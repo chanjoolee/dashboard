@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+
+	<select id="jiraissue.hms.list.projects" resultType="hashmap">
+		select 
+			LEGACY_NAME, 
+			LEGACY_PJT_NAME project, 
+			PJT_NAME pjt_code, 
+			LEGACY_PJT_KEY, 
+			INS_DT, 
+			MOD_DT
+		from pjt_mapping 
+		where LEGACY_NAME = 'JIRA' 
+		<if test="pjtCode != null and pjtCode != ''  " >
+       		and PJT_NAME  =  #{pjtCode}
+   		</if>
+    </select>
+    
+    <select id="jiraissue.hms.component.list" resultType="hashmap">
+		select 
+			a.ID, 
+			a.PROJECT,
+			p.PNAME,
+			a.CNAME, 
+			a.DESCRIPTION, 
+			a.URL, 
+			a.LEAD, 
+			a.ASSIGNEETYPE 
+		from jirauser.COMPONENT a
+		left outer join jirauser.PROJECT p
+			on p.id = a.project
+		where 1=1
+		<choose>
+			<when test="projects != null and projects.size() > 0" >
+	       		and p.pname in 
+	            <foreach collection="projects" item="item" index="index"  open="(" separator="," close=")">
+	                #{item.PROJECT}
+	            </foreach>
+	         </when>
+	         <otherwise>
+	         	and 1=2
+		   	 </otherwise>
+   		</choose>
+		order by PROJECT, cname
+    </select>
+    
+    <select id="jiraissue.hms.list.for.graph" resultType="hashmap">
+    
+		with tbl_dt as (
+			select 
+				distinct week_date(a.CREATED,'4','10')  as dt
+			from JIRA_ISSUE_STD_FIELD  a
+			where  a.PROJECT_KEY = 'GEM' 			
+			union 
+			select 
+				distinct week_date(a.RESOLUTIONDATE,'4','10') as dt
+			from JIRA_ISSUE_STD_FIELD  a
+			where  a.PROJECT_KEY = 'GEM'
+			and a.RESOLUTIONDATE is not null
+			union
+			select 
+				distinct week_date(g.CREATED,'4','10') as dt				
+			from jirauser.JIRAISSUE a
+			left outer join jirauser.CHANGEGROUP g
+				on a.id = g.ISSUEID
+			left outer join jirauser.CHANGEITEM i
+				on i.GROUPID = g.id
+			where a.PROJECT = '14000'
+			--and a.ISSUENUM = 1091
+			and i.FIELD = 'status'			
+			and dbms_lob.substr(i.NEWSTRING,100) in ('Closed','Resolved')			
+			and g.created is not null
+			
+		),
+		tbl_data as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, a.ISSUESTATUS
+				, a.CREATED
+				, week_date(a.CREATED,'4','10') as created_w
+				, a.RESOLUTIONDATE
+				, week_date(a.RESOLUTIONDATE,'4','10') as resolution_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved'
+				)  as resolved_date
+				, (
+					select 
+						 week_date( max(g.CREATED) ,'4','10') created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved'
+				)  as resolved_date_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date
+				, (
+					select 
+						week_date( max(g.CREATED),'4','10') created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date_w
+			from JIRA_ISSUE_STD_FIELD  a
+			where  a.PROJECT_KEY = 'GEM'
+			and a.ISSUESTATUS in ('Open','Closed','Resolved')
+		
+		)
+		
+		select 
+			a.*,
+			a.created_cu - closed_cu as gap,
+			a.created_cu - closed_cu - resolved_cu as gap_unresolved,
+			'xxx' gubun
+		from (
+			select 
+				dt.dt
+				, (select count(*) from tbl_data  a where dt.dt = a.created_w) created
+				, (select count(*) from tbl_data  a where dt.dt >= a.created_w) created_cu
+				, (select count(*) from tbl_data  a where dt.dt = a.closed_date_w) closed			
+				, (select count(*) from tbl_data  a where dt.dt >= a.closed_date_w) closed_cu
+				, (select count(*) from tbl_data  a where dt.dt = a.resolved_date_w ) resolved
+				, (select count(*) from tbl_data  a where dt.dt >= a.resolved_date_w ) resolved_cu
+			from tbl_dt dt
+			where  1=1
+			and dt.dt is not null
+		) a
+		order by 1
+		
+	
+    </select>
+    
+    <select id="jiraissue.hms.list.for.grid" resultType="hashmap">
+    
+		
+--//  from grid summary
+		with tbl_dt as (
+			
+			select 
+				p.pkey,
+				a.issuenum, 
+				dbms_lob.substr(i.NEWSTRING,100) as status,
+				week_date(g.CREATED,'4','10') as dt				
+			from jirauser.JIRAISSUE a
+			join jirauser.PROJECT p
+				on a.project = p.id
+			left outer join jirauser.CHANGEGROUP g
+				on a.id = g.ISSUEID
+			left outer join jirauser.CHANGEITEM i
+				on i.GROUPID = g.id
+			where a.PROJECT = '14000'
+			--and a.ISSUENUM = 1091
+			and i.FIELD = 'status'			
+			and dbms_lob.substr(i.NEWSTRING,100) in ('Closed','Resolved')			
+			and g.created is not null			
+		) ,
+		tbl_data as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, trim(REGEXP_SUBSTR(a.COMPONENTS, '[^,]+', 1, lv)) component 
+				, a.ISSUETYPE
+				, a.ISSUESTATUS
+				, a.CREATED
+				, week_date(a.CREATED,'4','10') as created_w
+				, a.RESOLUTIONDATE
+				, week_date(a.RESOLUTIONDATE,'4','10') as resolution_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date
+				, (
+					select 
+						 week_date( max(g.CREATED) ,'4','10') created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date
+				, (
+					select 
+						week_date( max(g.CREATED),'4','10') created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p
+						on p.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					-- and p.PKEY = 'GEM'
+					and p.id = 14000
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date_w
+			from JIRA_ISSUE_STD_FIELD  a
+			, (SELECT LEVEL lv FROM dual CONNECT BY LEVEL <= 9) c 	
+			where  a.PROJECT_KEY = 'GEM'
+			
+			and  lv <= LENGTH(a.COMPONENTS) - LENGTH(REPLACE(a.COMPONENTS, ',')) + 1 
+			--and a.ISSUESTATUS in ('Open','Closed','Resolved')		
+			and a.ISSUETYPE = 'Bug'
+			and trim(REGEXP_SUBSTR(a.COMPONENTS, '[^,]+', 1, lv)) = 'Gemini ASIC HCT_TOP'
+			
+			--and a.issue_num in (870,1045,1086,1091)
+			
+			order by to_number(a.ISSUE_NUM)
+			
+		)
+		
+		select 
+			jira.PROJECT,
+			jira.PROJECT_KEY,
+			jira.component,
+			count(*) created,
+			count( case when jira.closed_date is not null then 1 else null end ) as closed,
+			count(case when jira.closed_date is null  and jira.resolved_date is null then 1 else null end) cur_open_uresolved,
+			count(case when jira.closed_date is null  and jira.resolved_date is not null then 1 else null end) cur_open_resolved,
+			------ past week
+			count(case when created_w = week_date(sysdate,'4','10') then 1 else null end) past1_open,
+			count(case when resolved_date_w = week_date(sysdate,'4','10') then 1 else null end) past1_resolved,
+			count(case when closed_date_w = week_date(sysdate,'4','10') then 1 else null end) past1_closed,
+			------ past2 week
+			count(case when created_w = week_date(sysdate -7 ,'4','10') then 1 else null end) past2_open,
+			count(case when resolved_date_w = week_date(sysdate -7 ,'4','10') then 1 else null end) past2_resolved,
+			count(case when closed_date_w = week_date(sysdate -7 ,'4','10') then 1 else null end) past2_closed,
+			------ past3 week
+			count(case when created_w = week_date(sysdate -7*2 ,'4','10') then 1 else null end) past3_open,
+			count(case when resolved_date_w = week_date(sysdate -7*2 ,'4','10') then 1 else null end) past3_resolved,
+			count(case when closed_date_w = week_date(sysdate -7*2 ,'4','10') then 1 else null end) past3_closed,
+			------ awaiting past2		
+			count(
+				case 
+					when (
+						-- to_char(created,'YYYYMMDD') between to_char(sysdate - 7,'YYYYMMDD') and  to_char(sysdate - 15,'YYYYMMDD') 
+						created_w = week_date(sysdate -7 ,'4','10')
+						) 
+							and jira.closed_date is null  and jira.resolved_date is null  then 1 
+					else null end
+			) awaiting_resolve_past2 ,
+			count(
+				case 
+					when (
+						-- to_char(created,'YYYYMMDD') between to_char(sysdate - 7,'YYYYMMDD') and  to_char(sysdate - 15,'YYYYMMDD') 
+						created_w = week_date(sysdate -7 ,'4','10')
+						) 
+							and jira.closed_date is null  and jira.resolved_date is not null  then 1 
+					else null end
+			) awaiting_verification_past2,
+			------ awaiting past3
+			count(
+				case 
+					when (
+						-- to_char(created,'YYYYMMDD') between to_char(sysdate - 7,'YYYYMMDD') and  to_char(sysdate - 15,'YYYYMMDD') 
+						created_w = week_date(sysdate -7*2 ,'4','10')
+						) 
+							and jira.closed_date is null  and jira.resolved_date is null  then 1 
+					else null end
+			) awaiting_resolve_past3 ,
+			count(
+				case 
+					when (
+						-- to_char(created,'YYYYMMDD') between to_char(sysdate - 7,'YYYYMMDD') and  to_char(sysdate - 15,'YYYYMMDD') 
+						created_w = week_date(sysdate -7*2 ,'4','10')
+						) 
+							and jira.closed_date is null  and jira.resolved_date is not null  then 1 
+					else null end
+			) awaiting_verification_past3
+			
+		from tbl_data jira
+		where 1=1
+		
+		group by jira.PROJECT, jira.PROJECT_KEY, jira.component
+		
+		
+		
+		
+		
+		
+		
+	
+    </select>
+    
+    
+</mapper>

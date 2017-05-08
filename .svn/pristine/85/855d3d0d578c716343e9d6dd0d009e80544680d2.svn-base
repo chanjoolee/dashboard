@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <!--  
+    	pms와 dashboard의 project schedule 을 일치시키기 위함.
+    
+    -->
+<mapper namespace="">
+    <select id="batch.pmsSchedule.select" resultType="hashmap" >
+    	select 
+			info.pjt_id
+			,info.pjt_name
+			,ph.pjt_phase_id
+			,ph.phase_name
+			,to_char(ph.EST_START_DATE,'YYYY/MM/DD') plan_start_dt
+			,to_char(ph.EST_END_DATE,'YYYY/MM/DD') plan_end_dt
+			,to_char(ph.START_DATE,'YYYY/MM/DD') actual_start_dt
+			,to_char(ph.END_DATE,'YYYY/MM/DD') actual_end_dt
+			,ph.phase_order order_num
+		from pjt_info info
+		join pjt_phase ph
+	    	on ph.pjt_id = info.pjt_id
+	    WHERE
+	     ph.use_yn = 'Y'
+	     AND ph.islatest = 'Y'          
+	     and ph.UP_PHASE_ID is null    
+	     order by info.pjt_name, ph.PHASE_NAME
+    </select>
+    
+    <update id="batch.dashbaordSchedule.update">
+	    declare
+	    	cnt number;
+	    	vPjtName varchar2(100);
+	    begin
+	    	
+	    	/* get pjt_name */
+	    	select
+	    		count(*) into cnt
+	    	from pjt_list
+	    	where pjt_code = #{PJT_ID};
+	    	
+	    	if cnt = 0 then
+	    		vPjtName := #{PJT_NAME} ;
+	    	else
+	    		select pjt_name into vPjtName from pjt_list where pjt_code = #{PJT_ID} ;
+	    	end if ;
+	    	
+	    	
+	    	/* schedule update */
+	    	select
+	    		count(*) into cnt
+	    	from PJT_INFO
+	    	where pjt_code = #{PJT_ID}
+	    	and PHASE = #{PHASE_NAME} ;
+	    	
+	    	if cnt = 0 then
+	    		
+	    		insert into PJT_INFO(PJT_CODE, PJT_NAME, PHASE, PLAN_START_DATE, PLAN_END_DATE, ACTUAL_START_DATE, ACTUAL_END_DATE,INS_DT)
+	    		values(#{PJT_ID}, vPjtName ,#{PHASE_NAME}, #{PLAN_START_DT}, #{PLAN_END_DT}, #{ACTUAL_START_DT}, #{ACTUAL_END_DT} , sysdate );
+	    	else
+	    		update PJT_INFO set
+	    			PJT_NAME = vPjtName,
+	    			PHASE = #{PHASE_NAME} ,
+	    			PLAN_START_DATE = #{PLAN_START_DT} ,
+	    			PLAN_END_DATE = #{PLAN_END_DT} ,
+	    			ACTUAL_START_DATE = #{ACTUAL_START_DT} ,
+	    			ACTUAL_END_DATE = #{ACTUAL_END_DT} ,
+	    			mod_dt = sysdate
+	    			
+	    		where pjt_code = #{PJT_ID}
+	    		and PHASE = #{PHASE_NAME} ;
+	    	end if ;
+	    	
+	    end ;
+    
+    </update>
+    
+    
+    
+</mapper>

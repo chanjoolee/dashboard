@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    <select id="common.regacynames.bypjtcode" resultType="hashmap">
+    	select
+    		LEGACY_NAME, 
+    		LEGACY_PJT_NAME, 
+    		PJT_NAME, 
+    		LEGACY_PJT_KEY
+    	from pjt_mapping
+    	where 1=1
+    	<if test="legacy_name != null">
+    		and legacy_name = #{legacy_name}
+    	</if>
+    	<if test="pjt_code != null">
+    		and pjt_name = #{pjt_code}
+    	</if>
+    	order by legacy_name, PJT_NAME
+    	
+    </select>
+    <select id="common.username.byEmpId" resultType="hashmap">
+    	select FN_USER_NAME_EMPNO( #{empId} ) as user_name from dual
+    	
+    </select>
+    <select id="common.username.byUserId" resultType="hashmap">
+    	select FN_USER_NAME( #{userId} ) as user_name from dual
+    	
+    </select>
+    
+    <select id="common.pms.site" resultType="hashmap">
+    	select * from CMM_CDBASE where code_name= 'National_Cd'   order by DISPLAY_ORDER
+    </select>
+    <select id="common.pms.function" resultType="hashmap">
+    	select * from CMM_CDBASE where code_name= 'Function'   DISPLAY_ORDER
+    </select>
+    
+</mapper>

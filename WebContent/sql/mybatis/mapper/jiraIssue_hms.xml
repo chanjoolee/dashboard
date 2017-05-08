@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+
+	<select id="jiraissue.hms.list.projects" resultType="hashmap">
+		select 
+			LEGACY_NAME, 
+			LEGACY_PJT_NAME project, 
+			PJT_NAME pjt_code, 
+			LEGACY_PJT_KEY pkey, 
+			INS_DT, 
+			MOD_DT
+		from pjt_mapping 
+		where LEGACY_NAME = 'JIRA' 
+	   	<choose>
+			<when test="pjtCodeArr != null and pjtCodeArr != '' " >
+	       		and  PJT_NAME in 
+	            <foreach collection="pjtCodeArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	         </when>
+	         <otherwise>
+	         	and 1=2
+		   	 </otherwise>
+	  	</choose>
+	  	<if test="project != null and project != '' " >
+	  		or  LEGACY_PJT_NAME = #{project}
+	  	</if>
+    </select>
+    <select id="jiraissue.hms.issuetype.list" resultType="hashmap">
+		select
+			ID, 
+			SEQUENCE, 
+			PNAME, 
+			PSTYLE, 
+			DESCRIPTION, 
+			ICONURL, 
+			AVATAR
+		from jirauser.ISSUETYPE 
+		where SEQUENCE is not null 
+		and pstyle is null 
+		order by pname
+    </select>
+    <select id="jiraissue.hms.component.list" resultType="hashmap">
+		select 
+			a.ID, 
+			a.PROJECT,
+			p.PNAME,
+			a.CNAME, 
+			a.DESCRIPTION, 
+			a.URL, 
+			a.LEAD, 
+			a.ASSIGNEETYPE 
+		from jirauser.COMPONENT a
+		left outer join jirauser.PROJECT p
+			on p.id = a.project
+		where 1=1
+		<choose>
+			<when test="projects != null and projects.size() > 0" >
+	       		and p.pname in 
+	            <foreach collection="projects" item="item" index="index"  open="(" separator="," close=")">
+	                #{item.PROJECT}
+	            </foreach>
+	         </when>
+	         <otherwise>
+	         	and 1=2
+		   	 </otherwise>
+   		</choose>
+		order by PROJECT, cname
+    </select>
+    
+    <select id="jiraissue.hms.list.for.graph" resultType="hashmap">
+    	
+		with tbl_project as (
+			select * from (
+				<foreach collection="projects" item="item" index="index"  open="" separator=" union " close="">
+	                select  ${index} as rnum ,#{item.PROJECT} as project, #{item.PKEY} pkey, (select max(id) from jirauser.PROJECT where  pname = #{item.PROJECT} ) as projectid  from dual 
+	            </foreach>
+            ) where rnum = 0
+		) 
+		,tbl_dt as (
+			select 
+				distinct week_date(a.CREATED, #{baseday}, #{baseHour})  as dt
+			from JIRA_ISSUE_STD_FIELD  a
+			join tbl_project p 
+				on a.project = p.project
+			union 
+			select 
+				distinct week_date(a.RESOLUTIONDATE, #{baseday}, #{baseHour}) as dt
+			from JIRA_ISSUE_STD_FIELD  a
+			join tbl_project p 
+				on a.project = p.project
+			and a.RESOLUTIONDATE is not null
+			union
+			select 
+				distinct week_date(g.CREATED, #{baseday}, #{baseHour}) as dt				
+			from jirauser.JIRAISSUE a
+			join tbl_project p 
+				on a.project = p.projectid
+			left outer join jirauser.CHANGEGROUP g
+				on a.id = g.ISSUEID
+			left outer join jirauser.CHANGEITEM i
+				on i.GROUPID = g.id
+			where 1=1
+			and i.FIELD = 'status'			
+			and dbms_lob.substr(i.NEWSTRING,100) in ('Closed','Resolved')			
+			and g.created is not null
+			
+		),
+		tbl_data_components as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, trim(REGEXP_SUBSTR(a.COMPONENTS, '[^,]+', 1, lv)) component 
+			from JIRA_ISSUE_STD_FIELD  a			
+			join tbl_project p 
+				on a.project = p.project
+			join <![CDATA[ (SELECT LEVEL lv FROM dual CONNECT BY LEVEL <= 9) c 	]]>
+				on <![CDATA[  lv <= LENGTH(a.COMPONENTS) - LENGTH(REPLACE(a.COMPONENTS, ',')) + 1  ]]>
+			where 1=1			
+			<if test="issueTypeArr != null and issueTypeArr != '' " >
+	       		and  a.ISSUETYPE in 
+	            <foreach collection="issueTypeArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	         </if>
+		)
+		,tbl_data as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, a.ISSUESTATUS
+				, a.CREATED
+				, week_date(a.CREATED, #{baseday}, #{baseHour}) as created_w
+				, a.RESOLUTIONDATE
+				, week_date(a.RESOLUTIONDATE, #{baseday}, #{baseHour}) as resolution_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date
+				, (
+					select 
+						 week_date( max(g.CREATED) ,#{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date
+				, (
+					select 
+						week_date( max(g.CREATED),#{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date_w
+				, (
+					select 
+						week_date( max(g.CREATED),#{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.OLDSTRING,100) = 'Resolved'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as resolve_to_close_w
+			from JIRA_ISSUE_STD_FIELD  a
+			join tbl_project p 
+				on a.project = p.project
+			where 1=1	
+			and exists (
+				select * from tbl_data_components com
+				where a.project_key = com.project_key
+				and a.issue_num = com.issue_num
+				<if test="componentsArr != null and componentsArr != '' " >
+					and com.component in 
+					<foreach collection="componentsArr" item="item" index="index"  open="(" separator="," close=")">
+			            #{item}
+			        </foreach>
+		        </if>
+			)
+			<if test="issueTypeArr != null and issueTypeArr != '' " >
+	       		and  a.ISSUETYPE in 
+	            <foreach collection="issueTypeArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	         </if>
+		)
+		
+		select 
+			a.*,
+			a.created_cu - closed_cu as gap,
+			(resolved_cu - r2c_cu) as resolved_point,
+			(a.created_cu - closed_cu) - (resolved_cu - r2c_cu) unresolved_point ,
+			'xxx' gubun
+		from (
+			select 
+				dt.dt
+				, (select count(*) from tbl_data  a where dt.dt = a.created_w) created
+				, (select count(*) from tbl_data  a where dt.dt >= a.created_w) created_cu
+				, (select count(*) from tbl_data  a where dt.dt = a.closed_date_w) closed			
+				, (select count(*) from tbl_data  a where dt.dt >= a.closed_date_w) closed_cu
+				, (select count(*) from tbl_data  a where dt.dt = a.resolved_date_w ) resolved
+				, (select count(*) from tbl_data  a where dt.dt >= a.resolved_date_w ) resolved_cu
+				, (select count(*) from tbl_data  a where dt.dt >= a.resolve_to_close_w) r2c_cu
+			from tbl_dt dt
+			where  1=1
+			and dt.dt is not null
+		) a
+		order by 1
+	
+    </select>
+    
+    <select id="jiraissue.hms.list.for.grid" resultType="hashmap">
+		with tbl_project as (
+			select * from (
+				<foreach collection="projects" item="item" index="index"  open="" separator=" union " close="">
+	                select  ${index} as rnum ,#{item.PROJECT} as project, #{item.PKEY} pkey, (select max(id) from jirauser.PROJECT where  pname = #{item.PROJECT} ) as projectid  from dual 
+	            </foreach>
+            ) where rnum = 0
+		),
+		tbl_data as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, trim(REGEXP_SUBSTR(a.COMPONENTS, '[^,]+', 1, lv)) component 
+				, a.ISSUETYPE
+				, a.ISSUESTATUS
+				, a.CREATED
+				, week_date(a.CREATED, #{baseday}, #{baseHour}) as created_w
+				, a.RESOLUTIONDATE
+				, week_date(a.RESOLUTIONDATE, #{baseday}, #{baseHour}) as resolution_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date
+				, (
+					select 
+						 week_date( max(g.CREATED) , #{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date
+				, (
+					select 
+						week_date( max(g.CREATED),#{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date_w
+			from JIRA_ISSUE_STD_FIELD  a
+			join tbl_project p 
+				on a.project = p.project
+			join <![CDATA[ (SELECT LEVEL lv FROM dual CONNECT BY LEVEL <= 9) c 	]]>
+				on <![CDATA[  lv <= LENGTH(a.COMPONENTS) - LENGTH(REPLACE(a.COMPONENTS, ',')) + 1  ]]>
+			where  1=1
+			-- a.PROJECT_KEY = 'GEM'
+			--and a.ISSUESTATUS in ('Open','Closed','Resolved')		
+			<if test="issueTypeArr != null and issueTypeArr != '' " >
+	       		and  a.ISSUETYPE in 
+	            <foreach collection="issueTypeArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	         </if>
+			--and trim(REGEXP_SUBSTR(a.COMPONENTS, '[^,]+', 1, lv)) = 'Gemini ASIC HCT_TOP'
+						
+			order by to_number(a.ISSUE_NUM)
+			
+		)
+		
+		select 
+			jira.PROJECT,
+			jira.PROJECT_KEY,
+			nvl(cg.category,'Others') as category,
+			case 
+				when cg.category is null then '100'
+				else '1'
+			end as category_seq,
+			jira.component,
+			count(*) created,
+			count( case when jira.closed_date is not null then 1 else null end ) as closed,
+			count(case when jira.closed_date is null  and jira.resolved_date is null then 1 else null end) cur_open_uresolved,
+			count(case when jira.closed_date is null  and jira.resolved_date is not null then 1 else null end) cur_open_resolved,
+			------ past week
+			count(case when created_w = week_date(sysdate, #{baseday}, #{baseHour}) then 1 else null end) past1_open,
+			count(case when resolved_date_w = week_date(sysdate, #{baseday}, #{baseHour}) then 1 else null end) past1_resolved,
+			count(case when closed_date_w = week_date(sysdate, #{baseday}, #{baseHour}) then 1 else null end) past1_closed,
+			------ past2 week
+			count(case when created_w = week_date(sysdate -7 ,#{baseday}, #{baseHour}) then 1 else null end) past2_open,
+			count(case when resolved_date_w = week_date(sysdate -7 ,#{baseday}, #{baseHour}) then 1 else null end) past2_resolved,
+			count(case when closed_date_w = week_date(sysdate -7 ,#{baseday}, #{baseHour}) then 1 else null end) past2_closed,
+			------ past3 week
+			count(case when created_w = week_date(sysdate -7*2 ,#{baseday}, #{baseHour}) then 1 else null end) past3_open,
+			count(case when resolved_date_w = week_date(sysdate -7*2 ,#{baseday}, #{baseHour}) then 1 else null end) past3_resolved,
+			count(case when closed_date_w = week_date(sysdate -7*2 ,#{baseday}, #{baseHour}) then 1 else null end) past3_closed,
+			------ awaiting past2		
+			count(
+				case 
+					when (
+						created_w = week_date(sysdate -7 , #{baseday}, #{baseHour})
+						) 
+							and jira.closed_date is null  and jira.resolved_date is null  then 1 
+					else null end
+			) awaiting_resolve_past2 ,
+			count(
+				case 
+					when (
+						created_w = week_date(sysdate -7 ,#{baseday}, #{baseHour})
+						) 
+							and jira.closed_date is null  and jira.resolved_date is not null  then 1 
+					else null end
+			) awaiting_verification_past2,
+			------ awaiting past3
+			count(
+				case 
+					when (
+						<![CDATA[
+						created_w <= week_date(sysdate -7*2 ,#{baseday}, #{baseHour})
+						]]>
+						) 
+							and jira.closed_date is null  and jira.resolved_date is null  then 1 
+					else null end
+			) awaiting_resolve_past3 ,
+			count(
+				case 
+					when (
+					<![CDATA[
+						created_w <= week_date(sysdate -7*2 , #{baseday}, #{baseHour})
+					]]>	
+						) 
+							and jira.closed_date is null  and jira.resolved_date is not null  then 1 
+					else null end
+			) awaiting_verification_past3
+			
+		from tbl_data jira
+		left outer join JIRA_ISSUE_COMPONENT_GROUP cg -- compenent group
+			on cg.project = jira.project
+			and cg.component = jira.component
+		where 1=1
+		<if test="componentsArr != null and componentsArr != '' " >
+			and jira.component in 
+			<foreach collection="componentsArr" item="item" index="index"  open="(" separator="," close=")">
+	            #{item}
+	        </foreach>
+        </if>
+		group by jira.PROJECT, jira.PROJECT_KEY, jira.component, cg.category
+		order by cg.category nulls last , jira.component
+		
+    </select>
+    
+    <select id="jiraissue.hms.list.for.grid.detail" resultType="hashmap">
+		with tbl_project as (
+			select
+				rownum rnum,
+				a.PNAME project,
+				a.PKEY,
+				id projectid 
+			from jirauser.PROJECT a where a.pname= #{project}
+		)
+		
+		,tbl_data as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, a.ASSIGNEE_ACCOUNT
+				, trim(REGEXP_SUBSTR(a.COMPONENTS, '[^,]+', 1, lv)) component 
+				, a.ISSUETYPE
+				, a.ISSUESTATUS
+				, a.CREATED
+				, week_date(a.CREATED, #{baseday}, #{baseHour}) as created_w
+				, a.RESOLUTIONDATE
+				, week_date(a.RESOLUTIONDATE, #{baseday}, #{baseHour}) as resolution_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date
+				, (
+					select 
+						 week_date( max(g.CREATED) , #{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and (
+						i.FIELD = 'resolution' 
+						or ( i.FIELD = 'status'  and dbms_lob.substr(i.NEWSTRING,100) = 'Resolved' )
+					)
+				)  as resolved_date_w
+				, (
+					select 
+						max(g.CREATED) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date
+				, (
+					select 
+						week_date( max(g.CREATED),#{baseday}, #{baseHour}) created
+					from jirauser.JIRAISSUE issue
+					join jirauser.PROJECT p1
+						on p1.id = issue.project
+					left outer join jirauser.CHANGEGROUP g
+						on issue.id = g.ISSUEID
+					left outer join jirauser.CHANGEITEM i
+						on i.GROUPID = g.id
+					where 1=1
+					and p1.id = p.projectid
+					and issue.ISSUENUM = a.issue_num
+					and i.FIELD = 'status'
+					and dbms_lob.substr(i.NEWSTRING,100) = 'Closed'
+				)  as closed_date_w
+			from JIRA_ISSUE_STD_FIELD  a			
+			join tbl_project p 
+				on a.project = p.project
+			join <![CDATA[ (SELECT LEVEL lv FROM dual CONNECT BY LEVEL <= 9) c 	]]>
+				on <![CDATA[  lv <= LENGTH(a.COMPONENTS) - LENGTH(REPLACE(a.COMPONENTS, ',')) + 1  ]]>
+			where  1=1
+			<if test="issueTypeArr != null and issueTypeArr != '' " >
+	       		and  a.ISSUETYPE in 
+	            <foreach collection="issueTypeArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	         </if>						
+			
+			
+		)
+		
+		select 
+			jira.PROJECT,
+			jira.PROJECT_KEY,
+			jira.issue_num,
+			jira.PROJECT_KEY || '-' || jira.issue_num as key_issuenum,
+			solutionpms.fn_user_name(jira.ASSIGNEE_ACCOUNT)  ASSIGNEE_ACCOUNT,
+			nvl(cg.category,'Others') as category,
+			jira.component,
+			jira.ISSUESTATUS,
+			jira.ISSUETYPE,
+			nvl(to_char(jira.created,'YYYY/MM/DD HH24:MI'),' ' ) as created,
+			nvl(to_char(jira.resolved_date,'YYYY/MM/DD HH24:MI'),' ' ) as resolved,
+			nvl(to_char(jira.closed_date,'YYYY/MM/DD HH24:MI'),' ' ) as closed
+			
+		from tbl_data jira
+		left outer join JIRA_ISSUE_COMPONENT_GROUP cg -- compenent group
+			on cg.project = jira.project
+			and cg.component = jira.component
+		where 1=1
+		<if test="componentGroup != null and componentGroup != '' " >
+			and nvl(cg.category,'Others') = #{componentGroup}
+        </if>	
+        <if test="componentsArr != null and componentsArr != '' " >
+			and jira.component in 
+			<foreach collection="componentsArr" item="item" index="index"  open="(" separator="," close=")">
+	            #{item}
+	        </foreach>
+        </if>	
+        <if test="field != null and field eq 'CLOSED' " >
+			and jira.closed_date is not null
+        </if>	
+        <if test="field != null and field eq 'CUR_OPEN_URESOLVED' " >
+			and jira.closed_date is null  and jira.resolved_date is null
+        </if>	
+        <if test="field != null and field eq 'CUR_OPEN_RESOLVED' " >
+			and jira.closed_date is null  and jira.resolved_date is not null
+        </if>	
+        
+        <if test="field != null and field eq 'PAST1_OPEN' " >
+			and jira.created_w = week_date(sysdate, #{baseday}, #{baseHour})
+        </if>	
+        <if test="field != null and field eq 'PAST1_RESOLVED' " >
+			and jira.resolved_date_w = week_date(sysdate, #{baseday}, #{baseHour})
+        </if>	
+        <if test="field != null and field eq 'PAST1_CLOSED' " >
+			and jira.closed_date_w = week_date(sysdate, #{baseday}, #{baseHour})
+        </if>	
+        
+        <if test="field != null and field eq 'AWAITING_RESOLVE_PAST2' " >
+			and ( created_w = week_date(sysdate -7 , #{baseday}, #{baseHour}) 
+			and jira.closed_date is null  and jira.resolved_date is null) 
+        </if>	
+        <if test="field != null and field eq 'AWAITING_VERIFICATION_PAST2' " >
+			and created_w = week_date(sysdate -7 ,#{baseday}, #{baseHour})  
+			and jira.closed_date is null  and jira.resolved_date is not null 
+        </if>	
+        
+        <if test="field != null and field eq 'AWAITING_RESOLVE_PAST3' " >
+			<![CDATA[
+				and created_w <= week_date(sysdate -7*2 ,#{baseday}, #{baseHour})
+				and jira.closed_date is null  and jira.resolved_date is null 
+			]]>
+        </if>	
+        <if test="field != null and field eq 'AWAITING_VERIFICATION_PAST3' " >
+			<![CDATA[
+				and created_w <= week_date(sysdate -7*2 , #{baseday}, #{baseHour})
+				and jira.closed_date is null  and jira.resolved_date is not null 
+			]]>
+        </if>	
+		order by jira.PROJECT_KEY , to_number(jira.ISSUE_NUM)
+		
+    </select>
+    
+    
+</mapper>

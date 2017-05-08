@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    <select id="dashboard.socdesign.csvurl" resultType="hashmap">
+    	select
+    		--'http://chanjoo.hynix.com:8080/dashboard/csv/socdesignCsvTest.csv' csv_url
+    		'http://chanjoo.hynix.com:8080/dashboard/csv/00_Columbus_Verification_Check_List_Summary_v3.xlsx' csv_url
+    		--'http://chanjoo.hynix.com:8080/dashboard/csv/Columbus_SoC Design Verification Checklist (Summary).xlsx' csv_url
+    	from dual
+    	/*
+    	union all
+    	select
+    		'http://chanjoo.hynix.com:8080/dashboard/csv/socdesignCsvTest1.csv' csv_url
+    	from dual
+	  */
+    </select>
+    
+    <select id="dashboard.socdesign.confluence.spaceKey" resultType="hashmap">
+    	select
+			info.PJT_ID,
+			info.PJT_NAME,
+			i.CATEGORY,
+			i.INTERFACE_ID
+		from PJT_INTERFACE i
+		inner join pjt_info info
+			on i.pjt_id = info.pjt_id
+		where i.CATEGORY = 'CONFLUENCE'
+    </select>
+    
+    <update id="dashboard.socdesign.deleteall">
+	    declare
+	    
+	    begin
+	    	delete from SOC_DESIGN_CHECKLIST;
+	    	delete from SOC_DESIGN_SUMMARY;
+	    end;
+    
+    </update>
+    <update id="dashboard.socdesign.deleteall.new.history">
+	    declare
+	    
+	    begin
+	    	delete from SOC_DESIGN_NEW_HISTORY;
+	    end;
+    
+    </update>
+    <update id="dashboard.socdesign.delete.new.history.detail">
+	    declare
+	    
+	    begin
+	    	delete from SOC_DESIGN_NEW_HISTORY_DETAIL where project = #{PROJECT} and start_dt = #{START_DT} ;
+	    end;
+    
+    </update>
+    
+    <update id="dashboard.socdesign.new.detail.islast.n">
+	    declare
+	    
+	    begin
+	    	update SOC_DESIGN_NEW_HISTORY_DETAIL set
+	    	is_last = 'N';
+	    end;
+    
+    </update>
+    
+    <select id="dashboard.socdesign.new.maxStartDt" resultType="hashmap">
+    	select project, max(START_DT) START_DT  from SOC_DESIGN_NEW_HISTORY
+    	where ACTUAL_TARGET = 'actual'
+    	group by project 
+    </select>
+    <select id="dashboard.socdesign.new.batchid" resultType="hashmap">
+    	select LPAD(TO_NUMBER(nvl(max(batch_id),'0'))+1, 10,'0') new_batch_id  from  BATCH_HISTORY
+    </select>
+    
+    <update id="dashboard.socdesign.insert.newbatchid" parameterType="hashmap">
+	    declare
+	    	cnt number;
+	    	
+	    begin
+	    	update BATCH_HISTORY set
+	    		use_yn = 'N'
+	    	where category = #{batchCategory};
+	    	
+	    	insert into BATCH_HISTORY ( CATEGORY, BATCH_ID, BATCH_TIME, RESULT, USE_YN, MESSAGE1, MESSAGE2)
+	    	values ( #{batchCategory},#{batchId} , sysdate, '','Y','',''   );
+	    	
+	    end;
+    
+    </update>
+    
+    
+    <update id="dashboard.socdesign.update.batch.result" parameterType="hashmap">
+	    declare
+	    	cnt number;
+	    	
+	    begin
+	    	update BATCH_HISTORY set
+	    		result = #{batchResult},
+	    		message1 = #{message}
+	    	where category = #{batchCategory}
+	    	and batch_id = #{batchId};
+	    		    	
+	    end;
+    
+    </update>
+    
+    <update id="dashboard.socdesign.csvsave.checklist" parameterType="hashmap">
+    	declare
+    		cnt number;
+    	begin
+	    		select count(*) into cnt from SOC_DESIGN_CHECKLIST 
+	    		where batch_id = #{batchId} 
+	    		and project = #{project}
+	    		and revision = #{revision}
+	    		and category1 = #{category1}
+	    		and category2 = #{category2}
+	    		and code = #{code};
+	    		
+	    		if cnt = 0 then
+	    			insert into SOC_DESIGN_CHECKLIST ( BATCH_ID,PROJECT, REVISION,CATEGORY1, CATEGORY2, CODE, RESULT,CSV_URL,CRT_DT)
+	    			values (#{batchId},#{project}, #{revision} ,#{category1}, #{category2}, #{code},#{result},#{csv_url},sysdate);
+	    		else
+	    			update SOC_DESIGN_CHECKLIST set
+	    				result = #{result},
+	    				csv_url = #{csv_url},
+	    				UPD_DT = sysdate
+	    			where batch_id = #{batchId} 
+	    			and project = #{project}
+	    			and revision = #{revision}
+	    			and category1 = #{category1}
+	    			and category2 = #{category2}
+	    			and code = #{code}; 
+	    		
+	    		end if;   
+    		
+    	
+    	end;
+    
+    </update>
+    
+    <update id="dashboard.socdesign.csvsave.summary" parameterType="hashmap">
+    	declare
+    		cnt number;
+    	begin
+    		
+	    		select count(*) into cnt from SOC_DESIGN_SUMMARY 
+	    		where batch_id = #{batchId}
+	    		and project = #{project}
+	    		and revision = #{revision}
+	    		and category1 = #{category1}
+	    		and category2 = #{category2} ;
+	    		
+	    		if cnt = 0 then
+	    			insert into SOC_DESIGN_SUMMARY (BATCH_ID,PROJECT, REVISION, CATEGORY1, CATEGORY2,CSV_URL,CRT_DT)
+	    			values (#{batchId},#{project}, #{revision}, #{category1}, #{category2}, #{csv_url},sysdate);
+	    			
+	    			update SOC_DESIGN_SUMMARY set
+	    				${col} = #{result}	    				
+	    			where batch_id = #{batchId}
+	    			and project = #{project}
+	    			and revision = #{revision}
+	    			and category1 = #{category1}
+	    			and category2 = #{category2} ;
+	    			
+	    		else
+	    			update SOC_DESIGN_SUMMARY set
+	    				${col} = #{result} ,
+	    				csv_url = #{csv_url}
+	    			where batch_id = #{batchId}
+	    			and project = #{project}
+	    			and revision = #{revision}
+	    			and category1 = #{category1}
+	    			and category2 = #{category2} ;
+	    		
+	    		end if;      
+	    		
+    	
+    	end;
+    
+    </update>
+    
+    <update id="dashboard.socdesign.save.new.history" parameterType="hashmap">
+    	declare
+    		cnt number;
+    	begin
+    		
+	    		insert into SOC_DESIGN_NEW_HISTORY (BATCH_ID, PROJECT, START_DT, END_DT, ACTUAL_TARGET, CATEGORY, PARENT_CATEGORY, FIELD, MEASURE)
+	    		values (#{batchId},#{project}, #{start_dt}, null, #{actual_target}, #{category}, #{parent_category}, #{field}, #{measure});
+    	end;
+    
+    </update>
+    
+    <update id="dashboard.socdesign.save.new.history.detail" parameterType="hashmap">
+    	declare
+    		cnt number;
+    		vStartDt varchar2(100);
+    	begin
+    			select max(START_DT) into vStartDt   from SOC_DESIGN_NEW_HISTORY where ACTUAL_TARGET  = 'actual' and project = #{project};
+    	
+	    		insert into SOC_DESIGN_NEW_HISTORY_DETAIL (BATCH_ID, PROJECT, START_DT, CATEGORY, PARENT_CATEGORY, DETAIL_CATEGORY, CASES, PASS, PROGRESS, IS_LAST)
+	    		values (#{batchId},#{project}, vStartDt, #{category}, #{parent_category},#{detail_category}, #{cases}, #{pass}, #{progress},'Y');
+    	end;
+    
+    </update>
+    
+    
+    <select id="dashboard.socdesign.list.for.chart" resultType="hashmap">
+    	with pm as (
+    		select LEGACY_PJT_NAME pjt_name from PJT_MAPPING 
+    		where LEGACY_NAME = 'DV'
+    		and pjt_name = #{pjt_code}
+    	)
+    	,rev as (
+    		select max(dv.revision) as revision from SOC_DESIGN_SUMMARY dv
+    		join pm 
+    			on pm.pjt_name = dv.project
+    	)
+    	
+    	select 
+			category2 ip ,
+			category,
+			sum(cases) cases,
+			sum(pass) pass,
+			case
+				when sum(cases) = 0 then 0.0
+				else round((sum(pass)/sum(cases)) * 100,1 )
+			end as ratio
+		from (
+			select
+				dv.project ,
+				dv.revision , 
+				REGEXP_REPLACE(dv.category1,	'[[:space:]]+[[:alpha:]|[:digit:]]+','') category,
+				dv.category1,
+				dv.category2,
+				dv.cases,
+				dv.pass	
+			from SOC_DESIGN_SUMMARY dv	
+			join pm on 
+				pm.pjt_name = dv.project
+			where 1 = 1
+			and dv.revision = (select revision from rev)
+			
+		) a group by category2,category
+		order by 1,2
+		
+    </select>
+    
+    <select id="dashboard.socdesign.select.by.ip" resultType="hashmap">
+    	with rev as (
+			select project,max(dv.revision) as revision from SOC_DESIGN_SUMMARY dv
+			group by project
+		) 
+		
+		select 
+			category,
+			project,
+			sum(cases) cases,
+			sum(pass) pass,
+			case
+				when sum(cases) = 0 then 0.0
+				else round((sum(pass)/sum(cases)) * 100,1 )
+			end as ratio
+		from (
+			select
+				REGEXP_REPLACE(sd.category1,	'[[:space:]]+[[:alpha:]|[:digit:]]+','') category,
+				sd.project,
+				sd.cases,
+				sd.pass
+			from SOC_DESIGN_SUMMARY sd
+			join rev on rev.project = sd.project
+				and rev.revision = sd.revision
+			where sd.CATEGORY2 = #{ip}
+		) group by category,project
+		order by category,project
+    </select>
+    
+    <select id="dashboard.socdesign.list.for.chart.testcase" resultType="hashmap">
+    	with rev as (
+    		select batch.batch_id, a.project , max(a.revision) as revision 
+    		from SOC_DESIGN_SUMMARY a
+    		join BATCH_HISTORY batch
+    			on a.batch_id = batch.batch_id
+    			and batch.use_yn = 'Y'
+    			and batch.category = 'socDesignCheck'
+    		group by batch.batch_id ,a.project
+    	)
+    	    	
+    	select
+    		a.project,
+    		pl.pjt_code,
+    		pl.pjt_name,
+    		REGEXP_REPLACE(a.category1,	'[[:space:]]+[[:alpha:]|[:digit:]]+','') category ,
+    		a.category2 as ip,
+    		a.cases , --sum(a.cases) cases,
+    		a.pass  --sum(a.pass) pass
+    	from SOC_DESIGN_SUMMARY a
+    	left outer join pjt_mapping pm 
+    		on pm.LEGACY_PJT_NAME = a.project
+    		and pm.LEGACY_NAME = 'DV'
+    	left outer join pjt_list pl
+    		on pl.pjt_code = pm.pjt_name
+    	join rev rev
+    		on a.project = rev.project
+    		and a.revision = rev.revision 
+    		and a.batch_id = rev.batch_id
+    	where 1=1
+    	<if test="pjtCodeList != null and pjtCodeList != '' ">
+            and pl.pjt_code in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    	--group by a.project,pl.pjt_name,a.category2
+    	--order by a.project,lower(a.category2)
+    	
+		
+    </select>
+    
+    
+    <select id="dashboard.socdesign.new.general.list" resultType="hashmap">
+    	select 
+    		pl.pjt_code,
+		   	pl.pjt_name,
+			a.BATCH_ID, a.PROJECT, a.START_DT, a.CATEGORY, a.PARENT_CATEGORY, a.DETAIL_CATEGORY, a.CASES, a.PASS, a.PROGRESS, a.IS_LAST,
+			a.progress * 100 as progress1
+		from SOC_DESIGN_NEW_HISTORY_DETAIL a
+		left outer join pjt_mapping pm 
+    		on pm.LEGACY_PJT_NAME = a.project
+    		and pm.LEGACY_NAME = 'DV'
+    	left outer join pjt_list pl
+    		on pl.pjt_code = pm.pjt_name
+		<if test="pjtCodeList != null and pjtCodeList != '' ">
+            and pl.pjt_code in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>    		
+		where is_last = 'Y'
+		
+    </select>
+    
+    <select id="dashboard.socdesign.new.project.list.history" resultType="hashmap">
+    	select 
+    		pl.pjt_code,
+		   	pl.pjt_name,
+			a.BATCH_ID, a.PROJECT, a.START_DT,a.END_DT, a.ACTUAL_TARGET, a.CATEGORY, a.PARENT_CATEGORY, a.FIELD, a.MEASURE
+		from SOC_DESIGN_NEW_HISTORY a
+		left outer join pjt_mapping pm 
+    		on pm.LEGACY_PJT_NAME = a.project
+    		and pm.LEGACY_NAME = 'DV'
+    	left outer join pjt_list pl
+    		on pl.pjt_code = pm.pjt_name
+		where pl.pjt_code = #{pjt_code}
+		
+    </select>
+    
+     <select id="dashboard.socdesign.new.project.list.detail" resultType="hashmap">
+    	select 
+    		pl.pjt_code,
+		   	pl.pjt_name,
+			a.BATCH_ID, a.PROJECT, a.START_DT, a.CATEGORY, a.PARENT_CATEGORY, a.DETAIL_CATEGORY, a.CASES, a.PASS, a.PROGRESS, a.IS_LAST,
+			a.progress * 100 as progress1
+		from SOC_DESIGN_NEW_HISTORY_DETAIL a
+		left outer join pjt_mapping pm 
+    		on pm.LEGACY_PJT_NAME = a.project
+    		and pm.LEGACY_NAME = 'DV'
+    	left outer join pjt_list pl
+    		on pl.pjt_code = pm.pjt_name
+		where is_last = 'Y'
+		and pl.pjt_code = #{pjt_code}
+		
+    </select>
+    
+</mapper>

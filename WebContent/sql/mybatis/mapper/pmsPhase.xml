@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    <select id="pms.phase" resultType="hashmap">
+		select 
+			pi.pjt_id as pjt_code, 
+			pi.PJT_NAME, 
+			pp.PJT_PHASE_ID ,
+			pp.PHASE_NAME,
+			to_char(pp.STD_START_DATE,'YYYY/MM/DD') STD_START_DATE, 
+			to_char(pp.STD_END_DATE,'YYYY/MM/DD') STD_END_DATE, 
+			to_char(pp.EST_START_DATE,'YYYY/MM/DD') EST_START_DATE, 
+			to_char(pp.EST_END_DATE,'YYYY/MM/DD') EST_END_DATE,
+			to_char(pp.START_DATE,'YYYY/MM/DD') START_DATE,
+			nvl(to_char(pp.END_DATE,'YYYY/MM/DD'), to_char(sysdate,'YYYY/MM/DD')) END_DATE			
+		from PJT_PHASE pp
+		join pjt_info pi
+			on pi.pjt_id = pp.pjt_id			
+		where pi.pjt_id = #{pjt_code}
+		and pp.START_DATE is not null
+		and pp.ISLATEST = 'Y'
+		and UP_PHASE_ID is null
+		order by pi.pjt_id,pp.PHASE_ORDER
+    </select>
+    
+</mapper>

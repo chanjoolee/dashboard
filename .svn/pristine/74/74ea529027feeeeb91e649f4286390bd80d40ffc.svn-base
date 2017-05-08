@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+	
+    
+    
+   
+    <update id="fwq.functionParameter.insert" parameterType="hashmap">
+    	declare
+    		vPjtCode varchar2(100);
+    		vLoc varchar2(100);
+    		vCnt number;
+    		vMeasureDt varchar2(8) := #{measure_dt} ;
+    		vLine number := 0 ;
+    		vFunc number := 0 ;
+    		vPoint number;
+    		vP4Path varchar2(1000);
+    	begin
+    		
+			select count(*) into vCnt from  FW_QUALITY_FUNC_PARAMETER_RAW 
+			where MEASURE_DT = vMeasureDt 
+			and  PROJECT = #{project} 
+			and FUNC_NAME = #{func_name} ;
+			
+			<if test="p4_path != null and p4_path != '' ">
+			vP4Path := #{p4_path};
+			</if>
+    	
+    		if vCnt = 0 then
+	    		insert into FW_QUALITY_FUNC_PARAMETER_RAW ( MEASURE_DT, PROJECT, FUNC_NAME, PARAMETERS,P4_PATH,INS_DT)
+	    		values (
+		    		vMeasureDt, -- MEASURE_DT
+		    		#{project}, -- PROJECT
+		    		#{func_name} , 
+		    		#{parameters},
+		    		vP4Path,
+		    		sysdate
+	    		); 
+	    	else
+	    		update FW_QUALITY_FUNC_PARAMETER_RAW set
+	    			MEASURE_DT = vMeasureDt
+	    			, PROJECT = #{project}
+	    			, FUNC_NAME = #{func_name}
+	    			, PARAMETERS = #{parameters}
+	    			, P4_PATH = vP4Path
+	    			, MOD_DT = sysdate
+	    		where MEASURE_DT = vMeasureDt 
+				and  PROJECT = #{project} 
+				and FUNC_NAME = #{func_name} ;
+	    	end if;
+    	end;
+    </update>
+    
+    <update id="fwq.functionParameter.delete.project.measureDt" parameterType="hashmap">
+    	declare
+    		vMeasureDt varchar2(8) := #{measure_dt} ;
+    	begin
+    		
+			delete from  FW_QUALITY_FUNC_PARAMETER_RAW 
+			where MEASURE_DT = vMeasureDt 
+			and  PROJECT = #{project} ;
+    		
+    	end;
+    </update>
+    
+    <select id="fwq.functionParameter.selectList" resultType="hashmap">
+    	select 
+    		MEASURE_DT, 
+    		PROJECT, 
+    		FUNC_NAME, 
+    		PARAMETERS, 
+    		P4_PATH, 
+    		to_char(INS_DT,'YYYY-MM-DD') INS_DT, 
+    		to_char(MOD_DT,'YYYY-MM-DD') MOD_DT 
+    	
+    	from FW_QUALITY_FUNC_PARAMETER_RAW
+    	where 1=1
+    	<if test="measureDt != null and measureDt != '' ">
+			and MEASURE_DT = #{measureDt}
+		</if>
+		<if test="project != null and project != '' ">
+			and PROJECT = #{project}
+		</if>
+		<if test="func_name != null and func_name != '' ">
+			and FUNC_NAME = #{func_name}
+		</if>
+		order by ins_dt desc, FUNC_NAME
+    </select>
+    
+   
+</mapper>    

@@ -1,0 +1,1175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+    <select id="dashboard.getBoardContentView" resultType="hashmap">
+	    SELECT
+	        content,
+	        documentSrl,
+	        email,
+	        nickname,
+	        regdate,
+	        title
+	    FROM
+	        test
+	    WHERE
+	        1=1
+    </select>
+    
+    <select id="dashboard.series" resultType="hashmap">
+	    select distinct pjt_code,pjt_name  from CODESONAR_TEST	    
+	    where is_valid = 'T'
+	    and pjt_code = 'MercuryPlus'
+    </select>
+    
+    <select id="dashboard.series.data"  parameterType="hashmap"  resultType="hashmap">
+	    SELECT
+	    	P0_CNT,
+	    	PJT_CODE,
+	    	ANALYSYS_DATE
+	    from CODESONAR_TEST
+	    where 1=1 
+	    and is_valid = 'T'
+	    AND pjt_code = #{PJT_CODE}
+	    ORDER BY pjt_code,PHASE,PHASE_SEQ
+    </select>
+    
+    
+    <select id="dashboard.project" resultType="hashmap">
+    	select 
+    		pjt_code
+    		, sum(cnt) cnt
+    	from (
+	    	select
+				nvl(m.pjt_name,a.pjt_code) pjt_code		
+				, a.cnt
+			from		
+			(SELECT
+		        PJT_CODE
+		        ,PJT_NAME
+		        ,count(*) cnt 
+		    FROM
+		        CODESONAR_TEST
+		    where is_valid = 'T'
+		    group by pjt_code, pjt_name	    
+		    ) a 
+		    left outer join PJT_MAPPING m on m.legacy_pjt_name = A.pjt_code and LEGACY_NAME= 'CodeSonar' 
+		) group by pjt_code
+		order by 2 desc
+	    
+    </select>
+    
+    <select id="dashboard.codesonar.mappiglist" resultType="hashmap">
+    	select
+				a.pjt_code pjt_code_raw
+				,nvl(m.pjt_name,a.PJT_CODE)  pjt_code_map			
+				, a.cnt
+			from		
+			(SELECT
+		        PJT_CODE
+		        ,PJT_NAME
+		        ,count(*) cnt 
+		    FROM
+		        CODESONAR_TEST
+		    where is_valid = 'T'
+		    group by pjt_code, pjt_name	    
+		    ) a 
+		    left outer join PJT_MAPPING m on m.legacy_pjt_name = A.pjt_code and LEGACY_NAME= 'CodeSonar' 
+	    
+    </select>
+    
+    
+    
+    <select id="dashboard.project.list.jira" resultType="hashmap">
+	    select
+			distinct nvl(m.pjt_name,a.pjt_code) pjt_code
+		from		
+		(select 
+	    	distinct 
+	    	project pjt_code ,
+	    	project pjt_name ,
+	    	0 cnt  
+	    from JIRA_ISSUE
+		) a
+		left outer join PJT_MAPPING m on m.legacy_pjt_name = A.pjt_code and LEGACY_NAME= 'JIRA'
+		
+		order by 1
+    </select>
+    
+    <select id="dashboard.project.list.jira.backup" resultType="hashmap">
+	    select 
+	    	distinct 
+	    	project pjt_code ,
+	    	project pjt_name ,
+	    	0 cnt  
+	    from JIRA_ISSUE
+		order by 1
+    </select>
+    
+    <select id="dashboard.project.list.sub.jira" resultType="hashmap">
+	    select * from (
+		    select
+				nvl(m.pjt_name,a.pjt_code) pjt_code, a.pjt_code sub_pjt_code
+			from		
+			(select 
+		    	distinct 
+		    	project pjt_code ,
+		    	project pjt_name ,
+		    	0 cnt  
+		    from JIRA_ISSUE
+			) a
+			left outer join PJT_MAPPING m on m.legacy_pjt_name = A.pjt_code and LEGACY_NAME= 'JIRA'
+		)
+		where pjt_code = #{PJT_CODE}
+		order by 1
+    </select>
+    
+    
+    <!--  codesonar의 가장 최신의 데이타를 가져온다. -->
+    <select id="dashboard.codesonar.csvnum" resultType="hashmap">
+    	with mapping as (
+    		select
+				a.pjt_code legacy_pjt_name,
+				nvl(m.pjt_name,a.pjt_code) as pjt_name
+			from		
+			(SELECT
+		        PJT_CODE
+		        ,PJT_NAME
+		        ,count(*) cnt 
+		    FROM
+		        CODESONAR_TEST
+		    where is_valid = 'T'
+		    group by pjt_code, pjt_name	    
+		    ) a 
+		    left outer join PJT_MAPPING m on m.legacy_pjt_name = A.pjt_code and LEGACY_NAME= 'CodeSonar' 
+    	) ,         	
+	    maxDate as (
+	    	select 	
+		    	m.pjt_name,  
+		    	s.pjt_code,	
+		    	max(s.ANALYSYS_DATE) analysys_date
+		    from  CODESONAR_TEST s
+		    join mapping m on m.legacy_pjt_name = S.pjt_code
+		    where m.pjt_name = #{PJT_CODE}
+		    and s.IS_VALID = 'T' -- 2016.01.05
+		    group by m.pjt_name,s.PJT_CODE
+	    )
+	    
+	    select 
+	    	b.pjt_name as mapping_pjt_code, a.*
+	    from CODESONAR_TEST a
+	    join maxDate b on a.pjt_code = b.pjt_code
+	    where  is_valid = 'T' 
+	    and a.ANALYSYS_DATE = b.analysys_date
+	    
+    </select>
+    
+    
+    <select id="dashboard.jira.pkey" resultType="hashmap">
+    	with mapping as (
+    		select * from (
+		    	SELECT
+	                a.project legacy_pjt_name,
+					nvl(m.pjt_name,a.project) as pjt_name
+	            FROM
+                (
+                    SELECT
+                            DISTINCT project                           
+                        FROM
+                            JIRA_ISSUE
+                ) a
+                LEFT OUTER JOIN PJT_MAPPING m
+                    ON m.legacy_pjt_name = A.project		
+                    and LEGACY_NAME= 'JIRA'
+	         ) a 
+	         where a.pjt_name = #{PJT_CODE}
+    	)   
+    	   	
+	    select 	
+	    	m.pjt_name,  
+	    	s.PNAME as pjt_code,	
+	    	s.PKEY
+	    from  jirauser.project s
+	    join mapping m on m.legacy_pjt_name = S.PNAME
+	    where m.pjt_name = #{PJT_CODE}
+	    <if test="subProjects != null">
+		    and S.PNAME in 
+		    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			#{item}
+		    </foreach>		    
+		 </if>
+	    
+    </select>
+    
+    <select id="dashboard.project.pcount" parameterType="hashmap"  resultType="hashmap">
+    	with mapping as (
+    		select
+    			legacy_pjt_name,
+    			pjt_name,
+    			(
+    				select count(*) from pjt_mapping a 
+    				where a.LEGACY_NAME = pm.LEGACY_NAME
+    				and a.PJT_NAME = pm.PJT_NAME
+    			) as projectCount
+    		from pjt_mapping pm
+    		where pm.LEGACY_NAME = 'CodeSonar' 
+    	)
+    	
+	    select 
+				pjt_code,
+				to_char(to_date(ANALYSYS_DATE,'YYYY/MM/DD'),'YYYY-MM-DD') ANALYSYS_DATE,
+				phase1 phase,
+				ROW_NUMBER()  over( PARTITION BY pjt_code,phase1 order by ANALYSYS_DATE) as phase_seq , 
+				P0_CNT P0,
+				P1_CNT P1,
+				P2_CNT P2
+				
+			from 
+			(
+				select 
+					pjt_code,
+					ANALYSYS_DATE,
+					max(phase1) phase1, 
+					sum(case analysys_date_seq when 1 then p0_cnt else 0 end) as p0_cnt,
+					sum(case analysys_date_seq when 1 then p1_cnt else 0 end) as p1_cnt,
+					sum(case analysys_date_seq when 1 then p2_cnt else 0 end) as p2_cnt
+				From
+				(
+					select
+					m.pjt_name pjt_code, 
+					--s.PJT_CODE,
+					--s.ANALYSYS_DATE,
+					--// 2016-01-08. 분석일에 해당하는 일요일.
+					--// TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'IW')-1 week_date , -- ISO 월요일 시작
+					TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY') week_date , --해당주의 일요일
+					case
+						when m.projectCount > 1 then
+							to_char(
+								TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY'),
+								'YYYY/MM/DD'
+							)
+						else
+							s.ANALYSYS_DATE
+					end as ANALYSYS_DATE,
+					case 
+						when m.projectCount > 1 then
+							dense_rank() over ( PARTITION BY m.pjt_name,TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY') order by s.analysys_date desc) 
+						else 1
+					end as analysys_date_seq ,
+ 					(select max(phase)
+						 from PJT_INFO 
+						where pjt_code = m.PJT_NAME 
+						and  s.ANALYSYS_DATE between ACTUAL_START_DATE 
+ 						and nvl(ACTUAL_END_DATE,to_char(sysdate,'YYYY/MM/DD'))
+					) as phase1,
+					P0_CNT P0_CNT,
+					P1_CNT P1_CNT,
+					P2_CNT P2_CNT
+					from CODESONAR_TEST s
+					join mapping m on m.legacy_pjt_name = S.pjt_code
+					where 1=1 
+					and is_valid = 'T'
+					and m.pjt_name =#{PJT_CODE}
+					--order by m.pjt_name, 3
+				) a group by a.pjt_code,a.ANALYSYS_DATE
+		) a
+		where 1=1
+		--and a.phase1 is not null
+		order by pjt_code, ANALYSYS_DATE
+		
+    </select>
+    
+    <select id="dashboard.project.multi.raw" parameterType="hashmap"  resultType="hashmap">
+	    with mapping as (
+    		select
+    			legacy_pjt_name,
+    			pjt_name,
+    			(
+    				select count(*) from pjt_mapping a 
+    				where a.LEGACY_NAME = pm.LEGACY_NAME
+    				and a.PJT_NAME = pm.PJT_NAME
+    			) as projectCount
+	    		from pjt_mapping pm
+	    		where pm.LEGACY_NAME = 'CodeSonar'   
+    	)
+    	
+	    select 
+			pjt_code,
+			pjt_name,
+			ANALYSYS_DATE,
+			phase1 phase,
+			ROW_NUMBER()  over( PARTITION BY pjt_code,phase1 order by ANALYSYS_DATE) as phase_seq ,    -- dense_rank()
+			P0_CNT,
+			P1_CNT,
+			P2_CNT
+			--,LOC
+		from 
+		(
+			select
+				pjt_code,
+				pjt_name,
+				ANALYSYS_DATE,
+				max(phase1) phase1 ,
+				sum(case analysys_date_seq when 1 then p0_cnt else 0 end) as p0_cnt,
+				sum(case analysys_date_seq when 1 then p1_cnt else 0 end) as p1_cnt,
+				sum(case analysys_date_seq when 1 then p2_cnt else 0 end) as p2_cnt
+			from (
+				select
+					m.pjt_name pjt_code, 
+					pl.pjt_name,
+					TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY') week_date , --해당주의 일요일
+					case
+						when m.projectCount > 1 then
+							to_char(
+								TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY'),
+								'YYYY/MM/DD'
+							)
+						else
+							s.ANALYSYS_DATE
+					end as ANALYSYS_DATE,
+					case 
+						when m.projectCount > 1 then
+							dense_rank() over ( PARTITION BY m.pjt_name,TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY') order by s.analysys_date desc) 
+						else 1
+					end as analysys_date_seq ,
+					(select max(phase) from PJT_INFO 
+						where pjt_code = m.PJT_NAME 
+						and  s.ANALYSYS_DATE between ACTUAL_START_DATE 
+						and nvl(ACTUAL_END_DATE,to_char(sysdate,'YYYY/MM/DD'))
+					) as phase1,
+					P0_CNT P0_CNT,
+					P1_CNT P1_CNT,
+					P2_CNT P2_CNT
+					--,LOC
+				from CODESONAR_TEST s
+				join mapping m on m.legacy_pjt_name = S.pjt_code
+				join pjt_list pl on m.pjt_name = pl.pjt_code
+				where is_valid = 'T'
+				/*  2015-06-23 */
+				and m.pjt_name in (
+					select pjt_code from pjt_list
+				)
+				<if test="pjtCodeList != null and pjtCodeList != '' ">
+		            and pl.pjt_code in 
+		            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+		                #{item}
+		            </foreach>
+		        </if>
+				
+			) a group by pjt_code, pjt_name, ANALYSYS_DATE
+		) a
+		where 1=1
+		and a.phase1 is not null
+		order by pjt_code, ANALYSYS_DATE
+    </select>
+    
+    <select id="dashboard.project.multi.count" parameterType="hashmap"  resultType="hashmap">
+	    	with mapping as (
+                select
+    			legacy_pjt_name,
+    			pjt_name,
+    			(
+    				select count(*) from pjt_mapping a 
+    				where a.LEGACY_NAME = pm.LEGACY_NAME
+    				and a.PJT_NAME = pm.PJT_NAME
+    			) as projectCount
+	    		from pjt_mapping pm
+	    		where pm.LEGACY_NAME = 'CodeSonar'  
+            )
+            
+            select 
+                pjt_code,phase,count(*) cnt
+            from 
+            (
+                select 
+                    pjt_code,
+                    ANALYSYS_DATE,
+                    phase1 phase,
+                    ROW_NUMBER()  over( PARTITION BY pjt_code,phase1 order by ANALYSYS_DATE) as phase_seq ,    -- dense_rank()
+                    P0_CNT,
+                    P1_CNT,
+                    P2_CNT,
+                    LOC
+                from 
+	            (
+	            	select
+						m.pjt_name pjt_code, 
+						--s.PJT_CODE,
+						--s.ANALYSYS_DATE,
+						--// 2016-01-08. 분석일에 해당하는 일요일.
+						--// TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'IW')-1 week_date , -- ISO 월요일 시작
+						TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY') week_date , --해당주의 일요일
+						case
+							when m.projectCount > 1 then
+								to_char(
+									TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY'),
+									'YYYY/MM/DD'
+								)
+							else
+								s.ANALYSYS_DATE
+						end as ANALYSYS_DATE,
+						case 
+							when m.projectCount > 1 then
+								dense_rank() over ( PARTITION BY m.pjt_name,TRUNC (to_date(s.ANALYSYS_DATE,'YYYY/MM/DD'),'DAY') order by s.analysys_date desc) 
+							else 1
+						end as analysys_date_seq ,
+	 					(select max(phase)
+							 from PJT_INFO 
+							where pjt_code = m.PJT_NAME 
+							and  s.ANALYSYS_DATE between ACTUAL_START_DATE 
+	 						and nvl(ACTUAL_END_DATE,to_char(sysdate,'YYYY/MM/DD'))
+						) as phase1,
+						P0_CNT P0_CNT,
+						P1_CNT P1_CNT,
+						P2_CNT P2_CNT,
+						LOC
+	                from CODESONAR_TEST s
+	                join mapping m on m.legacy_pjt_name = S.PJT_CODE 
+	                where is_valid = 'T'
+		                /*  2015-06-23 */
+					and m.pjt_name in (
+						select pjt_code from pjt_list
+					)
+					<if test="pjtCodeList != null and pjtCodeList != '' ">
+			            and m.pjt_name in 
+			            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+			                #{item}
+			            </foreach>
+			        </if>
+                ) a
+                where 1=1
+                and a.phase1 is not null
+                and a.analysys_date_seq = 1
+                                
+            )
+            group by pjt_code, phase
+            ORDER BY pjt_code ,phase
+	        
+    </select>
+    
+    <select id="dashboard.project.multi.phase" parameterType="hashmap"  resultType="hashmap">
+	    select 
+            a.phase, 
+            to_char(ADD_MONTHS(a.start_dt,rownum-1),'YYYY-MM-DD')  phase_dt ,
+            nvl(b.p0,0) p0,
+            nvl(b.p1,0) p1,
+            nvl(b.p2,0) p2,
+            nvl(b.pa0,0) pa0,
+            nvl(b.pa1,0) pa1,
+            nvl(b.pa2,0) pa2
+        from (
+            SELECT
+                DISTINCT PHASE, to_date(to_char(sysdate,'YYYY') || '01-01','YYYY-MM-DD') start_dt
+            FROM
+                PJT_INFO
+            --order by phase
+        )  A  left outer join CODESONAR_PHASE_TARGET b
+            on a.phase = b.phase
+        order by a.phase
+		
+	        
+    </select>
+    
+    <select id="dashboard.project.phase" parameterType="hashmap"  resultType="hashmap">
+	    select 
+			pi.PJT_CODE, pi.PJT_NAME, pi.PHASE, pi.PLAN_START_DATE, pi.PLAN_END_DATE, pi.ACTUAL_START_DATE
+			, nvl(pi.ACTUAL_END_DATE, to_char(sysdate,'YYYY/MM/DD')) ACTUAL_END_DATE
+			, nvl(tar.P0,0) p0
+			, nvl(tar.P1,0) p1
+			, nvl(tar.P2,0) p2
+			, nvl(tar.PA0,0) pa0
+			, nvl(tar.PA1,0) pa1
+			, nvl(tar.PA2,0) pa2
+		from PJT_INFO pi
+		left outer join CODESONAR_PHASE_TARGET tar
+			on tar.phase = pi.phase
+		where pjt_code = #{PJT_CODE}
+		and pi.ACTUAL_START_DATE is not null
+		order by pi.phase
+	        
+    </select>
+    
+    
+    <select id="dashboard.summary.list" parameterType="hashmap"  resultType="hashmap">
+	    select
+	    	pjt_code,current_phase, Quality, Delivery, Comments
+	    from summary_dashboard
+	    	        
+    </select>
+    
+    <select id="dashboard.codereview.list" parameterType="hashmap"  resultType="hashmap">
+	    select
+	    	pjt_code, current_phase, submit, review, Comments
+	    from code_review
+	    	        
+    </select>
+    
+    <select id="dashboard.defectsTrends.list" parameterType="hashmap"  resultType="hashmap">
+	    with projectList as (
+	    	select * from (
+		    	SELECT
+	                DISTINCT NVL(m.pjt_name, a.project) pjt_code, a.project
+	            FROM
+	                (
+	                    SELECT
+	                            DISTINCT project                           
+	                        FROM
+	                            JIRA_ISSUE
+	                ) a
+	                    LEFT OUTER JOIN PJT_MAPPING m
+	                        ON m.legacy_pjt_name = A.project		
+	                        and LEGACY_NAME= 'JIRA'
+	         ) a
+             where a.pjt_code = #{PJT_CODE}   
+	    ) ,
+	    dt as(
+	        select
+            project AS project,
+            min(dt) start_dt,
+            max(dt) end_dt
+        from (     
+             SELECT jira.project AS project ,
+                   TO_CHAR (MIN(created), 'YYYY-MM-DD') dt
+              FROM JIRA_ISSUE jira 
+             JOIN projectList list ON list.project = jira.project
+             WHERE list.pjt_code = #{PJT_CODE} 
+             <if test="priority != null">
+                 and PRIORITY in 
+                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="issuetype != null">
+                 and ISSUETYPE in 
+                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="subProjects != null">
+			    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+			 </if>
+			 group by jira.project             
+             union all
+             SELECT jira.project AS project,
+                   TO_CHAR (max(created), 'YYYY-MM-DD') dt
+              FROM JIRA_ISSUE jira 
+             JOIN projectList list ON list.project = jira.project
+             WHERE list.pjt_code = #{PJT_CODE} 
+             <if test="priority != null">
+                 and PRIORITY in 
+                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="issuetype != null">
+                 and ISSUETYPE in 
+                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="subProjects != null">
+			    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+			 </if>
+			 group by jira.project      
+             union all
+             SELECT jira.project AS project,
+                   TO_CHAR (min(RESOLUTIONDATE), 'YYYY-MM-DD') dt
+              FROM JIRA_ISSUE jira 
+             JOIN projectList list ON list.project = jira.project
+             WHERE list.pjt_code = #{PJT_CODE} 
+             <if test="priority != null">
+                 and PRIORITY in 
+                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="issuetype != null">
+                 and ISSUETYPE in 
+                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="subProjects != null">
+			    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+			 </if>  
+			 group by jira.project     
+             union all
+             SELECT jira.project AS project ,
+                   TO_CHAR (MAX(RESOLUTIONDATE), 'YYYY-MM-DD') dt
+              FROM JIRA_ISSUE jira 
+             JOIN projectList list ON list.project = jira.project
+             WHERE list.pjt_code =#{PJT_CODE}
+	        <if test="priority != null">
+                 and PRIORITY in 
+                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="issuetype != null">
+                 and ISSUETYPE in 
+                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="subProjects != null">
+			    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+			 </if> 
+			 group by jira.project      
+	    	)
+	    	group by project    
+	    ) 
+	               
+	    select
+	    projectList.project
+	     , to_char(a.pre_dt,'YYYY/MM/DD') pre_dt 
+	     , to_char(a.dt, 'YYYY/MM/DD' )   defects_date
+	     , (select count(*) 
+	            from JIRA_ISSUE b 
+	            where b.created is not null
+	            <![CDATA[
+	            and b.created >= (a.pre_dt+1)
+	            and b.created < (a.dt + 1)
+	            and projectList.project = b.project
+	            ]]>
+	            <if test="priority != null">
+	                 and b.PRIORITY in 
+	                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+	                     #{item}
+	                 </foreach>
+	                 
+	             </if>
+	             <if test="issuetype != null">
+	                 and b.ISSUETYPE in 
+	                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+	                     #{item}
+	                 </foreach>
+	                 
+	             </if>
+	             <if test="subProjects != null">
+				    and b.project in 
+				    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+				        #{item}
+				    </foreach>		    
+				 </if>       
+	        ) created
+	     , (select count(*) 
+	            from JIRA_ISSUE b 
+	            where b.RESOLUTIONDATE is not null
+	            <![CDATA[
+	            and b.RESOLUTIONDATE >= (a.pre_dt+1)
+	            and b.RESOLUTIONDATE < (a.dt + 1)
+	            and projectList.project = b.project
+	            ]]>
+	            <if test="priority != null">
+	                 and b.PRIORITY in 
+	                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+	                     #{item}
+	                 </foreach>
+	                 
+	             </if>
+	             <if test="issuetype != null">
+	                 and b.ISSUETYPE in 
+	                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+	                     #{item}
+	                 </foreach>
+	                 
+	             </if>
+	             <if test="subProjects != null">
+				    and b.project in 
+				    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+				        #{item}
+				    </foreach>		    
+				 </if>
+	        ) resolved
+	    from 
+	    projectList, 
+	    (
+	        select
+	            a.dt
+	            , nvl(lag(a.dt) over (order by a.levelno),a.dt-1) pre_dt
+	        from 
+	        (
+	            select * from (
+	                select to_date( (select min(start_dt) from dt)  , 'YYYY-MM-DD') + rownum -1 dt , level as levelno
+	                from dual
+	                <![CDATA[
+	                connect by level <= to_date( (select max(end_dt) from dt) , 'YYYY-MM-DD') - to_date( (select min(start_dt) from dt)  , 'YYYY-MM-DD') +1
+	                ]]>
+	            ) where mod(levelno,7) = 0 or levelno=1 or dt = to_date( (select max(end_dt) from dt) , 'YYYY-MM-DD')
+	        ) a
+	    ) a 
+	    order by 2  	        
+	    	        
+    </select>
+    
+    
+    <select id="dashboard.defectsTrends.list.backup1" parameterType="hashmap"  resultType="hashmap">
+	    select 
+            project pjt_code,
+            defects_date,
+            created,
+            (select count(*) 
+                from JIRA_ISSUE b 
+                where a.project= b.project 
+                and b.RESOLUTIONDATE is not null
+                <![CDATA[
+                and b.RESOLUTIONDATE >= to_date(pre_date,'YYYY/MM/DD') +1
+                and b.RESOLUTIONDATE  < to_date(a.defects_date,'YYYY/MM/DD') + 1
+                ]]>
+                <if test="priority != null">
+                     and b.PRIORITY in 
+                     <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                         #{item}
+                     </foreach>
+                     
+                 </if>
+                 <if test="issuetype != null">
+                     and b.ISSUETYPE in 
+                     <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                         #{item}
+                     </foreach>
+                     
+                 </if>
+            ) resolved
+        from (
+            select 
+                a.project project,
+                a.created defects_date ,
+                count(decode(a.gubun,'real',1,null)) created,
+                lag(created) over(order by a.project,a.created) pre_date            
+             from 
+             (
+                 select 
+                     project,
+                     to_char(created,'YYYY/MM/DD') created,
+                     'real' gubun
+                 from JIRA_ISSUE
+                 where project =  #{PJT_CODE}
+                 <if test="priority != null">
+                     and PRIORITY in 
+                     <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                         #{item}
+                     </foreach>
+                     
+                 </if>
+                 <if test="issuetype != null">
+                     and ISSUETYPE in 
+                     <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                         #{item}
+                     </foreach>
+                     
+                 </if>
+                 union all
+                 select 
+                    '${PJT_CODE}' project,
+                    (
+                    	select max(to_char(resolutiondate,'YYYY/MM/DD')) from JIRA_ISSUE 
+                    	where project = #{PJT_CODE}
+                    	<if test="priority != null">
+		                    and PRIORITY in 
+		                	<foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+		                         #{item}
+		                    </foreach>
+		                </if>
+		                <if test="issuetype != null">
+		                    and ISSUETYPE in 
+		                    <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+		                        #{item}
+		                    </foreach>		                     
+		                </if>
+                    
+                    ) created ,
+                    'virtual' gubun                   
+                 from dual                 
+             ) a
+            group by a.project,a.created
+            order by defects_date 
+        ) a 
+	    	        
+    </select>
+    
+    <select id="dashboard.defectsTrends.list.backup" parameterType="hashmap"  resultType="hashmap">
+	    select 
+			project pjt_code,
+			created defects_date ,
+			count(*) created,
+			count(decode(resolved,null,null,1)) resolved
+		 from 
+		 (
+		 	select 
+		 	project,
+		 	to_char(created,'YYYY/MM/DD') created ,
+		 	to_char(resolutiondate,'YYYY/MM/DD') resolved
+		 	from JIRA_ISSUE
+		 	where project = #{PJT_CODE}			 		
+		 	<if test="priority != null">
+		 		and PRIORITY in 
+		 		<foreach collection="priority" item="a" index="index"  open="(" separator="," close=")">
+		 			#{a}
+		 		</foreach>
+		 		
+		 	</if>
+		 	<if test="issuetype != null">
+		 		and ISSUETYPE in 
+		 		<foreach collection="issuetype" item="a" index="index" open="(" separator="," close=")">
+		 			#{a}
+		 		</foreach>
+		 		
+		 	</if>
+		 )
+		group by project,created
+		order by defects_date 
+	    	        
+    </select>
+    
+    <select id="dashboard.defectsTrends.list.old" parameterType="hashmap"  resultType="hashmap">
+	    select
+	    	pjt_code, defects_date, created, resolved
+	    from defects_trends
+	    where pjt_code = #{PJT_CODE}
+	    	        
+    </select>
+    <select id="dashboard.defectsTrends.issuetype" parameterType="hashmap"  resultType="hashmap">
+    	with projectList as (
+	    	select * from (
+		    	SELECT
+	                DISTINCT NVL(m.pjt_name, a.project) pjt_code, a.project
+	            FROM
+	                (
+	                    SELECT
+	                            DISTINCT project                           
+	                        FROM
+	                            JIRA_ISSUE
+	                ) a
+	                    LEFT OUTER JOIN PJT_MAPPING m
+	                        ON m.legacy_pjt_name = A.project
+	                        and LEGACY_NAME= 'JIRA'		
+	         ) a
+             where a.pjt_code = #{PJT_CODE}   
+	    )
+	    
+		SELECT
+	        ISSUETYPE , COUNT(*) CNT
+	    FROM
+	        JIRA_ISSUE jira     
+	        join projectList list on list.project = jira.project        
+	    GROUP BY ISSUETYPE
+	    ORDER BY ISSUETYPE
+	    	        
+    </select>
+    <select id="dashboard.defectsTrends.priority" parameterType="hashmap"  resultType="hashmap">
+    	with projectList as (
+	    	select * from (
+		    	SELECT
+	                DISTINCT NVL(m.pjt_name, a.project) pjt_code, a.project
+	            FROM
+	                (
+	                    SELECT
+	                            DISTINCT project                           
+	                        FROM
+	                            JIRA_ISSUE
+	                ) a
+	                    LEFT OUTER JOIN PJT_MAPPING m
+	                        ON m.legacy_pjt_name = A.project
+	                        and LEGACY_NAME= 'JIRA'		
+	         ) a
+             where a.pjt_code = #{PJT_CODE}   
+	    ) 
+	    
+	    SELECT
+	        PRIORITY , COUNT(*) CNT
+	    FROM
+	        JIRA_ISSUE jira     
+	        join projectList list on list.project = jira.project        
+	    GROUP BY PRIORITY
+	    ORDER BY PRIORITY
+	    	        
+    </select>
+    
+    <select id="dashboard.defectsUnresolved" parameterType="hashmap"  resultType="hashmap">
+    	with projectList as (
+            select * from (
+                SELECT
+                    DISTINCT NVL(m.pjt_name, a.project) pjt_code, a.project
+                FROM
+                    (
+                        SELECT
+                                DISTINCT project                           
+                            FROM
+                                JIRA_ISSUE
+                    ) a
+                        LEFT OUTER JOIN PJT_MAPPING m
+                            ON m.legacy_pjt_name = A.project
+                            and LEGACY_NAME= 'JIRA'        
+             ) a
+             where a.pjt_code = #{PJT_CODE} 
+        ) 
+        SELECT
+            list.pjt_code , 
+            jira.project,
+            jira.PRIORITY , 
+            sum(decode(jira.resolutiondate,null,1,0)) unresolved
+        FROM
+            JIRA_ISSUE jira     
+            join projectList list on list.project = jira.project
+        where 1=1
+        <if test="priority != null">
+	     	and PRIORITY in 
+	        <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+	        	#{item}
+	         </foreach>
+	     </if>
+	     <if test="issuetype != null">
+	      	and ISSUETYPE in 
+	         <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+	             #{item}
+	         </foreach>
+	      </if>
+	      <if test="subProjects != null">
+		    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+		  </if>           
+        GROUP BY list.pjt_code,jira.project, PRIORITY
+        ORDER BY PRIORITY
+	    	        
+    </select>
+    
+    <select id="dashboard.defectsUnresolved.pie" parameterType="hashmap"  resultType="hashmap">
+    	with projectList as (
+            select * from (
+                SELECT
+                    DISTINCT NVL(m.pjt_name, a.project) pjt_code, a.project
+                FROM
+                    (
+                        SELECT
+                                DISTINCT project                           
+                            FROM
+                                JIRA_ISSUE
+                    ) a
+                        LEFT OUTER JOIN PJT_MAPPING m
+                            ON m.legacy_pjt_name = A.project
+                            and LEGACY_NAME= 'JIRA'        
+             ) a
+             where a.pjt_code = #{PJT_CODE} 
+        ) 
+        SELECT
+            list.pjt_code ,
+            jira.project, 
+            jira.PRIORITY ,
+            issueType,
+            sum(decode(jira.resolutiondate,null,1,0)) unresolved
+        FROM
+            JIRA_ISSUE jira     
+            join projectList list on list.project = jira.project        
+        where priority like '%' || #{PRIORITY} || '%'   
+        <if test="priority != null">
+	     	and PRIORITY in 
+	        <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+	        	#{item}
+	         </foreach>
+	     </if>
+	     <if test="issuetype != null">
+	      	and ISSUETYPE in 
+	         <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+	             #{item}
+	         </foreach>
+	      </if>
+	      <if test="subProjects != null">
+		    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+		  </if>
+        GROUP BY 
+        	list.pjt_code ,
+        	jira.project ,
+        	PRIORITY,
+        	issueType
+        ORDER BY issueType
+	    	        
+    </select>
+    
+    <select id="dashboard.dashboard.project" parameterType="hashmap"  resultType="hashmap">
+    	select 
+    		pl.pjt_code,
+    		pl.pjt_name,
+    		nvl(pl.APPLICATION,'etc') as application_id,
+    		nvl(app.CODE_NAME,'etc') application_name,
+    		nvl(app.DISPLAY_ORDER,100) DISPLAY_ORDER
+    	from PJT_LIST pl
+    	left outer join common_code app
+    		on pl.APPLICATION = app.CODE_ID
+    		and app.CATEGORY = 'pms_application'
+    	where use_yn = 'Y'
+    	<if test="pjtCodeList != null and pjtCodeList != '' ">
+            and pl.pjt_code in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		order by app.CODE_NAME asc nulls last, pl.PJT_NAME	    	        
+    </select>
+    
+    
+    <select id="dashboard.pjtcode.byPmsInterface.jira" parameterType="hashmap"  resultType="hashmap">
+    
+    		select * from ( 
+		    	SELECT
+	                a.project legacy_pjt_name,
+	                m.LEGACY_PJT_KEY,
+					nvl(m.pjt_name,a.project) as pjt_code ,
+					plist.pjt_name
+	            FROM
+                (
+                    SELECT
+                            DISTINCT project                           
+                        FROM
+                            JIRA_ISSUE
+                ) a
+                LEFT OUTER JOIN PJT_MAPPING m
+                    ON m.legacy_pjt_name = A.project		
+                    and LEGACY_NAME= 'JIRA'
+                LEFT OUTER JOIN pjt_list plist on plist.pjt_code = m.pjt_name
+	         ) a 
+	         where a.legacy_pjt_key in (
+	         	SELECT REGEXP_SUBSTR(col1,'[^,]+',1,lvl)  FROM
+				(	SELECT #{INTERFACE_ID} col1,level lvl 
+					FROM dual 
+					<![CDATA[ 
+						CONNECT BY level <= LENGTH(#{INTERFACE_ID}) - LENGTH(REPLACE(#{INTERFACE_ID},',')) + 1
+					]]>
+				)
+			 )
+			 and rownum = 1
+			 
+	              
+    </select>
+    <select id="dashboard.pjtcode.byPmsInterface.codesonar" parameterType="hashmap"  resultType="hashmap">
+    
+    		select * from (
+		    	SELECT
+	                a.project legacy_pjt_name,
+					nvl(m.pjt_name,a.project) as pjt_code
+	            FROM
+                (
+                    SELECT
+				        PJT_CODE
+				        ,PJT_NAME
+				        ,count(*) cnt 
+				    FROM
+				        CODESONAR_TEST
+				    where is_valid = 'T'
+				    group by pjt_code, pjt_name	    
+                ) a
+                LEFT OUTER JOIN PJT_MAPPING m
+                    ON m.legacy_pjt_name = A.PJT_CODE		
+                    and LEGACY_NAME= 'CodeSonar'
+	         ) a 
+	         where a.legacy_pjt_name in (
+	         	SELECT REGEXP_SUBSTR(col1,'[^,]+',1,lvl)  FROM
+				(	SELECT #{INTERFACE_ID} col1,level lvl 
+					FROM dual 
+					<![CDATA[ 
+						CONNECT BY level <= LENGTH(#{INTERFACE_ID}) - LENGTH(REPLACE(#{INTERFACE_ID},',')) + 1
+					]]>
+				)
+			 )
+			 and rownum = 1
+			 
+	              
+    </select>
+    
+    <select id="dashboard.jira.tat.average" parameterType="hashmap"  resultType="hashmap">
+    	select 
+    		round(avg(jira.RESOLUTIONDATE - jira.CREATED),1) tat  
+    	from jira_issue jira
+    	left outer join PJT_MAPPING m 
+    		on m.legacy_pjt_name = jira.project and LEGACY_NAME= 'JIRA' 
+    	where m.PJT_NAME = #{PJT_CODE}
+    	<if test="priority != null">
+                 and PRIORITY in 
+                 <foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="issuetype != null">
+                 and ISSUETYPE in 
+                 <foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+                     #{item}
+                 </foreach>
+                 
+             </if>
+             <if test="subProjects != null">
+			    and jira.project in 
+			    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+			        #{item}
+			    </foreach>		    
+			 </if>
+    	  	        
+    </select>
+    
+    <select id="dashboard.searchCondition.select" parameterType="hashmap"  resultType="hashmap">
+    	select 
+    		URL, SOLUTION, USER_ID, PJT_CODE, SEARCH
+    	from SEARCH_CONDITION
+    	where url = #{url}
+    	and solution= #{solution}
+    	and user_id = #{userId}
+    	and pjt_code = #{PJT_CODE}
+    	
+    </select>
+    
+    
+    <select id="dashboard.searchCondition.save" parameterType="hashmap"  resultType="hashmap">
+    	declare
+    		cnt number;
+    	begin
+    		select count(*) into cnt from SEARCH_CONDITION
+    		where url = #{url}
+	    	and solution= #{solution}
+	    	and user_id = #{userId}
+	    	and pjt_code = #{PJT_CODE}
+	    	;
+	    	
+	    	if cnt = 0 then
+	    		insert into SEARCH_CONDITION(URL, SOLUTION, USER_ID, PJT_CODE, SEARCH)
+	    		values(#{url},#{solution},#{userId},#{PJT_CODE},#{search});
+	    	else
+	    		update SEARCH_CONDITION set
+	    		SEARCH = #{search}
+	    		where url = #{url}
+		    	and solution= #{solution}
+		    	and user_id = #{userId}
+		    	and pjt_code = #{PJT_CODE}
+		    	;
+	    	
+	    	end if;
+    	end;
+    </select>
+    
+</mapper>

@@ -1,0 +1,1578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+	<select id="fwq.subProject.list" resultType="hashmap">
+		select 
+		    PM.PJT_NAME pjt_code,
+		    PL.PJT_NAME,
+		    PL.PJT_NAME_PMS,
+		    PM.LEGACY_PJT_NAME project
+		from PJT_MAPPING pm
+		left outer join PJT_LIST pl
+		    on PL.PJT_CODE = PM.PJT_NAME
+		where PM.LEGACY_NAME = 'FWQ'
+		and PM.PJT_NAME = #{pjt_code}
+		order by PM.LEGACY_PJT_NAME
+	</select>
+	<select id="fwq.allproject.curpoint.list" resultType="hashmap">
+		with tbl_dt as (
+			 select
+			 	--his.PJT_CODE,
+			 	p.project, 
+			 	--p.measure_dt,
+			 	--TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') monday,
+				--to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') weekday,
+				max(stc.MEASURE_DT) stc_real_measure_dt,
+				max(fs.MEASURE_DT) fs_real_measure_dt,
+				max(dup.MEASURE_DT) dup_real_measure_dt,
+				max(com.MEASURE_DT) com_real_measure_dt,
+				max(arc.MEASURE_DT) arc_real_measure_dt,
+				max(cov.MEASURE_DT) cov_real_measure_dt,
+				max(cod.MEASURE_DT) cod_real_measure_dt,
+				max(fd.MEASURE_DT) fp_real_measure_dt
+				
+				--to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD')   est_measure_dt
+			from FW_QUALITY_HISTORY his
+			join FW_QUALITY_POINT p
+				on p.measure_dt = his.measure_dt
+				and p.pjt_code = his.pjt_code
+			left outer join FW_QUALITY_STATIC_ANALISIS stc
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(stc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(stc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  stc.MEASURE_DT
+												end
+			 	and stc.project = p.project
+			 	
+			left outer join FW_QUALITY_FUNC_SIZE fs
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fs.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fs.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  fs.MEASURE_DT
+												end
+			 	and fs.project = p.project
+			left outer join FW_QUALITY_DUPLICATE_CODE dup
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(dup.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(dup.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  dup.MEASURE_DT
+												end
+			 	and dup.project = p.project
+			 	
+			left outer join FW_QUALITY_COMPLEXITY com
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  com.MEASURE_DT
+												end
+			 	and com.project = p.project
+			 
+			 left outer join FW_QUALITY_ARCHITECTURE arc
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(arc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(arc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  arc.MEASURE_DT
+												end
+			 	and arc.project = p.project
+			 
+			 left outer join FW_QUALITY_TESTCOVERAGE cov
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cov.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cov.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  cov.MEASURE_DT
+												end
+			 	and cov.project = p.project
+			 	
+			 left outer join FW_QUALITY_CODING_RULE cod
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cod.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cod.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  cod.MEASURE_DT
+												end
+			 	and cod.project = p.project
+			 	
+			left outer join FW_QUALITY_FUNC_PARAMETER fd
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fd.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fd.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  fd.MEASURE_DT
+												end
+			 	and fd.project = p.project
+			 	
+			 
+			 where 1=1 
+			and his.IS_LATEST = 'Y' 
+			--and p.project = 'Columbus_PCPU'
+			--and his.pjt_code = 'PJT_00062245'  
+			group by p.PROJECT
+		)
+
+		select 
+			HIS.MEASURE_DT, 
+			HIS.PJT_CODE, 
+			PL.PJT_NAME,
+			max(PL.PJT_NAME_PMS) as PJT_NAME_PMS,
+			round(max(HIS.MEASURE),2) as MEASURE, 
+			round(max(HIS.POINT),2) as POINT, 
+			nvl(sum(p.LOC) ,0)  as loc,
+			nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) as STATIC_ANALYSIS,
+			nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) as FUNC_PARAMETER,
+			nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) as FUNCTION_SIZE,
+			nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) as DUPLICATE,					
+			nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) AS CODING_RULE ,
+			
+			nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) as ARCHITECTURE,
+			nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) as COMPLEXITY,	
+			nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) as CODE_COVERAGE,	
+			
+			nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') as STATIC_ANALYSIS_EXISTS,
+			nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') as FUNC_PARAMETER_EXISTS,
+			nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') as FUNCTION_SIZE_EXISTS,
+			nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') as DUPLICATE_EXISTS,					
+			nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') AS CODING_RULE_EXISTS ,
+			
+			nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') as ARCHITECTURE_EXISTS,
+			nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') as COMPLEXITY_EXISTS,	
+			nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') as CODE_COVERAGE_EXISTS,	
+			
+			'XXX' GUBUN
+			
+		from FW_QUALITY_HISTORY his
+		left outer join FW_QUALITY_POINT p
+			on p.measure_dt = his.measure_dt
+			and p.pjt_code = his.pjt_code
+		left outer join tbl_dt  dt
+			on dt.project = p.project
+		left outer join FW_QUALITY_STATIC_ANALISIS  stc
+			on stc.MEASURE_DT = dt.stc_real_measure_dt
+			and stc.project = p.project
+		left outer join FW_QUALITY_FUNC_SIZE fs
+			on fs.MEASURE_DT = dt.fs_real_measure_dt
+			and fs.project = p.project
+		left outer join FW_QUALITY_DUPLICATE_CODE dup
+			on dup.MEASURE_DT = dt.dup_real_measure_dt
+			and dup.project = p.project
+		left outer join FW_QUALITY_COMPLEXITY com
+			on com.MEASURE_DT = dt.com_real_measure_dt
+			and com.project = p.project
+		left outer join FW_QUALITY_ARCHITECTURE arc
+			on arc.MEASURE_DT =  dt.arc_real_measure_dt
+			and arc.project = p.project			
+		left outer join FW_QUALITY_TESTCOVERAGE cov
+			on cov.MEASURE_DT = dt.cov_real_measure_dt
+			and cov.project = p.project
+		left outer join FW_QUALITY_CODING_RULE cod
+			on cod.MEASURE_DT = dt.cod_real_measure_dt
+			and cod.project = p.project
+		left outer join FW_QUALITY_FUNC_PARAMETER fp
+			on fp.MEASURE_DT = dt.fp_real_measure_dt
+			and fp.project = p.project
+			
+		left outer join pjt_list pl
+			on his.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING pm
+			on pm.LEGACY_NAME = 'FWQ'
+			and pm.LEGACY_PJT_NAME = p.project
+			and pm.PJT_NAME = p.pjt_code
+		where is_latest = 'Y'
+		and p.loc > 0
+		and pm.pjt_name is not null
+		<if test="pjtCodeList != null and pjtCodeList != '' ">
+            and his.pjt_code in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        group by HIS.MEASURE_DT, HIS.PJT_CODE, PL.PJT_NAME
+        
+        
+    </select>
+    <select id="fwq.pjtcode.project.curpoint.list" resultType="hashmap">
+		with projectLastMeasureDt as (
+			select 
+				pjt_code,
+				project,
+				max(measure_dt) as measure_dt
+			from FW_QUALITY_POINT p
+			group by pjt_code,project
+		)
+		select 
+			last.MEASURE_DT,
+		    PM.PJT_NAME pjt_code,
+		    PL.PJT_NAME,
+		    PL.PJT_NAME_PMS,
+		    PM.LEGACY_PJT_NAME project,
+		    nvl(p.POINT,0) point,
+		    'XXX' gubun
+		from PJT_MAPPING pm
+		left outer join PJT_LIST pl
+		    on PL.PJT_CODE = PM.PJT_NAME
+		left outer join projectLastMeasureDt last
+			on last.pjt_code = pl.pjt_code
+			and last.project = pm.LEGACY_PJT_NAME
+		left outer join FW_QUALITY_POINT p
+			on p.measure_dt = last.measure_dt
+			and p.pjt_code = last.pjt_code
+			and p.project = last.project
+		where PM.LEGACY_NAME = 'FWQ'
+		and PM.PJT_NAME = #{pjt_code}
+		and pl.use_yn = 'Y'		
+		order by PM.LEGACY_PJT_NAME, p.PROJECT
+	</select>
+    <select id="fwq.allproject.prepoint.data" resultType="hashmap">
+    	with tbl as ( 
+    		select * from (
+				select
+					MEASURE_DT, PJT_CODE, MEASURE, POINT, IS_LATEST, row_number() over (order by MEASURE_DT desc) row_num
+				from FW_QUALITY_HISTORY 
+				where measure_dt <![CDATA[ <  ]]> #{MEASURE_DT}
+				and pjt_code = #{PJT_CODE}
+			) where row_num = 1
+		)
+		, tbl_dt as (
+			 select
+			 	--his.PJT_CODE,
+			 	p.project, 
+			 	--p.measure_dt,
+			 	--TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') monday,
+				--to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') weekday,
+				max(stc.MEASURE_DT) stc_real_measure_dt,
+				max(fs.MEASURE_DT) fs_real_measure_dt,
+				max(dup.MEASURE_DT) dup_real_measure_dt,
+				max(com.MEASURE_DT) com_real_measure_dt,
+				max(arc.MEASURE_DT) arc_real_measure_dt,
+				max(cov.MEASURE_DT) cov_real_measure_dt,
+				max(cod.MEASURE_DT) cod_real_measure_dt,
+				max(fd.MEASURE_DT) fp_real_measure_dt
+				
+				--to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD')   est_measure_dt
+			from FW_QUALITY_HISTORY his
+			join tbl 
+				on tbl.pjt_code = his.pjt_code
+				and tbl.measure_dt = his.measure_dt
+			join FW_QUALITY_POINT p
+				on p.measure_dt = his.measure_dt
+				and p.pjt_code = his.pjt_code
+			
+			left outer join FW_QUALITY_STATIC_ANALISIS stc
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(stc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(stc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  stc.MEASURE_DT
+												end
+			 	and stc.project = p.project
+			 	
+			left outer join FW_QUALITY_FUNC_SIZE fs
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fs.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fs.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  fs.MEASURE_DT
+												end
+			 	and fs.project = p.project
+			left outer join FW_QUALITY_DUPLICATE_CODE dup
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(dup.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(dup.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  dup.MEASURE_DT
+												end
+			 	and dup.project = p.project
+			 	
+			left outer join FW_QUALITY_COMPLEXITY com
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  com.MEASURE_DT
+												end
+			 	and com.project = p.project
+			 
+			 left outer join FW_QUALITY_ARCHITECTURE arc
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(arc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(arc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  arc.MEASURE_DT
+												end
+			 	and arc.project = p.project
+			 
+			 left outer join FW_QUALITY_TESTCOVERAGE cov
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cov.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cov.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  cov.MEASURE_DT
+												end
+			 	and cov.project = p.project
+			 	
+			 left outer join FW_QUALITY_CODING_RULE cod
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cod.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cod.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  cod.MEASURE_DT
+												end
+			 	and cod.project = p.project
+			 	
+			left outer join FW_QUALITY_FUNC_PARAMETER fd
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fd.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fd.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  fd.MEASURE_DT
+												end
+			 	and fd.project = p.project
+			 	
+			 
+			 where 1=1 
+			--and his.IS_LATEST = 'Y' 
+			--and p.project = 'Columbus_PCPU'
+			--and his.pjt_code = 'PJT_00062245'  
+			and his.pjt_code = #{PJT_CODE}
+			group by p.PROJECT
+		)
+    	
+		select
+			HIS.MEASURE_DT, 
+			HIS.PJT_CODE, 
+			PL.PJT_NAME,
+			max(PL.PJT_NAME_PMS) as PJT_NAME_PMS,
+			round(max(HIS.MEASURE),2) as MEASURE, 
+			round(max(HIS.POINT),2) as POINT, 
+			
+			nvl(sum(p.LOC),0)  as loc,
+			nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) as STATIC_ANALYSIS,
+			nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) as FUNC_PARAMETER,
+			nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) as FUNCTION_SIZE,
+			nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) as DUPLICATE,					
+			nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) AS CODING_RULE ,
+			
+			nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) as ARCHITECTURE,
+			nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) as COMPLEXITY,	
+			nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) as CODE_COVERAGE,	
+			
+			nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') as STATIC_ANALYSIS_EXISTS,
+			nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') as FUNC_PARAMETER_EXISTS,
+			nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') as FUNCTION_SIZE_EXISTS,
+			nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') as DUPLICATE_EXISTS,					
+			nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') AS CODING_RULE_EXISTS ,
+			
+			nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') as ARCHITECTURE_EXISTS,
+			nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') as COMPLEXITY_EXISTS,	
+			nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') as CODE_COVERAGE_EXISTS,	
+			
+			'XXX' GUBUN,
+			row_number() over (order by his.MEASURE_DT desc) row_num
+		from FW_QUALITY_HISTORY his
+		join tbl 
+			on tbl.pjt_code = his.pjt_code
+			and tbl.measure_dt = his.measure_dt
+			
+		left outer join FW_QUALITY_POINT p
+			on p.measure_dt = his.measure_dt
+			and p.pjt_code = his.pjt_code
+		left outer join tbl_dt  dt
+			on dt.project = p.project
+			
+		left outer join FW_QUALITY_STATIC_ANALISIS  stc
+			on stc.MEASURE_DT = dt.stc_real_measure_dt
+			and stc.project = p.project
+		left outer join FW_QUALITY_FUNC_SIZE fs
+			on fs.MEASURE_DT = dt.fs_real_measure_dt
+			and fs.project = p.project
+		left outer join FW_QUALITY_DUPLICATE_CODE dup
+			on dup.MEASURE_DT = dt.dup_real_measure_dt
+			and dup.project = p.project
+		left outer join FW_QUALITY_COMPLEXITY com
+			on com.MEASURE_DT = dt.com_real_measure_dt
+			and com.project = p.project
+		left outer join FW_QUALITY_ARCHITECTURE arc
+			on arc.MEASURE_DT =  dt.arc_real_measure_dt
+			and arc.project = p.project			
+		left outer join FW_QUALITY_TESTCOVERAGE cov
+			on cov.MEASURE_DT = dt.cov_real_measure_dt
+			and cov.project = p.project
+		left outer join FW_QUALITY_CODING_RULE cod
+			on cod.MEASURE_DT = dt.cod_real_measure_dt
+			and cod.project = p.project
+		left outer join FW_QUALITY_FUNC_PARAMETER fp
+			on fp.MEASURE_DT = dt.fp_real_measure_dt
+			and fp.project = p.project
+		
+			
+		left outer join pjt_list pl
+			on his.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING pm
+			on pm.LEGACY_NAME = 'FWQ'
+			and pm.LEGACY_PJT_NAME = p.project
+			and pm.PJT_NAME = p.pjt_code
+		
+		group by HIS.MEASURE_DT, HIS.PJT_CODE, PL.PJT_NAME
+		
+    </select>
+    
+    <select id="fwq.project.point.history.static" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		a.CODESONAR_SVR,
+    		a.CSV_NUM,
+    		a.LOC,
+    		round(nvl(a.POINT,0),2) AS STATIC_ANALYSIS ,
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+    	from FW_QUALITY_STATIC_ANALISIS a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    <select id="fwq.project.point.history.funcSize" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		a.CSV_NUM,
+    		a.CODESONAR_SVR,
+    		round(nvl(a.POINT,0),2) AS FUNCTION_SIZE ,
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+    	from FW_QUALITY_FUNC_SIZE a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    <select id="fwq.project.point.history.duplicate" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		a.CSV_NAME DUP_CSV_NAME,
+    		a.LOC,
+    		round(nvl(a.POINT,0),2) AS DUPLICATE ,
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+    	from FW_QUALITY_DUPLICATE_CODE a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1 
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    
+    <select id="fwq.project.point.history.complexity" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		round(nvl(a.POINT,0),2) AS COMPLEXITY ,
+			map.LEGACY_PJT_KEY ,
+			map.LEGACY_PJT_NAME,
+			'XXX' GUBUN
+    	from FW_QUALITY_COMPLEXITY a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    <select id="fwq.project.point.history.architecture" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		round(nvl(a.POINT,0),2) AS ARCHITECTURE ,
+			map.LEGACY_PJT_KEY ,
+			map.LEGACY_PJT_NAME,
+			'XXX' GUBUN
+    	from FW_QUALITY_ARCHITECTURE a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+     <select id="fwq.project.point.history.codeCoverage" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		round(nvl(a.POINT,0),2) AS CODE_COVERAGE ,
+    		a.PRODUCT, 
+    		a.LINK,
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+    	from FW_QUALITY_TESTCOVERAGE a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    <select id="fwq.project.point.history.codingRule" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.REAL_MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		round(nvl(a.POINT,0),2) AS CODING_RULE ,
+    		a.CSV_NAME,
+    		a.PRODUCT, 
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+    	from FW_QUALITY_CODING_RULE a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    <select id="fwq.project.point.history.funcParam" resultType="hashmap">
+    	select 
+    		a.MEASURE_DT,
+    		a.REAL_MEASURE_DT,
+    		a.PJT_CODE,
+    		a.PROJECT,
+    		a.PROJECT_ORIGIN,
+    		round(nvl(a.POINT,0),2) AS FUNC_PARAMETER ,
+    		a.PRODUCT, 
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+    	from FW_QUALITY_FUNC_PARAMETER a
+    	left outer join pjt_list pl
+			on a.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = a.project
+			--and map.PJT_NAME = a.pjt_code
+		where 1=1
+		and a.project = #{project}
+		order by a.MEASURE_DT
+    </select>
+    <select id="fwq.project.point.history" resultType="hashmap">
+    	select 
+			HIS.MEASURE_DT, 
+			HIS.PJT_CODE, 
+			PL.PJT_NAME,
+			p.project,
+			nvl(fs.CODESONAR_SVR,'0') as CODESONAR_SVR,
+			nvl(fs.CSV_NUM,'0') as CSV_NUM,
+			nvl(p.MEASURE,0) as MEASURE, 
+			nvl(p.POINT,0) as POINT, 
+			nvl(STC.POINT,0) AS STATIC_ANALYSIS,
+			nvl(FS.POINT,0)  FUNCTION_SIZE,
+			nvl(DUP.POINT,0) AS DUPLICATE ,
+			DUP.CSV_NAME as dup_csv_name,
+			nvl(COM.POINT,0) AS COMPLEXITY ,
+			nvl(cod.POINT,0) AS CODING_RULE ,
+			cod.CSV_NAME as cod_csv_name,
+			nvl(ARC.POINT,0)  ARCHITECTURE ,
+			nvl(cov.POINT,0)  CODE_COVERAGE ,
+			cov.PRODUCT, 
+			
+			nvl(fp.point,0) FUNC_PARAMETER,
+			
+			
+			HIS.IS_LATEST,
+			map.LEGACY_PJT_KEY ,
+			'XXX' GUBUN
+			
+		from FW_QUALITY_HISTORY his
+		join FW_QUALITY_POINT P
+			on P.MEASURE_DT = his.MEASURE_DT
+			and P.PJT_CODE = his.PJT_CODE
+		left outer join FW_QUALITY_STATIC_ANALISIS  stc
+			--on stc.MEASURE_DT = p.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(stc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(stc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end) ,'YYYYMMDD') 
+												else  stc.MEASURE_DT
+											end
+			--and stc.PJT_CODE = p.PJT_CODE
+			and stc.project = p.project
+		left outer join FW_QUALITY_FUNC_SIZE fs
+			--on fs.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fs.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fs.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  fs.MEASURE_DT
+											end
+			--and fs.PJT_CODE = his.PJT_CODE 
+			and fs.project = p.project
+		left outer join FW_QUALITY_DUPLICATE_CODE dup
+			--on dup.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(dup.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(dup.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  dup.MEASURE_DT
+											end
+			--and dup.PJT_CODE = his.PJT_CODE 
+			and dup.project = p.project
+		left outer join FW_QUALITY_COMPLEXITY com
+			--on com.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  com.MEASURE_DT
+											end
+			--and com.PJT_CODE = his.PJT_CODE 
+			and com.project = p.project
+		left outer join FW_QUALITY_ARCHITECTURE arc
+			--on arc.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(arc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(arc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  arc.MEASURE_DT
+											end
+			--and arc.PJT_CODE = his.PJT_CODE 		
+			and arc.project = p.project			
+		left outer join FW_QUALITY_TESTCOVERAGE cov
+			--on cov.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cov.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cov.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  cov.MEASURE_DT
+											end
+			--and cov.PJT_CODE = his.PJT_CODE 		
+			and cov.project = p.project
+		left outer join FW_QUALITY_CODING_RULE cod
+			--on cod.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cod.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cod.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  cod.MEASURE_DT
+											end
+			--and cod.PJT_CODE = his.PJT_CODE 		
+			and cod.project = p.project
+			
+		left outer join FW_QUALITY_FUNC_PARAMETER fp
+			--on fp.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fp.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fp.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  fp.MEASURE_DT
+											end
+			--and fp.PJT_CODE = his.PJT_CODE 		
+			and fp.project = p.project
+		
+			
+		left outer join pjt_list pl
+			on his.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING map
+			on map.LEGACY_NAME = 'FWQ'
+			and map.LEGACY_PJT_NAME = p.project
+			and map.PJT_NAME = p.pjt_code
+		where his.pjt_code = #{pjt_code}
+		and p.project = #{project}
+		order by p.MEASURE_DT
+    </select>
+    
+    <!-- not use -->
+    <update id="dashbaord.batch.fwq.deleteAll" parameterType="hashmap">
+    	declare
+    	
+    	begin
+    	
+    		delete from FW_QUALITY_HISTORY;
+    		delete from FW_QUALITY_POINT;
+    		delete from FW_QUALITY_ARCHITECTURE;
+    		delete from FW_QUALITY_COMPLEXITY;
+    		delete from FW_QUALITY_DUPLICATE_CODE;
+    		delete from FW_QUALITY_FUNC_SIZE;
+    		delete from FW_QUALITY_HISTORY;
+    		delete from FW_QUALITY_STATIC_ANALISIS;
+    		
+    		delete from FW_QUALITY_ARCHITECTURE_1;
+    		delete from FW_QUALITY_COMPLEXITY_1;
+    		
+    	end;
+    </update>
+    
+    <!-- not use  -->
+    <update id="dashbaord.batch.fwq.delete" parameterType="hashmap">
+    	declare
+    		vMeasureDt varchar2(10);
+    	begin
+    	    vMeasureDt := to_char(to_date( #{measure_dt},'YYYY.MM.DD' ),'YYYYMMDD');
+    	    	
+    	    delete from FW_QUALITY_HISTORY where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_POINT where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_ARCHITECTURE where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_COMPLEXITY where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_DUPLICATE_CODE where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_FUNC_SIZE where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_HISTORY where measure_dt =  vMeasureDt;
+    		delete from FW_QUALITY_STATIC_ANALISIS where measure_dt =  vMeasureDt;
+    		
+    		delete from FW_QUALITY_ARCHITECTURE_1 where measure_dt =  vMeasureDt ;
+    		delete from FW_QUALITY_COMPLEXITY_1 where measure_dt =  vMeasureDt;
+    		
+    	end;
+    </update>
+    
+    <update id="dashbaord.batch.fwq.save" parameterType="hashmap">
+    	declare
+    		cnt number;
+    		vPjtCode varchar2(100);
+    		vMeasureDt varchar2(10);
+    	begin
+    		vMeasureDt := to_char(to_date( #{measure_dt},'YYYY.MM.DD' ),'YYYYMMDD');
+    		select count(*) into cnt from  pjt_mapping where LEGACY_NAME = 'FWQ' and LEGACY_PJT_NAME = #{project};
+    		if(cnt = 0) then
+    			vPjtCode := 'notMatch_${project}';
+    		else
+    			select pjt_name into vPjtCode from  pjt_mapping where LEGACY_NAME = 'FWQ' and LEGACY_PJT_NAME = #{project};
+    		end if;
+    		
+    		--// FW_QUALITY_ARCHITECTURE
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_ARCHITECTURE where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_ARCHITECTURE where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_ARCHITECTURE(MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project},round(#{architecture_point},2) );
+    		
+    			-- auto
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_ARCHITECTURE_1 where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_ARCHITECTURE_1 where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_ARCHITECTURE_1(MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project},round(#{architecture_point},2) );
+    		
+    		--// FW_QUALITY_COMPLEXITY
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_COMPLEXITY where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_COMPLEXITY where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_COMPLEXITY(MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project}, round(#{complexity_point},2) );
+    		
+    			-- auto
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_COMPLEXITY_1 where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_COMPLEXITY_1 where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_COMPLEXITY_1(MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project}, round(#{complexity_point},2) );
+    		
+    		--// FW_QUALITY_DUPLICATE_CODE
+   			cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_DUPLICATE_CODE where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_DUPLICATE_CODE where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_DUPLICATE_CODE (MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project},round(#{duplicate_point},2) );
+    		--// FW_QUALITY_FUNC_SIZE
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_FUNC_SIZE where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_FUNC_SIZE where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_FUNC_SIZE (MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project}, round(#{func_size_point},2) );
+    		
+    		--// FW_QUALITY_STATIC_ANALISIS
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_STATIC_ANALISIS where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_STATIC_ANALISIS where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_STATIC_ANALISIS (MEASURE_DT, PJT_CODE, PROJECT, POINT)
+    		values (vMeasureDt, vPjtCode,#{project}, round(#{static_analysis_point},2) );
+    		
+    		--// FW_QUALITY_POINT
+    		cnt := 0;
+    		select count(*) into cnt from FW_QUALITY_POINT where measure_dt = vMeasureDt and project= #{project};
+    		if ( cnt > 0 ) then
+    			delete from FW_QUALITY_POINT where measure_dt = vMeasureDt and project= #{project};
+    		end if;
+    		insert into FW_QUALITY_POINT (MEASURE_DT, PJT_CODE, PROJECT, LOC, MEASURE, POINT)
+    		values (vMeasureDt, vPjtCode,#{project}, #{loc}, round(#{total_measure},2),round(#{point},2) );
+    		
+    	end;
+    
+    </update>
+    
+    <!--   -->
+    <update id="dashboard.batch.fwq.functionParameter" parameterType="hashmap">
+    	declare
+    		vCnt number;
+    		vPjtCode varchar2(100);
+    		vProject varchar2(100);
+    		vMeasureDt varchar2(10);
+    		vWeekStartDt date;
+    		vPoint number;
+    	begin
+    		vCnt := 0;
+    		--// 01. sum parameters, parameters more than 4 by project from raw
+    		for rec in (
+    			select 
+    				a.* 
+    				, CHECK_DATE_FORMAT(a.measure_dt) check_dt
+    				, case 
+    					when a.total = 0 then 0
+    					else
+    						20 - (a.cnt_four/a.total) * 100
+    				end as point
+    			from (
+					select
+						measure_dt,
+						project,
+						count(PARAMETERS) as total ,
+						count(
+							case 
+								when REGEXP_LIKE(parameters,'^(([1-9]+\.[0-9]*)|([1-9]*\.[0-9]+)|([1-9]+))([eE][-+]?[0-9]+)?$','i')  and to_number(parameters) > 4 then 1 
+							else null 
+						end) cnt_four
+					from FW_QUALITY_FUNC_PARAMETER_RAW
+					group by measure_dt,project
+					order by project,measure_dt
+				) a
+    		) loop
+    			if rec.check_dt != 'YES' then
+    				continue;
+    			end if;
+    			
+	    		--// 01-01. find pjt_code : similarity
+	    		vProject := 'not match ' || rec.project ;
+	    		vPjtCode := 'not match ' || rec.project ;
+	    		select
+	    			LEGACY_PJT_NAME,
+	    			PJT_NAME 
+	    			into vProject, vPjtCode    			
+	    		from (
+	    			select a.* ,
+	                    row_number() over(order by a.eds desc )  row_num
+		            from (
+						select
+							LEGACY_NAME,
+							LEGACY_PJT_NAME,
+							PJT_NAME,
+							LEGACY_PJT_KEY,
+							UTL_MATCH.edit_distance_similarity(LEGACY_PJT_NAME, rec.project ) as eds
+						from pjt_mapping
+						where LEGACY_NAME = 'FWQ'
+					) a
+	    		) a 
+	    		where row_num = 1;    		
+	    		--// 01-02 re mesure_dt 
+	    		--select TRUNC(to_date(rec.measure_dt,'YYYYMMDD'), 'iw') into vWeekStartDt  from dual;
+	    		select to_date(rec.measure_dt,'YYYYMMDD') into vWeekStartDt  from dual;
+	    		vMeasureDt := to_char(vWeekStartDt,'YYYYMMDD');
+	    		--// 02. calculate point
+	    		if 0 >= rec.point then  
+	    				vPoint := 0;
+	   			else
+	   				vPoint := rec.point;
+	   				if vPoint > 20 then
+	   					vPoint := 20;
+	   				end if;
+	   			end if;
+	   			
+	    		--// 03. insert
+	    		select count(*) into vCnt  from FW_QUALITY_FUNC_PARAMETER
+	    		where  MEASURE_DT = vMeasureDt
+	    		and PJT_CODE = vPjtCode
+	    		and PROJECT = vProject
+	    		and PROJECT_ORIGIN = rec.project;
+	    		
+	    		if vCnt > 0 then
+	    			update FW_QUALITY_FUNC_PARAMETER set
+	    				cnt_total = rec.total
+	    				, CNT_FOUR = rec.cnt_four
+	    				, POINT = rec.point
+	    				, REAL_MEASURE_DT = rec.measure_dt
+	    				, mod_dt = sysdate
+	    			where  MEASURE_DT = vMeasureDt
+		    		and PJT_CODE = vPjtCode
+		    		and PROJECT = vProject
+		    		and PROJECT_ORIGIN = rec.project; 
+	    		else
+	    			insert into FW_QUALITY_FUNC_PARAMETER(MEASURE_DT, PJT_CODE, PROJECT, PROJECT_ORIGIN, CNT_TOTAL, CNT_FOUR, POINT, REAL_MEASURE_DT, INS_DT)
+	    			values(
+	    				vMeasureDt , --MEASURE_DT 
+	    				vPjtCode , -- PJT_CODE 
+	    				vProject , -- PROJECT 
+	    				rec.project , --PROJECT_ORIGIN 
+	    				rec.total , -- CNT_TOTAL 
+	    				rec.cnt_four , --  CNT_FOUR 
+	    				rec.point , -- POINT 
+	    				rec.measure_dt , -- REAL_MEASURE_DT
+	    				sysdate -- INS_DT
+	    			);
+	    		
+	    		end if;
+    		
+    		end loop;
+    		
+    	end;
+    
+    </update>
+    
+    <update id="dashbaord.batch.fwq.point" parameterType="hashmap">
+		declare
+    		vCnt number;
+    		vLoc number;
+    		vLocPre number;
+    		vMeasureDt varchar2(8);
+    		vWeekStartDt varchar2(8);
+    		vPjtCode varchar2(100);
+    		vProject varchar2(100);
+    		vPoint number; 
+    		
+    		vSql varchar2(8000);
+			vTableName varchar2(100);
+	    begin
+	    	
+	    	--// 01. point backup table 
+	    	/* vTableName := 'FW_QUALITY_POINT' ||  '_'  || to_char(sysdate,'YYMMDDhh24miss');
+			vSql := 'create table ' || vTableName;
+			vSql := vSql || ' as select * from  FW_QUALITY_POINT';
+			EXECUTE IMMEDIATE vSql;
+			*/
+	    	
+	    	delete from FW_QUALITY_POINT where measure_dt > '20160708';
+	    	
+	    	
+	    	for recWeek in (
+	    		--// step 1
+	    		select 
+					distinct to_char(TRUNC(to_date(measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') eds
+				from 
+				(
+					select 'FW_QUALITY_ARCHITECTURE' category,  pjt_code,project,measure_dt ,point from FW_QUALITY_ARCHITECTURE
+					union all 
+					select  'FW_QUALITY_CODING_RULE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_CODING_RULE
+					union all 
+					select  'FW_QUALITY_COMPLEXITY' category,   pjt_code,project,measure_dt,point from FW_QUALITY_COMPLEXITY
+					union all 
+					select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
+					union all 
+					select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+					union all 
+					select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
+					union all 
+					select  'FW_QUALITY_STATIC_ANALISIS' category,   pjt_code,project,measure_dt,point from FW_QUALITY_STATIC_ANALISIS
+					union all 
+					select  'FW_QUALITY_TESTCOVERAGE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_TESTCOVERAGE
+				) a 
+				where measure_dt > '20160708' -- 0708 이후에는 엑셀이 아닌 direct로 부터 데이타를 수집함.
+				order by 1
+	    	) loop 
+	    		for recPjt in (
+	    			--// step 2
+		    		select LEGACY_NAME, LEGACY_PJT_NAME project, PJT_NAME pjt_code , LEGACY_PJT_KEY  pjt_key from pjt_mapping where LEGACY_NAME = 'FWQ'
+		    	) loop
+		    		for recCategory in (
+		    			--// step 3
+		    			select 'FW_QUALITY_ARCHITECTURE' category from dual
+						union all 
+						select  'FW_QUALITY_CODING_RULE' category  from dual
+						union all 
+						select  'FW_QUALITY_COMPLEXITY' category  from dual
+						union all 
+						select  'FW_QUALITY_DUPLICATE_CODE' category  from dual
+						union all 
+						select  'FW_QUALITY_FUNC_PARAMETER' category  from dual
+						union all 
+						select  'FW_QUALITY_FUNC_SIZE' category  from dual
+						union all 
+						select  'FW_QUALITY_STATIC_ANALISIS' category  from dual
+						union all 
+						select  'FW_QUALITY_TESTCOVERAGE' category  from dual
+		    		) loop
+		    		
+						select count(*) into vCnt  from (
+							select  
+								a.* ,
+								lag(a.row_num) over(partition by a.category, a.pjt_code, a.project order by row_num) as pre_row
+							from (
+									
+								select
+									a.*
+									, rank() over(partition by a.category, a.pjt_code, a.project  order by   a.measure_dt desc ) row_num
+									
+								from (
+									select 
+										a.category ,
+										pm.PJT_NAME pjt_code,
+										a.project,
+										a.point,
+										a.measure_dt,
+										to_char(TRUNC(to_date(measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(measure_dt,'YYYYMMDD'),'D') when '2' then 1  when '3' then 1 else 8 end),'YYYYMMDD') eds
+									from 
+									(
+										select 'FW_QUALITY_ARCHITECTURE' category,  pjt_code,project,measure_dt ,point from FW_QUALITY_ARCHITECTURE
+										union all 
+										select  'FW_QUALITY_CODING_RULE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_CODING_RULE
+										union all 
+										select  'FW_QUALITY_COMPLEXITY' category,   pjt_code,project,measure_dt,point from FW_QUALITY_COMPLEXITY
+										union all 
+										select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
+										union all 
+										select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+										union all 
+										select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
+										union all 
+										select  'FW_QUALITY_STATIC_ANALISIS' category,   pjt_code,project,measure_dt,point from FW_QUALITY_STATIC_ANALISIS
+										union all 
+										select  'FW_QUALITY_TESTCOVERAGE' category,   tc.pjt_code,tc.project,tc.measure_dt,point from FW_QUALITY_TESTCOVERAGE tc
+										where MOD_DT = (select max(tc1.mod_dt) from  FW_QUALITY_TESTCOVERAGE tc1 where tc1.MEASURE_DT = tc.MEASURE_DT  and tc1.project = recPjt.project )
+									) a 
+									left outer join PJT_MAPPING pm 
+										on pm.LEGACY_NAME = 'FWQ'
+										--and pm.pjt_name = a.pjt_code
+										and pm.LEGACY_PJT_NAME = a.project
+									where measure_dt > '20160708' -- 0708 이후에는 엑셀이 아닌 direct로 부터 데이타를 수집함.
+									--order by a.measure_dt,a.pjt_code , a.project
+									and a.category = recCategory.category
+									and a.project = recPjt.project
+									and pm.PJT_NAME = recPjt.pjt_code
+								) a
+								where a.eds = recWeek.eds
+							) a
+						) a where 1=1
+						and a.row_num = 1
+						;
+						
+						
+						
+						if vCnt > 0 then
+							
+							/* delete from script_test;
+							 
+							insert into script_test(var,val) values('recCategory.category',recCategory.category);
+							insert into script_test(var,val) values('recPjt.project',recPjt.project);
+							insert into script_test(var,val) values('recPjt.pjt_code',recPjt.pjt_code);
+							insert into script_test(var,val) values('recWeek.eds',recWeek.eds);
+							commit;*/
+						
+
+							select pjt_code, project, measure_dt, eds, point  into vPjtCode, vProject, vMeasureDt, vWeekStartDt, vPoint from (
+								select  
+									a.* ,
+									lag(a.row_num) over(partition by a.category, a.pjt_code, a.project order by row_num) as pre_row
+								from (
+										
+									select
+										a.*
+										, rank() over(partition by a.category, a.pjt_code, a.project  order by  a.measure_dt desc ) row_num
+										
+									from (
+										select 
+											a.category ,
+											pm.PJT_NAME pjt_code,
+											a.project,
+											a.measure_dt,
+											a.point,
+											to_char(TRUNC(to_date(measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(measure_dt,'YYYYMMDD'),'D') when '2' then 1   when '3' then 1 else 8 end),'YYYYMMDD') eds
+										from 
+										(
+											select 'FW_QUALITY_ARCHITECTURE' category,  pjt_code,project,measure_dt ,point from FW_QUALITY_ARCHITECTURE
+											union all 
+											select  'FW_QUALITY_CODING_RULE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_CODING_RULE
+											union all 
+											select  'FW_QUALITY_COMPLEXITY' category,   pjt_code,project,measure_dt,point from FW_QUALITY_COMPLEXITY
+											union all 
+											select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
+											union all 
+											select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+											union all 
+											select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
+											union all 
+											select  'FW_QUALITY_STATIC_ANALISIS' category,   pjt_code,project,measure_dt,point from FW_QUALITY_STATIC_ANALISIS
+											union all 
+											select  'FW_QUALITY_TESTCOVERAGE' category,   tc.pjt_code,tc.project,tc.measure_dt,point from FW_QUALITY_TESTCOVERAGE tc
+											where MOD_DT = (select max(tc1.mod_dt) from  FW_QUALITY_TESTCOVERAGE tc1 where tc1.MEASURE_DT = tc.MEASURE_DT  and tc1.project = recPjt.project )
+										) a 
+										left outer join PJT_MAPPING pm 
+											on pm.LEGACY_NAME = 'FWQ'
+											--and pm.pjt_name = a.pjt_code
+											and pm.LEGACY_PJT_NAME = a.project
+										where measure_dt > '20160708' -- 0708 이후에는 엑셀이 아닌 direct로 부터 데이타를 수집함.
+										--order by a.measure_dt,a.pjt_code , a.project
+										and a.category = recCategory.category
+										and a.project = recPjt.project
+										and pm.PJT_NAME = recPjt.pjt_code
+									) a
+									where a.eds = recWeek.eds
+								) a
+							) a where 1=1 
+							-- and a.row_num != nvl(a.pre_row,0)
+							and a.row_num = 1
+							;
+						else
+							-- 01. 현재데이타가 없고 이전데이타 가 있는지
+							select count(*) into vCnt  from (
+								select  
+									a.* ,
+									lag(a.row_num) over(partition by a.category, a.pjt_code, a.project order by row_num) as pre_row
+								from (
+										
+									select
+										a.*
+										, rank() over(partition by a.category, a.pjt_code, a.project  order by  a.measure_dt desc ) row_num
+										
+									from (
+										select 
+											a.category ,
+											pm.PJT_NAME pjt_code,
+											a.project,
+											a.measure_dt,
+											a.point,
+											to_char(TRUNC(to_date(measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') eds
+										from 
+										(
+											select 'FW_QUALITY_ARCHITECTURE' category,  pjt_code,project,measure_dt ,point from FW_QUALITY_ARCHITECTURE
+											union all 
+											select  'FW_QUALITY_CODING_RULE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_CODING_RULE
+											union all 
+											select  'FW_QUALITY_COMPLEXITY' category,   pjt_code,project,measure_dt,point from FW_QUALITY_COMPLEXITY
+											union all 
+											select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
+											union all 
+											select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+											union all 
+											select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
+											union all 
+											select  'FW_QUALITY_STATIC_ANALISIS' category,   pjt_code,project,measure_dt,point from FW_QUALITY_STATIC_ANALISIS
+											union all 
+											select  'FW_QUALITY_TESTCOVERAGE' category,   tc.pjt_code,tc.project,tc.measure_dt,point from FW_QUALITY_TESTCOVERAGE tc
+											where MOD_DT = (select max(tc1.mod_dt) from  FW_QUALITY_TESTCOVERAGE tc1 where tc1.MEASURE_DT = tc.MEASURE_DT  and tc1.project = recPjt.project )
+										) a 
+										left outer join PJT_MAPPING pm 
+											on pm.LEGACY_NAME = 'FWQ'
+											--and pm.pjt_name = a.pjt_code
+											and pm.LEGACY_PJT_NAME = a.project
+										where 1=1 
+										--and measure_dt > '20160708' -- 0708 이후에는 엑셀이 아닌 direct로 부터 데이타를 수집함.
+										--order by a.measure_dt,a.pjt_code , a.project
+										and a.category = recCategory.category
+										and a.project = recPjt.project
+										and pm.pjt_name = recPjt.pjt_code
+									) a
+									where recWeek.eds > a.eds 
+								) a
+							) a where 1=1
+							-- and a.row_num != nvl(a.pre_row,0)
+							 ;
+							 
+							-- 02. 현재데이타가 없고 이전데이타가 있으면 이전데이타 적용
+							if vCnt > 0 then
+								select pjt_code, project, recWeek.eds, recWeek.eds, point into vPjtCode, vProject, vMeasureDt, vWeekStartDt, vPoint from (
+									select 
+										a.* , rownum rm
+									from (
+										select  
+											a.* ,
+											lag(a.row_num) over(partition by a.category, a.pjt_code, a.project order by row_num) as pre_row
+										from (
+												
+											select
+												a.*
+												, rank() over(partition by a.category, a.pjt_code, a.project  order by  a.measure_dt desc ) row_num
+												
+											from (
+												select 
+													a.category ,
+													pm.PJT_NAME pjt_code,
+													a.project,
+													a.measure_dt,
+													a.point,
+													to_char(TRUNC(to_date(measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') eds
+												from 
+												(
+													select 'FW_QUALITY_ARCHITECTURE' category,  pjt_code,project,measure_dt ,point from FW_QUALITY_ARCHITECTURE
+													union all 
+													select  'FW_QUALITY_CODING_RULE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_CODING_RULE
+													union all 
+													select  'FW_QUALITY_COMPLEXITY' category,   pjt_code,project,measure_dt,point from FW_QUALITY_COMPLEXITY
+													union all 
+													select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
+													union all 
+													select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+													union all 
+													select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
+													union all 
+													select  'FW_QUALITY_STATIC_ANALISIS' category,   pjt_code,project,measure_dt,point from FW_QUALITY_STATIC_ANALISIS
+													union all 
+													select  'FW_QUALITY_TESTCOVERAGE' category,   tc.pjt_code,tc.project,tc.measure_dt,point from FW_QUALITY_TESTCOVERAGE tc
+													where MOD_DT = (select max(tc1.mod_dt) from  FW_QUALITY_TESTCOVERAGE tc1 where tc1.MEASURE_DT = tc.MEASURE_DT  and tc1.project = recPjt.project )
+												) a 
+												left outer join PJT_MAPPING pm 
+													on pm.LEGACY_NAME = 'FWQ'
+													--and pm.pjt_name = a.pjt_code
+													and pm.LEGACY_PJT_NAME = a.project
+												where 1=1
+												--and measure_dt > '20160708' -- 0708 이후에는 엑셀이 아닌 direct로 부터 데이타를 수집함.
+												--order by a.measure_dt,a.pjt_code , a.project
+												and a.category = recCategory.category
+												and a.project = recPjt.project
+												and pm.pjt_name = recPjt.pjt_code
+											) a
+											where recWeek.eds > a.eds
+										) a
+									) a where 1=1
+									--and a.row_num != nvl(a.pre_row,0)
+									and a.row_num = 1
+									order by a.eds desc,a.pjt_code , a.project, category
+								) a where a.rm = 1;
+							else
+								-- 03. 없으면 변수할당
+								select recPjt.pjt_code, recPjt.project, recWeek.eds , recWeek.eds , 0  into vPjtCode, vProject, vMeasureDt, vWeekStartDt, vPoint from dual;
+							end if;
+							
+						
+						end if;
+						
+					
+						--// 02 re mesure_dt 
+			    		--vMeasureDt := to_char(rec.eds,'YYYYMMDD');
+			    		
+						select count(*) into vCnt from FW_QUALITY_POINT 
+						where measure_dt = vWeekStartDt
+						and pjt_code =  vPjtCode
+						and project = vProject;
+						
+						if ( vCnt = 0 ) then 
+							insert into FW_QUALITY_POINT (MEASURE_DT, PJT_CODE, PROJECT, MEASURE, POINT, REAL_MEASURE_DT)
+							values(vWeekStartDt, vPjtCode, vProject, vPoint , vPoint , vMeasureDt);
+						else
+							update FW_QUALITY_POINT set
+								measure = nvl(measure,0)  + nvl(vPoint,0) ,
+								point = nvl(point,0)  + nvl(vPoint,0) ,
+								real_measure_dt = vMeasureDt
+							where measure_dt =vWeekStartDt 
+							and pjt_code = vPjtCode
+							and project = vProject;
+						
+						end if;
+						
+						--// loc start
+						-- 01. measure_dt 의 주 시작일
+						--select TRUNC(to_date(rec.measure_dt,'YYYYMMDD'), 'iw') into vWeekStartDt  from dual;
+						-- vWeekStartDt := vMeasureDt ;
+						-- 02. 주시작일이 같은 codesonar data
+						select  
+							count(*) into vCnt
+						from CODESONAR_TEST cs
+						join pjt_mapping pm
+							on pm.legacy_pjt_key = cs.pjt_code
+							and pm.legacy_name = 'FWQ'
+						where pm.LEGACY_PJT_NAME = vProject
+						and to_char(TRUNC(to_date(cs.ANALYSYS_DATE, 'YYYY/MM/DD'), 'iw') + (case to_char(to_date(cs.ANALYSYS_DATE,'YYYY/MM/DD'),'D') when '2' then 1 when '3' then 1  else 8 end),'YYYYMMDD') = vWeekStartDt ;
+		
+						-- 03. 해당 loc 가져오기
+						if ( vCnt = 0 ) then
+							vLoc := 0;
+						else
+							select a.loc into vLoc 
+							from (
+								select a.*, rownum rm 
+								from (
+										select 
+											cs.*
+										from CODESONAR_TEST cs
+										join pjt_mapping pm
+											on pm.legacy_pjt_key = cs.pjt_code
+											and pm.legacy_name = 'FWQ'
+										where pm.LEGACY_PJT_NAME = vProject
+										and to_char(TRUNC(to_date(cs.ANALYSYS_DATE, 'YYYY/MM/DD'), 'iw') + (case to_char(to_date(cs.ANALYSYS_DATE,'YYYY/MM/DD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') = vWeekStartDt 
+										order by cs.ANALYSYS_DATE
+								) a
+							) a where a.rm = 1
+							;
+						end if;
+						
+						--// 04 만약 loc가 0이고 이전 loc가 0 보다 크다면 이전 loc 적용.
+						select 
+							count(*) into vCnt
+						from FW_QUALITY_POINT a  
+						where pjt_code = vPjtCode
+						and project = vProject
+						and vWeekStartDt > measure_dt ;
+						
+						if(vLoc = 0 and vCnt > 0) then 
+							select 
+								loc into vLoc 
+							from (
+								select 
+									a.*, rownum rm 
+								from (
+									select 
+										*
+									from FW_QUALITY_POINT a  
+									where pjt_code = vPjtCode
+									and project = vProject
+									and vWeekStartDt > measure_dt 
+									order by measure_dt desc
+								) a
+							) where rm = 1;
+						
+						end if;
+							
+						update FW_QUALITY_POINT set
+						LOC = vLoc
+						where measure_dt = vWeekStartDt 
+						and pjt_code = vPjtCode
+						and project = vProject;
+						--// loc end
+					
+					end loop; --// category 
+		    	
+		    	end loop; --// project
+	    	
+	    	end loop; --// eds
+			
+		end;
+    </update>
+    
+    <update id="dashbaord.batch.fwq.history" parameterType="hashmap">
+    	declare	   	
+    	   	vCnt number;
+    		vSql varchar2(8000);
+			vTableName varchar2(100);
+	    begin
+	    
+	    	--// 01. point backup table 
+	    	/* vTableName := 'FW_QUALITY_His' ||  '_'  || to_char(sysdate,'YYMMDDhh24miss');
+			vSql := 'create table ' || vTableName;
+			vSql := vSql || ' as select * from  FW_QUALITY_History';
+			EXECUTE IMMEDIATE vSql;
+			*/
+			
+			delete from FW_QUALITY_History where measure_dt > '20160708';
+			
+	    	
+	    	
+			for rec in (
+				select 
+					measure_dt,
+					pjt_code,
+					sum(loc*measure)/ sum(loc) as avgMeasure,
+					sum(loc*point) / sum(loc)  as avgPoint
+				from FW_QUALITY_POINT
+				where loc > 0
+				group by measure_dt,pjt_code
+				
+			) loop
+				select count(*) into vCnt from FW_QUALITY_HISTORY where measure_dt = rec.measure_dt and pjt_code = rec.pjt_code;
+				if ( vCnt = 0 ) then 
+					insert into FW_QUALITY_HISTORY (MEASURE_DT, PJT_CODE, MEASURE, POINT, IS_LATEST)
+					values(rec.measure_dt, rec.pjt_code, rec.avgMeasure,rec.avgPoint, 'N' );
+				else
+					update FW_QUALITY_HISTORY set
+						measure = rec.avgMeasure,
+						point = rec.avgPoint
+					where measure_dt = rec.measure_dt and pjt_code = rec.pjt_code;
+				
+				end if;
+				
+			end loop;
+			
+		end;
+    </update>
+    
+    <update id="dashbaord.batch.fwq.isLast" parameterType="hashmap">
+    	declare
+    		vLastMeasureDt varchar2(100);
+    		vLastPjtCode varchar2(100);
+    	begin
+    		update FW_QUALITY_HISTORY set
+			IS_LATEST = 'N' ;
+			
+    		for rec in (
+	    		select 
+					pjt_code,
+					max(measure_dt) measure_dt
+				from  FW_QUALITY_HISTORY
+				group by pjt_code
+			) loop
+				update FW_QUALITY_HISTORY set
+					IS_LATEST = 'Y'
+				where measure_dt = rec.measure_dt
+				and pjt_code = rec.pjt_code;
+			end loop;    	
+    	end;
+    </update>
+    
+    <update id="fw.quality.pjtAccessInsertLog" parameterType="hashmap">
+		INSERT INTO FW_QUALITY_PJT_ACCESS (	ACCESS_ID
+										  , PJT_ID
+										  , USER_ID
+										  , ACCESS_DATE
+										 )
+		VALUES (	TO_CHAR(SYSTIMESTAMP, 'YYYYMMDDHH24MISSFF6')
+				  , #{pjtId}
+				  , #{loginId}
+				  , SYSDATE
+			   )
+	</update>
+	
+	<select id="dashboard.batch.fwq.linkcheck.list" resultType="hashmap">
+		select 
+			HIS.MEASURE_DT, 
+			HIS.PJT_CODE, 
+			PL.PJT_NAME,
+			PL.PJT_NAME_PMS as PJT_NAME_PMS,
+			p.project,
+			HIS.MEASURE as MEASURE, 
+			HIS.POINT as POINT,
+			<![CDATA[ 
+			'http://codesonar' || stc.CODESONAR_SVR|| '.skhynix.com:7340/analysis/' || stc.CSV_NUM  || '.html' as link_static,
+			'http://solutionpms.skhynix.com/dashboard/fwqFunctionParameterPop.html?measureDt=' || fp.MEASURE_DT ||  '&project='  || fp.PROJECT_ORIGIN  || '&sender=func_param' as link_function_parameter,
+			'http://codesonar' || fs.CODESONAR_SVR || '.skhynix.com:7340/metric_search.html?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A' || fs.CSV_NUM AS link_function_loc,
+			'http://bamboo.skhynix.com:6060/CPD_Result/'  || dup.CSV_NAME as link_duplicate,
+			'http://bamboo.skhynix.com:6060/CI_Result/' || cod.CSV_NAME as link_coding_rule,
+			'http://10.156.81.104:8080/covcpp/tracker/' || pm.LEGACY_PJT_NAME || '/1.0.0/summary.html' as link_architecture_complexity,
+			]]>
+			cov.link as link_coverage
+			
+		from FW_QUALITY_HISTORY his
+		left outer join FW_QUALITY_POINT p
+			on p.measure_dt = his.measure_dt
+			and p.pjt_code = his.pjt_code
+		left outer join FW_QUALITY_STATIC_ANALISIS  stc
+			--on stc.MEASURE_DT = p.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(stc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(stc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end) ,'YYYYMMDD') 
+												else  stc.MEASURE_DT
+											end
+			--and stc.PJT_CODE = p.PJT_CODE
+			and stc.project = p.project
+		left outer join FW_QUALITY_FUNC_SIZE fs
+			--on fs.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fs.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fs.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  fs.MEASURE_DT
+											end
+			--and fs.PJT_CODE = his.PJT_CODE 
+			and fs.project = p.project
+		left outer join FW_QUALITY_DUPLICATE_CODE dup
+			--on dup.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(dup.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(dup.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  dup.MEASURE_DT
+											end
+			--and dup.PJT_CODE = his.PJT_CODE 
+			and dup.project = p.project
+		left outer join FW_QUALITY_COMPLEXITY com
+			--on com.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  com.MEASURE_DT
+											end
+			--and com.PJT_CODE = his.PJT_CODE 
+			and com.project = p.project
+		left outer join FW_QUALITY_ARCHITECTURE arc
+			--on arc.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(arc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(arc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  arc.MEASURE_DT
+											end
+			--and arc.PJT_CODE = his.PJT_CODE 		
+			and arc.project = p.project			
+		left outer join FW_QUALITY_TESTCOVERAGE cov
+			--on cov.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cov.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cov.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  cov.MEASURE_DT
+											end
+			--and cov.PJT_CODE = his.PJT_CODE 		
+			and cov.project = p.project
+		left outer join FW_QUALITY_CODING_RULE cod
+			--on cod.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cod.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cod.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  cod.MEASURE_DT
+											end
+			--and cod.PJT_CODE = his.PJT_CODE 		
+			and cod.project = p.project
+			
+		left outer join FW_QUALITY_FUNC_PARAMETER fp
+			--on fp.MEASURE_DT = his.MEASURE_DT
+			on p.MEASURE_DT = case 
+												when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fp.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fp.measure_dt,'YYYYMMDD'),'D') when '2' then 1 else 1 end),'YYYYMMDD') 
+												else  fp.MEASURE_DT
+											end
+			--and fp.PJT_CODE = his.PJT_CODE 		
+			and fp.project = p.project
+		
+			
+		left outer join pjt_list pl
+			on his.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING pm
+			on pm.LEGACY_NAME = 'FWQ'
+			and pm.LEGACY_PJT_NAME = p.project
+			and pm.PJT_NAME = p.pjt_code
+		where 1=1
+		<choose>
+			<when test="measureDt != null and measureDt != '' ">
+				and his.measure_dt = #{measureDt}  -- '20170124'
+			</when>
+			<otherwise>and is_latest = 'Y'</otherwise>
+		</choose>
+		
+		and p.loc > 0
+		and pm.pjt_name is not null
+		--and pm.pjt_name = 'PJT_00039104'
+		<if test="pjtCodeList != null and pjtCodeList != '' ">
+            and his.pjt_code in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item.PJT_ID}
+            </foreach>
+        </if>
+        order by his.measure_dt desc
+	</select>
+	<update id="dashboard.batch.fwq.linkcheck.update" parameterType="hashmap">
+		declare 
+			cnt number;
+		begin
+			select count(*) into cnt from FWQ_LINK_CHECK 
+			where MEASURE_DT = #{MEASURE_DT}
+			and PJT_CODE = #{PJT_CODE}
+			and PROJECT = #{PROJECT}
+			and CATEGORY = #{CATEGORY}
+			and LINK = #{LINK};
+			
+			if cnt = 0 then 
+				insert into FWQ_LINK_CHECK(MEASURE_DT, PJT_CODE, PROJECT, CATEGORY, LINK, RESULT, INS_DT, MOD_DT)
+				values (#{MEASURE_DT}, #{PJT_CODE}, #{PROJECT}, #{CATEGORY}, #{LINK}, #{RESULT}, sysdate, sysdate);
+			else
+			
+				update FWQ_LINK_CHECK set
+					RESULT = #{RESULT},
+					MOD_DT = sysdate
+				where MEASURE_DT = #{MEASURE_DT}
+				and PJT_CODE = #{PJT_CODE}
+				and PROJECT = #{PROJECT}
+				and CATEGORY = #{CATEGORY}
+				and LINK = #{LINK};			
+			end if;
+		
+		end;
+	</update>
+</mapper>    

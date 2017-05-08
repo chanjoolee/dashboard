@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+    <select id="license.selectIarLicenseUseList" resultType="hashmap">
+		SELECT B.DT USE_DATE
+		     , NVL(A.USE_CNT, 0) USE_CNT
+		     , 'Count' IMSI
+		FROM (
+		        SELECT LOG_FULL_DATE
+		             , COUNT(1) USE_CNT
+		        FROM (
+		                SELECT DISTINCT
+		                       LOG_FULL_DATE
+		                     , FEATURE_NAME
+		                FROM IAR_LICENSE_LOG
+		                WHERE LOG_FULL_DATE BETWEEN REPLACE(#{fromDt}, '-', '') AND REPLACE(#{toDt}, '-', '')
+		                  AND TRANS_TYPE = '0'
+		                UNION ALL
+                        SELECT LOG_FULL_DATE
+                             , FEATURE_NAME
+                        FROM IAR_LICENSE_LOG
+                        WHERE LOG_FULL_DATE BETWEEN REPLACE(#{fromDt}, '-', '') AND REPLACE(#{toDt}, '-', '')
+                          AND TRANS_TYPE = '1'
+		             )
+		        GROUP BY LOG_FULL_DATE
+		     ) A
+		   , (  SELECT TO_CHAR((TO_DATE(REPLACE(#{fromDt}, '-', ''), 'YYYYMMDD') + LEVEL - 1), 'YYYYMMDD') DT
+		        FROM DUAL
+		        CONNECT BY(TO_DATE(REPLACE(#{fromDt}, '-', ''), 'YYYYMMDD') + LEVEL - 1) <![CDATA[ <= ]]> TO_DATE(REPLACE(#{toDt}, '-', ''), 'YYYYMMDD')
+		     ) B
+		WHERE A.LOG_FULL_DATE(+) = B.DT
+		ORDER BY B.DT
+    </select>
+    
+    <select id="license.selectLicenseUsageList.smonth.table" resultType="hashmap">
+		SELECT DISTINCT SYEAR || '-' || SMONTH  TMONTH
+     	FROM PDF_DATA_LIST
+     	WHERE  SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}        
+    </select>
+    
+    <select id="license.selectLicenseUsageList.smonth.all" resultType="hashmap">
+		SELECT  
+				 SYEAR || SMONTH USE_MONTH,
+                 SYEAR ||'-' || SMONTH  TMONTH,   
+                'Denial' GBNM,
+                 Max(DENIAL) AVR ,
+                '%Used' GBUSED  ,
+                 Max(USED) USED,
+                'Max Avail' GBAVL  ,
+                 Max(AVAIL)AVAIL                            
+         FROM PDF_DATA_LIST
+         WHERE SITE_NM 		= #{siteNm}
+         AND   LICENSE_NM  	= #{licenseNm}
+         AND   SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
+         GROUP BY SITE_NM, SYEAR, SMONTH                
+         UNION ALL
+         SELECT  
+         		 SYEAR || SMONTH USE_MONTH,
+                 SYEAR ||'-' || SMONTH  TMONTH,   
+                'Peak' GBNM,
+                 Max(PEAK) AVR ,
+               '%Used' GBUSED  ,
+                ROUND(AVG(0),1) USED,
+                'Max Avail' GBAVL  ,
+                ROUND(AVG(0),1) AVAIL                     
+         FROM PDF_DATA_LIST
+         WHERE SITE_NM 		= #{siteNm}
+         AND   LICENSE_NM  	= #{licenseNm}
+         AND   SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
+         GROUP BY SITE_NM, SYEAR, SMONTH       
+         ORDER BY 1
+    </select>
+    
+    <select id="license.selectLicenseUsageList.sdate.all" resultType="hashmap">
+		SELECT  
+                SYEAR || SMONTH USE_MONTH,
+                SMONTH ||'-' || SDATE  TDATE,   
+                'Denial' GBNM,
+                Max(DENIAL) AVR ,
+                '%Used' GBUSED  ,
+                Max(USED) USED,
+                'Max Avail' GBAVL  ,
+                Max(AVAIL) AVAIL                            
+         FROM PDF_DATA_LIST
+         WHERE SITE_NM 		= #{siteNm}
+         AND   LICENSE_NM  	= #{licenseNm}
+         AND   SYEAR || SMONTH =  #{useMonth}         
+         GROUP BY SITE_NM, SYEAR, SMONTH, SDATE
+         UNION ALL
+         SELECT  
+         		SYEAR || SMONTH USE_MONTH,
+                SMONTH ||'-' || SDATE  TDATE,   
+                'Peak' GBNM,
+                Max(PEAK) AVR ,
+                '%Used' GBUSED  ,
+                Max(0) USED,
+                'Max Avail' GBAVL  ,
+                ROUND(AVG(0),1) AVAIL                            
+         FROM PDF_DATA_LIST
+         WHERE SITE_NM 		= #{siteNm}
+         AND   LICENSE_NM  	= #{licenseNm}
+         AND   SYEAR || SMONTH =  #{useMonth}        
+         GROUP BY SITE_NM, SYEAR, SMONTH, SDATE
+    </select>
+    
+    <select id="license.selectLicenseUsageList.sdate.list" resultType="hashmap">
+		SELECT SDATE USE_DATE_VAL
+		FROM PDF_DATA_LIST		
+		WHERE SITE_NM 		= #{siteNm}
+        AND   LICENSE_NM  	= #{licenseNm}
+		AND   SYEAR || SMONTH  = #{useMonth}         
+    </select>
+    
+    <select id="license.selectLicenseUsageList.sdate.table" resultType="hashmap">
+	    SELECT MAX(D01) AS D01
+	     , MAX(D02) AS D02
+	     , MAX(D03) AS D03
+	     , MAX(D04) AS D04
+	     , MAX(D05) AS D05
+	     , MAX(D06) AS D06
+	     , MAX(D07) AS D07
+	     , MAX(D08) AS D08
+	     , MAX(D09) AS D09
+	     , MAX(D10) AS D10
+	     , MAX(D11) AS D11
+	     , MAX(D12) AS D12
+	     , MAX(D13) AS D13
+	     , MAX(D14) AS D14
+	     , MAX(D15) AS D15
+	     , MAX(D16) AS D16
+	     , MAX(D17) AS D17
+	     , MAX(D18) AS D18
+	     , MAX(D19) AS D19
+	     , MAX(D20) AS D20
+	     , MAX(D21) AS D21
+	     , MAX(D22) AS D22
+	     , MAX(D23) AS D23
+	     , MAX(D24) AS D24
+	     , MAX(D25) AS D25
+	     , MAX(D26) AS D26
+	     , MAX(D27) AS D27
+	     , MAX(D28) AS D28
+	     , MAX(D29) AS D29
+	     , MAX(D30) AS D30
+	     , MAX(D31) AS D31
+	     , TYPE
+	     , DISPORDER
+	  FROM (
+	    SELECT DECODE(SDATE, '01', VAL, 0) AS D01
+	         , DECODE(SDATE, '02', VAL, 0) AS D02
+	         , DECODE(SDATE, '03', VAL, 0) AS D03
+	         , DECODE(SDATE, '04', VAL, 0) AS D04
+	         , DECODE(SDATE, '05', VAL, 0) AS D05
+	         , DECODE(SDATE, '06', VAL, 0) AS D06
+	         , DECODE(SDATE, '07', VAL, 0) AS D07
+	         , DECODE(SDATE, '08', VAL, 0) AS D08
+	         , DECODE(SDATE, '09', VAL, 0) AS D09
+	         , DECODE(SDATE, '10', VAL, 0) AS D10
+	         , DECODE(SDATE, '11', VAL, 0) AS D11
+	         , DECODE(SDATE, '12', VAL, 0) AS D12
+	         , DECODE(SDATE, '13', VAL, 0) AS D13
+	         , DECODE(SDATE, '14', VAL, 0) AS D14
+	         , DECODE(SDATE, '15', VAL, 0) AS D15
+	         , DECODE(SDATE, '16', VAL, 0) AS D16
+	         , DECODE(SDATE, '17', VAL, 0) AS D17
+	         , DECODE(SDATE, '18', VAL, 0) AS D18
+	         , DECODE(SDATE, '19', VAL, 0) AS D19
+	         , DECODE(SDATE, '20', VAL, 0) AS D20
+	         , DECODE(SDATE, '21', VAL, 0) AS D21
+	         , DECODE(SDATE, '22', VAL, 0) AS D22
+	         , DECODE(SDATE, '23', VAL, 0) AS D23
+	         , DECODE(SDATE, '24', VAL, 0) AS D24
+	         , DECODE(SDATE, '25', VAL, 0) AS D25
+	         , DECODE(SDATE, '26', VAL, 0) AS D26
+	         , DECODE(SDATE, '27', VAL, 0) AS D27
+	         , DECODE(SDATE, '28', VAL, 0) AS D28
+	         , DECODE(SDATE, '29', VAL, 0) AS D29
+	         , DECODE(SDATE, '30', VAL, 0) AS D30
+	         , DECODE(SDATE, '31', VAL, 0) AS D31
+	         , TYPE
+	         , DISPORDER
+	    FROM 
+	    (   
+	        SELECT SYEAR
+	             , SMONTH
+	             , SDATE
+	             , DENIAL AS VAL
+	             , 'Denial' AS TYPE
+	             , LICENSE_NM
+	             , SITE_NM
+	             , 1 AS DISPORDER
+	        FROM PDF_DATA_LIST 
+	        WHERE 1=1	       
+	        UNION ALL
+	        SELECT SYEAR
+	             , SMONTH
+	             , SDATE
+	             , PEAK AS VAL
+	             , 'Peak' AS TYPE
+	             , LICENSE_NM
+	             , SITE_NM
+	             , 2 AS DISPORDER  
+	        FROM PDF_DATA_LIST AA
+	        WHERE 1=1		        	
+	        UNION ALL        
+	        SELECT SYEAR
+	             , SMONTH
+	             , SDATE
+	             , USED AS VAL
+	             , '%Used' AS TYPE
+	             , LICENSE_NM
+	             , SITE_NM
+	             , 3 AS DISPORDER
+	        FROM PDF_DATA_LIST 
+	        WHERE 1=1	             
+	        UNION ALL
+	        SELECT SYEAR
+	             , SMONTH
+	             , SDATE
+	             , AVAIL AS VAL
+	             , 'Max Avail' AS TYPE
+	             , LICENSE_NM
+	             , SITE_NM
+	             , 4 AS DISPORDER
+	        FROM PDF_DATA_LIST
+	        WHERE 1=1	             
+	        ) AA ,
+	         (  SELECT TO_DATE( #{useMonth}, 'YYYYMM') + LEVEL - 1  TDATE 
+	            FROM DUAL
+	            CONNECT BY LEVEL <![CDATA[ <= ]]> 31 
+	         ) BB
+	    WHERE 1=1
+	    AND TO_DATE(AA.SYEAR || AA.SMONTH || AA.SDATE,'YYYYMMDD')  = BB.TDATE
+	    AND SITE_NM 		= #{siteNm}
+        AND LICENSE_NM  	= #{licenseNm}
+		AND SYEAR || SMONTH = #{useMonth}    
+	)
+	GROUP BY TYPE, DISPORDER
+	ORDER BY DISPORDER
+    </select>
+     
+</mapper>

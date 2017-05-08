@@ -1,0 +1,431 @@
+<!DOCTYPE html><html class=''>
+<head>
+<meta charset='UTF-8'><meta name="robots" content="noindex">
+<link rel="canonical" href="http://codepen.io/darminion/pen/sinyH/" />
+
+
+<style class="cp-pen-styles">
+
+.link {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+rect.table
+{
+  stroke:black;
+  stroke-width:1;
+  fill:white;
+}
+rect.tableHeader
+{  
+  stroke:black; 
+  stroke-width:1; 
+  fill:grey;
+}
+text
+{
+  font-size:12px;
+}
+text.tableHeader
+{
+  fill:white;
+  font-weight:bold;
+}
+text.nonNullable
+{
+  font-weight:bold;
+}
+line
+{
+  stroke:black;
+  stroke-width:0.5;      
+}</style></head><body>
+
+<script src='http://assets.codepen.io/assets/common/stopExecutionOnTimeout.js?t=1'></script>
+<!-- <script src='http://d3js.org/d3.v3.min.js'></script> -->
+<script src='d3.v3.src.js'></script>
+
+<script>
+	var links = [
+     	    {
+     	        'source': 1,
+     	        'target': 0,
+     	        'name': 'chanjoo'
+     	    },
+     	    {
+     	        'source': 1,
+     	        'target': 2
+     	    },
+     	    {
+     	        'source': 1,
+     	        'target': 3
+     	    },
+     	    {
+     	        'source': 5,
+     	        'target': 0
+     	    },
+     	    {
+     	        'source': 5,
+     	        'target': 4
+     	    }
+     	];
+	function dragstart(d) {
+	    d3.select(this).classed('fixed', d.fixed = true);
+	}
+	
+	function resize() {
+	    width = window.innerWidth, height = window.innerHeight;
+	    svg.attr('width', width).attr('height', height);
+	    force.size([
+	        width,
+	        height
+	    ]).resume();
+	}
+	function tick() {
+	    link.attr('x1', function (d) {
+	        return d.source.x + 100;
+	    }).attr('y1', function (d) {
+	        return d.source.y + (d.source.tableColumns.length * 20 + 20) / 2;
+	    }).attr('x2', function (d) {
+	        return d.target.x + 100;
+	    }).attr('y2', function (d) {
+	        return d.target.y + (d.target.tableColumns.length * 20 + 20) / 2;
+	    });
+	}
+	function getTableWidth(table) {
+	    return 250;
+	}
+	function getData() {
+	    return [
+	        {
+	            'tableId': 0,
+	            'tableName': 'Customer',
+	            'tableColumns': [
+	                {
+	                    'colName': 'CustomerId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'Name',
+	                    'dataType': 'varchar(50)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'LastModified',
+	                    'dataType': 'datetime(7)',
+	                    'nullable': 0
+	                }
+	            ]
+	        },
+	        {
+	            'tableId': 1,
+	            'tableName': 'CustomerAddress',
+	            'tableColumns': [
+	                {
+	                    'colName': 'CustomerAddressId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'AddressTypeId',
+	                    'dataType': 'varchar(50)',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'AddressLine1',
+	                    'dataType': 'varchar(100)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'AddressLine2',
+	                    'dataType': 'varchar(100)',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'CityId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'StateId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'PostalCode',
+	                    'dataType': 'varchar(10)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'IsPrimary',
+	                    'dataType': 'bit',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'LastModified',
+	                    'dataType': 'datetime(7)',
+	                    'nullable': 0
+	                }
+	            ]
+	        },
+	        {
+	            'tableId': 2,
+	            'tableName': 'City',
+	            'tableColumns': [
+	                {
+	                    'colName': 'CityId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'Name',
+	                    'dataType': 'varchar(50)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'LastModified',
+	                    'dataType': 'datetime(7)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'CreatedBy',
+	                    'dataType': 'varchar(100)',
+	                    'nullable': 0
+	                }
+	            ]
+	        },
+	        {
+	            'tableId': 3,
+	            'tableName': 'State',
+	            'tableColumns': [
+	                {
+	                    'colName': 'StateId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'Name',
+	                    'dataType': 'varchar(50)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'LastModified',
+	                    'dataType': 'datetime(7)',
+	                    'nullable': 0
+	                }
+	            ]
+	        },
+	        {
+	            'tableId': 4,
+	            'tableName': 'Order',
+	            'tableColumns': [
+	                {
+	                    'colName': 'OrderId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'Name',
+	                    'dataType': 'varchar(50)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'LastModified',
+	                    'dataType': 'datetime(7)',
+	                    'nullable': 0
+	                }
+	            ]
+	        },
+	        {
+	            'tableId': 5,
+	            'tableName': 'CustomerOrder',
+	            'tableColumns': [
+	                {
+	                    'colName': 'CustomerId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'OrderId',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'LastModified',
+	                    'dataType': 'datetime(7)',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'CreatedBy',
+	                    'dataType': 'varchar(100)',
+	                    'nullable': 0
+	                }
+	            ]
+	        },
+	        {
+	            'tableName': 'MasterInventoryItems',
+	            'tableColumns': [
+	                {
+	                    'colName': 'MasterInventoryItemID',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'VendorID',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'Category',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'ItemName',
+	                    'dataType': 'varchar(80)',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'ItemDescription',
+	                    'dataType': 'varchar(512)',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'PartNumber',
+	                    'dataType': 'varchar(120)',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'InventoryLevel',
+	                    'dataType': 'int',
+	                    'nullable': 0
+	                },
+	                {
+	                    'colName': 'InventoryParLevel',
+	                    'dataType': 'int',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'Notes',
+	                    'dataType': 'varchar(512)',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'QuantityUsedPerTest',
+	                    'dataType': 'float',
+	                    'nullable': 1
+	                },
+	                {
+	                    'colName': 'Hidden',
+	                    'dataType': 'bit',
+	                    'nullable': 0
+	                }
+	            ]
+	        }
+	    ];
+	}
+
+</script>
+<!-- <script src='//codepen.io/assets/editor/live/css_live_reload_init.js'></script> -->
+<body></body>
+<script>
+
+	var data = getData();
+	
+	//var w = 500, h = 500;
+	var w = 1000, h = 800;
+	var svg = d3.select('body').append('svg').attr('width', w).attr('height', h);
+	var link = svg.selectAll('.link').data(links).enter().append('line').attr('class', 'link');
+	var force = d3.layout.force().nodes(data).links(links).size([
+	    w,
+	    h
+	]).charge(-50).gravity(0.005).linkDistance(200).start();
+	force.on('tick', function (e) {
+	    var k = 6 * e.alpha;
+	    data.forEach(function (o, i) {
+	        o.y += i & 1 ? k : -k;
+	        o.x += i & 2 ? k : -k;
+	    });
+	    tableGroup.attr('x', function (d) {
+	        return d.x;
+	    }).attr('y', function (d) {
+	        return d.y;
+	    });
+	    tick();
+	});
+	var drag = force.drag().on('dragstart', dragstart);
+	
+	resize();
+	d3.select(window).on('resize', resize);
+	///
+	var tableGroup = svg.selectAll('svg.tableGroup').data(data).enter().append('svg').attr('id', function (d, i) {
+	    return 'tableGroup' + i;
+	}).attr('x', 0).attr('y', function (d, i) {
+	    return (i + 1) * 150;
+	//});
+	}).call(force.drag);
+	var tableContainer = tableGroup.append('rect').attr('x', 0).attr('y', 0).attr('width', function (d) {
+	    var maxColName = d.tableColumns.reduce(function (a, b) {
+	        return a.colName.length > b.colName.length ? a : b;
+	    }).colName.length;
+	    var maxDataType = d.tableColumns.reduce(function (a, b) {
+	        return a.dataType.length > b.dataType.length ? a : b;
+	    }).dataType.length;
+	    var width = (maxColName + maxDataType) * 8;
+	    console.log(d.tableName + ':' + width);
+	    return width;
+	}).attr('height', function (d) {
+	    return d.tableColumns.length * 20 + 20;
+	}).attr('class', 'table');
+	var dtLine = tableGroup.append('line').attr('x1', function (d) {
+	    var maxColName = d.tableColumns.reduce(function (a, b) {
+	        return a.colName.length > b.colName.length ? a : b;
+	    }).colName.length * 7;
+	    return maxColName;
+	}).attr('x2', function (d) {
+	    var maxColName = d.tableColumns.reduce(function (a, b) {
+	        return a.colName.length > b.colName.length ? a : b;
+	    }).colName.length * 7;
+	    return maxColName;
+	}).attr('y1', 20).attr('y2', function (d) {
+	    return d.tableColumns.length * 20 + 20;
+	});
+	var tableHeader = tableGroup.append('g').attr('id', function (d, i) {
+	    return 't' + i + 'Header';
+	});
+	tableHeader.append('rect').attr('class', 'tableHeader').attr('width', function (d) {
+	    return getTableWidth(d);
+	}).attr('height', 20).attr('x', 0).attr('y', 0);
+	tableHeader.append('text').attr('class', 'tableHeader').attr('width', function (d) {
+	    return getTableWidth(d);
+	}).attr('height', 20).attr('x', 5).attr('y', 15).text(function (d) {
+	    return d.tableName;
+	});
+	var tableColumns = tableGroup.selectAll('g.tableColumn').data(function (d) {
+	    return d.tableColumns;
+	}).enter().append('g').attr('class', 'tableColumn');
+	tableColumns.append('text').text(function (d) {
+	    return d.colName;
+	}).attr('x', 5).attr('y', function (d, i) {
+	    return 35 + i * 20;
+	}).attr('class', function (d) {
+	    return d.nullable == 0 ? 'nonNullable' : 'nullable';
+	});
+	tableColumns.append('text').text(function (d) {
+	    return d.dataType;
+	}).attr('x', 120).attr('y', function (d, i) {
+	    return 35 + i * 20;
+	}).attr('class', function (d) {
+	    return d.nullable == 0 ? 'nonNullable' : 'nullable';
+	});
+	tableColumns.append('line').attr('x1', 0).attr('x2', function (d) {
+	    return getTableWidth(d);
+	}).attr('y1', function (d, i) {
+	    return 40 + i * 20;
+	}).attr('y2', function (d, i) {
+	    return 40 + i * 20;
+	});
+	
+</script>
+</html>

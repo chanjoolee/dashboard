@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+	<select id="dashboard.preformance.datalist" resultType="hashmap">
+		select 
+			p.FOLDER_NAME,
+			f.MEASURE_DT, f.VENDOR, f.PRODUCT_NAME, f.CONTROLLER, f.NAND_TECH, f.CELL_TYPE, f.FORM_FACTOR, f.CAPACITY, f.FIRMWARE, f.SLC_BUFFER, f.SERIAL_NUMBER, f.TEST_COUNT, f.IS_GOOD_DATA,
+			p.TOOL,
+			p.DATA_SRC,
+			p.SPEC,
+			nvl(p.SPEC_LABEL,spec) as SPEC_LABEL,
+			p.QUEUE_DEPTH,
+			p.FIELD,
+			nvl(to_number(regexp_replace(p.measure, '[^([:digit:].)]')),0) measure
+		from PERFORMANCE p
+		join PERFORMANCE_FOLDER f
+			on p.folder_name = f.folder_name
+		where 1=1
+		<if test="FOLDER_NAME != null and FOLDER_NAME != '' ">
+       	  and f.folder_name in
+       		<foreach collection="FOLDER_NAME" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+   		</if>
+   		<if test="data_src != null and data_src != '' ">
+   			and p.data_src = #{data_src}
+   		</if>
+		and p.measure is not null
+		and spec != 'Precondition'
+		and 
+		(
+			(
+				p.FIELD in (
+					'MiBps (Binary)',
+					'Read MiBps (Binary)',
+					'Write MiBps (Binary)',
+					'MBps (Decimal)',
+					'Read MBps (Decimal)',
+					'Write MBps (Decimal)',
+					'Average Response Time',
+					'IOps'
+				)
+				and p.tool = 'Iometer'
+			)
+			or p.tool != 'Iometer'
+		)
+		
+	</select>
+	<select id="dashboard.preformance.tablist" resultType="hashmap">
+		select 
+			distinct p.DATA_SRC
+		from PERFORMANCE p
+		join PERFORMANCE_FOLDER f
+			on p.folder_name = f.folder_name
+		where 1=1
+		<if test="FOLDER_NAME != null and FOLDER_NAME != '' ">
+       	  and f.folder_name in
+       		<foreach collection="FOLDER_NAME" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+   		</if>
+		and p.measure is not null
+		and spec != 'Precondition'
+		and 
+		(
+			(
+				p.FIELD in (
+					'MiBps (Binary)',
+					'Read MiBps (Binary)',
+					'Write MiBps (Binary)',
+					'MBps (Decimal)',
+					'Read MBps (Decimal)',
+					'Write MBps (Decimal)',
+					'Average Response Time',
+					'IOps'
+				)
+				and p.tool = 'Iometer'
+			)
+			or p.tool != 'Iometer'
+		)
+		
+	</select>
+	<select id="dashboard.preformance.folderlist" resultType="hashmap">
+		select 
+			'R' edit_mode , 
+			' ' TARGET , 
+			FOLDER_NAME ,
+			MEASURE_DT, 
+			VENDOR, 
+			PRODUCT_NAME, 
+			CONTROLLER, 
+			NAND_TECH, 
+			CELL_TYPE, 
+			FORM_FACTOR, 
+			CAPACITY, 
+			FIRMWARE, 
+			SLC_BUFFER, 
+			SERIAL_NUMBER, 
+			TEST_COUNT
+			, nvl(IS_GOOD_DATA,'No') as  IS_GOOD_DATA
+			, nvl(remark, ' ') remark
+			, CATEGORY
+		from PERFORMANCE_FOLDER A
+		where 1=1
+		
+		<if test="pjtId != null and pjtId != ''  " >
+			<choose>
+				<when test="models != null and models != ''  and models.size() > 0 " >
+		       	  and PRODUCT_NAME in
+		       		<foreach collection="models" item="item" index="index"  open="(" separator="," close=")">
+		           		#{item.MODEL_NM}
+		       		</foreach>
+		   		</when>
+		   		<otherwise>
+		   		and 1 = 2
+		   		</otherwise>
+	   		</choose>
+   		</if>
+   		   		
+   		<!-- 상단검색조건 -->
+   		<if test="categoryArr != null and categoryArr != ''  " >
+       		and A.CATEGORY in 
+            <foreach collection="categoryArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		<if test="vendorArr != null and vendorArr != ''  " >
+       		and A.VENDOR in 
+            <foreach collection="vendorArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		<if test="productNameArr != null and productNameArr != ''  " >
+       		and A.PRODUCT_NAME in 
+            <foreach collection="productNameArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		<if test="firmwareArr != null and firmwareArr != ''  " >
+       		and A.FIRMWARE in 
+            <foreach collection="firmwareArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		<if test="nandTechArr != null and nandTechArr != ''  " >
+       		and A.NAND_TECH in 
+            <foreach collection="nandTechArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		<if test="cellTypeArr != null and cellTypeArr != ''  " >
+       		and A.CELL_TYPE in 
+            <foreach collection="cellTypeArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		<if test="capacityArr != null and capacityArr != ''  " >
+       		and A.CAPACITY in 
+            <foreach collection="capacityArr" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+   		</if>
+   		
+   		order by MEASURE_DT desc, PRODUCT_NAME, CAPACITY, firmware
+		
+	</select>
+	
+	<update id="dashboard.preformance.save.isGoddData" parameterType="hashmap">
+	declare
+	
+	begin
+		update PERFORMANCE_FOLDER set
+			IS_GOOD_DATA = #{IS_GOOD_DATA}
+			<if test="REMARK != null and REMARK != '' ">
+	       	  , remark = #{REMARK}
+	   		</if>
+		where FOLDER_NAME = #{FOLDER_NAME} ;
+	end;
+	</update>
+	
+	<select id="dashboard.preformance.field.distinct" resultType="hashmap">
+    	select
+    		<if test="filters != null and filters.fields != null and filters.fields != ''  " >
+	            <foreach collection="filters.fields" item="item" index="index"  open="" separator="," close="">
+	                ${item}
+	            </foreach>
+	   		</if>
+			, count(*) cnt 	
+		from PERFORMANCE_FOLDER a
+		where 1=1
+		<if test="filters != null and filters.fields != null and filters.fields != ''  " >
+            <foreach collection="filters.fields" item="item" index="index"  open="" separator="" close="">
+                and ${item} is not null
+            </foreach>
+            group by <foreach collection="filters.fields" item="item" index="index"  open="" separator="," close=""> ${item} </foreach>
+            order by <foreach collection="filters.fields" item="item" index="index"  open="" separator="," close=""> ${item} </foreach>
+   		</if>
+    	
+    </select>
+	
+</mapper>    

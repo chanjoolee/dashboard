@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    <select id="dashboard.regresson.project.back" resultType="hashmap">
+    	with maxRevision as (
+			select pjt_code,fw_rev
+			from(
+				select 
+					a.PJT_CODE,a.FW_REV, row_number() over(partition by a.pjt_code order by a.START_DATE) m
+				from BATMAN_TEST_INFO a
+			)  a where a.m = 1			
+		)
+    	
+    	
+	    select
+			pjt.PJT_CODE ,
+			pjt.PJT_NAME , 
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			count(*) CNT
+		from BATMAN_TEST_INFO info
+		join maxRevision mr on mr.pjt_code = info.pjt_code and mr.FW_REV = info.FW_REV
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		
+		join pjt_mapping m 
+			on m.LEGACY_PJT_NAME = info.PJT_CODE
+			and m.LEGACY_NAME = 'Regression' 
+		join pjt_list pjt
+			on pjt.pjt_code = m.pjt_name
+		group by pjt.PJT_CODE,pjt.pjt_name,result.FINAL_RESULT
+	  
+    </select>
+    <select id="dashboard.regresson.project" resultType="hashmap">
+    	with maxRevision as (
+			select pjt_code,fw_rev
+			from(
+				select 
+					/* a.PJT_CODE,a.FW_REV, row_number() over(partition by a.pjt_code order by a.START_DATE desc,a.FW_REV desc) m */
+					a.PJT_CODE,a.FW_REV, row_number() over(partition by a.pjt_code order by to_date(a.START_DATE,'MM/DD/YYYY') desc,a.FW_REV desc) m
+				from BATMAN_TEST_INFO a
+			)  a where a.m = 1			
+		)
+    	
+    	
+	    select
+			info.PJT_CODE ,
+			info.PRJ_NAME PJT_NAME , 
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			count(*) CNT
+		from BATMAN_TEST_INFO info
+		join maxRevision mr on mr.pjt_code = info.pjt_code and mr.FW_REV = info.FW_REV
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		
+		<if test="pjtCodeList != null and pjtCodeList != '' ">
+            and info.pjt_code in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		group by info.PJT_CODE,info.PRJ_NAME,result.FINAL_RESULT
+	  
+    </select>
+    
+    <select id="dashboard.regresson.projectlist" resultType="hashmap">
+    	select 
+    		distinct pjt_code , prj_name pjt_name 
+    	from BATMAN_TEST_INFO 
+    	where pjt_code is not null
+		order by pjt_code
+	  
+    </select>
+    
+    <select id="dashboard.regresson.revision.back" resultType="hashmap">
+    	
+	    select
+			pjt.PJT_CODE ,
+			pjt.PJT_NAME , 
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			info.FW_REV as revision ,
+			count(*) CNT
+		from BATMAN_TEST_INFO info
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		join pjt_mapping m 
+			on m.LEGACY_PJT_NAME = info.PJT_CODE
+			and m.LEGACY_NAME = 'Regression' 
+		join pjt_list pjt
+			on pjt.pjt_code = m.pjt_name
+		where pjt.PJT_CODE = #{pjt_code}
+		group by pjt.PJT_CODE,pjt.pjt_name,result.FINAL_RESULT,info.FW_REV
+	  
+    </select>
+    
+    
+    <select id="dashboard.regresson.revision" resultType="hashmap">
+    	
+	    select
+			info.PJT_CODE ,
+			info.PRJ_NAME PJT_NAME , 
+			info.FW_REV as revision ,
+			to_char(to_date(info.start_date,'MM/DD/YYYY'),'YYYY/MM/DD') start_date,
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			
+			count(*) CNT
+		from BATMAN_TEST_INFO info
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID		
+		where info.PJT_CODE = #{pjt_code}
+		group by info.PJT_CODE,info.PRJ_NAME,info.FW_REV,info.start_date,result.FINAL_RESULT
+		order by info.PJT_CODE,info.PRJ_NAME,info.start_date ,info.FW_REV,result.FINAL_RESULT
+	  
+    </select>
+    
+    <select id="dashboard.regresson.category.back" resultType="hashmap">
+    	
+	    select
+			pjt.PJT_CODE ,
+			pjt.PJT_NAME , 
+			info.FW_REV as revision,
+			result.CATEGORY,
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			count(*) CNT
+		from BATMAN_TEST_INFO info
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		join pjt_mapping m 
+			on m.LEGACY_PJT_NAME = info.PJT_CODE
+			and m.LEGACY_NAME = 'Regression' 
+		join pjt_list pjt
+			on pjt.pjt_code = m.pjt_name
+		where pjt.PJT_CODE = #{pjt_code}
+		and info.FW_REV = #{revision}
+		group by pjt.PJT_CODE,pjt.PJT_NAME, info.FW_REV,result.CATEGORY, result.FINAL_RESULT
+	   
+    </select>
+    
+    <select id="dashboard.regresson.category" resultType="hashmap">
+    	
+	    select
+			info.PJT_CODE ,
+			info.PRJ_NAME PJT_NAME , 
+			info.FW_REV as revision,
+			result.CATEGORY,
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			count(*) CNT
+		from BATMAN_TEST_INFO info
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		
+		where info.PJT_CODE = #{pjt_code}
+		and info.FW_REV = #{revision}
+		group by info.PJT_CODE,info.PRJ_NAME, info.FW_REV,result.CATEGORY, result.FINAL_RESULT
+	  
+    </select>
+    
+    
+    <select id="dashboard.regresson.category.list.back" resultType="hashmap">
+    	
+	    select
+			pjt.PJT_CODE ,
+			pjt.PJT_NAME , 
+			info.FW_REV as REVISION,
+			result.CATEGORY,
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			result.TEST_NAME,
+			result.TEST_SCRIPT,
+			result.BATMAN_COMMENT
+			 
+		from BATMAN_TEST_INFO info
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		join pjt_mapping m 
+			on m.LEGACY_PJT_NAME = info.PJT_CODE
+			and m.LEGACY_NAME = 'Regression' 
+		join pjt_list pjt
+			on pjt.pjt_code = m.pjt_name
+		where pjt.PJT_CODE = #{pjt_code}
+		and info.FW_REV = #{revision}
+		and result.CATEGORY = #{category}
+	  
+    </select>
+    
+    <select id="dashboard.regresson.category.list" resultType="hashmap">
+    	
+	    select
+			info.PJT_CODE ,
+			info.PRJ_NAME PJT_NAME , 
+			info.FW_REV as REVISION,
+			result.CATEGORY,
+			nvl(result.FINAL_RESULT,'N/A') as FINAL_RESULT,
+			result.TEST_NAME,
+			result.TEST_SCRIPT,
+			result.BATMAN_COMMENT
+			 
+		from BATMAN_TEST_INFO info
+		join BATMAN_TEST_RESULT result
+			on result.INFORM_ID = info.INFORM_ID
+		
+		where info.PJT_CODE = #{pjt_code}
+		and info.FW_REV = #{revision}
+		and result.CATEGORY = #{category}
+	  
+    </select>
+    
+    
+</mapper>

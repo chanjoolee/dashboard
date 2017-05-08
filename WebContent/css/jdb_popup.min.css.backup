@@ -1,0 +1,163 @@
+#jdbpopup_container {
+	overflow: hidden
+}
+
+#jdbpopup_container .container {
+	position: fixed;
+	display: block;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	z-index: 2200;
+	background: #fff;
+	border: solid 2px #fff
+}
+
+#jdbpopup_container .container img {
+	width: 100%;
+	height: 100%
+}
+
+#jdbpopup_container .container .caption {
+	display: none
+}
+
+#jdbpopup_container .container .caption.caption_on {
+	position: absolute;
+	display: block;
+	width: 100%;
+	padding: 5px 0;
+	left: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, .7);
+	text-align: center;
+	line-height: 1.4em;
+	font-size: 1.2em;
+	font-weight: 400;
+	color: #fff;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	backface-visibility: hidden
+}
+
+#jdbpopup_container .container .close {
+	position: absolute;
+	display: block;
+	width: 40px;
+	height: 40px;
+	top: 0;
+	right: 0;
+	background: #fff;
+	cursor: pointer
+}
+
+#jdbpopup_container .container .close:after, #jdbpopup_container .container .close:before
+	{
+	content: "";
+	position: absolute;
+	display: block;
+	width: 80%;
+	height: 2px;
+	background: #000;
+	top: 50%;
+	left: 15%;
+	margin-top: -1px
+}
+
+#jdbpopup_container .container .close:before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg)
+}
+
+#jdbpopup_container .container .close:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg)
+}
+
+#jdbpopup_container .overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 2000;
+	top: 0;
+	left: 0;
+	padding: 0;
+	background: rgba(0, 0, 0, .7)
+}
+
+#jdbpopup_container {
+	display: none
+}
+
+#jdbpopup_container .overlay, #jdbpopup_container.fade .container {
+	opacity: 0
+}
+
+#jdbpopup_container.scale .container {
+	-webkit-transform: scale(0);
+	-moz-transform: scale(0);
+	-ms-transform: scale(0);
+	-o-transform: scale(0);
+	transform: scale(0)
+}
+
+#jdbpopup_container.flipX .container {
+	-webkit-transform: rotateX(180deg);
+	-moz-transform: rotateX(180deg);
+	-ms-transform: rotateX(180deg);
+	-o-transform: rotateX(180deg);
+	transform: rotateX(180deg)
+}
+
+#jdbpopup_container.flipY .container {
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+	-ms-transform: rotateY(180deg);
+	-o-transform: rotateY(180deg);
+	transform: rotateY(180deg)
+}
+
+#jdbpopup_container.slide .container {
+	-webkit-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	-ms-transform-origin: 0 0;
+	-o-transform-origin: 0 0;
+	transform-origin: 0 0;
+	-webkit-transform: scale(1, 0);
+	-moz-transform: scale(1, 0);
+	-ms-transform: scale(1, 0);
+	-o-transform: scale(1, 0);
+	transform: scale(1, 0)
+}
+
+#jdbpopup_container.translateX .container {
+	-webkit-transform: translate(-300%, 0);
+	-moz-transform: translate(-300%, 0);
+	-ms-transform: translate(-300%, 0);
+	-o-transform: translate(-300%, 0);
+	transform: translate(-300%, 0)
+}
+
+#jdbpopup_container.translateY .container {
+	-webkit-transform: translate(0%, -300%);
+	-moz-transform: translate(0%, -300%);
+	-ms-transform: translate(0%, -300%);
+	-o-transform: translate(0%, -300%);
+	transform: translate(0%, -300%)
+}
+
+#jdbpopup_container.translateXY .container {
+	-webkit-transform: translate(-300%, -300%);
+	-moz-transform: translate(-300%, -300%);
+	-ms-transform: translate(-300%, -300%);
+	-o-transform: translate(-300%, -300%);
+	transform: translate(-300%, -300%)
+}

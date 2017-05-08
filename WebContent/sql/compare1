@@ -1,0 +1,147 @@
+WITH projectList AS (
+        SELECT
+                *
+            FROM
+                (
+                    SELECT
+                            DISTINCT NVL(m.pjt_name, a.project) pjt_code
+                            ,a.project
+                        FROM
+                            (
+                                SELECT
+                                        DISTINCT project
+                                    FROM
+                                        JIRA_ISSUE
+                            ) a
+                                LEFT OUTER JOIN PJT_MAPPING m
+                                    ON m.legacy_pjt_name = A.project
+                                    AND LEGACY_NAME = 'JIRA'
+                ) a
+    WHERE
+        a.pjt_code = 'Armstrong'
+)
+,dt AS (
+    SELECT
+            project AS project
+            ,MIN(dt) start_dt
+            ,MAX(dt) end_dt
+        FROM
+            (
+                SELECT
+                        jira.project AS project
+                        ,TO_CHAR(MIN(created), 'YYYY-MM-DD') dt
+                    FROM
+                        JIRA_ISSUE jira
+                            JOIN projectList list
+                                ON list.project = jira.project
+                    WHERE
+                        list.pjt_code = 'Armstrong'
+                    group by jira.project
+                UNION ALL
+                SELECT
+                        jira.project AS project
+                        ,TO_CHAR(MAX(created), 'YYYY-MM-DD') dt
+                    FROM
+                        JIRA_ISSUE jira
+                            JOIN projectList list
+                                ON list.project = jira.project
+                    WHERE
+                        list.pjt_code = 'Armstrong'
+                    group by jira.project
+                UNION ALL
+                SELECT
+                        jira.project AS project
+                        ,TO_CHAR(MIN(RESOLUTIONDATE), 'YYYY-MM-DD') dt
+                    FROM
+                        JIRA_ISSUE jira
+                            JOIN projectList list
+                                ON list.project = jira.project
+                    WHERE
+                        list.pjt_code = 'Armstrong'
+                    group by jira.project
+                UNION ALL
+                SELECT
+                        jira.project AS project
+                        ,TO_CHAR(MAX(RESOLUTIONDATE), 'YYYY-MM-DD') dt
+                    FROM
+                        JIRA_ISSUE jira
+                            JOIN projectList list
+                                ON list.project = jira.project
+                    WHERE
+                        list.pjt_code = 'Armstrong'
+                    group by jira.project
+            )
+        group by project
+)
+	SELECT
+        projectList.project
+        ,TO_CHAR(a.pre_dt, 'YYYY/MM/DD') pre_dt
+        ,TO_CHAR(a.dt, 'YYYY/MM/DD') defects_date
+        ,(
+            SELECT
+                    COUNT(*)
+                FROM
+                    JIRA_ISSUE b
+ 				where b.created IS NOT null
+                    AND b.created >= (a.pre_dt +1)
+                    AND b.created < (a.dt + 1)
+                    and projectList.project = b.project
+        ) created
+        ,(
+            SELECT
+                    COUNT(*)
+                FROM
+                    JIRA_ISSUE b
+				where b.RESOLUTIONDATE IS NOT null
+                    AND b.RESOLUTIONDATE >= (a.pre_dt +1)
+                    AND b.RESOLUTIONDATE < (a.dt + 1)
+                    and projectList.project = b.project
+        ) resolved
+    FROM
+    	projectList, 
+        (
+            SELECT
+                  a.dt
+                    ,NVL(lag(a.dt) OVER (
+                    ORDER BY
+                        a.levelno
+                    ), a.dt -1) pre_dt
+                FROM
+                    (
+                        SELECT
+                                *
+                            FROM
+                                (
+                                    SELECT
+                                            TO_DATE((
+                                                SELECT
+                                                        min(start_dt)
+                                                    FROM
+                                                        dt
+                                            ), 'YYYY-MM-DD') + ROWNUM -1 dt
+                                            ,LEVEL AS levelno
+                                        FROM
+                                            dual CONNECT BY LEVEL <= TO_DATE((
+                                                SELECT
+                                                        max(end_dt)
+                                                    FROM
+                                                        dt
+                                            ), 'YYYY-MM-DD') - TO_DATE((
+                                                SELECT
+                                                        min(start_dt)
+                                                    FROM
+                                                        dt
+                                            ), 'YYYY-MM-DD') +1
+                                )
+                            WHERE
+                                MOD(levelno, 7) = 0
+                                OR levelno = 1
+                                OR dt = TO_DATE((
+                                    SELECT
+                                            max(end_dt)
+                                        FROM
+                                            dt
+                                ), 'YYYY-MM-DD')
+                    ) a
+        ) a
+        order by 2;

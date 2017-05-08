@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    <select id="deliverable.participationProject" resultType="hashmap">
+    	SELECT
+			A.*
+			<![CDATA[
+			,CASE
+			    WHEN 0 < DEFDAY AND DEFDAY < 60 THEN 'signal2'
+			    WHEN 60 <= DEFDAY THEN 'signal1'
+			    ELSE 'signal3'
+			END AS SIGNAL
+			]]>
+	    FROM
+		(
+		    SELECT
+			    ROW_NUMBER() OVER ( ORDER BY INFO.CREATED DESC ) AS RNUM
+			    ,COUNT(*) OVER () AS RECORD_COUNT
+			    ,(
+					SELECT
+					DECODE(COUNT(*)
+					    ,0, 'N'
+					    ,'Y'
+					)
+				    FROM
+					PJT_BOOKMARK BM
+				    WHERE
+					BM.BM_OWNER = #{userId}
+					AND BM.PJT_ID = INFO.PJT_ID
+			    ) AS BOOKMARK_YN
+			    ,INFO.PJT_ID
+			    ,INFO.PJT_CODE_ID
+			    ,INFO.PJT_NAME
+			    ,INFO.PJT_STATE
+			    ,FN_CODE_NAME(
+					'Project_State'
+					,INFO.PJT_STATE
+			    	) AS PJT_STATE_NAME
+			    ,INFO.PJT_PROCESS_STATE
+			    ,FN_CODE_NAME(
+					'Process_State'
+					,INFO.PJT_PROCESS_STATE
+			    	) AS PJT_PROCESS_STATE_NAME
+			    ,INFO.PM_ID
+			    ,FN_USER_NAME(INFO.PM_ID) AS PM_ID_NM
+			    ,INFO.CUR_PJT_PHASE_ID
+			    ,FN_CODE_NAME(
+					'Phase'
+					,INFO.CUR_PJT_PHASE_ID
+				    ) AS CUR_PJT_PHASE_NM
+			    ,TO_CHAR(INFO.START_DATE, 'YYYY-MM-DD') AS START_DATE
+			    ,TO_CHAR(INFO.END_DATE, 'YYYY-MM-DD') AS END_DATE
+			    ,TO_CHAR(INFO.EST_END_DATE, 'YYYY-MM-DD') AS EST_END_DATE
+			    ,(
+					SELECT
+						CM.CODE_VALUE
+				    FROM
+					PJT_BASE_INFO A
+					,CMM_CDBASE CM
+				    WHERE
+					A.CODE_ID = CM.CODE_ID
+					AND CM.NSPIM_YN = 'Y'
+					AND CM.CODE_NAME = 'Application'
+					AND A.PJT_ID = INFO.PJT_ID
+			    ) AS APPLICATION_NAME
+			    ,(
+					SELECT
+						CM.CODE_VALUE
+				    FROM
+					PJT_BASE_INFO A
+					,CMM_CDBASE CM
+				    WHERE
+					A.CODE_ID = CM.CODE_ID
+					AND CM.NSPIM_YN = 'Y'
+					AND CM.CODE_NAME = 'Controller'
+					AND A.PJT_ID = INFO.PJT_ID
+			    ) AS CONTROLLER_NAME
+			    ,(
+					SELECT
+						TRUNC(SYSDATE - EST_END_DATE) AS DEFDAY
+				    FROM
+					PJT_PHASE
+				    WHERE
+					PJT_ID = INFO.PJT_ID
+					AND PJT_PHASE_ID = INFO.CUR_PJT_PHASE_ID
+					AND ISLATEST = 'Y'
+			    ) AS DEFDAY,
+			    1 as CNT /* custermize by chanjoo */
+			FROM
+			    PJT_INFO INFO
+			    ,(
+					SELECT
+					DISTINCT PJT_ID
+				    FROM
+					PJT_CFT
+				    WHERE
+					USER_NUM = #{userId}
+			    ) CFT
+			    ,(
+					SELECT
+						DISTINCT P.PJT_ID
+				    FROM
+					CMM_CDBASE C
+					,PJT_BASE_INFO P
+				    WHERE
+					C.CODE_NAME IN (
+					    'Development_Type'
+					    ,'Controller'
+					    ,'Host I/F'
+					    ,'Foundry'
+					    ,'Fab tech'
+					    ,'NAND'
+					    ,'Cell Type'
+					)
+					AND C.NSPIM_YN = 'Y'
+					AND C.CODE_ID = P.CODE_ID
+			    ) PB
+			WHERE
+			    1 = 1
+			    AND INFO.PJT_ID = PB.PJT_ID
+			    AND INFO.PJT_ID = CFT.PJT_ID
+		) A
+	    WHERE
+		1 = 1
+		
+	  
+    </select>
+    <select id="deliverable.allproject.participation" resultType="hashmap">
+    	SELECT PPH.PJT_ID, 	INFO.PJT_NAME,		FN_CODE_VALUE_ID(PPH.UP_PHASE_ID) PHASE_NAME
+  		     , PPH.UP_PHASE_ID, 			PAC.PJT_PHASE_ID, 			PPH.PHASE_ORDER
+		     , PAC.PJT_FUNC_ID, 			FN_UP_CODE_NAME('Function', PAC.PJT_FUNC_ID) as FUNC_NAME
+		     , PAC.PJT_ACT_ID,  			PAC.ACT_NAME, 				PAC.EST_START_DATE, 		PAT.PJT_DOC_VERSION
+		     , PAT.TPL_DOC_ID, 				PAT.PJT_DOC_NAME, 			PAT.PJT_DOC_ID
+		     /* chanjoo */ 			
+		     , case
+		     	 	When TO_CHAR(PAT.COMPLETED_APPROVE, 'YYYY-MM-DD') is not null then  'APPROVED'
+		     		else PAT.PJT_DOC_STATE
+		     	END PJT_DOC_STATE
+		     	
+  			 , PAT.PJT_DOC_DOWNLOAD_URL,	PAT.PJT_DOC_DOWNLOAD_URL2,	PAT.PJT_DOC_DOWNLOAD_URL3, 	PAT.PJT_DOC_DOWNLOAD_URL_MORE
+  			 , PAT.COMPLETER,				FN_USER_NAME(PAC.ACT_OWNER_ID) ACT_OWNER_NM
+  			 , TO_CHAR(PAT.COMPLETED, 'YYYY-MM-DD') as COMPLETED
+  			 , TO_CHAR(PAT.COMPLETED_APPROVE, 'YYYY-MM-DD') as COMPLETED_APPROVE
+  		 	 , 1 as CNT /* custermize by chanjoo */
+  			 
+		FROM PJT_ACT PAC, PJT_PHASE PPH, PJT_ATTACH PAT , pjt_info INFO
+		WHERE PAC.PJT_ID 		= PPH.PJT_ID
+		  AND PAC.PJT_ID 		= PAT.PJT_ID
+		  AND PAC.PJT_PHASE_ID 	= PPH.PJT_PHASE_ID
+		  AND INFO.PJT_ID = PAC.PJT_ID
+		  <if test="pjt_code != null and pjt_code !='' " >
+		  	and pph.pjt_id = #{pjt_code}
+		  </if>
+		  
+		  <if test="projectList != null and projectList.size() >0 " >
+	  	  		AND PPH.PJT_ID  in
+		  	    <foreach collection="projectList" item="item" index="index"  open="(" separator="," close=")">
+				#{item.PJT_ID}
+			    </foreach>		
+		  </if>  
+		   
+		  <if test="upPhaseId != null and upPhaseId != '' ">
+		  	  AND PPH.UP_PHASE_ID 	= #{upPhaseId}
+		  </if>
+		  
+		  <if test="pjtPhaseId != null and pjtPhaseId != '' ">
+		  	  AND PAC.PJT_PHASE_ID 	= #{pjtPhaseId}
+		  </if>
+		  
+		  <if test="pjtActId != null and pjtActId != '' ">
+		  	  AND PAC.PJT_ACT_ID 	= #{pjtActId}
+		  </if>
+		  
+		  AND PAC.USE_YN 		= 'Y'
+		  AND PPH.ISLATEST 		= 'Y'
+		  AND PAT.USE_YN 		= 'Y'
+		  AND PAC.PJT_ACT_ID 	= PAT.PJT_ACT_ID
+		 ORDER BY PPH.PHASE_ORDER, PAC.PJT_FUNC_ID, PAC.ACT_ORDER, PAT.PJT_ATTACH_ID 
+    
+    
+    
+    </select>
+    <select id="deliverable.project.function" resultType="hashmap">
+    	
+    </select>
+    
+</mapper>

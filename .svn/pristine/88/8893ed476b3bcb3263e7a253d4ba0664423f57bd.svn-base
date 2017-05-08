@@ -1,0 +1,63 @@
+package dashboard.systemUsage.controller;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import common.service.CommonService;
+
+import dashboard.service.ComplexService;
+import dashboard.systemUsage.service.SystemUsageService;
+
+@Controller
+public class SystemUsageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SystemUsageController.class);
+
+    @Autowired
+    private CommonService commonService;
+    
+    @Autowired
+    private ComplexService complexService;
+    
+    @Autowired
+    private SystemUsageService service;
+    
+    @RequestMapping(value = "/systemUsage",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView systemUsage(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+        mav.addObject("searchVO", searchVO);
+       
+        mav.setViewName("systemUsage");        
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/systemUsageJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView systemUsageJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	List<?> dataList = service.selectSystemUsageList(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+}

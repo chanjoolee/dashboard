@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+    <select id="jiraIssue.FunctionRootCause" resultType="hashmap">
+		SELECT ISSUE_FROM
+		     , CAUSE
+		     , CNT
+		     , ISSUE_FROM_SEQ
+		     , CAUSE_SEQ
+		FROM (
+		        SELECT ISSUE_FROM
+		             , CAUSE
+		             , COUNT(*) CNT
+		             , CASE ISSUE_FROM WHEN 'HW' THEN 1
+		                               WHEN 'SoC' THEN 2
+		                               WHEN 'Algorithm' THEN 3
+		                               WHEN 'FW' THEN 4
+		                               WHEN 'PE' THEN 5
+		                               WHEN 'AE' THEN 6
+		               END ISSUE_FROM_SEQ
+		             , CASE CAUSE WHEN '미적중' THEN 1
+		                          WHEN '판단불가' THEN 2
+		                          WHEN 'Test Script' THEN 3
+		                          WHEN 'SoC' THEN 4
+		                          WHEN 'Simulator/ Emulator' THEN 5
+		                          WHEN 'NAND' THEN 6
+		                          WHEN 'HW (PCB)' THEN 7
+		                          WHEN 'Host Compliance' THEN 8
+		                          WHEN 'FW Policy' THEN 9
+		                          WHEN 'FW Bug' THEN 10
+		               END CAUSE_SEQ
+		        FROM (
+		                SELECT ISSUE_FROM
+		                     , PRESUMED_CAUSE
+		                     , CONFIRMED_CAUSE
+		                     , CASE WHEN CONFIRMED_CAUSE IS NULL THEN '판단불가'
+		                            ELSE CASE WHEN PRESUMED_CAUSE = CONFIRMED_CAUSE THEN PRESUMED_CAUSE
+		                                      ELSE '미적중'
+		                                 END            
+		                       END CAUSE
+		                FROM JIRA_ISSUE_STD_FIELD
+		             )
+		        GROUP BY ISSUE_FROM, CAUSE
+		     )
+		ORDER BY ISSUE_FROM_SEQ, CAUSE_SEQ
+    </select>
+    
+    <select id="jiraIssue.PhaseCauseList" resultType="hashmap">
+		SELECT PHASE
+		     , CAUSE
+		     , PRESUMED_CNT
+		     , CONFIRMED_CNT
+		     , GRP_CNT
+		     , GRP_IDX
+		FROM (
+		        SELECT CASE WHEN GROUPING(PHASE) = 1 THEN 'GRAND_TOTAL' ELSE PHASE END PHASE
+		             , CASE WHEN GROUPING(PHASE) = 1 THEN 'GRAND_TOTAL' 
+		               ELSE CASE WHEN GROUPING(CAUSE) = 1 THEN 'SUB_TOTAL' ELSE CAUSE END
+		               END CAUSE
+		             , SUM(PRESUMED_CNT) PRESUMED_CNT
+		             , SUM(CONFIRMED_CNT) CONFIRMED_CNT
+		             , COUNT(PHASE) OVER(PARTITION BY PHASE) GRP_CNT
+		             , ROW_NUMBER() OVER(PARTITION BY PHASE ORDER BY DECODE(CAUSE, 'Test Script', 1, 'SoC', 2, 'Simulator / Emulator', 3, 'NAND', 4, 'HW (PCB)', 5, 'Host Compliance', 6, 'FW policy', 7, 'FW bug', 8, 'Unidentified', 9)) GRP_IDX
+		        FROM (
+		                SELECT A.PHASE
+		                     , A.CAUSE
+		                     , A.PRESUMED_CNT
+		                     , B.CONFIRMED_CNT
+		                FROM (
+		                        SELECT B.PHASE
+		                             , B.CAUSE
+		                             , NVL(A.PRESUMED_CNT, 0) PRESUMED_CNT
+		                        FROM (  SELECT PHASE
+		                                     , PRESUMED_CAUSE
+		                                     , COUNT(PROJECT) PRESUMED_CNT
+		                                FROM JIRA_ISSUE_STD_FIELD
+		                                WHERE 1 = 1
+		                                  AND PRESUMED_CAUSE IS NOT NULL
+		                                  AND PRESUMED_CAUSE NOT IN ('N/A')
+		                                GROUP BY PHASE, PRESUMED_CAUSE
+		                             ) A,
+		                             (  SELECT PHASE
+		                                     , CAUSE
+		                                FROM ( SELECT DISTINCT PHASE
+		                                       FROM JIRA_ISSUE_STD_FIELD
+		                                       WHERE PHASE IS NOT NULL
+		                                         AND PHASE NOT IN ('N/A')
+		                                     ) A
+		                                   , (  SELECT 'Test Script' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'SoC' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'Simulator / Emulator' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'NAND' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'HW (PCB)' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'Host Compliance' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'FW policy' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'FW bug' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'Unidentified' CAUSE FROM DUAL
+		                                     ) B
+		                                ORDER BY PHASE, CAUSE
+		                              ) B
+		                        WHERE A.PHASE(+) = B.PHASE
+		                          AND A.PRESUMED_CAUSE(+) = B.CAUSE
+		                     ) A
+		                    ,(
+		                        SELECT B.PHASE
+		                             , B.CAUSE
+		                             , NVL(A.CONFIRMED_CNT, 0) CONFIRMED_CNT
+		                        FROM (  SELECT PHASE
+		                                     , CONFIRMED_CAUSE
+		                                     , COUNT(PROJECT) CONFIRMED_CNT
+		                                FROM JIRA_ISSUE_STD_FIELD
+		                                WHERE 1 = 1
+		                                  AND CONFIRMED_CAUSE IS NOT NULL
+		                                  AND CONFIRMED_CAUSE NOT IN ('N/A')
+		                                GROUP BY PHASE, CONFIRMED_CAUSE
+		                             ) A,
+		                             (  SELECT PHASE
+		                                     , CAUSE
+		                                FROM ( SELECT DISTINCT PHASE
+		                                       FROM JIRA_ISSUE_STD_FIELD
+		                                       WHERE PHASE IS NOT NULL
+		                                         AND PHASE NOT IN ('N/A')
+		                                     ) A
+		                                   , (  SELECT 'Test Script' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'SoC' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'Simulator / Emulator' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'NAND' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'HW (PCB)' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'Host Compliance' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'FW policy' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'FW bug' CAUSE FROM DUAL UNION ALL
+		                                        SELECT 'Unidentified' CAUSE FROM DUAL
+		                                     ) B
+		                                ORDER BY PHASE, CAUSE
+		                              ) B
+		                        WHERE A.PHASE(+) = B.PHASE
+		                          AND A.CONFIRMED_CAUSE(+) = B.CAUSE    
+		                      ) B
+		                WHERE A.PHASE = B.PHASE
+		                  AND A.CAUSE = B.CAUSE
+		             ) 
+		        GROUP BY ROLLUP(PHASE, CAUSE)  
+		    )
+    </select>
+    
+ 	<select id="jiraIssue.CauseMatrixList" resultType="hashmap">
+ 	<![CDATA[ 
+		SELECT X.IDX COL_INDEX
+		     , Y.IDX ROW_INDEX
+		     , A.PRESUMED_CAUSE
+		     , B.CONFIRMED_CAUSE
+		FROM JIRA_ISSUE_STD_FIELD A
+		   , JIRA_ISSUE_STD_FIELD B
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE') X
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE') Y
+		WHERE A.PROJECT_KEY = B.PROJECT_KEY
+		  AND A.ISSUE_NUM = B.ISSUE_NUM
+		  AND A.PRESUMED_CAUSE = X.CODE_NAME
+		  AND B.CONFIRMED_CAUSE = Y.CODE_NAME
+	]]>
+    </select>
+    
+    <select id="jiraIssue.CauseStatusList" resultType="hashmap">
+ 	<!--  
+		SELECT X.IDX ROW_INDEX
+		     , Y.IDX COL_INDEX
+		     , A.PHASE
+		     , A.PRESUMED_CAUSE
+		     , B.CONFIRMED_CAUSE
+		     , A.RESOLUTION
+		     , CASE WHEN A.RESOLUTION IS NULL THEN 'Y' ELSE 'N' END ING_YN
+		     , (DENSE_RANK() OVER(ORDER BY A.PHASE) - 1) GRP_INDEX
+		     , COUNT(1) OVER() TOT_CNT
+		     , ROW_NUMBER() OVER(ORDER BY A.PHASE, A.PRESUMED_CAUSE) TOT_SEQ
+		     , COUNT(1) OVER(PARTITION BY A.PHASE) GRP_CNT          
+		     , ROW_NUMBER() OVER(PARTITION BY A.PHASE ORDER BY A.PRESUMED_CAUSE) GRP_SEQ
+		FROM JIRA_ISSUE_STD_FIELD A
+		   , (SELECT PROJECT_KEY
+		           , ISSUE_NUM
+		           , NVL(CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		      FROM JIRA_ISSUE_STD_FIELD ) B
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE' ) X
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE' ) Y
+		    , pjt_mapping pm 
+		    , pjt_list pl 
+		WHERE A.PROJECT_KEY = B.PROJECT_KEY
+		  AND A.ISSUE_NUM = B.ISSUE_NUM
+		  AND A.PHASE IS NOT NULL
+		  AND A.PRESUMED_CAUSE = X.CODE_NAME
+		  AND B.CONFIRMED_CAUSE = Y.CODE_NAME
+
+		  /* added join pjt_mapping*/
+		  and pm.LEGACY_NAME(+) = 'JIRA'
+		  AND PM.LEGACY_PJT_NAME(+) = a.project  
+		  
+		  /* added join pjt_list*/
+		  and pl.pjt_code(+) = pm.pjt_name
+		  
+		  /* added  where */ 
+		  and exists ( 	select 1 from JIRA_ISSUE jiraIssue
+	    				where a.PROJECT_KEY = jiraIssue.project_key
+	    				  and a.issue_num  = jiraIssue.issue_num )
+	    and (a.issue_from is not null or a.DISCOVERED_FROM is not null)
+	    
+	    <if test="jiraPjtCode != null and jiraPjtCode != '' ">
+	    	and a.project = #{jiraPjtCode}
+	    </if>
+	    <if test="pjtCode != null and pjtCode != '' ">
+	    	and pm.pjt_name= #{pjtCode}
+	    </if>
+	    <if test="pjtCodeList != null and pjtCodeList != '' ">
+            and pm.pjt_name in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		  
+	  	<if test="phase != null and phase != '' ">
+    	 	and a.phase = #{phase}
+	    </if>
+	    <if test="cause != null and cause != '' ">
+	    	and a.RESOLUTIONDATE is not null
+	    	and a.confirmed_cause is not null
+	    	and a.PRESUMED_CAUSE = #{cause}
+	    </if>
+	    <if test="discoveredFrom != null and discoveredFrom != '' ">
+	    	and a.DISCOVERED_FROM = #{discoveredFrom}
+	    </if>
+	    
+	    <if test="issueFrom != null and issueFrom != '' ">
+	    	and a.issue_from = #{issueFrom}
+	    </if>
+	-->
+		SELECT X.IDX ROW_INDEX
+		     , Y.IDX COL_INDEX
+		     , A.PROJECT
+		     , a.PROJECT_KEY
+		     , A.ISSUE_NUM
+		     , A.PHASE
+		     , A.PHASE_ID
+		     , A.ISSUE_FROM
+		     , A.PRESUMED_CAUSE
+		     , B.CONFIRMED_CAUSE
+		     , A.DISCOVERED_FROM
+		     , A.RESOLUTION
+		     , CASE WHEN A.RESOLUTION IS NULL THEN 'Y' ELSE 'N' END ING_YN
+		     , (DENSE_RANK() OVER(ORDER BY A.PHASE) - 1) GRP_INDEX
+		     , COUNT(1) OVER() TOT_CNT
+		     , ROW_NUMBER() OVER(ORDER BY A.PHASE, A.PRESUMED_CAUSE) TOT_SEQ
+		     , COUNT(1) OVER(PARTITION BY A.PHASE) GRP_CNT          
+		     , ROW_NUMBER() OVER(PARTITION BY A.PHASE ORDER BY A.PRESUMED_CAUSE) GRP_SEQ
+		FROM JIRA_ISSUE_STD_FIELD A
+		   , (SELECT PROJECT_KEY
+		           , ISSUE_NUM
+		           , NVL(CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		      FROM JIRA_ISSUE_STD_FIELD ) B
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE' ) X
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE' ) Y
+		    , pjt_mapping pm 
+		    , pjt_list pl 
+		WHERE A.PROJECT_KEY = B.PROJECT_KEY
+		  AND A.ISSUE_NUM = B.ISSUE_NUM
+		  AND A.PHASE IS NOT NULL
+		  AND A.PRESUMED_CAUSE = X.CODE_NAME
+		  AND B.CONFIRMED_CAUSE = Y.CODE_NAME
+
+		  /* added join pjt_mapping*/
+		  and pm.LEGACY_NAME = 'JIRA'
+		  AND PM.LEGACY_PJT_NAME = a.project  
+		  
+		  /* added join pjt_list*/
+		  and pl.pjt_code = pm.pjt_name
+		  
+		  /* added  where */ 
+		  and exists ( 	select 1 from JIRA_ISSUE jiraIssue
+	    				where a.PROJECT_KEY = jiraIssue.project_key
+	    				  and a.issue_num  = jiraIssue.issue_num )
+	    and (a.issue_from is not null or a.DISCOVERED_FROM is not null)
+	    
+	    <if test="jiraPjtCode != null and jiraPjtCode != '' ">
+	    	and a.project = #{jiraPjtCode}
+	    </if>
+	    <if test="pjtCode != null and pjtCode != '' ">
+	    	and pm.pjt_name= #{pjtCode}
+	    </if>
+	    <if test="pjtCodeList != null and pjtCodeList != '' ">
+            and pm.pjt_name in 
+            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		  
+	  	<if test="phase != null and phase != '' ">
+    	 	and a.phase = #{phase}
+	    </if>
+	    <if test="cause != null and cause != '' ">
+	    	and a.RESOLUTIONDATE is not null
+	    	and a.confirmed_cause is not null
+	    	and a.PRESUMED_CAUSE = #{cause}
+	    </if>
+	    <if test="discoveredFrom != null and discoveredFrom != '' ">
+	    	and a.DISCOVERED_FROM = #{discoveredFrom}
+	    </if>
+	    
+	    <if test="issueFrom != null and issueFrom != '' ">
+	    	and a.issue_from = #{issueFrom}
+	    </if>
+    </select>
+    
+    <select id="jiraIssue.RootCauseTat" resultType="hashmap">
+		SELECT X.IDX ROOT_CAUSE_SEQ
+		     , X.CODE_NAME ROOT_CAUSE
+		     , PHASE
+		     , PHASE_ID
+		     , CASE WHEN PHASE IS NULL THEN 'Y' ELSE 'N' END PHASE_NULL
+		     , NVL(ROUND(MAX(CAUSE_TERM_TOT), 1), 0) CAUSE_TERM_TOT
+		     , NVL(MAX(CAUSE_CNT), 0) CAUSE_CNT
+		     , NVL(ROUND(MAX(CAUSE_TERM_TOT) / MAX(CAUSE_CNT), 1), 0) CAUSE_TERM_AVG
+		     , NVL(ROUND(MAX(PHASE_TERM_TOT), 1), 0) PHASE_TERM_TOT
+		     , NVL(MAX(PHASE_CNT), 0) PHASE_CNT
+		     , NVL(ROUND(MAX(PHASE_TERM_TOT) / MAX(PHASE_CNT), 1), 0) PHASE_TERM_AVG
+		     , NVL(ROUND(MAX(PHASE_TERM_TOT) / MAX(CAUSE_TERM_TOT) * 100, 1), 0) PHASE_TERM_RATIO
+		     , COUNT(1) OVER(PARTITION BY X.IDX) GRP_CNT
+		     , ROW_NUMBER() OVER(PARTITION BY X.IDX ORDER BY PHASE) GRP_SEQ
+		     , 'X' IMSI_SERIES
+		FROM (
+		        SELECT CONFIRMED_CAUSE
+		             , PHASE
+		             , PHASE_ID
+		             , TERM
+		             , SUM(TERM) OVER(PARTITION BY CONFIRMED_CAUSE) CAUSE_TERM_TOT
+		             , COUNT(1) OVER(PARTITION BY CONFIRMED_CAUSE) CAUSE_CNT
+		             , SUM(TERM) OVER(PARTITION BY CONFIRMED_CAUSE, PHASE) PHASE_TERM_TOT
+		             , COUNT(1) OVER(PARTITION BY CONFIRMED_CAUSE, PHASE) PHASE_CNT
+		        FROM (
+		                SELECT A.PHASE
+		                	 , NVL(A.PHASE_ID, (SELECT MAX(CODE_ID) FROM COMMON_CODE WHERE CATEGORY = 'PHASE' AND CODE_NAME = A.PHASE  )) PHASE_ID
+		                     , A.PRESUMED_CAUSE
+		                     , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		                     , A.CREATED
+		                     , A.RESOLUTIONDATE
+		                     , A.RESOLUTIONDATE - A.CREATED TERM
+		                FROM JIRA_ISSUE_STD_FIELD A   
+		                   , PJT_MAPPING PM
+		                   , PJT_LIST PL
+		                WHERE 1 = 1
+		                  AND A.PHASE IS NOT NULL
+		                  AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+		                  AND A.PRESUMED_CAUSE IS NOT NULL
+		                  --AND A.CONFIRMED_CAUSE IS NOT NULL
+		                  AND A.RESOLUTIONDATE IS NOT NULL
+		                  AND PM.LEGACY_NAME = 'JIRA'
+		                  AND PM.LEGACY_PJT_NAME = A.PROJECT 
+		                  AND PL.PJT_CODE = PM.PJT_NAME                  
+		                  AND EXISTS (  SELECT 1 
+		                                FROM JIRA_ISSUE JIRAISSUE
+		                                WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+		                                  AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+		         		<if test="pjtCode != null and pjtCode != '' ">
+			    		  and pm.pjt_name= #{pjtCode}
+			    		</if>
+			    		<if test="pjtCodeList != null and pjtCodeList != '' ">
+		            	  and pm.pjt_name in 
+		            		<foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+		                		#{item}
+		            		</foreach>
+		        		</if>
+		             )
+		     ) A
+		   , (  SELECT CODE_NAME
+		             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		        FROM COMMON_CODE
+		        WHERE CATEGORY = 'CAUSE') X
+		WHERE A.CONFIRMED_CAUSE(+) = X.CODE_NAME
+		GROUP BY X.IDX, X.CODE_NAME, A.PHASE, a.PHASE_ID
+		ORDER BY X.IDX, A.PHASE                             
+    </select>
+    
+    <select id="jiraIssue.ProjectDefect" resultType="hashmap">
+	<!-- 
+	    SELECT PROJECT
+		     , CONFIRMED_CAUSE
+		     , COUNT(1) GRP_CNT
+		     , IDX GRP_SEQ
+		FROM (
+		        SELECT A.PROJECT
+		             , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		             , X.IDX
+		        FROM JIRA_ISSUE_STD_FIELD A   
+		           , (  SELECT CODE_NAME
+		                     , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		                FROM COMMON_CODE
+		                WHERE CATEGORY = 'CAUSE') X
+		           , PJT_MAPPING PM
+		           , PJT_LIST PL
+		        WHERE 1 = 1
+		          AND NVL(A.CONFIRMED_CAUSE, 'N/A') = X.CODE_NAME
+		          AND A.PHASE IS NOT NULL
+		          AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+		          AND A.PRESUMED_CAUSE IS NOT NULL
+		          AND A.RESOLUTIONDATE IS NOT NULL
+		          AND PM.LEGACY_NAME(+) = 'JIRA'
+		          AND PM.LEGACY_PJT_NAME(+) = A.PROJECT 
+		          AND PL.PJT_CODE(+) = PM.PJT_NAME                  
+		          AND EXISTS (  SELECT 1 
+		                        FROM JIRA_ISSUE JIRAISSUE
+		                        WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+		                          AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+		       <if test="pjtCode != null and pjtCode != '' ">
+		    	  AND pm.pjt_name= #{pjtCode}
+		    	</if>
+		     )
+		GROUP BY PROJECT, CONFIRMED_CAUSE, IDX
+		ORDER BY PROJECT, IDX   
+	-->        
+		SELECT 
+			 APPLICATION_ID
+			 ,  APPLICATION_NAME
+			 , PJT_CODE
+	         , PJT_NAME
+		     , CONFIRMED_CAUSE
+		     , COUNT(1) GRP_CNT
+		     , IDX GRP_SEQ
+		FROM (
+		        SELECT 
+		        	 PL.APPLICATION AS APPLICATION_ID
+		        	 , CM.CODE_NAME AS APPLICATION_NAME
+		        	 , PM.PJT_NAME PJT_CODE
+		             , PL.PJT_NAME
+		             , A.PROJECT
+		             , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		             , X.IDX
+		        FROM JIRA_ISSUE_STD_FIELD A   
+		           , (  SELECT CODE_NAME
+		                     , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		                FROM COMMON_CODE
+		                WHERE CATEGORY = 'CAUSE') X
+		           , PJT_MAPPING PM
+		           , PJT_LIST PL
+		           , COMMON_CODE CM
+		        WHERE 1 = 1
+		          AND NVL(A.CONFIRMED_CAUSE, 'N/A') = X.CODE_NAME
+		          AND A.PHASE IS NOT NULL
+		          AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+		          AND A.PRESUMED_CAUSE IS NOT NULL
+		          AND A.RESOLUTIONDATE IS NOT NULL
+		          AND PM.LEGACY_NAME = 'JIRA'
+		          AND PM.LEGACY_PJT_NAME = A.PROJECT 
+		          AND PL.PJT_CODE = PM.PJT_NAME   
+				  AND PL.APPLICATION = CM.CODE_ID     
+				  AND CM.CATEGORY = 'pms_application'	
+				  			     
+		          AND EXISTS (  SELECT 1 
+		                        FROM JIRA_ISSUE JIRAISSUE
+		                        WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+		                          AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+		 		<if test="pjtCode != null and pjtCode != '' ">
+	    		  and pm.pjt_name= #{pjtCode}
+	    		</if>
+	    		<if test="pjtCodeList != null and pjtCodeList != '' ">
+            	  and pm.pjt_name in 
+            		<foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                		#{item}
+            		</foreach>
+        		</if>
+		     )
+		GROUP BY APPLICATION_ID, APPLICATION_NAME, PJT_CODE, PJT_NAME, CONFIRMED_CAUSE, IDX
+		ORDER BY APPLICATION_NAME,PJT_CODE, PJT_NAME, IDX
+    </select>
+    
+    <select id="jiraIssue.ProjectDefectSub" resultType="hashmap">
+    <!--  
+	    SELECT PROJECT
+		     , CONFIRMED_CAUSE
+		     , PHASE
+		     , MAX(GRP_CNT) GRP_CNT
+		FROM (
+		        SELECT A.PROJECT             
+		             , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		             , A.PHASE
+		             , COUNT(1) OVER(PARTITION BY PROJECT, CONFIRMED_CAUSE, PHASE) GRP_CNT
+		        FROM JIRA_ISSUE_STD_FIELD A   
+		           , (  SELECT CODE_NAME
+		                     , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		                FROM COMMON_CODE
+		                WHERE CATEGORY = 'CAUSE') X
+		           , PJT_MAPPING PM
+		           , PJT_LIST PL
+		        WHERE 1 = 1
+		          AND NVL(A.CONFIRMED_CAUSE, 'N/A') = X.CODE_NAME
+		          AND A.PHASE IS NOT NULL
+		          AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+		          AND A.PRESUMED_CAUSE IS NOT NULL
+		          AND A.RESOLUTIONDATE IS NOT NULL
+		          AND PM.LEGACY_NAME(+) = 'JIRA'
+		          AND PM.LEGACY_PJT_NAME(+) = A.PROJECT 
+		          AND PL.PJT_CODE(+) = PM.PJT_NAME                  
+		          AND EXISTS (  SELECT 1 
+		                        FROM JIRA_ISSUE JIRAISSUE
+		                        WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+		                          AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+		    	<if test="pjtCode != null and pjtCode != '' ">
+		    	  AND pm.pjt_name= #{pjtCode}
+		    	</if>
+		     )
+		GROUP BY PROJECT, CONFIRMED_CAUSE, PHASE
+		ORDER BY PROJECT, CONFIRMED_CAUSE, PHASE 
+	-->          
+	 	SELECT
+	 		 APPLICATION_ID
+			 ,  APPLICATION_NAME 
+	 		 , PJT_CODE
+	         , PJT_NAME
+		     , CONFIRMED_CAUSE
+		     , PHASE
+		     , PHASE_ID
+		     , MAX(GRP_CNT) GRP_CNT
+		FROM (
+		        SELECT 
+		        	 PL.APPLICATION AS APPLICATION_ID
+		        	 , CM.CODE_NAME AS APPLICATION_NAME
+		        	 ,PM.PJT_NAME PJT_CODE
+		             , PL.PJT_NAME
+		             , A.PROJECT             
+		             , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+		             , A.PHASE
+		             , A.PHASE_ID
+		             , COUNT(1) OVER(PARTITION BY PM.PJT_NAME, CONFIRMED_CAUSE, PHASE) GRP_CNT
+		        FROM JIRA_ISSUE_STD_FIELD A   
+		           , (  SELECT CODE_NAME
+		                     , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+		                FROM COMMON_CODE
+		                WHERE CATEGORY = 'CAUSE') X
+		           , PJT_MAPPING PM
+		           , PJT_LIST PL
+		           , COMMON_CODE CM
+		        WHERE 1 = 1
+		          AND NVL(A.CONFIRMED_CAUSE, 'N/A') = X.CODE_NAME
+		          AND A.PHASE IS NOT NULL
+		          AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+		          AND A.PRESUMED_CAUSE IS NOT NULL
+		          AND A.RESOLUTIONDATE IS NOT NULL
+		          AND PM.LEGACY_NAME = 'JIRA'
+		          AND PM.LEGACY_PJT_NAME = A.PROJECT 
+		          AND PL.PJT_CODE = PM.PJT_NAME          
+		          AND PL.APPLICATION = CM.CODE_ID     
+				  AND CM.CATEGORY = 'pms_application'	
+		                  
+		          AND EXISTS (  SELECT 1 
+		                        FROM JIRA_ISSUE JIRAISSUE
+		                        WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+		                          AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+		  		<if test="pjtCode != null and pjtCode != '' ">
+	    		  and pm.pjt_name= #{pjtCode}
+	    		</if>
+	    		<if test="pjtCodeList != null and pjtCodeList != '' ">
+            	  and pm.pjt_name in 
+            		<foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+                		#{item}
+            		</foreach>
+        		</if>
+		     )
+		GROUP BY APPLICATION_ID, APPLICATION_NAME,PJT_CODE, PJT_NAME, CONFIRMED_CAUSE, PHASE,PHASE_ID
+		ORDER BY APPLICATION_NAME,PJT_CODE, PJT_NAME, CONFIRMED_CAUSE, PHASE 
+    </select>
+    
+    <select id="jiraIssue.ProjectDefect.rawdata" resultType="hashmap">
+    	SELECT 
+    		 PL.APPLICATION AS APPLICATION_ID
+		     , CM.CODE_NAME AS APPLICATION_NAME 
+    		 , PM.PJT_NAME PJT_CODE
+             , PL.PJT_NAME
+             , A.PROJECT   
+             , A.PROJECT_KEY
+             , A.ISSUE_NUM          
+             , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+             , A.PHASE
+             , A.PHASE_ID
+             , A.SUB_PHASE
+        FROM JIRA_ISSUE_STD_FIELD A   
+           , (  SELECT CODE_NAME
+                     , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+                FROM COMMON_CODE
+                WHERE CATEGORY = 'CAUSE') X
+           , PJT_MAPPING PM
+           , PJT_LIST PL
+           , COMMON_CODE CM
+        WHERE 1 = 1
+          AND NVL(A.CONFIRMED_CAUSE, 'N/A') = X.CODE_NAME
+          AND A.PHASE IS NOT NULL
+          AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+          AND A.PRESUMED_CAUSE IS NOT NULL
+          AND A.RESOLUTIONDATE IS NOT NULL
+          AND PM.LEGACY_NAME = 'JIRA'
+          AND PM.LEGACY_PJT_NAME = A.PROJECT 
+          AND PL.PJT_CODE = PM.PJT_NAME     
+          AND PL.APPLICATION = CM.CODE_ID     
+		  AND CM.CATEGORY = 'pms_application'	
+                       
+          AND EXISTS (  SELECT 1 
+                        FROM JIRA_ISSUE JIRAISSUE
+                        WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+                          AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+  		<if test="pjtCode != null and pjtCode != '' ">
+   		  and pm.pjt_name= #{pjtCode}
+   		</if>
+   		<if test="pjtCodeList != null and pjtCodeList != '' ">
+          	  and pm.pjt_name in 
+          		<foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+              		#{item}
+          		</foreach>
+      		</if>
+    </select>
+    
+    <select id="jiraIssue.PhaseTat" resultType="hashmap">
+    <!--  
+    	SELECT A.*
+    	     , COUNT(1) OVER(PARTITION BY RESOLUTIONDATE, TAT) GRP_CNT
+    	FROM (
+			    SELECT A.PROJECT
+				     , A.PHASE
+				     , A.PRESUMED_CAUSE
+				     , NVL(A.CONFIRMED_CAUSE, 'N/A') CONFIRMED_CAUSE
+				     , TO_CHAR(A.CREATED, 'YYYYMMDD') CREATED
+				     , TO_CHAR(A.RESOLUTIONDATE, 'YYYYMMDD') RESOLUTIONDATE
+				     , ROUND(A.RESOLUTIONDATE - A.CREATED, 1) TAT
+				     , 'X' IMSI_SERIES
+				FROM JIRA_ISSUE_STD_FIELD A   
+				   , (  SELECT CODE_NAME
+				             , ROW_NUMBER() OVER(ORDER BY DISPLAY_ORDER) IDX
+				        FROM COMMON_CODE
+				        WHERE CATEGORY = 'CAUSE') X
+				   , PJT_MAPPING PM
+				   , PJT_LIST PL
+				WHERE 1 = 1
+				  AND NVL(A.CONFIRMED_CAUSE, 'N/A') = X.CODE_NAME
+				  AND A.PHASE IS NOT NULL
+				  AND (A.ISSUE_FROM IS NOT NULL OR A.DISCOVERED_FROM IS NOT NULL)
+				  AND A.PRESUMED_CAUSE IS NOT NULL
+				  AND A.RESOLUTIONDATE IS NOT NULL
+				  AND PM.LEGACY_NAME(+) = 'JIRA'
+				  AND PM.LEGACY_PJT_NAME(+) = A.PROJECT 
+				  AND PL.PJT_CODE(+) = PM.PJT_NAME                  
+				  AND EXISTS (  SELECT 1 
+				                FROM JIRA_ISSUE JIRAISSUE
+				                WHERE A.PROJECT_KEY = JIRAISSUE.PROJECT_KEY
+				                  AND A.ISSUE_NUM  = JIRAISSUE.ISSUE_NUM )
+		    	  AND pm.pjt_name= #{pjtCode}
+			 ) A        
+	-->       
+		SELECT A.*
+    	     , COUNT(1) OVER(PARTITION BY RESOLUTIONDATE, TAT) GRP_CNT
+    	FROM (
+			    SELECT PL.PJT_CODE
+			         , PL.PJT_NAME
+				     , TO_CHAR(A.CREATED, 'YYYYMMDD') CREATED
+				     , TO_CHAR(A.RESOLUTIONDATE, 'YYYYMMDD') RESOLUTIONDATE
+				     , ROUND(A.RESOLUTIONDATE - A.CREATED, 1) TAT
+				     , 'X' IMSI_SERIES
+				     , A.PROJECT_KEY
+                     , A.ISSUE_NUM
+				FROM JIRA_ISSUE A   
+				   , PJT_MAPPING PM
+				   , PJT_LIST PL
+				WHERE 1 = 1
+				  AND A.RESOLUTIONDATE IS NOT NULL
+				  AND PM.LEGACY_NAME = 'JIRA'
+				  AND PM.LEGACY_PJT_NAME = A.PROJECT 
+				  AND PL.PJT_CODE = PM.PJT_NAME  
+		    	  AND PM.PJT_NAME = #{PJT_CODE}
+		 		<if test="priority != null">
+	     		  and a.PRIORITY in 
+	        		<foreach collection="priority" item="item" index="index"  open="(" separator="," close=")">
+	        			#{item}
+	         		</foreach>
+		     	</if>
+		     	<if test="issuetype != null">
+		      	  and a.ISSUETYPE in 
+		         	<foreach collection="issuetype" item="item" index="index" open="(" separator="," close=")">
+		             	#{item}
+		         	</foreach>
+		      	</if>
+		      	<if test="subProjects != null">
+			      and a.project in 
+				    <foreach collection="subProjects" item="item" index="index"  open="(" separator="," close=")">
+				        #{item}
+				    </foreach>		    
+			  	</if>       
+			 ) A  
+    </select>
+	
+    
+</mapper>

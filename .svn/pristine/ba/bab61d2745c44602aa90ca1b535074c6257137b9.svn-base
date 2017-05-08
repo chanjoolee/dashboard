@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+
+	<select id="jiraissue.hms.list.projects" resultType="hashmap">
+		select 
+			LEGACY_NAME, 
+			LEGACY_PJT_NAME project, 
+			PJT_NAME pjt_code, 
+			LEGACY_PJT_KEY, 
+			INS_DT, 
+			MOD_DT
+		from pjt_mapping 
+		where LEGACY_NAME = 'JIRA' 
+		<if test="pjtCode != null and pjtCode != ''  " >
+       		and PJT_NAME  =  #{pjtCode}
+   		</if>
+    </select>
+    
+    <select id="jiraissue.hms.component.list" resultType="hashmap">
+		select 
+			a.ID, 
+			a.PROJECT,
+			p.PNAME,
+			a.CNAME, 
+			a.DESCRIPTION, 
+			a.URL, 
+			a.LEAD, 
+			a.ASSIGNEETYPE 
+		from jirauser.COMPONENT a
+		left outer join jirauser.PROJECT p
+			on p.id = a.project
+		where 1=1
+		<choose>
+			<when test="projects != null and projects.size() > 0" >
+	       		and p.pname in 
+	            <foreach collection="projects" item="item" index="index"  open="(" separator="," close=")">
+	                #{item.PROJECT}
+	            </foreach>
+	         </when>
+	         <otherwise>
+	         	and 1=2
+		   	 </otherwise>
+   		</choose>
+		order by PROJECT, cname
+    </select>
+    
+    <select id="jiraissue.hms.list.for.graph" resultType="hashmap">
+    
+		with tbl_dt as (
+			select 
+				distinct to_char(trunc(a.CREATED,'iw'),'YYYYMMDD') as dt
+			from JIRA_ISSUE_STD_FIELD  a
+			where  a.PROJECT_KEY = 'GEM'
+			union 
+			select 
+				distinct to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') as dt
+			from JIRA_ISSUE_STD_FIELD  a
+			where  a.PROJECT_KEY = 'GEM'
+		),
+		tbl_data as (
+			select 
+				a.PROJECT
+				, a.PROJECT_KEY
+				, a.ISSUE_NUM
+				, a.ISSUESTATUS
+				, a.CREATED
+				, to_char(trunc(a.CREATED,'iw'),'YYYYMMDD') as created_w
+				, a.RESOLUTIONDATE
+				, to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') as resolution_w
+			from JIRA_ISSUE_STD_FIELD  a
+			where  a.PROJECT_KEY = 'GEM'
+		
+		)
+		
+		select 
+			a.*,
+			a.created_cu - resolution_cu as gap,
+			'xxx' gubun
+		from (
+			select 
+				dt.dt
+				, (select count(*) from tbl_data  a where dt.dt = a.created_w) created
+				, (select count(*) from tbl_data  a where dt.dt >= a.created_w) created_cu
+				, (select count(*) from tbl_data  a where dt.dt = a.resolution_w) resolution			
+				, (select count(*) from tbl_data  a where dt.dt >= a.resolution_w) resolution_cu
+				, (select count(*) from tbl_data  a where dt.dt = a.resolution_w and a.ISSUESTATUS !='Resolved' ) closed
+				, (select count(*) from tbl_data  a where dt.dt = a.resolution_w and a.ISSUESTATUS ='Resolved' ) resolved
+			from tbl_dt dt
+			where  1=1
+			and dt.dt is not null
+		) a
+		order by 1
+		
+	
+    </select>
+    
+    <select id="jiraissue.hms.list.for.grid" resultType="hashmap">
+    
+		select
+			a.PROJECT,
+			a.PROJECT_KEY,
+			a.COMPONENTS,
+			count(*) created,
+			count(case when a.RESOLUTIONDATE is not null then 1 else null end) closed,
+			count(
+				case 
+					when to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') then 1 
+					else null 
+				end
+			) cur_open,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Resolved' then 1 
+					else null 
+				end
+			) cur_resolved,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Closed' then 1 
+					else null 
+				end
+			) cur_closed,
+			------ past1 week
+			count(
+				case 
+					when to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate -7,'iw'),'YYYYMMDD') then 1 
+					else null 
+				end
+			) past1_open,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate -7 ,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Resolved' then 1 
+					else null 
+				end
+			) past1_resolved,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate - 7,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Closed' then 1 
+					else null 
+				end
+			) past1_closed,
+			------ past2 week
+			count(
+				case 
+					when to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate -7*2,'iw'),'YYYYMMDD') then 1 
+					else null 
+				end
+			) past2_open,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate -7*2 ,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Resolved' then 1 
+					else null 
+				end
+			) past2_resolved,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate - 7*2,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Closed' then 1 
+					else null 
+				end
+			) past2_closed,
+			------ past3 week
+			count(
+				case 
+					when to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate -7*2,'iw'),'YYYYMMDD') then 1 
+					else null 
+				end
+			) past3_open,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate -7*2 ,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Resolved' then 1 
+					else null 
+				end
+			) past3_resolved,
+			count(
+				case 
+					when a.RESOLUTIONDATE is not null  
+						and to_char(trunc(a.created,'iw'),'YYYYMMDD') = to_char(trunc(sysdate - 7*2,'iw'),'YYYYMMDD') 
+						--and to_char(trunc(a.RESOLUTIONDATE,'iw'),'YYYYMMDD') = to_char(trunc(sysdate,'iw'),'YYYYMMDD') 
+						and a.ISSUESTATUS = 'Closed' then 1 
+					else null 
+				end
+			) past3_closed
+		from JIRA_ISSUE_STD_FIELD a
+		--left outer join tbl_dt dt on 1=1
+		where a.PROJECT_KEY = 'GEM'
+		--and a.components = 'Gemini ASIC CPU_TOP'
+		group by a.PROJECT, a.PROJECT_KEY, a.COMPONENTS
+		order by 1,2,3 
+		
+	
+    </select>
+    
+    
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <!--  
+    	pms와 dashboard의 project name mapping
+    
+    -->
+<mapper namespace="">
+    <select id="batch.jiraproject.select" resultType="hashmap" >
+    	select 
+    		base.code_id as application_id,
+    		fn_code_name('Application',base.code_id) as application_nm ,
+	    	a.PJT_ID, 
+	       	a.PJT_NAME	,
+	       	i.INTERFACE_ID       	
+	    from pjt_info a
+	    join pjt_interface i
+	    	on a.pjt_id = i.pjt_id
+	    	and i.category = 'JIRA'
+	    left outer join PJT_BASE_INFO base on 
+	    	base.pjt_id = a.pjt_id and base.code_name = 'Application' 
+	    
+	    where base.CODE_ID in ('SPM_00005011','SPM_00005010','SPM_00005558')
+    </select>
+    
+    <update id="batch.jiraproject.update">
+	    declare
+	    	cnt number;
+			name1 varchar2(200);
+			name2 varchar2(200);
+			regTestOk number;
+			
+			jiraProject varchar2(100);
+			jiraKey varchar2(100);
+			pmsJiraKey varchar2(100);
+			
+	    begin
+	    
+	    	for recJira in (
+				WITH t AS 
+				( 
+					select #{INTERFACE_ID} as col1 from dual
+				) 
+				SELECT lv 
+				, trim(REGEXP_SUBSTR(col1, '[^,]+', 1, lv)) code
+				FROM t 
+				<![CDATA[
+				, (SELECT LEVEL lv FROM dual CONNECT BY LEVEL <= 9) c 
+				WHERE lv <= LENGTH(col1) - LENGTH(REPLACE(col1, ',')) + 1 
+				]]>
+				ORDER BY lv 
+			) loop
+				--// jira mapping 에 regacy_code 가 있는지 검토
+				select count(*)  into cnt from jira_issue where PROJECT_KEY = recJira.code;
+				if cnt > 0 then
+					select max(PROJECT) into jiraProject from jira_issue where PROJECT_KEY = recJira.code;
+					
+					select count(*) into cnt from pjt_mapping
+					where LEGACY_NAME = 'JIRA'
+					and pjt_name = #{PJT_ID}
+					and LEGACY_PJT_NAME = jiraProject;
+					
+					--// 없으면 insert
+					if cnt = 0 then
+						insert into pjt_mapping(LEGACY_NAME, LEGACY_PJT_NAME, PJT_NAME, LEGACY_PJT_KEY, ins_DT)
+						values ('JIRA',jiraProject,#{PJT_ID}, recJira.code, sysdate); 
+					else
+						jiraKey := null;
+						select LEGACY_PJT_KEY into jiraKey from pjt_mapping
+						where LEGACY_NAME = 'JIRA'
+						and pjt_name = #{PJT_ID}
+						and LEGACY_PJT_NAME = jiraProject;
+						
+						if jiraKey is null then
+							update pjt_mapping set
+								LEGACY_PJT_KEY = recJira.code ,
+								MOD_DT = sysdate
+							where LEGACY_NAME = 'JIRA'
+							and pjt_name = #{PJT_ID}
+							and LEGACY_PJT_NAME = jiraProject; 
+							
+						end if;
+						
+					end if;
+				end if;
+			
+			end loop;
+	    	
+	    end ;
+    
+    </update>
+    
+    
+    
+</mapper>

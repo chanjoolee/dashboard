@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+	
+    
+    
+   <!-- 임시로 개발서버에서 운영서버로  ssd_test 테이블을 옮긴다.-->
+    
+    <select id="batch.migration.CustomTest.transfer.dev.information" resultType="hashmap">
+    	select * from SSD_TEST_INFORMATION where copied is null
+    </select>
+    
+    <select id="batch.migration.CustomTest.transfer.dev.disk" resultType="hashmap">
+    	select 
+    		a.* 
+    	from SSD_TEST_DISK a
+    	join SSD_TEST_INFORMATION b
+    		on b.TEST_ID = a.TEST_ID
+    	where b.test_ID = #{TEST_ID}
+    </select>
+    
+    <select id="batch.migration.CustomTest.transfer.dev.files" resultType="hashmap">
+    	select 
+    		a.* 
+    	from SSD_TEST_FILES a
+    	join SSD_TEST_INFORMATION b
+    		on b.TEST_ID = a.TEST_ID
+    	where b.test_ID = #{TEST_ID}
+    </select>
+    
+    <select id="batch.migration.CustomTest.transfer.dev.result" resultType="hashmap">
+    	select 
+    		a.* 
+    	from SSD_TEST_RESULT a
+    	join SSD_TEST_INFORMATION b
+    		on b.TEST_ID = a.TEST_ID
+    	where b.test_ID = #{TEST_ID}
+    </select>
+    
+    <update id="batch.migration.CustomTest.transfer.oper.information" parameterType="hashmap">
+    	declare
+    		
+    		vCnt number;
+    		
+    	begin
+    		select count(*) into vCnt from SSD_TEST_INFORMATION where test_id = #{TEST_ID};
+    		if vCnt > 0 then
+    			delete from SSD_TEST_INFORMATION where test_id = #{TEST_ID};
+    			delete from SSD_TEST_DISK where test_id = #{TEST_ID};
+    			delete from SSD_TEST_FILES where test_id = #{TEST_ID};
+    			delete from SSD_TEST_RESULT where test_id = #{TEST_ID};
+    		end if;
+    		
+    		insert into SSD_TEST_INFORMATION(TEST_ID, PC_NUMBER, TESTER_NAME, TARGET_PHYSICAL_DRIVE_NUMBER, SPIDER_CLIENT_VERSION, NUMBER_OF_TEST, TEST_DATE, DEVICE_TYPE, MODEL_NAME, FORM_FACTOR, NAND_FLASH_VERSON, NAND_FLASH_PROCESS, NUMBER_OF_CHANNEL, NUMBER_OF_FLASH, FIRMWARE_VERSION, SERIAL_NUMBER, CAPACITY, OP_PERCENT, ATA_SPECIFICATION, CHIP_KILL, TCG, HIPM, CUSTOMER, PERFORCE_NUMBER, SYSTEM_MANUFACTURER, SYSTEM_MODEL, SYSTEM_TOTAL_PHYSICAL_MEMORY, SYSTEM_CHIPSET, OS_BUILD_NUMBER, OS_SERIAL_NUMBER, OS_SYSTEM_DIRECTORY, OS_VERSION, CPU_CAPTION, CPU_DEVICE_ID, CPU_MANUFACTURER, CPU_MAX_CLOCK_SPEED, CPU_NAME, CPU_SOCKET_DESIGNATION, BIOS_MANUFACTURER, BIOS_NAME, BIOS_SERIAL_NUMBER, BIOS_SMBIOSBIOS_VERSION, BIOS_VERSION, NUMBER_OF_DISK, INS_DT, DUMMY, COPIED)
+			values(
+				<choose><when test="TEST_ID != null">#{TEST_ID}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="PC_NUMBER != null">#{PC_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TESTER_NAME != null">#{TESTER_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TARGET_PHYSICAL_DRIVE_NUMBER != null">#{TARGET_PHYSICAL_DRIVE_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SPIDER_CLIENT_VERSION != null">#{SPIDER_CLIENT_VERSION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="NUMBER_OF_TEST != null">#{NUMBER_OF_TEST}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TEST_DATE != null">#{TEST_DATE}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DEVICE_TYPE != null">#{DEVICE_TYPE}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="MODEL_NAME != null">#{MODEL_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="FORM_FACTOR != null">#{FORM_FACTOR}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="NAND_FLASH_VERSON != null">#{NAND_FLASH_VERSON}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="NAND_FLASH_PROCESS != null">#{NAND_FLASH_PROCESS}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="NUMBER_OF_CHANNEL != null">#{NUMBER_OF_CHANNEL}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="NUMBER_OF_FLASH != null">#{NUMBER_OF_FLASH}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="FIRMWARE_VERSION != null">#{FIRMWARE_VERSION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SERIAL_NUMBER != null">#{SERIAL_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CAPACITY != null">#{CAPACITY}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="OP_PERCENT != null">#{OP_PERCENT}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="ATA_SPECIFICATION != null">#{ATA_SPECIFICATION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CHIP_KILL != null">#{CHIP_KILL}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TCG != null">#{TCG}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="HIPM != null">#{HIPM}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CUSTOMER != null">#{CUSTOMER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="PERFORCE_NUMBER != null">#{PERFORCE_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SYSTEM_MANUFACTURER != null">#{SYSTEM_MANUFACTURER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SYSTEM_MODEL != null">#{SYSTEM_MODEL}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SYSTEM_TOTAL_PHYSICAL_MEMORY != null">#{SYSTEM_TOTAL_PHYSICAL_MEMORY}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SYSTEM_CHIPSET != null">#{SYSTEM_CHIPSET}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="OS_BUILD_NUMBER != null">#{OS_BUILD_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="OS_SERIAL_NUMBER != null">#{OS_SERIAL_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="OS_SYSTEM_DIRECTORY != null">#{OS_SYSTEM_DIRECTORY}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="OS_VERSION != null">#{OS_VERSION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CPU_CAPTION != null">#{CPU_CAPTION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CPU_DEVICE_ID != null">#{CPU_DEVICE_ID}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CPU_MANUFACTURER != null">#{CPU_MANUFACTURER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CPU_MAX_CLOCK_SPEED != null">#{CPU_MAX_CLOCK_SPEED}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CPU_NAME != null">#{CPU_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="CPU_SOCKET_DESIGNATION != null">#{CPU_SOCKET_DESIGNATION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="BIOS_MANUFACTURER != null">#{BIOS_MANUFACTURER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="BIOS_NAME != null">#{BIOS_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="BIOS_SERIAL_NUMBER != null">#{BIOS_SERIAL_NUMBER}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="BIOS_SMBIOSBIOS_VERSION != null">#{BIOS_SMBIOSBIOS_VERSION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="BIOS_VERSION != null">#{BIOS_VERSION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="NUMBER_OF_DISK != null">#{NUMBER_OF_DISK}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="INS_DT != null">#{INS_DT}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DUMMY != null">#{DUMMY}</when><otherwise> null </otherwise></choose>  ,
+				 'Copied'  
+			);
+    	end;
+    </update>
+    
+    
+    <update id="batch.migration.CustomTest.transfer.oper.disk" parameterType="hashmap">
+    	declare
+    		
+    		vCnt number;
+    		
+    	begin
+    		
+    		
+    		insert into SSD_TEST_DISK(TEST_ID, DISK_CAPTION, DISK_DEVICE_ID, DISK_MODEL, DISK_PARTITIONS, DISK_SIZE, INS_DT, DISPLAY_ORDER)
+			values(
+				<choose><when test="TEST_ID != null">#{TEST_ID}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISK_CAPTION != null">#{DISK_CAPTION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISK_DEVICE_ID != null">#{DISK_DEVICE_ID}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISK_MODEL != null">#{DISK_MODEL}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISK_PARTITIONS != null">#{DISK_PARTITIONS}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISK_SIZE != null">#{DISK_SIZE}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="INS_DT != null">#{INS_DT}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISPLAY_ORDER != null">#{DISPLAY_ORDER}</when><otherwise> null </otherwise></choose> 
+			);
+    	end;
+    </update>
+    
+    <update id="batch.migration.CustomTest.transfer.oper.files" parameterType="hashmap">
+    	declare
+    		
+    		vCnt number;
+    		
+    	begin
+    		
+    		
+    		insert into SSD_TEST_FILES(TEST_ID, FILE_NAME, FIELD_NAME, FILE_PATH, INS_DT, MOD_DT)
+			values(
+				<choose><when test="TEST_ID != null">#{TEST_ID}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="FILE_NAME != null">#{FILE_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="FIELD_NAME != null">#{FIELD_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="FILE_PATH != null">#{FILE_PATH}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="INS_DT != null">#{INS_DT}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="MOD_DT != null">#{MOD_DT}</when><otherwise> null </otherwise></choose>  
+			);
+    	end;
+    </update>
+    
+    <update id="batch.migration.CustomTest.transfer.oper.result" parameterType="hashmap">
+    	declare
+    		
+    		vCnt number;
+    		
+    	begin
+    		insert into SSD_TEST_RESULT(TEST_ID, TOOL_NAME, TOOL_VERSION, SCRIPT_NAME, START_TIME, ELAPSED_TIME, TOTAL_TIME, ELAPSED_CYCLE, TOTAL_CYCLE, TEST_STATUS, TEST_LOG, TEST_LOG_PATH, INS_DT, MOD_DT, DISPLAY_ORDER)
+			values(
+				<choose><when test="TEST_ID != null">#{TEST_ID}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TOOL_NAME != null">#{TOOL_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TOOL_VERSION != null">#{TOOL_VERSION}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="SCRIPT_NAME != null">#{SCRIPT_NAME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="START_TIME != null">#{START_TIME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="ELAPSED_TIME != null">#{ELAPSED_TIME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TOTAL_TIME != null">#{TOTAL_TIME}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="ELAPSED_CYCLE != null">#{ELAPSED_CYCLE}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TOTAL_CYCLE != null">#{TOTAL_CYCLE}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TEST_STATUS != null">#{TEST_STATUS}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TEST_LOG != null">#{TEST_LOG}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="TEST_LOG_PATH != null">#{TEST_LOG_PATH}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="INS_DT != null">#{INS_DT}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="MOD_DT != null">#{MOD_DT}</when><otherwise> null </otherwise></choose>  ,
+				 <choose><when test="DISPLAY_ORDER != null">#{DISPLAY_ORDER}</when><otherwise> null </otherwise></choose> 
+			);
+    	end;
+    </update>
+    
+    <update id="batch.migration.CustomTest.transfer.dev.complete" parameterType="hashmap">
+    	declare
+    		
+    		vCnt number;
+    		
+    	begin
+    		update SSD_TEST_INFORMATION set
+    			copied = 'Copied'
+    		where TEST_ID = #{TEST_ID} ;
+			
+    	end;
+    </update>
+    
+   
+</mapper>    

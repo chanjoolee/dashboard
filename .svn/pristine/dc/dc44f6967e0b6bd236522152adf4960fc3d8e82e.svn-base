@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/views/authError.jsp=UTF-8
+encoding//WebContent/index.jsp=UTF-8
+encoding//WebContent/js/dashboard.js=UTF-8
+encoding//src/com/skhynix/rms/common/LogMGR.java=UTF-8
+encoding//src/config.properties=UTF-8
+encoding//src/dashboard/controller/CodeComplexHistoryJsonController.java=UTF-8
+encoding/<project>=UTF-8

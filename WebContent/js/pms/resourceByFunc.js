@@ -1,0 +1,1137 @@
+
+/**
+ * 
+ */
+
+
+
+function drawchartByAllFunc(){
+	currentFunc = drawchartByAllFunc;
+	currentArg = arguments;
+		var groupKeys = ['UP_PJT_FUNC_NAME','YYYYMM'];
+		/*var series = getDrillDownDataSeries(
+				'',
+				dataList ,
+				groupKeys ,
+				[],
+				'YYYYMM',
+				'MM_RESULT',
+				{cd: 'UP_PJT_FUNC_NAME', name:'UP_PJT_FUNC_NAME'}
+		);*/
+		
+		var series = getDrillDownDataSeries2(
+				'',
+				dataList,
+				groupKeys,
+				[], //filter
+				[{col:'MM_RESULT',convert:'y',isnull:0},{col:'YYYYMM',convert:'x',datatype:'date'}], //convert
+				'YYYYMM',//빈값이 있으면 강제로 할당한다.
+				'MM_RESULT',
+				{cd: 'UP_PJT_FUNC_NAME', name:'UP_PJT_FUNC_NAME'}
+		);
+		
+		
+		//pmo이면 visible 처리
+		$.each(series.series,function(i,s){
+			if(s.name == "PMO")
+				s.visible = false;
+		});
+		
+		
+		if($('#container').highcharts() != undefined) $('#container').highcharts().destroy();
+		$('#container').highcharts({
+	        chart: {
+	            type: 'area',
+	            zoomType: 'y'
+	        },
+	        credits: {//gets rid of the highcharts logo in bottom right
+                enabled: false
+            },
+	        title: {
+	        	text:'&nbsp;',
+            	useHTML: true
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        exporting:{
+	        	/* buttons:{
+	        		contextButton:{
+	        			menuItems: myExporting
+	        		}
+	        	} */
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	        	//tickInterval: 24 * 3000000 * 1000 , //1000000 * 60 * 60 * 24 ,
+	        	tickInterval: 24 * 3600 * 1000 * 30,
+	        	//tickmarkPlacement: 'on',
+	        	dateTimeLabelFormats: { // don't display the dummy year
+	        		week: '%m/%e',
+	        		day: '%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            }
+	            //title: {
+	            //    enabled: false
+	            //},
+	            //plotBands : plotBandsHigh,
+	            //plotLines: plotLinesHigh
+	           /* ,labels: {
+	                formatter: function () {
+	                	var dt = new Date(this.value);
+	                	return (dt.getMonth()+1) + '.' + dt.getDate();
+	                    
+	                }
+	            } */
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	            
+	        },
+	        tooltip: {
+	        	enabled:true,
+	            shared: true ,
+	            crosshairs: true,
+	            dateTimeLabelFormats: {
+	            	week: '%y/%m/%e',
+	        		day: '%y/%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            },
+	            valueSuffix: '' ,
+	            valueDecimals: 2
+	            /* ,
+	            formatter: function () {
+	            	var data = getDataByUtc($("#sProject").val(), this.x);
+	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 
+	                    '' + this.series.name + ':' + this.y + '';
+	            } */
+	        },
+	        //legend: legend,
+	        plotOptions: {
+	        	series: {
+	        		cursor: 'pointer',
+	                connectNulls: true // by default
+	               /*  point:{
+	                	events:{
+	                		click: function(e){
+	                			//alert('click');
+	                		}
+	                	}
+	                } */
+	            },
+	            area: {
+	                stacking: 'normal',
+	                lineColor: '#666666',
+	                lineWidth: 1,
+	                marker: {
+	                    lineWidth: 1,
+	                    lineColor: '#666666',
+	                    enabled: true
+	                },
+	                dataLabels: {
+	                    enabled: true,
+	                    //format:'{point.y:.0f}',
+	                    formatter: function(){
+	                    	if(this.point.y != 0)
+	                    		return Math.round(this.point.y);
+	                    }
+	                },
+	                trackByArea: true,
+	                enableMouseTracking: true,
+	                events:{
+	                	click: function(e){
+	                		//this.options.pjt_id
+	                		//this.options.pjt_name
+	                		$("#loader").show();
+	                		var func = this.options.name;
+					    	setTimeout(function(){	
+					    		//drawchartByFuncProject(func);
+					    		drawchartByFuncSubfunc(func);
+					    	},50);
+                		} 
+	                }
+	                	
+	            },
+	            line: {
+	            	//stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: false,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                enableMouseTracking: false
+	            }
+	        },	        
+	        series: series.series
+	    },function(chart){
+		    	/*var filters = [];
+				var sorts = ['NATL_NAME','PJT_NAME','PJT_FUNC_NAME','YYYYMM'];			
+				var list = getFilteredData(dataList,filters,sorts);
+				setAlldataInList(list);
+		    	drawGrid(list, gridModel_site_project_func);	*/
+		    }
+		);
+		
+	}
+	
+	
+	
+	function drawchartByFuncProject(func){
+		currentFunc = drawchartByFuncProject;
+		currentArg = arguments;
+		var groupKeys = ['UP_PJT_FUNC_NAME','PJT_ID','PJT_NAME','YYYYMM'];
+		var series = getDrillDownDataSeries2(
+				'' ,
+				dataList ,
+				groupKeys ,
+				[{col:'UP_PJT_FUNC_NAME',val:func}],
+				[{col:'MM_RESULT',convert:'y',isnull:0},{col:'YYYYMM',convert:'x',datatype:'date'}], //convert
+				'YYYYMM',
+				'MM_RESULT',
+				{cd: 'PJT_ID', name:'PJT_NAME'}
+		);
+		
+		
+		if($('#container').highcharts() != undefined) $('#container').highcharts().destroy();
+		var title = "";
+		if(series.series.length>0)
+			title =  series.series[0].data[0].UP_PJT_FUNC_NAME + ' (by Func > Project)';
+		
+		$('#container').highcharts({
+	        chart: {
+	            type: 'area',
+	            zoomType: 'y'
+	        },
+	        credits: {//gets rid of the highcharts logo in bottom right
+                enabled: false
+            },
+	        title: {
+	        	text: title ,
+            	useHTML: true
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        exporting:{
+	        	buttons: [
+					{
+						cursor: 'pointer',
+					    x: -500,
+					    y: 0,
+					    onclick: function () {
+							drawchartByAllFunc();
+					    },
+					    symbol: 'square',
+					    text:'Up to All Func'
+					},
+					{
+					    x: -300,
+					    y: 0,
+					    onclick: function () {
+					    	drawchartByFuncSite(func);
+					    },
+					    symbol: 'square',
+					    text:'Convert Func > Site'
+					},
+					{
+					    x: -100,
+					    y: 0,
+					    onclick: function () {
+					    	drawchartByFuncSubfunc(func);
+					    },
+					    symbol: 'square',
+					    text:'Convert Func > Sub Function'
+					}
+				]
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	        	//tickInterval: 24 * 3000000 * 1000 , //1000000 * 60 * 60 * 24 ,
+	        	tickInterval: 24 * 3600 * 1000 * 30,
+	        	//tickmarkPlacement: 'on',
+	        	dateTimeLabelFormats: { // don't display the dummy year
+	        		week: '%m/%e',
+	        		day: '%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            }
+	            //title: {
+	            //    enabled: false
+	            //},
+	            //plotBands : plotBandsHigh,
+	            //plotLines: plotLinesHigh
+	           /* ,labels: {
+	                formatter: function () {
+	                	var dt = new Date(this.value);
+	                	return (dt.getMonth()+1) + '.' + dt.getDate();
+	                    
+	                }
+	            } */
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	            
+	        },
+	        tooltip: {
+	        	enabled:false,
+	            shared: true ,
+	            crosshairs: true,
+	            dateTimeLabelFormats: {
+	            	week: '%y/%m/%e',
+	        		day: '%y/%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            },
+	            valueSuffix: '' ,
+	            valueDecimals: 2 /* ,
+	            formatter: function () {
+	            	var data = getDataByUtc($("#sProject").val(), this.x);
+	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 
+	                    '' + this.series.name + ':' + this.y + '';
+	            } */
+	        },
+	        //legend: legend,
+	        plotOptions: {
+	        	series: {
+	        		cursor: 'pointer',
+	                connectNulls: true // by default
+	               /*  point:{
+	                	events:{
+	                		click: function(e){
+	                			//alert('click');
+	                		}
+	                	}
+	                } */
+	            },
+	            area: {
+	                stacking: 'normal',
+	                lineColor: '#666666',
+	                lineWidth: 1,
+	                marker: {
+	                    lineWidth: 1,
+	                    lineColor: '#666666',
+	                    enabled: true
+	                },
+	                dataLabels: {
+	                    enabled: true,
+	                    format:'{point.y:.0f}'
+	                },
+	                trackByArea: true,
+	                enableMouseTracking: true,
+	                events:{
+	                	click: function(e){
+	                		//this.options.pjt_id
+	                		//this.options.pjt_name
+	                		drawchartByFuncProjectSite(func,this.options.id);
+                		}  
+	                }
+	                	
+	            },
+	            line: {
+	            	//stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: false,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                enableMouseTracking: false
+	            }
+	        },	        
+	        series: series.series
+	        //drilldown: {series: drilldowns}
+	        
+	    },function(chart){	    	
+		    	/*var filters = [
+		    		{col: 'NATL_CD',val: site}
+		    	];
+				var sorts = ['NATL_NAME','PJT_NAME','PJT_FUNC_NAME','YYYYMM'];			
+				var list = getFilteredData(dataList,filters,sorts);
+				setAlldataInList(list);
+		    	drawGrid(list, gridModel_site_project_func);	*/
+	    		$("#loader").hide();
+	    	}
+		);
+		
+	}
+	
+	function drawchartByFuncProjectSite(func,pjtId){
+		currentFunc = drawchartByFuncProjectSite;
+		currentArg = arguments;
+		var groupKeys = ['UP_PJT_FUNC_NAME','PJT_ID','PJT_NAME','NATL_CD','NATL_NAME','YYYYMM'];
+		var series = getDrillDownDataSeries2(
+				pjtId,
+				dataList,
+				groupKeys,
+				[{col:'UP_PJT_FUNC_NAME',val:func},{col:'PJT_ID',val:pjtId}],
+				[{col:'MM_RESULT',convert:'y',isnull:0},{col:'YYYYMM',convert:'x',datatype:'date'}], //convert
+				'YYYYMM',
+				'MM_RESULT',
+				{cd: 'NATL_CD', name:'NATL_NAME'}
+		);
+		
+		
+		if($('#container').highcharts() != undefined) $('#container').highcharts().destroy();
+		var title = "";
+		if(series.series.length>0)
+			title = series.series[0].data[0].UP_PJT_FUNC_NAME + ' > ' + series.series[0].data[0].PJT_NAME + ' (by Func > Project > Site)' ;
+		
+		$('#container').highcharts({
+	        chart: {
+	            type: 'area',
+	            zoomType: 'y'
+	        },
+	        credits: {//gets rid of the highcharts logo in bottom right
+                enabled: false
+            },
+	        title: {
+	        	text: title ,
+            	useHTML: true
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        exporting:{
+	        	buttons: [
+					/* {
+						cursor: 'pointer',
+					    x: -250,
+					    y: 5,
+					    onclick: function () {
+							drawchartByAllProject();
+					    },
+					    symbol: 'square',
+					    text:'Up to Main'
+					}, */
+					{
+					    x: -100,
+					    y: 5,
+					    onclick: function () {
+					    	$("#loader").show();
+					    	setTimeout(function(){	
+					    		drawchartByFuncProject(func);
+					    	},50);
+					    },
+					    symbol: 'square',
+					    text:'Up to Func > Project'
+					}
+				]
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	        	//tickInterval: 24 * 3000000 * 1000 , //1000000 * 60 * 60 * 24 ,
+	        	tickInterval: 24 * 3600 * 1000 * 30,
+	        	//tickmarkPlacement: 'on',
+	        	dateTimeLabelFormats: { // don't display the dummy year
+	        		week: '%m/%e',
+	        		day: '%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            }
+	            //title: {
+	            //    enabled: false
+	            //},
+	            //plotBands : plotBandsHigh,
+	            //plotLines: plotLinesHigh
+	           /* ,labels: {
+	                formatter: function () {
+	                	var dt = new Date(this.value);
+	                	return (dt.getMonth()+1) + '.' + dt.getDate();
+	                    
+	                }
+	            } */
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	            
+	        },
+	        tooltip: {
+	        	enabled:true,
+	            shared: true ,
+	            crosshairs: false,
+	            dateTimeLabelFormats: {
+	            	week: '%y/%m/%e',
+	        		day: '%y/%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            },
+	            valueSuffix: '' ,
+	            valueDecimals: 2 /* ,
+	            formatter: function () {
+	            	var data = getDataByUtc($("#sProject").val(), this.x);
+	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 
+	                    '' + this.series.name + ':' + this.y + '';
+	            } */
+	        },
+	        //legend: legend,
+	        plotOptions: {
+	        	series: {
+	        		//cursor: 'pointer',
+	                connectNulls: true // by default
+	               /*  point:{
+	                	events:{
+	                		click: function(e){
+	                			//alert('click');
+	                		}
+	                	}
+	                } */
+	            },
+	            area: {
+	                stacking: 'normal',
+	                lineColor: '#666666',
+	                lineWidth: 1,
+	                marker: {
+	                    lineWidth: 1,
+	                    lineColor: '#666666',
+	                    enabled: true
+	                },
+	                dataLabels: {
+	                    enabled: true,
+	                    format:'{point.y:.0f}'
+	                },
+	                trackByArea: true,
+	                enableMouseTracking: true
+	                /* events:{
+	                	click: function(e){
+	                		//this.options.pjt_id
+	                		//this.options.pjt_name
+	                		drawchartByProjectSite(this.name);
+                		}  
+	                } */
+	                	
+	            },
+	            line: {
+	            	//stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: false,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                enableMouseTracking: false
+	            },
+	            column: {
+	            	stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: true,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: true
+	                },
+	                enableMouseTracking: true
+	            }
+	        },	        
+	        series: series.series
+	    },function(chart){
+    			/*var filters = [
+					{col: 'NATL_CD',val: site},
+   		    		{col: 'PJT_ID',val: pjtId}
+   		    		
+   		    	];
+   				var sorts = ['NATL_NAME','PJT_NAME','PJT_FUNC_NAME','YYYYMM'];			
+   				var list = getFilteredData(dataList,filters,sorts);
+   				setAlldataInList(list);
+   		    	drawGrid(list, gridModel_site_project_func);	*/
+	    	}
+		);
+		
+	}
+	
+	function drawchartByFuncSite(func){
+		currentFunc = drawchartByFuncSite;
+		currentArg = arguments;
+		//var groupKeys = ['NATL_CD','NATL_NAME','PJT_FUNC_ID','PJT_FUNC_NAME','YYYYMM'];
+		var groupKeys = ['UP_PJT_FUNC_NAME','NATL_CD','NATL_NAME','YYYYMM'];
+		var series = getDrillDownDataSeries2(
+				'',
+				dataList ,
+				groupKeys ,
+				[{col:'UP_PJT_FUNC_NAME',val:func}],
+				[{col:'MM_RESULT',convert:'y',isnull:0},{col:'YYYYMM',convert:'x',datatype:'date'}], //convert
+				'YYYYMM',
+				'MM_RESULT',
+				{cd: 'NATL_CD', name:'NATL_NAME'}
+		);
+				
+		if($('#container').highcharts() != undefined) $('#container').highcharts().destroy();
+		var title = "";
+		if(series.series.length>0)
+			title = series.series[0].data[0].UP_PJT_FUNC_NAME + ' (by Func > Site)' ;
+		
+		$('#container').highcharts({
+	        chart: {
+	            type: 'area',
+	            zoomType: 'y'
+	        },
+	        credits: {//gets rid of the highcharts logo in bottom right
+                enabled: false
+            },
+	        title: {
+	        	text: title ,
+            	useHTML: true
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        exporting:{
+	        	buttons: [
+					{
+						cursor: 'pointer',
+					    x: -500,
+					    y: 0,
+					    onclick: function () {
+							drawchartByAllFunc();
+					    },
+					    symbol: 'square',
+					    text:'Up to All Func'
+					},
+					{
+					    x: -300,
+					    y: 0,
+					    onclick: function () {
+					    	$("#loader").show();
+					    	setTimeout(function(){	
+					    		drawchartByFuncProject(func);
+					    	},50);
+					    },
+					    symbol: 'square',
+					    text:'Convert Func > Project'
+					},
+					{
+					    x: -100,
+					    y: 0,
+					    onclick: function () {
+					    	drawchartByFuncSubfunc(func);
+					    },
+					    symbol: 'square',
+					    text:'Convert Func > Sub Function'
+					}
+				]
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	        	//tickInterval: 24 * 3000000 * 1000 , //1000000 * 60 * 60 * 24 ,
+	        	tickInterval: 24 * 3600 * 1000 * 30,
+	        	//tickmarkPlacement: 'on',
+	        	dateTimeLabelFormats: { // don't display the dummy year
+	        		week: '%m/%e',
+	        		day: '%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            }
+	            //title: {
+	            //    enabled: false
+	            //},
+	            //plotBands : plotBandsHigh,
+	            //plotLines: plotLinesHigh
+	           /* ,labels: {
+	                formatter: function () {
+	                	var dt = new Date(this.value);
+	                	return (dt.getMonth()+1) + '.' + dt.getDate();
+	                    
+	                }
+	            } */
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	            
+	        },
+	        tooltip: {
+	        	enabled:true,
+	            shared: true ,
+	            crosshairs: true,
+	            dateTimeLabelFormats: {
+	            	week: '%y/%m/%e',
+	        		day: '%y/%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            },
+	            valueSuffix: '' ,
+	            valueDecimals: 2 /* ,
+	            formatter: function () {
+	            	var data = getDataByUtc($("#sProject").val(), this.x);
+	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 
+	                    '' + this.series.name + ':' + this.y + '';
+	            } */
+	        },
+	        //legend: legend,
+	        plotOptions: {
+	        	series: {
+	        		cursor: 'pointer',
+	                connectNulls: true // by default
+	               /*  point:{
+	                	events:{
+	                		click: function(e){
+	                			//alert('click');
+	                		}
+	                	}
+	                } */
+	            },
+	            area: {
+	                stacking: 'normal',
+	                lineColor: '#666666',
+	                lineWidth: 1,
+	                marker: {
+	                    lineWidth: 1,
+	                    lineColor: '#666666',
+	                    enabled: true
+	                },
+	                dataLabels: {
+	                    enabled: true,
+	                    format:'{point.y:.0f}'
+	                },
+	                trackByArea: true,
+	                enableMouseTracking: true ,
+	                events:{
+	                	click: function(e){
+	                		//this.options.pjt_id
+	                		//this.options.pjt_name
+	                		drawchartByFuncSiteProject(func,this.options.id);
+                		}  
+	                }
+	                	
+	            },
+	            line: {
+	            	//stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: false,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                enableMouseTracking: false
+	            }
+	        },	        
+	        series: series.series
+	    },function(chart){
+	    		/*var filters = [
+		    		{col: 'NATL_CD',val: site}
+		    	];
+				var sorts = ['NATL_NAME','PJT_NAME','PJT_FUNC_NAME','YYYYMM'];			
+				var list = getFilteredData(dataList,filters,sorts);
+				setAlldataInList(list);
+		    	drawGrid(list, gridModel_site_func_project);	*/
+	    	}
+		);
+		
+	}
+	
+	function drawchartByFuncSubfunc(func){
+		currentFunc = drawchartByFuncSubfunc;
+		currentArg = arguments;
+		//var groupKeys = ['NATL_CD','NATL_NAME','PJT_FUNC_ID','PJT_FUNC_NAME','YYYYMM'];
+		
+		var vlist = [];
+		var funcIds = dataFilter(dataList,[{col: 'UP_PJT_FUNC_NAME', val: func }]);
+		var funcId = funcIds[0].UP_PJT_FUNC_ID;
+		$.ajax({
+			url: "/dashboard/pmsResourceSubfuncJson.html",
+			data: {func: funcId, estStartDate: $("#estStartDate").val(), estEndDate: $("#estEndDate").val() }, 
+			async: false,
+			success:  function(response){
+				vlist = response.data;
+			}
+		});
+		
+		var groupKeys = ['UP_PJT_FUNC_NAME','FUNC_NAME','YYYYMM'];
+		var series = getDrillDownDataSeries2(
+				'',
+				vlist ,
+				groupKeys ,
+				[],
+				[{col:'MM_RESULT',convert:'y',isnull:0},{col:'YYYYMM',convert:'x',datatype:'date'}], //convert
+				'YYYYMM',
+				'MM_RESULT',
+				{cd: 'FUNC_NAME', name:'FUNC_NAME'}
+		);
+				
+		if($('#container').highcharts() != undefined) $('#container').highcharts().destroy();
+		var title = "";
+		if(series.series.length>0)
+			title = func + ' (by Func > Sub Function)' ;
+		
+		$('#container').highcharts({
+	        chart: {
+	            type: 'area',
+	            zoomType: 'y'
+	        },
+	        credits: {//gets rid of the highcharts logo in bottom right
+                enabled: false
+            },
+	        title: {
+	        	text: title ,
+            	useHTML: true
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        exporting:{
+	        	buttons: [
+					{
+						cursor: 'pointer',
+					    x: -500,
+					    y: 0,
+					    onclick: function () {
+							drawchartByAllFunc();
+					    },
+					    symbol: 'square',
+					    text:'Up to All Func'
+					},
+					{
+					    x: -300,
+					    y: 0,
+					    onclick: function () {
+					    	$("#loader").show();
+					    	setTimeout(function(){	
+					    		drawchartByFuncProject(func);
+					    	},50);
+					    },
+					    symbol: 'square',
+					    text:'Convert Func > Project'
+					},
+					{
+					    x: -100,
+					    y: 0,
+					    onclick: function () {
+					    	drawchartByFuncSite(func);
+					    },
+					    symbol: 'square',
+					    text:'Convert Func > Site'
+					}
+				]
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	        	//tickInterval: 24 * 3000000 * 1000 , //1000000 * 60 * 60 * 24 ,
+	        	tickInterval: 24 * 3600 * 1000 * 30,
+	        	//tickmarkPlacement: 'on',
+	        	dateTimeLabelFormats: { // don't display the dummy year
+	        		week: '%m/%e',
+	        		day: '%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            }
+	            //title: {
+	            //    enabled: false
+	            //},
+	            //plotBands : plotBandsHigh,
+	            //plotLines: plotLinesHigh
+	           /* ,labels: {
+	                formatter: function () {
+	                	var dt = new Date(this.value);
+	                	return (dt.getMonth()+1) + '.' + dt.getDate();
+	                    
+	                }
+	            } */
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	            
+	        },
+	        tooltip: {
+	        	enabled:true,
+	            shared: true ,
+	            crosshairs: true,
+	            dateTimeLabelFormats: {
+	            	week: '%y/%m/%e',
+	        		day: '%y/%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            },
+	            valueSuffix: '' ,
+	            valueDecimals: 2 /* ,
+	            formatter: function () {
+	            	var data = getDataByUtc($("#sProject").val(), this.x);
+	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 
+	                    '' + this.series.name + ':' + this.y + '';
+	            } */
+	        },
+	        //legend: legend,
+	        plotOptions: {
+	        	series: {
+	        		//cursor: 'pointer',
+	                connectNulls: true // by default
+	               /*  point:{
+	                	events:{
+	                		click: function(e){
+	                			//alert('click');
+	                		}
+	                	}
+	                } */
+	            },
+	            area: {
+	                stacking: 'normal',
+	                lineColor: '#666666',
+	                lineWidth: 1,
+	                marker: {
+	                    lineWidth: 1,
+	                    lineColor: '#666666',
+	                    enabled: true
+	                },
+	                dataLabels: {
+	                    enabled: true,
+	                    format:'{point.y:.0f}'
+	                },
+	                trackByArea: true,
+	                enableMouseTracking: true 
+	                /*,events:{
+	                	click: function(e){
+	                		//this.options.pjt_id
+	                		//this.options.pjt_name
+	                		drawchartByFuncSiteProject(func,this.options.id);
+                		}  
+	                }*/
+	                	
+	            },
+	            line: {
+	            	//stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: false,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                enableMouseTracking: false
+	            }
+	        },	        
+	        series: series.series
+	    },function(chart){
+	    		/*var filters = [
+		    		{col: 'NATL_CD',val: site}
+		    	];
+				var sorts = ['NATL_NAME','PJT_NAME','PJT_FUNC_NAME','YYYYMM'];			
+				var list = getFilteredData(dataList,filters,sorts);
+				setAlldataInList(list);
+		    	drawGrid(list, gridModel_site_func_project);	*/
+	    		$("#loader").hide();
+	    	}
+		);
+		
+	}
+	
+	
+
+	function drawchartByFuncSiteProject(func,site){
+		currentFunc = drawchartByFuncSiteProject;
+		currentArg = arguments;
+		var groupKeys = ['UP_PJT_FUNC_NAME','NATL_CD','NATL_NAME','PJT_ID','PJT_NAME','YYYYMM'];
+		var series = getDrillDownDataSeries2(
+				func,
+				dataList,
+				groupKeys,
+				[{col:'UP_PJT_FUNC_NAME',val:func},{col:'NATL_CD',val:site}],
+				[{col:'MM_RESULT',convert:'y',isnull:0},{col:'YYYYMM',convert:'x',datatype:'date'}], //convert
+				'YYYYMM',
+				'MM_RESULT',
+				{cd: 'PJT_ID', name:'PJT_NAME'}
+		);
+		
+		
+		if($('#container').highcharts() != undefined) $('#container').highcharts().destroy();
+		var title = "";
+		if(series.series.length>0)
+			title = series.series[0].data[0].UP_PJT_FUNC_NAME + ' > ' + series.series[0].data[0].NATL_NAME + ' (by Func > Site > Project)';
+		
+		$('#container').highcharts({
+	        chart: {
+	            type: 'area',
+	            zoomType: 'y'
+	        },
+	        credits: {//gets rid of the highcharts logo in bottom right
+                enabled: false
+            },
+	        title: {
+	        	text: title ,
+            	useHTML: true
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        exporting:{
+	        	buttons: [
+					/* {
+						cursor: 'pointer',
+					    x: -250,
+					    y: 5,
+					    onclick: function () {
+							drawchartByAllProject();
+					    },
+					    symbol: 'square',
+					    text:'Up to Main'
+					}, */
+					{
+					    x: -100,
+					    y: 5,
+					    onclick: function () {
+					    	drawchartByFuncSite(func);
+					    },
+					    symbol: 'square',
+					    text:'Up to Func > Site'
+					}
+				]
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	        	//tickInterval: 24 * 3000000 * 1000 , //1000000 * 60 * 60 * 24 ,
+	        	tickInterval: 24 * 3600 * 1000 * 30,
+	        	//tickmarkPlacement: 'on',
+	        	dateTimeLabelFormats: { // don't display the dummy year
+	        		week: '%m/%e',
+	        		day: '%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            }
+	            //title: {
+	            //    enabled: false
+	            //},
+	            //plotBands : plotBandsHigh,
+	            //plotLines: plotLinesHigh
+	           /* ,labels: {
+	                formatter: function () {
+	                	var dt = new Date(this.value);
+	                	return (dt.getMonth()+1) + '.' + dt.getDate();
+	                    
+	                }
+	            } */
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	            
+	        },
+	        tooltip: {
+	        	enabled:true,
+	            shared: true ,
+	            crosshairs: false,
+	            dateTimeLabelFormats: {
+	            	week: '%y/%m/%e',
+	        		day: '%y/%m/%e',
+	        		month: '%y/%m',
+	        		year: '%y/%m/%e'
+	            },
+	            valueSuffix: '' ,
+	            valueDecimals: 2/* ,
+	            formatter: function () {
+	            	var data = getDataByUtc($("#sProject").val(), this.x);
+	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 
+	                    '' + this.series.name + ':' + this.y + '';
+	            } */
+	        },
+	        //legend: legend,
+	        plotOptions: {
+	        	series: {
+	        		//cursor: 'pointer',
+	                connectNulls: true // by default
+	               /*  point:{
+	                	events:{
+	                		click: function(e){
+	                			//alert('click');
+	                		}
+	                	}
+	                } */
+	            },
+	            area: {
+	                stacking: 'normal',
+	                lineColor: '#666666',
+	                lineWidth: 1,
+	                marker: {
+	                    lineWidth: 1,
+	                    lineColor: '#666666',
+	                    enabled: true
+	                },
+	                dataLabels: {
+	                    enabled: true,
+	                    format:'{point.y:.0f}'
+	                },
+	                trackByArea: true,
+	                enableMouseTracking: true
+	                /* events:{
+	                	click: function(e){
+	                		//this.options.pjt_id
+	                		//this.options.pjt_name
+	                		drawchartByProjectSite(this.name);
+                		}  
+	                } */
+	                	
+	            },
+	            line: {
+	            	//stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: false,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                enableMouseTracking: false
+	            },
+	            column: {
+	            	stacking: 'normal',
+	                //lineColor: 'red',
+	                //lineWidth: 1,
+	                marker: {
+	                	enabled: true,
+	                    lineWidth: 1,
+	                    lineColor: '#666666'
+	                },
+	                dataLabels: {
+	                    enabled: true
+	                },
+	                enableMouseTracking: true
+	            }
+	        },	        
+	        series: series.series
+	    },function(chart){
+    			/*var filters = [
+					{col: 'NATL_CD',val: site},
+   		    		{col: 'PJT_FUNC_NAME',val: func}
+   		    		
+   		    	];
+   				var sorts = ['NATL_NAME','PJT_FUNC_NAME','PJT_NAME','YYYYMM'];			
+   				var list = getFilteredData(dataList,filters,sorts);
+   				setAlldataInList(list);
+   		    	drawGrid(list, gridModel_site_func_project);	*/
+	    	}
+		);
+	}

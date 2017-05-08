@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    
+    <select id="dashboard.confluence.usage.list" parameterType="hashmap" resultType="hashmap">
+    
+    	
+		with tempTable2 as (
+			SELECT 
+				S.SPACENAME, 
+				C.TITLE, 
+				C.CONTENTTYPE, 
+				C.CONTENTID,
+				to_char(C.CREATIONDATE,'YYYY-MM-DD HH24:MI') CREATIONDATE, 
+				to_char(C.LASTMODDATE,'YYYY-MM-DD HH24:MI') LASTMODDATE, 
+				C.VERSION, 
+				U.username
+			FROM CONFUSER.content C , CONFUSER.spaces S, CONFUSER.user_mapping U
+			where 1=1
+			--and C.CREATIONDATE between 'YYYY-MM-DD' and 'YYYY-MM-DD'
+			and C.CONTENTTYPE='PAGE'
+			and C.SPACEID = S.SPACEID
+			and C.CREATOR = U.user_key
+			<choose>
+				<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
+		       		<foreach collection="filters.rules" item="item" index="index"  >
+		       			<choose>
+		       			<when test="item.field eq 'SPACENAME' ">
+		           			and REGEXP_LIKE(S.SPACENAME ,#{item.data},'i')  
+		           		</when>
+		           		<when test="item.field eq 'USERNAME' ">
+		           			and REGEXP_LIKE(U.USERNAME,#{item.data},'i') 
+		           		</when>
+		           		<otherwise>
+		           			and REGEXP_LIKE(C.${item.field},#{item.data},'i') 
+		           		</otherwise>
+		           		</choose>
+		       		</foreach>
+		   		</when>
+		   		<otherwise>
+		   		</otherwise>
+	   		</choose>
+	   		<choose>
+	   			<when test="sidx != null and sidx != '' and sord != null and sord != '' "> order by ${sidx} ${sord}</when>
+	   			<otherwise> order by  C.CREATIONDATE desc </otherwise>
+	   		</choose>
+	   		
+		)			
+		
+		
+	    select 
+	    		A.*	    		
+	    	from (
+		    	SELECT		    		
+		    		A.*
+		    	FROM
+		    	(
+		    		SELECT A.*, ROWNUM AS ROW_NUM from tempTable2 A
+	    	) A 
+	    	where
+	    	<![CDATA[
+		    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+		    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+	    	]]>
+	    ) A 
+
+		
+    </select>
+    
+     <select id="dashboard.confluence.usage.list.page" parameterType="hashmap" resultType="hashmap">
+	     	-- 최종사용
+			with tempTable2 as (
+				SELECT 
+				S.SPACENAME, 
+				C.TITLE, 
+				C.CONTENTTYPE, 
+				to_char(C.CREATIONDATE,'YYYY-MM-DD HH24:MI') CREATIONDATE, 
+				to_char(C.LASTMODDATE,'YYYY-MM-DD HH24:MI') LASTMODDATE, 
+				C.VERSION, 
+				U.username
+			FROM CONFUSER.content C , CONFUSER.spaces S, CONFUSER.user_mapping U
+			where 1=1
+			--and C.CREATIONDATE between 'YYYY-MM-DD' and 'YYYY-MM-DD'
+			and C.CONTENTTYPE='PAGE'
+			and C.SPACEID = S.SPACEID
+			and C.CREATOR = U.user_key
+			<choose>
+				<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
+		       		<foreach collection="filters.rules" item="item" index="index"  >
+		       			<choose>
+		       			<when test="item.field eq 'SPACENAME' ">
+		           			and REGEXP_LIKE(S.SPACENAME ,#{item.data},'i')  
+		           		</when>
+		           		<when test="item.field eq 'USERNAME' ">
+		           			and REGEXP_LIKE(U.USERNAME,#{item.data},'i') 
+		           		</when>
+		           		<otherwise>
+		           			and REGEXP_LIKE(C.${item.field},#{item.data},'i') 
+		           		</otherwise>
+		           		</choose>
+		       		</foreach>
+		   		</when>
+		   		<otherwise>
+		   		</otherwise>
+	   		</choose>
+			)
+			
+     		select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from tempTable2
+     </select>
+     
+     
+     
+    
+    
+</mapper>

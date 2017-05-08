@@ -1,0 +1,315 @@
+package dashboard.jiraIssue.controller;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import common.service.CommonService;
+
+import dashboard.jiraIssue.service.JiraIssueService;
+import dashboard.service.ComplexService;
+
+/**
+ * 
+ * @author grechan
+ *
+ */
+@Controller
+public class JiraIssueController {
+
+    private static final Logger logger = LoggerFactory.getLogger(JiraIssueController.class);
+
+    @Autowired
+    private CommonService commonService;
+    
+    @Autowired
+    private ComplexService complexService;
+    
+    @Autowired
+    private JiraIssueService service;
+    
+    
+    @RequestMapping(value = "/jiraIssueFunctionRootCause",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueFunctionRootCause(@SuppressWarnings("rawtypes") Map parameter, Locale locale, Model model) {
+        return "jiraIssueFunctionRootCause";
+    }
+
+    @RequestMapping(value = "/jiraIssueFunctionRootCauseJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueFunctionRootCauseJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	List<?> dataList = service.selectJiraIssueFunctionRootCause(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssuePhaseCauseList",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssuePhaseCauseList(@SuppressWarnings("rawtypes") Map parameter,Locale locale, Model model) {
+
+        return "jiraIssuePhaseCauseList";
+    }
+    
+    
+    @RequestMapping(value = "/jiraIssuePhaseCauseListJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssuePhaseCauseListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	List<?> dataList = service.selectJiraIssuePhaseCauseList(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueCauseMatrixList",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueCauseMatrixList(@SuppressWarnings("rawtypes") Map parameter,Locale locale, Model model) {
+
+        return "jiraIssueCauseMatrixList";
+    }
+    
+    
+    @RequestMapping(value = "/jiraIssueCauseMatrixListJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueCauseMatrixListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	List<?> dataList = service.jiraIssueCauseMatrixListJson(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueCauseStatusList",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueCauseStatusList(@SuppressWarnings("rawtypes") Map parameter,Locale locale, Model model) {
+
+        return "jiraIssueCauseStatusList";
+    }
+    
+    
+    @RequestMapping(value = "/jiraIssueCauseStatusListJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueCauseStatusListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+    	List<?> dataList = service.jiraIssueCauseStatusListJson(searchVO);
+    	
+    	searchVO.put("legacy_name","JIRA");
+    	List<?> regacyList = commonService.regacynamesByPjtcode(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+        mav.addObject("regacyList", regacyList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueRootCauseTat",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueRootCauseTat(@SuppressWarnings("rawtypes") Map parameter, Locale locale, Model model) {
+    	
+        return "jiraIssueRootCauseTat";
+    }
+
+    @RequestMapping(value = "/jiraIssueRootCauseTatJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueRootCauseTatJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+    	List<?> dataList = service.jiraIssueRootCauseTatJson(searchVO);
+    	List<?> dataListRaw = service.jiraIssueProjectDefectRawDataJson(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+        mav.addObject("dataListRaw", dataListRaw);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueProjectDefect",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueProjectDefect(@SuppressWarnings("rawtypes") Map parameter, Locale locale, Model model) {
+    	
+        return "jiraIssueProjectDefect";
+    }
+
+    @RequestMapping(value = "/jiraIssueProjectDefectJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueProjectDefectJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+    	//List<?> pmsPjtList = commonService.pmsProjectList(searchVO);
+    	List<?> dataList = service.jiraIssueProjectDefectJson(searchVO);
+    	List<?> dataListSub = service.jiraIssueProjectDefectSubJson(searchVO);
+    	List<?> dataListRaw = service.jiraIssueProjectDefectRawDataJson(searchVO);
+    	
+    	searchVO.put("legacy_name","JIRA");
+    	List<?> regacyList = commonService.regacynamesByPjtcode(searchVO);
+    	
+    	//mav.addObject("pmsPjtList", pmsPjtList);
+        mav.addObject("dataList", dataList);
+        mav.addObject("dataListSub", dataListSub);
+        mav.addObject("dataListRaw", dataListRaw);
+        mav.addObject("regacyList", regacyList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssuePhaseTat",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssuePhaseTat(@SuppressWarnings("rawtypes") Map parameter, Locale locale, Model model) {
+    	
+        return "jiraIssuePhaseTat";
+    }
+
+    @RequestMapping(value = "/jiraIssuePhaseTatJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssuePhaseTatJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	Map<?,?> savedSearch = complexService.getSavedSearchCondiion(searchVO);
+    	JSONObject searchCondition = null;
+    	if(savedSearch !=null && savedSearch.get("SEARCH") != null)
+    		searchCondition = (JSONObject) JSONSerializer.toJSON( savedSearch.get("SEARCH") );
+    	
+    	List<?> dataList = service.jiraIssuePhaseTatJson(searchCondition);
+    	List<?> phase = complexService.selectProjectPhase(searchVO);//ProjectSchedule-Phase ��ȸ
+    	
+        mav.addObject("dataList", dataList);
+        mav.addObject("phase", phase);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueHMS",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueHMS(@SuppressWarnings("rawtypes") Map parameter, Locale locale, Model model) {
+    	
+        return "jiraIssueHMS";
+    }
+    
+    
+    
+    @RequestMapping(value = "/jiraIssueComponentJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueComponentJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	commonService.requestToVo(request, searchVO);
+    	
+    	List<?> dataListProject = service.jiraProjects(searchVO);
+    	searchVO.put("projects", dataListProject);
+    	List<?> dataListCompoent = service.jiraProjectComponents(searchVO);
+    	
+        mav.addObject("dataListProject", dataListProject);
+        mav.addObject("dataListCompoent", dataListCompoent);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueTypeJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueTypeJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	commonService.requestToVo(request, searchVO);
+    	
+    	List<?> dataList = service.jiraIssueType(searchVO);
+        mav.addObject("dataList", dataList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueHmsListJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueHmsListJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	commonService.requestToVo(request, searchVO);
+    	
+    	List<?> dataListProject = service.jiraProjects(searchVO);
+    	searchVO.put("projects", dataListProject);
+    	
+    	List<?> dataListForGrid = service.jiraProjectHmsListForGrid(searchVO);
+    	List<?> dataListForGraph = service.jiraProjectHmsListForGraph(searchVO);
+    	
+        mav.addObject("dataListForGrid", dataListForGrid);
+        mav.addObject("dataListForGraph", dataListForGraph);
+        
+        //****  start 검색조건유지 ***//
+        // 2015-06-23 add
+        // 2017-03-24 copy from dashboard.controller.jira.IssueTrendsJsonController.issueTrendsJson
+        JSONObject searchCondition = new JSONObject();
+        searchCondition.putAll(searchVO);        
+        if(searchVO.get("userId") != null  && !searchVO.get("userId").toString().equals("")){
+        	// 2015-07-02. confluence에서는 userId를 넘겨주지 않으므로 저장하지 않는다.
+	        searchVO.put("search", searchCondition.toString());
+	        complexService.saveSearchCondition(searchVO);
+        }
+        //****  end 검색조건유지 ***//
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/jiraIssueHMSDetail",method = { RequestMethod.GET, RequestMethod.POST })
+    public String jiraIssueHMSDetail(@SuppressWarnings("rawtypes") Map parameter, Locale locale, Model model) {
+    	
+        return "jiraIssueHMSDetail";
+    }
+    
+    @RequestMapping(value = "/jiraIssueHmsDetailListJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView jiraIssueHmsDetailListJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	
+    	commonService.requestToVo(request, searchVO);
+    	
+    	//List<?> dataListProject = service.jiraProjects(searchVO);
+    	//searchVO.put("projects", dataListProject);
+    	
+    	List<?> dataList = service.jiraProjectHmsDetailListForGrid(searchVO);
+    	
+        mav.addObject("dataList", dataList);
+       
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+}
