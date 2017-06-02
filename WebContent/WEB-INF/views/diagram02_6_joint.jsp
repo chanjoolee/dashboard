@@ -173,9 +173,9 @@
 	            '<div class="html-element">',
 	            '<button class="delete">x</button>',
 	            '<label></label>',
-	            '<span></span>', '<br/>',
-	            '<select><option>--</option><option>one</option><option>two</option></select>',
-	            '<input type="text" value="I\'m HTML input" />',
+	            //'<span></span>', '<br/>',
+	            //'<select><option>--</option><option>one</option><option>two</option></select>',
+	            //'<input type="text" value="I\'m HTML input" />',
 	            '</div>'
 	        ].join(''),
 
@@ -184,22 +184,22 @@
 	            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 
 	            this.$box = $(_.template(this.template)());
-	            // Prevent paper from handling pointerdown.
-	            this.$box.find('input,select').on('mousedown click', function(evt) {
-	                evt.stopPropagation();
-	            });
-	            // This is an example of reacting on the input change and storing the input data in the cell model.
-	            this.$box.find('input').on('change', _.bind(function(evt) {
-	                this.model.set('input', $(evt.target).val());
-	            }, this));
-	            this.$box.find('select').on('change', _.bind(function(evt) {
-	                this.model.set('select', $(evt.target).val());
-	            }, this));
-	            this.$box.find('select').val(this.model.get('select'));
-	            this.$box.find('.delete').on('click', _.bind(this.model.remove, this.model));
-	            // Update the box position whenever the underlying model changes.
+	            //// Prevent paper from handling pointerdown.
+	            //this.$box.find('input,select').on('mousedown click', function(evt) {
+	            //    evt.stopPropagation();
+	            //});
+	            //// This is an example of reacting on the input change and storing the input data in the cell model.
+	            //this.$box.find('input').on('change', _.bind(function(evt) {
+	            //    this.model.set('input', $(evt.target).val());
+	            //}, this));
+	            //this.$box.find('select').on('change', _.bind(function(evt) {
+	            //    this.model.set('select', $(evt.target).val());
+	            //}, this));
+	            //this.$box.find('select').val(this.model.get('select'));
+	            //this.$box.find('.delete').on('click', _.bind(this.model.remove, this.model));
+	            //// Update the box position whenever the underlying model changes.
 	            this.model.on('change', this.updateBox, this);
-	            // Remove the box when the model gets removed from the graph.
+	            //// Remove the box when the model gets removed from the graph.
 	            this.model.on('remove', this.removeBox, this);
 
 	            this.updateBox();
@@ -214,8 +214,8 @@
 	            // Set the position and dimension of the box so that it covers the JointJS element.
 	            var bbox = this.model.getBBox();
 	            // Example of updating the HTML with a data stored in the cell model.
-	            this.$box.find('label').text(this.model.get('label'));
-	            this.$box.find('span').text(this.model.get('select'));
+	            //this.$box.find('label').text(this.model.get('label'));
+	            //this.$box.find('span').text(this.model.get('select'));
 	            this.$box.css({
 	                width: bbox.width,
 	                height: bbox.height,
@@ -394,9 +394,9 @@
 			
 			var rect = new joint.shapes.html.Element({
 		        position: { x: 80, y: 80 },
-		        size: { width: 170, height: 100 },
-		        label: 'I am HTML',
-		        select: 'one'
+		        size: { width: 170, height: 100 }
+		        //label: 'I am HTML',
+		        //select: 'one'
 		    });
 			
 			graph.addCells([rect]);
