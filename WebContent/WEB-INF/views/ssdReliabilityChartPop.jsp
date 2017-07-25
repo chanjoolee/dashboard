@@ -44,7 +44,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=3"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	

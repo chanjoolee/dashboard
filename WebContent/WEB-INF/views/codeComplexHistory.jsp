@@ -8,7 +8,7 @@
 	<script src="js/highcharts/src/highcharts.src.js"></script>
 	<script src="js/highcharts/src/highcharts-more.src.js"></script>
 	<script src="js/highcharts/src/exporting.src.js"></script>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<script type="text/javascript">
 	$(function () {

@@ -36,7 +36,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	
@@ -55,7 +55,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/licenseUsageJson.html",
+			url : "/dashboard/licenseUsageJson.html?siteNm=xxx",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -83,11 +83,11 @@
 		);
 		
 		$.each(seriesavg.series,function(i,s){
-			if(s.name == 'PEAK')
-				s.color = '#336688';
+			if(s.name == 'Peak')
+				s.color = '#7cb5ec';//'#09d6ed'; // skyblue
 			
-			if(s.name == 'DENIAL')
-				s.color = '#616688';
+			if(s.name == 'Denial')
+				s.color = 'red';//'#ed0a28'; // red
 			series.push(s);
 		});
 		
@@ -112,7 +112,8 @@
 			id : '%Used',
 			name : '%Used',
 			type: 'spline',
-			color: 'red'
+			color: 'red',
+			visible: false
 		};
 		$.each(monthgroup,function(i,month){
 			var data = dataFilter(dataList,[{col:'TMONTH',val: month.TMONTH}]);
@@ -174,7 +175,9 @@
 	                	click: function(e){
 	                		gotoClassName(e.point.options.TMONTH);
                 		} 
-	                }
+	                },
+	                borderWidth: 1,
+	                borderColor: 'black'
 	                	
 	            }
 	        },	
@@ -228,7 +231,31 @@
 			padding-right: 0;
 			width: 100%;
 			height: 100%;			
-		}		
+		}	
+		/***  jqgrid Header   ***/
+		.ui-jqgrid-hdiv th {
+			text-align: center;
+		}
+		
+		.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    	    background-color: #f5f5f5;;
+    	    background-image: none
+    	}
+    	
+    	.ui-jqgrid .ui-jqgrid-htable th div {
+			height:auto;
+			overflow:hidden;
+			padding-right:4px;
+			padding-top:2px;
+			position:relative;
+			vertical-align:text-top;
+			white-space:normal !important;
+			}
+			th.ui-th-column div{
+		        white-space:normal !important;
+		        height:auto !important;
+		        padding:2px;
+		    }	
 	</style>
 </head>
 <body>
@@ -242,7 +269,9 @@
 <input type="hidden" id="fromUseMonth" name="fromUseMonth" value="${param.fromUseMonth}"/>
 <input type="hidden" id="toUseMonth" name="toUseMonth" value="${param.toUseMonth }"/>
 <input type="hidden" id="licenseNm" name="licenseNm" value="${param.licenseNm }"/>
-<input type="hidden" id="siteNm" name="siteNm" value="${param.siteNm }"/>
+<c:forEach items="${paramValues.siteNm}" var="item" varStatus="status">
+	<input type="hidden" name="siteNm" value="${item}"/>
+</c:forEach>
 <input type="hidden" id="useMonth" name="useMonth" value=""/>
 <div id="container" class="container"></div>
 </form>

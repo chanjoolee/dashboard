@@ -5,13 +5,2087 @@
 <mapper namespace="">
 
 	<select id="dashboard.regresson.folderlist" resultType="hashmap">
+		with tbl_id as (
+			select
+				a.PJT_CODE ,
+				nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+				a.FOLDER_NAME,
+				a.FIRMWARE, 
+				a.REVISION
+			from REGRESSION_FOLDER a
+			left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code
+			where 1=1
+			<if test="firmwareArr != null and firmwareArr != '' ">
+	       	  and a.firmware in
+	       		<foreach collection="firmwareArr" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+	   		<if test="revisionArr != null and revisionArr != '' ">
+	       	  and a.revision in
+	       		<foreach collection="revisionArr" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			order by a.pjt_code, a.FOLDER_NAME
+		) 
+		
 		select
-			FOLDER_NAME
-		from REGRESSION_FOLDER
+				PJT_CODE
+				, PJT_NAME_PMS
+				,FOLDER_NAME
+				,FIRMWARE
+				, REVISION
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Generated'
+				) as Generated
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Started'
+				) as Started
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Ended'
+				) as Ended
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Depot'
+				) as Depot
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'FW Revision'
+				) as FW_Revision
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'FW Binary'
+				) as FW_Binary
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Link'
+				) as Link
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Description'
+				) as Description
+				,(select max(measure)  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = 'N'
+					and t.ROWVALUE = 'N'
+					and t.FIELD = 'Test Run Information'
+				) as Test_Run_Information
+			from tbl_id a
+	</select>
+	
+	<select id="dashboard.regresson.foldermeta" resultType="hashmap">
+		select 
+			PJT_CODE, FOLDER_NAME, ROWKEY, ROWVALUE, FIELD, MEASURE
+		from REGRESSION_META
+		where FOLDER_NAME = 'PPlus.B1.S48.TLC.AA5.128GB.256GB.512GB.Recursive_1.HP.C200HT77.519330.1'
 		
 		
 	</select>
 	
+	
+	<select id="dashboard.regresson.smartlist" resultType="hashmap">
+		with TBL_META_LIST as (
+            SELECT 
+                a.PJT_CODE, 
+                a.FOLDER_NAME, 
+               	b.TESTNAME_FULL, 
+                b.NO, 
+                b.TESTNAME, 
+                b.SLOTNAME, 
+                b.CATEGORY, 
+                b.STATUS, 
+                b.COMMENTARY, 
+                b.ERROR_MESSAGE, 
+                b.START_TIME, 
+                b.START_TIME_STR, 
+                b.DURATION, 
+                b.PARAMETERS
+            from REGRESSION_FOLDER a
+            join  REGRESSION_META_UNNORMAL  b
+            	on a.pjt_code = b.pjt_code
+            	and a.folder_name = b.folder_name            
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+           
+        )
+         , TBL_META_LAST as (
+             select
+                 pjt_code,
+                 slotname,
+                 TESTNAME_FULL,
+                 max(start_time_str) start_time_str
+             from TBL_META_LIST
+             group by 
+                 pjt_code,
+                 slotname,
+                 TESTNAME_FULL
+         )
+        , TBL_MAIN as (
+            select 
+                a.pjt_code,
+                a.folder_name,
+                a.slotname,
+                a.testname,
+                a.testname_full,
+                'post_SMART.csv'  data_src,
+                'regression' as tool,
+                a.start_time_str,
+                a.start_time,
+                a.duration,
+                a.parameters
+            from tbl_meta_last last
+            join  tbl_meta_list a
+	            on a.pjt_code = last.pjt_code
+	            and a.testname_full = last.testname_full
+	            and a.start_time_str = last.start_time_str
+        )
+        , TBL_REGRESSION_LIST as (
+            select 
+                a.PJT_CODE,
+                    a.FOLDER_NAME,
+                    a.SLOTNAME, 
+                    a.TESTNAME, 
+                    main.slotname as slotname_meta,
+                    main.testname testname_meta,
+                    main.testname testname_simple,
+                    a.TOOL, 
+                    a.DATA_SRC, 
+                    a.ROWKEY, 
+                    a.ROWVALUE, 
+                    a.MEASURE,
+                    main.START_TIME_STR,
+                	main.START_TIME               
+            from tbl_main main
+            join regression a
+                on a.pjt_code = main.pjt_code
+                and a.folder_name = main.folder_name
+                and a.slotname = main.slotname
+                and a.testname = main.testname_full
+                and a.tool = main.tool
+                and a.data_src = main.data_src
+                and a.rowkey='id'
+                and a.field = 'id'
+                --order by to_number(rowvalue)
+        )
+        
+        select
+                a.FOLDER_NAME,
+                a.SLOTNAME, 
+                a.TESTNAME, 
+                a.TOOL, 
+                a.DATA_SRC, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.MEASURE,
+                to_number(a.MEASURE) id ,
+                a.MEASURE || '`' || a.TESTNAME as ID_TESTNAME,
+                a.START_TIME_STR,
+                a.START_TIME,
+                (select to_number(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'value'
+                ) as val ,
+                (select to_number(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'normalized'
+                ) as normalized,
+                (select trim(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'name'
+                ) as name
+        from TBL_REGRESSION_LIST a
+        <choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+					<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+	           			<if test="index > 0"> union all</if>
+	           			select 
+	           				#{item.FOLDER_NAME} as folder_name
+	           				, #{item.SLOTNAME} as slotname
+	           				, #{item.CATEGORY} as category
+	           				, #{item.TESTNAME} as testname
+	           				, #{item.ROWVALUE} as testname_full
+	           			from dual 
+	       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname_meta = b.slotname
+					and a.testname = b.testname_full
+			</when>			
+		</choose>
+        --order by testname, a.rowvalue
+	</select>
+	
+	<select id="dashboard.regresson.smartlist.21070703" resultType="hashmap">
+		with TBL_META_LIST as (
+            SELECT 
+                PJT_CODE, 
+                FOLDER_NAME, 
+                ROWKEY, 
+                ROWVALUE, 
+                FIELD, 
+                MEASURE
+            from REGRESSION_META  a
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+            and a.ROWKEY != 'N'
+            and a.FIELD = 'no_category_testname'
+            --order by pjt_code,FOLDER_NAME, rowvalue
+        )
+
+        , TBL_META_DETAIL as (        
+            SELECT
+                PJT_CODE, 
+                FOLDER_NAME, 
+                ROWKEY, 
+                ROWVALUE, 
+                FIELD,                 
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Slot Name'
+                ) as slotname ,
+                (select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'NO'
+					) as NO ,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Category'
+                ) as Category,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Test Name'
+                ) as testname,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Status'
+                ) as Status,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Comment'
+                ) as "COMMENT",
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Error Message'
+                ) as Error_Message
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Start Time'
+                ) as START_TIME_STR
+                ,(select to_char(to_date(substr(measure,0,19),'YYYY-MM-DD HH24:MI:SS'),'YYYY/MM/DD/HH24/MI/SS')  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Start Time'
+                ) as START_TIME
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Duratoin'
+                ) as Duration
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Parameters'
+                ) as Parameters
+            from tbl_meta_list a
+         )
+         , TBL_META_LAST as (
+             select
+                 pjt_code,
+                 slotname,
+                 category,
+                 testname,
+                 ROWVALUE,
+                 max(start_time_str) start_time_str
+             from tbl_meta_detail
+             group by 
+                 pjt_code,
+                 slotname,
+                 category,
+                 testname,
+                 ROWVALUE
+         )
+        , TBL_MAIN as (
+            select 
+                a.pjt_code,
+                a.folder_name,
+                a.slotname,
+                a.testname,
+                a.rowvalue testname_full,
+                'post_SMART.csv'  data_src,
+                'regression' as tool,
+                a.start_time_str,
+                a.start_time,
+                a.duration,
+                a.parameters
+            from tbl_meta_last last
+            join  tbl_meta_detail a
+            on a.pjt_code = last.pjt_code
+            and a.slotname = last.slotname
+            and a.category = last.category
+            and a.testname = last.testname
+            and a.rowvalue = last.rowvalue
+            and a.start_time_str = last.start_time_str
+        )
+        , TBL_REGRESSION_LIST as (
+            select 
+                a.PJT_CODE,
+                    a.FOLDER_NAME,
+                    a.SLOTNAME, 
+                    a.TESTNAME, 
+                    main.slotname as slotname_meta,
+                    main.testname testname_meta,
+                    main.testname testname_simple,
+                    a.TOOL, 
+                    a.DATA_SRC, 
+                    a.ROWKEY, 
+                    a.ROWVALUE, 
+                    a.MEASURE,
+                    main.START_TIME_STR,
+                	main.START_TIME               
+            from tbl_main main
+            join regression a
+                on a.pjt_code = main.pjt_code
+                and a.folder_name = main.folder_name
+                and a.slotname = main.slotname
+                and a.testname = main.testname_full
+                and a.field = ('id')
+                --order by to_number(rowvalue)
+        )
+        
+        select
+                a.FOLDER_NAME,
+                a.SLOTNAME, 
+                a.TESTNAME, 
+                a.TOOL, 
+                a.DATA_SRC, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.MEASURE,
+                to_number(a.MEASURE) id ,
+                a.MEASURE || '`' || a.TESTNAME as ID_TESTNAME,
+                a.START_TIME_STR,
+                a.START_TIME,
+                (select to_number(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'value'
+                ) as val ,
+                (select to_number(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'normalized'
+                ) as normalized,
+                (select trim(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'name'
+                ) as name
+        from TBL_REGRESSION_LIST a
+        <choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+					<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+	           			<if test="index > 0"> union all</if>
+	           			select 
+	           				#{item.FOLDER_NAME} as folder_name
+	           				, #{item.SLOTNAME} as slotname
+	           				, #{item.CATEGORY} as category
+	           				, #{item.TESTNAME} as testname
+	           				, #{item.ROWVALUE} as testname_full
+	           			from dual 
+	       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname_meta = b.slotname
+					--and a.testname_meta = b.testname
+					and a.testname = b.testname_full
+			</when>			
+		</choose>
+        --order by testname, a.rowvalue
+	</select>
+	
+	<select id="dashboard.regresson.smartlist.raw" resultType="hashmap">
+		with TBL_META_LIST as (
+            SELECT 
+                a.PJT_CODE, 
+                nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+                a.FOLDER_NAME, 
+               	a.TESTNAME_FULL, 
+                a.NO, TESTNAME, 
+                a.SLOTNAME, 
+                a.CATEGORY, 
+                a.STATUS, 
+                a.COMMENTARY, 
+                a.ERROR_MESSAGE, 
+                a.START_TIME, 
+                a.START_TIME_STR, 
+                a.DURATION, 
+                a.PARAMETERS,
+                b.revision,
+                b.firmware,
+                b.ins_dt
+            from REGRESSION_META_UNNORMAL  a
+            left outer join REGRESSION_FOLDER b
+            	on a.pjt_code = b.pjt_code
+            	and a.folder_name = b.folder_name
+            left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code			
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+            --order by a.pjt_code,a.FOLDER_NAME, rowvalue
+        )
+          , TBL_MAIN as (
+            select 
+               a.*,
+                'post_SMART.csv'  data_src,
+                'regression' as tool
+            from tbl_meta_list a            
+        )
+        , TBL_REGRESSION_LIST as (
+            select 
+                a.PJT_CODE,
+                	main.pjt_name_pms,
+                	main.firmware,
+                	main.revision,
+                    a.FOLDER_NAME,
+                    a.SLOTNAME, 
+                    a.TESTNAME, 
+                    main.slotname as slotname_meta,
+                    main.testname as testname_meta,
+                    main.category,
+                    main.testname testname_simple,
+                    a.TOOL, 
+                    a.DATA_SRC, 
+                    a.ROWKEY, 
+                    a.ROWVALUE, 
+                    a.MEASURE,
+                    main.START_TIME_STR,
+                	main.START_TIME               
+            from tbl_main main
+            join regression a
+                on a.pjt_code = main.pjt_code
+                and a.folder_name = main.folder_name
+                and a.slotname = main.slotname
+                and a.testname = main.testname_full
+                and a.tool = main.tool
+                and a.data_src = main.data_src
+                and a.rowkey='id'
+                and a.field = 'id'
+                --order by to_number(rowvalue)
+        )
+        
+        
+        select
+        		a.pjt_code,
+        		a.pjt_name_pms,
+        		a.firmware,
+        		a.revision,
+                a.FOLDER_NAME,
+                a.SLOTNAME, 
+                a.TESTNAME, 
+                a.testname_simple,
+                a.category,
+                a.TOOL, 
+                a.DATA_SRC, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.MEASURE,
+                to_number(a.MEASURE) id ,
+                a.MEASURE || '`' || a.TESTNAME as ID_TESTNAME,
+                a.START_TIME_STR,
+                a.START_TIME,
+                (select to_number(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'value'
+                ) as val ,
+                (select to_number(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'normalized'
+                ) as normalized,
+                (select trim(t.MEASURE) from REGRESSION t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.SLOTNAME = a.SLOTNAME
+                    and t.TESTNAME = a.TESTNAME
+                    and t.TOOL = a.TOOL
+                    and t.DATA_SRC = a.DATA_SRC 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'name'
+                ) as name
+        from TBL_REGRESSION_LIST a
+        <choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+				<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+           			<if test="index > 0"> union all</if>
+           			select 
+           				#{item.FOLDER_NAME} as folder_name
+           				, #{item.SLOTNAME} as slotname
+           				, #{item.CATEGORY} as category
+           				, #{item.TESTNAME} as testname
+           				, #{item.ROWVALUE} as testname_full
+           			from dual 
+       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname_meta = b.slotname
+					and a.testname = b.testname_full
+			</when>
+		</choose>
+        --order by a.FIRMWARE,a.testname, a.slotname
+	</select>
+	
+	
+	<select id="dashboard.regresson.hostlist" resultType="hashmap">
+		with tbl_id as (
+			select 
+				a.PJT_CODE,
+				b.FOLDER_NAME,
+				SLOTNAME, 
+				TESTNAME, 
+				(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = b.PJT_CODE
+                    and t.FOLDER_NAME =b.FOLDER_NAME 
+                    and t.ROWKEY = 'no_category_testname'
+                    and t.ROWVALUE = b.testname
+                    and t.FIELD = 'Test Name'
+                ) as testname_meta,
+				TOOL, 
+				DATA_SRC, 
+				ROWKEY, 
+				ROWVALUE, 
+				MEASURE				
+			from REGRESSION_FOLDER a			
+			join REGRESSION b
+				on a.pjt_code = b.pjt_code
+                and a.folder_name = b.folder_name
+			
+			where 1=1
+			<if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and b.DATA_SRC = 'post_HostInfo.csv' 
+			and field in( 'command')
+		)
+		,tbl_testname as (
+			select rownum-1 rn, testname from (
+				select distinct testname from tbl_id order by 1
+			)
+		)
+		,tbl_command as (
+			select rownum-1 rn, measure command from (
+				select distinct measure from tbl_id order by 1
+			)
+		)
+		,tbl_detail as (
+			select
+				a.folder_name,
+				a.SLOTNAME, 
+				a.TESTNAME, 
+				a.testname_meta,
+				a.TOOL, 
+				a.DATA_SRC, 
+				a.ROWKEY, 
+				a.ROWVALUE, 
+				a.MEASURE,
+				a.MEASURE command ,
+				<if test = "1==2">
+				(
+					select 
+						rn
+					from tbl_testname t where a.testname = t.testname
+				) as "x",
+				(
+					select 
+						rn
+					from tbl_command t where a.measure = t.command
+				) as "y", 
+				</if>
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'latency_min'
+				) as latency_min ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'latency_max'
+				) as latency_max ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'size'
+				) as "size",
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'count'
+				) as count
+			from tbl_id a
+			<choose>
+				<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+					-- apply searchJson
+					join (
+						<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+		           			<if test="index > 0"> union all</if>
+		           			select 
+		           				#{item.FOLDER_NAME} as folder_name
+		           				, #{item.SLOTNAME} as slotname
+		           				, #{item.CATEGORY} as category
+		           				, #{item.TESTNAME} as testname
+		           				, #{item.ROWVALUE} as testname_full
+		           			from dual 
+		       			</foreach>
+					) b on a.folder_name = b.folder_name
+						and a.slotname = b.slotname
+						and a.testname = b.testname_full
+				</when>			
+			</choose>
+		)
+		
+		select			
+			a.SLOTNAME, 
+				a.TESTNAME, 
+				a.TOOL, 
+				a.DATA_SRC, 
+				a.MEASURE command ,
+				<if test = "1==2">
+				(
+					select 
+						rn
+					from tbl_testname t where a.testname = t.testname
+				) as "x",
+				(
+					select 
+						rn
+					from tbl_command t where a.measure = t.command
+				) as "y",
+				</if>
+				a.measure || '`' || a.testname as command_testname,
+				avg(a.latency_max) latency_max_avg ,
+				avg(a.latency_min) latency_min_avg,
+				max(a.latency_max) latency_max_tot ,
+				max(a.latency_min) latency_min_tot,
+				sum(a."size") as "SIZE",
+				sum(a.count) CNT
+		from tbl_detail a
+		group by a.SLOTNAME, a.TESTNAME, a.TOOL, a.DATA_SRC, a.MEASURE
+		
+	</select>
+	<select id="dashboard.regresson.hostlist.raw" resultType="hashmap">
+		with tbl_id as (
+			select 
+				a.PJT_CODE,
+				nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+				b.FOLDER_NAME,
+				FIRMWARE,
+				REVISION,
+				SLOTNAME, 
+				TESTNAME, 
+				TOOL, 
+				DATA_SRC, 
+				ROWKEY, 
+				ROWVALUE, 
+				MEASURE				
+			from REGRESSION_FOLDER a
+			left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code
+                
+			join REGRESSION b
+				on a.pjt_code = b.pjt_code
+				and a.folder_name = b.folder_name
+			
+			where 1=1
+			<if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and b.DATA_SRC = 'post_HostInfo.csv' 
+			and field in( 'command')
+		)
+		
+			select
+				a.folder_name,
+				a.PJT_CODE,
+				a.pjt_name_pms,
+				a.FIRMWARE,
+				a.REVISION,
+				a.SLOTNAME, 
+				a.TESTNAME, 
+				a.TOOL, 
+				a.DATA_SRC, 
+				a.ROWKEY, 
+				a.ROWVALUE, 
+				a.MEASURE,
+				a.MEASURE command ,				
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'latency_min'
+				) as latency_min ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'latency_max'
+				) as latency_max ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'size'
+				) as "SIZE",
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'count'
+				) as cnt
+			from tbl_id a
+			<choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+					<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+	           			<if test="index > 0"> union all</if>
+	           			select 
+	           				#{item.FOLDER_NAME} as folder_name
+	           				, #{item.SLOTNAME} as slotname
+	           				, #{item.CATEGORY} as category
+	           				, #{item.TESTNAME} as testname
+	           				, #{item.ROWVALUE} as testname_full
+	           			from dual 
+	       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname = b.slotname
+					and a.testname = b.testname_full
+			</when>			
+		</choose>
+			order by  a.firmware, a.testname, a.slotname, a.MEASURE
+		
+		
+	</select>
+	<select id="dashboard.regresson.hostlist.x" resultType="hashmap">
+		with tbl_id as (
+			select 
+				a.PJT_CODE,
+				b.FOLDER_NAME,
+				b.SLOTNAME, 
+				b.TESTNAME, 
+				b.TOOL, 
+				b.DATA_SRC, 
+				b.ROWKEY, 
+				b.ROWVALUE, 
+				b.MEASURE				
+			from REGRESSION_FOLDER a			
+			join REGRESSION b
+				on a.pjt_code = b.pjt_code
+				and a.folder_name = b.folder_name
+			
+			where 1=1
+			<if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and b.DATA_SRC = 'post_HostInfo.csv' 
+			and field in( 'command')
+		)
+		,tbl_testname as (
+			select rownum-1 rn, testname from (
+				select distinct a.testname from tbl_id a
+				<choose>
+					<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+						-- apply searchJson
+						join (
+							<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+			           			<if test="index > 0"> union all</if>
+			           			select 
+			           				#{item.FOLDER_NAME} as folder_name
+			           				, #{item.SLOTNAME} as slotname
+			           				, #{item.CATEGORY} as category
+			           				, #{item.TESTNAME} as testname
+			           				, #{item.ROWVALUE} as testname_full
+			           			from dual 
+			       			</foreach>
+						) b on a.folder_name = b.folder_name
+							and a.slotname = b.slotname
+							and a.testname = b.testname_full
+					</when>			
+				</choose>
+				order by 1
+			) a
+		)
+		
+		
+		select * from tbl_testname 
+		
+	</select>
+	<select id="dashboard.regresson.hostlist.y" resultType="hashmap">
+		with tbl_id as (
+			select 
+				a.PJT_CODE,
+				b.FOLDER_NAME,
+				SLOTNAME, 
+				TESTNAME, 
+				TOOL, 
+				DATA_SRC, 
+				ROWKEY, 
+				ROWVALUE, 
+				MEASURE				
+			from REGRESSION_FOLDER a			
+			join REGRESSION b
+				on a.pjt_code = b.pjt_code
+				and a.folder_name = b.folder_name
+			
+			where 1=1
+			<if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and b.DATA_SRC = 'post_HostInfo.csv' 
+			and field in( 'command')
+		)
+		,tbl_command as (
+			select rownum-1 rn, a.measure command from (
+				select distinct measure from tbl_id a
+				<choose>
+					<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+						-- apply searchJson
+						join (
+							<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+			           			<if test="index > 0"> union all</if>
+			           			select 
+			           				#{item.FOLDER_NAME} as folder_name
+			           				, #{item.SLOTNAME} as slotname
+			           				, #{item.CATEGORY} as category
+			           				, #{item.TESTNAME} as testname
+			           				, #{item.ROWVALUE} as testname_full
+			           			from dual 
+			       			</foreach>
+						) b on a.folder_name = b.folder_name
+							and a.slotname = b.slotname
+							and a.testname = b.testname_full
+					</when>			
+				</choose>
+				order by 1
+			) a
+		)
+		
+		select * from tbl_command 
+		
+	</select>
+	<select id="dashboard.regresson.pecountlist" resultType="hashmap">
+		with tbl_id as (
+			select 
+				a.PJT_CODE,
+				b.FOLDER_NAME,
+				b.SLOTNAME, 
+				b.TESTNAME, 
+				b.TOOL, 
+				b.DATA_SRC, 
+				b.ROWKEY, 
+				b.ROWVALUE, 
+				b.field,
+				b.MEASURE	
+							
+			from REGRESSION_FOLDER a	
+			join REGRESSION b
+				on a.pjt_code = b.pjt_code
+                and a.folder_name = b.folder_name
+			
+			where 1=1
+			<if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and b.DATA_SRC = 'post_PECount.csv' 
+			and field in( 'Group Name')
+		)
+		, tbl_detail as (
+			select
+				a.SLOTNAME, 
+				a.TESTNAME, 
+				a.TOOL, 
+				a.DATA_SRC, 
+				a.ROWKEY, 
+				a.ROWVALUE, 
+				a.MEASURE,
+				a.MEASURE as GROUP_NAME,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'MIN'
+				) as "MIN" ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'MAX'
+				) as "MAX" ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'AVG'
+				) as "AVG"
+			from tbl_id a
+			<choose>
+				<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+					-- apply searchJson
+					join (
+						<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+		           			<if test="index > 0"> union all</if>
+		           			select 
+		           				#{item.FOLDER_NAME} as folder_name
+		           				, #{item.SLOTNAME} as slotname
+		           				, #{item.CATEGORY} as category
+		           				, #{item.TESTNAME} as testname
+		           				, #{item.ROWVALUE} as testname_full
+		           			from dual 
+		       			</foreach>
+					) b on a.folder_name = b.folder_name
+						and a.slotname = b.slotname
+						and a.testname = b.testname_full
+				</when>			
+			</choose>
+		)
+		
+		select			
+			a.SLOTNAME, 
+				a.TESTNAME, 
+				a.TOOL, 
+				a.DATA_SRC, 
+				a.MEASURE GROUP_NAME ,
+				avg(a."MIN") "MIN" ,
+				avg(a."MAX") "MAX" ,
+				avg(a."AVG") "Average" 
+		from tbl_detail a
+		group by a.SLOTNAME, a.TESTNAME, a.TOOL, a.DATA_SRC, a.MEASURE
+		
+		
+	</select>
+	<select id="dashboard.regresson.pecountlist.raw" resultType="hashmap">
+		with tbl_id as (
+			select 
+				a.PJT_CODE,
+				nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+				b.FOLDER_NAME,
+				FIRMWARE,
+				REVISION,
+				SLOTNAME, 
+				TESTNAME, 
+				TOOL, 
+				DATA_SRC, 
+				ROWKEY, 
+				ROWVALUE, 
+				field,
+				MEASURE	
+							
+			from REGRESSION_FOLDER a	
+			left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code			
+			join REGRESSION b
+				on a.pjt_code = b.pjt_code
+                and a.folder_name = b.folder_name
+			
+			where 1=1
+			<if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and b.DATA_SRC = 'post_PECount.csv' 
+			and field in( 'Group Name')
+		)
+		, tbl_detail as (
+			select
+				a.folder_name,
+				a.PJT_CODE,
+				a.pjt_name_pms,
+				a.FIRMWARE,
+				a.REVISION,
+				a.SLOTNAME, 
+				a.TESTNAME, 
+				a.TOOL, 
+				a.DATA_SRC, 
+				a.ROWKEY, 
+				a.ROWVALUE, 
+				a.MEASURE,
+				a.MEASURE as GROUP_NAME,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'MIN'
+				) as "MIN" ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'MAX'
+				) as "MAX" ,
+				(select to_number(t.MEASURE) from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'AVG'
+				) as "AVERAGE"
+			from tbl_id a
+			<choose>
+				<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+					-- apply searchJson
+					join (
+						<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+		           			<if test="index > 0"> union all</if>
+		           			select 
+		           				#{item.FOLDER_NAME} as folder_name
+		           				, #{item.SLOTNAME} as slotname
+		           				, #{item.CATEGORY} as category
+		           				, #{item.TESTNAME} as testname
+		           				, #{item.ROWVALUE} as testname_full
+		           			from dual 
+		       			</foreach>
+					) b on a.folder_name = b.folder_name
+						and a.slotname = b.slotname
+						and a.testname = b.testname_full
+				</when>			
+			</choose>
+		)
+		
+		select * from tbl_detail
+		order by firmware, testname, slotname
+		
+		
+	</select>
+	<select id="dashboard.regresson.errologlist" resultType="hashmap">
+		with TBL_META_LIST as (
+            SELECT 
+                PJT_CODE, 
+                FOLDER_NAME, 
+                ROWKEY, 
+                ROWVALUE, 
+                FIELD, 
+                MEASURE
+            from REGRESSION_META  a
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+            and a.ROWKEY != 'N'
+            and a.FIELD = 'no_category_testname'
+            order by pjt_code,FOLDER_NAME,rowvalue
+        )
+
+        , TBL_META_DETAIL as (        
+            SELECT
+                PJT_CODE, 
+                FOLDER_NAME, 
+                ROWKEY, 
+                ROWVALUE, 
+                FIELD, 
+                MEASURE no,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Slot Name'
+                ) as slotname ,
+                (select measure  from REGRESSION_META t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.FIELD = 'NO'
+				) as row_no ,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Category'
+                ) as Category,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Test Name'
+                ) as testname,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Status'
+                ) as Status,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Comment'
+                ) as "COMMENT",
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Error Message'
+                ) as Error_Message
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Start Time'
+                ) as START_TIME_STR
+                ,(select to_char(to_date(substr(measure,0,19),'YYYY-MM-DD HH24:MI:SS'),'YYYY/MM/DD/HH24/MI/SS')  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Start Time'
+                ) as START_TIME
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Duratoin'
+                ) as Duration
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Parameters'
+                ) as Parameters
+            from tbl_meta_list a
+         )
+         , TBL_META_LAST as (
+             select
+                 pjt_code,
+                 slotname,
+                 category,
+                 testname,
+                 ROWVALUE,
+                 max(start_time_str) start_time_str
+             from tbl_meta_detail
+             group by 
+                 pjt_code,
+                 slotname,
+                 category,
+                 testname,
+                 ROWVALUE
+         )
+        , TBL_MAIN as (
+            select 
+                a.pjt_code,
+                a.folder_name,
+                a.slotname,
+                a.testname,
+                a.rowvalue testname_full,
+                'post_ErrorLog.csv'  data_src,
+                'regression' as tool,
+                a.start_time_str,
+                a.start_time,
+                a.duration,
+                a.parameters
+            from tbl_meta_last last
+            join  tbl_meta_detail a
+            on a.pjt_code = last.pjt_code
+            and a.slotname = last.slotname
+            and a.category = last.category
+            and a.testname = last.testname
+            and a.rowvalue = last.rowvalue
+            and a.start_time_str = last.start_time_str
+        )
+        , TBL_REGRESSION_LIST as (
+            select 
+                a.PJT_CODE,
+                    a.FOLDER_NAME,
+                    a.SLOTNAME, 
+                    a.TESTNAME, 
+                    main.testname testname_simple,
+                    a.TOOL, 
+                    a.DATA_SRC, 
+                    a.ROWKEY, 
+                    a.ROWVALUE, 
+                    a.MEASURE,
+                    main.START_TIME_STR,
+                	main.START_TIME               
+            from tbl_main main
+            join regression a
+                on a.pjt_code = main.pjt_code
+                and a.folder_name = main.folder_name
+                and a.slotname = main.slotname
+                --and REGEXP_LIKE( a.testname , main.testname,'i')  
+                --and a.testname  like '%' || main.testname  || ''
+                and a.testname = main.testname_full
+                and a.field = ('Error Type')
+                --order by to_number(rowvalue)
+        )
+		
+		select
+				a.FOLDER_NAME,
+                a.SLOTNAME, 
+                a.TESTNAME, 
+                a.TOOL, 
+                a.DATA_SRC, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.MEASURE error_type,
+                a.measure || '`' || a.testname as ERRORTYPE_TESTNAME,
+                a.START_TIME_STR,
+                a.START_TIME,
+				(select count(*)  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.TOOL = a.TOOL
+					and t.DATA_SRC = a.DATA_SRC 					
+					and t.FIELD = 'Die'
+				) as cnt 
+		from TBL_REGRESSION_LIST a
+		<choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+					<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+	           			<if test="index > 0"> union all</if>
+	           			select 
+	           				#{item.FOLDER_NAME} as folder_name
+	           				, #{item.SLOTNAME} as slotname
+	           				, #{item.CATEGORY} as category
+	           				, #{item.TESTNAME} as testname
+	           				, #{item.ROWVALUE} as testname_full
+	           			from dual 
+	       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname = b.slotname
+					and a.testname = b.testname_full
+			</when>			
+		</choose>
+		order by a.testname,to_number(a.rowvalue)
+		
+		
+	</select>
+	
+	<select id="dashboard.regresson.errologlist.raw" resultType="hashmap">
+		with TBL_META_LIST as (
+            SELECT 
+                a.PJT_CODE, 
+                nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+                b.FIRMWARE,
+				b.REVISION,
+                a.FOLDER_NAME, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.FIELD, 
+                a.MEASURE
+            from REGRESSION_META  a
+            left outer join REGRESSION_FOLDER b
+            	on a.pjt_code = b.pjt_code
+            	and a.folder_name = b.folder_name
+            left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code			
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+            and a.ROWKEY != 'N'
+            and a.FIELD = 'no_category_testname'
+            order by pjt_code,FOLDER_NAME, rowvalue
+        )
+
+        , TBL_META_DETAIL as (        
+            SELECT
+                PJT_CODE, 
+                pjt_name_pms,
+                FIRMWARE,
+                REVISION,
+                FOLDER_NAME, 
+                ROWKEY, 
+                ROWVALUE, 
+                FIELD, 
+                MEASURE no,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Slot Name'
+                ) as slotname ,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Category'
+                ) as Category,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Test Name'
+                ) as testname,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Status'
+                ) as Status,
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Comment'
+                ) as "COMMENT",
+                (select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Error Message'
+                ) as Error_Message
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Start Time'
+                ) as START_TIME_STR
+                ,(select to_char(to_date(substr(measure,0,19),'YYYY-MM-DD HH24:MI:SS'),'YYYY/MM/DD/HH24/MI/SS')  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Start Time'
+                ) as START_TIME
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Duratoin'
+                ) as Duration
+                ,(select measure  from REGRESSION_META t 
+                    where t.PJT_CODE = a.PJT_CODE
+                    and t.FOLDER_NAME =a.FOLDER_NAME 
+                    and t.ROWKEY = a.ROWKEY
+                    and t.ROWVALUE = a.ROWVALUE
+                    and t.FIELD = 'Parameters'
+                ) as Parameters
+            from tbl_meta_list a
+         )
+        , TBL_MAIN as (
+        	select 
+               a.*,
+               a.rowvalue testname_full,
+                'post_ErrorLog.csv'  data_src,
+                'regression' as tool
+            from tbl_meta_detail a            
+           
+        )
+        , TBL_REGRESSION_LIST as (
+            select 
+                a.PJT_CODE,
+                main.pjt_name_pms,
+                main.FIRMWARE,
+                main.REVISION,
+                a.FOLDER_NAME,
+                a.SLOTNAME, 
+                a.TESTNAME, 
+                main.testname testname_simple,
+                a.TOOL, 
+                a.DATA_SRC, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.MEASURE,
+                main.START_TIME_STR,
+            	main.START_TIME               
+            from tbl_main main
+            join regression a
+                on a.pjt_code = main.pjt_code
+                and a.folder_name = main.folder_name
+                and a.slotname = main.slotname
+                --and REGEXP_LIKE( a.testname , main.testname,'i')  
+                --and a.testname  like '%' || main.testname  || ''
+                and a.testname = main.testname_full
+                and a.field = ('Error Type')
+                --order by to_number(rowvalue)
+        )
+		
+		select
+				a.pjt_code,
+				a.pjt_name_pms,
+                a.FIRMWARE,
+                a.REVISION,
+				a.FOLDER_NAME,
+                a.SLOTNAME, 
+                a.TESTNAME, 
+                a.testname_simple,
+                a.TOOL, 
+                a.DATA_SRC, 
+                a.ROWKEY, 
+                a.ROWVALUE, 
+                a.MEASURE error_type,
+                a.measure || '`' || a.testname as ERRORTYPE_TESTNAME,
+                a.START_TIME_STR,
+                a.START_TIME,
+				(select t.MEASURE  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.DATA_SRC = a.DATA_SRC
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.TOOL = a.TOOL										
+					and t.FIELD = 'Block'
+				) as Block ,
+				(select t.MEASURE  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.DATA_SRC = a.DATA_SRC
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.TOOL = a.TOOL						 					
+					and t.FIELD = 'STATUS'
+				) as STATUS ,
+				(select t.MEASURE  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.DATA_SRC = a.DATA_SRC
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.TOOL = a.TOOL										
+					and t.FIELD = 'Channel'
+				) as Channel ,
+				(select t.MEASURE  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.DATA_SRC = a.DATA_SRC
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.TOOL = a.TOOL										
+					and t.FIELD = 'Die'
+				) as Die ,
+				(select t.MEASURE  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.DATA_SRC = a.DATA_SRC
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.TOOL = a.TOOL											
+					and t.FIELD = 'ISRType'
+				) as ISRType
+				 ,
+				(select t.MEASURE  from REGRESSION t 
+					where t.PJT_CODE = a.PJT_CODE
+					and t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.SLOTNAME = a.SLOTNAME
+					and t.TESTNAME = a.TESTNAME
+					and t.DATA_SRC = a.DATA_SRC
+					and t.ROWKEY = a.ROWKEY
+					and t.ROWVALUE = a.ROWVALUE
+					and t.TOOL = a.TOOL						
+					and t.FIELD = 'Page'
+				) as Page
+		from TBL_REGRESSION_LIST a
+		 <choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+					<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+	           			<if test="index > 0"> union all</if>
+	           			select 
+	           				#{item.FOLDER_NAME} as folder_name
+	           				, #{item.SLOTNAME} as slotname
+	           				, #{item.CATEGORY} as category
+	           				, #{item.TESTNAME} as testname
+	           				, #{item.ROWVALUE} as testname_full
+	           			from dual 
+	       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname = b.slotname
+					and a.testname = b.testname_full
+			</when>			
+		</choose>
+		order by a.FIRMWARE,a.testname, a.slotname
+		
+		
+	</select>
+	
+	<select id="dashboard.regresson.mainlist" resultType="hashmap">
+		with TBL_META_LIST as (
+			SELECT 
+                a.PJT_CODE, 
+                nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+                a.FOLDER_NAME, 
+               	a.TESTNAME_FULL, 
+                a.NO line_no, 
+                a.TESTNAME, 
+                a.SLOTNAME, 
+                a.CATEGORY, 
+                a.STATUS, 
+                a.COMMENTARY, 
+                a.ERROR_MESSAGE, 
+                a.START_TIME, 
+                a.START_TIME_STR, 
+                nvl(a.DURATION, '00:30:00') as duration ,
+                a.PARAMETERS,
+                b.revision,
+                b.firmware,
+                b.ins_dt
+            from REGRESSION_META_UNNORMAL  a
+            left outer join REGRESSION_FOLDER b
+            	on a.pjt_code = b.pjt_code
+            	and a.folder_name = b.folder_name
+            left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code			
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+            --order by a.pjt_code,a.FOLDER_NAME, rowvalue
+            order by b.firmware, a.pjt_code, a.folder_name
+		)
+		select 
+			a.*
+		from TBL_META_LIST a
+		<choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+				<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+           			<if test="index > 0"> union all</if>
+           			select 
+           				#{item.FOLDER_NAME} as folder_name
+           				, #{item.SLOTNAME} as slotname
+           				, #{item.CATEGORY} as category
+           				, #{item.TESTNAME} as testname
+           				, #{item.ROWVALUE} as testname_full
+           			from dual 
+       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname = b.slotname
+					and a.testname_full = b.testname_full
+			</when>
+		</choose>
+		where 1=1
+		and a.START_TIME is not null
+		
+	</select>
+	
+	<select id="dashboard.regresson.mainlist.all" resultType="hashmap">
+		with TBL_META_LIST as (
+			SELECT 
+                a.PJT_CODE, 
+                nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+                a.FOLDER_NAME, 
+               	a.TESTNAME_FULL, 
+                a.NO line_no, 
+                a.TESTNAME, 
+                a.SLOTNAME, 
+                a.CATEGORY, 
+                a.STATUS, 
+                a.COMMENTARY, 
+                a.ERROR_MESSAGE, 
+                a.START_TIME, 
+                a.START_TIME_STR, 
+                a.DURATION,
+                a.PARAMETERS,
+                b.revision,
+                b.firmware,
+                b.ins_dt
+            from REGRESSION_META_UNNORMAL  a
+            left outer join REGRESSION_FOLDER b
+            	on a.pjt_code = b.pjt_code
+            	and a.folder_name = b.folder_name
+            left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code			
+            where 1=1
+             <if test="searchJson != null and searchJson.folderNames != null and searchJson.folderNames.size() > 0 ">
+	   			-- apply searchJson
+	       	  	and a.FOLDER_NAME in
+	       		<foreach collection="searchJson.folderNames" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+            --order by a.pjt_code,a.FOLDER_NAME, rowvalue
+            order by b.firmware, a.pjt_code, a.folder_name
+		)
+		select 
+			a.*
+		from TBL_META_LIST a
+		<choose>
+			<when test="searchJson != null and searchJson.selectedPoints != null and searchJson.selectedPoints.size() > 0 ">
+				-- apply searchJson
+				join (
+				<foreach collection="searchJson.selectedPoints" item="item" index="index"  open="" separator="" close="">
+           			<if test="index > 0"> union all</if>
+           			select 
+           				#{item.FOLDER_NAME} as folder_name
+           				, #{item.SLOTNAME} as slotname
+           				, #{item.CATEGORY} as category
+           				, #{item.TESTNAME} as testname
+           				, #{item.ROWVALUE} as testname_full
+           			from dual 
+       			</foreach>
+				) b on a.folder_name = b.folder_name
+					and a.slotname = b.slotname
+					and a.testname_full = b.testname_full
+			</when>
+		</choose>
+		where 1=1
+		
+	</select>
+	
+	<select id="dashboard.regression.meta.testname.range" resultType="hashmap">
+		with tbl_id as (
+			SELECT 
+				a.PJT_CODE, 
+				nvl(pjt.pjt_name_pms,a.PJT_CODE ) as pjt_name_pms,
+				a.FOLDER_NAME, 
+				b.firmware,
+				b.revision,
+				a.ROWKEY, 
+				a.ROWVALUE, 
+				a.FIELD, 
+				a.MEASURE
+			from REGRESSION_META  a
+			left outer join regression_folder b
+				on a.pjt_code = b.pjt_code
+				and a.folder_name = b.folder_name				
+			left outer join PJT_LIST pjt
+				on a.pjt_code = pjt.pjt_code
+			where 1=1
+			<if test="folderNameArr != null and folderNameArr != '' ">
+	       	  and a.FOLDER_NAME in
+	       		<foreach collection="folderNameArr" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+			and a.ROWKEY != 'N'
+			and a.FIELD = 'no_category_testname'
+			--order by a.pjt_code,a.FOLDER_NAME,to_number(rowvalue)
+		)
+		, tbl_data as (
+			select
+					PJT_CODE, 
+					PJT_NAME_PMS,
+					FOLDER_NAME, 
+					firmware,
+					revision,
+					ROWKEY, 
+					ROWVALUE, 
+					FIELD, 
+					MEASURE row_no,
+					(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Slot Name'
+					) as slotname ,
+					(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Category'
+					) as Category,
+					(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Test Name'
+					) as testname,
+					(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Status'
+					) as Status,
+					(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Comment'
+					) as "COMMENT",
+					(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Error Message'
+					) as Error_Message
+					,(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Start Time'
+					) as START_TIME_STR
+					,(select to_char(to_date(substr(measure,0,19),'YYYY-MM-DD HH24:MI:SS'),'YYYY/MM/DD/HH24/MI/SS')  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Start Time'
+					) as START_TIME
+					,nvl((select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Duratoin'
+					),'00:30:00') as Duration
+					,(select measure  from REGRESSION_META t 
+						where t.PJT_CODE = a.PJT_CODE
+						and t.FOLDER_NAME =a.FOLDER_NAME 
+						and t.ROWKEY = a.ROWKEY
+						and t.ROWVALUE = a.ROWVALUE
+						and t.FIELD = 'Parameters'
+					) as Parameters
+			from tbl_id a
+			--order by a.firmware, a.pjt_code, a.folder_name
+		) 
+		
+		select * from tbl_data a
+		where a.START_TIME is not null
+		order by a.slotname, a.START_TIME
+		
+		
+	</select>
+	
+	<select id="dashboard.regresson.firmware.list" resultType="hashmap">
+		select distinct 
+			FIRMWARE 
+			--, 'selected' as "selected"
+		from REGRESSION_FOLDER
+	</select>
+	
+	<select id="dashboard.regresson.firmware.revision.list" resultType="hashmap">
+		select distinct 
+			FIRMWARE
+			, revision
+			, firmware || '.' || revision firmware_revision 
+			--, 'selected' as "selected"
+		from REGRESSION_FOLDER
+	</select>
+	
+	<select id="dashboard.regresson.distinct.field" resultType="hashmap">
+		with tbl_data as (
+			select 
+				a.*,
+				f.firmware,
+				f.revision
+			from REGRESSION a
+			left outer  join REGRESSION_FOLDER f
+				on a.pjt_code = f.pjt_code
+				and a.folder_name = f.folder_name
+			where 1=1
+			<if test="folderNameArr != null and folderNameArr != '' ">
+	      	  and f.FOLDER_NAME in
+	      		<foreach collection="folderNameArr" item="item" index="index"  open="(" separator="," close=")">
+	          		#{item}
+	      		</foreach>
+	   		</if>
+			
+		)
+		select 
+			distinct ${field} as "col"
+		from tbl_data 
+   		order by 1
+		
+		
+	</select>
+	
+	<select id="dashboard.regresson.distinct.testname" resultType="hashmap">
+		with tbl_data as (
+			select 
+				a.*,
+				f.firmware,
+				f.revision
+			from REGRESSION_Meta a
+			left outer  join REGRESSION_FOLDER f
+				on a.pjt_code = f.pjt_code
+				and a.folder_name = f.folder_name
+			where 1=1
+			and a.ROWKEY != 'N'
+			and a.FIELD = 'no_category_testname'
+			<if test="folderNameArr != null and folderNameArr != '' ">
+	      	  and f.FOLDER_NAME in
+	      		<foreach collection="folderNameArr" item="item" index="index"  open="(" separator="," close=")">
+	          		#{item}
+	      		</foreach>
+	   		</if>
+			
+		)
+		select 
+			distinct measure as "col"
+		from tbl_data 
+   		order by 1
+		
+		
+	</select>
 	
 	
 	

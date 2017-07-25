@@ -65,6 +65,11 @@ public class JointjsController {
         return "backboneEx";
     }
     
+    @RequestMapping(value = "/diagramGeneral",method = { RequestMethod.GET, RequestMethod.POST })
+    public String diagramGeneral(@SuppressWarnings("rawtypes") @RequestParam Map parameter,Locale locale, Model model) {
+        return parameter.get("viewname").toString();
+    }
+    
     @RequestMapping(value = "/diagram01_blog",method = { RequestMethod.GET, RequestMethod.POST })
     public String diagram01_blog(@SuppressWarnings("rawtypes") Map parameter,Locale locale, Model model) {
         return "diagram01_blog";

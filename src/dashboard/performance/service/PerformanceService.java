@@ -25,7 +25,12 @@ public class PerformanceService {
    
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<?> dataList(Map<Object, Object> parameter) {
-		List list = (List)dao.selectList("dashboard.preformance.datalist", parameter);
+		List list;
+		if(parameter.get("sqlid") != null){
+			list = (List)dao.selectList(parameter.get("sqlid").toString(), parameter);
+		}else{
+			list = (List)dao.selectList("dashboard.preformance.datalist", parameter);
+		}
 		return list;
 	}	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

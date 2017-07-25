@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
@@ -109,6 +110,76 @@ public class CommonController {
         return mav;
     }
     
+    @RequestMapping(value = "/generic",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView generic(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletRequest request,ModelAndView mav) {
+    	//parameter.put("pjtCodeList",req.getParameterValues("pjtCodeList"));
+    	mav.addObject("searchVO",searchVO);
+    	commonService.requestToVo(request, searchVO);
+    	mav.setViewName(searchVO.get("viewName").toString());
+        return mav;
+    }
+    
+    @RequestMapping(value = "/genericlListJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView genericlListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
+        mav.addObject("dataList", dataList);       
+        mav.setViewName("jsonView");        
+        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/genericlListPageJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView genericlListPageJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+    	commonService.requestToVo(request, searchVO);
+    	Object filterStr = searchVO.get("filters");
+    	if(filterStr != null){
+    		JSONObject filters = JSONObject.fromObject(filterStr.toString());
+        	searchVO.put("filtersOrigin", filterStr.toString());
+        	searchVO.put("filters", filters);
+    	}
+    	
+    	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
+    	mav.addObject("rows", dataList);
+    	
+    	Map<String,Object> paging = commonService.selectOne(searchVO.get("paging_sqlid").toString(),searchVO);
+    	mav.addObject("total", paging.get("TOTAL"));
+    	mav.addObject("page", paging.get("PAGE"));
+    	mav.addObject("records", paging.get("RECORDS"));
+        
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/genericSaveJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView genericlSaveJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	try{
+    		commonService.update(searchVO.get("sqlid").toString(), searchVO);
+    		//searchVO.put("result","success");
+    		mav.addObject("result", "success");       
+    	}catch(Exception ex){
+    		//searchVO.put("result","fail");
+    		//searchVO.put("message",ex.getMessage());
+    		mav.addObject("result", "fail");       
+    		mav.addObject("message", ex.getMessage());       
+    		
+    	}
+    	
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
     
     
     @RequestMapping(value = "/urlExistsJson" ,method = { RequestMethod.GET, RequestMethod.POST })
@@ -166,4 +237,7 @@ public class CommonController {
 
         return mav;
     }
+    
+    
+    
 }

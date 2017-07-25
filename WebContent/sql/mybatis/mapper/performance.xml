@@ -127,6 +127,8 @@
             </foreach>
    		</if>
    		
+   		--and A.CATEGORY in ('CSSD','ESSD')
+   		
    		<if test="vendorArr != null and vendorArr != ''  " >
        		and A.VENDOR in 
             <foreach collection="vendorArr" item="item" index="index"  open="(" separator="," close=")">
@@ -196,6 +198,7 @@
 			, count(*) cnt 	
 		from PERFORMANCE_FOLDER a
 		where 1=1
+		--and A.CATEGORY in ('CSSD','ESSD')
 		<if test="filters != null and filters.fields != null and filters.fields != ''  " >
             <foreach collection="filters.fields" item="item" index="index"  open="" separator="" close="">
                 and ${item} is not null
@@ -203,6 +206,7 @@
             group by <foreach collection="filters.fields" item="item" index="index"  open="" separator="," close=""> ${item} </foreach>
             order by <foreach collection="filters.fields" item="item" index="index"  open="" separator="," close=""> ${item} </foreach>
    		</if>
+   		
     	
     </select>
 	

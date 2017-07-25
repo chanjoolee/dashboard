@@ -1,0 +1,1506 @@
+﻿{
+   	"regressionTabView" : {
+		category : "regressionTabView",
+		,todos : [
+	      {
+	        id: "process 변경",
+	        process : {
+	           smart : [
+	              {
+	                 title : "load all data"
+	                 , sqlid: "dashboard.regresson.smartlist.raw"
+	                 , comment: [
+	                    "3D Bubble chart를 고려한다. 시간순서대로 row_number 를 고려함.",
+	                    "3D chart를 고려한다."
+	                 ]
+	                
+	              }               
+	           ]
+	        }
+	      },
+	      
+	      {
+	        id: "polar 밑에 쫙 펼쳐진 차트'",
+	        desc: "polar 를 제외하고 하나를 추가한다.",
+	        result: "ing"
+	        process: [
+	        	"smart: chart option 에서 ispolar 를 false",
+	        	"실적로그의 testname과 meta의 testname 이 일치하지 않는 것을 일치시킨다.",
+	        	"속도가 너무 안나온다.",
+	        	"1. regression_meta 에서 "
+	        	
+	        	
+	        	"hostinfo: chart option 에서 ispolar 를 false",
+	        	"errorlog: chart option 에서 ispolar 를 false"
+	        ]
+	        
+	      } ,
+	      
+	      
+	      {
+	         id: "smart_polar_slot" ,
+	         desc: "smart chanrt에서 polar chart 의 한 점은 slot 을 나타내는 것임." ,
+	         result: "not yet" ,
+	         process: [
+	         	"slot 중에서 가장 나중에 실행된 test를 것만을 뽑는다."
+	         ]
+	      } ,
+	      
+	      {
+	         id: "smart_bubble_first" ,
+	         desc: "smart chanrt에서 맨 상단의 chart 는 모든데이타를 포함한다.",
+	         result: "not yet",
+	         process: [
+	         	"testname 이 겹치면 _1.. 등을 붙인다."
+	         ]
+	      },
+	      
+	      {
+	      	id: "main_search_field_Grid" ,
+	        desc: "그리드상단에서 공통적으로 사용하려는 select list 의 속도가 너무 느리다.",
+	        result: "not yet",
+	        process: [
+	        	"개별적으로 쿼리를 만들어 준다. ",
+	        	"현재는 dashboard.regresson.distinct.field 를 사용한다."
+	        ]
+	      }   ,
+	      
+	      {
+	      	id: "grid_server_side_page" ,
+	        desc: "",
+	        result: "todo",
+	        process: [
+	        	
+	        ]
+	      }   ,
+	      
+	      {
+	      	id: "smart_host_chat_to_stockChart" ,
+	        desc: "Stock chart 로 변경한다.",
+	        result: "Y",
+	        process: [
+	        	"x축이 표시가 안된다.==> 해결함"
+	        ]
+	      }
+	      
+	      , {
+	      	id: "smart_host_chat_to_stockChart_PlotBand" ,
+	        desc: "너무 범위가 넓기 대문에 PlotBand 를 지정한다.",
+	        result: "todo",
+	        process: [
+	        	"x축이 표시가 안된다.==> 해결함"
+	        ]
+	      }
+	      
+	      , {
+	      	id: "unNormalize" ,
+	        desc: "속도향상을 위해 unNormalize 를 한다. ",
+	        result: "todo",
+	        process: [
+	        	"모든 select 경우"
+	        ]
+	      }
+	      
+	      , {
+	      	id: "filter_for_heatmap" ,
+	        desc: "heatmap인경우 filter selectBox를 만든다.",
+	        result: "todo",
+	        process: [
+	        	""
+	        ]
+	      }
+	      
+	  	]
+		, debug : [
+	       {
+	          errors: [
+	             {
+	                title :  'range Select 에서 아무런 데이타가 나오지 않는다.'
+	                parameter: {
+	                   firmware : 'T020DTB0',
+	                   folerName : 'PPlus.B1.S48.TLC.AB3.1TB.Recursive_1.DELL.TCG.T020DTB0.561448.1_4612' 
+	                }
+	                error_cause: [
+	                   {
+	                      description: '에러라기 보다는 데이타가 없음'
+	                      , sqlid: 'dashboard.regression.meta.testname.range'
+	                      , result : 'Fail'
+	                      , cause : '데이타 자체는 있음. 쿼리 잘못인것 같음.'
+	                   },
+	                   {
+	                      description: '쿼리를 분석'
+	                      , sqlid: 'dashboard.regression.meta.testname.range'
+	                      , result : 'Success'
+	                      , cause: " a.FIELD = 'No' ==>  a.FIELD = 'no_category_testname' "
+	                   }
+	                   
+	                ]
+	             },
+	             {
+	                title :  'range Select Script 에러가 남.'
+	                parameter: {
+	                   firmware : 'T020DTB0',
+	                   folerName : 'PPlus.B1.S48.TLC.AB3.1TB.Recursive_1.DELL.TCG.T020DTB0.561448.1_4612' 
+	                }
+	                error_cause: [
+	                   {
+	                      description: 'start time 이 null 임.'
+	                      , sqlid: 'dashboard.regression.meta.testname.range'
+	                      , result : 'Fail'
+	                      , resolve : [
+	                         {
+	                            desc: '쿼리에서 start time 이 없는 것들은 가져오지 않는다.'
+	                            "쿼리구문": "where a.START_TIME is not null"
+	                         }
+	                      ]
+	                   }
+	                   
+	                ]
+	             },
+	             {
+	                title :  'showData 에서 에러가 남.'
+	                parameter: {
+	                   firmware : 'T020DTB0',
+	                   folerName : 'PPlus.B1.S48.TLC.AB3.1TB.Recursive_1.DELL.TCG.T020DTB0.561448.1_4612' 
+	                }
+	                , error_cause: [
+	                   {
+	                      description: 'Main 에서. duration이 없음. duration을 기준으로 bubble chart 원의 크기를 결정한다. 2017년 6월 29일 목요일 오후 3:22:18'
+	                      , resolve : [
+	                         {
+	                            desc: 'duration 이 없는 경우 0.5 로 표현함.'
+	                            , sqlid : 'dashboard.regresson.mainlist'
+	                            , result : 'Fail'
+	                            , fail_cause : 'range list 가 없기 때문이다. '
+	                            , result1 : 'Fail 인줄 알았는데 성공 2017년 6월 29일 목요일 오후 3:17:13'
+	                         }
+	                         , {
+	                            desc: 'meta data 가 없으면 데이타가 나오지 않게 한다.'
+	                            , sqlid : 'dashboard.regresson.mainlist'
+	                            , result : 'sucess'
+	                            , fail_cause : ''
+	                         }
+	                      
+	                      ]
+	                   },
+	                   {
+	                      description: 'start time 이 null 임.'
+	                      , resolve : [
+	                         {
+	                            desc: 'start_time 이 있는 것만 조회한다.'
+	                            , sqlid : 'dashboard.regresson.mainlist'
+	                            , result : 'Fail'
+	                            "쿼리구문": "where a.START_TIME is not null"
+	                         }
+	                         
+	                      
+	                      ]
+	                   },
+	                   {
+	                      description: 'start time 이 있는 것만 조회를 하더라도 Grid에서는 나오도록 해야 한다.'
+	                      , resolve : [
+	                         {
+	                            desc: '새로운 쿼리를 만든다.'
+	                            , sqlid : 'dashboard.regresson.mainlist.all'
+	                            , result : 'Success'
+	                            , process : [
+	                               "'dashboard.regresson.mainlist' 쿼리를 수정한다. ", 
+	                               "<when test=\"ignoreTime == null or  ignoreTime = 'Y' \">", 
+	                               "schemaMain의 Grid의 data() function에서 위의 sql 에 해당하는 sql을 가져온다."
+	                               "'dashboard.regresson.mainlist.all' 쿼리를 작성한다. ",
+	                               "Duration 도 그대로보여준다. "
+	                            ]
+	                         }
+	                         
+	                      
+	                      ]
+	                   },
+	                   {
+	                      description: "Main에서 No가 안나온다. "
+	                      , resolve : [
+	                         {
+	                            desc: ""
+	                            , sqlid : "dashboard.regresson.mainlist.all"
+	                            , result : "Success"
+	                            , process : [
+	                            
+	                            ]
+	                         }
+	                         
+	                      
+	                      ]
+	                   },
+	                   {
+	                      description: "Grid 의 검색조건 의 Select 조건에서 TestName을 meta 정보에서 가져와야 하는가?"
+	                      , resolve : [
+	                         {
+	                            desc: "새로운 쿼리를 만든다."
+	                            , sqlid : 'dashboard.regresson.distinct.testname'
+	                            , result : 'Y'
+	                            , process : [
+	                               
+	                            ]
+	                         },
+	                         {
+	                            desc: 'jsp 에서 해당쿼리를 수정한다. '
+	                            , sqlid : 'dashboard.regresson.distinct.testname'
+	                            , result : 'Not yet. 나중에 문제가 되면 고려하도록 한다.'
+	                            , process : [
+	                               
+	                            ]
+	                         }
+	                         
+	                      
+	                      ]
+	                   }
+	                   
+	                ]
+	                
+	             },
+	             {
+	                title :  'testName 의 앞의 일련번호가 Category와 동일하지 않다. 독립적이다. '
+	                parameter: {
+	                   firmware : 'T020DTB0',
+	                   folerName : 'PPlus.B1.S48.TLC.AB3.1TB.Recursive_1.DELL.TCG.T020DTB0.561448.1_4612' 
+	                }
+	                error_cause: [
+	                   {
+	                      description: '...'
+	                      , sqlid: '...'
+	                      , result : 'Not Yet'
+	                      , resolve : [
+	                         {
+	                            desc: 'To do. 어떤 문제가 일어날지 생각해야 함.'
+	                            
+	                         }
+	                      ]
+	                   }
+	                   
+	                ]
+	             },
+	             {
+	                title :  'Smart info'
+	                parameter: {
+	                   firmware : 'T020DTB0',
+	                   folerName : 'PPlus.B1.S48.TLC.AB3.1TB.Recursive_1.DELL.TCG.T020DTB0.561448.1_4612' 
+	                }
+	                error_cause: [
+	                   {
+	                      description: 'regression 에 데이타가 없다 meta만 있음. 그래서 javascript 에러가 났음. '
+	                      , error_script: 'alasql.tables['smart'].data = dataSmart.dataList;'
+	                      , result : 'Y'
+	                      , resolve : [
+	                         {
+	                            desc: 'DataList.length==0 인경우 if 처리함.'
+	                            
+	                         }
+	                      ]
+	                   }
+	                   
+	                ]
+	             },
+	             {
+	                title :  'Smart info'
+	                parameter: {
+	                   firmware : "T020DTB0",
+	                   folerName : "PPlus.B1.S48.TLC.AB3.1TB.Recursive_1.DELL.TCG.T020DTB0.561448.2_4613" 
+	                }
+	                error_list: [
+	                   {
+	                      description: "regression 에 데이타가 있는데 아무런 결과가 없음."
+	                      , error_script: "alasql.tables['smart'].data = dataSmart.dataList;"
+	                      , result : "Y"
+	                      , resolve : [
+	                         {
+	                            sqlid: ["dashboard.regresson.smartlist","dashboard.regresson.smartlist.raw"]
+	                            cause: "meta의 category는 'test/ReadDisturb' 인데 regression 의 catetgory는 'test_ReadDisturb' 이기 때문에 join 이 안되었음",
+	                            resolve: [
+	                            	"김범호 책임에게 요청을 함."
+	                            ]
+	                            
+	                         }
+	                      ]
+	                   }
+	                   
+	                ]
+	             }
+	          ]
+	       }         
+	    ],
+		cnosider : [
+		   {
+		      
+		   }
+		]
+      
+   },
+   
+   	"PMS resource": {
+   		category : "PMS resource",
+   		todos: [
+   			{
+   				id:"pms_project_resourse",
+   				date: "2017년 6월 30일 금요일 오후 1:47:19"
+   				desc: "pms project tab의 undefined 처리",   				
+   				process:[
+   					"project에 해당하는 쿼리를 찾아 general 의 쿼리를 적용한다.",
+   					{
+   						sqlid: "pms.resource.project",
+   						referSqlid: "pms.resource"
+   					},
+   				],
+   				result: "Sucess"
+   				
+   			},
+   			
+   			{
+   				id:"pms_project_jira_map",
+   				date: "2017년 6월 30일 금요일 오후 1:47:58",
+   				desc: "jira로 등록된 것을 프로젝트에 연계한다.",
+   				result: "Y",
+   				parameter: [
+   					
+   				],
+   				process:[
+   					""
+   				]
+   			}
+   		]
+   	
+   } ,
+   
+	"Corona" : {
+   		category : "Corona dashboard",
+   		todos: [
+   			{
+   				id:"table_analysis",
+   				date: "2017년 7월 4일 화요일 오전 10:51:01"
+   				desc: "firmware_master에 sample 키가 추가됨",   				
+   				process:[
+   					{
+   						title: "add_column_mapping"
+   					}
+   					
+   				],
+   				result: "Done"
+   				
+   			}, 
+   			
+   			{
+   				id:"naming_resource",
+   				desc: "",
+   				process: [
+   					{
+   						name: "coronaSummay.jsp",
+   						require:[
+   							"jqgrid",
+   							"makeHtml",
+   							"multiselect"
+   						]
+   						
+   					}
+   					, {
+   						name: "coronaDetail.jsp",
+   						require:[
+   							"jqgrid",
+   							"makeHtml",
+   							"multiselect"
+   						]
+   						
+   					}
+   					, {
+   						name: "/dashboard/generic.html?viewName=coronaSummay",
+   						controller: "CommonController"
+   					}
+   					, {
+						name: "dashboard.corona.summary"   						
+   					}
+   					, {
+						name: "dashboard.corona.real"					
+   					}
+   					, {
+						name: "dashboard.corona.search.firmware"   						
+   					}
+   					
+   				]
+   			},
+   			
+   			{
+   				id:"data_process",
+   				desc: "call process를 만든다.",
+   				process: [
+   					{
+   						name: "01. sql for summary" ,
+   						sqlid: "dashboard.corona.summary",
+   						parameters : [
+   							"firmware",
+   							"sample",
+   							"YYYYMM"
+   						],
+   						colunms: [
+   							""
+   						]
+   					}, 
+   					
+   					{
+   						name: "02. sql for detail" ,
+   						sqlid: "dashboard.corona.real",
+   						parameters : [
+   							"firmware",
+   							"sample",
+   							"test_item"
+   						]
+   						
+   					}, 
+   					
+   					{
+   						name: "03. make parameter for summary" ,
+   						sqlid: "dashboard.corona.search.firmware",
+   						parameters : [
+   							
+   						]
+   					},
+   					
+   					{
+   						name: "03.1. make parameter for summary" ,
+   						sqlid: "dashboard.corona.search.sample",
+   						parameters : [
+   							"firmware"
+   						]
+   					},  
+   					
+   					{
+   						name: "04. make Controller"
+   					}, 
+   					
+   					{
+   						name: "05. make summary jsp"
+   						, scripts : [
+   							{
+   								category: "jquery",
+   								scripts: [
+   									'<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>',
+   									'<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>',
+   									'<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />'
+   								]
+   							},
+   							{
+   								category: "jqueryMohthPicker",
+   								reference: 'http://jsfiddle.net/kidsysco/JeZap/'
+   								scripts: [
+   									'<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />'
+   									'<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>',
+   									'<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>',
+   									"$("#yyyymm").MonthPicker();",
+   									"$("#yyyymm").MonthPicker('option','MonthFormat', 'yymm');"
+   									
+   								]
+   							},
+   							{
+   								category: "jqGrid",
+   								scripts: [
+   									'<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>' ,
+   									'<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>'
+   								]
+   							},
+   							{
+   								category: "bootstrap",
+   								scripts: [
+   									'<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">' ,
+   									'<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />' ,
+   									'<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>'
+   									
+   									
+   								]
+   							},
+   							{
+   								category: "multi select",
+   								scripts: [
+   									'<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>' ,
+   									'<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>' ,
+   									'<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />',
+   									'<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />'
+   									
+   								]
+   							},
+   							{
+   								cagtegory: "PMS" ,
+   								scripts: [
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />' ,
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />' ,
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />',
+   									'<script src="/common/js/module.js"></script>'
+   									
+   								]
+   							},
+   							{
+   								category: "HighChart",
+   								scripts: [
+   									'<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>'
+   								]
+   							},
+   							{
+   								cagtegory: "Dashboard" ,
+   								scripts: [
+   									'<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>' ,
+   									'<script src="/dashboard/js/jointjs/lodash.min.js"></script>' ,
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />',
+   									'<script src="/common/js/module.js"></script>',
+   									'<script src="js/dashboard.js?version=2017.07.04.01"></script>'
+   									
+   								]
+   							},
+   							{
+   								category : "Page custom script",
+   								schema: [
+   									{
+   										name: "schemaSearch"
+   									},
+   									{
+   										name: "schemaContent"
+   										list: [
+   											"summary",
+   											"result"
+   											
+   										]
+   									}
+   								],
+   								script: [
+   									{
+   										name: "makeHtml",
+   										parameter:[
+   											"container: string",
+   											"schema: Object"
+   										]
+   									},
+   									
+   									{
+   										name: "gridcell_gradiant",
+   										desc: "Progress display",
+   										referrence: [
+   											"http://www.trirand.com/jqgridwiki/doku.php?id=wiki:custom_formatter",
+   											"http://www.ok-soft-gmbh.com/jqGrid/NumberWithGradientColor.htm"
+   										],
+   										
+   										parameter: [
+   											
+   										]
+   									},
+   									
+   									{
+   										name: "mergeCell",
+   										desc: "reliability를 참조한다."
+   										parameter: [
+   											"culumnname: String"
+   										]
+   									},
+   									
+   									{
+   										name: "parent_scroll",
+   										desc: "scroll no",
+   										parameter: [
+   											"culumnname: String"
+   										]
+   									},
+   									   									
+   									{
+   										name: "call popDatail",
+   										parameter: [
+   											"firmware",
+   											"sample",
+   											"category"
+   										],
+   										targetUrl: "/dashboard/generic.html?vewname=coronaDetail",
+   										status: "Before Start"
+   									},
+   									
+   									{
+   										status: "Ing"
+   										date: "2017년 7월 13일",
+   										name: "total Progress"
+   										sub_process: {
+   											"01. create weight table": {
+   												desc: "전체적인 진행률을 구하기 위힌 첫단계로 table create  CORONA_FIRMWARE_MASTER 가 parent",
+   												process: {
+   													"01. table create": {
+   														table_name: "corona_testitem_master",
+   														columns: [
+   															"sample",
+   															"firmware",
+   															"category",
+   															"test_item",
+   															"weight",
+   															"compute_creteria",
+   															"compute_value",
+   															"max_value",
+   															"ins_dt",
+   															"mod_dt"
+   														]	
+   													}												
+   												
+   												}
+   											},
+   											
+   											"02. modify individual progress" : {
+   												desc: "test item 별로 계산방식이 다름",
+   												process: {
+   													"01. add column in corona_testitem_master": {
+   														columns : [
+   															"compute_creteria",
+   															"compute_value"
+   														],
+   														data: {
+   															"normal": "일반적인 계산방식",
+   															"sec":  {
+   																
+   															},
+   															"step": {
+   																
+   															},
+   															"min": {
+   																
+   															}
+   														}
+   													},
+   													"02. add column in jsp" : {
+   														columns : [
+   															"compute_creteria",
+   															"compute_value",
+   															"max_value"
+   														]
+   													},
+   													"03. add edit function in added col" : {
+   														"compute_creteria": {
+   															edit_type: "select"
+   														},
+   														"compute_value": {
+   															edit_type: "input"
+   														},
+   														reference: "performanceTabView.jsp, ssdCusPop.jsp: comment ",
+   														subResource: {
+   															sqlid: "dashboard.corona.testitem.update"
+   														}
+   													},
+   													"04. compute progress in jsp": {
+   														desc: "grid_summary 에서 data function ",
+   														process: {
+   															"normal": "일반적인 계산방식",
+   															"hrs":  {
+   																max : 96
+   															},
+   															"sec":  {
+   																max: 86400
+   															},
+   															"step": {
+   																max: 868
+   															},
+   															"min": {
+   																max: 10000
+   															}
+   														}
+   													}
+   												}
+   											}
+   											
+   											"03. display total progress in jsp": {
+   												desc: "최종진행률을 표시한다.",
+   												process: {
+   													"01. sql": {
+   														target: "corona.xml",
+   														sqlid: "dashboard.corona.summary"
+   													},
+   													"02. add column in grid": {
+   														target: "coronaSummary.jsp"
+   														"add_column_name": "WEIGHT"
+   													},
+   													"03. compute total progress": {
+   														process: [
+   															"var v_total_progress = 0;",
+   															"sum(weight * progress) * 100"
+   														]
+   													}
+   													"04. display total progress in grid" : {
+   														target: "afterComplete",
+   														targetElement:  ""
+   														
+   													}
+   												}
+   												
+   											}
+   										}
+   									}
+   									
+   									
+   									
+   									
+   								]
+   								
+   							}
+   						
+   						]
+   					},
+   					
+   					{
+   						status: "Before Start",
+   						name: "06. make detail jsp "
+   						referrence: "/dashboard/ssdCusPop.html", 
+   						include_scripts : [
+   							{
+   								category: "jquery",
+   								scripts: [
+   									'<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>',
+   									'<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>',
+   									'<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />'
+   								]
+   							},
+   							{
+   								category: "jqGrid",
+   								scripts: [
+   									'<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" >' ,
+   									'<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js">'
+   								]
+   							},
+   							{
+   								category: "bootstrap",
+   								scripts: [
+   									'<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">' ,
+   									'<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />' ,
+   									'<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>'
+   									
+   									
+   								]
+   							},
+   							{
+   								category: "multi select",
+   								scripts: [
+   									'<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>' ,
+   									'<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>' ,
+   									'<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />',
+   									'<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />'
+   									
+   								]
+   							},
+   							{
+   								cagtegory: "PMS" ,
+   								scripts: [
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />' ,
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />' ,
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />',
+   									'<script src="/common/js/module.js"></script>'
+   									
+   								]
+   							},
+   							{
+   								category: "HighChart",
+   								scripts: [
+   									'<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>'
+   								]
+   							},
+   							{
+   								cagtegory: "Dashboard" ,
+   								scripts: [
+   									'<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>' ,
+   									'<script src="/dashboard/js/jointjs/lodash.min.js"></script>' ,
+   									'<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />',
+   									'<script src="/common/js/module.js"></script>',
+   									'<script src="js/dashboard.js?version=2017.07.04.01"></script>'
+   									
+   								]
+   							}
+   						],
+						functions: {							
+							schema: [
+								{
+									name: "schemaContent",
+									category: [
+										{
+											type: "grid",
+											id: "grid_detail",
+											name: "grid_detail",
+											data: {
+												sqlid: "dashboard.corona.detail",
+												parameter: {
+													"sample",
+													"firmware",
+													"category"
+												}
+											}
+										}
+									]
+								}
+							],
+							script: [
+								{
+									name: "makeHtml",
+									parameter:[
+										"container: contentMain",
+										"schema: schemaContent"
+									]
+								}
+							]
+							
+						}
+   						
+   						]
+   					}
+   					
+   					
+   				]
+   			}
+   			
+   		
+   		]
+   	
+   	} ,
+   	
+   	"FW Complier License Usage" : {
+   		"sourceAnalysis": {
+   			"url" :  "http://chanjoo.skhynix.com:8080/nspim/dash/retrieveLicenseUsage.do",
+   			"Cotroller": {
+   				"nspim": "/nspim/src/main/java/com/skhynix/nspim/pjt/dash/controller/DashBoardController.java",
+   				
+   			},
+   			"load_flow" : {
+   				"url" :  "http://chanjoo.skhynix.com:8080/nspim/dash/retrieveLicenseUsage.do",
+   				"controller": "/nspim/src/main/java/com/skhynix/nspim/pjt/dash/controller/DashBoardController.java",
+   				"jsp_pms": {
+   					"jsp": "/nspim/src/main/webapp/WEB-INF/jsp/nspim/dash/retrieveLicenseUsage.jsp",
+   					
+   					"dashboard_call_DS-5/Metaware": {
+   						"getDataByJson" : function() {
+   							// draw chart in dashboard
+							dashboardShow("licenseUsage","/dashboard/licenseUsage.html");		
+		
+							// dawtable in pms
+							$.ajax({
+								url : "/nspim/dash/retrieveLicenseUsageTbl.do",
+								data: $("#searchForm").serialize() ,
+								success : function(responseData){	
+									dateList  = responseData.useMonthList;
+								 	dateTable = responseData.useMonthTbl;		
+									drawTable(dateList,dateTable); 
+								}
+								
+							});
+						},
+						
+						// draw chart in dashboard
+						"/dashboard/licenseUsage.html": {
+							"url": "/dashboard/licenseUsage.html",
+	   						"controller": "/dashboard/src/dashboard/license/controller/LicenseUsageController.java",
+	   						"jsp_dashboard": {
+	   							"jsp": "/dashboard/WebContent/WEB-INF/views/licenseUsage.jsp",
+	   							"documentReady": {
+									"getDataByJson": function(){
+										if( $("#sProject").val() == "")
+											return;
+										$.ajax({
+											url : "/dashboard/licenseUsageJson.html",
+											data: $("#form").serialize() ,
+											success : function(responseData){
+												dataList = responseData.dataList;
+												// sqlid: license.selectLicenseUsageList.smonth.all
+												drawchart();
+											}
+										});
+	   								},
+	   								"controller" : "/dashboard/src/dashboard/license/controller/LicenseUsageController.java",
+	   								"xml": "/dashboard/WebContent/sql/mybatis/mapper/license.xml",
+	   								"sqlid": "license.selectLicenseUsageList.smonth.all",
+	   								"sqlid1": "license.selectLicenseUsageList.smonth.table"
+	   								
+								}
+								
+	   						}
+						},
+						
+						"drawTable": {
+							"url": "/nspim/dash/retrieveLicenseUsageTbl.do",
+							"controller" : "/nspim/src/main/java/com/skhynix/nspim/pjt/dash/controller/DashBoardController.java",
+							"dateList" : "nspim.license.LicenseUsage.selectUseMonthTable",
+							"dateTable": "nspim.license.LicenseUsage.selectLicenseUsageSmonthList",
+							"drawTable": function(dateList,dateTable){
+								var html = "";
+									var body = "";
+								
+									html = "<tr>";
+									html += "	<th> </th>";
+									$.each(dateList, function(i, data) {
+										html += "	<td class='txt_center'>"+data.tmonth + "	</td>";
+									});
+									html += "</tr>";
+									
+									$("#tblHead").html("");
+									$("#tblHead").append(html);
+									
+									
+									$.each(dateTable, function(i, table) {
+										
+										body += "<tr>";		
+										$.each(table, function(j, tableDetail) {
+											if (j != 0){
+												if (i == 0){
+													body += "	<td class='txt_right' style='color:red ; font-weight:bold'>"+tableDetail + "	</td>";
+												}
+												else{
+													body += "	<td class='txt_right' >"+tableDetail + "	</td>";
+												}
+												
+											}
+											else{
+												body += "	<td class='txt_left' >"+tableDetail + "	</td>"
+											}
+											
+										});
+										body += "</tr>";
+									});
+									
+									$("#tblBody").html("");
+									$("#tblBody").append(body);
+							}
+						}
+   						
+   						
+   						
+   					},
+   					
+   					"dashboard_call_IAR": {
+   						"searchIarLicense" : function() {	
+							var url = "/nspim/dash/retrieveIarLicenseUse.do";
+							dashboardShow("chartArea","/dashboard/iarLicenseUse.html");
+						},
+   						"url": "/dashboard/iarLicenseUse.html",
+   						"controller": "/dashboard/src/dashboard/license/controller/LicenseController.java",
+   						"jsp_dashboard": {
+   							"jsp": "/dashboard/WebContent/WEB-INF/views/iarLicenseUse.jsp",
+   							"documentReady": {
+								"getDataByJson": function() {
+									$.ajax({
+										type: "POST",
+										url : "/dashboard/iarLicenseUseJson.html",
+										data: {fromDt:"${searchVO.fromDt}", toDt:"${searchVO.toDt}"},
+										success : function(responseData){
+											drawchart(responseData);
+										}
+									});
+   								},
+   								"controller" : "/dashboard/src/dashboard/license/controller/LicenseController.java",
+   								"xml": "/dashboard/WebContent/sql/mybatis/mapper/license.xml",
+   								"sqlid": "license.selectIarLicenseUseList"
+   								
+							}
+							
+   						}
+   						
+   						
+   					}
+   					, "": {
+   						
+   					}
+   				}
+   				
+   			}
+   			
+   		} ,
+   		
+   		"todo_plan": {
+   			"3tab":{
+   				"status": "Complete", 
+   				"taget":  "retrieveLicenseUsage.jsp"	,
+   				"html" : {
+   					
+   					"addHtml" : "#tabs-1-1",
+   					
+   					"changeFunction" : {
+   						"source" : "drawTable",
+   						"from": "#tabs-1 #tblHead",   						
+   						"to" : "#tabs-1 #tblHead",
+   						"toFunc" : function(divid,dateList,dateTable) {
+   							var $Div = $("#"+divid);
+							var html = "";
+							var body = "";
+						
+							html = "<tr>";
+							html += "	<th> </th>";
+							$.each(dateList, function(i, data) {
+								html += "	<td class='txt_center'>"+data.tmonth + "	</td>";
+							});
+							html += "</tr>";
+							
+							$Div.find("#tblHead").html("");
+							$Div.find("#tblHead").append(html);
+							
+							
+							$.each(dateTable, function(i, table) {
+								
+								body += "<tr>";		
+								$.each(table, function(j, tableDetail) {
+									if (j != 0){
+										if (i == 0){
+											body += "	<td class='txt_right' style='color:red ; font-weight:bold'>"+tableDetail + "	</td>";
+										}
+										else{
+											body += "	<td class='txt_right' >"+tableDetail + "	</td>";
+										}
+										
+									}
+									else{
+										body += "	<td class='txt_left' >"+tableDetail + "	</td>"
+									}
+									
+								});
+								body += "</tr>";
+							});
+							
+							$Div.find$Div.find("#tblBody").html("");
+							$Div.find("#tblBody").append(body);
+   							
+   						}
+   						"funcCall" : {
+   							"getDataByJson": {
+   								from : function(){
+   									dashboardShow("licenseUsage","/dashboard/licenseUsage.html");		
+		
+									$.ajax({
+										url : "/nspim/dash/retrieveLicenseUsageTbl.do",
+										data: $("#searchForm").serialize() ,
+										success : function(responseData){	
+											dateList  = responseData.useMonthList;
+										 	dateTable = responseData.useMonthTbl;		
+											drawTable(dateList,dateTable); 
+										}
+										
+									});
+   								},
+   								to : function(divid,target){
+   									var $Div = $("#"+divid);
+   									dashboardShow(divid,target,"/dashboard/licenseUsage.html");		
+		
+									$.ajax({
+										url : "/nspim/dash/retrieveLicenseUsageTbl.do",
+										data: $Div.find("#searchForm").serialize() ,
+										success : function(responseData){	
+											var dateList  = responseData.useMonthList;
+										 	var dateTable = responseData.useMonthTbl;		
+											drawTable(divid,dateList,dateTable); 
+										}
+										
+									});
+   								}
+   							}
+   							,"dashboardShow": {
+   								"from" : function (target,action){
+									var target = target;
+									if (target != "chartArea"){
+										
+										var oFrm = document.getElementById("searchForm");		
+										var target = target;
+										oFrm.action =  action;
+										oFrm.method = "post";
+										oFrm.target = target; 
+									    oFrm.submit();
+										
+									}
+									else{
+										
+										var oFrm = document.getElementById("form1");
+										
+										var target = target;
+										oFrm.action =  action;
+										oFrm.method = "post";
+										oFrm.target = target; 
+									    oFrm.submit();
+									}
+								},
+								"to" : function (divid,target,action){
+									var $Div = $("#"+divid);
+									var target = target;
+									if (target != "chartArea"){
+										
+										var oFrm = $Div.find("#searchForm")[0];		
+										var target = target;
+										oFrm.action =  action;
+										oFrm.method = "post";
+										oFrm.target = target; 
+									    oFrm.submit();
+										
+									}
+									else{
+										
+										var oFrm = document.getElementById("form1");
+										
+										var target = target;
+										oFrm.action =  action;
+										oFrm.method = "post";
+										oFrm.target = target; 
+									    oFrm.submit();
+									}
+								}
+   							}
+   							, "fnSearch": {
+   								from : functio() {	
+									getDataByJson();
+								},
+								to : function(divid,target) {	
+									getDataByJson(divid,target);
+								}
+   							}
+   						}
+   						
+   					
+   					}
+   				}
+   				
+   			},
+   			
+   			"multiselect": {
+   				target:"nspim/src/main/webapp/WEB-INF/jsp/nspim/dash/retrieveLicenseUsage.jsp"
+   				, script : [
+   					
+   				]
+   				, result:"Complete"
+   			}
+   			
+   			, "changeChartColor": {
+   				, "src": "/dashboard/WebContent/WEB-INF/views/licenseUsage.jsp"
+   				, "Deinal":{
+	   				color: "red"
+	   			}
+	   			, "Peak":{
+	   				color: "skyblue"
+	   			}
+   			}
+   			
+   		}
+   		
+   	}	
+   	
+   	"Reliability" : {
+   		"resource": {
+   			url: "/dashboard/ssdReliabilityMain.html",
+   			controller : "dashboard.ssd.controller.SSDController.ssdReliabilityMain",
+   			sql: "ssdReliability.xml, ssd.xml"
+   		},
+   		"process_as_is" : [
+   			{
+   				subject: "Load main_list",
+   				sqlid: "dashboard.ssd.mainlist"
+   				
+   			}
+   		],
+   		"concept_to_be" : [
+   			{
+   				subject: "Main layout",
+   				descriptions : [
+   					"view by Tab (by test type)",
+   					{
+   						subject: "view chart for each tab",
+   						series_field: "product_name",
+   						group : ["product_name","Start date"]
+   					}
+   				]			
+   			},
+   			{
+   				subject: "Detail layout",
+   				descriptions : [
+   					"view by Tab (by fwversion)",
+   					{
+   						subject: "view chart for each tab",
+   						tab_gubun: "fwversion",
+   						filter : ["product_name"],
+   						series_field: "capacity",
+   						group : ["capacity","tonum"]
+   					}
+   				]			
+   			}
+   		],
+   		"process_to_be" : [
+   			{
+   				subject: "main query",
+   				sql: {
+   					filename: "ssd.xml",
+   					sqlid: "dashboard.ssd.mainlist1",
+   					filter : [
+   						{column: "RSOHD.DSSDPCI_COM.PROJECTID", mybatis_var: "searchProductArr"} ,
+   						{column: "RSOHD.DSSDPCI_COM.TESTNM", mybatis_var: "searchTestTypeArr" }, 
+   						{column: "RSOHD.DSSDPCI_COM.FIRMWARE", mybatis_var: "searchFWversionArr" }, 
+   						{column: "RSOHD.DSSDPCI_COM.CAPACITY", mybatis_var: "searchCapacityArr" }, 
+   						{column: "RSOHD.DSSDPCI_COM.START_DT", mybatis_var: ["dateFrom","dateTo"] }
+   						
+   					],
+   					groupBy : [
+   						"RSOHD.DSSDPCI_COM.PROJECTID",
+   						"RSOHD.DSSDPCI_COM.START_DT"
+   					]
+   				}
+   			},
+   			{
+   				subject: "main jsp",
+   				jsp_name: "ssdReliabilityMain1.jsp",
+   				variable : [
+   					{
+   						name: "schemaSearch",
+   						type: "schema",
+   						desc: "검색조건. test Type은 빼고 Tab으로 대체한다."
+   					}
+   					
+   				],
+   				process: [
+   					{
+   						name: "검색조건",
+   						script: "makeHtml('searchCondition', schemaSearch);"
+   					},
+   					{
+   						name: "makeTab",
+   						desc: ""
+   					},		
+   					{
+   						name: "drawchart",
+   						script: [
+   							{
+   								name: "make schema",
+   								variable: {
+			   						name: "schema",
+			   						type: "schema",
+			   						desc: "chart"
+			   					}
+   							},
+   							"makeHtml('tabid', 'schema');"
+   						]
+   					},
+   					{
+   						name: "pop when chartClick",
+   						pop_url: "/dashboard/generic.html?viewName=ssdReliabilityChartPop1",
+   						parameters: [
+   							{
+   								name: "productName"   							
+   							},
+   							{
+   								name: "testType"   							
+   							},
+   							{
+   								name: "fwVersion"
+   							},
+   							{
+   								name: "startDate"   							
+   							}
+   						]
+   					}
+   				]
+   			},
+   			{
+   				subject: "detail query",
+   				sql: [
+   					{
+	   					filename: "ssd.xml",
+	   					desc: "firmware 리스트쿼리",
+	   					sqlid: "dashboard.ssd.chartlist1.firmware",
+	   					filter : [
+	   						{column: "RSOHD.DSSDPCI_COM.PROJECTID", mybatis_var: "searchProduct", required: true} ,
+	   						{column: "RSOHD.DSSDPCI_COM.TESTNM", mybatis_var: "searchTestType", required: true }, 
+	   						{column: "RSOHD.DSSDPCI_COM.FIRMWARE", mybatis_var: "searchFWversion", required: true  }, 
+	   						{column: "RSOHD.DSSDPCI_COM.CAPACITY", mybatis_var: "searchCapacityArr" }, 
+	   						{column: "RSOHD.DSSDPCI_COM.START_DT", mybatis_var: ["dateFrom","dateTo"] }
+	   						
+	   					],
+	   					groupBy : [
+	   						
+	   					]
+   					},
+   					{
+	   					filename: "ssd.xml",
+	   					desc: "각 탭별 쿼리",
+	   					sqlid: "dashboard.ssd.chartlist1",
+	   					filter : [
+	   						{column: "RSOHD.DSSDPCI_COM.PROJECTID", mybatis_var: "searchProduct", required: true} ,
+	   						{column: "RSOHD.DSSDPCI_COM.TESTNM", mybatis_var: "searchTestType", required: true }, 
+	   						{column: "RSOHD.DSSDPCI_COM.FIRMWARE", mybatis_var: "searchFWversion", required: true  }, 
+	   						{column: "RSOHD.DSSDPCI_COM.CAPACITY", mybatis_var: "searchCapacityArr" }, 
+	   						{column: "RSOHD.DSSDPCI_COM.START_DT", mybatis_var: ["dateFrom","dateTo"] }
+	   						
+	   					],
+	   					groupBy : [
+	   						"RSOHD.DSSDPCI_COM.PROJECTID",
+	   						"RSOHD.DSSDPCI_COM.START_DT"
+	   					]
+   					}
+   				]
+   			},
+   			{
+   				subject: "detail jsp",
+   				jsp_name: "ssdReliabilityChartPop1.jsp",
+   				process: [
+   					{
+   						name: "makeTab",
+   						desc: "파라메터로 넘어온 searchFWversionArr 을 바탕으로 탭을 만든다."
+   					},				
+   					{
+   						name: "drawchart",
+   						parameter: ["tabid","firmware"]
+   						script: [
+   							{
+   								name: "make schema",
+   								variable: {
+			   						name: "schema",
+			   						type: "schema",
+			   						desc: "chart"
+			   					}
+   							},
+   							"makeHtml('tabid', 'schema');"
+   						]
+   					}
+   				]
+   			}
+   		]
+   	}
+   	
+   	"My" : {
+   		webSearch : {
+   			java: {
+   				Controller: {
+   					url: "/dashboard/webSearch.html",
+   					package: "bigdata.websearch.controller",
+   					name: "bigdata.websearch.controller.WebSearchController",
+   					functions: [
+   						{
+   							name: "webSearchJson"
+   						}
+   					]
+   				},
+   				Service: {
+   					package: "bigdata.websearch.service",
+   					name: "bigdata.websearch.controller.WebSearchService",
+   					functios: [
+   						{
+   							name: "analyze"
+   						}
+   					]
+   				}
+   			}
+   			,jsp: {
+   				name: "webSearch.jsp",
+   				pageStructure: {
+	   				include_script: {
+	   					
+	   				},
+	   				schemas: {
+	   					schemaSearch: {
+	   							
+	   					},
+	   					schemaContent: {
+	   						
+	   					}
+	   					
+	   				},
+	   				variables: {
+	   					
+	   				},
+	   				functions: {
+	   					searchSite: {
+	   						url: "/dashboard/webSearch.html",
+	   						parameter : [
+	   							{
+	   								sites: [
+	   									"https://kr.koreanair.com/korea/ko/booking/booking-gate.html"
+	   								]
+	   							}
+	   						]
+	   							
+	   						
+	   					}
+	   				}
+	   				
+	   			}
+   			}
+   			, process : [
+   				{
+   					category: "url input"
+   				},
+   				{
+   					category: "receive dom"
+   				},
+   				{
+   					category: "stack dom"
+   				},
+   				{
+   					category: "find my data"
+   				},
+   				{
+   					category: "analysis"
+   				}
+   			]
+   			
+   		}
+   		
+   		, AI : {
+   			
+   		}	
+   	
+   		, jeju_schedule: [
+   			{
+   				name: "home ==> jeju",
+   				perseon: 3,
+   				date: "2017-09-21",
+   				ticket: true,
+   				air: "이스타",
+   				price: 54700
+   			},
+   			{
+   				name: "jeju ==> home",
+   				perseon: 1,
+   				date: "2017-09-26",
+   				ticket: true,
+   				air: "아시아나",
+   				price: 41200
+   			},
+   			{
+   				name: "home ==> jeju",
+   				perseon: 1,
+   				date: "2017-09-29",
+   				ticket: true,
+   				air: "진에어",
+   				price: 103900
+   			},
+   			{
+   				name: "jeju ==> home",
+   				perseon: 1,
+   				date: "2017-10-11 06:30",
+   				ticket: true,
+   				air: "아시아나",
+   				price: 58200
+   			},
+   			{
+   				name: "home ==> jeju",
+   				perseon: 1,
+   				date: "2017-10-13 18:45",
+   				ticket: true,
+   				air: "티웨이",
+   				price: 61100
+   			},
+   			{
+   				name: "jeju ==> home",
+   				perseon: 1,
+   				date: "2017-10-15",
+   				ticket: false,
+   				air: ""
+   			},
+   			{
+   				name: "home ==> jeju",
+   				perseon: 1,
+   				date: "2017-10-18 19:45",
+   				ticket: true,
+   				air: "이스타항공",
+   				price: 22100 ,
+   				option: "특가운임"
+   			},
+   			{
+   				name: "jeju ==> home",
+   				perseon: 3,
+   				date: "2017-10-23",
+   				ticket: true,
+   				air: "이스타",
+   				price: 145300
+   			},
+   		]
+   	}	
+}

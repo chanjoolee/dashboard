@@ -32,7 +32,47 @@ public class RegressionTabViewService {
 		return list;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> folderMeta(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList("dashboard.regresson.foldermeta", parameter);
+		return list;
+	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> smartList(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList("dashboard.regresson.smartlist", parameter);
+		return list;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> hostList(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList("dashboard.regresson.hostlist", parameter);
+		return list;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> pecountList(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList("dashboard.regresson.pecountlist", parameter);
+		return list;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> errorlogList(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList("dashboard.regresson.errologlist", parameter);
+		return list;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> mainList(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList("dashboard.regresson.mainlist", parameter);
+		return list;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<?> commonList(Map<Object, Object> parameter) {
+		List list = (List)dao.selectList(parameter.get("sqlid").toString(), parameter);
+		return list;
+	}
 	
 	
 }

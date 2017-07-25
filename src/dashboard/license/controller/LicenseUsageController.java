@@ -42,6 +42,8 @@ public class LicenseUsageController {
     public ModelAndView licenseUsageJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
 
     	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	
     	
     	List<?> dataList  = service.licenseUsage(searchVO);
     	List<?> monthList = service.licenseUseMonthTable(searchVO);

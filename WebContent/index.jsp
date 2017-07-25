@@ -134,6 +134,14 @@
 <input type="hidden" name="sender" value="confluence"/>
 				<ul class="ul">
 					<li class="">
+						Corona
+						<ul>
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=coronaSummary');">Corona Summary</a></label>
+							</li>
+						</ul>
+					</li>
+					<li class="">
 						Regression
 						<ul>
 							<li class="">
@@ -543,8 +551,22 @@
 							</li>	
 							<li class="">
 								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_4_joint.html');">02-4. diagram joint: template</a></label>
-							</li>				
+							</li>		
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/diagramGeneral.html?viewname=diagram02_5_joint');">02-5. diagram joint: template</a></label>
+							</li>		
+									
 						</ul>
+					</li>
+					<li>
+						<li class="">
+						Search
+						<ul>
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=webSearch');">Web Search</a></label>
+							</li>
+						</ul>
+					</li>
 					</li>
 				</ul>
 </form>				

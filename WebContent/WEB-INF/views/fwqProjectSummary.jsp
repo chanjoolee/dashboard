@@ -43,7 +43,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	
@@ -120,6 +120,14 @@
 		//initAdvanced();
 		//getDataByJson();
 		//subProjectList();
+		if($("#isPop").val() == "N"){
+			$("#pjtName").hide();
+			parent.$("html").css("overflow","scroll");
+			parent.$(".box_gray").css("height","900px");
+			$("html").css("overflow","hidden");
+		}
+			
+			
 		subProjectPoint();
 		
 		$( window ).resize(function() {
@@ -164,6 +172,10 @@
 			data: $("#form1").serialize(),
 			success : function(responseData){
 				dataList = responseData.fwqDataList;
+				if(dataList.length == 0){
+					$("#fwqDetails").html("<h2 class=''>There is no FW Quality data of project.<h2>");
+					return;
+				}
 				scheduleDataList = responseData.scheduleDataList; 				
 				drawTimeLineChart();
 				adjustDelay();
@@ -206,6 +218,10 @@
 			data: $("#form1").serialize(),
 			success : function(responseData){
 				subProjectList = responseData.dataList;
+				if(subProjectList.length == 0){
+					$(".pop_window").html("<h2 class=''>There is no FW Quality data of project.<h2>");
+					return;
+				}
 				drawChartSubPoints();
 				buttons();
 			}
@@ -599,10 +615,13 @@
 	        },	        
 	        series: series.series
 	    },function(chart){
-	    		chart.series[0].data[0].select(true,false);
-	    		$("#project").val(subProjectList[0].PROJECT);
-	    		$("#title_fwQualityDetail").text(subProjectList[0].PROJECT);
-	    		getDataByJson();
+	    		if(chart.series.length > 0){
+	    			chart.series[0].data[0].select(true,false);
+		    		$("#project").val(subProjectList[0].PROJECT);
+		    		$("#title_fwQualityDetail").text(subProjectList[0].PROJECT);
+		    		getDataByJson();
+	    		}
+	    		
 		    }
 		);
 		
@@ -686,12 +705,12 @@
 
 <input type="hidden" name="userId" value="${login_id}"/>
 <input type="hidden" name="solution" value="pms"/>
-
+<input type="hidden" id ="isPop" name ="isPop" value="${param.isPop}"/>
 
 <input type="hidden" name="revision" id="revision"  value=""/>
 <input type="hidden" name="category" id="category"  value=""/>
-	<div class="pop_window">
-		<div class="pop_tit_wrap">
+	<div class="pop_window">		
+		<div class="pop_tit_wrap" id="pjtName">
 			<!-- <span class="baseline"></span> -->
 			<h2 class="pop_tit" style="margin-top:10px;">${param.pjt_name}</h2>
 		</div>
@@ -728,7 +747,7 @@
 	           </div>
        	   </div>
        	   <div class="wrap_a" style="height:20px;"></div>
-           <div class="wrap_a">
+           <div class="wrap_a" id="fwqDetails">
                <h3 class="cont_tit">FW Quality Details:&nbsp;<conf id='title_fwQualityDetail'  style="color: blue;display: inline;"></conf> </h3>
 			   <!-- <div  name="projectDiv" class="radioDiv"  id="projectDiv" style="" ></div> -->
                <div style="height:270px" class="border_boxAll">

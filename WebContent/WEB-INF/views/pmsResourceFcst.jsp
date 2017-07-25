@@ -61,7 +61,7 @@
 		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	 --%>
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -900,7 +900,7 @@
 		$.ajax({
 			//url : "/dashboard/dashboardProjectListJson.html",
 			url : "/dashboard/pmsProjectListJson.html",
-			data: {division:'jira'},
+			data: {division:'jira',allYn:'Y'},
 			async : false,
 			success : function(pResponseData){
 				projectList =pResponseData.dataList;
@@ -923,10 +923,10 @@
 				$.each(series.series,function(index,s){
 					sb.push("<optgroup label=\""+s.name+" (Click)\">");
 					$.each(s.data,function(index1,d){
-						if(this.APPLICATION_NAME=="Mobile Solution")
+						if(this.APPLICATION_NAME=="Mobile Solution" || this.APPLICATION_NAME=="cSSD" || this.APPLICATION_NAME=="eSSD")
 							selected = "selected";
 						else 
-							selected = "selected";
+							selected = "";
 						sb.push("<option value='"+ d.PJT_CODE +"' "+selected+" status='"+d.PJT_STATE+"'>" + d.PJT_NAME +"</option>");
 					});
 					sb.push("</optgroup>");
@@ -1090,13 +1090,14 @@
 				//01. merge 
 				$.each(planList,function(i,plan){
 					//plan.isPlan = true;
-					plan.MM_RESULT = plan.MM_PLAN;
+					//plan.MM_RESULT = plan.MM_PLAN;
+					plan.MM_RESULT_RATE = plan.MM_PLAN;
 					dataList.push(plan);
 					plan.YYYYMM= plan.YYYYMM.substr(0,6) + ' Fcst';
 				});
 				
 				//searchs = responseData.searchs;			
-				pivotObject = pivot(dataList,{col:'PJT_ID',name:'PJT_NAME'},['YYYYMM','UP_PJT_FUNC_ID','UP_PJT_FUNC_NAME'],'MM_RESULT');
+				pivotObject = pivot(dataList,{col:'PJT_ID',name:'PJT_NAME'},['YYYYMM','UP_PJT_FUNC_ID','UP_PJT_FUNC_NAME'],'MM_RESULT_RATE');
 				sortObjects(pivotObject.columns,['PJT_NAME']);
 				//drawGrid();
 				$("#loader").hide();
@@ -1288,13 +1289,40 @@
 			    		
 			    	});
 			    	
+			    	
+			    	
 			    }, 
 			    onCellSelect: function (rowId, iCol, content, event) {
 			    	var test = "";
 			    	var grid = $("#jqgridTable");
 			    	var row = theGrid.jqGrid('getRowData',rowId);
-			    	var cm = grid.jqGrid("getGridParam", "colModel");
-					//var cm = cms[iCol];
+			    	var cms = grid.jqGrid("getGridParam", "colModel");
+					var cm = cms[iCol];
+					var yyyymm = row.YYYYMM;
+					
+					// month func pop
+					if(cm.name=="MM_RESULT_RATE" && $.isNumeric(yyyymm)){
+						var newWin1 = window.open("", "ResourceFcstMonthFunc", "width=1000,height=600, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+		    			var parameter = "";
+		    			//yyymm
+		    			parameter += "yyyymm=" + row.YYYYMM;
+		    			//func
+		    			parameter += "&fnCode=" + row.UP_PJT_FUNC_ID;
+		    			//project
+		    			parameter +="&pjtCodeList=xxx";
+		    			$("#pjtCode option:selected").each(function(){
+		    				parameter +="&pjtCodeList=" + $(this).val();
+		    			});
+		    			parameter += "&cj=y";
+		    			//parameter += "&tfmCd=Y";
+		    			
+		    			var oFrm = document.getElementById("form1");			    			
+		    			oFrm.action =  '/nspim/pjt/pjt/retrieveDetailMResourceInfo2.do?' + parameter;
+		    			oFrm.method = "post";
+		    			oFrm.target = 'ResourceFcstMonthFunc'; 
+		    		    oFrm.submit();		
+		    		    newWin1.focus();
+					}
 					
 					
 					
@@ -1346,6 +1374,73 @@
 		    summaryrow.children(":eq(2)").css("padding-left","30px");
 		});
 		
+		theGrid.find("tr td:contains('0.00')").each(function(){
+			$(this).text("-");
+		});
+		
+		//month project summary click
+    	theGrid.find("tr.jqgroup").find("td[aria-describedby^='jqgridTable_PJT_']").each(function(){
+    		var td = $(this);			    		
+    		var td_next = td.next();
+    		var description = td.attr("aria-describedby");
+    		var pjt_code = "";
+    		if(description.match(/PJT_[0-9]+$/) != null)
+    			pjt_code = description.match(/PJT_[0-9]+$/)[0];
+    		var month = td.parent().find("td:first").text();
+    		if(pjt_code != "" && $.isNumeric(month) && td_next.text()!="-"){
+    			td_next.css("color","blue");
+    			td_next.css("cursor","pointer");
+    			td_next.click(function(){
+	    			//alert(pjt_code + "_"+ month);
+					var newWin1 = window.open("", "ResourceFcstProjectMonth", "width=1000,height=600, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+	    			var parameter = "pjtCodeList=" + pjt_code;
+	    			parameter += "&yyyymm=" + month;
+	    			parameter += "&cj=y&tfmCd=Y";
+	    			
+	    			var oFrm = document.getElementById("form1");			    			
+	    			oFrm.action =  '/nspim/pjt/pjt/retrieveDetailMResourceInfo2.do?' + parameter;
+	    			oFrm.method = "post";
+	    			oFrm.target = 'ResourceFcstProjectMonth'; 
+	    		    oFrm.submit();		
+	    		    newWin1.focus();
+	    		});
+    		}
+    		
+    	});
+		
+    	//month all summary click
+    	theGrid.find("tr.jqgroup").find("td[aria-describedby='jqgridTable_MM_RESULT_RATE']").each(function(){
+    		var td = $(this);			    		
+    		var month = td.parent().find("td:first").text();
+    		if($.isNumeric(month) && td.text()!="-"){
+    			td.css("color","blue");
+    			td.css("cursor","pointer");
+    			td.click(function(){
+	    			//alert(pjt_code + "_"+ month);
+					var newWin1 = window.open("", "ResourceFcstMonthAll", "width=1000,height=600, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+	    			var parameter = "";
+	    			//yyymm
+	    			parameter += "yyyymm=" + month;
+	    			//project
+	    			parameter +="&pjtCodeList=xxx";
+	    			$("#pjtCode option:selected").each(function(){
+	    				parameter +="&pjtCodeList=" + $(this).val();
+	    			});
+	    			parameter += "&cj=y&tfmCd=Y";
+	    			
+	    			var oFrm = document.getElementById("form1");			    			
+	    			oFrm.action =  '/nspim/pjt/pjt/retrieveDetailMResourceInfo2.do?' + parameter;
+	    			oFrm.method = "post";
+	    			oFrm.target = 'ResourceFcstMonthAll'; 
+	    		    oFrm.submit();		
+	    		    newWin1.focus();
+	    		});
+    		}
+    		
+    	});
+    	
+    	
+		
 		adjustGrid();
 		$("#loader").hide();	
 	}
@@ -1376,11 +1471,35 @@
 			var result = "";
 			var style = "";
 			
-			if(rawObject != undefined){
+			if(val == "0.00"){
+				
+			}else if(rawObject != undefined && $.isNumeric(rawObject.YYYYMM)){
 				style += " cursor:pointer;";
 				result +=" style=\""+style+";color:blue;\"";
 				result +=" title=\""+val+"\"";
 				result += " onclick = popPmsRsc('"+rawObject.UP_PJT_FUNC_ID+"','"+cm.id+"','"+rawObject.YYYYMM+"');";
+			}
+				
+			return result;
+			
+		};
+		var setAttrSum = function(rowId, val, rawObject, cm) {
+		    //var attr = rawObject.attr[cm.name], result;
+			var rownum = parseInt(rowId,10) -1 ;
+			var rowspan = 1; 
+			var preVal = "";
+			var postVal = "";
+			//var attr = rawObject[cm.name];
+			var result = "";
+			var style = "";
+			
+			if(val == "0.00"){
+				
+			}else if(rawObject != undefined && $.isNumeric(rawObject.YYYYMM)){
+				style += " cursor:pointer;";
+				result +=" style=\""+style+";color:blue;\"";
+				result +=" title=\""+val+"\"";
+				//result += " onclick = popPmsRsc('"+rawObject.UP_PJT_FUNC_ID+"','"+cm.id+"','"+rawObject.YYYYMM+"');";
 			}
 				
 			return result;
@@ -1400,7 +1519,7 @@
 		     		    },
 		     		    {label:'UP_PJT_FUNC_ID', name:'UP_PJT_FUNC_ID', id:'UP_PJT_FUNC_ID',sortable:false, hidden:true},
 		     		    {label:'Func', name:'UP_PJT_FUNC_NAME', id:'UP_PJT_FUNC_NAME', width:200, align:'left', textAlign:'left',sortable:false}
-		     		    ,{label:'Sum', name:'MM_RESULT', id:'MM_RESULT', width:50,sortable:false, align:'right', textAlign:'right',summaryType: 'sum', formatter:'number' }
+		     		    ,{label:'Sum', name:'MM_RESULT_RATE', id:'MM_RESULT_RATE', width:50,sortable:false, align:'right', textAlign:'right',summaryType: 'sum', formatter:'number' ,cellattr: setAttrSum}
 		           	];
 		
 		$.each(pivotObject.columns,function(i,col){
@@ -1423,7 +1542,14 @@
 				align:'right', 
 				textAlign:'right',
 				sortable:false,
-				summaryType: 'sum', formatter:'number',
+				summaryType: 'sum', 
+				formatter:'number',
+// 				formatter: function(cellvalue, options, rowObject){
+// 					if(cellvalue == 0){
+// 						return '-';
+// 					}
+// 				},
+
 				cellattr: setAttr
 			});
 		});
@@ -1745,6 +1871,8 @@
 	</div>
 </div>
 <div id="loader"></div>
+</form>
+<form name="form1" id="form1" class="">
 </form>
 </body>
 <script src="js/highcharts/themes/dashboard-simple.js"></script>

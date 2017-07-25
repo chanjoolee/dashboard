@@ -27,7 +27,7 @@
 		<!-- <script type="text/javascript" src="/dashboard/js/pivottable/dist/highcharts_renderers.js"></script> -->
         
         <%-- dashboard --%>
-        <script src="js/dashboard.js?version=1"></script>
+        <script src="js/dashboard.js?version=2017.05.26"></script>
         <script type="text/javascript">
         google.load("visualization", "1", {packages:["corechart", "charteditor"]});
         //$( document ).ready(function() {

@@ -5,35 +5,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
+  <!-- Dependencies -->
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  
+  <!-- <link rel="stylesheet" href="/dashboard/js/jointjs/joint.css" /> -->
+  <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
   <script src="http://resources.jointjs.com/tutorials/joint/node_modules/jquery/dist/jquery.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
-  
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-  
-  <link rel="stylesheet" href="/dashboard/js/jointjs/joint.css" />
-  
   <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
   <script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
   <script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script>
-  <!-- <script src="/dashboard/js/jointjs/lodash.min.js"></script>
+  
+  <!-- <link rel="stylesheet" href="/dashboard/js/jointjs/joint.css" />
+  <script src="/dashboard/js/jointjs/jquery.min.js"></script>
+  <script src="/dashboard/js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+  <script src="/dashboard/js/jointjs/lodash.min.js"></script>
   <script src="/dashboard/js/jointjs/backbone.js"></script>
-  <script src="/dashboard/js/jointjs/joint.js"></script> -->
-  <!-- <script src="/dashboard/js/jointjs/rappid.js"></script> -->
+  <script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script> -->
   
-  <!-- 
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
-  <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
-  <script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script> 
-  -->
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   
+  <!-- my -->
+  <!-- <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/tutorials/css/tutorial.css">  
+  <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/node_modules/prismjs/themes/prism.css">
+  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/prismjs/prism.js"></script> -->
   
-  <style>
+  <style title="outline">
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
       margin-bottom: 0;
@@ -148,6 +146,8 @@
     color: white;
     font-size: 10px;
 }
+
+
   </style>
   <script type="text/javascript">
   		_.templateSettings = {
@@ -410,17 +410,17 @@
 		function createLink(){
 			
 			var link = new joint.dia.Link({
-			    source: { x: 170, y: 20 }, 
-			    target: { x: 480, y: 20 },
-			    attrs: {
-			        // Define a filter for the whole link (special selector '.' means the root element )
-			        '.': { filter: { name: 'dropShadow', args: { dx: 1, dy: 1, blur: 2 } } },
-			        '.connection': {
-			            'stroke-width': 5, stroke: '#34495E'
-			        },
-			        //'.marker-source': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' },
-			        '.marker-target': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' }
-			    }
+			    source: { x: 170, y: 20 } 
+			    ,target: { x: 480, y: 20 }
+// 			    ,attrs: {
+// 			        // Define a filter for the whole link (special selector '.' means the root element )
+// 			        '.': { filter: { name: 'dropShadow', args: { dx: 1, dy: 1, blur: 2 } } },
+// 			        '.connection': {
+// 			            'stroke-width': 5, stroke: '#34495E'
+// 			        },
+// 			        //'.marker-source': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' },
+// 			        '.marker-target': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' }
+// 			    }
 			});
 			
 			graph.addCells([link]);
@@ -503,13 +503,13 @@
   <div class="row content text-left">
     <div class="col-sm-2 sidenav">
       <ul class="nav nav-pills nav-stacked">
-        <li><div id="shapeStart"></div></li>
-        <li><div id="shapeTask"></div></li>
-        <li><div id="shapeSubTask"></div></li>
-        <li><div id="shapeLink"></div></li>
+        <li><div id="shapeStart" style="background-color: transparent;"></div></li>
+        <li><div id="shapeTask" style="background-color: transparent;"></div></li>
+        <li><div id="shapeSubTask" style="background-color: transparent;"></div></li>
+        <li><div id="shapeLink" style="background-color: transparent;"></div></li>
       </ul><br>
     </div>
-    <div class="col-sm-8 text-left" id="canvas" style="height: 100%"></div>
+    <div class="col-sm-8 text-left" id="canvas" style="height: 100%;background-color: transparent;"></div>
     <div class="col-sm-2 sidenav">
       <div class="well">
         <p></p>

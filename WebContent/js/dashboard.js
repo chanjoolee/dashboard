@@ -93,6 +93,11 @@ var phaseColor = {
 		'Tools & infra for development':'#8d4653',
 		'development for mutiple projects  ':'#91e8e1'
 			
+		// regression
+		//System: Highcharts.defaultOptions.colors[0],
+		//Buffer: Highcharts.defaultOptions.colors[1],
+		//User: Highcharts.defaultOptions.colors[2]
+			
 		
 };
 
@@ -1501,17 +1506,6 @@ function getDrillDownDataSeries2(drillDownId,srcObj,keyArray,pSearch,convertDefi
 				
 				var dataListByXCol = getFilteredData(dataFiltered,[{col : xCol[0] , val : dt[xCol[0]] }],keyArray);
 				
-				/*//groupKey
-				$.each(keyArray,function(index, key){
-					var search4s = [
-					               {col:'col',val:key},
-					               {col:'val',val:dataListByXCol[0][key]}
-					];
-					
-					if(!arrayContain(search,search4s))
-						search.push({col : key , val : dataListByXCol[0][key] });
-				});*/
-				
 				if(!arrayContain(dataFiltered,search)){
 					
 					//var nilObj = $.extend({}, dataFiltered[0]);
@@ -2181,4 +2175,5 @@ function pivot(datasrc,colDef,groupbyColumns,targetColumn){
 	return rtnObject ;
 	
 }
+
 

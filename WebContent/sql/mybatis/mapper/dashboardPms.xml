@@ -93,116 +93,137 @@
 		    and FUNC.PJT_FUNC_ID is null
 		
 		)
-	    select
-	    
-			p.YYYYMM || '01' as YYYYMM,
-			--p.PJT_FUNC_ID,
-			--func.FUNC_NAME,
-			nvl(func.UP_FUNC_ID,'Undefined') as UP_PJT_FUNC_ID,
-			nvl(FN_CODE_NAME('Function',func.UP_FUNC_ID),'Undefined') as UP_PJT_FUNC_NAME,
-			p.PJT_ID,
-			info.PJT_NAME,
-			p.NATION NATL_CD,
-			FN_CODE_NAME('National_Cd',p.NATION) natl_name ,
-			--nvl(p.mm_plan,null) as mm_plan,
-			0 MM_PLAN,
-			-- sum(nvl(p.CAL_RATE,null )) as mm_result , 
-			sum(nvl(p.RATE,null )) as mm_result ,
-			count(distinct 
-	       	case 
-	       		when rate is null then null 
-	       		when rate = 0 then null
-	       		else
-	       			p.user_num
-	       	end
-	       	) as user_count ,
-			'X'  REVISION,
-			'Y' ISLATEST,
-			--p.STATUS,
-			p.PJT_PHASE_ID,
-			FN_CODE_NAME('Phase',p.PJT_PHASE_ID) as PJT_PHASE_NAME
-		from PJT_RSC_RATE p
-		join PJT_INFO info
-			on p.pjt_id = info.pjt_id
-		--left outer join PJT_FUNC func
-		left outer join tbl_func func
-			on p.PJT_FUNC_ID = func.pjt_func_id
-			and p.pjt_id = func.pjt_id 
-	    WHERE
-	        1=1
-	    --and p.ISLATEST = 'Y'
-	    and (func.UP_FUNC_ID != 'NPM_00000005' or func.UP_FUNC_ID is null ) /*  dev planning 제외*/
-	    <if test="estStartDate != null and estStartDate != ''">
-	    	<![CDATA[
-	    	and p.YYYYMM >= to_char(to_date(#{estStartDate},'YYYY-MM-DD'),'YYYYMM') 
-	    	]]>
-	    </if>
-	    <if test="estEndDate != null and estEndDate != ''">
-	    	<![CDATA[
-	    	and p.YYYYMM <= to_char(to_date(#{estEndDate},'YYYY-MM-DD'),'YYYYMM') 
-	    	]]>
-	    </if>
-	    <if test="pjt_code != null and pjt_code != ''">
-	    	and info.pjt_Id = #{pjt_code}
-	    </if>
-	    
-	    <!-- 2016.12.20 -->
-	    <if test="siteArr != null and siteArr != ''  " >
-       		and p.NATION in 
-            <foreach collection="siteArr" item="item" index="index"  open="(" separator="," close=")">
-                #{item}
-            </foreach>
-   		</if>
-	    <if test="functionArr != null and functionArr != ''  " >
-       		and func.UP_FUNC_ID in 
-            <foreach collection="functionArr" item="item" index="index"  open="(" separator="," close=")">
-                #{item}
-            </foreach>
-   		</if>
-   		<if test="pjtCodeArr != null and pjtCodeArr != ''  " >
-       		and info.pjt_Id in 
-            <foreach collection="pjtCodeArr" item="item" index="index"  open="(" separator="," close=")">
-                #{item}
-            </foreach>
-   		</if>
-	    /* order by PJT_ID,YYYYMM, PJT_FUNC_ID, NATL_CD */
-	    -- 2015-12-01 데이타로딩이 너무 오래 걸리므로 group by
-	    group by p.YYYYMM,func.UP_FUNC_ID,p.PJT_ID,info.PJT_NAME,p.NATION, p.PJT_PHASE_ID
+		, tbl_group as (
+		    select
+		    
+				p.YYYYMM || '01' as YYYYMM,
+				--p.PJT_FUNC_ID,
+				--func.FUNC_NAME,
+				nvl(func.UP_FUNC_ID,'Undefined') as UP_PJT_FUNC_ID,
+				max(p.PJT_FUNC_ID) max_PJT_FUNC_ID,
+				nvl(FN_CODE_NAME('Function',func.UP_FUNC_ID),'Undefined') as UP_PJT_FUNC_NAME,
+				p.PJT_ID,
+				info.PJT_NAME,
+				p.NATION NATL_CD,
+				FN_CODE_NAME('National_Cd',p.NATION) natl_name ,
+				--nvl(p.mm_plan,null) as mm_plan,
+				0 MM_PLAN,
+				sum(nvl(p.CAL_RATE,null )) as mm_result , 
+				sum(nvl(p.RATE,null )) as mm_result_rate ,
+				count(distinct 
+		       	case 
+		       		when rate is null then null 
+		       		when rate = 0 then null
+		       		else
+		       			p.user_num
+		       	end
+		       	) as user_count ,
+				'X'  REVISION,
+				'Y' ISLATEST,
+				--p.STATUS,
+				p.PJT_PHASE_ID,
+				FN_CODE_NAME('Phase',p.PJT_PHASE_ID) as PJT_PHASE_NAME
+			from PJT_RSC_RATE p
+			join PJT_INFO info
+				on p.pjt_id = info.pjt_id
+			left outer join PJT_FUNC func
+			--left outer join tbl_func func
+				on p.PJT_FUNC_ID = func.pjt_func_id
+				and p.pjt_id = func.pjt_id 
+		    WHERE
+		        1=1
+		    --and p.ISLATEST = 'Y'
+		    and (func.UP_FUNC_ID != 'NPM_00000005' or func.UP_FUNC_ID is null ) /*  dev planning 제외*/
+		    <if test="estStartDate != null and estStartDate != ''">
+		    	<![CDATA[
+		    	and p.YYYYMM >= to_char(to_date(#{estStartDate},'YYYY-MM-DD'),'YYYYMM') 
+		    	]]>
+		    </if>
+		    <if test="estEndDate != null and estEndDate != ''">
+		    	<![CDATA[
+		    	and p.YYYYMM <= to_char(to_date(#{estEndDate},'YYYY-MM-DD'),'YYYYMM') 
+		    	]]>
+		    </if>
+		    <if test="pjt_code != null and pjt_code != ''">
+		    	and info.pjt_Id = #{pjt_code}
+		    </if>
+		    
+		    <!-- 2016.12.20 -->
+		    <if test="siteArr != null and siteArr != ''  " >
+	       		and p.NATION in 
+	            <foreach collection="siteArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	   		</if>
+		    <if test="functionArr != null and functionArr != ''  " >
+	       		and func.UP_FUNC_ID in 
+	            <foreach collection="functionArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	   		</if>
+	   		<if test="pjtCodeArr != null and pjtCodeArr != ''  " >
+	       		and info.pjt_Id in 
+	            <foreach collection="pjtCodeArr" item="item" index="index"  open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	   		</if>
+		    /* order by PJT_ID,YYYYMM, PJT_FUNC_ID, NATL_CD */
+		    -- 2015-12-01 데이타로딩이 너무 오래 걸리므로 group by
+		    group by p.YYYYMM,func.UP_FUNC_ID,p.PJT_ID,info.PJT_NAME,p.NATION, p.PJT_PHASE_ID
+		 ) 
+		 
+		select 
+	    	YYYYMM,
+	    	--UP_PJT_FUNC_ID,
+	    	case
+	    		when UP_PJT_FUNC_ID = 'Undefined' then
+	    			fn_up_code_id(max_PJT_FUNC_ID)
+	    		else UP_PJT_FUNC_ID
+	    	end as UP_PJT_FUNC_ID,	    	
+	    	max_PJT_FUNC_ID,
+	    	case 
+	    		when UP_PJT_FUNC_NAME = 'Undefined' then
+	    			--fn_code_name('Function',fn_up_code_id(max_PJT_FUNC_ID))
+	    			nvl( fn_code_name('Function',fn_up_code_id(max_PJT_FUNC_ID))
+	    			, fn_code_name('',fn_up_code_id(max_PJT_FUNC_ID))
+	    			)
+	    		else UP_PJT_FUNC_NAME
+	    	end as UP_PJT_FUNC_NAME,
+	    	PJT_ID,
+	    	PJT_NAME,
+	    	NATL_CD,
+	    	natl_name,
+	    	MM_PLAN,
+	    	mm_result,
+	    	mm_result_rate,
+	    	user_count,
+	    	REVISION,
+	    	ISLATEST,
+	    	PJT_PHASE_ID,
+	    	PJT_PHASE_NAME
+	    from tbl_group 
 	  
     </select>
     
     <select id="pms.resource.subfunc" resultType="hashmap">
-    	
 	    select
 	    
 			p.YYYYMM || '01' as YYYYMM,
 			p.PJT_FUNC_ID,
-			func.FUNC_NAME,
-			nvl(func.UP_FUNC_ID,'Undefined') as UP_PJT_FUNC_ID,
-			nvl(FN_CODE_NAME('Function',func.UP_FUNC_ID),'Undefined') as UP_PJT_FUNC_NAME,
-			--p.PJT_ID,
-			--info.PJT_NAME,
+			nvl(fn_code_name('Function', p.PJT_FUNC_ID),fn_code_name('', p.PJT_FUNC_ID)  ) FUNC_NAME ,
+			fn_up_code_id(p.PJT_FUNC_ID) UP_PJT_FUNC_ID,
+			fn_code_name('Function', fn_up_code_id(p.PJT_FUNC_ID)) as UP_PJT_FUNC_NAME,
 			p.NATION NATL_CD,
 			FN_CODE_NAME('National_Cd',p.NATION) natl_name ,
-			--nvl(p.mm_plan,null) as mm_plan,
 			0 MM_PLAN,
 			sum(nvl(p.CAL_RATE,0 )) as mm_result , -- 2015-11-27
-			--nvl(p.CAL_RATE,null ) as mm_result , 
 			'X'  REVISION,
 			'Y' ISLATEST
-			--p.STATUS,
-			--p.PJT_PHASE_ID,
-			--FN_CODE_NAME('Phase',p.PJT_PHASE_ID) as PJT_PHASE_NAME
 		from PJT_RSC_RATE p
 		join PJT_INFO info
-			on p.pjt_id = info.pjt_id
-		left outer join PJT_FUNC func
-			on p.PJT_FUNC_ID = func.pjt_func_id
-			and p.pjt_id = func.pjt_id 
+			on p.pjt_id = info.pjt_id 
 	    WHERE
 	        1=1
-	    --and p.ISLATEST = 'Y'
-	    and (func.UP_FUNC_ID != 'NPM_00000005' or func.UP_FUNC_ID is null ) /*  dev planning 제외*/
 	    <if test="estStartDate != null and estStartDate != ''">
 	    	<![CDATA[
 	    	and p.YYYYMM >= to_char(to_date(#{estStartDate},'YYYY-MM-DD'),'YYYYMM') 
@@ -220,12 +241,9 @@
 	    <if test="site != null and site != ''">
 	    	and p.NATION = #{site}
 	    </if>
-	    
 	    <if test="func != null and func != ''">
-	    	and func.UP_FUNC_ID = #{func}
+	    	and fn_up_code_id(p.PJT_FUNC_ID) = #{func}
 	    </if>
-	    
-	    
 	    
 	    <!-- 2016.12.20 -->
 	    <if test="siteArr != null and siteArr != ''  " >
@@ -235,7 +253,7 @@
             </foreach>
    		</if>
 	    <if test="functionArr != null and functionArr != ''  " >
-       		and func.UP_FUNC_ID in 
+       		and fn_up_code_id(p.PJT_FUNC_ID) in 
             <foreach collection="functionArr" item="item" index="index"  open="(" separator="," close=")">
                 #{item}
             </foreach>
@@ -247,19 +265,21 @@
             </foreach>
    		</if>
 	    /* order by PJT_ID,YYYYMM, PJT_FUNC_ID, NATL_CD */
-	    group by p.YYYYMM,func.UP_FUNC_ID,p.PJT_FUNC_ID,func.FUNC_NAME, p.NATION
-	    order by p.YYYYMM,func.UP_FUNC_ID,p.PJT_FUNC_ID,func.FUNC_NAME
+	    group by p.YYYYMM,p.PJT_FUNC_ID, p.NATION
+	    order by p.YYYYMM,p.PJT_FUNC_ID, p.NATION
 	  
     </select>
     
     <select id="pms.resource.project" resultType="hashmap">
-    	
+    
 	    select
 			p.YYYYMM || '01' as YYYYMM,
 			p.PJT_FUNC_ID,
-			func.FUNC_NAME,
-			func.UP_FUNC_ID as UP_PJT_FUNC_ID,
-			FN_CODE_NAME('Function',func.UP_FUNC_ID) as UP_PJT_FUNC_NAME,
+			nvl(func.FUNC_NAME, fn_code_name('',fn_up_code_id(p.PJT_FUNC_ID)) ) as FUNC_NAME ,
+			--func.UP_FUNC_ID as UP_PJT_FUNC_ID,
+			fn_up_code_id(p.PJT_FUNC_ID) UP_PJT_FUNC_ID,
+			--FN_CODE_NAME('Function',func.UP_FUNC_ID) as UP_PJT_FUNC_NAME,
+			fn_code_name('',fn_up_code_id(p.PJT_FUNC_ID)) UP_PJT_FUNC_NAME,
 			p.PJT_ID,
 			info.PJT_NAME,
 			p.NATION NATL_CD,
@@ -695,8 +715,21 @@
 	    	a.PJT_ID, 
 	       	a.PJT_NAME, 
 	       	/*a.YYYYMM, */
-	       	UP_PJT_FUNC_ID,
-	       UP_PJT_FUNC_NAME,
+	       	--UP_PJT_FUNC_ID,
+	       	case
+	    		when UP_PJT_FUNC_ID = 'Undefined' then
+	    			fn_up_code_id(max_PJT_FUNC_ID)
+	    		else UP_PJT_FUNC_ID
+	    	end as UP_PJT_FUNC_ID,	   	
+	       --UP_PJT_FUNC_NAME,
+	       case 
+	    		when UP_PJT_FUNC_NAME = 'Undefined' then
+	    			--fn_code_name('Function',fn_up_code_id(max_PJT_FUNC_ID))
+	    			nvl( fn_code_name('Function',fn_up_code_id(max_PJT_FUNC_ID))
+	    			, fn_code_name('',fn_up_code_id(max_PJT_FUNC_ID))
+	    			)
+	    		else UP_PJT_FUNC_NAME
+	    	end as UP_PJT_FUNC_NAME,
 	       NATL_CD,
 	       NATL_NAME,
 	       	a.MM_RESULT,
@@ -707,6 +740,7 @@
 		       p.PJT_ID, 
 		       info.PJT_NAME, 
 		       nvl(func.UP_FUNC_ID,'Undefined') as UP_PJT_FUNC_ID,
+		       max(p.PJT_FUNC_ID) max_PJT_FUNC_ID,
 			   nvl(FN_CODE_NAME('Function',func.UP_FUNC_ID),'Undefined') as UP_PJT_FUNC_NAME,
 		       p.nation NATL_CD,
 			   --FN_CODE_NAME('National_Cd',p.NATL_CD) natl_name ,

@@ -35,6 +35,21 @@
 		ORDER BY B.DT
     </select>
     
+    <select id="license.selectIarLicenseUseList.grid" resultType="hashmap">
+    	SELECT
+			LOG_FULL_DATE,
+			TRANS_TYPE,		
+			FEATURE_NAME,
+			FEATURE_VERSION,
+			USER_NUM,
+			HOST_NAME		
+		from IAR_LICENSE_LOG
+		where  LOG_FULL_DATE BETWEEN REPLACE(#{fromDt}, '-', '') AND REPLACE(#{toDt}, '-', '')
+		and TRANS_TYPE in ('0','1')
+		order by LOG_FULL_DATE, TRANS_TYPE, FEATURE_NAME
+    
+    </select>
+    
     <select id="license.selectLicenseUsageList.smonth.table" resultType="hashmap">
 		SELECT DISTINCT SYEAR || '-' || SMONTH  TMONTH
      	FROM PDF_DATA_LIST
@@ -52,10 +67,16 @@
                 'Max Avail' GBAVL  ,
                  Max(AVAIL)AVAIL                            
          FROM PDF_DATA_LIST
-         WHERE SITE_NM 		= #{siteNm}
+         WHERE 1=1
+         <if test="siteNmArr != null and siteNmArr != '' ">
+         	and SITE_NM  in 
+         	<foreach collection="siteNmArr" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+         </if>
          AND   LICENSE_NM  	= #{licenseNm}
          AND   SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
-         GROUP BY SITE_NM, SYEAR, SMONTH                
+         GROUP BY SYEAR, SMONTH                
          UNION ALL
          SELECT  
          		 SYEAR || SMONTH USE_MONTH,
@@ -67,10 +88,16 @@
                 'Max Avail' GBAVL  ,
                 ROUND(AVG(0),1) AVAIL                     
          FROM PDF_DATA_LIST
-         WHERE SITE_NM 		= #{siteNm}
+         WHERE 1=1
+         <if test="siteNmArr != null and siteNmArr != '' ">
+         	and SITE_NM  in 
+         	<foreach collection="siteNmArr" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+         </if>
          AND   LICENSE_NM  	= #{licenseNm}
          AND   SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
-         GROUP BY SITE_NM, SYEAR, SMONTH       
+         GROUP BY SYEAR, SMONTH       
          ORDER BY 1
     </select>
     
@@ -240,6 +267,42 @@
 	)
 	GROUP BY TYPE, DISPORDER
 	ORDER BY DISPORDER
+    </select>
+    
+    <select id="dashboard.license.selectUseMonthTable" resultType="hashmap">
+		SELECT DISTINCT SYEAR || '-' || SMONTH  TMONTH
+     	FROM SOLUTIONPMS.PDF_DATA_LIST
+     	WHERE  1=1
+     	AND LICENSE_NM 	= #{licenseNm}   
+        <if test="siteNmArr != null and siteNmArr != '' ">
+         	and SITE_NM  in 
+         	<foreach collection="siteNmArr" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+         </if>
+     	AND SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
+     	ORDER BY 1         
+    </select>
+    <select id="dashboard.license.selectLicenseUsageSmonthList" resultType="hashmap">
+	    SELECT VENDER,
+	    	SITE_NM,
+	    	SYEAR,
+	    	SMONTH,
+            MAX(DENIAL) DENIAL, 
+            MAX(PEAK) PEAK,
+            MAX(USED) USED,
+            MAX(AVAIL) AVAIL
+            FROM SOLUTIONPMS.PDF_DATA_LIST
+            WHERE 1=1
+            AND LICENSE_NM 	= #{licenseNm}           
+            <if test="siteNmArr != null and siteNmArr != '' ">
+	         	and SITE_NM  in 
+	         	<foreach collection="siteNmArr" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	         </if>
+            AND SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}            
+            GROUP BY VENDER,SITE_NM,SYEAR,SMONTH 
     </select>
      
 </mapper>

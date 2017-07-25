@@ -100,6 +100,7 @@ public class PerformanceController {
     	
     	ModelAndView mav = new ModelAndView(); 
     	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+    	commonService.requestToVo(request, searchVO);
     	searchVO.put("FOLDER_NAME",request.getParameterValues("FOLDER_NAME[]"));
     	List<?> dataList = service.dataList(searchVO);
         mav.addObject("dataList", dataList);
@@ -161,6 +162,19 @@ public class PerformanceController {
     	List<?> dataList = service.ssdDistinctField(searchVO);
     	mav.addObject("dataList",dataList);
         mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/performanceReportJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView performanceReportJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	
+        mav.addObject("chartData", searchVO.get("searchJson"));       
+        mav.setViewName("jsonView");        
+        
 
         return mav;
     }

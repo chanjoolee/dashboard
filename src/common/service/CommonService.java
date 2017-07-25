@@ -33,6 +33,7 @@ import com.sun.jersey.multipart.FormDataBodyPart;
 
 import common.dao.CommonDao;
 import common.dao.PmsDao;
+import net.sf.json.JSONObject;
 
 @Service
 public class CommonService {
@@ -52,6 +53,11 @@ public class CommonService {
 	@SuppressWarnings("rawtypes")
     public List selectList(String statement,Object parameter) {
         return (List)dao.selectList(statement, parameter);
+    }
+	
+	@SuppressWarnings("rawtypes")
+    public void update(String statement,Object parameter) {
+        dao.update(statement, parameter);
     }
 	
 	@SuppressWarnings("rawtypes")
@@ -373,9 +379,31 @@ public class CommonService {
 			String keyStr = (String)key;
 			String[] value = (String[])map.get(keyStr);
 			vo.put(keyStr+"Arr",value);
+			
+			if(keyStr.equals("searchJson")){
+				Object searchJsonStr = vo.get("searchJson");
+		    	if(searchJsonStr != null){
+		    		JSONObject searchJson = JSONObject.fromObject(searchJsonStr.toString());
+		    		vo.put("searchJsonOrigin", searchJsonStr.toString());
+		    		vo.put("searchJson", searchJson);
+		    	}
+			}
+			if(keyStr.equals("origindata")){
+				Object origindata = vo.get("origindata");
+		    	if(origindata != null){
+		    		JSONObject origindataJson = JSONObject.fromObject(origindata.toString());
+		    		vo.put("origindataOrigin", origindata.toString());
+		    		vo.put("origindata", origindataJson);
+		    	}
+			}
+			
 		   
 		}
+		
+		
 	}
+
+	
 
 	
 }

@@ -61,7 +61,7 @@
 		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	 --%>
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -1141,6 +1141,11 @@
 	<script type="text/javascript">
 	var dataList = [];
 	$(function () {
+		parent.$("html").css("overflow","scroll");
+		parent.$(".box_gray").css("height","1200px");
+		//$("html").css("overflow","hidden");
+		
+		
 		//getDataByJson();
 		drawGrid();
 		makeHtml('searchCondition', schema);
@@ -1521,7 +1526,7 @@
 	    }
 	    
 	    .table>tbody>tr>td{
-			padding: 7px;
+			padding: 5px;
 		}
 		
 		/* #searchCondition h3{
@@ -1540,7 +1545,7 @@
 <input type="hidden" id="testId" name="testId" value=""/>
 <div id="searchCondition"></div>
 <div align="left" id="container" class="dashboard-div container" >
-	<div id="jqgrid" style="width:100%;/* display:inline-block;float:left; */">
+	<div id="jqgrid" style="width:100%; height: 900px;/* display:inline-block;float:left; */">
 		<table id="jqgridTable"></table>
 		<div id="jqgridPager"></div>
 	</div>

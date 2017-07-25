@@ -51,7 +51,7 @@ public class LicenseController {
     public ModelAndView iarLicenseUseJson(HttpServletRequest request, @RequestParam Map<Object,Object> searchVO, Locale locale, Model model) {
     	
     	ModelAndView mav = new ModelAndView(); 
-    	
+    	commonService.requestToVo(request, searchVO);
     	List<?> dataList = service.selectIarLicenseUseList(searchVO);
     	
         mav.addObject("dataList", dataList);

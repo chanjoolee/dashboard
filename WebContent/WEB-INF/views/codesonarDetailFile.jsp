@@ -12,7 +12,7 @@
 	<script src="js/highcharts/src/highcharts-more.src.js"></script>
 	<script src="js/highcharts/src/exporting.src.js"></script>
 	<script src="js/highcharts/modules/no-data-to-display.src.js"></script>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<!-- Additional files for the Highslide popup effect -->
 	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>

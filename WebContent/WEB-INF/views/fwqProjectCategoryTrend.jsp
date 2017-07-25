@@ -38,7 +38,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	<link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	<script src="js/pms/resourceBySite.js"></script>
@@ -542,7 +542,7 @@
 		$("#buttonRawData").remove();
 		$("#buttonGuide").remove();
 		
-		if($('#category').val() == "CODING_RULE"){
+		if($('#category').val() == "CODING_RULE_AAA"){
 			chart.renderer.label('Raw Data', width -20 - 80  -90 ,10 )
 	        .attr({
 	        	width:80,
@@ -616,7 +616,26 @@
         .on('click', function () {
         	//popSchedule();
         	//window.open('http://confluence.skhynix.com/display/FSSW/FW+Quality+Guide','_blank');
-        	window.open("http://confluence.skhynix.com/display/FSSW/FW+Quality+Guide", "", "left=300, top = 200, width=1300,height=700resizable=yes, scrollbars=yes, status=yes,menubar=yes");
+        	if($("#category").val() == "CODING_RULE"){
+        		var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+				if (isIE){
+					var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + "/MISRA Rule_0329.pptx"];
+		            var blobObject = new Blob(fileData);
+		            window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+
+				}else{
+					var link = document.createElement('a');
+					link.download = "MISRA Rule_0329.pptx";
+					link.href = "${pageContext.request.contextPath}" + "/MISRA Rule_0329.pptx";
+					//Firefox requires the link to be in the body
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+				}
+        	}else{
+        		window.open("http://confluence.skhynix.com/display/FSSW/FW+Quality+Guide", "", "left=300, top = 200, width=1300,height=700resizable=yes, scrollbars=yes, status=yes,menubar=yes");	
+        	}
+        	
         })
         .on('mouseover',function(e){
         	/* text = chart.renderer.text('This confluence page could be an informative text', e.layerX - 300, e.layerY - 10)

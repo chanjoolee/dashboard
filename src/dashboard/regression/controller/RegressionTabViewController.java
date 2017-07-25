@@ -63,9 +63,101 @@ public class RegressionTabViewController {
     	ModelAndView mav = new ModelAndView(); 
     	commonService.requestToVo(request, searchVO);
     	List<?> folderList = service.folderList(searchVO);
-    	//List<?> tabList = service.tabList(searchVO);
         mav.addObject("folderList", folderList);
-        //mav.addObject("tabList", tabList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/regressionTabViewFolderMetaJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewFolderMetaJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = service.folderMeta(searchVO);
+        mav.addObject("dataList", dataList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/regressionTabViewSmartJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewSmartJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = service.smartList(searchVO);
+        mav.addObject("dataList", dataList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/regressionTabViewHostJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewHostJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = service.hostList(searchVO);
+        mav.addObject("dataList", dataList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/regressionTabViewPecountJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewPecountJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = service.pecountList(searchVO);
+        mav.addObject("dataList", dataList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/regressionTabViewErrologJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewErrologJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = service.errorlogList(searchVO);
+        mav.addObject("dataList", dataList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    @RequestMapping(value = "/regressionTabViewMainJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewMainJson(HttpServletRequest request,HttpServletResponse response, 
+    		@RequestParam Map<Object,Object> searchVO ,
+    		//@RequestParam(value="folderNames[]") List<Map> folderNames,
+    		//@RequestParam(value="selectedPoints[]") List<Map> selectedPoints,
+    		Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	//searchVO.put("folderNames", folderNames);
+    	//searchVO.put("selectedPoints", selectedPoints);
+    	searchVO.put("folderNames",request.getParameterValues("folderNames[]"));
+    	searchVO.put("selectedPoints",request.getParameterValues("selectedPoints[]"));
+    	
+    	List<?> dataList = service.mainList(searchVO);
+        mav.addObject("dataList", dataList);
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    
+    @RequestMapping(value = "/regressionTabViewCommonJson",method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView regressionTabViewCommonJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	List<?> dataList = service.commonList(searchVO);
+        mav.addObject("dataList", dataList);
         mav.setViewName("jsonView");        
 
         return mav;

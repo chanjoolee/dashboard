@@ -58,7 +58,7 @@
 		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	 --%>
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=1"></script>
+	<script src="js/dashboard.js?version=2017.05.26"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -593,23 +593,29 @@
 			var diff = 0;
 			//var symbol ="circle"; 
 			var symbol ="url(/dashboard/images/unchange.png)"; 
+			var symbolTxtUp ="▲";
+			var symbolTxtDown ="▼ ";
+			var symbolTxt = '<span style="color:grey">-</span>';
+			var symbolHtml = "";
 			var fillColor = "yellow";
 			
 			if( fwqDataList[i].preData != null){
 				preData = fwqDataList[i].preData;
 			}
 			if(preData.POINT != undefined){
-				diff = fwqDataList[i].POINT - preData.POINT;
+				diff = Number(fwqDataList[i].POINT.toFixed(2))  - Number(preData.POINT.toFixed(2)) ;
 			}
 			
-			if(Math.round(diff) > 0 ){
+			if(diff > 0 ){
 				//symbol = 'triangle';
 				//fillColor = 'red';
 				symbol = 'url(/dashboard/images/up.png)';
-			}else if(Math.round(diff) < 0){
+				symbolTxt = '<span style="color: blue">'+symbolTxtUp+'</span>';
+			}else if(diff < 0){
 				//symbol = 'triangle-down';
 				//fillColor = 'blue';
 				symbol = 'url(/dashboard/images/down.png)';
+				symbolTxt = '<span style="color: red">'+symbolTxtDown+'</span>';
 			}
 			
 			var data =  {
@@ -618,36 +624,36 @@
 				
 				dataraw: fwqDataList[i],
 				dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format:'<b>{point.dataraw.PJT_NAME}</b>',
-                    formatter: function() {
-    	               //return '<b style="font-size:16px;">'+ this.point.dataraw.PJT_NAME +'</b>';
-    	                //alert('a');
-    	            },
+//                     formatter: function() {
+//     	               return '<b style="font-size:11px;">'+ this.point.dataraw.PJT_NAME +'</b>';
+//     	                //alert('a');
+//     	            },
     	            y: - 8
                 },
                 //symbol
 	          	marker:{
 	          		symbol: symbol,
-	          		width:20,
-	          		height:20,
+	          		width:15,
+	          		height:15,
 	          		fillColor : 'rgba(255,0,0,1)',
 	          		//lineColor : '#000000',
 	          		//lineWidth : 1,
 	          		elementObj:{
 	          			id: fwqDataList[i].PJT_CODE + '-' + fwqDataList[i].MEASURE_DT 
-	          		},
-	          		states: {
-                        hover: {
-                        	endabled:true,
-                            //fillColor: fillColor,
-                            //lineColor: '#000000',
-                            //lineWidth: 2
-                            symbol:symbol,
-                            width:33,
-                            height:33
-                        }
-                    }
+	          		}
+// 	          		,states: {
+//                         hover: {
+//                         	//endabled:true,
+//                             //fillColor: fillColor,
+//                             //lineColor: '#000000',
+//                             //lineWidth: 2
+//                             symbol:symbol,
+//                             width:33,
+//                             height:33
+//                         }
+//                     }
 	          	}  
                 
 			};
@@ -728,8 +734,8 @@
 	                            this.graphic.attr('height', 25);
 		                    },
 		                    mouseOut: function() {
-		                        this.graphic.attr('width', 20);
-		                        this.graphic.attr('height', 20);
+		                        this.graphic.attr('width', 15);
+		                        this.graphic.attr('height', 15);
 		                     }
 		                     
 	                	}
@@ -745,6 +751,7 @@
 	                            lineColor: 'rgb(100,100,100)'
 	                        }
 	                    }
+	                    
 	            	}
 	            }
 	        },
@@ -1011,7 +1018,7 @@
 			var diff = 0;
 			var preData = this.preData;
 			if(preData != undefined && preData.POINT != undefined){
-				diff = this.POINT - preData.POINT;
+				diff = Number(this.POINT.toFixed(2)) - Number(preData.POINT.toFixed(2));
 			}
 			var symbolPath = $("#"+this.PJT_CODE + '-' + this.MEASURE_DT);
 			if(symbolPath.attr("d") != undefined ){
@@ -1024,7 +1031,7 @@
 					y = Math.round((symbolPath).attr("d").split(" ")[7]);
 				}
 				
-				if(x != undefined && Math.round(diff) != 0){
+				if(x != undefined && diff != 0){
 					symbolRenderer.text(diff.toFixed(2) + '' , x , y +10).attr("id","symbolText"+this.PJT_CODE+'-'+this.MEASURE_DT).add();
 				}
 			}else if(symbolPath[0].tagName == 'image'){
@@ -1038,7 +1045,7 @@
 					y = Math.round((symbolPath).attr("y"))+13;
 				}
 				
-				if(x != undefined && Math.round(diff) != 0){
+				if(x != undefined && diff != 0){
 					symbolRenderer.text(diff.toFixed(2) + '' , x , y +15)
 					.attr("id","symbolText"+this.PJT_CODE+'-'+this.MEASURE_DT)
 					.attr("style","font-weight:bolder;font-size:11px")
@@ -1248,8 +1255,11 @@
 					preData = data.preData;
 				}
 				if(preData[options.colModel.name] != undefined){
-					diff = data[options.colModel.name] - preData[options.colModel.name];
+					diff = Number(data[options.colModel.name].toFixed(2)) - Number(preData[options.colModel.name].toFixed(2));
 				}
+				
+				
+				//diff = Number(diff.toFixed(2));
 				
 				if(diff  > 0 ){
 					//symbol = 'triangle';
@@ -1270,7 +1280,7 @@
 				//dataHtml = '<span style="font-weight:bold">' + rowObject[options.colModel.name].toFixed(options.colModel.formatoptions.decimalPlaces) +'</span>';
 				dataHtml = '<span style="font-weight:'+fontWeight+'">' + $.number(rowObject[options.colModel.name],options.colModel.formatoptions.decimalPlaces) +'</span>';
 				imageHtml = '<br/><img src="' + symbol + '" style="width:20px;"/>';
-				symbolHtml = '<br/>'+symbolTxt;
+				symbolHtml = '<br/>'+symbolTxt + "";
 				labelHtml = "<span> ("+  $.number(diff,options.colModel.formatoptions.decimalPlaces) + ")</span>";
 				
 				
@@ -1312,8 +1322,10 @@
       					preData = data.preData;
       				}
       				if(preData.POINT != undefined){
-      					diff = data.POINT - preData.POINT;
+      					diff = Number(data.POINT.toFixed(2)) - Number(preData.POINT.toFixed(2));
       				}
+      				
+      				//diff = Number(diff.toFixed(3));
       				
       				if(diff > 0 ){
       					//symbol = 'triangle';
