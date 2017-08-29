@@ -370,8 +370,8 @@
    } ,
    
 	"Corona" : {
-   		category : "Corona dashboard",
-   		todos: [
+   		"category" : "Corona dashboard",
+   		"todos": [
    			{
    				id:"table_analysis",
    				date: "2017년 7월 4일 화요일 오전 10:51:01"
@@ -848,7 +848,370 @@
    				]
    			}
    			
-   		
+   			, {
+   				"name": "script_manager"
+   				"testUrl": [
+   					"http://chanjoo.skhynix.com:8080/nspim/dash/performanceHigh.do?dashboardUrl=generic.html?viewName=corona_manage_script"
+   					,"http://solutionpms.skhynix.com/nspim/dash/performanceHigh.do?dashboardUrl=generic.html?viewName=corona_manage_script"
+   					,"http://solutionpms.skhynix.com/nspim/dash/performanceHigh.do?dashboardUrl=generic.html?viewName=coronaSummary"
+   				],
+   				"list": [
+   					{
+   						"name": "manage_raw_script",
+   						"functions": [ // 구현할 기능
+   							{
+   								"name": "search_list",
+   								"search_conditions": [],
+   								"grouping" : ["category","test_item"],
+   								"tool": ["jqgrid"]
+   								
+   							},
+   							{
+   								"name": "edit_details",
+   								"comments": [
+   									"subGridRowExpanded 로 확장후 . react.js 를 이용해서 component를 만듦?",
+   									"jqgrid default",
+   									"jqgrid template"
+   								]
+   							},
+   							{
+   								"name": "copy_to_firmware",
+   								"desc": "copy 버튼을 누르면 아랬쪽 firmware list에 script 를 copy 한다."
+   							}
+   						] ,
+   						"jsps": [
+   							{
+   								"name": "corona_manage_tabs.jsp",
+   								"기능": [
+   									"page container by tab",
+   									
+   								]
+   								, "functions" : {
+   									"schemaTabs": {
+   										"elements": [
+   											{
+   												"type": "tab_node"
+   												"id" : "해당 tab id",
+   												"connected_content" :  {
+   													"id": "content id",
+   													"topElement": "schema.elements"
+   												}
+   											},
+   											{
+   												"type": "tab_iframe"
+   												"id" : "해당 tab id",
+   												"label" : "",
+   												"connected_content" :  {
+   													"url": "content id"
+   												}
+   											}
+   										]
+   									}
+   								}
+   								
+   								
+   							},
+   							{
+								"name": "corona_manage_script.jsp",
+								"기능": [
+									"script master add, edit, del",
+									"firmware script master edit",
+									"copy to firmware script master from script master"
+								] 
+								
+								"variables" : [
+									{
+										name: "schemaSearch",
+										type: "schema",
+										list: [
+											{
+												name: "category",
+												required: false,
+												sqlid: "dashboard.corona.script.category.distinct"
+											},
+											{
+												name: "test_item",
+												required: false,
+												sqlid: "dashboard.corona.script.test_item.distinct"
+											},
+											"button: search"
+										
+										]
+										,sqlid: "dashboard.corona.manage.script.search"										
+										
+									},
+									{
+										name: "schemaContent",
+										type: "schema",
+										list: [
+											{
+												name: "grid: script"
+												type: "grid",
+												referrence: ["http://jsfiddle.net/Suninsky/564RP/12/"],
+												functions: [
+													{
+														"function": edit,
+														isCompleted: true
+													},
+													{
+														"function": add,
+														isCompleted: true,
+														options: {
+															input_param: [
+																
+															],
+															edit_cols : [
+																{ col: "category" },
+																{ col: "test_item" },
+																{ col: "script_name" }
+															],
+															process : [
+																"edit",
+																"save",
+																"reloadGrid"
+															]
+														}
+													},
+													{
+														"function": del,
+														isCompleted: true
+													}
+												],
+												work_history: [
+													{
+														date: "2017년 7월 28일 금요일 오전 10:38:44",
+														comment: "jqgrid를 사용하여 grouping을 해 보니 너무 느림. js Tree를 사용하기로 함."
+													},
+													{
+														date: "2017년 8월 3일 목요일 오후 5:19:31",
+														comment: "delete and refresh is not good"
+														
+													}
+												]
+											
+											},
+											
+											{
+												name: "schemaCopy",
+												type: "schema",
+												list : [
+													{"function":"select: project",isCompleted: true},
+													{"function":"select: firmware",isCompleted: true},
+													{"function":"button: search",isCompleted: true},
+													{
+														"function":"button: copy",
+														isCompleted: false,
+														paremeters : {
+															selectedlist: {
+																type: "list",
+																fields : [
+																	"script_name"
+																]
+															},
+															target: {
+																type: "object",
+																fields : [
+																	"firmware",
+																	"sample"
+																]
+															}
+														}
+													}
+												]
+												
+											},
+											{
+												name: "grid: firmware",
+												functions: [
+													{
+														"function": edit,
+														isCompleted: true
+													},
+													{
+														"function": add,
+														isCompleted: true
+													},
+													{
+														"function": del,
+														isCompleted: true
+													}
+												]
+												
+											} 
+										]
+									},									
+									{
+										name : "fn_copy",
+										type: "function",
+										parameter: [],
+										process: [
+											{
+												name: "check project, firmware"
+											},
+											{
+												name: "get selected list from scripts"
+											},
+											{
+												name: "get target project and firmware"
+											},
+											{
+												name: "submit to server"
+											},
+											{
+												name: "list of script project and firmware"
+											}
+										]
+									},
+									{
+										name: "fn_add_script",
+										type: "function"
+									},
+									{
+										name: "fn_save_script",
+										type: "function"
+									},
+									{
+										name: "fn_delete_script",
+										type: "function"
+									},
+									{
+										name: "fn_add_script_firmware",
+										type: "function"
+									},
+									{
+										name: "fn_save_script_firmware",
+										type: "function"
+									},
+									{
+										name: "fn_delete_script_firmware",
+										type: "function"
+									}
+								]
+							}
+							
+							
+   						
+   						]
+   						
+   					},
+   					{
+   						name: "manage_firmware_script",
+   						functions: [ // 구현할 기능
+   							{
+   								name: "search_list",
+   								search_conditions: [],
+   								grouping : ["category","test_item"],
+   								tool: ["jqgrid"]
+   								
+   							},
+   							{
+   								name: "edit_details",
+   								comments: [
+   									"subGridRowExpanded 로 확장후 . react.js 를 이용해서 component를 만듦?",
+   									"jqgrid default",
+   									"jqgrid template"
+   								]
+   							},
+   							{
+   								name: "copy_to_firmware",
+   								desc: "copy 버튼을 누르면 아랬쪽 firmware list에 script 를 copy 한다."
+   							}
+   						] ,
+   						jsps: [
+   							{
+								name: "corona_manage_script.jsp",
+								variables : [
+									{
+										name: "schemaSearch",
+										type: "schema",
+										list: [
+											{
+												name: "category",
+												required: false
+											},
+											{
+												name: "test_item",
+												required: false
+											},
+											"button: search"
+										
+										]
+										,sqlid: "dashboard.corona.manage.script.search"										
+										
+									},
+									{
+										name: "schemaContent",
+										type: "schema",
+										list: [
+											"grid: script",
+											{
+												name: "schemaCopy",
+												type: "schema",
+												list : [
+													"select: project",
+													"select: firmware",
+													"button: search",
+													"button: copy"
+												]
+												
+											},
+											"grid: firmware"
+										]
+									},									
+									{
+										name : "fn_copy",
+										type: "function",
+										parameter: [],
+										process: [
+											{
+												name: "check project, firmware"
+											},
+											{
+												name: "get selected list from scripts"
+											},
+											{
+												name: "get target project and firmware"
+											},
+											{
+												name: "submit to server"
+											},
+											{
+												name: "list of script project and firmware"
+											}
+										]
+									},
+									{
+										name: "fn_add_script",
+										type: "function"
+									},
+									{
+										name: "fn_save_script",
+										type: "function"
+									},
+									{
+										name: "fn_delete_script",
+										type: "function"
+									},
+									{
+										name: "fn_add_script_firmware",
+										type: "function"
+									},
+									{
+										name: "fn_save_script_firmware",
+										type: "function"
+									},
+									{
+										name: "fn_delete_script_firmware",
+										type: "function"
+									}
+								]
+							}
+   						
+   						]
+   						
+   					}
+   				]
+   			}
    		]
    	
    	} ,
@@ -1179,7 +1542,583 @@
    		"resource": {
    			url: "/dashboard/ssdReliabilityMain.html",
    			controller : "dashboard.ssd.controller.SSDController.ssdReliabilityMain",
-   			sql: "ssdReliability.xml, ssd.xml"
+   			sql: "ssdReliability.xml, ssd.xml",
+   			tables : {
+   				oracle : { 
+   					connectionInfo: {
+   						ConnectionString: "jdbc:oracle:thin:@10.15.202.33:1521/RNDDAS",
+   						user: "rsohd",
+   						password: "rsohdadm"
+   					},
+   					"RSOHD.DRST" : function(){
+	   					CREATE TABLE RSOHD.DRST
+						(
+						    MEASUREID                   NUMBER NOT NULL,
+						    PROJECTID                   VARCHAR2(10),
+						    TESTNM                      VARCHAR2(10),
+						    EQMID                       VARCHAR2(50),
+						    START_DT                    VARCHAR2(10),
+						    CAPACITY                    VARCHAR2(10),
+						    CNUM                        VARCHAR2(20),
+						    PGBNM                       VARCHAR2(10),
+						    TONUM                       VARCHAR2(4),
+						    TNNUM                       VARCHAR2(6),
+						    DUTNO                       VARCHAR2(5),
+						    EQMCAT                      VARCHAR2(20),
+						    FILENAME                    VARCHAR2(200),
+						    LOAD_DT                     DATE,
+						    CONSTRAINT PK_DRST_MEASUREID PRIMARY KEY (MEASUREID),
+						    CONSTRAINT UK_DRST UNIQUE (PROJECTID, TESTNM, EQMID, START_DT, CAPACITY, CNUM, PGBNM, TONUM, TNNUM, DUTNO, EQMCAT)
+						);
+					},
+					"RSOHD.DRSTLOG" : function(){
+						CREATE TABLE RSOHD.DRSTLOG
+						(
+						    IL_SEQ                      NUMBER,
+						    COL_ID                      VARCHAR2(100) NOT NULL,
+						    COL_NAME                    VARCHAR2(100),
+						    LOG_NO                      NUMBER,
+						    LOG_NAME                    VARCHAR2(50),
+						    LOG_DESC                    VARCHAR2(500),
+						    UNIT                        VARCHAR2(20),
+						    DATA_TYPE                   VARCHAR2(20),
+						    LOG_OPTION                  VARCHAR2(20),
+						    ATT_NO                      NUMBER,
+						    ATT_NAME                    VARCHAR2(50),
+						    CONSTRAINT PK_DRSTLOG PRIMARY KEY (COL_ID),
+						    CONSTRAINT UK_DRSTLOG UNIQUE (COL_ID, COL_NAME, LOG_NO, LOG_NAME, ATT_NO, ATT_NAME)
+						);
+					},
+					"RSOHD.FMDETAILRST" : function(){
+						CREATE TABLE RSOHD.FMDETAILRST (
+						    MEASUREID                   NUMBER,
+						    TSUBNO                      NUMBER,
+						    TNAME                       VARCHAR2(100),
+						    TEST_START                  DATE,
+						    CURRENT_TEMPERATURE         NUMBER,
+						    STR001                      VARCHAR2(100),
+						    STR002                      VARCHAR2(100),
+						    STR003                      VARCHAR2(100),
+						    STR004                      VARCHAR2(100),
+						    STR005                      VARCHAR2(100),
+						    STR006                      VARCHAR2(100),
+						    STR007                      VARCHAR2(100),
+						    STR008                      VARCHAR2(100),
+						    STR009                      VARCHAR2(100),
+						    STR010                      VARCHAR2(100),
+						    NUM001                      NUMBER,
+						    NUM002                      NUMBER,
+						    NUM003                      NUMBER,
+						    NUM004                      NUMBER,
+						    NUM005                      NUMBER,
+						    NUM006                      NUMBER,
+						    NUM007                      NUMBER,
+						    NUM008                      NUMBER,
+						    NUM009                      NUMBER,
+						    NUM010                      NUMBER,
+						    NUM011                      NUMBER,
+						    NUM012                      NUMBER,
+						    NUM013                      NUMBER,
+						    NUM014                      NUMBER,
+						    NUM015                      NUMBER,
+						    NUM016                      NUMBER,
+						    NUM017                      NUMBER,
+						    NUM018                      NUMBER,
+						    NUM019                      NUMBER,
+						    NUM020                      NUMBER,
+						    NUM021                      NUMBER,
+						    NUM022                      NUMBER,
+						    NUM023                      NUMBER,
+						    NUM024                      NUMBER,
+						    NUM025                      NUMBER,
+						    NUM026                      NUMBER,
+						    NUM027                      NUMBER,
+						    NUM028                      NUMBER,
+						    NUM029                      NUMBER,
+						    NUM030                      NUMBER,
+						    NUM031                      NUMBER,
+						    NUM032                      NUMBER,
+						    NUM033                      NUMBER,
+						    NUM034                      NUMBER,
+						    NUM035                      NUMBER,
+						    NUM036                      NUMBER,
+						    NUM037                      NUMBER,
+						    NUM038                      NUMBER,
+						    NUM039                      NUMBER,
+						    NUM040                      NUMBER,
+						    NUM041                      NUMBER,
+						    NUM042                      NUMBER,
+						    NUM043                      NUMBER,
+						    NUM044                      NUMBER,
+						    NUM045                      NUMBER,
+						    NUM046                      NUMBER,
+						    NUM047                      NUMBER,
+						    NUM048                      NUMBER,
+						    NUM049                      NUMBER,
+						    NUM050                      NUMBER,
+						    NUM051                      NUMBER,
+						    NUM052                      NUMBER,
+						    NUM053                      NUMBER,
+						    NUM054                      NUMBER,
+						    NUM055                      NUMBER,
+						    NUM056                      NUMBER,
+						    NUM057                      NUMBER,
+						    NUM058                      NUMBER,
+						    NUM059                      NUMBER,
+						    NUM060                      NUMBER,
+						    NUM061                      NUMBER,
+						    NUM062                      NUMBER,
+						    NUM063                      NUMBER,
+						    NUM064                      NUMBER,
+						    NUM065                      NUMBER,
+						    NUM066                      NUMBER,
+						    NUM067                      NUMBER,
+						    NUM068                      NUMBER,
+						    NUM069                      NUMBER,
+						    NUM070                      NUMBER,
+						    NUM071                      NUMBER,
+						    NUM072                      NUMBER,
+						    NUM073                      NUMBER,
+						    NUM074                      NUMBER,
+						    NUM075                      NUMBER,
+						    NUM076                      NUMBER,
+						    NUM077                      NUMBER,
+						    NUM078                      NUMBER,
+						    NUM079                      NUMBER,
+						    NUM080                      NUMBER,
+						    NUM081                      NUMBER,
+						    NUM082                      NUMBER,
+						    NUM083                      NUMBER,
+						    NUM084                      NUMBER,
+						    NUM085                      NUMBER,
+						    NUM086                      NUMBER,
+						    NUM087                      NUMBER,
+						    NUM088                      NUMBER,
+						    NUM089                      NUMBER,
+						    NUM090                      NUMBER,
+						    NUM091                      NUMBER,
+						    NUM092                      NUMBER,
+						    NUM093                      NUMBER,
+						    NUM094                      NUMBER,
+						    NUM095                      NUMBER,
+						    NUM096                      NUMBER,
+						    NUM097                      NUMBER,
+						    NUM098                      NUMBER,
+						    NUM099                      NUMBER,
+						    NUM100                      NUMBER,
+						    NUM101                      NUMBER,
+						    NUM102                      NUMBER,
+						    NUM103                      NUMBER,
+						    NUM104                      NUMBER,
+						    NUM105                      NUMBER,
+						    NUM106                      NUMBER,
+						    NUM107                      NUMBER,
+						    NUM108                      NUMBER,
+						    NUM109                      NUMBER,
+						    NUM110                      NUMBER,
+						    NUM111                      NUMBER,
+						    NUM112                      NUMBER,
+						    NUM113                      NUMBER,
+						    NUM114                      NUMBER,
+						    NUM115                      NUMBER,
+						    NUM116                      NUMBER,
+						    NUM117                      NUMBER,
+						    NUM118                      NUMBER,
+						    NUM119                      NUMBER,
+						    NUM120                      NUMBER,
+						    NUM121                      NUMBER,
+						    NUM122                      NUMBER,
+						    NUM123                      NUMBER,
+						    NUM124                      NUMBER,
+						    NUM125                      NUMBER,
+						    NUM126                      NUMBER,
+						    NUM127                      NUMBER,
+						    NUM128                      NUMBER,
+						    NUM129                      NUMBER,
+						    NUM130                      NUMBER,
+						    NUM131                      NUMBER,
+						    NUM132                      NUMBER,
+						    NUM133                      NUMBER,
+						    NUM134                      NUMBER,
+						    NUM135                      NUMBER,
+						    NUM136                      NUMBER,
+						    NUM137                      NUMBER,
+						    NUM138                      NUMBER,
+						    NUM139                      NUMBER,
+						    NUM140                      NUMBER,
+						    NUM141                      NUMBER,
+						    NUM142                      NUMBER,
+						    NUM143                      NUMBER,
+						    NUM144                      NUMBER,
+						    NUM145                      NUMBER,
+						    NUM146                      NUMBER,
+						    NUM147                      NUMBER,
+						    NUM148                      NUMBER,
+						    NUM149                      NUMBER,
+						    NUM150                      NUMBER,
+						    NUM151                      NUMBER,
+						    NUM152                      NUMBER,
+						    NUM153                      NUMBER,
+						    NUM154                      NUMBER,
+						    NUM155                      NUMBER,
+						    NUM156                      NUMBER,
+						    NUM157                      NUMBER,
+						    NUM158                      NUMBER,
+						    NUM159                      NUMBER,
+						    NUM160                      NUMBER,
+						    NUM161                      NUMBER,
+						    NUM162                      NUMBER,
+						    NUM163                      NUMBER,
+						    NUM164                      NUMBER,
+						    NUM165                      NUMBER,
+						    NUM166                      NUMBER,
+						    NUM167                      NUMBER,
+						    NUM168                      NUMBER,
+						    NUM169                      NUMBER,
+						    NUM170                      NUMBER,
+						    NUM171                      NUMBER,
+						    NUM172                      NUMBER,
+						    NUM173                      NUMBER,
+						    NUM174                      NUMBER,
+						    NUM175                      NUMBER,
+						    NUM176                      NUMBER,
+						    NUM177                      NUMBER,
+						    NUM178                      NUMBER,
+						    NUM179                      NUMBER,
+						    NUM180                      NUMBER,
+						    NUM181                      NUMBER,
+						    NUM182                      NUMBER,
+						    NUM183                      NUMBER,
+						    NUM184                      NUMBER,
+						    NUM185                      NUMBER,
+						    NUM186                      NUMBER,
+						    NUM187                      NUMBER,
+						    NUM188                      NUMBER,
+						    NUM189                      NUMBER,
+						    NUM190                      NUMBER,
+						    NUM191                      NUMBER,
+						    NUM192                      NUMBER,
+						    NUM193                      NUMBER,
+						    NUM194                      NUMBER,
+						    NUM195                      NUMBER,
+						    NUM196                      NUMBER,
+						    NUM197                      NUMBER,
+						    NUM198                      NUMBER,
+						    NUM199                      NUMBER,
+						    NUM200                      NUMBER,
+						    NUM201                      NUMBER,
+						    NUM202                      NUMBER,
+						    NUM203                      NUMBER,
+						    NUM204                      NUMBER,
+						    NUM205                      NUMBER,
+						    NUM206                      NUMBER,
+						    NUM207                      NUMBER,
+						    NUM208                      NUMBER,
+						    NUM209                      NUMBER,
+						    NUM210                      NUMBER,
+						    NUM211                      NUMBER,
+						    NUM212                      NUMBER,
+						    NUM213                      NUMBER,
+						    NUM214                      NUMBER,
+						    NUM215                      NUMBER,
+						    NUM216                      NUMBER,
+						    NUM217                      NUMBER,
+						    NUM218                      NUMBER,
+						    NUM219                      NUMBER,
+						    NUM220                      NUMBER,
+						    NUM221                      NUMBER,
+						    NUM222                      NUMBER,
+						    NUM223                      NUMBER,
+						    NUM224                      NUMBER,
+						    NUM225                      NUMBER,
+						    NUM226                      NUMBER,
+						    NUM227                      NUMBER,
+						    NUM228                      NUMBER,
+						    NUM229                      NUMBER,
+						    NUM230                      NUMBER,
+						    NUM231                      NUMBER,
+						    NUM232                      NUMBER,
+						    NUM233                      NUMBER,
+						    NUM234                      NUMBER,
+						    NUM235                      NUMBER,
+						    NUM236                      NUMBER,
+						    NUM237                      NUMBER,
+						    NUM238                      NUMBER,
+						    NUM239                      NUMBER,
+						    NUM240                      NUMBER,
+						    NUM241                      NUMBER,
+						    NUM242                      NUMBER,
+						    NUM243                      NUMBER,
+						    NUM244                      NUMBER,
+						    NUM245                      NUMBER,
+						    NUM246                      NUMBER,
+						    NUM247                      NUMBER,
+						    NUM248                      NUMBER,
+						    NUM249                      NUMBER,
+						    NUM250                      NUMBER,
+						    NUM251                      NUMBER,
+						    NUM252                      NUMBER,
+						    NUM253                      NUMBER,
+						    NUM254                      NUMBER,
+						    NUM255                      NUMBER,
+						    NUM256                      NUMBER,
+						    NUM257                      NUMBER,
+						    NUM258                      NUMBER,
+						    NUM259                      NUMBER,
+						    NUM260                      NUMBER,
+						    NUM261                      NUMBER,
+						    NUM262                      NUMBER,
+						    NUM263                      NUMBER,
+						    NUM264                      NUMBER,
+						    NUM265                      NUMBER,
+						    NUM266                      NUMBER,
+						    NUM267                      NUMBER,
+						    NUM268                      NUMBER,
+						    NUM269                      NUMBER,
+						    NUM270                      NUMBER,
+						    NUM271                      NUMBER,
+						    NUM272                      NUMBER,
+						    NUM273                      NUMBER,
+						    NUM274                      NUMBER,
+						    NUM275                      NUMBER,
+						    NUM276                      NUMBER,
+						    NUM277                      NUMBER,
+						    NUM278                      NUMBER,
+						    NUM279                      NUMBER,
+						    NUM280                      NUMBER,
+						    NUM281                      NUMBER,
+						    NUM282                      NUMBER,
+						    NUM283                      NUMBER,
+						    NUM284                      NUMBER,
+						    NUM285                      NUMBER,
+						    NUM286                      NUMBER,
+						    NUM287                      NUMBER,
+						    NUM288                      NUMBER,
+						    NUM289                      NUMBER,
+						    NUM290                      NUMBER,
+						    NUM291                      NUMBER,
+						    NUM292                      NUMBER,
+						    NUM293                      NUMBER,
+						    NUM294                      NUMBER,
+						    NUM295                      NUMBER,
+						    NUM296                      NUMBER,
+						    NUM297                      NUMBER,
+						    NUM298                      NUMBER,
+						    NUM299                      NUMBER,
+						    NUM300                      NUMBER,
+						    NUM301                      NUMBER,
+						    NUM302                      NUMBER,
+						    NUM303                      NUMBER,
+						    NUM304                      NUMBER,
+						    NUM305                      NUMBER,
+						    NUM306                      NUMBER,
+						    NUM307                      NUMBER,
+						    NUM308                      NUMBER,
+						    NUM309                      NUMBER,
+						    NUM310                      NUMBER,
+						    NUM311                      NUMBER,
+						    NUM312                      NUMBER,
+						    NUM313                      NUMBER,
+						    NUM314                      NUMBER,
+						    NUM315                      NUMBER,
+						    NUM316                      NUMBER,
+						    NUM317                      NUMBER,
+						    NUM318                      NUMBER,
+						    NUM319                      NUMBER,
+						    NUM320                      NUMBER,
+						    NUM321                      NUMBER,
+						    NUM322                      NUMBER,
+						    NUM323                      NUMBER,
+						    NUM324                      NUMBER,
+						    NUM325                      NUMBER,
+						    NUM326                      NUMBER,
+						    NUM327                      NUMBER,
+						    NUM328                      NUMBER,
+						    NUM329                      NUMBER,
+						    NUM330                      NUMBER,
+						    NUM331                      NUMBER,
+						    NUM332                      NUMBER,
+						    NUM333                      NUMBER,
+						    NUM334                      NUMBER,
+						    NUM335                      NUMBER,
+						    NUM336                      NUMBER,
+						    NUM337                      NUMBER,
+						    NUM338                      NUMBER,
+						    NUM339                      NUMBER,
+						    NUM340                      NUMBER,
+						    NUM341                      NUMBER,
+						    NUM342                      NUMBER,
+						    NUM343                      NUMBER,
+						    NUM344                      NUMBER,
+						    NUM345                      NUMBER,
+						    NUM346                      NUMBER,
+						    NUM347                      NUMBER,
+						    NUM348                      NUMBER,
+						    NUM349                      NUMBER,
+						    NUM350                      NUMBER,
+						    NUM351                      NUMBER,
+						    NUM352                      NUMBER,
+						    NUM353                      NUMBER,
+						    NUM354                      NUMBER,
+						    NUM355                      NUMBER,
+						    NUM356                      NUMBER,
+						    NUM357                      NUMBER,
+						    NUM358                      NUMBER,
+						    NUM359                      NUMBER,
+						    NUM360                      NUMBER,
+						    NUM361                      NUMBER,
+						    NUM362                      NUMBER,
+						    NUM363                      NUMBER,
+						    NUM364                      NUMBER,
+						    NUM365                      NUMBER,
+						    NUM366                      NUMBER,
+						    NUM367                      NUMBER,
+						    NUM368                      NUMBER,
+						    NUM369                      NUMBER,
+						    NUM370                      NUMBER,
+						    NUM371                      NUMBER,
+						    NUM372                      NUMBER,
+						    NUM373                      NUMBER,
+						    NUM374                      NUMBER,
+						    NUM375                      NUMBER,
+						    NUM376                      NUMBER,
+						    NUM377                      NUMBER,
+						    NUM378                      NUMBER,
+						    NUM379                      NUMBER,
+						    NUM380                      NUMBER,
+						    NUM381                      NUMBER,
+						    NUM382                      NUMBER,
+						    NUM383                      NUMBER,
+						    NUM384                      NUMBER,
+						    NUM385                      NUMBER,
+						    NUM386                      NUMBER,
+						    NUM387                      NUMBER,
+						    NUM388                      NUMBER,
+						    NUM389                      NUMBER,
+						    NUM390                      NUMBER,
+						    NUM391                      NUMBER,
+						    NUM392                      NUMBER,
+						    NUM393                      NUMBER,
+						    NUM394                      NUMBER,
+						    NUM395                      NUMBER,
+						    NUM396                      NUMBER,
+						    NUM397                      NUMBER,
+						    NUM398                      NUMBER,
+						    NUM399                      NUMBER,
+						    NUM400                      NUMBER,
+						    NUM401                      NUMBER,
+						    NUM402                      NUMBER,
+						    NUM403                      NUMBER,
+						    NUM404                      NUMBER,
+						    NUM405                      NUMBER,
+						    NUM406                      NUMBER,
+						    NUM407                      NUMBER,
+						    NUM408                      NUMBER,
+						    NUM409                      NUMBER,
+						    NUM410                      NUMBER,
+						    NUM411                      NUMBER,
+						    NUM412                      NUMBER,
+						    NUM413                      NUMBER,
+						    NUM414                      NUMBER,
+						    NUM415                      NUMBER,
+						    NUM416                      NUMBER,
+						    NUM417                      NUMBER,
+						    NUM418                      NUMBER,
+						    NUM419                      NUMBER,
+						    NUM420                      NUMBER,
+						    NUM421                      NUMBER,
+						    NUM422                      NUMBER,
+						    NUM423                      NUMBER,
+						    NUM424                      NUMBER,
+						    NUM425                      NUMBER,
+						    NUM426                      NUMBER,
+						    NUM427                      NUMBER,
+						    NUM428                      NUMBER,
+						    NUM429                      NUMBER,
+						    NUM430                      NUMBER,
+						    NUM431                      NUMBER,
+						    NUM432                      NUMBER,
+						    NUM433                      NUMBER,
+						    NUM434                      NUMBER,
+						    NUM435                      NUMBER,
+						    NUM436                      NUMBER,
+						    NUM437                      NUMBER,
+						    NUM438                      NUMBER,
+						    NUM439                      NUMBER,
+						    NUM440                      NUMBER,
+						    NUM441                      NUMBER,
+						    NUM442                      NUMBER,
+						    NUM443                      NUMBER,
+						    NUM444                      NUMBER,
+						    NUM445                      NUMBER,
+						    NUM446                      NUMBER,
+						    NUM447                      NUMBER,
+						    NUM448                      NUMBER,
+						    NUM449                      NUMBER,
+						    NUM450                      NUMBER,
+						    NUM451                      NUMBER,
+						    NUM452                      NUMBER,
+						    NUM453                      NUMBER,
+						    NUM454                      NUMBER,
+						    NUM455                      NUMBER,
+						    NUM456                      NUMBER,
+						    NUM457                      NUMBER,
+						    NUM458                      NUMBER,
+						    NUM459                      NUMBER,
+						    NUM460                      NUMBER,
+						    NUM461                      NUMBER,
+						    NUM462                      NUMBER,
+						    NUM463                      NUMBER,
+						    NUM464                      NUMBER,
+						    NUM465                      NUMBER,
+						    NUM466                      NUMBER,
+						    NUM467                      NUMBER,
+						    NUM468                      NUMBER,
+						    NUM469                      NUMBER,
+						    NUM470                      NUMBER,
+						    NUM471                      NUMBER,
+						    NUM472                      NUMBER,
+						    NUM473                      NUMBER,
+						    NUM474                      NUMBER,
+						    NUM475                      NUMBER,
+						    NUM476                      NUMBER,
+						    NUM477                      NUMBER,
+						    NUM478                      NUMBER,
+						    NUM479                      NUMBER,
+						    NUM480                      NUMBER,
+						    NUM481                      NUMBER,
+						    NUM482                      NUMBER,
+						    NUM483                      NUMBER,
+						    NUM484                      NUMBER,
+						    NUM485                      NUMBER,
+						    NUM486                      NUMBER,
+						    NUM487                      NUMBER,
+						    NUM488                      NUMBER,
+						    NUM489                      NUMBER,
+						    NUM490                      NUMBER,
+						    NUM491                      NUMBER,
+						    NUM492                      NUMBER,
+						    NUM493                      NUMBER,
+						    NUM494                      NUMBER,
+						    NUM495                      NUMBER,
+						    NUM496                      NUMBER,
+						    NUM497                      NUMBER,
+						    NUM498                      NUMBER,
+						    NUM499                      NUMBER,
+						    NUM500                      NUMBER,
+						    TEST_DURATIONE_TIME         NUMBER,
+						    TEST_END                    DATE,
+						    CONSTRAINT UK_FMDETAILRST UNIQUE (MEASUREID, TSUBNO)
+						)
+					}
+					
+
+					
+   				},
+   				mssql : {
+   					
+   				}
+   			}
    		},
    		"process_as_is" : [
    			{
@@ -1354,8 +2293,39 @@
    		]
    	}
    	
+   	, "FWQ" : {
+   		"Pop_loc": {
+   			date: "2017년 8월 7일 월요일 오후 2:02:06",
+   			status: true
+   		},
+   		"Coding rule": {
+   			"Coverity connect" {
+   				date: "2017년 8월 7일 월요일 오후 2:02:06",
+   				status: false,
+   				url: "http://10.92.11.38:8000"
+   			},
+   			"Summary Data": {
+   				date: "2017년 8월 7일 월요일 오후 2:02:06",
+   				desc: "Summary Data종류 별 위반된 룰과 함께 연결하여 보여주는 것 ",
+   				status: true
+   			}
+   		},
+   		"Function LoC 분포도": {
+   			date: "2017년 8월 7일 월요일 오후 2:02:06"
+   			"이태경 mail down": "D:\hynix\requirement\FWQualityMetric\function_parameter\Function LoC 분포도",
+   			dataAnalysis: {
+   				csvIndexHeder: "['project', 'state', 'started', 'lines with code', 'url']",
+   				csvIndexrow: "['Armstrong_FW_S1', 'Finished', '01/15/2017', '135721', '/analysis/2716.csv?prj_filter=29']"
+   			}
+   			
+   		}
+   		
+   	}
+   	
+   	
+   	
    	"My" : {
-   		webSearch : {
+   		"webSearch" : {
    			java: {
    				Controller: {
    					url: "/dashboard/webSearch.html",
@@ -1380,9 +2350,7 @@
    			,jsp: {
    				name: "webSearch.jsp",
    				pageStructure: {
-	   				include_script: {
-	   					
-	   				},
+	   				include_script: [],
 	   				schemas: {
 	   					schemaSearch: {
 	   							
@@ -1432,34 +2400,39 @@
    			
    		}
    		
-   		, AI : {
+   		, "AI" : {
    			
    		}	
    	
-   		, jeju_schedule: [
+   		
+   		, "jeju_schedule": [
    			{
    				name: "home ==> jeju",
    				perseon: 3,
-   				date: "2017-09-21",
+   				date: "2017-09-21 19:45",
    				ticket: true,
    				air: "이스타",
+   				app: "인터파크"
    				price: 54700
    			},
    			{
    				name: "jeju ==> home",
    				perseon: 1,
-   				date: "2017-09-26",
+   				date: "2017-09-26 19:00",
    				ticket: true,
    				air: "아시아나",
+   				app: "인터파크"
    				price: 41200
    			},
    			{
    				name: "home ==> jeju",
    				perseon: 1,
-   				date: "2017-09-29",
+   				date: "2017-09-29 18:45",
    				ticket: true,
    				air: "진에어",
+   				app: "진에어"
    				price: 103900
+   				
    			},
    			{
    				name: "jeju ==> home",
@@ -1467,6 +2440,7 @@
    				date: "2017-10-11 06:30",
    				ticket: true,
    				air: "아시아나",
+   				app: "아시아나",
    				price: 58200
    			},
    			{
@@ -1475,6 +2449,7 @@
    				date: "2017-10-13 18:45",
    				ticket: true,
    				air: "티웨이",
+   				app: "인터파크"
    				price: 61100
    			},
    			{
@@ -1490,6 +2465,7 @@
    				date: "2017-10-18 19:45",
    				ticket: true,
    				air: "이스타항공",
+   				app: "이스타항공"
    				price: 22100 ,
    				option: "특가운임"
    			},
@@ -1499,8 +2475,61 @@
    				date: "2017-10-23",
    				ticket: true,
    				air: "이스타",
+   				app: "인터파크",
    				price: 145300
    			},
+   		]
+   	
+   		, "project_build" : [
+   			"schema": {
+   				"entities": [
+   					{
+   						table_name : "" , 
+   						columns: [
+   							{
+   								column_name : "",
+   								type : "",
+   								data_length: "int"
+   							}
+   						],
+   						constraints: {
+   							primary_key:[],
+   							foreign_key:[]
+   						}
+   					}
+   				],
+   				"work_flows" : [
+   					"task": {
+   						"task_name": "",
+   						"search_condition": {
+   							"elements" : [
+   								{
+   									"type": ["multiCombo","text_input","date_input"]
+   								}
+   							]	
+   						}
+   						,
+   						"entities" : [
+   							{
+   								"table_name": ""
+   							},
+   							{
+   								"table_name": ""
+   							}
+   							
+   						], 
+   						"contents": {
+   							"elements": [
+   								{
+   									"type": ["..."]
+   								}
+   							]
+   						}
+   					}
+   				]
+   					
+   				
+   			}
    		]
    	}	
 }
