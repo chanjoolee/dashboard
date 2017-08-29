@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>pmsResourceFcstProject</title>
+	<title>Corona Detail</title>
 	<!-- <link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css" /> -->
 	
 	
@@ -68,7 +68,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.05.26"></script>
+	<script src="js/dashboard.js?version=2017.08.22.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
@@ -86,7 +86,6 @@
 	
 	<!-- <script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script> -->
 	<link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css">
-	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
 	<style>
 		html, body,form {
 			padding: 0;
@@ -150,6 +149,37 @@
 		<%--  jqGrid에서 dialog가 뒤로 숨는 문제.--%>
 		.ui-dialog { z-index: 1000 !important ;}
 		
+		/***  jqgrid Header   ***/
+		.ui-jqgrid-hdiv th {
+			text-align: center;
+		}
+		
+		.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {    	    
+    	    background-image: none
+    	}
+    	
+    	.ui-jqgrid .ui-jqgrid-htable th div {
+			height:auto;
+			overflow:hidden;
+			padding-right:4px;
+			padding-top:2px;
+			position:relative;
+			vertical-align:text-top;
+			white-space:normal !important;
+		}
+		.ui-jqgrid .ui-jqgrid-htable th.ui-th-column div{
+	        white-space:normal !important;
+	        height:auto !important;
+	        padding:2px;
+	    }
+		.ui-jqgrid .ui-jqgrid-htable th.ui-th-column {
+	        vertical-align: top;
+	    }
+	    
+	    .ui-jqgrid-hdiv .ui-jqgrid-htable .ui-search-toolbar input {
+	    	height: 30px;
+	    }
+		
 	</style>
 	<style type="text/css" title="nspmstyle">
 		
@@ -162,7 +192,7 @@
 		}
 		
 		.pop_window .pop_con_area {
-		    padding: 20px 30px;
+		    padding: 5px 10px; 
 		    overflow: auto;
 		    background-color: #ffffff;
 		}
@@ -176,61 +206,16 @@
 		    vertical-align: middle;
 		}
 	
-		.cont_tit{font-size:15px; display:block; color:#000; text-align:left; padding-bottom:12px; position:relative; background:url(/nspim/images/board/bullet.gif) no-repeat left 1px; padding-left:18px}
+		.cont_tit{font-size:12px; display:block; color:#000; text-align:left; padding-bottom:12px; position:relative; background:url(/nspim/images/board/bullet.gif) no-repeat left 1px; padding-left:18px}
 		.cont_tit {float:none}
-		
-		#loader {
-		  position: absolute;
-		  left: 50%;
-		  top: 50%;
-		  z-index: 1;
-		  width: 150px;
-		  height: 150px;
-		  margin: -75px 0 0 -75px;
-		  border: 16px solid #f3f3f3;
-		  border-radius: 50%;
-		  border-top: 16px solid #3498db;
-		  width: 120px;
-		  height: 120px;
-		  -webkit-animation: spin 2s linear infinite;
-		  animation: spin 2s linear infinite;
-		}
-		
-		@-webkit-keyframes spin {
-		  0% { -webkit-transform: rotate(0deg); }
-		  100% { -webkit-transform: rotate(360deg); }
-		}
-		
-		@keyframes spin {
-		  0% { transform: rotate(0deg); }
-		  100% { transform: rotate(360deg); }
-		}
-		
-		/* Add animation to "page content" */
-		.animate-bottom {
-		  position: relative;
-		  -webkit-animation-name: animatebottom;
-		  -webkit-animation-duration: 1s;
-		  animation-name: animatebottom;
-		  animation-duration: 1s
-		}
-		
-		@-webkit-keyframes animatebottom {
-		  from { bottom:-100px; opacity:0 } 
-		  to { bottom:0px; opacity:1 }
-		}
-		
-		@keyframes animatebottom { 
-		  from{ bottom:-100px; opacity:0 } 
-		  to{ bottom:0; opacity:1 }
-		}
 		
 		<%--  table style--%>
 		.table_hori {
 		    width: 100%;
 		    table-layout: fixed;
 		    border-collapse: collapse;
-		    border-top: 1px solid #fc5d57;
+		    /* border-top: 1px solid #fc5d57; */
+		    border-top: 1px solid #e1e2e6;
 		    border-left: 1px solid #e1e2e6;
 		    border-right: 1px solid #e1e2e6;
 		}
@@ -254,6 +239,7 @@
 		    table-layout: fixed;
 		    line-height: 160%;
 		    color: #000;
+		    white-space: pre;
 		}
 		.cont_tit {
 		    padding-bottom: 3px;
@@ -263,101 +249,6 @@
 		    text-align: right;
 		}
 		<%--//  table style--%>
-		
-		
-		/***  jqgrid Header   ***/
-		.ui-jqgrid-hdiv th {
-			text-align: center;
-		}
-		
-		.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
-    	    background-color: #f5f5f5;;
-    	    background-image: none
-    	}
-    	
-    	.ui-jqgrid .ui-jqgrid-htable th div {
-			height:auto;
-			overflow:hidden;
-			padding-right:4px;
-			padding-top:2px;
-			position:relative;
-			vertical-align:text-top;
-			white-space:normal !important;
-			}
-		th.ui-th-column div{
-	        white-space:normal !important;
-	        height:auto !important;
-	        padding:2px;
-	    }
-	    input[type="text"], input[type="password"]{
-	    	height: 34px;
-	    }
-	    
-	    .table>tbody>tr>td{
-			padding: 7px;
-		}
-		
-		/* #searchCondition h3{
-			font-size: 1px;
-		} */
-		
-		/***  jqgrid Header   ***/
-		.ui-jqgrid-hdiv th {
-			text-align: center;
-		}
-		
-		.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
-    	    background-color: #f5f5f5;;
-    	    background-image: none
-    	}
-    	
-    	.ui-jqgrid .ui-jqgrid-htable th div {
-			height:auto;
-			overflow:hidden;
-			padding-right:4px;
-			padding-top:2px;
-			position:relative;
-			vertical-align:text-top;
-			white-space:normal !important;
-			}
-		th.ui-th-column div{
-	        white-space:normal !important;
-	        height:auto !important;
-	        padding:2px;
-	    }
-	    input[type="text"], input[type="password"]{
-	    	height: 34px;
-	    }
-	    
-	    .table>tbody>tr>td{
-			padding: 7px;
-		}
-		
-		/* #searchCondition h3{
-			font-size: 1px;
-		} */
-		
-		
-		<%-- 테이블헤더 45--%>
-		th.rotate {
-		  /* Something you can count on */
-		  height: 80px;
-		  white-space: nowrap;
-		}
-		
-		th.rotate > div {
-		  transform: 
-		    /* Magic Numbers */
-		   translate(-30px, -40px)
-		    /* 45 is really 360 - 45 */
-		    rotate(275deg);
-		  width: 100px;
-		  height: 50px;
-		}
-		th.rotate > div > span {
-		  border-bottom: 1px solid #ccc;
-		  padding: 5px 10px;
-		}
 	
 	</style>
 <script title="schema">
@@ -365,10 +256,243 @@
 // 	$.jgrid.defaults.responsive = true;
 // 	$.jgrid.defaults.styleUI = 'Bootstrap';
 	
-	var responseData = {};
-	var dataList = [];
-	var pivotObject = {};
+	var testInformation = {};
+	var testDisks = [];
+	var testResults = [];
+	var testFiles = [];
 
+	var schemaContent = {
+			containerId:'contentCoronaDetail',
+			type:'Vertical',
+			label:'',
+			elements:[ 
+				{
+					containerCss:[
+						//{code: 'display', value:''}
+						//,{code: 'float', value:'left'}
+						//{code: 'height', value:'1000px'},
+						{code: 'width', value:'99%'}
+					],			
+			    	type:'grid',
+			    	id: 'grid_detail',
+			    	label:'',
+			    	items:[
+						{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:70, align:'center', sortable:false, hidden: true }
+						,{label:'sample', name:'SAMPLE', id:'SAMPLE', width:70, align:'center', sortable:false, hidden: true }
+						,{label:'firmware', name:'FIRMWARE', id:'FIRMWARE', width:70, align:'center', sortable:false, hidden: true }
+						
+						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true}  
+						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false }
+						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false }
+						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true }
+						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true}
+						,{label:'Status', name:'STATUS', id:'STATUS', width:60, align:'center', sortable:false }
+						,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false,hidden: true }
+			    		,{label:'Duration', name:'DURATION', id:'DURATION', width:70, align:'center', sortable:false ,hidden: true}
+			    		
+			    		,{label:'Test Time', name:'TEST_TIME_MASTER', id:'TEST_TIME_MASTER', width:90, align:'center', sortable:false }
+			    		,{label:'Customer Item', name:'CUSTOMER_ITEM', id:'CUSTOMER_ITEM', width:90, align:'center', sortable:false }
+			    		,{label:'Need Vendor<br>CMD', name:'NEED_VENDOR_CMD', id:'NEED_VENDOR_CMD', width:90, align:'center', sortable:false }
+			    		,{label:'Need Vendor<br>Cycle', name:'NEED_VENDOR_CMD', id:'NEED_POWER_CYCLE', width:90, align:'center', sortable:false }
+			    		
+			    		,{label:'EMMC<br>Ver', name:'EMMC_VER', id:'EMMC_VER', width:50, align:'center', sortable:false }
+			    		,{label:'Taget<br>Device', name:'TARGET_DEVICE', id:'TARGET_DEVICE', width:70, align:'center', sortable:false }
+			    		,{label:'Category1', name:'CATEGORY1', id:'CATEGORY1', width:90, align:'center', sortable:false }
+			    		,{label:'Category2', name:'CATEGORY2', id:'CATEGORY2', width:90, align:'center', sortable:false }
+			    		,{label:'Category3', name:'CATEGORY3', id:'CATEGORY3', width:90, align:'center', sortable:false }
+			    		,{label:'Category4', name:'CATEGORY4', id:'CATEGORY4', width:90, align:'center', sortable:false }
+			    		,{label:'Category5', name:'CATEGORY5', id:'CATEGORY5', width:90, align:'center', sortable:false }
+			    		,{label:'Write Mode', name:'WRITE_MODE', id:'WRITE_MODE', width:70, align:'center', sortable:false }
+			    		,{label:'Read Mode', name:'WRITE_MODE', id:'READ_MODE', width:70, align:'center', sortable:false }
+			    		,{label:'Platform', name:'PLATFORM', id:'PLATFORM', width:70, align:'center', sortable:false }
+			    		,{label:'Function Name', name:'FUNCTION_NAME', id:'FUNCTION_NAME', width:150, align:'left', sortable:false }
+			    		
+			    		
+			    		,{label:'Description', name:'DESCRIPTION', id:'DESCRIPTION', width:200, align:'left', sortable:false, hidden: true  }
+			    		,{label:'Description', name:'DESCRIPTION_SIMPLE', id:'DESCRIPTION_SIMPLE', width:200, align:'left', sortable:false 
+							, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
+								var result = "";
+								var grid = $(this).jqGrid();
+								var colModel = grid.jqGrid('getGridParam','colModel');
+								result = " title=\""+ rowObj.DESCRIPTION + "\"";
+								
+								return result;
+								
+							}	    			
+			    		}
+			    		,{label:'Argument', name:'ARGUMENT', id:'ARGUMENT', width:200, align:'left', sortable:false, hidden: true  }
+			    		,{label:'Argument', name:'ARGUMENT_SIMPLE', id:'ARGUMENT_SIMPLE', width:200, align:'left', sortable:false 
+			    			, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
+								var result = "";
+								var grid = $(this).jqGrid();
+								var colModel = grid.jqGrid('getGridParam','colModel');
+								result = " title=\""+ rowObj.ARGUMENT + "\"";
+								
+								return result;
+								
+							}	    		
+			    		
+			    		}
+			    		
+			    		
+			    	],					
+			    	gridOpt:{
+			    		datatype:'json',
+			    		pager: "#grid_detailPager",
+			    		url: function(){
+			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page"
+			    		},
+			    		viewrecords: true,			    		
+			    		width: '100%',
+			    		height: '100%',
+			    		sortable: false,
+			    		multiSort:false,
+			    		//sortname: 'CATEGORY, TEST_ITEM ',
+			    		rowNum: 20,
+						rowList:[10,15,20,30],
+			    		//forceFit : false ,
+			    		emptyrecords: "No records to view",
+			    		rownumbers: true, // show row numbers
+			    		
+			    		//subgrid start
+			    		subGrid: true,
+			    		subgridtype:'json',
+			    		subGridRowExpanded: function(parentRowID, parentRowKey){
+			    			var test = "";
+					    	var theGrid = $(this).jqGrid();
+					    	var row = theGrid.jqGrid('getRowData',parentRowKey);
+					    	var cms = theGrid.jqGrid("getGridParam", "colModel");
+					    	
+			    			var childGridURL = "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.detail"; 
+			    			childGridURL  += "&test_board=" + row.TEST_BOARD;
+			    			childGridURL  += "&sample=" + row.SAMPLE;
+			    			childGridURL  += "&firmware=" + row.FIRMWARE;
+			    			childGridURL  += "&script=" + row.SCRIPT_NAME_META;
+			    			
+			    			// ***  grid ***//
+			    			var childDivId = parentRowID + "_div_input";
+			    			var childDiv = $(document.createElement("div"));
+			    			childDiv.attr("id",childDivId);
+			    			// add a table and pager HTML elements to the parent grid row - we will render the child grid here			    			
+			                $('#' + parentRowID).append(childDiv);
+			    			var schema1 = {
+			    					containerId: childDivId,
+			    					type:'Vertical',
+			    					label: '',
+			    					elements: [
+			    					    {
+			    					    	label: "Details",
+			    					    	type: 'Group',
+			    					    	elements: [
+												{
+													type: "inline",
+													cols: 1,
+													data: function(){ return row},
+													items: [
+														{label:'Item Purpose', col: 'ITEM_PURPOSE'},
+														{label:'Item Description', col: 'ITEM_DESCRIPTION'},
+														{label:'Input Parameter', col: 'INPUT_PARAMETER'},
+														{label:'Comment', col: 'USER_COMMENT'},
+													]
+												}
+			    					    	
+			    					    	]
+			    					    }
+			    						
+			    					
+			    					]
+			    			};
+			    			fn_makeHtml(childDiv,schema1);
+			    			
+			    			
+			    			
+			    			// ***  grid ***//
+			    			var childGridID = parentRowID + "_table";
+			    			// add a table and pager HTML elements to the parent grid row - we will render the child grid here
+			                $('#' + parentRowID).append('<table id=' + childGridID + '></table>');
+
+			                $("#" + childGridID).jqGrid({
+			                    url: childGridURL,
+			                    //mtype: "GET",
+			                    datatype: "json",
+			                    //root: "dataList", 
+			                    //userdata: "dataList",
+			                    jsonReader: {
+								      root: function(data){
+									    return data.dataList;
+								      }
+								      //,userdata: function(data){
+									  //  return data.dataList;
+								      //}
+								     ,repeatitems:false
+								},
+			                    styleUI : 'Bootstrap',
+			                    rownumbers: true, // show row numbers
+			                    iconSet: "fontAwesome",
+			                    //autowidth:true,
+			    		        //scrollOffset:15,
+			    		        //viewrecords: true,
+			    				//emptyrecords: "No records to view",
+			    				caption:"Detail List",
+			                    colModel: [
+									{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false }  
+									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false }
+									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false }
+									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false }
+									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false }
+									,{label:'Status', name:'STATUS', id:'STATUS', width:60, align:'center', sortable:false }
+									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false }
+									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false }
+									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false }
+									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false }         
+			                    ],
+			    				loadonce: true,
+			                    width: '100%'
+			                    ,height: '100%'
+			                    //pager: "#" + childGridPagerID
+			                });
+			                
+			                
+			                var subgrid = $("#" + parentRowID);
+			                subgrid.find(".ui-jqgrid").css("width","100%");
+			                subgrid.find(".ui-jqgrid-view").css("width","100%");
+			                subgrid.find(".ui-jqgrid-hdiv").css("width","100%");
+			                subgrid.find(".ui-jqgrid-bdiv").css("width","100%");
+			                subgrid.find(".ui-jqgrid-sdiv").css("width","100%");
+			                subgrid.find(".ui-jqgrid-pager").css("width","100%");
+			                
+			                subgrid.find(".ui-jqgrid").css("margin-top","10px");
+			    			
+			    			
+			    		} ,
+			    		//subgrid end
+			    		gridComplete: function () {
+			    			var grid = $(this).jqGrid();
+			    			grid.jqGrid('filterToolbar',
+		    					{
+		    						defaultSearch:'cn'
+		    		                // JSON stringify all data from search, including search toolbar operators
+		    		                ,stringResult: true
+		    		                // instuct the grid toolbar to show the search options
+		    		                //,searchOperators: true
+		    		            }
+		    				);
+			    			
+			    		}
+				    	
+				    	
+			    	}
+					
+				}
+				
+
+			]								
+	};
+	
+	
+</script>
+<script title="ui-schema">
+	
 	
 	
 </script>
@@ -393,345 +517,23 @@
 
 	//var spiderData = {};
 	$(function () {
-		setTimeout(function(){			
-			getDataByJson();
-		},50);
-		
+		fn_search();
 		$( window ).unload(function() {
 			
 		});
 		
-		$( window ).resize(function() {
-			adjustGrid();
-		});
-		
 	});
 	
-	function getDataByJson(){
-		//setCalendarRsc();
-		$.ajax({
-			url : "/dashboard/pmsResourceFcstProjectJson.html",
-			data: $("#form1").serialize(),
-			async: false,
-			success : function(vResponseData){
-				responseData = vResponseData;
-				dataList = responseData.data;
-				$.each(dataList,function(i,d){
-					d.YYYYMM= d.YYYYMM.substr(0,6);
-				});
-				
-				pivotObject = pivot(dataList,{col:'YYYYMM',name:'YYYYMM'},['UP_PJT_FUNC_ID','UP_PJT_FUNC_NAME'],'MM_RESULT');
-				sortObjects(pivotObject.columns,['YYYYMM']);
-				drawGrid();
-				$("#loader").hide();
-			}
-		});
-		
-		
-				
-	}
-	
-	function pivot(datasrc,colDef,groupbyColumns,targetColumn){
-		var rtnObject = {};
-		//var groupList = groupbyCount(datasrc,groupbyColumns);
-		var groupList = groupbySum(datasrc,groupbyColumns, targetColumn);
-		groupList = _.filter(groupList, function(item){
-			return item[groupbyColumns[1]] != 'Undefined';
-		});
-		var cols = groupbyCount(datasrc,[colDef.col,colDef.name]);
-		
-		$.each(groupList,function(i,group){
-			var sum = 0;
-			$.each(cols,function(ci,col){
-				var filter = [];
-				filter.push({col: colDef.col ,val: col[colDef.col]});
-				$.each(groupbyColumns,function(c,v){
-					if(c != 'count'){
-						filter.push({col: v, val: group[v] });
-					}
-				});
-				
-				if(col[colDef.col] == 'PJT_00059012' && group.YYYYMM=='201702' && group.UP_PJT_FUNC_ID =='NPM_00000004')
-					var xxx = 'xxx';
-				
-				var targets = dataFilter(datasrc,filter);
-				var targets1 = groupbySum(targets,groupbyColumns, targetColumn);
-				var target = {};
-				if(targets1.length > 0){
-					target = targets1[0];
-					
-					// customize
-					if(target.isPlan != undefined && target.isPlan == true)
-						group.isPlan = true;
-				}else{
-					group[col[colDef.col]] = 0;
-					group[col[colDef.name]] = 0;
-					return true;
-				}
-				
-// 				$.each(target,function(c,v){
-// 					group[c] = v;
-// 				});				
-				
-				var tval = 0;
-				if(target[targetColumn] != undefined)
-					tval = target[targetColumn];
-				
-				group[col[colDef.col]] = tval;
-				group[col[colDef.name]] = tval;
-				sum += tval;
-					
-				
-			});
-			group['total'] = sum;
-		});
-		
-		rtnObject.list = groupList;
-		rtnObject.datasrc = datasrc;
-		rtnObject.colDef = colDef;
-		rtnObject.columns = cols;
-		rtnObject.groupbyColumns = groupbyColumns;
-		rtnObject.targetColumn = targetColumn;
-		
-		return rtnObject ;
-		
-	}
-	
-function drawGrid(){
-		
-		var gridModel = getGridModel();
-		
-		sortObjects(pivotObject.list,['UP_PJT_FUNC_NAME']);
-		var theGrid = $("#jqgridTable");
-		var opt ={
-				datatype: 'local',
-				styleUI : 'Bootstrap',
-				colModel: gridModel,
-				loadonce: true,
-				rowNum:100000,
-				sortable: false,
-				viewrecords: true,
-				emptyrecords: "No records to view",
-				rownumbers: false, // show row numbers
-		        multiSort: false,
-		        multiselect: false,
-		        //caption: 'Analysis List',
-		        // width: '100%' ,
-		        //autowidth:true,
-		        scrollOffset:15,
-		        forceFit : false ,
-		        iconSet: "fontAwesome",
-		        data: pivotObject.list,
-		        height: '100%',
-		        footerrow: true,
-		        userDataOnFooter: true,
-				onInitGrid: function () {
-			        var p = $(this).jqGrid("getGridParam");
-			        // save names of columns in custom option of jqGrid
-			        p.originalColumnOrder = $.map(p.colModel, function (cm) {
-			            return cm.name;
-			        });
-			        //alert(JSON.stringify(p.originalColumnOrder));
-			    },
-			    beforeProcessing: function(data, status, xhr){
-			    	data = data.dataList;
-			    },
-			    beforeRequest: function(){
-			    	var aaa = "aaa";
-			    },  
-			    gridComplete: function () {
-			    	var test = "";
-			    	if(dataList.length == 0){
-			    		
-			    	}
-			    	
-			    	var theGrid = $("#jqgridTable");
-			    	
-			    	$.each(pivotObject.columns,function(i,col){
-			    		var colid = getColumnSrcIndexByName(theGrid,col[pivotObject.colDef.name]);
-				    	var sum = theGrid.jqGrid('getCol',colid,false,'sum');
-				    	var sumobj = {};
-				    	sumobj[col[pivotObject.colDef.name]] = sum;
-				    	theGrid.jqGrid('footerData','set',sumobj);
-			    	});
-			    	
-			    	var colid = getColumnSrcIndexByName(theGrid,'total');
-			    	var sum = theGrid.jqGrid('getCol',colid,false,'sum');
-			    	var sumobj = {};
-			    	sumobj['total'] = sum;
-			    	theGrid.jqGrid('footerData','set',sumobj);
-			    	
-			    	
-			    	
-			    }, 
-			    onCellSelect: function (rowId, iCol, content, event) {
-			    	var test = "";
-			    	var grid = $("#jqgridTable");
-			    	var row = theGrid.jqGrid('getRowData',rowId);
-			    	var cms = grid.jqGrid("getGridParam", "colModel");
-					var cm = cms[iCol];
-					
-					
-			    }
-			    
-		};
-		
-		//"use strict";		
-		theGrid.jqGrid(opt);
-		//$(".ui-jqgrid th.ui-th-column").css("vertical-align","top");
-		//$(".ui-jqgrid th.ui-th-column div").css("text-align","left");
-		$('.ui-jqgrid-hdiv th').each(function(){
-			if($(this).find("div").text() != "Func"){
-				$(this).css("vertical-align","bottom");				
-				$(this).addClass("rotate");
-				$(this).find("div").css("text-align","left");
-				
-			}
-		});
-		//$('.ui-jqgrid-hdiv th').addClass("rotate");
-		$('.ui-jqgrid-hdiv th').css("overflow","visible");
-		//theGrid.jqGrid('sortableRows');
-		
-// 		theGrid.jqGrid('filterToolbar',
-// 			{
-// 				defaultSearch:'cn' ,
-//                 // JSON stringify all data from search, including search toolbar operators
-//                 stringResult: true
-//                 // instuct the grid toolbar to show the search options
-//                 //searchOperators: false
-//             }
-// 		);
-		
-		adjustGrid();
-		$("#loader").hide();	
+	function fn_search(){
+		$("#contents").html("");
+		fn_makeHtml('contents',schemaContent);
 	}
 	
 	
-	function getGridModel(){
-		var setAttr = function(rowId, val, rawObject, cm) {
-		    //var attr = rawObject.attr[cm.name], result;
-			var rownum = parseInt(rowId,10) -1 ;
-			var rowspan = 1; 
-			var preVal = "";
-			var postVal = "";
-			//var attr = rawObject[cm.name];
-			var result = "";
-			var style = "";
-			
-			if(rawObject != undefined){
-				style += " cursor:pointer;";
-				result +=" style=\""+style+";color:blue;\"";
-				result +=" title=\""+val+"\"";
-				result += " onclick = popPmsRsc('"+rawObject.UP_PJT_FUNC_ID+"','${param.pjt_code}','"+cm.id+"');";
-			}
-				
-			return result;
-			
-		};
-		
-		var theGrid = $("#jqgridTable");
-		var gridModel = [
-		     		    {label:'UP_PJT_FUNC_ID', name:'UP_PJT_FUNC_ID', id:'UP_PJT_FUNC_ID', hidden:true},
-		     		    {label:'Func', name:'UP_PJT_FUNC_NAME', id:'UP_PJT_FUNC_NAME', width:200, align:'left', textAlign:'left',sortable:false}
-		           	];
-		
-		$.each(pivotObject.columns,function(i,col){
-			/* gridModel.push({
-				label: col[pivotObject.colDef.col] , 
-				name:col[pivotObject.colDef.col], 
-				id:col[pivotObject.colDef.col], 
-				width:130,
-				align:'center', 
-				textAlign:'center',
-				sortable:false,
-				hidden:true
-			}); */
-			gridModel.push({
-				label: col[pivotObject.colDef.name] , 
-				name:col[pivotObject.colDef.name], 
-				id:col[pivotObject.colDef.name], 
-				width:60,
-				//align:'left', 
-				//textAlign:'left',
-				sortable:false,
-				formatter:'number',
-				summaryType:'sum',
-				cellattr: setAttr
-			});
-		});
-		
-		gridModel.push({
-			label: 'Total' , 
-			name:'total', 
-			id: 'total', 
-			width:50,
-			//align:'left', 
-			//textAlign:'left',
-			sortable:false,
-			formatter:'number',
-			summaryType:'sum'
-		});
-		
-		return gridModel;
-	}
-	
-	function cellStyle(rowId, val, rowObj, cm, rowData) {
-		var result = '';
-		if(cm.name=='TEST_ID'){
-			result = ' style="cursor:pointer;color: rgba(6, 89, 203, 0.93);bold; font-weight: bold;"';
-		}
-		return result;
-	}
-	
-	function adjustGrid() {
-		$("#jqgridTable").jqGrid('setGridWidth',$("#contents").width() - 5 );
-		//$("#jqgridTable").jqGrid('setScrollOffset',15 );
-		//$("#jqgridTable").jqGrid('setGridHeight',$("#container").height() - 60 );
-		
-		$('.ui-jqgrid').css("width",'100%');
-		$('.ui-jqgrid-view').css("width",'100%');
-		$('.ui-jqgrid-hdiv').css("width",'100%');
-		$('.ui-jqgrid-bdiv').css("width",'100%');
-		$('.ui-jqgrid-pager').css("width",'100%');
-	}
 	
 	function fn_close(){
 		window.close();
 	}	
-	
-	function getColumnSrcIndexByName(grid,columnName) {
-	    var cm = grid.jqGrid('getGridParam','colModel'),
-	        i=0, index=0, l=cm.length, cmName;
-	    while (i<l) {
-	        cmName = cm[i].name;
-	        i++;
-	        if (cmName===columnName) {
-	            return index;
-	        } else if (cmName!=='rn' && cmName!=='cb' && cmName!=='subgrid') {
-	            index++;
-	        }
-	    }
-	    return -1;
-	};
-	
-	function popPmsRsc(upFuncId,pjtId,yyyymm){
-		//var url = '/nspim/pjt/pjt/retrieveResourceInfo.do?fnCode=' + upFuncId +'&searchPjtId='+pjtId;
-		var url = '/nspim/pjt/pjt/retrieveDetailMResourceInfo.do?fnCode=' + upFuncId +'&searchPjtId='+pjtId +'&yyyymm='+yyyymm +'&cj=y';
-		var parameter ="&natlCdList=xxx";
-		$("[name=site]").each(function(){
-			parameter +="&natlCdList=" + $(this).val();
-		});
-		
-		var newWin1 = window.open("", "DetailMResourceInfo", "width=1280,height=350, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
-		var oFrm = document.getElementById("form1");
-		
-		oFrm.pjtId.value = pjtId;
-		oFrm.action =  url + parameter;
-		oFrm.method = "post";
-		oFrm.target = 'DetailMResourceInfo'; 
-	    oFrm.submit();		 
-	    newWin1.focus();
-	}
 </script>
 <script comment="divPop">
 
@@ -809,30 +611,27 @@ jQuery.fn.center = function () {
 
 </head>
 <body>
-<form name="form1" id="form1" method="post" >
+<form name="form" id="form" method="post" >
 <input type="hidden" name="version" id="version"  value=""/>
 <input type="hidden" name ="sender" value="${param.sender}"/>
 <input type="hidden" name="cookieName" value="${param.cookieName}"/>
 <input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
-<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
-<input type="hidden" id="pjt_code" name="pjt_code" value="${param.pjt_code}"/>
-<input type="hidden" id="pjt_name" name="pjt_name" value="${param.pjt_name}"/>
-<c:forEach items="${paramValues.site}" var="natl_cd" varStatus="status">
-	<input type="hidden" name="site" value="${natl_cd}"/>
-</c:forEach>
+<input type="hidden" id="testId" name="testId" value="${param.testId}"/>
+<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
+<input type="hidden" id="sample" name="sample" value="${param.sample}"/>
+<input type="hidden" id="firmware" name="firmware" value="${param.firmware}"/>
+<input type="hidden" id="category" name="category" value="${param.category}"/>
 	<div class="pop_window">
 		<div class="pop_tit_wrap">
 			<!-- <span class="baseline"></span> -->
-			<h2 class="pop_tit" style="margin-top:10px;">${param.pjt_name}</h2>
+			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.firmware} / ${param.category}</h2>
 		</div>
 		
        <div class="pop_con_area" style="padding-top: 3px;"> 
 			<div id="contents" class="wrap_a" >
-       	   		<div id="jqgrid" style="width:100%;">
-					<table id="jqgridTable"></table>
-					<div id="jqgridPager"></div>
-				</div>
-       	   </div>         	  
+       	   		
+       	   </div>  
+       	  
        	   <div class="btn_section">
 	            <div class="right_section">
 	            	
@@ -848,7 +647,6 @@ jQuery.fn.center = function () {
     </div>
     <div id="dialog-confirm"></div>
     <!-- ## //PAGE CONTENTS ## -->	
-    <div id="loader"></div>
 </form>
 </body>
 

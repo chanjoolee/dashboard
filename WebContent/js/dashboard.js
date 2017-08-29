@@ -2176,4 +2176,908 @@ function pivot(datasrc,colDef,groupbyColumns,targetColumn){
 	
 }
 
+// schema에서 특정 element를 찾는다.
+function findAll(id, items) {
+	var i = 0, found, result = [];
 
+	for (; i < items.length; i++) {
+		if (items[i].id === id) {
+	    	result.push(items[i]);
+		} else if (_.isArray(items[i].elements)) {
+			found = findAll(id, items[i].elements);
+		    if (found.length) {
+		    	result = result.concat(found);
+			}
+		}
+	}
+
+	return result;
+}
+
+function fn_findTopContainer(){
+	if(this.parentContainer != undefined)
+		return fn_findTopContainer.call(this.parentContainer);
+}
+
+function fn_makeHtml(container, _schema){
+		var containerSub = null;
+		if(container == null)
+			container = _schema.containerId;
+		if(typeof container == 'string')
+			container = $("#" + container);
+		
+		if(_schema.parentSchema != undefined && _schema.parentSchema.cls != undefined)
+			container.addClass(_schema.parentSchema.cls);
+		if(_schema.parentSchema != undefined &&  _schema.parentSchema.containerCss != undefined){
+			$.each(_schema.parentSchema.containerCss,function(i,v){
+				container.css(v.code,v.value);
+			});
+		}
+			
+		var mainContainer = null;
+		var mainControl = null;
+		if(_schema.type == 'inline'){
+			var cols = 3;
+			if(_schema.cols != undefined)
+				cols = _schema.cols;
+			
+			//tableCreate
+			mainContainer = $(document.createElement("table"));
+			//table.addClass("table_hori m_bottom_20");
+			mainContainer.addClass("table_hori");
+			container.append(mainContainer);
+			
+			// colgroup
+			var colgroup = $(document.createElement("colgroup"));
+			mainContainer.append(colgroup);
+			
+			for(var i=0; i< cols;i++){
+				if(i == (cols - 1) ){
+					colgroup.append("<col width=\"150\"/><col width=\"\"/>");
+				}else{
+					colgroup.append("<col width=\"150\"/><col width=\"180\"/>");
+				}
+			}
+			// -- colgroup
+			
+			// tbody
+			var tbody = $(document.createElement("tbody"));
+			mainContainer.append(tbody); 
+			var tr = null;
+			$.each(_schema.items,function(i,item){
+				if(i%cols == 0 ){
+					tr =$(document.createElement("tr"));
+					tbody.append(tr);
+				}
+				//header
+				var th = $(document.createElement("th"));
+				th.addClass("txt_right");
+				th.text(item.label);
+				//td value
+				var td = $(document.createElement("td"));
+				td.addClass("hori_t_data");
+				td.text(_schema.data()[item.col]);
+				
+				tr.append(th);
+				tr.append(td);
+				
+			});
+			// --tbody
+		}else if(_schema.type == 'inline_edit'){
+			var cols = 3;
+			if(_schema.cols != undefined)
+				cols = _schema.cols;
+			
+			//tableCreate
+			mainContainer = $(document.createElement("table"));
+			//table.addClass("table_hori m_bottom_20");
+			mainContainer.addClass("table_hori");
+			container.append(mainContainer);
+			
+			// colgroup
+			var colgroup = $(document.createElement("colgroup"));
+			mainContainer.append(colgroup);
+			
+			for(var i=0; i< cols;i++){
+				if(i == (cols - 1) ){
+					colgroup.append("<col width=\"150\"/><col width=\"\"/>");
+				}else{
+					colgroup.append("<col width=\"150\"/><col width=\"180\"/>");
+				}
+			}
+			// -- colgroup
+			
+			// tbody
+			var tbody = $(document.createElement("tbody"));
+			mainContainer.append(tbody); 
+			var tr = null;
+			var data = _schema.data();
+			$.each(_schema.items,function(i,item){
+				if(data[item.col] == undefined) {
+					data[item.col] = "";
+				}
+				if(i%cols == 0 ){
+					tr =$(document.createElement("tr"));
+					tbody.append(tr);
+				}
+				//header
+				var th = $(document.createElement("th"));
+				th.addClass("txt_right");
+				th.text(item.label);
+				//td value
+				var td = $(document.createElement("td"));
+				var tdOption = {
+					name: item.col,
+					//keys: _schema.keys,
+					value: data[item.col],
+					editable : item.editable != undefined ? item.editable : true,
+					mode: "read"					
+				};
+				
+				if(_schema.options != undefined && _schema.options.keys != undefined){
+					var keys = [];
+					//var data = _schema.data();
+					$.each(_schema.options.keys,function(i,k){
+						var key = {
+							field: k,
+							value: data[k]
+						};
+						keys.push(key);
+					});
+					tdOption.keys = keys;
+				}
+					
+				
+				if(_schema.options != undefined && _schema.options.fn_submit != undefined)
+					tdOption.fn_submit = _schema.options.fn_submit;
+				else {
+					tdOption.fn_submit = function(){
+						alert("submit function not defined")
+					};
+				}
+				
+				if( item.edit_tag != undefined )	{
+					tdOption.edit_tag = item.edit_tag;
+					if(item.edit_style != undefined ){
+						tdOption.edit_style = item.edit_style;
+					} else {
+						if(item.edit_tag == "textarea"){
+							tdOption.edit_style = {height:"200px",width: "450px"};
+						} else {
+							tdOption.edit_style = {
+								
+							};
+						}
+					}
+				}else {
+					tdOption.edit_tag = "input";
+					tdOption.edit_style = {
+						height: "2.5em",
+						width: "300px"
+					};
+				}
+				
+				window.fn_td(td[0], tdOption );
+				//td.addClass("hori_t_data");
+				//td.text(_schema.data()[item.col]);
+				
+				tr.append(th);
+				tr.append(td);
+				
+			});
+		}else if(_schema.type == 'grid'){
+			//==grid create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(container.children().length > 0)
+					mainContainer.css("margin-left","10px");
+			}
+				
+			container.append(mainContainer);
+			//mainContainer.css("width","100%");
+			//grid.addClass("chartContainerSub");
+			
+			
+			//==table create
+			mainControl = $(document.createElement( "table" ));
+			mainControl.attr("id",_schema.id);
+			//table.css("width","100%");
+			mainContainer.append(mainControl);
+			
+			//== page create
+			var pager = $(document.createElement( "div" ));
+			pager.attr("id",_schema.id + 'Pager');
+			mainContainer.append(pager);
+			
+			//== common option
+			var opt = {
+					datatype: 'local',
+					styleUI : 'Bootstrap',
+					colModel: _schema.items,
+					//rowNum:10,
+					rownumbers: true, // show row numbers
+					caption: _schema.label,
+					//width: '100%',
+					//height: '100%',
+					iconSet: "fontAwesome",
+					sortable: false,
+					//viewrecords: true,
+					//pager : pager, 
+					//data : _schema.data() 
+			};
+			if(_schema.data != undefined && typeof _schema.data == 'function')
+				opt.data = _schema.data();
+			
+			if(_schema.gridOpt != undefined){
+				$.extend(opt, _schema.gridOpt);
+			}
+			
+			mainControl.jqGrid(opt);
+			
+			// width가 100%인 경우
+			if(opt.width != undefined && opt.width == '100%'){
+				mainContainer.find(".ui-jqgrid").css("width","100%");
+				mainContainer.find(".ui-jqgrid-view").css("width","100%");
+				mainContainer.find(".ui-jqgrid-hdiv").css("width","100%");
+				mainContainer.find(".ui-jqgrid-bdiv").css("width","100%");
+				mainContainer.find(".ui-jqgrid-sdiv").css("width","100%");
+				mainContainer.find(".ui-jqgrid-pager").css("width","100%");
+			}
+			
+			
+		}else if(_schema.type == 'chart'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(container.children().length > 0)
+					mainContainer.css("margin-left","10px");
+			}
+			if(_schema.width != undefined)
+				mainContainer.css("width",_schema.width);
+				
+			if(_schema.label != ""){
+				var h3 = $(document.createElement("h3"));
+				h3.addClass("cont_tit");
+				h3.text(_schema.label);
+				container.append(h3);
+			}
+			
+			container.append(mainContainer);
+			
+			
+			if($(mainContainer).highcharts() != undefined) $(mainContainer).highcharts().destroy();
+			var defaultOption =  {
+					credits: {//gets rid of the highcharts logo in bottom right
+               			enabled: false
+					}
+            };
+			var series = {};
+			var options = $.extend( defaultOption, _schema.options());
+			if(_schema.data != undefined && typeof _schema.data == 'function'){
+				var vData = _schema.data();
+				series = vData.series;
+				options.series = vData.series.series;
+				if(vData.xAxis != undefined)
+					options.xAxis = vData.xAxis;
+				if(vData.yAxis != undefined)
+					options.yAxis = vData.yAxis;
+			}
+// 			var chartUser = Highcharts.stockChart($(mainContainer).attr('id') ,options,function(chart){
+//		    	
+// 	 		});
+			
+			if(options.stockchart != undefined && options.stockchart){
+				$(mainContainer).highcharts('StockChart',options,function(chart){
+				});
+			}else{
+				$(mainContainer).highcharts(options,function(chart){
+		    	
+			 	});
+			}
+			
+			 
+			//var chart = mainContainer.highcharts();
+			//chart.reflow();
+			
+// 			$(mainContainer).highcharts(options,function(chart){
+		    	
+// 			 });
+			
+		}else if(_schema.type == 'SearchHeader'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				if(container.children().length > 0)
+					mainContainer.css("margin-left","1px");
+			}
+				
+			mainControl = $(document.createElement("h3"));
+			//h3.addClass("cont_tit");
+			mainContainer.append(mainControl);
+			mainControl.text(_schema.text);
+			mainControl.css("font-weight","bold");
+			mainControl.css("text-align","right");
+			mainControl.css("color","#000");
+			
+			container.append(mainContainer);
+		}else if(_schema.type == 'multiCombo'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				if(container.children().length > 0)
+					mainContainer.css("margin-left","10px");
+			}
+			container.append(mainContainer); 
+			
+			var vData = _schema.data();
+			var sb = [];
+			//sb.push("<option value='' multiple='multiple' ></option>");
+			mainControl = $(document.createElement( "select" ));
+			mainControl.css("width",_schema.width);
+			if(_schema.multiselectOpt != undefined && _schema.multiselectOpt.multiple != undefined && _schema.multiselectOpt.multiple == true )
+				mainControl.attr("multiple","multiple");
+			if(_schema.name != undefined)
+				mainControl.attr("name",_schema.name)
+			if(_schema.id != undefined)
+				mainControl.attr("id",_schema.id)
+			mainContainer.append(mainControl);
+			
+			/* var option1 = $(document.createElement( "option" ));
+			option1.val('xxx');
+			option1.text('xxx');
+			option1.css("display","none");
+			mainControl.append(option1); */
+			
+			if(_schema.options.group != undefined){
+				var groupKeys = [_schema.options.group.cd, _schema.options.group.name];
+				var series = getDrillDownDataSeries2(
+						'',
+						vData ,
+						groupKeys ,
+						[], //filter
+						[], //convert
+						'', //xAxis
+						'',
+						{cd: _schema.options.group.cd, name: _schema.options.group.name},
+						{isGroupby: false}
+				);
+				var selected ="selected";
+				var sb = [];
+				$.each(series.series,function(index,s){
+					var optGrp = $(document.createElement( "optgroup" ));
+					optGrp.attr("label",s.name);
+					optGrp.attr("cd",s.cd);
+					mainControl.append(optGrp);
+					$.each(s.data,function(index1,d){
+						var option = $(document.createElement( "option" ));
+						option.val(this[_schema.options.cd]);
+						option.text(this[_schema.options.name]);
+						//모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
+						$.each(this,function(k,v){
+							option.attr(k.toLowerCase(),v);
+						});
+						optGrp.append(option);
+					});
+				});
+				
+			}
+			else {
+				$.each(vData,function(){
+					var option = $(document.createElement( "option" ));
+					option.val(this[_schema.options.cd]);
+					option.text(this[_schema.options.name]);
+					//모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
+					$.each(this,function(k,v){
+						option.attr(k.toLowerCase(),v);
+					});
+					//sb.push("<option value='"+ this[_schema.options.cd] +"' "+''+">" + this[_schema.options.name] +"</option>");
+					mainControl.append(option);
+				});
+			}
+			
+			
+			
+			//$(vSelect).append(sb.join(""));
+			//$(vSelect).append(sb.join(""));
+			var multiselectOpt = {
+				//selectedList: 1,
+				height:300,
+				minWidth: 100,
+				//selectedText: _schema.text + ' # selected',
+				selectedText: function(numChecked, numTotal, checkedItems){
+				     return numChecked + ' of ' + numTotal + ' checked';
+				},
+				noneSelectedText: 'Select ' + _schema.text
+				
+			};
+			if(_schema.multiselectOpt != undefined)
+				$.extend(multiselectOpt, _schema.multiselectOpt);
+			var vMultiSelect = mainControl.multiselect(multiselectOpt).multiselectfilter();
+			
+			//filter by parent
+			if(_schema.options.childrens != undefined){
+				$.each(_schema.options.childrens, function(i,child){
+					var childSchema = findAll(child.id, eval(child.topElement) )[0];
+					if(childSchema != undefined){						
+						mainControl.on( 'change', function(){
+							
+							$("select[name="+_schema.name+"] option").each(function(i,sel){
+								if($(this).is(':selected')){
+									$("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "disabled", false );
+									//$("input[name=multiselect_pjtCodeList],[value="+$(this).val()+"]").prop( "disabled", true );
+								}else{
+									$("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "disabled", true );
+									//$("input[name=multiselect_pjtCodeList],[value="+$(this).val()+"]").prop( "disabled", false );
+								}
+							});
+							
+							$("select[name="+ child.id+"] option").each(function(i,project){			
+								$("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").prop( "disabled", $(this).prop("disabled") );
+								if($(this).prop("disabled")){
+									$("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").parent().addClass( "ui-state-disabled" );
+									$("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").attr("checked",false);
+									
+								}else{
+									$("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").parent().removeClass( "ui-state-disabled" );
+									$("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").attr("checked",true);
+								}
+								
+							});
+							
+							$("input[name=multiselect_"+ child.id+"]").each(function(){
+								$("select[name="+ child.id+"] option[value='"+$(this).val()+"']").prop( "selected", $(this).is(":checked") );
+							});
+							
+							var childMultiselectOpt = {
+								//selectedList: 1,
+								height:300,
+								minWidth: 100,
+								//selectedText: _schema.text + ' # selected',
+								selectedText: function(numChecked, numTotal, checkedItems){
+								     return numChecked + ' of ' + numTotal + ' checked';
+								},
+								noneSelectedText: 'Select ' + childSchema.text
+								
+							};
+							if(childSchema.multiselectOpt != undefined)
+								$.extend(childMultiselectOpt, childSchema.multiselectOpt);
+							
+							
+							$("select[name="+ child.id+"]").multiselect(childMultiselectOpt).multiselectfilter();
+							//$("select[name="+ child.id+"]").multiselect(childSchema.multiselectOpt).multiselectfilter();
+							
+							$("div.ui-multiselect-menu").css("width","400px");
+							$(".ui-multiselect-filter input").css("width","150px");
+						});
+					}
+					
+				} );
+				
+			}
+			
+		}else if(_schema.type == 'Button'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				
+			}
+			
+			mainControl = $(document.createElement("a"));
+			mainContainer.append(mainControl);
+			
+			
+			var span = $(document.createElement("span"));
+			span.addClass("name");
+			var span1 = $(document.createElement("span"));
+			span1.addClass("txt");
+			span1.text(_schema.label);
+			span.append(span1);
+			mainControl.append(span);
+			
+			container.append(mainContainer);
+		}else if(_schema.type == 'radioButton'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				
+			}
+			
+			mainControl = $(document.createElement("input"));
+			mainControl.attr("type","radio");
+			mainControl.attr("name",_schema.name);
+			mainControl.attr("id",_schema.id);
+			
+			if(_schema.checked != undefined)
+				mainControl.prop("checked",_schema.checked);
+			
+			mainContainer.append(mainControl);
+			
+			var label = $(document.createElement("label"));
+			label.text(_schema.label);
+			mainContainer.append(label);
+			
+			container.append(mainContainer);
+		}else if(_schema.type == 'dateInput'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				
+			}
+			
+			// text
+			mainControl = $(document.createElement("input"));
+			mainControl.attr("type","text");
+			mainControl.attr("name",_schema.name);
+			mainControl.attr("id",_schema.id);
+			mainControl.attr("readonly", "readonly");
+			mainContainer.append(mainControl);			
+			
+			container.append(mainContainer);
+			
+		}else if(_schema.type == 'monthInput'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				
+			}
+			
+			// text
+			mainControl = $(document.createElement("input"));
+			mainControl.attr("type","text");
+			mainControl.attr("name",_schema.name);
+			mainControl.attr("id",_schema.id);
+			mainControl.attr("readonly", "readonly");
+			//mainControl.MonthPicker();
+			//mainControl.MonthPicker('option','MonthFormat', 'yymm');
+			mainContainer.append(mainControl);			
+			
+			container.append(mainContainer);
+			mainControl.MonthPicker();
+			mainControl.MonthPicker('option','MonthFormat', 'yymm');
+			$("#MonthPicker_" + _schema.id).css("width","160px");   
+			
+		}else if(_schema.type == 'dateButton'){
+			//==chart container create
+			//mainContainer = $(document.createElement( "div" ));
+			//mainContainer.attr("id",_schema.id + 'Container');
+			if(_schema.parentContainerId != undefined){
+				mainContainer = $("#"  + _schema.parentContainerId);
+				
+				// btn
+				mainControl = $(document.createElement("a"));
+				mainContainer.append(mainControl);
+
+				var span = $(document.createElement("span"));
+				span.addClass("blind");
+				
+				mainControl.append(span);
+			}
+			else{
+				mainContainer = $(document.createElement( "div" ));	
+				
+				var containerType = container.attr("type");
+				if(_schema.parentSchema.type == 'HorizontalLayout'){
+					mainContainer.css("display","inline-block");
+					if(_schema.width != undefined)
+						mainContainer.css("width",_schema.width);
+				}
+				
+				// btn
+				mainControl = $(document.createElement("a"));
+				mainContainer.append(mainControl);
+
+				var span = $(document.createElement("span"));
+				span.addClass("blind");
+				
+				mainControl.append(span);
+				container.append(mainContainer);
+			}
+				
+			
+			
+		}else if(_schema.type == 'title'){
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				if(container.children().length > 0)
+					mainContainer.css("margin-left","1px");
+			}
+			mainControl = $(document.createElement("h3"));
+			mainContainer.append(mainControl);
+			mainControl.addClass("cont_tit");
+			mainControl.text(_schema.label);
+			container.append(mainContainer);
+		}else if(_schema.type == 'emptyDiv'){
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				if(container.children().length > 0)
+					mainContainer.css("margin-left","1px");
+			}
+			
+			container.append(mainContainer);
+		}else if(_schema.type == 'tab_list'){
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container' )
+			mainContainer.addClass("tit_btn");
+			mainContainer.addClass("m_top_10");			
+			
+			mainControl = $(document.createElement( "ul" )); 
+			mainControl.attr("id",_schema.id + 'Ul');
+			mainControl.addClass("tab_2depth");
+			mainContainer.append(mainControl);
+			
+			container.append(mainContainer);
+		}else if(_schema.type == 'tab_iframe'){
+			var topContainer = fn_findTopContainer.call(_schema);
+			var v_ul = $(_schema.parentContainer).find("ul");
+			
+			var v_li = $(document.createElement( "li" ));
+			v_li.attr("id", _schema.id + 'Tab' );
+			v_li.attr("target", _schema.id + 'Content' );
+			v_ul.append(v_li);
+			
+			var mainControl = $(document.createElement( "a" ));
+			mainControl.attr("id", _schema.id + '_a' );
+			mainControl.attr("origin_id", _schema.id );
+			$.each(_schema.connected_content, function(key,val){
+				mainControl.attr(key,val);
+			});
+			mainControl.text(_schema.label);
+			v_li.append(mainControl);		
+			
+			var content_id = _schema.id + 'Content';
+			var frame_id = _schema.id + 'Frame';
+			var v_content = null;
+			var v_frame = null;
+			if($("#"+content_id).length > 0 ){
+				v_content = $("#"+content_id);
+				v_frame = ("#"+frame_id);
+			}else {
+				//
+				v_content = $(document.createElement( "div" ));
+				v_content.attr("id", _schema.id + 'Content');
+				//v_content.css("margin-top","10px");
+				v_content.css("padding","0 10px 0 10px");
+				v_content.css("width","100%");
+				$(window.document.body).append(v_content);
+				
+				//iframe
+				var v_frame = $(document.createElement( "iframe" ));
+				v_frame.attr("id", _schema.id + 'Frame');
+				v_frame.attr("name", _schema.id + 'Frame');
+				v_frame.css("width","100%");
+				v_frame.css("height","1550px");
+				
+				if(_schema.iframe_css != null){
+					$.each(_schema.iframe_css,function(i,v){
+						v_frame.css(v.code,v.value);
+					});
+				}
+				v_content.append(v_frame);
+			}
+			
+			
+			
+			
+			//tab 클릭시 동작
+			if( _schema.events == undefined || _schema.events.click == undefined ){
+				mainControl.on("click",function(){
+					
+					$.each(_schema.parentSchema.elements,function(i,el){
+						$("#"+el.id + 'Tab').removeClass('on'); 
+						$("#"+el.id + 'Tab').removeClass('off');
+						$("#"+el.id + 'Tab').addClass('off');
+						
+						$("#"+el.id + 'Content').hide();
+					});
+					$("#" + _schema.id + 'Tab').removeClass("off");
+					$("#" + _schema.id + 'Tab').addClass("on");
+					v_content.show();
+					
+					var roaded = mainControl.attr("roaded");
+					if(roaded == undefined ) roaded = 'n';
+					if( roaded != 'n')
+						return;
+					
+					var viewName = $(this).attr("viewName");
+					var form_id = $(this).attr("form_id");
+					
+					//todo from this
+					//var vform = $(document.createElement( "form" ));
+					
+					var vform =  document.getElementById(form_id);
+					vform.action = '/dashboard/generic.html?viewName='+viewName;
+					vform.method = "post";
+					vform.target = _schema.id + 'Frame';
+					//vform.target = v_content[0];
+					vform.submit();
+					
+					mainControl.attr("roaded","y");
+					
+					
+				});
+			}
+			
+			var cur_index = null;
+			$.each(_schema.parentSchema.elements,function(i,el){
+				if(el == _schema){
+					cur_index = i;
+					return false;
+				}					
+			});
+			
+			if(cur_index == 0 ){
+				v_li.addClass("on")
+				v_content.css("display", "");				
+				
+				// load content
+				if( _schema.events == undefined || _schema.events.click == undefined ){
+					mainControl.trigger("click");
+				}else {
+					_schema.events.click.call(mainControl);
+				}
+				
+				//mainControl.trigger("click");
+			}else{
+				v_li.addClass("off")
+				v_content.css("display", "none");
+			}
+			
+		}
+		
+		//******* common properties *******//
+		
+		//*** default value ***//
+		if(mainControl != null  && _schema.value != undefined){
+			if(typeof _schema.value == 'string')
+				mainControl.val(_schema.value);
+			else if(typeof _schema.value == 'function')
+				mainControl.val(_schema.value());
+		}
+		
+		//***  class ***//
+		if(mainControl != null  && _schema.cls != undefined)
+			mainControl.addClass(_schema.cls);
+		
+		//***  events ***//
+		//if(_schema.events != undefined && _schema.events.click != undefined)
+		//	vInput.click(_schema.events.click);
+		if(mainControl != null  && _schema.events != undefined ){
+			$.each(_schema.events,function(ikey,event){
+				mainControl.on( ikey, event);
+				
+			});
+		}
+		
+		//***  css ***//
+		var containerType = container.attr("type");
+		if(mainContainer != null && _schema.parentSchema != undefined && _schema.parentSchema.type == 'HorizontalLayout'){
+			mainContainer.css("display","inline-block");
+			if(_schema.width != undefined)
+				mainContainer.css("width",_schema.width);
+		}
+		//- control
+		if(mainControl != null && _schema.controlCss != null){
+			$.each(_schema.controlCss,function(i,v){
+				mainControl.css(v.code,v.value);
+			});
+		}
+		//- container
+		if(mainContainer != null && _schema.containerCss != null){
+			$.each(_schema.containerCss,function(i,v){
+				mainContainer.css(v.code,v.value);
+			});
+		}
+		
+		
+		//******* End common properties *******//
+		
+		
+		// data process
+		if(_schema.elements != undefined &&  _schema.label != undefined){
+			
+			if(_schema.label != ""){
+				var h3 = $(document.createElement("h3"));
+				h3.addClass("cont_tit");
+				h3.text(_schema.label);
+				container.append(h3);
+			}
+			
+			
+			containerSub = $(document.createElement("div"));
+			container.append(containerSub);
+			
+			//상위 container type을 줘서 알아서 판단 할 수 있도록 한다.
+			containerSub.attr("type", _schema.type);
+			if(_schema.parentSchema != undefined 
+					&& _schema.parentSchema.type == 'HorizontalLayout'){
+				
+				containerSub.css("display","inline-block");
+				if(_schema.width != undefined)
+					containerSub.css("width",_schema.width);
+				//if(container.children().length > 0)
+				//	containerSub.css("margin-left","10px");
+			}
+			
+			
+		}
+		
+		if(_schema.elements != undefined){
+			$.each(_schema.elements, function(i,el){
+				
+				el.parentSchema = _schema;
+				el.parentContainer = container;
+				fn_makeHtml(containerSub,el);
+				/* if(el.type == 'inline'){
+					makeInline(containerSub, el);
+				}else if(el.type == 'grid'){
+					makeGrid(containerSub , el );
+				}else if(el.type == 'chart'){
+					makeChart(containerSub , el );
+				}else if(el.type == 'SearchHeader'){
+					makeSearchHeader(containerSub , el );
+				}else if(el.type == 'multiCombo'){
+					makeMultiCombo(containerSub , el );
+				}else if(el.elements != undefined){
+					makeHtml(container, el);
+				} */
+			});
+		}
+		
+		
+		
+		$("div.ui-multiselect-menu").css("width","400px");
+		$(".ui-multiselect-filter input").css("width","150px");
+	}
+	

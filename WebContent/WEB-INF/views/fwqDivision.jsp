@@ -410,6 +410,9 @@
 				virtualDelay();
 				drawChart();
 				drawGrid();
+				
+				$("#measure_dt").text("Measure Date: " + Highcharts.dateFormat('%Y-%m-%d',convertDateToUct(maxValue(fwqDataList,"MEASURE_DT")))); 
+				
 			}
 		});
 	
@@ -1298,67 +1301,9 @@
 		
 		var gridModel = [
   			{ label: 'Project', name: 'PJT_NAME', width: 210 ,align:'left' , sortable: true, formatter:'string',cellattr:  setAttrProject },
-  			{ label: 'dummy', name: 'POINT', width: 80 ,align:'center', sortable: true, hidden: true},
-      		{ label: 'Index<br/>(200)', name: 'dummy', width: 90 ,align:'center', sortable: true
-  				//, formatter: 'number'
-  				,  formatter:  function(cellValue, options, rowObject) {
-      				var result = "";
-      				var datalHtml = "";
-      				var imageHtml = "";
-      				var labelHtml = "";
-      				
-      				var data = dataFilter(fwqDataList,[{col:'PJT_CODE',val:rowObject.PJT_CODE}])[0];
-      				var preData = {};
-      				var diff = 0;
-      				//var symbol ="circle"; 
-      				var symbol ="/dashboard/images/unchange.png"; 
-      				var symbolTxtUp ="▲";
-    				var symbolTxtDown ="▼ ";
-    				var symbolTxt = '<span style="color:grey">-</span>';
-    				var symbolHtml = "";
-      				var fillColor = "yellow";
-      				
-      				if( data.preData != null){
-      					preData = data.preData;
-      				}
-      				if(preData.POINT != undefined){
-      					diff = Number(data.POINT.toFixed(2)) - Number(preData.POINT.toFixed(2));
-      				}
-      				
-      				//diff = Number(diff.toFixed(3));
-      				
-      				if(diff > 0 ){
-      					//symbol = 'triangle';
-      					//fillColor = 'red';
-      					symbol = '/dashboard/images/up.png';
-      					symbolTxt = '<span style="color: blue">'+symbolTxtUp+'</span>';
-      				}else if(diff < 0){
-      					//symbol = 'triangle-down';
-      					//fillColor = 'blue';
-      					symbol = '/dashboard/images/down.png';
-      					symbolTxt = '<span style="color: red">'+symbolTxtDown+'</span>';
-      				}
-      				
-      				if(Math.abs(diff).toFixed(2) == "0.00")
-      					diff = 0;
-      				
-      				dataHtml = rowObject.POINT ;
-      				imageHtml = '&nbsp;<img src="' + symbol + '" style="width:20px;"/>';
-      				symbolHtml = '<br/>'+symbolTxt;
-      				labelHtml = "<span> ("+  diff.toFixed(2) + ")</span>";
-      				
-      				
-      				//result = dataHtml + imageHtml + labelHtml;
-      				result = dataHtml + symbolHtml + labelHtml;
-      				return result;
-      				
-      				
-      			}
-  				//,sorttype: 'number'
-  				//,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}
-      			//,cellattr: setAttr 
-      		},  
-      		{ label: 'Loc', name: 'LOC', width:  65 ,align:'center', sortable:false,  formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 0},fontWeight:''},
+  			//{ label: 'dummy', name: 'POINT', width: 80 ,align:'center', sortable: true, hidden: true},
+      		{ label: 'Index<br/>(200)', name: 'POINT', width: 90 ,align:'center', sortable: true, formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'' ,cursor:'' },  
+      		{ label: 'Loc', name: 'LOC', width:  65 ,align:'center', sortable:false,  formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 0},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
       		{ label: 'Static Analysis<br/>(20)', name: 'STATIC_ANALYSIS', width:  65 ,align:'center', sortable:false,  formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
       		{ label: 'Function Parameter<br/>(20)', name: 'FUNC_PARAMETER', width: 70 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
       		{ label: 'Function LOC<br/>(20)', name: 'FUNCTION_SIZE', width: 65 ,align:'center', sortable:false , formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold' ,cursor:'pointer' },
@@ -1454,13 +1399,13 @@
 				var cm = jQuery("#jqGrid").jqGrid("getGridParam", "colModel");
 				if(cm.name != ''){
 					var val = Number($('#jqGrid').jqGrid('getCell', rowId, iCol));	
-					if(cm[iCol].name == 'PJT_NAME' || cm[iCol].name == 'POINT'){
+					if(cm[iCol].name == 'PJT_NAME' ){
 						var val1 = $('#jqGrid').jqGrid('getCell', rowId, 0);	
 						var object = dataFilter(fwqDataList,[{col:'PJT_NAME',val: val1}])[0];
 						if(object != undefined){
 							popFWQProjectSummary.call(object);
 						}
-					}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status' || cm[iCol].name == 'LOC' || cm[iCol].name == 'dummy'){
+					}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status' || cm[iCol].name == 'POINT'){
 						// nothing
 					}else {
 						//cell click
@@ -1651,7 +1596,7 @@
 		.containerGrid{
 			position: relative;
 			min-height: 1px;
-			margin-top: 40px;
+			margin-top: 3px;
 			padding-left: 10px;
 			padding-right: 0;
 			/* width: 100%; */
@@ -1660,7 +1605,12 @@
 			/* height: 590px; */
 		}			
 		
-		
+		.divlabel{
+			margin-top: 0px;
+			margin-left: 10px;
+			font-weight: bold;
+			font-size: 13px;
+		}
 		
 		.div-search{
 			width: 100%;
@@ -1942,6 +1892,7 @@
 <input type="hidden" name="cookieName" value="${param.cookieName}"/>
 <input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 <input type="hidden" id="userId" name="userId" value="${param.userId}"/>
+<input type="hidden" name="PMS_ROLE" id="PMS_ROLE" value="${param.PMS_ROLE}"/>
 <input type="hidden" id="pjt_code" name="pjt_code" value=""/> 
 <input type="hidden" id="pjt_name" name="pjt_name" value=""/>
 <input type="hidden" id ="phaseBase" name ="phaseBase" value="phase"/>
@@ -1956,6 +1907,7 @@
 </div>
 
 <div  id="container" class="container"></div>
+<div id="measure_dt" class="divlabel">2017.08.29</div>
 <div id="containerGrid" class="containerGrid">
 	<table id="jqGrid"></table> 
     <!-- <div id="jqGridPager"></div> --> 

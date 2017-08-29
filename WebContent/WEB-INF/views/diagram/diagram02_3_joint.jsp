@@ -15,16 +15,10 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
   
-  <!--<link rel="stylesheet" href="/dashboard/js/jointjs/joint.css" />-->
-  
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
-  <!--<script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script>-->
-  <script src="/dashboard/js/jointjs/joint.src.js"></script>
-  
-  <!-- <script src="/dashboard/js/jointjs/lodash.min.js"></script>
+  <link rel="stylesheet" href="/dashboard/js/jointjs/joint.css" />
+  <script src="/dashboard/js/jointjs/lodash.min.js"></script>
   <script src="/dashboard/js/jointjs/backbone.js"></script>
-  <script src="/dashboard/js/jointjs/joint.js"></script> -->
+  <script src="/dashboard/js/jointjs/joint.js"></script>
   <!-- <script src="/dashboard/js/jointjs/rappid.js"></script> -->
   
   <!-- 
@@ -33,7 +27,6 @@
   <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
   <script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script> 
   -->
- <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
   
   
   <style>
@@ -92,9 +85,7 @@
     border-radius: 4px;
     border: 2px solid #2980B9;
     box-shadow: inset 0 0 5px black, 2px 2px 1px gray;
-    /*padding: 5px;*/
-    padding: 0;
-    
+    padding: 5px;
     box-sizing: border-box;
     z-index: 2;
 }
@@ -124,23 +115,22 @@
 .html-element button.delete:hover {
     width: 20px;
     height: 20px;
-    line-height: 20px; 
+    line-height: 20px;
 }
 .html-element select {
     position: absolute;
     right: 2px;
     bottom: 28px;
 }
-.html-element input.title {
-    position: relative;
-    /*top: 0;*/
-    /*left: 0;*/
-    /*right: 0;*/
+.html-element input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     border: none;
     color: #333;
     padding: 5px;
     height: 16px;
-    width: 100%;
 }
 .html-element label {
     color: #333;
@@ -154,9 +144,6 @@
     color: white;
     font-size: 10px;
 }
-.joint-paper.joint-theme-default {
-    background-color: transparent;
-}
   </style>
   <script type="text/javascript">
   		_.templateSettings = {
@@ -165,46 +152,37 @@
 		    escape: /\<\@\-(.+?)\@\>/gim
 		};
 	  // custom 
-	 	joint.shapes.html = {};
-	    joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
-	        defaults: joint.util.deepSupplement({
-	            type: 'html.Element',
-	            attrs: {
-	                rect: { stroke: 'none', 'fill-opacity': 0 }
-	            }
-	        }, joint.shapes.basic.Rect.prototype.defaults)
-	    });
+	  joint.shapes.html = {};
+	  joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
+	      defaults: joint.util.deepSupplement({
+	          type: 'html.Element',
+	          attrs: {
+	              rect: { stroke: 'none', 'fill-opacity': 0 }
+	          }
+	      }, joint.shapes.basic.Rect.prototype.defaults)
+	  });
 	  
-	    joint.shapes.html.ElementView = joint.dia.ElementView.extend({
+	  joint.shapes.html.ElementView = joint.dia.ElementView.extend({
+
 	        template: [
 	            '<div class="html-element">',
 	            '<button class="delete">x</button>',
-	            '<input class="title" type="text" value="" />',
+	            '<label></label>',
 	            '</div>'
 	        ].join(''),
+
 	        initialize: function() {
 	            _.bindAll(this, 'updateBox');
 	            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-				this.expand = false;
-				this.expandPosition = null;
-				this.$box = $(_.template(this.template)());
-	            //// Prevent paper from handling pointerdown.
-	            //this.$box.find('input,select').on('mousedown click', function(evt) {
-	            //    evt.stopPropagation();
-	            //});
-	            //// This is an example of reacting on the input change and storing the input data in the cell model.
-	            this.$box.find('input').on('change', _.bind(function(evt) {
-	                this.model.set('input', $(evt.target).val());
-	            }, this));
-	            //this.$box.find('select').on('change', _.bind(function(evt) {
-	            //    this.model.set('select', $(evt.target).val());
-	            //}, this));
-	            //this.$box.find('select').val(this.model.get('select'));
+
+	            this.$box = $(_.template(this.template)());
+	            // Prevent paper from handling pointerdown.
 	            this.$box.find('.delete').on('click', _.bind(this.model.remove, this.model));
-	            //// Update the box position whenever the underlying model changes.
+	            // Update the box position whenever the underlying model changes.
 	            this.model.on('change', this.updateBox, this);
-	            //// Remove the box when the model gets removed from the graph.
+	            // Remove the box when the model gets removed from the graph.
 	            this.model.on('remove', this.removeBox, this);
+
 	            this.updateBox();
 	        },
 	        render: function() {
@@ -218,67 +196,17 @@
 	            var bbox = this.model.getBBox();
 	            // Example of updating the HTML with a data stored in the cell model.
 	            //this.$box.find('label').text(this.model.get('label'));
-	            //this.$box.find('span').text(this.model.get('select'));
 	            this.$box.css({
 	                width: bbox.width,
 	                height: bbox.height,
 	                left: bbox.x,
-	                top: bbox.y,
-	                transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)'
+	                top: bbox.y
+	                //transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)'
 	            });
 	        },
 	        removeBox: function(evt) {
 	            this.$box.remove();
-	        },
-	        
-	        pointerdown: function(evt, x, y) {
-		        // var position = this.model.get('position');
-		        // var size = this.model.get('size');
-		        // var center = g.rect(position.x, position.y, size.width, size.height).center();
-		        // var intersection = constraint.intersectionWithLineFromCenterToPoint(center);
-		        // joint.dia.ElementView.prototype.pointerdown.apply(this, [evt, intersection.x, intersection.y]);
-				var box = this.getBBox();
-				var mouseSection = g.rect(x - 2,y - 2,10,10);
-				var cornerSection = g.rect(box.corner().x - 1,box.corner().y - 2,10,10);
-				var intersection = cornerSection.intersect(mouseSection);
-				if(intersection != null){
-					this.expand = true;
-					this.expandPosition = 2;
-				}else{
-					this.expand = false;	
-				}
-					
-				// console.log("intersection: " + intersection); 
-				
-				joint.dia.ElementView.prototype.pointerdown.apply(this, [evt, x, y]);
-		    },
-			
-			
-			pointermove: function(evt, x, y) {
-				// console.log("pointermove x:" + x + ", y:" + y);
-				var box = this.getBBox();
-				var corner = box.corner();
-				var diff_x = x - corner.x;
-				var diff_y = y - corner.y;
-				var origin_h = this.model.attributes.size.height;
-				var origin_w = this.model.attributes.size.width;
-				var mod_h = origin_h + diff_y;
-				var mod_w = origin_w + diff_x;
-				if(this.expand && this.expandPosition == 2){
-					this.model.set({size:{width: mod_w ,height: mod_h }}) ;				
-				}else {
-					joint.dia.ElementView.prototype.pointermove.apply(this, [evt, x, y]);
-				}
-				
-				
-			},
-			
-			// mouseover: function(evt) {
-				// //this.$box.position();
-				// // console.log("mouseover x:" + evt.clientX + ", y:" + evt.clientY);
-				// joint.dia.ElementView.prototype.mouseover.apply(this, [evt]);
-			// }
-	        
+	        }
 	    });
   	
   		var graph;
@@ -294,6 +222,7 @@
 				resize();
 			});
 		});
+
 		function resize() {
 			var height = window.innerHeight
 				- $("#nav").height() 
@@ -305,13 +234,14 @@
 				- parseInt($("#footer").css("padding-bottom"))
 				- 5
 				;			
+
 			$("#center").height(height);
+
 		}
 		
 		
 		function initPaper(){
 			graph = new joint.dia.Graph;
-			// 
 			paper = new joint.dia.Paper({
 	  	        el: $('#canvas'),
 	  	        width: '100%',
@@ -320,38 +250,32 @@
 	  	        gridSize: 1
 	  	    });
 			
-			// paper = new joint.dia.Paper({graph.on('all', function(eventName, cell) {
-		 	    // console.log(arguments);
-		 	// });
-	  	        
-			
-			// paper.on('cell:pointerdown', function(cellView, evt, x, y) {
-			    // var bbox = cellView.getBBox();
-			    // var strokeWidth = cellView.model.attr('rect/stroke-width') || 1;
-			    // // console.log(isBorderClicked(bbox, x, y, strokeWidth))
-				// // console.log(strokeWidth);
+			paper.on('cell:pointerdown', function(cellView, evt, x, y) {
+			    var bbox = cellView.getBBox();
+			    var strokeWidth = cellView.model.attr('rect/stroke-width') || 1;
+			    //console.log(isBorderClicked(bbox, x, y, strokeWidth))
 			    
 			
-			    // /* cellView.highlight(
-		   		// null ,//defaults to cellView.el  
-		   		// {
-		        // highlighter: {
-		            // name: 'stroke',
-		            // options: {
-		                // //padding: 10,
-		                // //rx: 5,
-		                // //ry: 5,
-		                // attrs: {
-		                    // 'stroke-width': 3,
-		                    // stroke: '#FF0000'
-		                // }
-		            // }
-		        // }
-		    // }); */
+			    /* cellView.highlight(
+		   		null ,//defaults to cellView.el  
+		   		{
+		        highlighter: {
+		            name: 'stroke',
+		            options: {
+		                //padding: 10,
+		                //rx: 5,
+		                //ry: 5,
+		                attrs: {
+		                    'stroke-width': 3,
+		                    stroke: '#FF0000'
+		                }
+		            }
+		        }
+		    }); */
 			    
 			    
 			    
-			// });
+			});
 		}
 		
 		function initShapeMenu(){
@@ -449,10 +373,9 @@
 		    }); */
 			
 			var rect = new joint.shapes.html.Element({
-		        position: { x: 80, y: 80 },
-		        size: { width: 170, height: 100 }
-		        //label: 'I am HTML',
-		        //select: 'one'
+		        position: { x: 0, y: 0 },
+		        size: { width: 120, height: 100 },
+		        label: 'aaaa'
 		    });
 			
 			graph.addCells([rect]);
@@ -473,16 +396,16 @@
 			
 			var link = new joint.dia.Link({
 			    source: { x: 170, y: 20 }, 
-			    target: { x: 480, y: 20 }
-//			    , attrs: {
-//			        // Define a filter for the whole link (special selector '.' means the root element )
-//			        '.': { filter: { name: 'dropShadow', args: { dx: 1, dy: 1, blur: 2 } } },
-//			        '.connection': {
-//			            'stroke-width': 5, stroke: '#34495E'
-//			        },
-//			        //'.marker-source': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' },
-//			        '.marker-target': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' }
-//			    }
+			    target: { x: 480, y: 20 },
+			    attrs: {
+			        // Define a filter for the whole link (special selector '.' means the root element )
+			        '.': { filter: { name: 'dropShadow', args: { dx: 1, dy: 1, blur: 2 } } },
+			        '.connection': {
+			            'stroke-width': 5, stroke: '#34495E'
+			        },
+			        //'.marker-source': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' },
+			        '.marker-target': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' }
+			    }
 			});
 			
 			graph.addCells([link]);
@@ -493,7 +416,7 @@
 				helper:"clone"  	,
 				start: function(event,ui) {
 					$(this).attr("clonable",true);
-					//$(this).draggable( "option", "revert", false );					
+					$(this).draggable( "option", "revert", false );					
 				}
 				
 			});
@@ -536,6 +459,7 @@
 	</script>
 </head>
 <body>
+
 <nav class="navbar navbar-inverse" id="nav">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -581,8 +505,10 @@
     </div>
   </div>
 </div>
+
 <footer id="footer" class="container-fluid text-center">
   <p>Footer Text</p>
 </footer>
+
 </body>
 </html>

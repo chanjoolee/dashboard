@@ -1091,13 +1091,13 @@
 				$.each(planList,function(i,plan){
 					//plan.isPlan = true;
 					//plan.MM_RESULT = plan.MM_PLAN;
-					plan.MM_RESULT_RATE = plan.MM_PLAN;
+					plan.MM_RESULT = plan.MM_PLAN;
 					dataList.push(plan);
 					plan.YYYYMM= plan.YYYYMM.substr(0,6) + ' Fcst';
 				});
 				
 				//searchs = responseData.searchs;			
-				pivotObject = pivot(dataList,{col:'PJT_ID',name:'PJT_NAME'},['YYYYMM','UP_PJT_FUNC_ID','UP_PJT_FUNC_NAME'],'MM_RESULT_RATE');
+				pivotObject = pivot(dataList,{col:'PJT_ID',name:'PJT_NAME'},['YYYYMM','UP_PJT_FUNC_ID','UP_PJT_FUNC_NAME'],'MM_RESULT');
 				sortObjects(pivotObject.columns,['PJT_NAME']);
 				//drawGrid();
 				$("#loader").hide();
@@ -1279,8 +1279,9 @@
 			    			var oFrm = document.getElementById("form");
 			    			oFrm.pjt_code.value = pjtObject.PJT_ID;
 		    				oFrm.pjt_name.value = pjtObject.PJT_NAME;
-			    			
-			    			oFrm.action =  '/dashboard/pmsResourceFcstProject.html';
+		    				
+		    				var url = '/dashboard/pmsResourceFcstProject.html';
+			    			oFrm.action =  url;
 			    			oFrm.method = "post";
 			    			oFrm.target = 'ResourceFcstProject'; 
 			    		    oFrm.submit();		
@@ -1301,7 +1302,7 @@
 					var yyyymm = row.YYYYMM;
 					
 					// month func pop
-					if(cm.name=="MM_RESULT_RATE" && $.isNumeric(yyyymm)){
+					if(cm.name=="MM_RESULT" && $.isNumeric(yyyymm)){
 						var newWin1 = window.open("", "ResourceFcstMonthFunc", "width=1000,height=600, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 		    			var parameter = "";
 		    			//yyymm
@@ -1313,6 +1314,11 @@
 		    			$("#pjtCode option:selected").each(function(){
 		    				parameter +="&pjtCodeList=" + $(this).val();
 		    			});
+		    			
+		    			parameter +="&natlCdList=xxx";
+						$("#site option:selected").each(function(){
+							parameter +="&natlCdList=" + $(this).val();
+						});
 		    			parameter += "&cj=y";
 		    			//parameter += "&tfmCd=Y";
 		    			
@@ -1375,7 +1381,10 @@
 		});
 		
 		theGrid.find("tr td:contains('0.00')").each(function(){
-			$(this).text("-");
+			//$(this).text("-");
+			if($(this).text().match(/\b0\.00/) != null)
+				$(this).text("-");
+			
 		});
 		
 		//month project summary click
@@ -1397,6 +1406,11 @@
 	    			parameter += "&yyyymm=" + month;
 	    			parameter += "&cj=y&tfmCd=Y";
 	    			
+	    			parameter +="&natlCdList=xxx";
+	    			$("#site option:selected").each(function(){
+	    				parameter +="&natlCdList=" + $(this).val();
+	    			});
+	    			
 	    			var oFrm = document.getElementById("form1");			    			
 	    			oFrm.action =  '/nspim/pjt/pjt/retrieveDetailMResourceInfo2.do?' + parameter;
 	    			oFrm.method = "post";
@@ -1409,7 +1423,7 @@
     	});
 		
     	//month all summary click
-    	theGrid.find("tr.jqgroup").find("td[aria-describedby='jqgridTable_MM_RESULT_RATE']").each(function(){
+    	theGrid.find("tr.jqgroup").find("td[aria-describedby='jqgridTable_MM_RESULT']").each(function(){
     		var td = $(this);			    		
     		var month = td.parent().find("td:first").text();
     		if($.isNumeric(month) && td.text()!="-"){
@@ -1425,6 +1439,11 @@
 	    			parameter +="&pjtCodeList=xxx";
 	    			$("#pjtCode option:selected").each(function(){
 	    				parameter +="&pjtCodeList=" + $(this).val();
+	    			});
+	    			
+	    			parameter +="&natlCdList=xxx";
+	    			$("#site option:selected").each(function(){
+	    				parameter +="&natlCdList=" + $(this).val();
 	    			});
 	    			parameter += "&cj=y&tfmCd=Y";
 	    			
@@ -1448,12 +1467,21 @@
 	
 	function popPmsRsc(upFuncId,pjtId,yyyymm){
 		//var url = '/nspim/pjt/pjt/retrieveResourceInfo.do?fnCode=' + upFuncId +'&searchPjtId='+pjtId;
-		var url = '/nspim/pjt/pjt/retrieveDetailMResourceInfo.do?fnCode=' + upFuncId +'&searchPjtId='+pjtId +'&yyyymm='+yyyymm +'&cj=y ' ;
+		var url = '/nspim/pjt/pjt/retrieveDetailMResourceInfo.do?';
+		var parameter = 'fnCode=' + upFuncId +'&searchPjtId='+pjtId +'&yyyymm='+yyyymm;
+		
+		parameter +="&natlCdList=xxx";
+		$("#site option:selected").each(function(){
+			parameter +="&natlCdList=" + $(this).val();
+		});
+		
+		parameter += '&cj=y ' ;
+		
 		var newWin1 = window.open("", "ResourceForeCast", "width=1280,height=350, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 		var oFrm = document.getElementById("form");
 		
 		oFrm.pjtId.value = pjtId;
-		oFrm.action =  url;
+		oFrm.action =  url + parameter;
 		oFrm.method = "post";
 		oFrm.target = 'ResourceForeCast'; 
 	    oFrm.submit();		 
@@ -1519,7 +1547,7 @@
 		     		    },
 		     		    {label:'UP_PJT_FUNC_ID', name:'UP_PJT_FUNC_ID', id:'UP_PJT_FUNC_ID',sortable:false, hidden:true},
 		     		    {label:'Func', name:'UP_PJT_FUNC_NAME', id:'UP_PJT_FUNC_NAME', width:200, align:'left', textAlign:'left',sortable:false}
-		     		    ,{label:'Sum', name:'MM_RESULT_RATE', id:'MM_RESULT_RATE', width:50,sortable:false, align:'right', textAlign:'right',summaryType: 'sum', formatter:'number' ,cellattr: setAttrSum}
+		     		    ,{label:'Sum', name:'MM_RESULT', id:'MM_RESULT', width:50,sortable:false, align:'right', textAlign:'right',summaryType: 'sum', formatter:'number' ,cellattr: setAttrSum}
 		           	];
 		
 		$.each(pivotObject.columns,function(i,col){

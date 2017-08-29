@@ -124,6 +124,12 @@ public class CommonController {
     	
     	ModelAndView mav = new ModelAndView(); 
     	commonService.requestToVo(request, searchVO);
+    	Object filterStr = searchVO.get("filters");
+    	if(filterStr != null){
+    		JSONObject filters = JSONObject.fromObject(filterStr.toString());
+        	searchVO.put("filtersOrigin", filterStr.toString());
+        	searchVO.put("filters", filters);
+    	}
     	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
         mav.addObject("dataList", dataList);       
         mav.setViewName("jsonView");        
@@ -138,13 +144,6 @@ public class CommonController {
     	ModelAndView mav = new ModelAndView(); 
     	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
     	commonService.requestToVo(request, searchVO);
-    	Object filterStr = searchVO.get("filters");
-    	if(filterStr != null){
-    		JSONObject filters = JSONObject.fromObject(filterStr.toString());
-        	searchVO.put("filtersOrigin", filterStr.toString());
-        	searchVO.put("filters", filters);
-    	}
-    	
     	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
     	mav.addObject("rows", dataList);
     	
@@ -164,7 +163,7 @@ public class CommonController {
     	ModelAndView mav = new ModelAndView(); 
     	commonService.requestToVo(request, searchVO);
     	try{
-    		commonService.update(searchVO.get("sqlid").toString(), searchVO);
+    		commonService.update(searchVO.get("sqlid").toString(), searchVO); 
     		//searchVO.put("result","success");
     		mav.addObject("result", "success");       
     	}catch(Exception ex){

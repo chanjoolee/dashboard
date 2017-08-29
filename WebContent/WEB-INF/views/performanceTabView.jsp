@@ -4455,6 +4455,47 @@
 	     					,orderby: 8
 	     			 },
 	     			 {
+	     					category:'SPECwpc',
+	     					calculateCols:[
+								{
+									col:'ORDER',
+									val: function(){
+										if(this.SPEC.match(/Media and Entertainment/gi) != null  ){
+	     									return 1;
+	     								}else if(this.SPEC.match(/Product Development/gi) != null ){
+	     									return 2;
+	     								}else if(this.SPEC.match(/Life Sciences/gi) != null ){
+	     									return 3;
+	     								}else if(this.SPEC.match(/Energy/gi) != null ){
+	     									return 4;
+	     								}else if(this.SPEC.match(/General Operations/gi) != null ){
+	     									return 5;
+	     								}else{
+	     									return 100;
+	     								}
+										
+									}
+								}               
+	     					],
+	     					filters:[
+	     						{col:'FIELD',val:'IOMeter'} ,
+	     						{col:'QUEUE_DEPTH',val:'Summary'}
+	     						
+	     					],
+	     					xOderbyCols:['FIRMWARE1','ORDER','SPEC'],
+	     					categoryCols:['FIELD','SPEC'],
+	     					yCol:'MEASURE',
+	     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+	     					multichart:{
+	     						enabled:false,
+	     						splitCol:'FIELD'
+	     					}
+	     					, decimalPoint:2
+	     					, gridSeriesColWidth: ''
+	     					, gridColWidth: '115px'
+	     					, orderby: 0.1
+	     			 },
+	     			 {
 	     					category:'SLC_Max Throughput.csv',
 	     					calculateCols:[
 								{

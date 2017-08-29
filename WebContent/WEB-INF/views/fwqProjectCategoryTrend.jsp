@@ -161,6 +161,10 @@
 		    	ymax = 20;
 		    	ytickInterval = 5;
 		    	break;
+		    case 'LOC':
+		    	ymax = null;
+		    	ytickInterval = null;
+		    	break;
 		    default:
 		    	ymax = 25;
 		    	ytickInterval = 5;
@@ -260,7 +264,7 @@
 	                lineWidth:3,
 	                dataLabels: {
 	                    enabled: true,
-	                    format:'{point.y}',
+	                    format:'{point.y:,.0f}',
 	                    color: 'black'
 	                },
 	                //enableMouseTracking: true,
@@ -301,29 +305,43 @@
 		            		    	});
 		            		    	break;
 		            		    case 'FUNCTION_SIZE':
-		            		    	//var url = 'http://codesonar'+ e.point.options.CODESONAR_SVR  +'.skhynix.com:7340/html?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A'+ e.point.options.CSV_NUM +'&query=&prj_filter=29&metric_filter=8' ;
-		            		    	//var url = 'http://codesonar'+ e.point.options.CODESONAR_SVR  +'.skhynix.com:7340/analysis/?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A'+ e.point.options.CSV_NUM +'&query=&prj_filter=29&metric_filter=8' ;
-		            		    	var url =  'http://codesonar'+ e.point.options.CODESONAR_SVR  +'.skhynix.com:7340/metric_search.html?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A' +  e.point.options.CSV_NUM ;
-		            		    	//window.open(url, '_blank');
-									urlExists(url,function(result){
-										if(result){
-											window.open(url, '_blank');
-										}else{
-											
-// 											hs.htmlExpand(null, {
-// 										        pageOrigin: {
-// 										            x: e.pageX || e.clientX,
-// 										            y: (e.pageY || e.clientY)  + 52 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
-// 										        },
-// 										        headingText: 'There is no corresponding web address',
-// 										        //maincontentText: url,
-// 										        width: 450,
-// 										        height: 0
-// 										    });
-											
-										}
-										
-		            		    	});
+//		            		    	//var url = 'http://codesonar'+ e.point.options.CODESONAR_SVR  +'.skhynix.com:7340/html?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A'+ e.point.options.CSV_NUM +'&query=&prj_filter=29&metric_filter=8' ;
+//		            		    	//var url = 'http://codesonar'+ e.point.options.CODESONAR_SVR  +'.skhynix.com:7340/analysis/?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A'+ e.point.options.CSV_NUM +'&query=&prj_filter=29&metric_filter=8' ;
+//		            		    	var url =  'http://codesonar'+ e.point.options.CODESONAR_SVR  +'.skhynix.com:7340/metric_search.html?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A' +  e.point.options.CSV_NUM ;
+//		            		    	//window.open(url, '_blank');
+//									urlExists(url,function(result){
+//										if(result){
+//											window.open(url, '_blank');
+//										}else{
+//											
+//// 											hs.htmlExpand(null, {
+//// 										        pageOrigin: {
+//// 										            x: e.pageX || e.clientX,
+//// 										            y: (e.pageY || e.clientY)  + 52 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
+//// 										        },
+//// 										        headingText: 'There is no corresponding web address',
+//// 										        //maincontentText: url,
+//// 										        width: 450,
+//// 										        height: 0
+//// 										    });
+//											
+//										}
+//										
+//		            		    	});
+		            		    	
+		            		    	var url =  '/dashboard/generic.html?viewName=fwqFunctionLocDetailPop&measure_dt='+ e.point.options.MEASURE_DT ;
+		            		    	url += '&project='+ e.point.options.PROJECT  ;
+		            		    	url += '&svr_num=' + e.point.options.CODESONAR_SVR;
+		            		    	url += '&csv_num=' + e.point.options.CSV_NUM;
+		            		    	
+		            		    	var newWin1 = window.open("", "fwqFunctionLocDetailPop", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+		            		    	var oFrm = document.getElementById("form");
+		            		    	oFrm.action =  url;
+		    						oFrm.method = "post";
+		    						oFrm.target = 'fwqFunctionLocDetailPop'; 
+		    					    oFrm.submit();		
+		    					    newWin1.focus();
+		    					    
 		            		    	break;
 		            		    case 'DUPLICATE':
 		            		    	//vDate = '160320';
@@ -542,7 +560,7 @@
 		$("#buttonRawData").remove();
 		$("#buttonGuide").remove();
 		
-		if($('#category').val() == "CODING_RULE_AAA"){
+		if($('#PMS_ROLE').val() == "ADMIN" && $('#category').val() == "CODING_RULE" ){
 			chart.renderer.label('Raw Data', width -20 - 80  -90 ,10 )
 	        .attr({
 	        	width:80,
@@ -665,7 +683,12 @@
         .add();
 	}
 	
-	
+	Highcharts.setOptions({
+	    lang: {
+	    	thousandsSep: ','
+	        //,thousandsSeparator: ','
+	    }
+	});
 	</script>
 	<style type="text/css">
 		.wrap_a{width:100%; overflow:hidden}
@@ -705,6 +728,7 @@
 <input type="hidden" name="cookieName" value="${param.cookieName}"/>
 <input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 <input type="hidden" id="userId" name="userId" value="${param.userId}"/>
+<input type="hidden" name="PMS_ROLE" id="PMS_ROLE" value="${param.PMS_ROLE}"/>
 <input type="hidden" id="pjt_code" name="pjt_code" value="${param.pjt_code}"/>
 <input type="hidden" id="pjt_name" name="pjt_name" value="${param.pjt_name}"/>
 <input type="hidden" id="category" name="category" value="${param.category}"/>

@@ -53,6 +53,7 @@
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
 	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
 	
+	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
 	<script type="text/javascript">	
 	var starttime = new Date();
 	if (window.console) console.log('start time:' + starttime.toString());

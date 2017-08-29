@@ -57,6 +57,31 @@ public class CommonService {
 	
 	@SuppressWarnings("rawtypes")
     public void update(String statement,Object parameter) {
+		Map<Object,Object> param = (Map<Object,Object>)parameter;	 
+		String loop_id = "";
+		net.sf.json.JSONObject searchJson = (net.sf.json.JSONObject)param.get("searchJson");
+		if(searchJson != null){
+			loop_id =  (String)searchJson.get("loop_id");
+			if(loop_id != null){
+				net.sf.json.JSONArray update_list = (net.sf.json.JSONArray)searchJson.get(loop_id);
+				for( int i = 0; i < update_list.size(); i++){
+					net.sf.json.JSONObject update = (net.sf.json.JSONObject)update_list.get(i);
+					param.put("detail",update);
+					dao.update(statement, param);
+				}
+				
+			}else{
+				dao.update(statement, parameter);
+			}
+		}
+		else{
+			dao.update(statement, parameter);
+		}
+        
+    }
+	
+	@SuppressWarnings("rawtypes")
+    public void loopUpdate(String statement,Object parameter) {		
         dao.update(statement, parameter);
     }
 	
