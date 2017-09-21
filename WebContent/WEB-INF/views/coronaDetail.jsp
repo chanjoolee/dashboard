@@ -68,7 +68,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.05.26"></script>
+	<script src="js/dashboard.js?version=2017.08.31.02"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
@@ -179,6 +179,10 @@
 	    .ui-jqgrid-hdiv .ui-jqgrid-htable .ui-search-toolbar input {
 	    	height: 30px;
 	    }
+	    
+	    .ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td {
+	    	white-space: nowrap;
+	    }
 		
 	</style>
 	<style type="text/css" title="nspmstyle">
@@ -260,6 +264,9 @@
 	var testDisks = [];
 	var testResults = [];
 	var testFiles = [];
+	//그리드 편집전 데이타
+	var beforEditRow = {};
+	var beforEditRow1 = {};
 
 	var schemaContent = {
 			containerId:'contentCoronaDetail',
@@ -277,39 +284,124 @@
 			    	id: 'grid_detail',
 			    	label:'',
 			    	items:[
-						{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:70, align:'center', sortable:false, hidden: true }
-						,{label:'sample', name:'SAMPLE', id:'SAMPLE', width:70, align:'center', sortable:false, hidden: true }
-						,{label:'firmware', name:'FIRMWARE', id:'FIRMWARE', width:70, align:'center', sortable:false, hidden: true }
+			    		{
+							label: " ",
+							search: false,
+							name: "actions",
+							align:'center',
+							width: 60,
+							formatter: "actions",	
+							formatoptions: {
+		                        keys: true
+		                        ,delbutton:false
+		                        ,editformbutton: false
+		                        ,editOptions: {} // editformbutton 가 true 인경우
+		                        ,addOptions: {}
+		                        ,delOptions: {}
+		                        
+		                        ,afterSave : function(rowid,res) {
+		                        	var grid = $(this).jqGrid();
+		                        	var row = grid.jqGrid('getRowData',rowid);
+		                        	row.sqlid = "dashbaord.corona.firmware.status.edit";
+		                        	row.userId = $("#userId").val();
+		                        	row.origindata = JSON.stringify(beforEditRow);
+		                        	
+		                        	var response1 = {};
+		                        	$.ajax({
+			                    		url: "/dashboard/genericSaveJson.html",
+			                    		type: "POST",
+			                    		data: row, 
+			                    		async: false,			                    		
+			                    		success:  function(data){
+			                    			response1 = data;
+			                    			if(response1.result != 'success'){
+			                    				msg = "Save Success!";
+				                    			$("#dialog-confirm").html(data.message);
+				                    			$("#dialog-confirm").dialog({
+				                    			    resizable: false,
+				                    			    modal: true,
+				                    			    title: "Error",
+				                    			    //height: 200,
+				                    			    width: 500,
+				                    			    dialogClass: 'no-close',
+				                    			    closeOnEscape: false,
+				                    			    buttons: [
+			                    			              {
+			                    			                text: "OK",
+			                    			                click: function() {
+			                    			                  $( this ).dialog( "close" );
+			                    			                }
+			                    			              }
+		                    			            ]
+				                    			});
+				                    			
+				                    			
+				                    			  
+			                    			}else{
+			                    				grid.trigger("reloadGrid",[{current:true}]);
+			                    			}					                    			
+			                    		}
+			                    	});
+		                        	
+		                        }
+		                        ,afterRestore : function(rowid) {
+		                        	
+		                        }
+		                        ,onEdit :function(rowid,actop){
+		                        	var grid = $(this).jqGrid();
+		                        	beforEditRow = grid.jqGrid('getRowData',rowid);
+		    					}
+		                        
+		                    } 
+		                    
+		                	
+						}
 						
-						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true}  
-						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false }
-						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false }
-						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true }
-						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true}
-						,{label:'Status', name:'STATUS', id:'STATUS', width:60, align:'center', sortable:false }
-						,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false,hidden: true }
-						,{label:'Script<br>TAT LVL', name:'SCRIPT_TAT_LVL', id:'SCRIPT_TAT_LVL', width:70, align:'center', sortable:false }
-			    		,{label:'Script<br>Version', name:'SCRIPT_VERSION', id:'SCRIPT_VERSION', width:70, align:'center', sortable:false }
-			    		,{label:'Duration', name:'DURATION', id:'DURATION', width:70, align:'center', sortable:false ,hidden: true}
+						,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:70, align:'center', sortable:false, hidden: true, editable: false}
+						,{label:'sample', name:'SAMPLE', id:'SAMPLE', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						,{label:'firmware', name:'FIRMWARE', id:'FIRMWARE', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						
+						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true, editable: false}  
+						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false, editable: false }
+						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false, editable: false }
+						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true, editable: false }
+						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true, editable: false}
+						,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false
+							, editable: true
+							, edittype: "select"
+							, formatter:"select"
+							, editoptions: {
+								value: {
+									"No Data":"No Data",
+									"PASS":"PASS",
+									"FAIL": "FAIL"
+								}
+							}
+							
+						 }
+						,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false,hidden: true, editable: false }
+						,{label:'Script<br>TAT LVL', name:'SCRIPT_TAT_LVL', id:'SCRIPT_TAT_LVL', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Script<br>Version', name:'SCRIPT_VERSION', id:'SCRIPT_VERSION', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Duration', name:'DURATION', id:'DURATION', width:70, align:'center', sortable:false ,hidden: true, editable: false}
 			    		
-			    		,{label:'Single<br>Multi&nbsp;', name:'SINGLE_MULTI', id:'SINGLE_MULTI', width:70, align:'center', sortable:false }
-			    		,{label:'Power Mode<br>(Speed)', name:'POWER_MODE_SPEED', id:'POWER_MODE_SPEED', width:100, align:'center', sortable:false }
-			    		,{label:'Test Time', name:'TEST_TIME_MASTER', id:'TEST_TIME_MASTER', width:90, align:'center', sortable:false }
-			    		,{label:'Need Vendor<br>CMD', name:'NEED_VENDOR_CMD', id:'NEED_VENDOR_CMD', width:90, align:'center', sortable:false }
-			    		,{label:'Luconfig<br>유무', name:'LUCONFIG_YN', id:'LUCONFIG_YN', width:70, align:'center', sortable:false }
-			    		,{label:'UFS<br>Ver', name:'UFS_VER', id:'UFS_VER', width:50, align:'center', sortable:false }
-			    		,{label:'Taget<br>Operation', name:'TARGET_OPERATION', id:'TARGET_OPERATION', width:70, align:'center', sortable:false }
-			    		,{label:'Precondition', name:'PRECONDITION', id:'PRECONDITION', width:90, align:'center', sortable:false }
-			    		,{label:'POR', name:'POR', id:'POR', width:40, align:'center', sortable:false }
-			    		,{label:'HW Reset', name:'HW_RESET', id:'HW_RESET', width:60, align:'center', sortable:false }
-			    		,{label:'EP Reset', name:'EP_RESET', id:'EP_RESET', width:60, align:'center', sortable:false }
-			    		,{label:'H8', name:'H8', id:'H8', width:40, align:'center', sortable:false }
-			    		,{label:'SSU', name:'SSU', id:'SSU', width:60, align:'center', sortable:false } 
-			    		,{label:'Target LU', name:'TARGET_LU', id:'TARGET_LU', width:100, align:'center', sortable:false }
-			    		,{label:'Power<br>Control', name:'POWER_CONTROL', id:'POWER_CONTROL', width:70, align:'center', sortable:false }
-			    		,{label:'Item Name', name:'ITEM_NAME', id:'ITEM_NAME', width:200, align:'left', sortable:false }
-			    		,{label:'Item Purpos', name:'ITEM_PURPOSE', id:'ITEM_PURPOSE', width:200, align:'left', sortable:false, hidden: true  }
-			    		,{label:'Item Purpose', name:'ITEM_PURPOSE_SIMPLE', id:'ITEM_PURPOSE_SIMPLE', width:200, align:'left', sortable:false 
+			    		,{label:'Single<br>Multi&nbsp;', name:'SINGLE_MULTI', id:'SINGLE_MULTI', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Power Mode<br>(Speed)', name:'POWER_MODE_SPEED', id:'POWER_MODE_SPEED', width:100, align:'center', sortable:false , editable: false}
+			    		,{label:'Test Time', name:'TEST_TIME_MASTER', id:'TEST_TIME_MASTER', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Need Vendor<br>CMD', name:'NEED_VENDOR_CMD', id:'NEED_VENDOR_CMD', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Luconfig<br>유무', name:'LUCONFIG_YN', id:'LUCONFIG_YN', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'UFS<br>Ver', name:'UFS_VER', id:'UFS_VER', width:50, align:'center', sortable:false, editable: false }
+			    		,{label:'Taget<br>Operation', name:'TARGET_OPERATION', id:'TARGET_OPERATION', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Precondition', name:'PRECONDITION', id:'PRECONDITION', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'POR', name:'POR', id:'POR', width:40, align:'center', sortable:false, editable: false }
+			    		,{label:'HW Reset', name:'HW_RESET', id:'HW_RESET', width:60, align:'center', sortable:false, editable: false }
+			    		,{label:'EP Reset', name:'EP_RESET', id:'EP_RESET', width:60, align:'center', sortable:false, editable: false }
+			    		,{label:'H8', name:'H8', id:'H8', width:40, align:'center', sortable:false, editable: false }
+			    		,{label:'SSU', name:'SSU', id:'SSU', width:60, align:'center', sortable:false, editable: false } 
+			    		,{label:'Target LU', name:'TARGET_LU', id:'TARGET_LU', width:100, align:'center', sortable:false, editable: false }
+			    		,{label:'Power<br>Control', name:'POWER_CONTROL', id:'POWER_CONTROL', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Item Name', name:'ITEM_NAME', id:'ITEM_NAME', width:200, align:'left', sortable:false, editable: false }
+			    		,{label:'Item Purpos', name:'ITEM_PURPOSE', id:'ITEM_PURPOSE', width:200, align:'left', sortable:false, hidden: true, editable: false  }
+			    		,{label:'Item Purpose', name:'ITEM_PURPOSE_SIMPLE', id:'ITEM_PURPOSE_SIMPLE', width:200, align:'left', sortable:false , editable: false
 							, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
 								var result = "";
 								var grid = $(this).jqGrid();
@@ -320,8 +412,8 @@
 								
 							}	    			
 			    		}
-			    		,{label:'Item Description', name:'ITEM_DESCRIPTION', id:'ITEM_DESCRIPTION', width:200, align:'left', sortable:false, hidden: true  }
-			    		,{label:'Item Description', name:'ITEM_DESCRIPTION_SIMPLE', id:'ITEM_DESCRIPTION_SIMPLE', width:200, align:'left', sortable:false 
+			    		,{label:'Item Description', name:'ITEM_DESCRIPTION', id:'ITEM_DESCRIPTION', width:200, align:'left', sortable:false, hidden: true, editable: false  }
+			    		,{label:'Item Description', name:'ITEM_DESCRIPTION_SIMPLE', id:'ITEM_DESCRIPTION_SIMPLE', width:200, align:'left', sortable:false , editable: false
 			    			, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
 								var result = "";
 								var grid = $(this).jqGrid();
@@ -333,8 +425,8 @@
 							}	    		
 			    		
 			    		}
-			    		,{label:'Input Parameter', name:'INPUT_PARAMETER', id:'INPUT_PARAMETER', width:200, align:'left', sortable:false, hidden: true  }
-			    		,{label:'Input Parameter', name:'INPUT_PARAMETER_SIMPLE', id:'INPUT_PARAMETER_SIMPLE', width:150, align:'left', sortable:false 
+			    		,{label:'Input Parameter', name:'INPUT_PARAMETER', id:'INPUT_PARAMETER', width:200, align:'left', sortable:false, hidden: true, editable: false  }
+			    		,{label:'Input Parameter', name:'INPUT_PARAMETER_SIMPLE', id:'INPUT_PARAMETER_SIMPLE', width:150, align:'left', sortable:false , editable: false
 			    			, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
 								var result = "";
 								var grid = $(this).jqGrid();
@@ -345,13 +437,13 @@
 			    		
 			    		}
 			    		
-			    		,{label:'PF110', name:'PF110', id:'PF110', width:60, align:'center', sortable:false }
-			    		,{label:'Exynos 7420', name:'EXYNOS_7420', id:'EXYNOS_7420', width:70, align:'center', sortable:false }
-			    		,{label:'P4 Rev', name:'P4_REV', id:'P4_REV', width:70, align:'center', sortable:false }
-			    		,{label:'Priority', name:'PRIORITY', id:'PRIORITY', width:60, align:'center', sortable:false }
-			    		,{label:'TG645', name:'TG645', id:'TG645', width:60, align:'center', sortable:false }
-			    		,{label:'Comment', name:'USER_COMMENT', id:'USER_COMMENT', width:200, align:'left', sortable:false, hidden: true  }
-			    		,{label:'Comment', name:'USER_COMMENT_SIMPLE', id:'USER_COMMENT_SIMPLE', width:150, align:'center', sortable:false
+			    		,{label:'PF110', name:'PF110', id:'PF110', width:60, align:'center', sortable:false, editable: false }
+			    		,{label:'Exynos 7420', name:'EXYNOS_7420', id:'EXYNOS_7420', width:70, align:'center', sortable:false , editable: false}
+			    		,{label:'P4 Rev', name:'P4_REV', id:'P4_REV', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Priority', name:'PRIORITY', id:'PRIORITY', width:60, align:'center', sortable:false, editable: false }
+			    		,{label:'TG645', name:'TG645', id:'TG645', width:60, align:'center', sortable:false, editable: false }
+			    		,{label:'Comment', name:'USER_COMMENT', id:'USER_COMMENT', width:200, align:'left', sortable:false, hidden: true, editable: false  }
+			    		,{label:'Comment', name:'USER_COMMENT_SIMPLE', id:'USER_COMMENT_SIMPLE', width:150, align:'center', sortable:false, editable: false
 			    			, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
 								var result = "";
 								var grid = $(this).jqGrid();
@@ -369,9 +461,11 @@
 			    	gridOpt:{
 			    		datatype:'json',
 			    		pager: "#grid_detailPager",
-			    		url: function(){
-			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page"
-			    		},
+//			    		url: function(){
+//			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
+//			    		},
+			    		url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
+			    		editurl: "/dashboard/ssdCusDummySaveJson.html",
 			    		viewrecords: true,			    		
 			    		width: '100%',
 			    		height: '100%',
@@ -432,7 +526,7 @@
 			    					
 			    					]
 			    			};
-			    			makeHtml(childDiv,schema1);
+			    			fn_makeHtml(childDiv,schema1);
 			    			
 			    			
 			    			
@@ -465,16 +559,100 @@
 			    				//emptyrecords: "No records to view",
 			    				caption:"Detail List",
 			                    colModel: [
-									{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false }  
-									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false }
-									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false }
-									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false }
-									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false }
-									,{label:'Status', name:'STATUS', id:'STATUS', width:60, align:'center', sortable:false }
-									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false }
-									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false }
-									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false }
-									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false }         
+			                    	{
+										label: " ",
+										search: false,
+										name: "actions",
+										align:'center',
+										width: 60,
+										formatter: "actions",	
+										formatoptions: {
+					                        keys: true
+					                        ,delbutton:false
+					                        ,editformbutton: false
+					                        ,editOptions: {} // editformbutton 가 true 인경우
+					                        ,addOptions: {}
+					                        ,delOptions: {}
+					                        
+					                        ,afterSave : function(rowid,res) {
+					                        	var grid = $(this).jqGrid();
+					                        	var row = grid.jqGrid('getRowData',rowid);
+					                        	row.sqlid = "dashbaord.corona.firmware.log.status.edit";
+					                        	row.userId = $("#userId").val();
+					                        	row.origindata = JSON.stringify(beforEditRow1);
+					                        	
+					                        	var response1 = {};
+					                        	$.ajax({
+						                    		url: "/dashboard/genericSaveJson.html",
+						                    		type: "POST",
+						                    		data: row, 
+						                    		async: false,			                    		
+						                    		success:  function(data){
+						                    			response1 = data;
+						                    			if(response1.result != 'success'){
+						                    				msg = "Save Success!";
+							                    			$("#dialog-confirm").html(data.message);
+							                    			$("#dialog-confirm").dialog({
+							                    			    resizable: false,
+							                    			    modal: true,
+							                    			    title: "Error",
+							                    			    //height: 200,
+							                    			    width: 500,
+							                    			    dialogClass: 'no-close',
+							                    			    closeOnEscape: false,
+							                    			    buttons: [
+						                    			              {
+						                    			                text: "OK",
+						                    			                click: function() {
+						                    			                  $( this ).dialog( "close" );
+						                    			                }
+						                    			              }
+					                    			            ]
+							                    			});
+							                    			
+							                    			
+							                    			  
+						                    			}else{
+						                    				grid.trigger("reloadGrid",[{current:true}]);
+						                    			}					                    			
+						                    		}
+						                    	});
+					                        	
+					                        }
+					                        ,afterRestore : function(rowid) {
+					                        	
+					                        }
+					                        ,onEdit :function(rowid,actop){
+					                        	var grid = $(this).jqGrid();
+					                        	beforEditRow1 = grid.jqGrid('getRowData',rowid);
+					    					}
+					                        
+					                    } 
+					                    
+					                	
+									}
+									,{label:'Sample', name:'SAMPLE', id:'SAMPLE', width:100, align:'center', sortable:false,hidden: true, editable: false }  
+									,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'center', sortable:false,hidden: true, editable: false }  
+									,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false, editable: false }  
+									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false, editable: false }
+									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false, editable: false }
+									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false, editable: false }
+									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false }
+									,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false 
+										, editable: true
+										, edittype: "select"
+										, formatter:"select"
+										, editoptions: {
+											value: {
+												"PASS":"PASS",
+												"FAIL": "FAIL"
+											}
+										}
+									 }
+									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false, editable: false }
+									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false, editable: false }
+									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false, editable: false }
+									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false, editable: false }         
 			                    ],
 			    				loadonce: true,
 			                    width: '100%'
@@ -507,6 +685,8 @@
 		    		                //,searchOperators: true
 		    		            }
 		    				);
+		    				
+		    				
 			    			
 			    		}
 				    	
@@ -519,531 +699,6 @@
 			]								
 	};
 	
-	function makeHtml(container, _schema){
-		var containerSub = null;
-		if(container == null)
-			container = _schema.containerId;
-		if(typeof container == 'string')
-			container = $("#" + container);
-		
-		if(_schema.parentSchema != undefined && _schema.parentSchema.cls != undefined)
-			container.addClass(_schema.parentSchema.cls);
-		if(_schema.parentSchema != undefined &&  _schema.parentSchema.containerCss != undefined){
-			$.each(_schema.parentSchema.containerCss,function(i,v){
-				container.css(v.code,v.value);
-			});
-		}
-			
-		var mainContainer = null;
-		var mainControl = null;
-		if(_schema.type == 'inline'){
-			var cols = 3;
-			if(_schema.cols != undefined)
-				cols = _schema.cols;
-			
-			//tableCreate
-			mainContainer = $(document.createElement("table"));
-			//table.addClass("table_hori m_bottom_20");
-			mainContainer.addClass("table_hori");
-			container.append(mainContainer);
-			
-			// colgroup
-			var colgroup = $(document.createElement("colgroup"));
-			mainContainer.append(colgroup);
-			
-			for(var i=0; i< cols;i++){
-				if(i == (cols - 1) ){
-					colgroup.append("<col width=\"150\"/><col width=\"\"/>");
-				}else{
-					colgroup.append("<col width=\"150\"/><col width=\"180\"/>");
-				}
-			}
-			// -- colgroup
-			
-			// tbody
-			var tbody = $(document.createElement("tbody"));
-			mainContainer.append(tbody); 
-			var tr = null;
-			$.each(_schema.items,function(i,item){
-				if(i%cols == 0 ){
-					tr =$(document.createElement("tr"));
-					tbody.append(tr);
-				}
-				//header
-				var th = $(document.createElement("th"));
-				th.addClass("txt_right");
-				th.text(item.label);
-				//td value
-				var td = $(document.createElement("td"));
-				td.addClass("hori_t_data");
-				td.text(_schema.data()[item.col]);
-				
-				tr.append(th);
-				tr.append(td);
-				
-			});
-			// --tbody
-		}else if(_schema.type == 'grid'){
-			//==grid create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","10px");
-			}
-				
-			container.append(mainContainer);
-			//mainContainer.css("width","100%");
-			//grid.addClass("chartContainerSub");
-			
-			
-			//==table create
-			mainControl = $(document.createElement( "table" ));
-			mainControl.attr("id",_schema.id);
-			//table.css("width","100%");
-			mainContainer.append(mainControl);
-			
-			//== page create
-			var pager = $(document.createElement( "div" ));
-			pager.attr("id",_schema.id + 'Pager');
-			mainContainer.append(pager);
-			
-			//== common option
-			var opt = {
-					datatype: 'local',
-					styleUI : 'Bootstrap',
-					colModel: _schema.items,
-					//rowNum:10,
-					rownumbers: true, // show row numbers
-					caption: _schema.label,
-					//width: '100%',
-					//height: '100%',
-					iconSet: "fontAwesome",
-					sortable: false,
-					//viewrecords: true,
-					//pager : pager, 
-					//data : _schema.data() 
-			};
-			if(_schema.data != undefined && typeof _schema.data == 'function')
-				opt.data = _schema.data();
-			
-			if(_schema.gridOpt != undefined){
-				if(typeof _schema.gridOpt.url ==  'function'){
-					_schema.gridOpt.url = _schema.gridOpt.url();
-				}
-				$.extend(opt, _schema.gridOpt);
-			}
-			
-			mainControl.jqGrid(opt);
-			
-			// width가 100%인 경우
-			if(opt.width != undefined && opt.width == '100%'){
-				mainContainer.find(".ui-jqgrid").css("width","100%");
-				mainContainer.find(".ui-jqgrid-view").css("width","100%");
-				mainContainer.find(".ui-jqgrid-hdiv").css("width","100%");
-				mainContainer.find(".ui-jqgrid-bdiv").css("width","100%");
-				mainContainer.find(".ui-jqgrid-sdiv").css("width","100%");
-				mainContainer.find(".ui-jqgrid-pager").css("width","100%");
-			}
-			
-			
-		}else if(_schema.type == 'chart'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","10px");
-			}
-			if(_schema.width != undefined)
-				mainContainer.css("width",_schema.width);
-				
-			if(_schema.label != ""){
-				var h3 = $(document.createElement("h3"));
-				h3.addClass("cont_tit");
-				h3.text(_schema.label);
-				container.append(h3);
-			}
-			
-			container.append(mainContainer);
-			
-			
-			if($(mainContainer).highcharts() != undefined) $(mainContainer).highcharts().destroy();
-			var defaultOption =  {
-					credits: {//gets rid of the highcharts logo in bottom right
-               			enabled: false
-					}
-            };
-			var series = {};
-			var options = $.extend( defaultOption, _schema.options());
-			if(_schema.data != undefined && typeof _schema.data == 'function'){
-				var vData = _schema.data();
-				series = vData.series;
-				options.series = vData.series.series;
-				if(vData.xAxis != undefined)
-					options.xAxis = vData.xAxis;
-				if(vData.yAxis != undefined)
-					options.yAxis = vData.yAxis;
-			}
-// 			var chartUser = Highcharts.stockChart($(mainContainer).attr('id') ,options,function(chart){
-//		    	
-// 	 		});
-			
-			if(options.stockchart != undefined && options.stockchart){
-				$(mainContainer).highcharts('StockChart',options,function(chart){
-				});
-			}else{
-				$(mainContainer).highcharts(options,function(chart){
-		    	
-			 	});
-			}
-			
-			 
-			//var chart = mainContainer.highcharts();
-			//chart.reflow();
-			
-// 			$(mainContainer).highcharts(options,function(chart){
-		    	
-// 			 });
-			
-		}else if(_schema.type == 'SearchHeader'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","1px");
-			}
-				
-			mainControl = $(document.createElement("h3"));
-			//h3.addClass("cont_tit");
-			mainContainer.append(mainControl);
-			mainControl.text(_schema.text);
-			mainControl.css("font-weight","bold");
-			mainControl.css("text-align","right");
-			mainControl.css("color","#000");
-			
-			container.append(mainContainer);
-		}else if (_schema.type == 'multiCombo'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","10px");
-			}
-			container.append(mainContainer); 
-			
-			var vData = _schema.data();
-			var sb = [];
-			//sb.push("<option value='' multiple='multiple' ></option>");
-			mainControl = $(document.createElement( "select" ));
-			mainControl.css("width",_schema.width);
-			if(_schema.multiselectOpt != undefined && _schema.multiselectOpt.multiple != undefined && _schema.multiselectOpt.multiple == true )
-				mainControl.attr("multiple","multiple");
-			if(_schema.name != undefined)
-				mainControl.attr("name",_schema.name)
-			if(_schema.id != undefined)
-				mainControl.attr("id",_schema.id)
-			mainContainer.append(mainControl);
-			
-			/* var option1 = $(document.createElement( "option" ));
-			option1.val('xxx');
-			option1.text('xxx');
-			option1.css("display","none");
-			mainControl.append(option1); */
-			
-			$.each(vData,function(){
-				var option = $(document.createElement( "option" ));
-				option.val(this[_schema.options.cd]);
-				option.text(this[_schema.options.name]);
-				//모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
-				$.each(this,function(k,v){
-					option.attr(k.toLowerCase(),v);
-				});
-				//sb.push("<option value='"+ this[_schema.options.cd] +"' "+''+">" + this[_schema.options.name] +"</option>");
-				mainControl.append(option);
-			});
-			//$(vSelect).append(sb.join(""));
-			//$(vSelect).append(sb.join(""));
-			var multiselectOpt = {
-				//selectedList: 1,
-				height:300,
-				minWidth: 100,
-				//selectedText: _schema.text + ' # selected',
-				selectedText: function(numChecked, numTotal, checkedItems){
-				     return numChecked + ' of ' + numTotal + ' checked';
-				},
-				noneSelectedText: 'Select ' + _schema.text
-				
-			};
-			if(_schema.multiselectOpt != undefined)
-				$.extend(multiselectOpt, _schema.multiselectOpt);
-			var vMultiSelect = mainControl.multiselect(multiselectOpt).multiselectfilter();
-			
-		}else if(_schema.type == 'Button'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				
-			}
-			
-			mainControl = $(document.createElement("a"));
-			mainContainer.append(mainControl);
-			
-			
-			var span = $(document.createElement("span"));
-			span.addClass("name");
-			var span1 = $(document.createElement("span"));
-			span1.addClass("txt");
-			span1.text(_schema.label);
-			span.append(span1);
-			mainControl.append(span);
-			
-			container.append(mainContainer);
-		}else if(_schema.type == 'radioButton'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				
-			}
-			
-			mainControl = $(document.createElement("input"));
-			mainControl.attr("type","radio");
-			mainControl.attr("name",_schema.name);
-			mainControl.attr("id",_schema.id);
-			
-			if(_schema.checked != undefined)
-				mainControl.prop("checked",_schema.checked);
-			
-			mainContainer.append(mainControl);
-			
-			var label = $(document.createElement("label"));
-			label.text(_schema.label);
-			mainContainer.append(label);
-			
-			container.append(mainContainer);
-		}else if(_schema.type == 'dateInput'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				
-			}
-			
-			// text
-			mainControl = $(document.createElement("input"));
-			mainControl.attr("type","text");
-			mainControl.attr("name",_schema.name);
-			mainControl.attr("id",_schema.id);
-			mainControl.attr("readonly", "readonly");
-			mainContainer.append(mainControl);			
-			
-			container.append(mainContainer);
-			
-		}else if(_schema.type == 'monthInput'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				
-			}
-			
-			// text
-			mainControl = $(document.createElement("input"));
-			mainControl.attr("type","text");
-			mainControl.attr("name",_schema.name);
-			mainControl.attr("id",_schema.id);
-			mainControl.attr("readonly", "readonly");
-			//mainControl.MonthPicker();
-			//mainControl.MonthPicker('option','MonthFormat', 'yymm');
-			mainContainer.append(mainControl);			
-			
-			container.append(mainContainer);
-			mainControl.MonthPicker();
-			mainControl.MonthPicker('option','MonthFormat', 'yymm');
-			$("#MonthPicker_" + _schema.id).css("width","160px");   
-			
-		}else if(_schema.type == 'dateButton'){
-			//==chart container create
-			//mainContainer = $(document.createElement( "div" ));
-			//mainContainer.attr("id",_schema.id + 'Container');
-			if(_schema.parentContainerId != undefined){
-				mainContainer = $("#"  + _schema.parentContainerId);
-				
-				// btn
-				mainControl = $(document.createElement("a"));
-				mainContainer.append(mainControl);
-
-				var span = $(document.createElement("span"));
-				span.addClass("blind");
-				
-				mainControl.append(span);
-			}
-			else{
-				mainContainer = $(document.createElement( "div" ));	
-				
-				var containerType = container.attr("type");
-				if(_schema.parentSchema.type == 'HorizontalLayout'){
-					mainContainer.css("display","inline-block");
-					if(_schema.width != undefined)
-						mainContainer.css("width",_schema.width);
-				}
-				
-				// btn
-				mainControl = $(document.createElement("a"));
-				mainContainer.append(mainControl);
-
-				var span = $(document.createElement("span"));
-				span.addClass("blind");
-				
-				mainControl.append(span);
-				container.append(mainContainer);
-			}
-				
-			
-			
-		}
-		
-		//******* common properties *******//
-		
-		//*** default value ***//
-		if(mainControl != null  && _schema.value != undefined){
-			if(typeof _schema.value == 'string')
-				mainControl.val(_schema.value);
-			else if(typeof _schema.value == 'function')
-				mainControl.val(_schema.value());
-		}
-		
-		//***  class ***//
-		if(mainControl != null  && _schema.cls != undefined)
-			mainControl.addClass(_schema.cls);
-		
-		//***  events ***//
-		//if(_schema.events != undefined && _schema.events.click != undefined)
-		//	vInput.click(_schema.events.click);
-		if(mainControl != null  && _schema.events != undefined ){
-			$.each(_schema.events,function(ikey,event){
-				mainControl.on( ikey, event);
-				
-			});
-		}
-		
-		//***  css ***//
-		var containerType = container.attr("type");
-		if(mainContainer != null && _schema.parentSchema != undefined && _schema.parentSchema.type == 'HorizontalLayout'){
-			mainContainer.css("display","inline-block");
-			if(_schema.width != undefined)
-				mainContainer.css("width",_schema.width);
-		}
-		//- control
-		if(mainControl != null && _schema.controlCss != null){
-			$.each(_schema.controlCss,function(i,v){
-				mainControl.css(v.code,v.value);
-			});
-		}
-		//- container
-		if(mainContainer != null && _schema.containerCss != null){
-			$.each(_schema.containerCss,function(i,v){
-				mainContainer.css(v.code,v.value);
-			});
-		}
-		
-		
-		//******* End common properties *******//
-		
-		
-		// data process
-		if(_schema.elements != undefined &&  _schema.label != undefined){
-			
-			if(_schema.label != ""){
-				var h3 = $(document.createElement("h3"));
-				h3.addClass("cont_tit");
-				h3.text(_schema.label);
-				container.append(h3);
-			}
-			
-			containerSub = $(document.createElement("div"));
-			//상위 container type을 줘서 알아서 판단 할 수 있도록 한다.
-			containerSub.attr("type", _schema.type);
-			if(_schema.parentSchema != undefined 
-					&& _schema.parentSchema.type == 'HorizontalLayout'){
-				
-				containerSub.css("display","inline-block");
-				if(_schema.width != undefined)
-					containerSub.css("width",_schema.width);
-				//if(container.children().length > 0)
-				//	containerSub.css("margin-left","10px");
-			}
-			container.append(containerSub);
-			
-		}
-		
-		if(_schema.elements != undefined){
-			$.each(_schema.elements, function(i,el){
-				
-				el.parentSchema = _schema;
-				el.parentContainer = container;
-				makeHtml(containerSub,el);
-				/* if(el.type == 'inline'){
-					makeInline(containerSub, el);
-				}else if(el.type == 'grid'){
-					makeGrid(containerSub , el );
-				}else if(el.type == 'chart'){
-					makeChart(containerSub , el );
-				}else if(el.type == 'SearchHeader'){
-					makeSearchHeader(containerSub , el );
-				}else if(el.type == 'multiCombo'){
-					makeMultiCombo(containerSub , el );
-				}else if(el.elements != undefined){
-					makeHtml(container, el);
-				} */
-			});
-		}
-		
-		
-		
-		$("div.ui-multiselect-menu").css("width","400px");
-		$(".ui-multiselect-filter input").css("width","150px");
-	}
 	
 </script>
 <script title="ui-schema">
@@ -1081,7 +736,7 @@
 	
 	function fn_search(){
 		$("#contents").html("");
-		makeHtml('contents',schemaContent);
+		fn_makeHtml('contents',schemaContent);
 	}
 	
 	

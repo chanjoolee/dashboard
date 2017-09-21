@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+	<select id="dashboard.hms.defect.datalist" resultType="hashmap">
+		select 
+			--f.FOLDER_NAME,
+			--f.DATA_SRC,
+			FIELD,
+			MEASURE,
+			count(*) cnt
+		from PERFORMANCE f
+		where 1=1
+		<if test="FOLDER_NAME != null and FOLDER_NAME != '' ">
+       	  and f.folder_name in
+       		<foreach collection="FOLDER_NAME" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+   		</if> 
+		and  TOOL = 'HMS' 
+		and DATA_SRC ='defect_lists.csv'  
+		and field in ('G-List total')
+		group by 
+			--f.FOLDER_NAME,
+			--f.DATA_SRC,
+			FIELD, 
+			MEASURE
+			
+		order by measure
+		
+	</select>
+	
+	<select id="dashboard.hms.erase.datalist" resultType="hashmap">
+		with tbl_data as (
+			select 
+				distinct
+				FOLDER_NAME,
+				TOOL,
+				DATA_SRC,
+				SPEC
+			from PERFORMANCE 
+			where FOLDER_NAME = 'HMS_20170419' 
+			and  TOOL = 'HMS' 
+			and DATA_SRC ='erase_count.csv'  
+		) 
+		,tbl_data1 as (
+			select 
+				spec,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Subtest'
+				) as Subtest ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Serial number'
+				) as Serial_number ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Capacity'
+				) as Capacity ,
+				(select to_number(measure)  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Avg'
+				) as "Avg" ,
+				(select to_number(measure)  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Max'
+				) as "Max" ,
+				(select to_number(measure)  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Min'
+				) as "Min" ,
+				(select to_char(TO_TIMESTAMP(measure,'YYYY/MM/DD HH24:MI:SS.FF3'),'YYYY/MM/DD/HH24/MI/SS')  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Event Date'
+				) as dt  ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Event Date'
+				) as dt_str
+			
+			from tbl_data a
+		)
+		
+		select * from tbl_data1  
+		where subtest = 'FINAL_RDT_PARAMETRIC'
+		order by dt
+		
+	</select>
+	<select id="dashboard.hms.smart.datalist" resultType="hashmap">
+		with tbl_data as (	
+			select 
+				distinct 
+				FOLDER_NAME,
+				a.TOOL,
+				a.spec, 
+				a.DATA_SRC,
+				a.measure att
+			from PERFORMANCE a
+			where a.FOLDER_NAME = 'HMS_20170419' 
+			and  a.TOOL = 'HMS' 
+			and a.DATA_SRC ='smart_attributes.csv'  
+			and a.FIELD = 'Att'
+		)
+		
+		select 
+			distinct a.att,
+			(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Attribute Description'
+				) as att_name 
+		from tbl_data a
+			
+	</select>
+	<select id="dashboard.hms.smart.datalist.by.atts" resultType="hashmap">
+		with tbl_data as (
+			select 
+				distinct
+				FOLDER_NAME,
+				TOOL,
+				DATA_SRC,
+				SPEC
+			from PERFORMANCE 
+			where FOLDER_NAME = 'HMS_20170419' 
+			and  TOOL = 'HMS' 
+			and DATA_SRC ='smart_attributes.csv'  
+		) 
+		,tbl_data1 as (
+			select 
+				spec,		
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Subtest'
+				) as Subtest ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Serial number'
+				) as Serial_number ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Capacity'
+				) as Capacity ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Att'
+				) as Att ,		
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Attribute Description'
+				) as att_name ,		
+				(select to_number(measure)  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Value'
+				) as Value ,
+				/*(select to_number(measure)  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Norm'
+				) as Norm ,
+				(select to_number(measure)  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Worst'
+				) as Worst ,*/
+				(select to_char(TO_TIMESTAMP(measure,'YYYY/MM/DD HH24:MI:SS.FF3'),'YYYY/MM/DD/HH24/MI/SS')  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Event Date'
+				) as dt ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Event Date'
+				) as dt_str
+			
+			from tbl_data a
+		)
+		
+		select * from tbl_data1  
+		where 1=1
+		--and subtest = 'FINAL_RDT_PARAMETRIC'
+		--and att in ('234','241')
+		<if test="attributesArr != null and attributesArr != '' ">
+       	  and att in
+       		<foreach collection="attributesArr" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+   		</if> 
+		--order by att,dt
+	</select>
+	
+	<select id="dashboard.hms.performance.datalist" resultType="hashmap">
+		select 'dummy' dummy from dual
+			
+	</select>
+	<select id="dashboard.hms.performance.datalist.by.field" resultType="hashmap">
+		with tbl_data as (
+			select 
+				FOLDER_NAME,
+				TOOL,
+				DATA_SRC,
+				SPEC,
+				field,
+				to_number(replace(measure,'%','')) as measure
+			from PERFORMANCE 
+			where FOLDER_NAME = 'HMS_20170419' 
+			and  TOOL = 'HMS' 
+			and DATA_SRC ='performance_data.csv'  
+			<if test="fieldArr != null and fieldArr != '' ">
+	       	  	and field in
+	       		<foreach collection="fieldArr" item="item" index="index"  open="(" separator="," close=")">
+	           		#{item}
+	       		</foreach>
+	   		</if> 
+		) 
+		,tbl_data1 as (
+			select 
+				spec,	
+				field ,
+				measure value,	
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Subtest'
+				) as Subtest ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Serial number'
+				) as Serial_number ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Capacity'
+				) as Capacity ,
+				(select to_char(TO_TIMESTAMP(measure,'YYYY/MM/DD HH24:MI:SS.FF3'),'YYYY/MM/DD/HH24/MI/SS')  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Event Date'
+				) as dt ,
+				(select measure  from PERFORMANCE t 
+					where t.FOLDER_NAME =a.FOLDER_NAME 
+					and t.TOOL =a.TOOL 
+					and t.DATA_SRC =a.DATA_SRC 
+					and t.SPEC =a.SPEC 
+					and t.FIELD = 'Event Date'
+				) as dt_str
+			
+			from tbl_data a
+		)		
+		select * from tbl_data1  
+		where 1=1
+	</select>
+	
+	
+</mapper>    

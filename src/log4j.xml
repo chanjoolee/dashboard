@@ -36,10 +36,9 @@
      
     <!-- Query Loggers -->
     <logger name="jdbc.sqlonly" additivity="false">  
-        <level value="INFO"/>
+        <level value="debug"/>
         <appender-ref ref="sqlout" />  
         <appender-ref ref="console-infolog"/>  
-        <!-- <appender-ref ref="console"/>   -->
     </logger>
     
     <!-- <logger name="jdbc.sqltiming" additivity="false">  
@@ -49,12 +48,11 @@
     </logger> -->
      
      
-    <!-- <logger name="jdbc.resultsettable" additivity="false">  
-        <level value="INFO"/>  
-        <appender-ref ref="sqlout" />
-        <appender-ref ref="console"/>
-       	<appender-ref ref="console-infolog"/>
-    </logger> -->
+    <logger name="jdbc.resultsettable" additivity="false">  
+        <level value="debug"/>  
+        <!-- <appender-ref ref="sqlout" /> -->
+        <!-- <appender-ref ref="console"/> -->
+    </logger>
  
     <!-- Root Logger -->
     <root>

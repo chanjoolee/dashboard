@@ -9,7 +9,7 @@
     <title>corona summary</title>
     <%-- 1. jquery --%>
     <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
     <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
     <!-- <script src="js/jquery.csv-0.71.js"></script> -->
@@ -23,6 +23,7 @@
     <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+	<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
 	
 	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
@@ -69,7 +70,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.22.01"></script>
+	<script src="js/dashboard.js?version=2017.09.13.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -225,19 +226,7 @@
 		  to{ bottom:0; opacity:1 }
 		}
 		
-		.btn_n2 {
-		 	width: 100px;		 	
-		}
 		
-		.btn_n2:hover {
-			width: 100px;
-			cursor: pointer;
-			text-decoration: none;
-		}
-		
-		.btn_n2:active {
-		  width: 100px;
-		}
 		
 		<%-- 탭뷰--%>
 		a:hover,a:focus{
@@ -553,14 +542,14 @@
 			label:'',
 			
 			elements:[
-				{
-					containerCss:[
-						{code: 'margin-top', value:'10px'},
-					],		
-					type:"title",
-					id: "title_script",
-					label: "Script Template"
-				},
+//				{
+//					containerCss:[
+//						{code: 'margin-top', value:'10px'},
+//					],		
+//					type:"title",
+//					id: "title_script",
+//					label: "Script Template"
+//				},
 				{
 					label:'',
 					type: 'HorizontalLayout',
@@ -585,7 +574,7 @@
 							    		{code:'height',value:'30px'}
 							    	],
 									elements:[
-										
+										//categoryHead
 										{
 											type:'SearchHeader',
 											id: 'categoryHead',
@@ -594,7 +583,7 @@
 											text:'Category',
 											width: '50px'
 										},
-										
+										//Category
 										{
 											type:'multiCombo',
 											id: 'category',
@@ -606,7 +595,7 @@
 												var rtnList = [];
 												$.ajax({
 													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
+													data: {sqlid: "codegen.tables"}, 
 													async: false,
 													success:  function(response){
 														rtnList = response.dataList;
@@ -807,10 +796,67 @@
 							],			
 					    	type:'grid',
 					    	id: 'grid_script',
-					    	label:'Script Master',
+					    	label:' ',
 					    	items:[						
-								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
-								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
+								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}
+									,edittype: "text"
+									,editoptions: {
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+										   $(element).attr("autocomplete","off").typeahead({ 
+											   	appendTo : "body",
+												source: function(query, proxy) {
+													$.ajax({
+														url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.autocomplete.script&callback=?&field=CATEGORY',
+														//dataType: "jsonp",
+														data: {term: query},
+														//dataType: "json",
+														//success : proxy
+														success: function (data) {
+								                            proxy($.map(data.dataList, function(item) {
+								                            	return item.name;
+							                                 }));//END Response
+								                        } //END Success
+								                        
+													});//END AJAX
+												}
+												
+											});
+										}
+										
+									}
+								}
+								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
+								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true 
+								 	,edittype: "text"
+									,editoptions: {
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+										   $(element).attr("autocomplete","off").typeahead({ 
+											   	appendTo : "body",
+												source: function(query, proxy) {
+													$.ajax({
+														url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.autocomplete.script&callback=?&field=TEST_ITEM',
+														//dataType: "jsonp",
+														data: {term: query},
+														//dataType: "json",
+														//success : proxy
+														success: function (data) {
+								                            proxy($.map(data.dataList, function(item) {
+								                            	return item.name;
+							                                 }));//END Response
+								                        } //END Success
+								                        
+													});//END AJAX
+												}
+												
+											});
+										}
+										
+									}
+								 }
 								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 					    		
 					    	],	
@@ -834,7 +880,7 @@
 					    	// script grid option		
 					    	gridOpt:{
 					    		datatype:'local',
-					    		//loadonce: true,
+					    		loadonce: false,
 					    		pager: "#grid_scriptPager",
 					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
 					    		//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
@@ -846,7 +892,7 @@
 					    		multiSort:true,
 					    		multiselect: true,
 					    		multiboxonly:true, 
-					    		sortname: 'CATEGORY, TEST_ITEM,SCRIPT_NAME',
+					    		sortname: 'CATEGORY, SCRIPT_NAME',
 					    		rowNum: 1000000,
 					    		//forceFit : false ,
 					    		emptyrecords: "No records to view",
@@ -854,9 +900,9 @@
 					    		
 					    		grouping: true,
 					    		groupingView: {
-									groupField: ["CATEGORY"],
-									groupColumnShow: [false],
-									groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0}  </b>'],
+									groupField: ["CATEGORY","ROWNUM_GRP"],
+									groupColumnShow: [false,false],
+									groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0} - {1} Item(s)  </b>'],
 									groupOrder: ["asc"],
 									//groupSummary: [true],
 									//groupSummaryPos: ["header"],
@@ -904,7 +950,7 @@
 					    					label: '',
 					    					elements: [
 					    					    {
-					    					    	label: "Details",
+					    					    	label: "",
 					    					    	type: 'Group',
 					    					    	elements: [
 														{
@@ -917,10 +963,14 @@
 																keys : ['SCRIPT_NAME'],
 																fn_submit: function(){
 																	//alert("submit function defined");
+																	var state = true;
 																	var paramObj = {
-																		origindatas: this.props.options.keys
+																		//origindatas: this.props.options.keys
+																		origindatas: this.state.keys
 																	};
 																	
+																	if(this.props.options.value == this.state.value)
+																		return state;
 																	$.ajax({
 											                    		url: "/dashboard/genericSaveJson.html",
 											                    		type: "POST",
@@ -928,18 +978,21 @@
 											                    			searchJson: JSON.stringify(paramObj),
 											                    			fieldName: this.state.name,
 											                    			fieldValue: this.state.value,
+											                    			fieldValueOrigin: this.state.value_origin,
+											                    			userId: $("#userId").val(),
 											                    			sqlid: "dashboard.corona.emmc.script_master.update"
 											                    		}, 
 											                    		async: false,			                    		
 											                    		success:  function(data){
 											                    			response1 = data;
 											                    			if(response1.result != 'success'){
+											                    				state = false;
 											                    				msg = "Save Success!";
 												                    			$("#dialog-confirm").html(response1.message);
 												                    			$("#dialog-confirm").dialog({
 												                    			    resizable: false,
 												                    			    modal: true,
-												                    			    title: "Success",
+												                    			    title: "Error",
 												                    			    //height: 200,
 												                    			    width: 300,
 												                    			    dialogClass: 'no-close',
@@ -960,12 +1013,22 @@
 											                    		}
 											                    	});
 											                    	
-											                   
-																}
+											                   		return state;
+																},
+																fn_afterSubmit: function(keyUpdatedObjects){
+																	//var filter = dataFilter()
+																	$.each(keyUpdatedObjects,function(i,react){
+																		if(react.state.name == "SCRIPT_NAME"){
+																			theGrid.setRowData(parentRowKey,{SCRIPT_NAME:react.state.value});
+																		}
+																	});
+																	
+																},
+																progressObject: parent.$("#loader")
 															},
 															items: [
-																{label:'Script Name', col: 'SCRIPT_NAME', editable: false},
-																{label:'Category', col: 'CATEGORY', editable: false},
+																{label:'Script Name', col: 'SCRIPT_NAME', editable: true},
+																{label:'Category', col: 'CATEGORY', editable: true},
 																{label:'Test Item', col: 'TEST_ITEM', editable: false},
 																{label:'TIME', col: 'TIME'},
 																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
@@ -1196,7 +1259,8 @@
 
 			]								
 	};
-		
+	
+	
 	// 테스트 중. 그룹별로 상세리스트 만들기
 	function groupbyList(json,pkeys){
 		var abcArr = json;
@@ -1325,6 +1389,8 @@
 		
 	});
 	
+	
+	
 	</script>
 	
 	</head>
@@ -1431,8 +1497,8 @@
 	    }
 	    
 	    dblclick(){
-	    	if(this.state.editable == true)
-	    		this.setState({mode: "edit"});
+	    	//if(this.state.editable == true)
+	    	//	this.setState({mode: "edit"});
 	    }
 	    
 	    confirm(){
@@ -1465,43 +1531,12 @@
 	    			return (
 			    		<div>
 							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
-							<div className="right_section"  >
-								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Cancel</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
-							<div className="right_section" style={{marginRight:"3px"}} >
-								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Confirm</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
 						</div>
 					);
 	    		}else {
 	    			return (
 			    		<div>
 							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
-							<div className="right_section"  >
-								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Cancel</span>
-		                          </span>
-		                      	</a>
-							</div>
-							<div className="right_section" style={{marginRight:"3px"}}>
-								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Confirm</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
 						</div>
 					);
 	    		}		

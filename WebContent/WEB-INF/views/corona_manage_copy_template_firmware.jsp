@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.17.01"></script>
+	<script src="js/dashboard.js?version=2017.08.31.02"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -559,7 +559,7 @@
 					],		
 					type:"title",
 					id: "title_script",
-					label: "Script Template"
+					label: "Source: Master TS"
 				},
 				{
 					label:'',
@@ -809,9 +809,10 @@
 							],			
 					    	type:'grid',
 					    	id: 'grid_script',
-					    	label:'Script Master',
+					    	label:' ',
 					    	items:[						
 								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
+								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
 								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 					    		
@@ -848,7 +849,7 @@
 					    		multiSort:true,
 					    		multiselect: true,
 					    		multiboxonly:true, 
-					    		sortname: 'CATEGORY, TEST_ITEM,SCRIPT_NAME',
+					    		sortname: 'CATEGORY, SCRIPT_NAME',
 					    		rowNum: 1000000,
 					    		//forceFit : false ,
 					    		emptyrecords: "No records to view",
@@ -856,9 +857,9 @@
 					    		
 					    		grouping: true,
 					    		groupingView: {
-									groupField: ["CATEGORY"],
-									groupColumnShow: [false],
-									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0}  </b>'],
+									groupField: ["CATEGORY","ROWNUM_GRP"],
+									groupColumnShow: [false,false],
+									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0} - {1} Item(s)  </b>'],
 									groupOrder: ["asc"],
 									//groupSummary: [true],
 									//groupSummaryPos: ["header"],
@@ -1068,12 +1069,51 @@
 					]
 				},
 				
+				// copy Button
+				{ 
+					type:'Button',
+					id: 'to_btnCopy',
+					name: 'to_btnCopy',
+					label:'Copy',
+					//width: '50px',
+					cls: 'btn_txt btn_type_e btn_color_c',
+					controlCss: [
+						{code: 'width', value:'300px'}
+					],
+					containerCls : "center_section",
+					containerCss:[
+						{code: 'margin-top', value:'20px'}
+					],
+					events:{
+						click : function(){
+//									if(fn_validation()){
+//										parent.$("#loader").show();
+//										setTimeout( function(){
+//											fn_copy();
+//											fn_search_firmware();
+//											//parent.$("#loader").show();
+//										},50);	
+//									}
+							
+							fn_validation(function(){
+								parent.$("#loader").show();
+								setTimeout( function(){
+									fn_copy();
+									fn_search_firmware();
+									//parent.$("#loader").show();
+								},50);	
+							});
+							
+						}
+					}
+				},
+				
 				{
 					controlCss:[
 						{code: 'margin-top', value:'10px'} 
 					],	
 					type:"title",
-					label: "Target Firmware to copy"
+					label: "Target: Project TS"
 				},
 				
 				// target search
@@ -1151,7 +1191,7 @@
 									$.each(datas ,function(){
 										var option = $(document.createElement( "option" ));
 										option.val(this.FIRMWARE);
-										option.text(this.FIRMWARE);
+										option.text(this.FIRMWARE_NM);
 										sampleObj.append(option);
 									});
 									
@@ -1196,7 +1236,7 @@
 							//value :'CSSD',
 							options: {
 								cd:'FIRMWARE',
-								name:'FIRMWARE'
+								name:'FIRMWARE_NM'
 							},
 							multiselectOpt:{
 								selectedList: 1 ,
@@ -1205,7 +1245,7 @@
 									 //return numChecked + ' of ' + numTotal + ' checked';
 									 var sb = [];
 									 $.each(checkedItems,function(){
-										 sb.push($(this).val());
+										 sb.push($(this).attr('title'));
 									 });
 									 return sb.join(",");
 								}
@@ -1217,41 +1257,7 @@
 							}
 						},
 					
-						// copy Button
-						{ 
-							type:'Button',
-							id: 'to_btnCopy',
-							name: 'to_btnCopy',
-							label:'Copy',
-							//width: '50px',
-							cls: 'btn_txt btn_type_e btn_color_a',
-							containerCss:[
-								{code: 'margin-right', value:'3px'},
-								{code: 'float', value:'right'}
-							],
-							events:{
-								click : function(){
-//									if(fn_validation()){
-//										parent.$("#loader").show();
-//										setTimeout( function(){
-//											fn_copy();
-//											fn_search_firmware();
-//											//parent.$("#loader").show();
-//										},50);	
-//									}
-									
-									fn_validation(function(){
-										parent.$("#loader").show();
-										setTimeout( function(){
-											fn_copy();
-											fn_search_firmware();
-											//parent.$("#loader").show();
-										},50);	
-									});
-									
-								}
-							}
-						},
+						
 						
 						// search Button
 						{
@@ -1288,11 +1294,12 @@
 					],			
 			    	type:'grid',
 			    	id: 'grid_firmware',
-			    	label:'Firmware Script',
+			    	label:' ',
 			    	items:[	
 			    		{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: true, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
 			    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
 						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
+						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
 						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 			    		
@@ -1316,7 +1323,7 @@
 			    		multiSort:true,
 			    		multiselect: true,
 			    		multiboxonly:true, 
-			    		sortname: 'CATEGORY, TEST_ITEM,SCRIPT_NAME',
+			    		sortname: 'CATEGORY,SCRIPT_NAME',
 			    		rowNum: 1000000,
 			    		//forceFit : false ,
 			    		emptyrecords: "No records to view",
@@ -1324,10 +1331,10 @@
 			    		
 			    		grouping: true,
 			    		groupingView: {
-							groupField: ["CATEGORY"],
-							groupColumnShow: [false],
+							groupField: ["CATEGORY","ROWNUM_GRP"],
+							groupColumnShow: [false,false],
 							//groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0}  </b>'],
-							groupText: ['<b>  {0}  </b>'],
+							groupText: ['<b>  {0} - {1} Item(s)  </b>'],
 							groupOrder: ["asc"],
 							//groupSummary: [true],
 							//groupSummaryPos: ["header"],
@@ -1738,26 +1745,10 @@
 			success:  function(data){
 				response1 = data;
 				if(response1.result == 'success'){
-					msg = "Copied to Firmware ( " + $("#to_firmware").val() + " )" ;
-	    			$("#dialog-confirm").html(msg);
-	    			$("#dialog-confirm").dialog({
-	    			    resizable: false,
-	    			    modal: true,
-	    			    title: "Success",
-	    			    //height: 200,
-	    			    width: 400,
-	    			    dialogClass: 'no-close',
-	    			    closeOnEscape: false,
-	    			    buttons: [
-				              {
-				                text: "OK",
-				                click: function() {
-				                  $( this ).dialog( "close" );											                    			                  
-				                }
-				              }
-			            ]
-	    			});
+					update_ok = true;
+					
 				}else {
+					update_ok = false;
 	    			$("#dialog-confirm").html(response1.message);
 	    			$("#dialog-confirm").dialog({
 	    			    resizable: false,
@@ -1781,6 +1772,64 @@
 		});
 		
 		
+		if( !update_ok)
+			return;
+		// 04. stauts update
+		$.ajax({
+			url: "/dashboard/genericSaveJson.html",
+			type: "POST",
+			data: {
+				firmware : $("#to_firmware").val(),
+				sample: $("#to_sample").val(),
+				sqlid: "dashboard.corona.manage.firmware.status.update"
+			}, 
+			async: false,			                    		
+			success:  function(data){
+				response1 = data;
+				if(response1.result == 'success'){
+					update_ok = true;
+					msg = "Copied to Firmware ( " + $("#to_firmware").val() + " )" ;
+	    			$("#dialog-confirm").html(msg);
+	    			$("#dialog-confirm").dialog({
+	    			    resizable: false,
+	    			    modal: true,
+	    			    title: "Success",
+	    			    //height: 200,
+	    			    width: 400,
+	    			    dialogClass: 'no-close',
+	    			    closeOnEscape: false,
+	    			    buttons: [
+				              {
+				                text: "OK",
+				                click: function() {
+				                  $( this ).dialog( "close" );											                    			                  
+				                }
+				              }
+			            ]
+	    			});
+				}else {
+					update_ok = false;
+	    			$("#dialog-confirm").html(response1.message);
+	    			$("#dialog-confirm").dialog({
+	    			    resizable: false,
+	    			    modal: true,
+	    			    title: "Error",
+	    			    //height: 200,
+	    			    width: 400,
+	    			    dialogClass: 'no-close',
+	    			    closeOnEscape: false,
+	    			    buttons: [
+				              {
+				                text: "OK",
+				                click: function() {
+				                  $( this ).dialog( "close" );											                    			                  
+				                }
+				              }
+			            ]
+	    			});
+				}						                    			
+			}
+		});
 	}
 	
 	function fn_validation(onSuccess){

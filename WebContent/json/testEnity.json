@@ -1,0 +1,33 @@
+{
+	"entities": [
+		{
+			"table_name" : "" , 
+			"columns": [
+				{
+					"column_name" : "",
+					"data_type" : "",
+					"data_length": 100
+				}
+			]
+		}
+	],
+	"constraints" : [
+		{
+			"type": "primary_key",
+			"table_name": "",
+			"columns": [ "","" ,""]
+		},
+		{
+			"type": "foreign_key",
+			"source": {
+				"table_name": "",
+				"columns": []
+			},
+			"target": {
+				"table_name": "",
+				"columns": []
+			}
+		}
+	]
+}
+	

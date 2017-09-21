@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>Corona Detail</title>
+	<title>Corona Emmc Detail</title>
 	<!-- <link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css" /> -->
 	
 	
@@ -179,6 +179,10 @@
 	    .ui-jqgrid-hdiv .ui-jqgrid-htable .ui-search-toolbar input {
 	    	height: 30px;
 	    }
+	    
+	    .ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td {
+	    	white-space: nowrap;
+	    }
 		
 	</style>
 	<style type="text/css" title="nspmstyle">
@@ -260,7 +264,10 @@
 	var testDisks = [];
 	var testResults = [];
 	var testFiles = [];
-
+	//그리드 편집전 데이타
+	var beforEditRow = {};
+	var beforEditRow1 = {};
+	
 	var schemaContent = {
 			containerId:'contentCoronaDetail',
 			type:'Vertical',
@@ -277,39 +284,122 @@
 			    	id: 'grid_detail',
 			    	label:'',
 			    	items:[
-						{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:70, align:'center', sortable:false, hidden: true }
-						,{label:'sample', name:'SAMPLE', id:'SAMPLE', width:70, align:'center', sortable:false, hidden: true }
-						,{label:'firmware', name:'FIRMWARE', id:'FIRMWARE', width:70, align:'center', sortable:false, hidden: true }
+						{
+							label: " ",
+							search: false,
+							name: "actions",
+							align:'center',
+							width: 60,
+							formatter: "actions",	
+							formatoptions: {
+		                        keys: true
+		                        ,delbutton:false
+		                        ,editformbutton: false
+		                        ,editOptions: {} // editformbutton 가 true 인경우
+		                        ,addOptions: {}
+		                        ,delOptions: {}
+		                        
+		                        ,afterSave : function(rowid,res) {
+		                        	var grid = $(this).jqGrid();
+		                        	var row = grid.jqGrid('getRowData',rowid);
+		                        	row.sqlid = "dashbaord.corona.emmc.firmware.status.edit";
+		                        	row.userId = $("#userId").val();
+		                        	row.origindata = JSON.stringify(beforEditRow);
+		                        	
+		                        	var response1 = {};
+		                        	$.ajax({
+			                    		url: "/dashboard/genericSaveJson.html",
+			                    		type: "POST",
+			                    		data: row, 
+			                    		async: false,			                    		
+			                    		success:  function(data){
+			                    			response1 = data;
+			                    			if(response1.result != 'success'){
+			                    				msg = "Save Success!";
+				                    			$("#dialog-confirm").html(data.message);
+				                    			$("#dialog-confirm").dialog({
+				                    			    resizable: false,
+				                    			    modal: true,
+				                    			    title: "Error",
+				                    			    //height: 200,
+				                    			    width: 500,
+				                    			    dialogClass: 'no-close',
+				                    			    closeOnEscape: false,
+				                    			    buttons: [
+			                    			              {
+			                    			                text: "OK",
+			                    			                click: function() {
+			                    			                  $( this ).dialog( "close" );
+			                    			                }
+			                    			              }
+		                    			            ]
+				                    			});
+				                    			
+				                    			
+				                    			  
+			                    			}else{
+			                    				grid.trigger("reloadGrid",[{current:true}]);
+			                    			}					                    			
+			                    		}
+			                    	});
+		                        	
+		                        }
+		                        ,afterRestore : function(rowid) {
+		                        	
+		                        }
+		                        ,onEdit :function(rowid,actop){
+		                        	var grid = $(this).jqGrid();
+		                        	beforEditRow = grid.jqGrid('getRowData',rowid);
+		    					}
+		                        
+		                    } 
+		                    
+		                	
+						}
+						,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						,{label:'sample', name:'SAMPLE', id:'SAMPLE', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						,{label:'firmware', name:'FIRMWARE', id:'FIRMWARE', width:70, align:'center', sortable:false, hidden: true, editable: false }
 						
-						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true}  
-						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false }
-						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false }
-						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true }
-						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true}
-						,{label:'Status', name:'STATUS', id:'STATUS', width:60, align:'center', sortable:false }
-						,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false,hidden: true }
-			    		,{label:'Duration', name:'DURATION', id:'DURATION', width:70, align:'center', sortable:false ,hidden: true}
+						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true, editable: false}  
+						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false, editable: false }
+						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false, editable: false }
+						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true, editable: false }
+						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true, editable: false}
+						,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false
+							, editable: true
+							, edittype: "select"
+							, formatter:"select"
+							, editoptions: {
+								value: {
+									"No Data":"No Data",
+									"PASS":"PASS",
+									"FAIL": "FAIL"
+								}
+							}
+						}
+						,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false,hidden: true, editable: false }
+			    		,{label:'Duration', name:'DURATION', id:'DURATION', width:70, align:'center', sortable:false ,hidden: true, editable: false}
 			    		
-			    		,{label:'Test Time', name:'TEST_TIME_MASTER', id:'TEST_TIME_MASTER', width:90, align:'center', sortable:false }
-			    		,{label:'Customer Item', name:'CUSTOMER_ITEM', id:'CUSTOMER_ITEM', width:90, align:'center', sortable:false }
-			    		,{label:'Need Vendor<br>CMD', name:'NEED_VENDOR_CMD', id:'NEED_VENDOR_CMD', width:90, align:'center', sortable:false }
-			    		,{label:'Need Vendor<br>Cycle', name:'NEED_VENDOR_CMD', id:'NEED_POWER_CYCLE', width:90, align:'center', sortable:false }
+			    		,{label:'Test Time', name:'TEST_TIME_MASTER', id:'TEST_TIME_MASTER', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Customer Item', name:'CUSTOMER_ITEM', id:'CUSTOMER_ITEM', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Need Vendor<br>CMD', name:'NEED_VENDOR_CMD', id:'NEED_VENDOR_CMD', width:90, align:'center', sortable:false , editable: false}
+			    		,{label:'Need Vendor<br>Cycle', name:'NEED_VENDOR_CMD', id:'NEED_POWER_CYCLE', width:90, align:'center', sortable:false, editable: false }
 			    		
-			    		,{label:'EMMC<br>Ver', name:'EMMC_VER', id:'EMMC_VER', width:50, align:'center', sortable:false }
-			    		,{label:'Taget<br>Device', name:'TARGET_DEVICE', id:'TARGET_DEVICE', width:70, align:'center', sortable:false }
-			    		,{label:'Category1', name:'CATEGORY1', id:'CATEGORY1', width:90, align:'center', sortable:false }
-			    		,{label:'Category2', name:'CATEGORY2', id:'CATEGORY2', width:90, align:'center', sortable:false }
-			    		,{label:'Category3', name:'CATEGORY3', id:'CATEGORY3', width:90, align:'center', sortable:false }
-			    		,{label:'Category4', name:'CATEGORY4', id:'CATEGORY4', width:90, align:'center', sortable:false }
-			    		,{label:'Category5', name:'CATEGORY5', id:'CATEGORY5', width:90, align:'center', sortable:false }
-			    		,{label:'Write Mode', name:'WRITE_MODE', id:'WRITE_MODE', width:70, align:'center', sortable:false }
-			    		,{label:'Read Mode', name:'WRITE_MODE', id:'READ_MODE', width:70, align:'center', sortable:false }
-			    		,{label:'Platform', name:'PLATFORM', id:'PLATFORM', width:70, align:'center', sortable:false }
-			    		,{label:'Function Name', name:'FUNCTION_NAME', id:'FUNCTION_NAME', width:150, align:'left', sortable:false }
+			    		,{label:'EMMC<br>Ver', name:'EMMC_VER', id:'EMMC_VER', width:50, align:'center', sortable:false, editable: false }
+			    		,{label:'Taget<br>Device', name:'TARGET_DEVICE', id:'TARGET_DEVICE', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Category1', name:'CATEGORY1', id:'CATEGORY1', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Category2', name:'CATEGORY2', id:'CATEGORY2', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Category3', name:'CATEGORY3', id:'CATEGORY3', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Category4', name:'CATEGORY4', id:'CATEGORY4', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Category5', name:'CATEGORY5', id:'CATEGORY5', width:90, align:'center', sortable:false, editable: false }
+			    		,{label:'Write Mode', name:'WRITE_MODE', id:'WRITE_MODE', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Read Mode', name:'WRITE_MODE', id:'READ_MODE', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Platform', name:'PLATFORM', id:'PLATFORM', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Function Name', name:'FUNCTION_NAME', id:'FUNCTION_NAME', width:150, align:'left', sortable:false, editable: false }
 			    		
 			    		
-			    		,{label:'Description', name:'DESCRIPTION', id:'DESCRIPTION', width:200, align:'left', sortable:false, hidden: true  }
-			    		,{label:'Description', name:'DESCRIPTION_SIMPLE', id:'DESCRIPTION_SIMPLE', width:200, align:'left', sortable:false 
+			    		,{label:'Description', name:'DESCRIPTION', id:'DESCRIPTION', width:200, align:'left', sortable:false, hidden: true, editable: false  }
+			    		,{label:'Description', name:'DESCRIPTION_SIMPLE', id:'DESCRIPTION_SIMPLE', width:200, align:'left', sortable:false , editable: false
 							, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
 								var result = "";
 								var grid = $(this).jqGrid();
@@ -320,8 +410,8 @@
 								
 							}	    			
 			    		}
-			    		,{label:'Argument', name:'ARGUMENT', id:'ARGUMENT', width:200, align:'left', sortable:false, hidden: true  }
-			    		,{label:'Argument', name:'ARGUMENT_SIMPLE', id:'ARGUMENT_SIMPLE', width:200, align:'left', sortable:false 
+			    		,{label:'Argument', name:'ARGUMENT', id:'ARGUMENT', width:200, align:'left', sortable:false, hidden: true, editable: false  }
+			    		,{label:'Argument', name:'ARGUMENT_SIMPLE', id:'ARGUMENT_SIMPLE', width:200, align:'left', sortable:false , editable: false
 			    			, cellattr : function(rowId, val, rowObj, cm, rowData, isCustom){
 								var result = "";
 								var grid = $(this).jqGrid();
@@ -339,9 +429,11 @@
 			    	gridOpt:{
 			    		datatype:'json',
 			    		pager: "#grid_detailPager",
-			    		url: function(){
-			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page"
-			    		},
+//			    		url:function(){ 
+//			    			//return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
+//			    			return	"/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
+//			    		},
+			    		url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page",
 			    		viewrecords: true,			    		
 			    		width: '100%',
 			    		height: '100%',
@@ -389,10 +481,8 @@
 													cols: 1,
 													data: function(){ return row},
 													items: [
-														{label:'Item Purpose', col: 'ITEM_PURPOSE'},
-														{label:'Item Description', col: 'ITEM_DESCRIPTION'},
-														{label:'Input Parameter', col: 'INPUT_PARAMETER'},
-														{label:'Comment', col: 'USER_COMMENT'},
+														{label:'Description', col: 'DESCRIPTION'},
+														{label:'Argument', col: 'ARGUMENT'},
 													]
 												}
 			    					    	
@@ -402,6 +492,7 @@
 			    					
 			    					]
 			    			};
+			    			
 			    			fn_makeHtml(childDiv,schema1);
 			    			
 			    			
@@ -435,16 +526,100 @@
 			    				//emptyrecords: "No records to view",
 			    				caption:"Detail List",
 			                    colModel: [
-									{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false }  
-									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false }
-									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false }
-									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false }
-									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false }
-									,{label:'Status', name:'STATUS', id:'STATUS', width:60, align:'center', sortable:false }
-									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false }
-									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false }
-									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false }
-									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false }         
+									{
+										label: " ",
+										search: false,
+										name: "actions",
+										align:'center',
+										width: 60,
+										formatter: "actions",	
+										formatoptions: {
+					                        keys: true
+					                        ,delbutton:false
+					                        ,editformbutton: false
+					                        ,editOptions: {} // editformbutton 가 true 인경우
+					                        ,addOptions: {}
+					                        ,delOptions: {}
+					                        
+					                        ,afterSave : function(rowid,res) {
+					                        	var grid = $(this).jqGrid();
+					                        	var row = grid.jqGrid('getRowData',rowid);
+					                        	row.sqlid = "dashbaord.corona.emmc.firmware.log.status.edit";
+					                        	row.userId = $("#userId").val();
+					                        	row.origindata = JSON.stringify(beforEditRow1);
+					                        	
+					                        	var response1 = {};
+					                        	$.ajax({
+						                    		url: "/dashboard/genericSaveJson.html",
+						                    		type: "POST",
+						                    		data: row, 
+						                    		async: false,			                    		
+						                    		success:  function(data){
+						                    			response1 = data;
+						                    			if(response1.result != 'success'){
+						                    				msg = "Save Success!";
+							                    			$("#dialog-confirm").html(data.message);
+							                    			$("#dialog-confirm").dialog({
+							                    			    resizable: false,
+							                    			    modal: true,
+							                    			    title: "Error",
+							                    			    //height: 200,
+							                    			    width: 500,
+							                    			    dialogClass: 'no-close',
+							                    			    closeOnEscape: false,
+							                    			    buttons: [
+						                    			              {
+						                    			                text: "OK",
+						                    			                click: function() {
+						                    			                  $( this ).dialog( "close" );
+						                    			                }
+						                    			              }
+					                    			            ]
+							                    			});
+							                    			
+							                    			
+							                    			  
+						                    			}else{
+						                    				grid.trigger("reloadGrid",[{current:true}]);
+						                    			}					                    			
+						                    		}
+						                    	});
+					                        	
+					                        }
+					                        ,afterRestore : function(rowid) {
+					                        	
+					                        }
+					                        ,onEdit :function(rowid,actop){
+					                        	var grid = $(this).jqGrid();
+					                        	beforEditRow1 = grid.jqGrid('getRowData',rowid);
+					    					}
+					                        
+					                    } 
+					                    
+					                	
+									}
+									,{label:'Sample', name:'SAMPLE', id:'SAMPLE', width:100, align:'center', sortable:false,hidden: true, editable: false }  
+									,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'center', sortable:false,hidden: true, editable: false }  
+									,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false, editable: false }  
+									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false, editable: false }
+									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false, editable: false }
+									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false, editable: false }
+									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false }
+									,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false 
+										, editable: true
+										, edittype: "select"
+										, formatter:"select"
+										, editoptions: {
+											value: {
+												"PASS":"PASS",
+												"FAIL": "FAIL"
+											}
+										}
+									 }
+									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false, editable: false }
+									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false, editable: false }
+									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false, editable: false }
+									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false, editable: false }         
 			                    ],
 			    				loadonce: true,
 			                    width: '100%'
@@ -535,80 +710,6 @@
 		window.close();
 	}	
 </script>
-<script comment="divPop">
-
-(function($) {
-    $.fn.popupWindow = function(instanceSettings) {
-
-        return this.each(function() {
-
-            $(this).click(function() {
-
-                $.fn.popupWindow.defaultSettings = {
-                    centerBrowser: 0, // center window over browser window? {1 (YES) or 0 (NO)}. overrides top and left
-                    centerScreen: 0, // center window over entire screen? {1 (YES) or 0 (NO)}. overrides top and left
-                    height: 500, // sets the height in pixels of the window.
-                    left: 0, // left position when the window appears.
-                    location: 0, // determines whether the address bar is displayed {1 (YES) or 0 (NO)}.
-                    menubar: 0, // determines whether the menu bar is displayed {1 (YES) or 0 (NO)}.
-                    resizable: 0, // whether the window can be resized {1 (YES) or 0 (NO)}. Can also be overloaded using resizable.
-                    scrollbars: 0, // determines whether scrollbars appear on the window {1 (YES) or 0 (NO)}.
-                    status: 0, // whether a status line appears at the bottom of the window {1 (YES) or 0 (NO)}.
-                    width: 500, // sets the width in pixels of the window.
-                    windowName: null, // name of window set from the name attribute of the element that invokes the click
-                    windowURL: null, // url used for the popup
-                    top: 0, // top position when the window appears.
-                    toolbar: 0 // determines whether a toolbar (includes the forward and back buttons) is displayed {1 (YES) or 0 (NO)}.
-                };
-
-                settings = $.extend({}, $.fn.popupWindow.defaultSettings, instanceSettings || {});
-
-                var windowFeatures = 'height=' + settings.height +
-                    ',width=' + settings.width +
-                    ',toolbar=' + settings.toolbar +
-                    ',scrollbars=' + settings.scrollbars +
-                    ',status=' + settings.status +
-                    ',resizable=' + settings.resizable +
-                    ',location=' + settings.location +
-                    ',menuBar=' + settings.menubar;
-
-                settings.windowName = this.name || settings.windowName;
-                settings.windowURL = this.href || settings.windowURL;
-                var centeredY, centeredX;
-
-                if (settings.centerBrowser) {
-
-                    if ($.browser.msie) { //hacked together for IE browsers
-                        centeredY = (window.screenTop - 120) + ((((document.documentElement.clientHeight + 120) / 2) - (settings.height / 2)));
-                        centeredX = window.screenLeft + ((((document.body.offsetWidth + 20) / 2) - (settings.width / 2)));
-                    } else {
-                        centeredY = window.screenY + (((window.outerHeight / 2) - (settings.height / 2)));
-                        centeredX = window.screenX + (((window.outerWidth / 2) - (settings.width / 2)));
-                    }
-                    window.open(settings.windowURL, settings.windowName, windowFeatures + ',left=' + centeredX + ',top=' + centeredY).focus();
-                } else if (settings.centerScreen) {
-                    centeredY = (screen.height - settings.height) / 2;
-                    centeredX = (screen.width - settings.width) / 2;
-                    window.open(settings.windowURL, settings.windowName, windowFeatures + ',left=' + centeredX + ',top=' + centeredY).focus();
-                } else {
-                    window.open(settings.windowURL, settings.windowName, windowFeatures + ',left=' + settings.left + ',top=' + settings.top).focus();
-                }
-                return false;
-            });
-
-        });
-    };
-})(jQuery);
-
-//position center
-jQuery.fn.center = function () {
-    this.css("position","absolute");
-    this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
-    this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
-    return this;
-}
-</script>
-
 </head>
 <body>
 <form name="form" id="form" method="post" >
@@ -651,4 +752,5 @@ jQuery.fn.center = function () {
 </body>
 
 <iframe id="file_iframe" style="display:none;"></iframe>
+
 </html>

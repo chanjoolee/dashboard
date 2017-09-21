@@ -60,7 +60,7 @@
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 	
-	<%-- x축 그룹라벨 --%>
+	<%-- x�?그룹?�벨 --%>
 	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
 	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
 	
@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.22.01"></script>
+	<script src="js/dashboard.js?version=2017.08.31.02"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -161,7 +161,7 @@
 			font-size: 12px;
 		}
 		
-		/* multi-select 관련  */
+		/* multi-select 관?? */
 		.ui-multiselect-checkboxes li label{
 			font-size: 13px;
 			line-height: 1.3em;
@@ -239,7 +239,7 @@
 		  width: 100px;
 		}
 		
-		<%-- 탭뷰--%>
+		<%-- ??��--%>
 		a:hover,a:focus{
 		    text-decoration: none;
 		    outline: none;
@@ -305,7 +305,7 @@
 		
 		
 		<%--
-		/* chart가 숨김시 작아지는 현상 없앰 */
+		/* chart가 ?��????�아지???�상 ?�앰 */
 		
 		.tab-content > .tab-pane,
 		.pill-content > .pill-pane {
@@ -404,7 +404,7 @@
             float:right;
         }
 		
-		<%--  jqGrid에서 dialog가 뒤로 숨는 문제.--%>
+		<%--  jqGrid?�서 dialog가 ?�로 ?�는 문제.--%>
 		.ui-dialog { z-index: 1000 !important ;}
 		div button.ui-button.ui-dialog-titlebar-close {
 			display: none;
@@ -541,7 +541,7 @@
 		
 	</script>
 	<script  id="script_schemaSearchCondition">
-	//그리드 편집전 데이타
+	//그리???�집???�이?�
 	var tempList = [];
 	var beforEditRow = {};
 	
@@ -559,7 +559,7 @@
 					],		
 					type:"title",
 					id: "title_script",
-					label: "Firmware Script Template"
+					label: "Source: Project TS"
 				},
 				{
 					label:'',
@@ -649,7 +649,7 @@
 													$.each(datas ,function(){
 														var option = $(document.createElement( "option" ));
 														option.val(this.FIRMWARE);
-														option.text(this.FIRMWARE);
+														option.text(this.FIRMWARE_NM);
 														sampleObj.append(option);
 													});
 													
@@ -694,7 +694,7 @@
 											//value :'CSSD',
 											options: {
 												cd:'FIRMWARE',
-												name:'FIRMWARE'
+												name:'FIRMWARE_NM'
 											},
 											multiselectOpt:{
 												selectedList: 1 ,
@@ -703,7 +703,7 @@
 													 //return numChecked + ' of ' + numTotal + ' checked';
 													 var sb = [];
 													 $.each(checkedItems,function(){
-														 sb.push($(this).val());
+														 sb.push($(this).attr('title'));
 													 });
 													 return sb.join(",");
 												}
@@ -723,7 +723,7 @@
 								
 							]
 					 	},
-					 	//검색버튼
+					 	//검?�버??					
 					 	{
 					 		label:'',
 					 		type: 'VerticalLayout',
@@ -799,11 +799,12 @@
 							],			
 					    	type:'grid',
 					    	id: 'grid_script',
-					    	label:'Firmware Template',
+					    	label:' ',
 					    	items:[						
 								{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: true, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
 					    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
 								,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
+								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
 								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 					    		
@@ -845,7 +846,7 @@
 					    		multiSort:true,
 					    		multiselect: true,
 					    		multiboxonly:true, 
-					    		sortname: 'CATEGORY, TEST_ITEM,SCRIPT_NAME',
+					    		sortname: 'CATEGORY, SCRIPT_NAME',
 					    		rowNum: 1000000,
 					    		//forceFit : false ,
 					    		emptyrecords: "No records to view",
@@ -853,9 +854,9 @@
 					    		
 					    		grouping: true,
 					    		groupingView: {
-									groupField: ["CATEGORY"],
-									groupColumnShow: [false],
-									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0}  </b>'],
+									groupField: ["CATEGORY","ROWNUM_GRP"],
+									groupColumnShow: [false,false],
+									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0} - {1} Item(s)  </b>'],
 									groupOrder: ["asc"],
 									//groupSummary: [true],
 									//groupSummaryPos: ["header"],
@@ -1053,13 +1054,50 @@
 					
 					]
 				},
-				
+				// copy Button
+				{ 
+					type:'Button',
+					id: 'to_btnCopy',
+					name: 'to_btnCopy',
+					label:'Copy',
+					//width: '50px',
+					cls: 'btn_txt btn_type_e btn_color_c',
+					controlCss: [
+						{code: 'width', value:'300px'}
+					],
+					containerCls : "center_section",
+					containerCss:[
+						{code: 'margin-top', value:'20px'}
+					],
+					events:{
+						click : function(){
+//									if(fn_validation()){
+//										parent.$("#loader").show();
+//										setTimeout( function(){
+//											fn_copy();
+//											fn_search_firmware();
+//											//parent.$("#loader").show();
+//										},50);	
+//									}
+							
+							fn_validation(function(){
+								parent.$("#loader").show();
+								setTimeout( function(){
+									fn_copy();
+									fn_search_firmware();
+									//parent.$("#loader").show();
+								},50);	
+							});
+							
+						}
+					}
+				},
 				{
 					controlCss:[
 						{code: 'margin-top', value:'10px'} 
 					],	
 					type:"title",
-					label: "Target Firmware to copy"
+					label: "Target: Project TS"
 				},
 				
 				// target search
@@ -1137,7 +1175,7 @@
 									$.each(datas ,function(){
 										var option = $(document.createElement( "option" ));
 										option.val(this.FIRMWARE);
-										option.text(this.FIRMWARE);
+										option.text(this.FIRMWARE_NM);
 										sampleObj.append(option);
 									});
 									
@@ -1182,7 +1220,7 @@
 							//value :'CSSD',
 							options: {
 								cd:'FIRMWARE',
-								name:'FIRMWARE'
+								name:'FIRMWARE_NM'
 							},
 							multiselectOpt:{
 								selectedList: 1 ,
@@ -1191,7 +1229,7 @@
 									 //return numChecked + ' of ' + numTotal + ' checked';
 									 var sb = [];
 									 $.each(checkedItems,function(){
-										 sb.push($(this).val());
+										 sb.push($(this).attr('title'));
 									 });
 									 return sb.join(",");
 								}
@@ -1203,41 +1241,6 @@
 							}
 						},
 					
-						// copy Button
-						{ 
-							type:'Button',
-							id: 'to_btnCopy',
-							name: 'to_btnCopy',
-							label:'Copy',
-							//width: '50px',
-							cls: 'btn_txt btn_type_e btn_color_a',
-							containerCss:[
-								{code: 'margin-right', value:'3px'},
-								{code: 'float', value:'right'}
-							],
-							events:{
-								click : function(){
-//									if(fn_validation()){
-//										parent.$("#loader").show();
-//										setTimeout( function(){
-//											fn_copy();
-//											fn_search_firmware();
-//											//parent.$("#loader").show();
-//										},50);	
-//									}
-									
-									fn_validation(function(){
-										parent.$("#loader").show();
-										setTimeout( function(){
-											fn_copy();
-											fn_search_firmware();
-											//parent.$("#loader").show();
-										},50);	
-									});
-									
-								}
-							}
-						},
 						
 						// search Button
 						{
@@ -1274,11 +1277,12 @@
 					],			
 			    	type:'grid',
 			    	id: 'grid_firmware',
-			    	label:'Firmware Script',
+			    	label:' ',
 			    	items:[	
 			    		{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: true, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
 			    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
 						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
+						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
 						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 			    		
@@ -1302,7 +1306,7 @@
 			    		multiSort:true,
 			    		multiselect: true,
 			    		multiboxonly:true, 
-			    		sortname: 'CATEGORY, TEST_ITEM,SCRIPT_NAME',
+			    		sortname: 'CATEGORY, SCRIPT_NAME',
 			    		rowNum: 1000000,
 			    		//forceFit : false ,
 			    		emptyrecords: "No records to view",
@@ -1310,10 +1314,10 @@
 			    		
 			    		grouping: true,
 			    		groupingView: {
-							groupField: ["CATEGORY"],
-							groupColumnShow: [false],
+							groupField: ["CATEGORY","ROWNUM_GRP"],
+							groupColumnShow: [false,false],
 							//groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0}  </b>'],
-							groupText: ['<b>  {0}  </b>'],
+							groupText: ['<b>  {0} - {1} Item(s)  </b>'],
 							groupOrder: ["asc"],
 							//groupSummary: [true],
 							//groupSummaryPos: ["header"],
@@ -1507,7 +1511,7 @@
 			]								
 	};
 		
-	// 테스트 중. 그룹별로 상세리스트 만들기
+	// �׽�Ʈ ��. �׷캰�� �󼼸���Ʈ �����
 	function groupbyList(json,pkeys){
 		var abcArr = json;
 		var items = {}, base, key,val ;
@@ -1742,6 +1746,48 @@
 			success:  function(data){
 				response1 = data;
 				if(response1.result == 'success'){
+					update_ok = true;
+					
+				}else {
+					update_ok = false;
+	    			$("#dialog-confirm").html(response1.message);
+	    			$("#dialog-confirm").dialog({
+	    			    resizable: false,
+	    			    modal: true,
+	    			    title: "Success",
+	    			    //height: 200,
+	    			    width: 400,
+	    			    dialogClass: 'no-close',
+	    			    closeOnEscape: false,
+	    			    buttons: [
+				              {
+				                text: "OK",
+				                click: function() {
+				                  $( this ).dialog( "close" );											                    			                  
+				                }
+				              }
+			            ]
+	    			});
+				}						                    			
+			}
+		});
+		
+		if( !update_ok)
+			return;
+		// 04. stauts update
+		$.ajax({
+			url: "/dashboard/genericSaveJson.html",
+			type: "POST",
+			data: {
+				firmware : $("#to_firmware").val(),
+				sample: $("#to_sample").val(),
+				sqlid: "dashboard.corona.emmc.manage.firmware.status.update"
+			}, 
+			async: false,			                    		
+			success:  function(data){
+				response1 = data;
+				if(response1.result == 'success'){
+					update_ok = true;
 					msg = "Copied to Firmware ( " + $("#to_firmware").val() + " )" ;
 	    			$("#dialog-confirm").html(msg);
 	    			$("#dialog-confirm").dialog({
@@ -1762,11 +1808,12 @@
 			            ]
 	    			});
 				}else {
+					update_ok = false;
 	    			$("#dialog-confirm").html(response1.message);
 	    			$("#dialog-confirm").dialog({
 	    			    resizable: false,
 	    			    modal: true,
-	    			    title: "Success",
+	    			    title: "Error",
 	    			    //height: 200,
 	    			    width: 400,
 	    			    dialogClass: 'no-close',

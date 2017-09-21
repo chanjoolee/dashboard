@@ -2268,6 +2268,60 @@ function fn_makeHtml(container, _schema){
 			if(_schema.cols != undefined)
 				cols = _schema.cols;
 			
+			// create button edit
+			var btnSection = $(document.createElement("div"));
+			btnSection.addClass("btn_section");	
+			var btnDiv = $(document.createElement("div"));
+			btnDiv.addClass("right_section");
+			var btnA = $(document.createElement("a"));
+			btnA.addClass("btn_n2");			
+			var btnSpan = $(document.createElement("span"));
+			btnSpan.addClass("name");
+			var btnSpan1 = $(document.createElement("span"));
+			btnSpan1.addClass("btn_n2_right"); 
+			btnSpan1.addClass("txt_color_e"); 
+			btnSpan1.text("Edit")
+			
+			btnSection.append(btnDiv);
+			btnDiv.append(btnA);
+			btnA.append(btnSpan);
+			btnSpan.append(btnSpan1);
+			
+			container.append(btnSection);
+			
+			// button confirm
+			var btnConfirm = $(document.createElement("a"));
+			btnConfirm.addClass("btn_txt");
+			btnConfirm.addClass("btn_type_e");
+			btnConfirm.addClass("btn_color_c");
+			btnConfirm.hide();
+			var btnConfirmSpan = $(document.createElement("span"));
+			btnConfirmSpan.addClass("name");
+			var btnConfirmSpan1 = $(document.createElement("span"));
+			btnConfirmSpan1.addClass("txt"); 
+			btnConfirmSpan1.text("Confirm")
+			
+			btnDiv.append(btnConfirm);
+			btnConfirm.append(btnConfirmSpan);
+			btnConfirmSpan.append(btnConfirmSpan1);
+			
+			// button cancel
+			var btnCancel = $(document.createElement("a"));
+			btnCancel.addClass("btn_txt");
+			btnCancel.addClass("btn_type_e");
+			btnCancel.addClass("btn_color_a");
+			btnCancel.hide();
+			var btnCancelSpan = $(document.createElement("span"));
+			btnCancelSpan.addClass("name");
+			var btnCancelSpan1 = $(document.createElement("span"));
+			btnCancelSpan1.addClass("txt"); 
+			btnCancelSpan1.text("Cancel")
+			
+			btnDiv.append(btnCancel);
+			btnCancel.append(btnCancelSpan);
+			btnCancelSpan.append(btnCancelSpan1);
+			
+			
 			//tableCreate
 			mainContainer = $(document.createElement("table"));
 			//table.addClass("table_hori m_bottom_20");
@@ -2292,6 +2346,8 @@ function fn_makeHtml(container, _schema){
 			mainContainer.append(tbody); 
 			var tr = null;
 			var data = _schema.data();
+			
+			var reactObjects = [];
 			$.each(_schema.items,function(i,item){
 				if(data[item.col] == undefined) {
 					data[item.col] = "";
@@ -2310,6 +2366,7 @@ function fn_makeHtml(container, _schema){
 					name: item.col,
 					//keys: _schema.keys,
 					value: data[item.col],
+					value_origin: data[item.col],
 					editable : item.editable != undefined ? item.editable : true,
 					mode: "read"					
 				};
@@ -2336,6 +2393,8 @@ function fn_makeHtml(container, _schema){
 					};
 				}
 				
+				
+				
 				if( item.edit_tag != undefined )	{
 					tdOption.edit_tag = item.edit_tag;
 					if(item.edit_style != undefined ){
@@ -2357,13 +2416,80 @@ function fn_makeHtml(container, _schema){
 					};
 				}
 				
-				window.fn_td(td[0], tdOption );
+				var reacttd = window.fn_td(td[0], tdOption );
 				//td.addClass("hori_t_data");
 				//td.text(_schema.data()[item.col]);
-				
+				reactObjects.push(reacttd);
 				tr.append(th);
 				tr.append(td);
 				
+			});
+			
+			btnA.click(function(){
+				var a = "a";
+				$.each(reactObjects,function(i,item){
+					if(item.props.options.editable){
+						item.setState({mode:"edit"});
+					}
+				});
+				btnA.hide();
+				btnConfirm.show();
+				btnCancel.show();
+			});
+			btnConfirm.click(function(){
+				var a = "a";
+				var state = true;
+				// loader
+				if(_schema.options != undefined && _schema.options.progressObject != undefined)
+					_schema.options.progressObject.show();
+				setTimeout(function(){
+					
+					var keyUpdatedObjects = [];
+					$.each(reactObjects,function(i,item){
+						var isKeyUpdate = false;
+						if(this.state.value_origin != this.state.value){
+							var vObject = this;
+							$.each(this.state.keys,function(){
+								if(this.field == vObject.state.name){
+									this.value = vObject.state.value_origin;
+									isKeyUpdate = true;
+								}
+									
+							});
+							
+							state = item.props.options.fn_submit.call(this);
+							this.setState({value_origin: this.state.value});
+						}
+							
+						if(!state)
+							return false;
+						this.setState({mode: "read"});
+						if(isKeyUpdate){
+							keyUpdatedObjects.push(item);
+						}
+					});
+					if(state){
+						btnConfirm.hide();
+						btnCancel.hide();
+						btnA.show();
+						if(_schema.options != undefined && _schema.options.fn_afterSubmit != undefined)
+							_schema.options.fn_afterSubmit.call(reactObjects,keyUpdatedObjects);
+					}
+					if(_schema.options != undefined && _schema.options.progressObject != undefined)
+						_schema.options.progressObject.hide();
+				}
+				,50);
+				
+				
+			});
+			btnCancel.click(function(){
+				var a = "a";
+				$.each(reactObjects,function(i,item){
+					this.setState({mode: "read"});
+				});
+				btnConfirm.hide();
+				btnCancel.hide();
+				btnA.show();
 			});
 		}else if(_schema.type == 'grid'){
 			//==grid create
@@ -2888,7 +3014,7 @@ function fn_makeHtml(container, _schema){
 				v_content = $(document.createElement( "div" ));
 				v_content.attr("id", _schema.id + 'Content');
 				//v_content.css("margin-top","10px");
-				v_content.css("padding","0 10px 0 10px");
+				//v_content.css("padding","0 10px 0 10px");
 				v_content.css("width","100%");
 				$(window.document.body).append(v_content);
 				
@@ -3000,8 +3126,12 @@ function fn_makeHtml(container, _schema){
 			});
 		}
 		
-		//***  css ***//
+		
 		var containerType = container.attr("type");
+		//***  class ***//
+		if(mainContainer != null  && _schema.containerCls != undefined)
+			mainContainer.addClass(_schema.containerCls);
+		//***  css ***//
 		if(mainContainer != null && _schema.parentSchema != undefined && _schema.parentSchema.type == 'HorizontalLayout'){
 			mainContainer.css("display","inline-block");
 			if(_schema.width != undefined)

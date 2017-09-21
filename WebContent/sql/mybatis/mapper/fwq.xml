@@ -104,35 +104,94 @@
 		select 
 			HIS.MEASURE_DT, 
 			HIS.PJT_CODE, 
-			PL.PJT_NAME,
-			max(PL.PJT_NAME_PMS) as PJT_NAME_PMS,
+			nvl(PL.PJT_NAME,HIS.PJT_CODE) as PJT_NAME,
+			nvl(max(PL.PJT_NAME_PMS),HIS.PJT_CODE) as PJT_NAME_PMS,
 			round(max(HIS.MEASURE),2) as MEASURE, 
 			round(max(HIS.POINT),2) as POINT, 
-			nvl(sum(p.LOC) ,0)  as loc,
-			nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) as STATIC_ANALYSIS,
-			nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) as FUNC_PARAMETER,
-			nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) as FUNCTION_SIZE,
-			nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) as DUPLICATE,					
-			nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) AS CODING_RULE ,
+			'Y' as POINT_EXISTS,
 			
-			nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) as ARCHITECTURE,
-			nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) as COMPLEXITY,	
-			nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) as CODE_COVERAGE,	
+			nvl(sum(p.LOC),0)  as loc,
 			
-			nvl2(sum(p.LOC) ,'Y','N')  as LOC_EXISTS,
-			nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') as STATIC_ANALYSIS_EXISTS,
-			nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') as FUNC_PARAMETER_EXISTS,
-			nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') as FUNCTION_SIZE_EXISTS,
-			nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') as DUPLICATE_EXISTS,					
-			nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') AS CODING_RULE_EXISTS ,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(stc.point)/count(*)
+				else nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) 
+			end as STATIC_ANALYSIS
+			,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(FP.POINT)/count(*)
+				else nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) 
+			end as FUNC_PARAMETER,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(FS.POINT)/count(*)
+				else nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) 
+			end as FUNCTION_SIZE,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(DUP.POINT)/count(*)
+				else nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) 
+			end as DUPLICATE,				
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(cod.POINT)/count(*)
+				else nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) 
+			end AS CODING_RULE ,
 			
-			nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') as ARCHITECTURE_EXISTS,
-			nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') as COMPLEXITY_EXISTS,	
-			nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') as CODE_COVERAGE_EXISTS,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(ARC.POINT)/count(*)
+				else nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) 
+			end as ARCHITECTURE,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(COM.POINT)/count(*)
+				else nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) 
+			end as COMPLEXITY,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(COV.POINT)/count(*)
+				else nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) 
+			end as CODE_COVERAGE,	
+			
+			--nvl2(sum(p.LOC) ,'Y','N')  LOC_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then 'N'
+				else 'Y'
+			end  LOC_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(p.stc.point),'Y','N') 
+				else nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') 
+			end as STATIC_ANALYSIS_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(FP.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') 
+			end as FUNC_PARAMETER_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(FS.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') 
+			end as FUNCTION_SIZE_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(DUP.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') 
+			end as DUPLICATE_EXISTS,					
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(cod.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') 
+			end AS CODING_RULE_EXISTS ,
+			
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(ARC.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') 
+			end as ARCHITECTURE_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(COM.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') 
+			end as COMPLEXITY_EXISTS,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then  nvl2(sum(COV.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') 
+			end as CODE_COVERAGE_EXISTS,
 			
 			'XXX' GUBUN
 			
 		from FW_QUALITY_HISTORY his
+		left outer join pjt_list pl
+			on his.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
 		left outer join FW_QUALITY_POINT p
 			on p.measure_dt = his.measure_dt
 			and p.pjt_code = his.pjt_code
@@ -163,22 +222,31 @@
 			on fp.MEASURE_DT = dt.fp_real_measure_dt
 			and fp.project = p.project
 			
-		left outer join pjt_list pl
-			on his.pjt_code = pl.pjt_code
-			and pl.use_yn = 'Y'
-		left outer join PJT_MAPPING pm
+		
+		join PJT_MAPPING pm
 			on pm.LEGACY_NAME = 'FWQ'
 			and pm.LEGACY_PJT_NAME = p.project
 			and pm.PJT_NAME = p.pjt_code
-		where is_latest = 'Y'
-		and p.loc > 0
-		and pm.pjt_name is not null
-		<if test="pjtCodeList != null and pjtCodeList != '' ">
-            and his.pjt_code in 
-            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
+		where 1=1
+		and is_latest = 'Y'
+		<choose>
+			<when test="notProject == null  or notProject != 'Y'.toString()" >
+				and p.loc > 0
+				and pm.pjt_name is not null
+				<if test="pjtCodeList != null and pjtCodeList != '' ">
+		            and his.pjt_code in 
+		            <foreach collection="pjtCodeList" item="item" index="index"  open="(" separator="," close=")">
+		                #{item}
+		            </foreach>
+		        </if>
+			</when>
+			<otherwise>
+				and pl.pjt_code is null
+			</otherwise>
+			
+		</choose>
+		
+		
         group by HIS.MEASURE_DT, HIS.PJT_CODE, PL.PJT_NAME
         
         
@@ -203,8 +271,9 @@
 		from PJT_MAPPING pm
 		left outer join PJT_LIST pl
 		    on PL.PJT_CODE = PM.PJT_NAME
+		    and pl.use_yn = 'Y'	
 		left outer join projectLastMeasureDt last
-			on last.pjt_code = pl.pjt_code
+			on last.pjt_code = pm.pjt_name
 			and last.project = pm.LEGACY_PJT_NAME
 		left outer join FW_QUALITY_POINT p
 			on p.measure_dt = last.measure_dt
@@ -212,7 +281,7 @@
 			and p.project = last.project
 		where PM.LEGACY_NAME = 'FWQ'
 		and PM.PJT_NAME = #{pjt_code}
-		and pl.use_yn = 'Y'		
+			
 		order by PM.LEGACY_PJT_NAME, p.PROJECT
 	</select>
     <select id="fwq.allproject.prepoint.data" resultType="hashmap">
@@ -323,26 +392,75 @@
 			round(max(HIS.POINT),2) as POINT, 
 			
 			nvl(sum(p.LOC),0)  as loc,
-			nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) as STATIC_ANALYSIS,
-			nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) as FUNC_PARAMETER,
-			nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) as FUNCTION_SIZE,
-			nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) as DUPLICATE,					
-			nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) AS CODING_RULE ,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(stc.point)/count(*)
+				else nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) 
+			end as STATIC_ANALYSIS
+			,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(FP.POINT)/count(*)
+				else nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) 
+			end as FUNC_PARAMETER,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(FS.POINT)/count(*)
+				else nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) 
+			end as FUNCTION_SIZE,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(DUP.POINT)/count(*)
+				else nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) 
+			end as DUPLICATE,				
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(cod.POINT)/count(*)
+				else nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) 
+			end AS CODING_RULE ,
 			
-			nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) as ARCHITECTURE,
-			nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) as COMPLEXITY,	
-			nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) as CODE_COVERAGE,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(ARC.POINT)/count(*)
+				else nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) 
+			end as ARCHITECTURE,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(COM.POINT)/count(*)
+				else nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) 
+			end as COMPLEXITY,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(COV.POINT)/count(*)
+				else nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) 
+			end as CODE_COVERAGE,	
 			
-			nvl2(sum(p.LOC) ,'Y','N')  as LOC_EXISTS,
-			nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') as STATIC_ANALYSIS_EXISTS,
-			nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') as FUNC_PARAMETER_EXISTS,
-			nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') as FUNCTION_SIZE_EXISTS,
-			nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') as DUPLICATE_EXISTS,					
-			nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') AS CODING_RULE_EXISTS ,
+			nvl2(sum(p.LOC) ,'Y','N')  LOC_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(p.stc.point),'Y','N') 
+				else nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') 
+			end as STATIC_ANALYSIS_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(FP.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') 
+			end as FUNC_PARAMETER_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(FS.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') 
+			end as FUNCTION_SIZE_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(DUP.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') 
+			end as DUPLICATE_EXISTS,					
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(cod.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') 
+			end AS CODING_RULE_EXISTS ,
 			
-			nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') as ARCHITECTURE_EXISTS,
-			nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') as COMPLEXITY_EXISTS,	
-			nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') as CODE_COVERAGE_EXISTS,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(ARC.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') 
+			end as ARCHITECTURE_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(COM.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') 
+			end as COMPLEXITY_EXISTS,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then  nvl2(sum(COV.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') 
+			end as CODE_COVERAGE_EXISTS,
 			
 			'XXX' GUBUN,
 			row_number() over (order by his.MEASURE_DT desc) row_num
@@ -580,6 +698,7 @@
 			HIS.PJT_CODE, 
 			PL.PJT_NAME,
 			p.project,
+			nvl(p.LOC,0) as LOC,
 			nvl(fs.CODESONAR_SVR,'0') as CODESONAR_SVR,
 			nvl(fs.CSV_NUM,'0') as CSV_NUM,
 			nvl(p.MEASURE,0) as MEASURE, 
@@ -878,7 +997,12 @@
 						where LEGACY_NAME = 'FWQ'
 					) a
 	    		) a 
-	    		where row_num = 1;    		
+	    		where row_num = 1;    
+	    		
+	    		if UTL_MATCH.edit_distance_similarity(vProject, rec.project )	 <![CDATA[ <= 50 ]]> then 
+	    			continue;
+	    		end if;
+	    				
 	    		--// 01-02 re mesure_dt 
 	    		--select TRUNC(to_date(rec.measure_dt,'YYYYMMDD'), 'iw') into vWeekStartDt  from dual;
 	    		select to_date(rec.measure_dt,'YYYYMMDD') into vWeekStartDt  from dual;
@@ -973,6 +1097,7 @@
 					select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
 					union all 
 					select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+					
 					union all 
 					select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
 					union all 
@@ -1035,6 +1160,7 @@
 										select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
 										union all 
 										select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+										where UTL_MATCH.edit_distance_similarity(PROJECT,PROJECT_ORIGIN) > 50
 										union all 
 										select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
 										union all 
@@ -1101,6 +1227,7 @@
 											select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
 											union all 
 											select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
+											where UTL_MATCH.edit_distance_similarity(PROJECT,PROJECT_ORIGIN) > 50
 											union all 
 											select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
 											union all 
@@ -1370,14 +1497,35 @@
 	    	
 	    	
 			for rec in (
+				with tbl_loc as (
+					select 
+						measure_dt,
+						pjt_code,
+						sum(loc*measure)/ sum(loc)  as avgMeasure,
+						sum(loc*point) / sum(loc)  as avgPoint
+					from FW_QUALITY_POINT
+					where 1=1
+					and loc > 0
+					group by measure_dt,pjt_code
+					union all
+					select 
+						measure_dt,
+						pjt_code,
+						sum(measure)/ count(*)  as avgMeasure,
+						sum(point) / count(*)  as avgPoint
+					from FW_QUALITY_POINT
+					where 1=1
+					and loc = 0
+					group by measure_dt,pjt_code
+				) 
+				
 				select 
-					measure_dt,
-					pjt_code,
-					sum(loc*measure)/ sum(loc) as avgMeasure,
-					sum(loc*point) / sum(loc)  as avgPoint
-				from FW_QUALITY_POINT
-				where loc > 0
-				group by measure_dt,pjt_code
+					a.measure_dt, 
+					a.pjt_code, 
+					a.avgMeasure,
+					a.avgPoint
+				from tbl_loc a				
+				order by a.measure_dt desc
 				
 			) loop
 				select count(*) into vCnt from FW_QUALITY_HISTORY where measure_dt = rec.measure_dt and pjt_code = rec.pjt_code;
@@ -1577,4 +1725,40 @@
 		
 		end;
 	</update>
+	<select id="fwq.project.function_loc.file_distribution" resultType="hashmap">
+		select	
+			case 
+				when to_number(a.VALUE) between 0 and 50 then '0 ~ 50'
+				when to_number(a.VALUE) between 51 and 100 then '51 ~ 100'
+				when to_number(a.VALUE) between 101 and 150 then '101 ~ 150'
+				when to_number(a.VALUE) between 151 and 200 then '151 ~ 200'
+				else '200 ~'
+			end as RANGE,
+			case 
+				when to_number(a.VALUE) between 0 and 50 then 'q1'
+				when to_number(a.VALUE) between 51 and 100 then 'q2'
+				when to_number(a.VALUE) between 101 and 150 then 'q3'
+				when to_number(a.VALUE) between 151 and 200 then 'q4'
+				else 'q5'
+			end as q_order,
+			1 as CNT,
+			MEASURE_DT, 
+			PJT_CODE, 
+			PROJECT, 
+			SEQ, 
+			NAME, 
+			DESCRIPTION, 
+			GRANULARITY, 
+			FILE_NAME, 
+			PROCEDURE_NAME, 
+			VALUE
+		from FW_QUALITY_FUNC_SIZE_RAW a
+		where MEASURE_DT = #{measure_dt}
+		
+		and PROJECT = #{project}
+		and GRANULARITY = 'Procedure'
+		and name= 'LCode'
+		order by 2, seq    	, FILE_NAME, PROCEDURE_NAME
+    	
+    </select>
 </mapper>    

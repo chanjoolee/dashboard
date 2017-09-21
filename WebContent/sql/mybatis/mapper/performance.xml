@@ -10,6 +10,7 @@
 			p.TOOL,
 			p.DATA_SRC,
 			p.SPEC,
+			p.SPEC1,
 			nvl(p.SPEC_LABEL,spec) as SPEC_LABEL,
 			p.QUEUE_DEPTH,
 			p.FIELD,
@@ -39,8 +40,9 @@
 					'MBps (Decimal)',
 					'Read MBps (Decimal)',
 					'Write MBps (Decimal)',
-					'Average Response Time',
-					'IOps'
+					'Average Response Time',					
+					'IOps',
+					'Average of 3 runs'
 				)
 				and p.tool = 'Iometer'
 			)
@@ -74,7 +76,8 @@
 					'Read MBps (Decimal)',
 					'Write MBps (Decimal)',
 					'Average Response Time',
-					'IOps'
+					'IOps',
+					'Average of 3 runs'
 				)
 				and p.tool = 'Iometer'
 			)

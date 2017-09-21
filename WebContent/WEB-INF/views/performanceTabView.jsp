@@ -68,7 +68,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.05.26"></script>
+	<script src="js/dashboard.js?version=2017.08.31.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -2681,7 +2681,8 @@
 				
 			});
 			
-		}else{
+		}
+		else{
 			//단일차트인경우
 			vCols = [];
 			var subId = chartContainerId + '_' + '0';
@@ -4332,7 +4333,7 @@
 	</script>
 	<script type="text/javascript" title="schema" >
 		var categoryInfo =[
-	     		      {
+	    			 {
 	     					category:'Latency.csv',
 	     					calculateCols:[
 								{
@@ -4454,8 +4455,9 @@
 		     				, gridColWidth: '115px'
 	     					,orderby: 8
 	     			 },
+	     			 // SPECwpcSummary
 	     			 {
-	     					category:'SPECwpc',
+	     					category:'SPECwpcSummary',
 	     					calculateCols:[
 								{
 									col:'ORDER',
@@ -4495,6 +4497,197 @@
 	     					, gridColWidth: '115px'
 	     					, orderby: 0.1
 	     			 },
+	     			 // wpc1.csv
+	     			 {
+     					category:'wpc1.csv',
+     					calculateCols:[
+							{
+								col:'ORDER',
+								val: function(){
+									if(this.SPEC.match(/64K Sequential Reads/gi) != null  ){
+     									return 1;
+     								}else if(this.SPEC.match(/64K Sequential Writes/gi) != null ){
+     									return 2;
+     								}else if(this.SPEC.match(/8K Sequential Writes/gi) != null ){
+     									return 3;
+     								}else if(this.SPEC.match(/8K Sequential Reads/gi) != null ){
+     									return 4;
+     								}else if(this.SPEC.match(/3dsmax/gi) != null ){
+     									return 5;
+     								}else if(this.SPEC.match(/ansys/gi) != null ){
+     									return 6;
+     								}else if(this.SPEC.match(/blender/gi) != null ){
+     									return 7;
+     								}else if(this.SPEC.match(/Handbrake/gi) != null ){
+     									return 8;
+     								}else if(this.SPEC.match(/Solidworks/gi) != null ){
+     									return 9;
+     								}else if(this.SPEC.match(/NX6/gi) != null ){
+     									return 10;
+     								}else if(this.SPEC.match(/Maya2012/gi) != null ){
+     									return 11;
+     								}else if(this.SPEC.match(/Inventor/gi) != null ){
+     									return 12;
+     								}else if(this.SPEC.match(/Energy/gi) != null ){
+     									return 13;
+     								}else if(this.SPEC.match(/Life Sci/gi) != null ){
+     									return 14;
+     								}else if(this.SPEC.match(/General/gi) != null ){
+     									return 15;
+     								}else{
+     									return 100;
+     								}
+									
+								}
+							}               
+     					],
+     					filters:[
+     						{col:'FIELD',val:'Read MBps (Decimal)'} ,
+     						{col:'FIELD',val:'Write MBps (Decimal)'}
+     					],
+     					xOderbyCols:['FIRMWARE1','ORDER','SPEC'],
+     					categoryCols:['FIELD','SPEC'],
+     					yCol:'MEASURE',
+     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+     					multichart:{
+     						enabled:true,
+     						splitCol:'FIELD',
+     						chartWidth: 100 , // percent 로 표시
+     						oneLineChatNum: 1,
+     						oneLineHeight: 600
+     					}
+     					, decimalPoint:2
+     					, gridSeriesColWidth: ''
+     					, gridColWidth: '115px'
+     					, orderby: 0.2
+	     			 },
+	     			 {
+     					category:'wpc2.csv',
+     					calculateCols:[
+							{
+								col:'ORDER',
+								val: function(){
+									if(this.SPEC.match(/64K Sequential Reads/gi) != null  ){
+     									return 1;
+     								}else if(this.SPEC.match(/64K Sequential Writes/gi) != null ){
+     									return 2;
+     								}else if(this.SPEC.match(/8K Sequential Writes/gi) != null ){
+     									return 3;
+     								}else if(this.SPEC.match(/8K Sequential Reads/gi) != null ){
+     									return 4;
+     								}else if(this.SPEC.match(/3dsmax/gi) != null ){
+     									return 5;
+     								}else if(this.SPEC.match(/ansys/gi) != null ){
+     									return 6;
+     								}else if(this.SPEC.match(/blender/gi) != null ){
+     									return 7;
+     								}else if(this.SPEC.match(/Handbrake/gi) != null ){
+     									return 8;
+     								}else if(this.SPEC.match(/Solidworks/gi) != null ){
+     									return 9;
+     								}else if(this.SPEC.match(/NX6/gi) != null ){
+     									return 10;
+     								}else if(this.SPEC.match(/Maya2012/gi) != null ){
+     									return 11;
+     								}else if(this.SPEC.match(/Inventor/gi) != null ){
+     									return 12;
+     								}else if(this.SPEC.match(/Energy/gi) != null ){
+     									return 13;
+     								}else if(this.SPEC.match(/Life Sci/gi) != null ){
+     									return 14;
+     								}else if(this.SPEC.match(/General/gi) != null ){
+     									return 15;
+     								}else{
+     									return 100;
+     								}
+									
+								}
+							}               
+     					],
+     					filters:[
+     						{col:'FIELD',val:'Read MBps (Decimal)'} ,
+     						{col:'FIELD',val:'Write MBps (Decimal)'}
+     					],
+     					xOderbyCols:['FIRMWARE1','ORDER','SPEC'],
+     					categoryCols:['FIELD','SPEC'],
+     					yCol:'MEASURE',
+     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+     					multichart:{
+     						enabled:true,
+     						splitCol:'FIELD',
+     						chartWidth: 100 , // percent 로 표시
+     						oneLineChatNum: 1,
+     						oneLineHeight: 600,
+     					}
+     					, decimalPoint:2
+     					, gridSeriesColWidth: ''
+     					, gridColWidth: '115px'
+     					, orderby: 0.3
+	     			 },
+	     			 {
+     					category:'wpc3.csv',
+     					calculateCols:[
+							{
+								col:'ORDER',
+								val: function(){
+									if(this.SPEC.match(/64K Sequential Reads/gi) != null  ){
+     									return 1;
+     								}else if(this.SPEC.match(/64K Sequential Writes/gi) != null ){
+     									return 2;
+     								}else if(this.SPEC.match(/8K Sequential Writes/gi) != null ){
+     									return 3;
+     								}else if(this.SPEC.match(/8K Sequential Reads/gi) != null ){
+     									return 4;
+     								}else if(this.SPEC.match(/3dsmax/gi) != null ){
+     									return 5;
+     								}else if(this.SPEC.match(/ansys/gi) != null ){
+     									return 6;
+     								}else if(this.SPEC.match(/blender/gi) != null ){
+     									return 7;
+     								}else if(this.SPEC.match(/Handbrake/gi) != null ){
+     									return 8;
+     								}else if(this.SPEC.match(/Solidworks/gi) != null ){
+     									return 9;
+     								}else if(this.SPEC.match(/NX6/gi) != null ){
+     									return 10;
+     								}else if(this.SPEC.match(/Maya2012/gi) != null ){
+     									return 11;
+     								}else if(this.SPEC.match(/Inventor/gi) != null ){
+     									return 12;
+     								}else if(this.SPEC.match(/Energy/gi) != null ){
+     									return 13;
+     								}else if(this.SPEC.match(/Life Sci/gi) != null ){
+     									return 14;
+     								}else if(this.SPEC.match(/General/gi) != null ){
+     									return 15;
+     								}else{
+     									return 100;
+     								}
+									
+								}
+							}               
+     					],
+     					filters:[
+     						{col:'FIELD',val:'Read MBps (Decimal)'} ,
+     						{col:'FIELD',val:'Write MBps (Decimal)'}
+     					],
+     					xOderbyCols:['FIRMWARE1','ORDER','SPEC'],
+     					categoryCols:['FIELD','SPEC'],
+     					yCol:'MEASURE',
+     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+     					multichart:{
+     						enabled:true,
+     						splitCol:'FIELD',
+     						chartWidth: 100 , // percent 로 표시
+     						oneLineChatNum: 1,
+     						oneLineHeight: 600,
+     					}
+     					, decimalPoint:2
+     					, gridSeriesColWidth: ''
+     					, gridColWidth: '115px'
+     					, orderby: 0.4
+	     			 },
+	     			 // SLC_Max Throughput.csv
 	     			 {
 	     					category:'SLC_Max Throughput.csv',
 	     					calculateCols:[
@@ -5918,6 +6111,160 @@
 		  	     		gridColWidth: '58px',
 	   	     			orderby: 14
 	     		 	},
+	     		 	// Rw Block Sweep
+	     		 	{
+	     		 		
+     				 	//x축을 2개이상 사용하도록 설정필요.
+     					category:'RW Block Sweep parsed.csv',
+     					//chartType:'spline',
+     					calculateCols:[
+							{
+								col:'Category',
+								val: function(){
+									var vSplit = this.SPEC.split("_");
+									return vSplit[0] + " " + vSplit[1];									
+								}
+							},
+							{
+								col:'BlockSize',
+								val: function(){
+									var vSplit = this.SPEC.split("_");
+									return vSplit[2];
+									
+								}
+							}
+							
+     					],
+     					filters:[
+     						{col:'FIELD',val:  'Average of 3 runs'}
+     					],
+     					xOderbyCols:['FIRMWARE1','BlockSize'],
+     					categoryCols:['Category','BlockSize'],
+     					yCol:'MEASURE',
+     					decimalPoint:2,
+     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+     					multichart:{
+     						enabled:true,
+     						splitCol:'Category',
+     						chartWidth: 50 , // percent 로 표시
+     						oneLineChatNum: 2,
+     						oneLineHeight: 600,
+     						yAxisTitle:{
+     							"Random Read":'IOps',
+     							"Random Write":'IOps',
+     							"Sequential Read":'MBps (Binary)',
+     							"Sequential Write":'MBps (Binary)',
+     							"Random 25R/75W":'IOps',
+     							"Random 75R/25W":'IOps',     							
+     							"Sequential 25R/75W":'MBps (Binary)',
+     							"Sequential 75R/25W":'MBps (Binary)',
+     						},
+     						orderBy : function(){
+	   							if(this.Category.match(/Random Read/gi) != null  ){
+									return 10;
+								}else if(this.Category.match(/Random Write/gi) != null  ){
+									return 20;
+								}else if(this.Category.match(/Sequential Read/gi) != null  ){
+									return 30;
+								}else if(this.Category.match(/Sequential Write/gi) != null  ){
+									return 40;
+								}else if(this.Category.match(/Random 75R\/25W/gi) != null  ){
+									return 50;
+								}else if(this.Category.match(/Random 25R\/75W/gi) != null  ){
+									return 60;
+								}else if(this.Category.match(/Sequential 75R\/25W/gi) != null  ){
+									return 70;
+								}else if(this.Category.match(/Sequential 25R\/75W/gi) != null  ){
+									return 80;
+								}else{
+									return 100;
+								}
+								
+							}
+     					},
+     					gridColWidth: '50px',
+     					orderby:14.2
+	     		 	},
+	     		 	// SSD Performance V1.csv
+	     		 	{
+	     		 		
+     				 	//x축을 2개이상 사용하도록 설정필요.
+     					category:'SSD Performance V1.csv',
+     					//chartType:'spline',
+     					calculateCols:[
+     						{
+								col:'isShow',
+								val: function(){
+									if(this.SPEC == "Seqread" && this.FIELD == "MBps (Decimal)" ){
+										return "O";
+									}else if(this.SPEC == "SeqWrite" && this.FIELD == "MBps (Decimal)" ){
+										return "O";
+									}else if(this.SPEC == "RandomRead" && this.FIELD == "IOps" ){
+										return "O";
+									}else if(this.SPEC == "RandomWrite" && this.FIELD == "IOps" ){
+										return "O";
+									}else{
+										return "X";
+									}										
+								}
+							},
+							{
+								col:'SeqRandom',
+								val: function(){
+									if(this.SPEC.match(/^Random/gi) != null ){
+										return 'Ran';
+									}else if(this.SPEC.match(/^Seq/gi) != null ){
+										return 'Seq';
+									}										
+								}
+							},
+							{
+								col:'Seq',
+								val: function(){
+									return Number(this.SPEC1);
+									
+								}
+							}
+							
+     					],
+     					filters:[
+     						{col:'isShow',val:  "O"}
+     					],
+     					xOderbyCols:['FIRMWARE1','Seq'],
+     					categoryCols:['SPEC','Seq'],
+     					yCol:'MEASURE',
+     					decimalPoint:2,
+     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+     					multichart:{
+     						enabled:true,
+     						splitCol:'SPEC',
+     						chartWidth: 100 , // percent 로 표시
+     						oneLineChatNum: 1,
+     						oneLineHeight: 600,
+     						yAxisTitle:{
+     							"Seqread":'MB/s',
+     							"SeqWrite":'MB/s',
+     							"RandomRead":'IOps',
+     							"RandomWrite":'IOps'
+     						},
+     						orderBy : function(){
+	   							if(this.SPEC.match(/Seqread/gi) != null  ){
+									return 10;
+								}else if(this.SPEC.match(/SeqWrite/gi) != null  ){
+									return 20;
+								}else if(this.SPEC.match(/RandomRead/gi) != null  ){
+									return 30;
+								}else if(this.SPEC.match(/RandomWrite/gi) != null  ){
+									return 40;
+								}else{
+									return 100;
+								}
+								
+							}
+     					},
+     					gridColWidth: '50px',
+     					orderby:14.3
+	     		 	},
 	     		 	{
 	     				category:'SLC_Mixed_Seq_RW.csv',
 	     				calculateCols:[
@@ -6478,6 +6825,7 @@
 	 	     		gridColWidth: '70px',
      				orderby: 240
      		 	},
+	     		 // PCMARK_VANTAGE.xlsx
 	     		 {
 	     				category:'PCMARK_VANTAGE.xlsx',
 	     				calculateCols:[
@@ -6518,6 +6866,167 @@
 	     				gridColWidth: '65px',
 	     				orderby: 250
 	     		 },
+	     		 {
+	     				category:'PCMARK_VANTAGE_30GB.xlsx',
+	     				calculateCols:[
+							{
+								col:'IS_SCORE',
+								val: function(){
+									if(this.SPEC == 'Score'  ){
+											return 'Score';
+										}else{
+											return 'NotScore';
+										}
+									
+								}
+							},                     
+	     					{
+	     						col:'PCMARK_DUMMY',
+	     						val: function(){
+	     							return 'measure';
+	     						}
+	     					}
+	     				],
+	     				filters:[
+	     				],
+	     				xOderbyCols:['FIRMWARE1','SPEC','IS_SCORE'],
+	     				categoryCols:['SPEC'],
+	     				yCol:'MEASURE',
+	     				yAxisTitle :'MB/s',
+	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+	     				multichart:{
+	     					enabled:true,
+	     					splitCol:'IS_SCORE',
+	     					yAxisTitle:{NotScore:'MB/s'},
+	     					chartWidth: 50 , // percent 로 표시
+	     					oneLineChatNum: 2,
+	     					oneLineHeight: 600
+	     				},
+	     				gridSeriesColWidth: '100px',
+	     				gridColWidth: '65px',
+	     				orderby: 250
+	     		 },
+	     		 {
+	     				category:'PCMARK_VANTAGE_60GB.xlsx',
+	     				calculateCols:[
+							{
+								col:'IS_SCORE',
+								val: function(){
+									if(this.SPEC == 'Score'  ){
+											return 'Score';
+										}else{
+											return 'NotScore';
+										}
+									
+								}
+							},                     
+	     					{
+	     						col:'PCMARK_DUMMY',
+	     						val: function(){
+	     							return 'measure';
+	     						}
+	     					}
+	     				],
+	     				filters:[
+	     				],
+	     				xOderbyCols:['FIRMWARE1','SPEC','IS_SCORE'],
+	     				categoryCols:['SPEC'],
+	     				yCol:'MEASURE',
+	     				yAxisTitle :'MB/s',
+	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+	     				multichart:{
+	     					enabled:true,
+	     					splitCol:'IS_SCORE',
+	     					yAxisTitle:{NotScore:'MB/s'},
+	     					chartWidth: 50 , // percent 로 표시
+	     					oneLineChatNum: 2,
+	     					oneLineHeight: 600
+	     				},
+	     				gridSeriesColWidth: '100px',
+	     				gridColWidth: '65px',
+	     				orderby: 250
+	     		 },
+	     		 {
+	     				category:'PCMARK_VANTAGE_90GB.xlsx',
+	     				calculateCols:[
+							{
+								col:'IS_SCORE',
+								val: function(){
+									if(this.SPEC == 'Score'  ){
+											return 'Score';
+										}else{
+											return 'NotScore';
+										}
+									
+								}
+							},                     
+	     					{
+	     						col:'PCMARK_DUMMY',
+	     						val: function(){
+	     							return 'measure';
+	     						}
+	     					}
+	     				],
+	     				filters:[
+	     				],
+	     				xOderbyCols:['FIRMWARE1','SPEC','IS_SCORE'],
+	     				categoryCols:['SPEC'],
+	     				yCol:'MEASURE',
+	     				yAxisTitle :'MB/s',
+	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+	     				multichart:{
+	     					enabled:true,
+	     					splitCol:'IS_SCORE',
+	     					yAxisTitle:{NotScore:'MB/s'},
+	     					chartWidth: 50 , // percent 로 표시
+	     					oneLineChatNum: 2,
+	     					oneLineHeight: 600
+	     				},
+	     				gridSeriesColWidth: '100px',
+	     				gridColWidth: '65px',
+	     				orderby: 250
+	     		 },
+	     		 {
+	     				category:'PCMARK_VANTAGE_120GB.xlsx',
+	     				calculateCols:[
+							{
+								col:'IS_SCORE',
+								val: function(){
+									if(this.SPEC == 'Score'  ){
+											return 'Score';
+										}else{
+											return 'NotScore';
+										}
+									
+								}
+							},                     
+	     					{
+	     						col:'PCMARK_DUMMY',
+	     						val: function(){
+	     							return 'measure';
+	     						}
+	     					}
+	     				],
+	     				filters:[
+	     				],
+	     				xOderbyCols:['FIRMWARE1','SPEC','IS_SCORE'],
+	     				categoryCols:['SPEC'],
+	     				yCol:'MEASURE',
+	     				yAxisTitle :'MB/s',
+	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+	     				multichart:{
+	     					enabled:true,
+	     					splitCol:'IS_SCORE',
+	     					yAxisTitle:{NotScore:'MB/s'},
+	     					chartWidth: 50 , // percent 로 표시
+	     					oneLineChatNum: 2,
+	     					oneLineHeight: 600
+	     				},
+	     				gridSeriesColWidth: '100px',
+	     				gridColWidth: '65px',
+	     				orderby: 250
+	     		 },
+	     		 //PCMARK7.txt
 	     		 {
 	     				category:'PCMARK7.txt',
 	     				calculateCols:[
@@ -6663,7 +7172,8 @@
      					cols:[]
      				},
      				orderby: 300
-     		 },
+     		 	},
+     		 	// Sustain 보류
      		 //========= ESSD Start ============//
      		{
    					category:'result_HBA.csv', //Max Throughput.csv 참조

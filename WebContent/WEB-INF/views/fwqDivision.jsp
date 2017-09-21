@@ -206,6 +206,7 @@
 	
 	
 	var fwqDataList = [];
+	var fwqDataListNon = [];
 	var scheduleDataList = [];
 	var scheduleSeries = {};
 	var over60 = [];
@@ -1086,6 +1087,8 @@
 
         })
         .add(); */
+        
+        
 		
 		chart.renderer.label('Guide', width -55 - 80 ,10 )
         .attr({
@@ -1235,6 +1238,14 @@
 		};
 		
 		var item_formatter = function(cellValue, options, rowObject){
+			var vGrid = $(this);
+			var vList = [];
+			if(vGrid.attr("id") == "grid_manage"){
+				vList = fwqDataList;
+			}
+			else{
+				vList = fwqDataListNon;
+			}
 			var result = "";
 			if(rowObject[options.colModel.name + '_EXISTS'] == 'Y'){
 				//result = cellValue.toFixed(2);
@@ -1243,7 +1254,7 @@
 				var imageHtml = "";
 				var labelHtml = "";
 				
-				var data = dataFilter(fwqDataList,[{col:'PJT_CODE',val:rowObject.PJT_CODE}])[0];
+				var data = dataFilter(vList,[{col:'PJT_CODE',val:rowObject.PJT_CODE}])[0];
 				var preData = {};
 				var diff = 0;
 				//var symbol ="circle"; 
@@ -1302,7 +1313,7 @@
 		var gridModel = [
   			{ label: 'Project', name: 'PJT_NAME', width: 210 ,align:'left' , sortable: true, formatter:'string',cellattr:  setAttrProject },
   			//{ label: 'dummy', name: 'POINT', width: 80 ,align:'center', sortable: true, hidden: true},
-      		{ label: 'Index<br/>(200)', name: 'POINT', width: 90 ,align:'center', sortable: true, formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'' ,cursor:'' },  
+      		{ label: 'Index<br/>(200)', name: 'POINT', width: 90 ,align:'center', sortable: true, formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },  
       		{ label: 'Loc', name: 'LOC', width:  65 ,align:'center', sortable:false,  formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 0},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
       		{ label: 'Static Analysis<br/>(20)', name: 'STATIC_ANALYSIS', width:  65 ,align:'center', sortable:false,  formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
       		{ label: 'Function Parameter<br/>(20)', name: 'FUNC_PARAMETER', width: 70 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
@@ -1377,9 +1388,10 @@
 			styleUI : 'Bootstrap',
 			colModel: gridModel,
 			data: fwqDataList,
-			rowNum: 100000, 
-			//rowList:[10,20,30,50,100],
-			caption:'',
+			pager: "#grid_managePager",
+			rowNum: 10, 
+			rowList:[10,20,30],
+			caption:'Project',
 			sortable: true,			
 			multiSort: true,
 			//sortname: 'POINT desc, PJT_NAME_PMS',
@@ -1390,26 +1402,27 @@
 	        //multiSort: false,
 	        //multiselect: false,
 	        width: '100%' ,
+	        //width: '1020px' ,
 	        //width: '1200',
-	        height: '600',
+	        height: '400',
 	        //pager:'#jqGridPager',
 	        //mtype: 'POST',
 	        //grouping:true,
 			onCellSelect: function (rowId, iCol, content, event) {
-				var cm = jQuery("#jqGrid").jqGrid("getGridParam", "colModel");
+				var cm = jQuery("#grid_manage").jqGrid("getGridParam", "colModel");
 				if(cm.name != ''){
-					var val = Number($('#jqGrid').jqGrid('getCell', rowId, iCol));	
+					var val = Number($('#grid_manage').jqGrid('getCell', rowId, iCol));	
 					if(cm[iCol].name == 'PJT_NAME' ){
-						var val1 = $('#jqGrid').jqGrid('getCell', rowId, 0);	
+						var val1 = $('#grid_manage').jqGrid('getCell', rowId, 1);	
 						var object = dataFilter(fwqDataList,[{col:'PJT_NAME',val: val1}])[0];
 						if(object != undefined){
 							popFWQProjectSummary.call(object);
 						}
-					}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status' || cm[iCol].name == 'POINT'){
+					}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status'){
 						// nothing
 					}else {
 						//cell click
-						var projectName = $('#jqGrid').jqGrid('getCell', rowId, 0);
+						var projectName = $('#grid_manage').jqGrid('getCell', rowId, 1);
 						var object = dataFilter(fwqDataList,[{col:'PJT_NAME',val: projectName}])[0];
 						var label = "";
 						if(cm[iCol].label.match(/[\w\s]+/) != null)
@@ -1425,13 +1438,13 @@
 			    	//grid.navGrid('#confluencePager', { edit: false, add: false, del: false, search: false, refresh: false, view: false, position: "left", cloneToTop: true  });
 			    	//$('#funcParamsPager .ui-paging-pager').hide();
 			    	
-	 				$('#containerGrid .ui-jqgrid').css("width",'100%');
-	 				$('#containerGrid .ui-jqgrid').css("border",'0');
-	 				//$('#containerGrid .ui-jqgrid .table-bordered').css("border-left",'1px !important');
-	 				$('#containerGrid .ui-jqgrid-view').css("width",'100%');
-	 				$('#containerGrid .ui-jqgrid-hdiv').css("width",'100%');
-	 				$('#containerGrid .ui-jqgrid-bdiv').css("width",'100%');
-	 				$('#containerGrid .ui-jqgrid-pager').css("width",'100%');
+//	 				$('#containerGrid .ui-jqgrid').css("width",'100%');
+//	 				$('#containerGrid .ui-jqgrid').css("border",'0');
+//	 				//$('#containerGrid .ui-jqgrid .table-bordered').css("border-left",'1px !important');
+//	 				$('#containerGrid .ui-jqgrid-view').css("width",'100%');
+//	 				$('#containerGrid .ui-jqgrid-hdiv').css("width",'100%');
+//	 				$('#containerGrid .ui-jqgrid-bdiv').css("width",'100%');
+//	 				$('#containerGrid .ui-jqgrid-pager').css("width",'100%');
 	 				
 	 				
 	 				
@@ -1460,31 +1473,118 @@
 			
 		};
 		
-		try{
-			if($("#jqGrid tbody").length >0 ){
-				$('#jqGrid').jqGrid('clearGridData');
-				$("#jqGrid").jqGrid('setGridParam', options ,true);
-				//$("#jqGrid").jqGrid('setGroupHeaders', pModel);
-				$('#jqGrid').trigger('reloadGrid');
+		
+		
+		$.ajax({
+			url : "/dashboard/fwqDivisionJson.html?notProject=Y",
+			data: $("#form").serialize(),
+			async: false,
+			success : function(pResponseData){
+				fwqDataListNon = pResponseData.fwqDataList;
+			}
+		});
+		
+		
+			
+		var schemaGrid = {
+			containerId:'contentCoronaDetail',
+			type:'Vertical', 
+			label:'',
+			elements: [
+				{
+					type: 'grid',
+					id: 'grid_manage',
+					label:' ',
+					items: gridModel,
+					gridOpt: options
+				},
+				{
+					containerCss:[
+						{code: 'margin-top', value:'20px'}
+					],		
+					type: 'grid',
+					id: 'grid_nonmanage',
+					label:' ',
+					items: [
+						{ label: 'Project', name: 'PJT_NAME', width: 210 ,align:'left' , sortable: true, formatter:'string',cellattr:  setAttrProject },
+			  			//{ label: 'dummy', name: 'POINT', width: 80 ,align:'center', sortable: true, hidden: true},
+			      		{ label: 'Index<br/>(200)', name: 'POINT', width: 90 ,align:'center', sortable: true, formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },  
+			      		{ label: 'Loc', name: 'LOC', width:  65 ,align:'center', sortable:false,  formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 0},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
+			      		{ label: 'Static Analysis<br/>(20)', name: 'STATIC_ANALYSIS', width:  65 ,align:'center', sortable:false,  formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
+			      		{ label: 'Function Parameter<br/>(20)', name: 'FUNC_PARAMETER', width: 70 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
+			      		{ label: 'Function LOC<br/>(20)', name: 'FUNCTION_SIZE', width: 65 ,align:'center', sortable:false , formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold' ,cursor:'pointer' },
+			      		{ label: 'Duplicate Code<br/>(20)', name: 'DUPLICATE', width:  65,align:'center' , sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer'  },
+			      		{ label: 'Coding Rule<br/>(20)', name: 'CODING_RULE', width:  65 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
+			      		{ label: 'Architecture Analysis<br/>(25)', name: 'ARCHITECTURE', width:  80 ,align:'center', sortable:false,formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
+			      		{ label: 'Complexity<br/>(25)', name: 'COMPLEXITY', width:  75,align:'center', sortable:false, formatter:  item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold'  ,cursor:'pointer' },
+			      		{ label: 'Simulator Test Coverage<br/>(25)', name: 'CODE_COVERAGE', width: 70,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold'  ,cursor:'pointer' }
+					],
+					gridOpt: {
+						datatype: "local",
+						styleUI : 'Bootstrap',
+						pager: "#grid_nonmanagePager",
+						data: fwqDataListNon,
+						rowNum: 10, 
+						rowList:[10,20,30],
+						caption:'Non-Project',
+						sortable: true,			
+						multiSort: true,
+						//sortname: 'POINT desc, PJT_NAME_PMS',
+				        //sortorder: 'asc',  
+				        emptyrecords: "No records to view",
+				        viewrecords: true,
+						//rownumbers: true, // show row numbers
+				        //multiSort: false,
+				        //multiselect: false,
+				        width: '100%' ,
+				        //width: '1020px' ,
+				        //width: '1200',
+				        height: '200',
+				        //pager:'#jqGridPager',
+				        //mtype: 'POST',
+				        //grouping:true,
+						onCellSelect: function (rowId, iCol, content, event) {
+							
+							var cm = jQuery("#grid_nonmanage").jqGrid("getGridParam", "colModel");
+							if(cm.name != ''){
+								var val = Number($('#grid_nonmanage').jqGrid('getCell', rowId, iCol));	
+								if(cm[iCol].name == 'PJT_NAME' ){
+									var val1 = $('#grid_nonmanage').jqGrid('getCell', rowId, 1);	
+									var object = dataFilter(fwqDataListNon,[{col:'PJT_NAME',val: val1}])[0];
+									if(object != undefined){
+										popFWQProjectSummary.call(object);
+									}
+								}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status'){
+									// nothing
+								}else {
+									//cell click
+									var projectName = $('#grid_nonmanage').jqGrid('getCell', rowId, 1);
+									var object = dataFilter(fwqDataListNon,[{col:'PJT_NAME',val: projectName}])[0];
+									var label = "";
+									if(cm[iCol].label.match(/[\w\s]+/) != null)
+										label = cm[iCol].label.match(/[\w\s]+/).join('');
+									popFWQProjectCategoryTrend.call(object,cm[iCol].name,label);
+								}
+								
+							}
+								
+					      }// end onclick
+					      ,gridComplete: function () {
+						    	var grid = $(this).jqGrid();
+				 				
+						    }
+						
+					}
+				}
 				
-			}else{
-				$("#jqGrid").jqGrid(options);
-				$('#jqGrid').setGroupHeaders(
-		                {
-		                    useColSpanStyle: true,
-		                    groupHeaders: [
-								//{ numberOfColumns: 2, titleText: '' , startColumnName: 'PJT_NAME_PMS' },
-		                        { numberOfColumns: 5, titleText: 'Basic Index', startColumnName: 'STATIC_ANALYSIS' },
-		                        { numberOfColumns: 3, titleText: 'Advanced Index', startColumnName: 'ARCHITECTURE' }
-		                     ]
-		                
-		                });
-			}
-		}catch(err){
-			if(fwqDataList.length == 0) {
-				$("#load_jqGrid").text("no data");
-			}
-		}
+			]
+		};
+		$("#containerGrid").html("");
+		fn_makeHtml('containerGrid',schemaGrid);
+		$(".ui-jqgrid-title").css("font-weight","bold");
+		$(".ui-jqgrid-title").css("font-size","13px");
+		$(".ui-jqgrid-title").css("color","red");
+		
 		
 	}
 
@@ -1567,6 +1667,19 @@
 	    newWin1.focus();
 	}
 	
+	function popNoManage(){
+		//var newWin1 = window.open("FWQuality", "FWQuality", "width=1000,height=870, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes"); 
+		var newWin1 = window.open("", "FWQualityNoManage", "width=980,height=870, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+		
+		var oFrm = document.getElementById("form");
+		//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
+		//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
+		oFrm.action =  '/dashboard/generic.html?viewName=fwqDivisionNotManage';
+		oFrm.method = "post";
+		oFrm.target = 'FWQualityNoManage'; 
+	    oFrm.submit();		    
+	    newWin1.focus();
+	}
 	</script>
 	<style type="text/css">
 		html, body,form {
@@ -1601,7 +1714,7 @@
 			padding-right: 0;
 			/* width: 100%; */
 			/* height: 400px; */
-			/* width: 960px; */
+			width: 1060px;
 			/* height: 590px; */
 		}			
 		
@@ -1884,6 +1997,10 @@
 		.table>tbody>tr>td {
 			/* line-height: 4em; */
 		}
+		
+		.ui-jqgrid .ui-jqgrid-pager .ui-pager-control {
+			height: 30px;
+		}
 	</style>
 </head>
 <body>
@@ -1898,6 +2015,7 @@
 <input type="hidden" id ="phaseBase" name ="phaseBase" value="phase"/>
 <input type="hidden" id="category" name="category" value=""/>
 <input type="hidden" id="categoryLabel" name="categoryLabel" value=""/>
+
 <div id="application" class="div-search">
 	<div style="display:inline-block;text-overflow:show;float:left;">
 		<select name="pjtStatus" id="pjtStatus" multiple="multiple" style="width:150px" > </select>
@@ -1907,11 +2025,11 @@
 </div>
 
 <div  id="container" class="container"></div>
-<div id="measure_dt" class="divlabel">2017.08.29</div>
-<div id="containerGrid" class="containerGrid">
-	<table id="jqGrid"></table> 
-    <!-- <div id="jqGridPager"></div> --> 
+<div class="btn_section" style="width:1014px">
+	<div id="measure_dt" class="divlabel" style="float: left;">Measure Date:</div>
+    
 </div>
+<div id="containerGrid" class="containerGrid"></div>
 </form>
 <iframe id="devFrame" name="devFrame" width="0" height="0"></iframe>
 </body>

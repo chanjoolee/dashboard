@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>corona summary</title>
+    <title>Corona UFS summary</title>
     <%-- 1. jquery --%>
     <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.06.12.01"></script>
+	<script src="js/dashboard.js?version=2017.08.31.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -514,6 +514,41 @@
 		return result;
 	}
 	
+	// validation
+	$.extend(true, $.jgrid.inlineEdit, {
+        beforeSaveRow: function (options, rowid) {
+			var grid = $(this).jqGrid();
+		    var row = grid.jqGrid('getRowData',rowid);
+		    var v_creteria = $(this).find("select[name=COMPUTE_CRETERIA]").val();
+		    var v_val = $(this).find("input[name=COMPUTE_VALUE]").val();
+		    if(v_creteria == "" && Number(v_val) > 0 ){
+		    	var vMsg = "Can not input when None!";
+				$("#dialog-confirm").html(vMsg);
+				$("#dialog-confirm").dialog({
+				    resizable: false,
+				    modal: true,
+				    title: "Error",
+				    height: 200,
+				    width: 400,
+				    dialogClass: 'no-close',
+				    closeOnEscape: false,
+				    buttons: [
+			              {
+			                text: "OK",
+			                click: function() {
+			                  $( this ).dialog( "close" );
+			                  
+			                }
+			              }
+		            ]
+				});
+				return false;
+		    }else
+		    	return true;
+			
+            
+        }
+    });
 		
 	</script>
 	<script type="text/javascript" id="script_schemaSearchCondition">
@@ -610,7 +645,7 @@
 													$.each(datas ,function(){
 														var option = $(document.createElement( "option" ));
 														option.val(this.FIRMWARE);
-														option.text(this.FIRMWARE);
+														option.text(this.FIRMWARE_NM);
 														sampleObj.append(option);
 													});
 													
@@ -662,7 +697,7 @@
 											//value :'CSSD',
 											options: {
 												cd:'FIRMWARE',
-												name:'FIRMWARE'
+												name:'FIRMWARE_NM'
 											},
 											multiselectOpt:{
 												selectedList: 1 ,
@@ -671,7 +706,8 @@
 													 //return numChecked + ' of ' + numTotal + ' checked';
 													 var sb = [];
 													 $.each(checkedItems,function(){
-														 sb.push($(this).val());
+													 	sb.push($(this).attr('title'));
+														//sb.push($(this).val());
 													 });
 													 return sb.join(",");
 												}
@@ -813,6 +849,7 @@
 			    			this.progressStr = progress2 + '%' + ' ( ' + pass + ' / ' + total + ' )';
 			    			
 			    			this.failRateStr = fail + ' / ' + total ;
+			    			this.failRateStr = fail;
 			    		});
 			    		
 			    		return dataList;
@@ -893,6 +930,10 @@
 							, editable: false
 							, editrules:{edithidden:true}		
 						},
+						{label:'Fail',name:'failRateStr', id:'failRateStr', align:'center', width: 110, sortable: false
+							, editable: false
+							, editrules:{edithidden:true}
+						},
 						{label:'Test progress',name:'progressStr', id:'progressStr', align:'center', width: 110, sortable: false
 							,formatter: function (cellvalue,col,row) {
 								var total = row.TOTAL_COUNT;
@@ -902,7 +943,7 @@
 				    			var progress1 = 0;
 				    			var progress2 = "";
 
-								if(pass == 0 && row.COMPUTE_CRETERIA != undefined && row.COMPUTE_CRETERIA != "" && row.COMPUTE_CRETERIA != "normal" ){
+								if(row.COMPUTE_CRETERIA != undefined && row.COMPUTE_CRETERIA != ""){
 									pass = row.COMPUTE_VALUE;
 									if(pass == undefined)
 										pass = 0;
@@ -924,10 +965,7 @@
 	                        }
 	                        , editrules:{edithidden:true}
 						},
-						{label:'Fail Rate',name:'failRateStr', id:'failRateStr', align:'center', width: 110, sortable: false
-							, editable: false
-							, editrules:{edithidden:true}
-						},
+						
 						{label:'Weight',name:'WEIGHT', id:'WEIGHT', align:'center', width: 60, sortable: false
 							, editable: true
 							, formatter: 'integer'
@@ -979,6 +1017,10 @@
 		                        ,editOptions: {} // editformbutton 가 true 인경우
 		                        ,addOptions: {}
 		                        ,delOptions: {}
+		                        ,beforeSaveRow : function(options,rowid){
+		                        	alert("beforeSaveRow")	;
+		                        	return true;
+		                        }
 		                        ,afterSave : function(rowid,res) {
 		                        	var grid = $(this).jqGrid();
 		                        	var row = grid.jqGrid('getRowData',rowid);
@@ -1932,7 +1974,7 @@
     };
 	
 	function fn_management(){
-		var newwin = window.open("", "coronaScriptManagement", "width=1200,height=860,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
+		var newwin = window.open("coronaScriptManagement", "coronaScriptManagement", "width=1200,height=860,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
 		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';

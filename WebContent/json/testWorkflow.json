@@ -1,0 +1,42 @@
+{
+	"task": {
+		"id": "",
+		"task_name": "",
+		"task_type": [ "main","return" ] ,
+		"search_condition": {
+			"elements" : [
+				{
+					"type": ["multiCombo","text_input","date_input"]
+				}
+			]	
+		}
+		,
+		"entities" : [
+			{
+				"table_name": ""
+			},
+			{
+				"table_name": ""
+			}
+			
+		], 
+		"contents": {
+			"elements": [
+				{
+					"type": ["..."]
+				}
+			]
+		}
+	},
+	"connections": [
+		{
+			"id": "",
+			"source": {
+				"id": ""
+			},
+			"target" : {
+				"id": ""
+			}
+		}
+	]
+}

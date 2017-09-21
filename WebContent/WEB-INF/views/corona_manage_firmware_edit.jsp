@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.17.01"></script>
+	<script src="js/dashboard.js?version=2017.08.31.02"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -225,19 +225,6 @@
 		  to{ bottom:0; opacity:1 }
 		}
 		
-		.btn_n2 {
-		 	width: 100px;		 	
-		}
-		
-		.btn_n2:hover {
-			width: 100px;
-			cursor: pointer;
-			text-decoration: none;
-		}
-		
-		.btn_n2:active {
-		  width: 100px;
-		}
 		
 		<%-- 탭뷰--%>
 		a:hover,a:focus{
@@ -552,13 +539,13 @@
 			label:'',
 			elements:[ 
 				
-				{
-					controlCss:[
-						{code: 'margin-top', value:'10px'} 
-					],	
-					type:"title",
-					label: "Firmware Script"
-				},
+//				{
+//					controlCss:[
+//						{code: 'margin-top', value:'10px'} 
+//					],	
+//					type:"title",
+//					label: "Firmware Script"
+//				},
 				
 				// target search
 				{
@@ -680,7 +667,7 @@
 							//value :'CSSD',
 							options: {
 								cd:'FIRMWARE',
-								name:'FIRMWARE'
+								name:'FIRMWARE_NM'
 							},
 							multiselectOpt:{
 								selectedList: 1 ,
@@ -689,7 +676,7 @@
 									 //return numChecked + ' of ' + numTotal + ' checked';
 									 var sb = [];
 									 $.each(checkedItems,function(){
-										 sb.push($(this).val());
+										 sb.push($(this).attr('title'));
 									 });
 									 return sb.join(",");
 								}
@@ -736,11 +723,12 @@
 					],			
 			    	type:'grid',
 			    	id: 'grid_firmware',
-			    	label:'Firmware Script',
+			    	label:' ',
 			    	items:[	
 			    		{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: true, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
 			    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
 						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
+						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
 						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 			    		
@@ -763,7 +751,7 @@
 			    		multiSort:true,
 			    		multiselect: true,
 			    		multiboxonly:true, 
-			    		sortname: 'CATEGORY, TEST_ITEM,SCRIPT_NAME',
+			    		sortname: 'CATEGORY, SCRIPT_NAME',
 			    		rowNum: 1000000,
 			    		//forceFit : false ,
 			    		emptyrecords: "No records to view",
@@ -771,9 +759,9 @@
 			    		
 			    		grouping: true,
 			    		groupingView: {
-							groupField: ["CATEGORY"],
-							groupColumnShow: [false],
-							groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0}  </b>'],
+							groupField: ["CATEGORY","ROWNUM_GRP"],
+							groupColumnShow: [false,false],
+							groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0} - {1} Item(s)  </b>'],
 							groupOrder: ["asc"],
 							//groupSummary: [true],
 							//groupSummaryPos: ["header"],
@@ -821,7 +809,7 @@
 			    					label: '',
 			    					elements: [
 			    					    {
-			    					    	label: "Details",
+			    					    	label: "",
 			    					    	type: 'Group',
 			    					    	elements: [
 												{
@@ -834,6 +822,7 @@
 														keys : ['FIRMWARE','SAMPLE','SCRIPT_NAME'],
 														fn_submit: function(){
 															//alert("submit function defined");
+															var state = true;
 															var paramObj = {
 																origindatas: this.props.options.keys
 															};
@@ -851,6 +840,7 @@
 									                    		success:  function(data){
 									                    			response1 = data;
 									                    			if(response1.result != 'success'){
+									                    				state = false;
 									                    				msg = "Save Success!";
 										                    			$("#dialog-confirm").html(response1.message);
 										                    			$("#dialog-confirm").dialog({
@@ -876,9 +866,10 @@
 									                    			}						                    			
 									                    		}
 									                    	});
-									                    	
+									                    	return state;
 									                   
-														}
+														},
+														progressObject: parent.$("#loader")
 													},
 													items: [
 														{label:'Script Name', col: 'SCRIPT_NAME', editable: false},
@@ -1316,8 +1307,8 @@
 	    }
 	    
 	    dblclick(){
-	    	if(this.state.editable == true)
-	    		this.setState({mode: "edit"});
+	    	//if(this.state.editable == true)
+	    	//	this.setState({mode: "edit"});
 	    }
 	    
 	    confirm(){
@@ -1350,43 +1341,12 @@
 	    			return (
 			    		<div>
 							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
-							<div className="right_section"  >
-								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Cancel</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
-							<div className="right_section" style={{marginRight:"3px"}} >
-								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Confirm</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
 						</div>
 					);
 	    		}else {
 	    			return (
 			    		<div>
 							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
-							<div className="right_section"  >
-								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Cancel</span>
-		                          </span>
-		                      	</a>
-							</div>
-							<div className="right_section" style={{marginRight:"3px"}}>
-								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Confirm</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
 						</div>
 					);
 	    		}		

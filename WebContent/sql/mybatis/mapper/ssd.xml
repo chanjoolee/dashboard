@@ -321,6 +321,7 @@
     <update id="dashboard.ssd.delete.testid" parameterType="hashmap">
     	declare
 	    	cnt number;
+	    	
 	    begin
 	    	delete from  SSD_TEST_INFORMATION where test_id = #{test_id};	    	
 	    	delete from SSD_TEST_DISK	 where test_id = #{test_id};   	

@@ -243,7 +243,7 @@
 	        		year: '%y/%m/%e'
 	            },
 	            valueSuffix: '' ,
-	            pointFormat:'<span style="color:{series.color}"><b>{point.y}</b><br/>'/* ,
+	            pointFormat:'<span style="color:{series.color}"><b>{point.y:,.2f}</b><br/>'/* ,
 	            formatter: function () {
 	            	var data = getDataByUtc($("#sProject").val(), this.x);
 	                return '' +  data.PHASE + '_' + data.PHASE_SEQ + ' ' + data.ANALYSYS_DATE.replace(/\//g,'.') +  '<br/>' + 

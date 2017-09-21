@@ -774,10 +774,10 @@
 			type:'Vertical', 
 			label:'',
 			elements:[ 
-				{
-					type:"title",
-					label: "Script Template"
-				},
+//				{
+//					type:"title",
+//					label: "Script Template"
+//				},
 				
 				
 				//script master grid

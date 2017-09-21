@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+	<select id="dashboard.corona.emmc.summary" resultType="hashmap">
+	
+		with tbl_data as (
+			select
+				m.SAMPLE,
+				m.FIRMWARE,
+				m.CATEGORY,
+				m.TEST_ITEM,
+				count(*) total_count,
+				count(case when m.status = 'PASS' then 1 else null end) pass_count
+			from CORONA_EMMC_F_S_MAP m 
+			join CORONA_EMMC_FIRMWARE_MASTER f
+				on f.firmware = m.firmware
+				and f.sample = m.sample
+			where 1=1		
+			--and m.FIRMWARE = 'U3AE351C5419'
+			--and m.SAMPLE = 'Armstrong3D_S36_128Gb_32GB'
+			and m.FIRMWARE = #{firmware}
+			and m.SAMPLE = #{sample}
+			group by 
+				m.SAMPLE,
+				m.FIRMWARE,
+				m.CATEGORY,
+				m.TEST_ITEM
+			order by m.CATEGORY,m.TEST_ITEM
+		)	,
+		tbl_order as (
+			select 'Protocol' CATEGORY , 1 as seq from dual  union all
+			select 'Functional Test' CATEGORY , 2 as seq from dual  union all
+			select 'Write Stress' CATEGORY , 3 as seq from dual  union all
+			select 'Read Stress' CATEGORY , 4 as seq from dual  union all
+			select 'SPOR Test' CATEGORY , 5 as seq from dual  union all
+			select 'Lesson Learn' CATEGORY , 6 as seq from dual  		
+		)	
+		select 
+			a.FIRMWARE,
+			a.SAMPLE,
+			a.CATEGORY,
+			a.TEST_ITEM,
+			a.TOTAL_COUNT,
+			a.PASS_COUNT,		
+			c.WEIGHT,
+			c.COMPUTE_CRETERIA,
+			--nvl(c.COMPUTE_CRETERIA,'None') COMPUTE_CRETERIA,
+			c.COMPUTE_VALUE,
+			case 
+				when c.COMPUTE_CRETERIA = 'hrs' Then 96
+				when c.COMPUTE_CRETERIA = 'sec' Then 86400
+				when c.COMPUTE_CRETERIA = 'step' Then 868
+				when c.COMPUTE_CRETERIA = 'min' Then 10000
+				else null
+			end as max_value,
+			a.TOTAL_COUNT - a.PASS_COUNT AS FAIL_COUNT,
+			(a.PASS_COUNT/a.TOTAL_COUNT) AS TEST_PROGRESS
+		from tbl_data  a
+		left outer join tbl_order b
+			 on a.CATEGORY = b.CATEGORY
+		left outer join CORONA_EMMC_TESTITEM_MASTER c
+			on c.FIRMWARE = a.FIRMWARE
+			and c.SAMPLE = a.SAMPLE
+			and c.CATEGORY = a.CATEGORY
+			and c.TEST_ITEM = a.TEST_ITEM
+		order by b.seq , a.category, a.test_item
+		
+	</select>
+	
+	<select id="dashboard.corona.emmc.detail.last" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+				select
+					d.YYYYMM,
+					d.TEST_BOARD,
+					m.SAMPLE,
+					m.FIRMWARE,
+					d.SCRIPT_NAME,
+					d.SAMPLE_NUMBER,
+					d.SCRIPT,					
+					d.SEQ,
+					d.TEST_TIME,
+					nvl(m.STATUS,'No Data') as STATUS,
+					d.STATUS_DETAIL,
+					d.DURATION,	
+					
+					m.SCRIPT_NAME as SCRIPT_NAME_META,
+					m.CATEGORY, 
+					m.TEST_ITEM, 
+					m.TIME TEST_TIME_MASTER, 
+					m.CUSTOMER_ITEM, 
+					m.NEED_VENDOR_CMD, 
+					m.NEED_POWER_CYCLE, 
+					m.EMMC_VER, 
+					m.TARGET_DEVICE, 
+					m.TARGET_PARTITION, 
+					m.CATEGORY1, 
+					m.CATEGORY2, 
+					m.CATEGORY3, 
+					m.CATEGORY4, 
+					m.CATEGORY5, 
+					m.WRITE_MODE, 
+					m.READ_MODE, 
+					substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+					m.DESCRIPTION,
+					substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+					m.ARGUMENT, 
+					m.PLATFORM, 
+					m.FUNCTION_NAME
+					
+				from CORONA_EMMC_F_S_MAP m
+				left outer join CORONA_EMMC_TEST_DETAIL_LAST d
+					on m.firmware = d.firmware
+					and m.sample = d.sample
+					and m.script_name = d.script
+				where m.sample = #{sample}
+				and m.FIRMWARE = #{firmware}
+				and m.CATEGORY = #{category}
+				
+				order by d.YYYYMM,d.TEST_BOARD, d.SAMPLE, d.FIRMWARE, d.SCRIPT_NAME, d.SAMPLE_NUMBER, d.SCRIPT
+			) A
+			where 1=1
+			<choose>
+				<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
+		       		<foreach collection="filters.rules" item="item" index="index"  >
+		           		and REGEXP_LIKE(${item.field},#{item.data},'i') 
+		       		</foreach>
+		   		</when>
+		   		<otherwise>
+		   		</otherwise>
+	   		</choose>
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+	</select>
+	<select id="dashboard.corona.emmc.detail.last.page" resultType="hashmap">
+		select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+					select
+						d.YYYYMM,
+						d.TEST_BOARD,
+						d.SAMPLE,
+						d.FIRMWARE,
+						d.SCRIPT_NAME,
+						d.SAMPLE_NUMBER,
+						d.SCRIPT,
+						d.SEQ,
+						d.TEST_TIME,
+						d.STATUS,
+						d.STATUS_DETAIL,
+						d.DURATION,	
+						
+						
+						m.SCRIPT_NAME as SCRIPT_NAME_META,
+						m.CATEGORY, 
+						m.TEST_ITEM, 
+						m.TIME TEST_TIME_MASTER, 
+						m.CUSTOMER_ITEM, 
+						m.NEED_VENDOR_CMD, 
+						m.NEED_POWER_CYCLE, 
+						m.EMMC_VER, 
+						m.TARGET_DEVICE, 
+						m.TARGET_PARTITION, 
+						m.CATEGORY1, 
+						m.CATEGORY2, 
+						m.CATEGORY3, 
+						m.CATEGORY4, 
+						m.CATEGORY5, 
+						m.WRITE_MODE, 
+						m.READ_MODE, 
+						substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						m.DESCRIPTION,
+						substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+						m.ARGUMENT, 
+						m.PLATFORM, 
+						m.FUNCTION_NAME
+						
+					from CORONA_EMMC_F_S_MAP m
+					left outer join CORONA_EMMC_TEST_DETAIL_LAST d
+						on m.firmware = d.firmware
+						and m.sample = d.sample
+						and m.script_name = d.script
+					where m.sample = #{sample}
+					and m.FIRMWARE = #{firmware}
+					and m.CATEGORY = #{category}
+				) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
+			       		<foreach collection="filters.rules" item="item" index="index"  >
+			           		and REGEXP_LIKE(${item.field},#{item.data},'i') 
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   		</otherwise>
+		   		</choose>
+			)
+		
+		
+		
+				
+	</select>
+	
+	<select id="dashboard.corona.emmc.detail" resultType="hashmap">
+		select
+			d.YYYYMM,
+			d.TEST_BOARD,
+			d.SAMPLE,
+			d.FIRMWARE,
+			d.SCRIPT_NAME,
+			d.SAMPLE_NUMBER,
+			d.SCRIPT,			
+			d.SEQ,
+			to_char(d.TEST_TIME,'YYYY-MM-DD HH24:MI:SS') as TEST_TIME,
+			d.STATUS,
+			d.STATUS_DETAIL,
+			d.DURATION			
+		from CORONA_EMMC_TEST_DETAIL d
+		where 1=1
+		and d.test_board = #{test_board}		
+		and d.sample = #{sample}
+		and d.FIRMWARE = #{firmware}
+		and d.script = #{script}		
+		order by d.YYYYMM,d.TEST_BOARD, d.SAMPLE, d.FIRMWARE, d.SCRIPT_NAME, d.SAMPLE_NUMBER, d.SCRIPT
+				
+	</select>
+	<select id="dashboard.corona.emmc.search.firmware" resultType="hashmap">
+		select 
+			a.SAMPLE,
+			a.FIRMWARE,
+			a.FIRMWARE ||
+			case  
+				when c.TEST_SET_ID  is not null then 
+					'( ' || c.TEST_SET_NAME || ' )'
+				else ''
+			end as FIRMWARE_NM,
+			b.REQUEST_ID,
+			(SELECT CASE WHEN CODE_ID = 'SPM_00005011' THEN 'eMMC' ELSE 'SSD' END FROM SOLUTIONPMS.PJT_BASE_INFO WHERE CODE_NAME = 'Application' AND PJT_ID = B.PJT_ID)  as APP_TYPE  ,
+			b.RELEASE_STATUS_CD,
+			SOLUTIONPMS.FN_CODE_VALUE_ID(b.RELEASE_STATUS_CD) RELEASE_STATUS_NM,
+			b.VERIFY_RESULT_CD,
+			SOLUTIONPMS.FN_CODE_VALUE_ID(b.VERIFY_RESULT_CD) VERIFY_RESULT_NM,
+			c.TEST_SET_ID,
+			c.TEST_SET_NAME
+		from CORONA_EMMC_FIRMWARE_MASTER A
+		left outer join SOLUTIONPMS.FW_RELEASE b
+			on A.firmware = b.fw_version
+			and (SELECT CASE WHEN CODE_ID = 'SPM_00005011' THEN 'eMMC' ELSE 'SSD' END FROM SOLUTIONPMS.PJT_BASE_INFO WHERE CODE_NAME = 'Application' AND PJT_ID = B.PJT_ID) != 'SSD'
+			and SOLUTIONPMS.FN_CODE_VALUE_ID(b.VERIFY_RESULT_CD) = 'Pass'
+			and SOLUTIONPMS.FN_CODE_VALUE_ID(b.RELEASE_STATUS_CD) != 'Cancelled'
+			and NVL(b.OVT_YN, 'N') = 'N'
+		left outer join SOLUTIONPMS.FW_RELEASE_TEST_SET c
+			on b.FVT_TEST_SET_ID = c.TEST_SET_ID
+		where 1=1
+		<choose>
+			<when test="sample != null and sample != '' ">
+				and a.sample = #{sample}
+			</when>
+			<otherwise>
+				and 1 = 2
+			</otherwise>
+		</choose>
+		order by 1
+	</select>
+	
+	<select id="dashboard.corona.emmc.search.sample" resultType="hashmap">
+		select
+			distinct SAMPLE
+		from CORONA_EMMC_FIRMWARE_MASTER
+		where 1=1
+		--firmware = 'U3AE351C5419'
+		order by 1
+	
+	</select>
+	
+	<update id="dashboard.corona.emmc.testitem.master.update" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		select count(*) into cnt from CORONA_EMMC_TESTITEM_MASTER
+	    		where FIRMWARE = #{origindata.FIRMWARE}
+                and  SAMPLE = #{origindata.SAMPLE}
+                and  CATEGORY = #{origindata.CATEGORY} 
+                and  TEST_ITEM = #{origindata.TEST_ITEM};
+	    		
+	    		if cnt = 1 then
+	                update CORONA_EMMC_TESTITEM_MASTER set
+	                	WEIGHT = #{WEIGHT}, 
+	                	COMPUTE_CRETERIA = #{COMPUTE_CRETERIA}, 
+	                	COMPUTE_VALUE = #{COMPUTE_VALUE}, 
+	  
+	                	MOD_DT = sysdate
+	                where FIRMWARE = #{origindata.FIRMWARE}
+	                and  SAMPLE = #{origindata.SAMPLE}
+	                and  CATEGORY = #{origindata.CATEGORY} 
+	                and  TEST_ITEM = #{origindata.TEST_ITEM};
+	          	else
+	          		insert into CORONA_EMMC_TESTITEM_MASTER(FIRMWARE, SAMPLE, CATEGORY, TEST_ITEM, WEIGHT, COMPUTE_CRETERIA, COMPUTE_VALUE,  INS_DT)
+	          		values (#{origindata.FIRMWARE}, #{origindata.SAMPLE}, #{origindata.CATEGORY}, #{origindata.TEST_ITEM}, #{WEIGHT}, #{COMPUTE_CRETERIA}, #{COMPUTE_VALUE}, sysdate);
+	          	
+	          	end if;
+                
+       	 
+	    end;
+    
+    </update>
+	
+	<select id="dashboard.corona.emmc.script.category.distinct" resultType="hashmap">
+		select
+			distinct category , 'SELECTED' selected
+		from CORONA_EMMC_SCRIPT_MASTER
+		order by 1
+	
+	</select>
+	
+	<select id="dashboard.corona.emmc.script.test_item.distinct" resultType="hashmap">
+		select
+			distinct category, test_item , 'SELECTED' selected
+		from CORONA_EMMC_SCRIPT_MASTER
+		order by 1
+	
+	</select>
+	
+	<select id="dashboard.corona.emmc.manage.script.search" resultType="hashmap">
+			with tbl_a as (	
+				SELECT
+						CATEGORY, 
+						SCRIPT_NAME, 	
+						row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
+						TEST_ITEM, 
+						TIME, 
+						CUSTOMER_ITEM, 
+						NEED_VENDOR_CMD, 
+						NEED_POWER_CYCLE, 
+						EMMC_VER, 
+						TARGET_DEVICE, 
+						TARGET_PARTITION, 
+						CATEGORY1, 
+						CATEGORY2, 
+						CATEGORY3, 
+						CATEGORY4, 
+						CATEGORY5, 
+						WRITE_MODE, 
+						READ_MODE, 
+						substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						DESCRIPTION,
+						substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+						ARGUMENT, 
+						PLATFORM, 
+						FUNCTION_NAME,
+						INS_DT, 
+						MOD_DT				
+					from CORONA_EMMC_SCRIPT_MASTER a
+					where 1=1
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and a.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="testItemArr  != null and testItemArr != '' ">
+						and a.test_item in 
+						<foreach collection="testItemArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					--order by category,test_item, script_name
+					order by category ,script_name
+				)
+				
+				select 
+					case 
+						when a.row_num > 0 and a.row_num <![CDATA[ <= ]]>  500 then '01. ~500'
+						when a.row_num >500 and a.row_num <![CDATA[ <=  ]]> 1000 then '02. 500~1000'
+						when a.row_num > 1000 and a.row_num <![CDATA[ <=  ]]> 1500 then '03. 1000~1500'
+						when a.row_num > 1500 and a.row_num <![CDATA[ <=  ]]> 2000 then '04. 1500~2000'
+						when a.row_num > 2000 then '05. 2000~'				
+					end as rownum_grp
+					,a.*
+				from tbl_a a
+				
+	
+	</select>
+	
+	<select id="dashboard.corona.emmc.manage.script.search.one" resultType="hashmap">
+			SELECT
+				SCRIPT_NAME, 
+				CATEGORY, 
+				TEST_ITEM, 
+				TIME, 
+				CUSTOMER_ITEM, 
+				NEED_VENDOR_CMD, 
+				NEED_POWER_CYCLE, 
+				EMMC_VER, 
+				TARGET_DEVICE, 
+				TARGET_PARTITION, 
+				CATEGORY1, 
+				CATEGORY2, 
+				CATEGORY3, 
+				CATEGORY4, 
+				CATEGORY5, 
+				WRITE_MODE, 
+				READ_MODE, 
+				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				DESCRIPTION,
+				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				ARGUMENT, 
+				PLATFORM, 
+				FUNCTION_NAME,
+				INS_DT, 
+				MOD_DT
+			from CORONA_EMMC_SCRIPT_MASTER a
+			where script_name = #{script_name}
+			order by category,test_item, script_name
+	
+	</select>
+	
+	<select id="dashboard.corona.emmc.manage.script.firmware.mapping" resultType="hashmap">
+		with tbl_a as (	
+			SELECT
+				SAMPLE,
+				FIRMWARE,
+				SCRIPT_NAME, 
+				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
+				CATEGORY, 
+				TEST_ITEM, 
+				TIME, 
+				CUSTOMER_ITEM, 
+				NEED_VENDOR_CMD, 
+				NEED_POWER_CYCLE, 
+				EMMC_VER, 
+				TARGET_DEVICE, 
+				TARGET_PARTITION, 
+				CATEGORY1, 
+				CATEGORY2, 
+				CATEGORY3, 
+				CATEGORY4, 
+				CATEGORY5, 
+				WRITE_MODE, 
+				READ_MODE, 
+				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				DESCRIPTION,
+				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				ARGUMENT, 
+				PLATFORM, 
+				FUNCTION_NAME,
+				INS_DT, 
+				MOD_DT
+			from CORONA_EMMC_F_S_MAP m
+			where m.sample = #{sample}
+			and m.FIRMWARE = #{firmware}
+			order by category,test_item, script_name
+		)
+		select 
+			case 
+				when a.row_num > 0 and a.row_num <![CDATA[ <= ]]>  500 then '01. ~500'
+				when a.row_num >500 and a.row_num <![CDATA[ <=  ]]> 1000 then '02. 500~1000'
+				when a.row_num > 1000 and a.row_num <![CDATA[ <=  ]]> 1500 then '03. 1000~1500'
+				when a.row_num > 1500 and a.row_num <![CDATA[ <=  ]]> 2000 then '04. 1500~2000'
+				when a.row_num > 2000 then '05. 2000~'				
+			end as rownum_grp
+			,a.*
+		from tbl_a a
+		
+	</select>
+	<select id="dashboard.corona.emmc.manage.script.firmware.mapping.one" resultType="hashmap">
+		
+		SELECT
+				SAMPLE,
+				FIRMWARE,
+				SCRIPT_NAME, 
+				CATEGORY, 
+				TEST_ITEM, 
+				TIME, 
+				CUSTOMER_ITEM, 
+				NEED_VENDOR_CMD, 
+				NEED_POWER_CYCLE, 
+				EMMC_VER, 
+				TARGET_DEVICE, 
+				TARGET_PARTITION, 
+				CATEGORY1, 
+				CATEGORY2, 
+				CATEGORY3, 
+				CATEGORY4, 
+				CATEGORY5, 
+				WRITE_MODE, 
+				READ_MODE, 
+				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				DESCRIPTION,
+				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				ARGUMENT, 
+				PLATFORM, 
+				FUNCTION_NAME,
+				INS_DT, 
+				MOD_DT
+			from CORONA_EMMC_F_S_MAP m
+			where m.sample = #{sample}
+			and m.FIRMWARE = #{firmware}
+			and m.script_name = #{script_name}
+			order by category,test_item, script_name
+		
+	</select>
+	
+	<update id="dashboard.corona.emmc.script_master.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		select count(*) into cnt from CORONA_EMMC_SCRIPT_MASTER
+	    		where 1=1
+	    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+			       			and ${item.field} = #{item.value}
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   			and 1=2
+			   		</otherwise>
+		   		</choose>   
+	    		;
+	    		
+	    		if cnt = 1 then
+	              	update CORONA_EMMC_SCRIPT_MASTER set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+	          		
+	          		if '${fieldName}' = 'SCRIPT_NAME' then
+	          			--// update_firmware_table	          			
+	          			update CORONA_EMMC_F_S_MAP set
+	          			SCRIPT_NAME = #{fieldValue},
+	          			MOD_DT = sysdate
+	          			where SCRIPT_NAME = #{fieldValueOrigin};
+	          			
+				   		
+				   		--// update_log_table
+	          			update CORONA_EMMC_TEST_DETAIL set
+	          			SCRIPT = #{fieldValue},
+	          			MOD_DT = sysdate
+	          			where Script = #{fieldValueOrigin};
+	          			
+	          			--// update_log_table
+	          			update CORONA_EMMC_TEST_DETAIL_LAST set
+	          			SCRIPT = #{fieldValue},
+	          			MOD_DT = sysdate
+	          			where Script = #{fieldValueOrigin};
+	          			
+	          			--// update_comment
+	          			update CORONA_EMMC_SCRIPT_MASTER set
+	          			DESCRIPTION = DESCRIPTION || case when DESCRIPTION is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
+	          			MOD_DT = sysdate
+	          			where SCRIPT_NAME = #{fieldValue};
+	          			
+	          		end if;
+	        end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.corona.emmc.script_master.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		insert into CORONA_EMMC_SCRIPT_MASTER (SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
+                values (#{SCRIPT_NAME},#{CATEGORY},#{TEST_ITEM}, sysdate) ;
+       	 
+	    end;
+    
+    </update>
+    
+    
+    <update id="dashboard.corona.emmc.script_master.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		delete from CORONA_EMMC_SCRIPT_MASTER
+	    		where 1=1
+	    		and SCRIPT_NAME = #{detail.SCRIPT_NAME};
+	    end;
+    
+    </update>
+    
+    
+    <update id="dashboard.corona.emmc.firmware_script_map.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		select count(*) into cnt from CORONA_EMMC_F_S_MAP
+	    		where 1=1
+	    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+			       			and ${item.field} = #{item.value}
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   			and 1=2
+			   		</otherwise>
+		   		</choose>   
+	    		;
+	    		
+	    		if cnt = 1 then
+	              	update CORONA_EMMC_F_S_MAP set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+	        end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.corona.emmc.firmware_script_map.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		insert into CORONA_EMMC_F_S_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
+                values (#{FIRMWARE},#{SAMPLE},#{SCRIPT_NAME},#{CATEGORY},#{TEST_ITEM}, sysdate) ;
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.corona.emmc.firmware_script_map.delete.back" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    		for rec in (
+	    			with tbl_list as (
+	    				select 'xxx' as firmware , 'xxx' as sample , 'xxx' as script_name  from dual
+	    				<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.delRows.size() > 0 " >
+	    				<foreach collection="searchJson.delRows" item="item" index="index"  open=" union all  " separator=" union all " close=" ">
+			       			select #{item.FIRMWARE} as firmware , #{item.SAMPLE} as sample , #{item.SCRIPT_NAME} as script_name  from dual
+			       		</foreach>
+			       		</when>
+			       		</choose>
+	    			)
+	    			
+	    			select * from tbl_list
+	    			
+	    		) loop 
+	    			delete from CORONA_EMMC_F_S_MAP 
+	    			where firmware = rec.firmware
+	    			and sample = rec.sample
+	    			and script_name = rec.script_name;
+	    		
+	    		end loop;
+	    end;
+    
+    </update>
+    <update id="dashboard.corona.emmc.firmware_script_map.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    		for rec in (
+	    			with tbl_list as (
+	    				select 'xxx' as firmware , 'xxx' as sample , 'xxx' as script_name  from dual
+	    				union all
+			       		select #{detail.FIRMWARE} as firmware , #{detail.SAMPLE} as sample , #{detail.SCRIPT_NAME} as script_name  from dual
+	    			)
+	    			
+	    			select * from tbl_list
+	    			
+	    		) loop 
+	    			delete from CORONA_EMMC_F_S_MAP 
+	    			where firmware = rec.firmware
+	    			and sample = rec.sample
+	    			and script_name = rec.script_name;
+	    		
+	    		end loop;
+	    end;
+    
+    </update>
+    
+    <select id="dashboard.corona.emmc.historyno" resultType="hashmap">
+		SELECT LPAD(TO_NUMBER(nvl(max(HISTORY_NO),'0'))+1, 10,'0') HISTORY_NO from  CORONA_EMMC_HISTORY_NO
+    </select>
+    <update id="dashboard.corona.emmc.manage.insert.historyno.copy_template_project" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    	INSERT INTO CORONA_EMMC_HISTORY_NO (HISTORY_NO, INS_DT) VALUES (v_history_no , sysdate );
+	    	insert into CORONA_EMMC_MAP_HISTORY (HISTORY_NO, FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME, INS_DT, MOD_DT)
+	    		select 
+	    			v_history_no,
+	    			FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME, INS_DT, MOD_DT
+	    		from CORONA_EMMC_F_S_MAP
+	    		where 1=1
+	    		and sample = #{searchJson.target.sample} ;
+	    End;
+    </update>
+    <update id="dashboard.corona.emmc.manage.insert.historyno.copy_template_firmware" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    	INSERT INTO CORONA_EMMC_HISTORY_NO (HISTORY_NO, INS_DT) VALUES (v_history_no , sysdate );
+	    	insert into CORONA_EMMC_MAP_HISTORY (HISTORY_NO, FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME, INS_DT, MOD_DT)
+	    		select 
+	    			v_history_no,
+	    			FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME, INS_DT, MOD_DT
+	    		from CORONA_EMMC_F_S_MAP
+	    		where 1=1
+	    		and sample = #{searchJson.target.sample}
+	    		and firmware = #{searchJson.target.firmware}
+	    		 ;
+	    End;
+    </update>
+    <update id="dashboard.corona.emmc.manage.insert.historyno.copy_firmware_firmware" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    	INSERT INTO CORONA_EMMC_HISTORY_NO (HISTORY_NO, INS_DT) VALUES (v_history_no , sysdate );
+	    	insert into CORONA_EMMC_MAP_HISTORY (HISTORY_NO, FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME, INS_DT, MOD_DT)
+	    		select 
+	    			v_history_no,
+	    			FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME, INS_DT, MOD_DT
+	    		from CORONA_EMMC_F_S_MAP
+	    		where 1=1
+	    		and sample = #{searchJson.target.sample}
+	    		and firmware = #{searchJson.target.firmware}
+	    		 ;
+	    End;
+    </update>
+    
+    <update id="dashboard.corona.emmc.manage.script_copy_project.update" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    		
+	    	--// Revision Start	    		
+	    	For rec_firmware in (
+	    		select distinct firmware from CORONA_EMMC_FIRMWARE_MASTER where sample = #{searchJson.target.sample}
+	    	) Loop
+	    		
+	    		--// second Loop
+	    		FOR rec in (
+	    			select * from CORONA_EMMC_SCRIPT_MASTER
+					where 1=1
+					and script_name = #{detail.SCRIPT_NAME}    			
+	    		) LOOP 
+		    		
+			    			
+					select count(*) into cnt from CORONA_EMMC_F_S_MAP
+					where firmware = rec_firmware.firmware
+					and sample = #{searchJson.target.sample}
+					and script_name = rec.SCRIPT_NAME;
+					
+					IF cnt = 0 THEN
+						insert into CORONA_EMMC_F_S_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT,PLATFORM, FUNCTION_NAME, INS_DT)
+						values (
+							rec_firmware.firmware , #{searchJson.target.sample}
+							, rec.SCRIPT_NAME, rec.CATEGORY, rec.TEST_ITEM, rec.TIME, rec.CUSTOMER_ITEM, rec.NEED_VENDOR_CMD, rec.NEED_POWER_CYCLE, rec.EMMC_VER, rec.TARGET_DEVICE, rec.TARGET_PARTITION, rec.CATEGORY1,rec. CATEGORY2, rec.CATEGORY3, rec.CATEGORY4, rec.CATEGORY5, rec.WRITE_MODE, rec.READ_MODE, rec.DESCRIPTION, rec.ARGUMENT, rec.PLATFORM, rec.FUNCTION_NAME
+							, sysdate
+						);
+					ELSE
+					
+						UPDATE CORONA_EMMC_F_S_MAP SET
+							CATEGORY = rec.CATEGORY,
+							TEST_ITEM = rec.TEST_ITEM,
+							TIME = rec.TIME,
+							CUSTOMER_ITEM = rec.CUSTOMER_ITEM,
+							NEED_VENDOR_CMD = rec.NEED_VENDOR_CMD,
+							NEED_POWER_CYCLE = rec.NEED_POWER_CYCLE,
+							EMMC_VER = rec.EMMC_VER,
+							TARGET_DEVICE = rec.TARGET_DEVICE,
+							TARGET_PARTITION = rec.TARGET_PARTITION,
+							CATEGORY1 = rec.CATEGORY1,
+							CATEGORY2 = rec.CATEGORY2,
+							CATEGORY3 = rec.CATEGORY3,
+							CATEGORY4 = rec.CATEGORY4,
+							CATEGORY5 = rec.CATEGORY5,
+							WRITE_MODE = rec.WRITE_MODE,
+							READ_MODE = rec.READ_MODE,
+							DESCRIPTION = rec.DESCRIPTION,
+							ARGUMENT = rec.ARGUMENT,
+							PLATFORM = rec.PLATFORM,
+							FUNCTION_NAME =  rec.FUNCTION_NAME,
+							MOD_DT = sysdate
+						WHERE firmware = rec_firmware.firmware
+						AND sample = #{searchJson.target.sample}
+						AND script_name = rec.script_name; 
+						
+						
+					END IF;
+					
+				End Loop;
+	    	
+	    	End Loop;
+	    	 
+	    	
+	    		
+	    	
+	 			
+	    END;
+    
+    </update>
+    
+    <update id="dashboard.corona.emmc.manage.script_copy_firmware.update" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    		
+	    	--// Revision Start	    		
+	    	For rec_firmware in (
+	    		select distinct firmware from CORONA_EMMC_FIRMWARE_MASTER where sample = #{searchJson.target.sample} and firmware = #{searchJson.target.firmware} 
+	    	) Loop
+	    		
+	    		--// second Loop
+	    		FOR rec in (
+	    			select * from CORONA_EMMC_SCRIPT_MASTER
+					where 1=1
+					and script_name = #{detail.SCRIPT_NAME}    			
+	    		) LOOP 
+		    		
+			    			
+					select count(*) into cnt from CORONA_EMMC_F_S_MAP
+					where firmware = rec_firmware.firmware
+					and sample = #{searchJson.target.sample}
+					and script_name = rec.SCRIPT_NAME;
+					
+					IF cnt = 0 THEN
+						insert into CORONA_EMMC_F_S_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT,PLATFORM, FUNCTION_NAME, INS_DT)
+						values (
+							rec_firmware.firmware , #{searchJson.target.sample}
+							, rec.SCRIPT_NAME, rec.CATEGORY, rec.TEST_ITEM, rec.TIME, rec.CUSTOMER_ITEM, rec.NEED_VENDOR_CMD, rec.NEED_POWER_CYCLE, rec.EMMC_VER, rec.TARGET_DEVICE, rec.TARGET_PARTITION, rec.CATEGORY1,rec. CATEGORY2, rec.CATEGORY3, rec.CATEGORY4, rec.CATEGORY5, rec.WRITE_MODE, rec.READ_MODE, rec.DESCRIPTION, rec.ARGUMENT, rec.PLATFORM, rec.FUNCTION_NAME
+							, sysdate
+						);
+					ELSE
+					
+						UPDATE CORONA_EMMC_F_S_MAP SET
+							CATEGORY = rec.CATEGORY,
+							TEST_ITEM = rec.TEST_ITEM,
+							TIME = rec.TIME,
+							CUSTOMER_ITEM = rec.CUSTOMER_ITEM,
+							NEED_VENDOR_CMD = rec.NEED_VENDOR_CMD,
+							NEED_POWER_CYCLE = rec.NEED_POWER_CYCLE,
+							EMMC_VER = rec.EMMC_VER,
+							TARGET_DEVICE = rec.TARGET_DEVICE,
+							TARGET_PARTITION = rec.TARGET_PARTITION,
+							CATEGORY1 = rec.CATEGORY1,
+							CATEGORY2 = rec.CATEGORY2,
+							CATEGORY3 = rec.CATEGORY3,
+							CATEGORY4 = rec.CATEGORY4,
+							CATEGORY5 = rec.CATEGORY5,
+							WRITE_MODE = rec.WRITE_MODE,
+							READ_MODE = rec.READ_MODE,
+							DESCRIPTION = rec.DESCRIPTION,
+							ARGUMENT = rec.ARGUMENT,
+							PLATFORM = rec.PLATFORM,
+							FUNCTION_NAME =  rec.FUNCTION_NAME,
+							MOD_DT = sysdate
+						WHERE firmware = rec_firmware.firmware
+						AND sample = #{searchJson.target.sample}
+						AND script_name = rec.script_name; 
+						
+						
+					END IF;
+					
+				End Loop;
+	    	
+	    	End Loop;
+	    	 
+	    	
+	    		
+	    	
+	 			
+	    END;
+    
+    </update>
+    <update id="dashboard.corona.emmc.manage.firmware_copy_firmware.update" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    		
+	    	--// Revision Start	    		
+	    	For rec_firmware in (
+	    		select distinct firmware from CORONA_EMMC_FIRMWARE_MASTER where sample = #{searchJson.target.sample} and firmware = #{searchJson.target.firmware} 
+	    	) Loop
+	    		
+	    		--// second Loop
+	    		FOR rec in (
+	    			select * from CORONA_EMMC_F_S_MAP
+					where 1=1
+					and firmware = #{detail.FIRMWARE}
+					and sample = #{detail.SAMPLE}
+					and script_name = #{detail.SCRIPT_NAME}    			
+	    		) LOOP 
+		    		
+			    			
+					select count(*) into cnt from CORONA_EMMC_F_S_MAP
+					where firmware = rec_firmware.firmware
+					and sample = #{searchJson.target.sample}
+					and script_name = rec.SCRIPT_NAME;
+					
+					IF cnt = 0 THEN
+						insert into CORONA_EMMC_F_S_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT,PLATFORM, FUNCTION_NAME, INS_DT)
+						values (
+							rec_firmware.firmware , #{searchJson.target.sample}
+							, rec.SCRIPT_NAME, rec.CATEGORY, rec.TEST_ITEM, rec.TIME, rec.CUSTOMER_ITEM, rec.NEED_VENDOR_CMD, rec.NEED_POWER_CYCLE, rec.EMMC_VER, rec.TARGET_DEVICE, rec.TARGET_PARTITION, rec.CATEGORY1,rec. CATEGORY2, rec.CATEGORY3, rec.CATEGORY4, rec.CATEGORY5, rec.WRITE_MODE, rec.READ_MODE, rec.DESCRIPTION, rec.ARGUMENT, rec.PLATFORM, rec.FUNCTION_NAME
+							, sysdate
+						);
+					ELSE
+					
+						UPDATE CORONA_EMMC_F_S_MAP SET						
+							CATEGORY = rec.CATEGORY,
+							TEST_ITEM = rec.TEST_ITEM,
+							TIME = rec.TIME,
+							CUSTOMER_ITEM = rec.CUSTOMER_ITEM,
+							NEED_VENDOR_CMD = rec.NEED_VENDOR_CMD,
+							NEED_POWER_CYCLE = rec.NEED_POWER_CYCLE,
+							EMMC_VER = rec.EMMC_VER,
+							TARGET_DEVICE = rec.TARGET_DEVICE,
+							TARGET_PARTITION = rec.TARGET_PARTITION,
+							CATEGORY1 = rec.CATEGORY1,
+							CATEGORY2 = rec.CATEGORY2,
+							CATEGORY3 = rec.CATEGORY3,
+							CATEGORY4 = rec.CATEGORY4,
+							CATEGORY5 = rec.CATEGORY5,
+							WRITE_MODE = rec.WRITE_MODE,
+							READ_MODE = rec.READ_MODE,
+							DESCRIPTION = rec.DESCRIPTION,
+							ARGUMENT = rec.ARGUMENT,
+							PLATFORM = rec.PLATFORM,
+							FUNCTION_NAME =  rec.FUNCTION_NAME,
+							MOD_DT = sysdate
+				
+						WHERE firmware = rec_firmware.firmware
+						AND sample = #{searchJson.target.sample}
+						AND script_name = rec.script_name; 
+						
+						
+					END IF;
+					
+				End Loop;
+	    	
+	    	End Loop;
+	    	 
+	    	
+	    		
+	    	
+	 			
+	    END;
+    
+    </update>
+    <update id="dashbaord.corona.emmc.firmware.status.edit" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    	vStatus varchar2(10) := #{STATUS};
+	    	vStatus1 varchar2(10) ;
+	    begin
+	    		
+	    		select count(*) into cnt from CORONA_EMMC_F_S_MAP
+	    		where FIRMWARE = #{origindata.FIRMWARE}
+                and  SAMPLE = #{origindata.SAMPLE}
+                and  SCRIPT_NAME = #{origindata.SCRIPT_NAME_META} ;
+	    		
+	    		if cnt = 1 then
+	    			if vStatus = 'No Data' then 
+	    				vStatus1 := '';
+	    			else
+	    				vStatus1 := vStatus;
+	    			end if;
+	    		
+	                update CORONA_EMMC_F_S_MAP set
+	                	STATUS = vStatus1, 
+	                	DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || #{STATUS} || ' ( ${userId} )'  ,
+	  
+	                	MOD_DT = sysdate
+	                where FIRMWARE = #{origindata.FIRMWARE}
+	                and  SAMPLE = #{origindata.SAMPLE}
+	                and  SCRIPT_NAME = #{origindata.SCRIPT_NAME_META} ;
+	                
+	          	end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <update id="dashbaord.corona.emmc.firmware.log.status.edit" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    	vStatus varchar2(10) := #{STATUS};
+	    	vStatus1 varchar2(10) ;
+	    begin
+	    		
+	    		select count(*) into cnt from CORONA_EMMC_TEST_DETAIL
+	    		where 1=1
+                and  SAMPLE = #{origindata.SAMPLE}
+                and FIRMWARE = #{origindata.FIRMWARE}
+                and SCRIPT = #{origindata.SCRIPT}
+                and YYYYMM = #{origindata.YYYYMM}
+                and TEST_BOARD = #{origindata.TEST_BOARD}
+                and  SCRIPT_NAME = #{origindata.SCRIPT_NAME}
+                and  SAMPLE_NUMBER = #{origindata.SAMPLE_NUMBER};                
+	    		
+	    		if cnt = 1 then
+	    			if vStatus = 'No Data' then 
+	    				vStatus1 := '';
+	    			else
+	    				vStatus1 := vStatus;
+	    			end if;
+	    		
+	                update CORONA_EMMC_TEST_DETAIL set
+	                	STATUS = vStatus1, 
+	                	MOD_DT = sysdate
+	                where  SAMPLE = #{origindata.SAMPLE}
+	                and FIRMWARE = #{origindata.FIRMWARE}
+	                and SCRIPT = #{origindata.SCRIPT}
+	                and YYYYMM = #{origindata.YYYYMM}
+	                and TEST_BOARD = #{origindata.TEST_BOARD}
+	                and  SCRIPT_NAME = #{origindata.SCRIPT_NAME}
+	                and  SAMPLE_NUMBER = #{origindata.SAMPLE_NUMBER};                
+	                
+	          	end if;
+                
+       	 
+	    end;
+    
+    
+    </update>
+    <update id="dashboard.corona.emmc.manage.firmware.status.update" parameterType="hashmap">
+    	declare
+			v_status varchar2(10);
+		
+		begin	
+			
+			-- start firmware status
+			-- 01. firmware script list
+			for rec in (
+				select
+					FIRMWARE,SAMPLE, SCRIPT_NAME
+				from CORONA_EMMC_F_S_MAP
+				where sample = #{sample}
+				and FIRMWARE = #{firmware}	 
+				--order by FIRMWARE, SAMPLE, SCRIPT_NAME
+			) loop
+			-- 02. detail log list , determine status
+				v_status := '';
+				for rec1 in (
+					select
+						STATUS
+					from CORONA_EMMC_TEST_DETAIL a
+					where a.sample= rec.sample
+					and a.firmware = rec.firmware
+					and a.script = rec.script_name
+					order by YYYYMM
+				) loop
+					v_status := rec1.STATUS;
+					if rec1.STATUS = 'FAIL' then 
+						exit;
+					end if;
+				end loop;
+				
+				update CORONA_EMMC_F_S_MAP set
+					status = v_status,
+					DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) ',
+					MOD_DT = sysdate
+				where firmware = rec.firmware
+				and sample= rec.sample
+				and script_name = rec.script_name;
+				
+			end loop;
+			
+			
+		end;
+    
+    
+    </update>
+    <select id="dashboard.corona.emmc.autocomplete.script" resultType="hashmap">
+		select
+			distinct ${field} "id", ${field} "name"
+		from CORONA_EMMC_SCRIPT_MASTER
+		where REGEXP_LIKE(${field} ,#{term},'i')  
+		order by 1
+	
+	</select>
+    
+</mapper>    

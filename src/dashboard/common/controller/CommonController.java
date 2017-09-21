@@ -144,6 +144,12 @@ public class CommonController {
     	ModelAndView mav = new ModelAndView(); 
     	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
     	commonService.requestToVo(request, searchVO);
+    	Object filterStr = searchVO.get("filters");
+    	if(filterStr != null){
+    		JSONObject filters = JSONObject.fromObject(filterStr.toString());
+        	searchVO.put("filtersOrigin", filterStr.toString());
+        	searchVO.put("filters", filters);
+    	}
     	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
     	mav.addObject("rows", dataList);
     	

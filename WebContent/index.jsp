@@ -137,7 +137,16 @@
 						Corona
 						<ul>
 							<li class="">
-								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=coronaSummary');">Corona Summary</a></label>
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_portal');">Corona All</a></label>
+							</li>
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_emmc/coronaSummary');">Corona EMMC Summary</a></label>
+							</li>
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=coronaSummary');">Corona UFS Summary</a></label>
+							</li>
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_manage_script');">Corona Manage Script</a></label>
 							</li>
 						</ul>
 					</li>
@@ -554,6 +563,12 @@
 							</li>		
 							<li class="">
 								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/diagramGeneral.html?viewname=diagram02_5_joint');">02-5. diagram joint: template</a></label>
+							</li>		
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram02_6_joint');">02-6. diagram joint: template</a></label>
+							</li>		
+							<li class="">
+								<label><a href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram_erd');">diagram: erd</a></label>
 							</li>		
 									
 						</ul>

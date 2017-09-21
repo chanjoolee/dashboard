@@ -27,7 +27,7 @@
 	        	"smart: chart option 에서 ispolar 를 false",
 	        	"실적로그의 testname과 meta의 testname 이 일치하지 않는 것을 일치시킨다.",
 	        	"속도가 너무 안나온다.",
-	        	"1. regression_meta 에서 "
+	        	"1. regression_meta 에서 ",
 	        	
 	        	
 	        	"hostinfo: chart option 에서 ispolar 를 false",
@@ -1212,10 +1212,185 @@
    					}
    				]
    			}
+   		
+   			, {
+   				"name": "emmc에 platform추가함",
+   				"수정할 사항": {
+   					"summary": {
+   						jsp: {
+   							jsp_name: "coronaSummary_platform.jsp", 
+   							grid: {
+   								groupcols: ["platform","category"]
+   							},
+   							popup_parameter: ["platform","category"]
+   						},
+   						sql: {
+   							sqlid: "dashboard.corona.emmc.platform.summary",
+   							groupcols: ["platform","category"]
+   						}
+   					},
+   					"detail": {
+   						jsp: {
+   							parameter: {
+	   							before: ["category"],
+	   							tobe: ["platform","category"]
+	   						},
+	   						top_title: {
+	   							from: "Project/firmeware/Category"
+	   							to: 
+	   						}
+	   						
+   						},
+   						sqlid: "dashboard.corona.emmc.platform.detail.last"
+   					},
+   					"firmware_manage": {
+   						jsp: {
+   							groupcols: ["platform","category"]
+   						}
+   					}
+   				}
+   			}
+   		
+   			// - main 화면에서 수정할 수 있도록 만드는 모듈
+			//- Log 화면에서도 수정할 수 있도록 만드는 모듈 : Pass / Fail
+			, {
+				name: "status_edit",
+				status: 'ok',
+				process: {
+					table_column_add: {
+						table_name: ["CORONA_FIRMWARE_SCRIPT_MAP", "CORONA_EMMC_F_S_MAP"]
+						column_name: "Status",
+						default_value: "null"
+					} ,
+					sql_select : {
+						desc: "우선적으로 추가된 컬럼을 보여준다.",
+						sqlid: [
+							"dashboard.corona.detail.last",
+							"dashboard.corona.emmc.detail.last"
+						]
+					},
+					jsp_firmware_status: {
+						resources: [
+							"coronaDetail.jsp",
+							"coronaSummary.jsp",
+							"corona.xml",
+							"sp_corona_test_last",
+							"corona_emmc/coronaDetail.jsp",
+							"corona_emmc/coronaSummary.jsp",
+							"corona_emmc.xml",
+							"sp_corona_emmc_test_last",
+						],
+						function_edit : {
+							edit_type: "inline_edit",
+							inputs : ["PASS","FAIL"],
+							"참조": {
+								
+							},
+							update_sqlid: [
+								"dashbaord.corona.firmware.status.edit",
+								"dashboard.corona.summary",
+								"sp_corona_test_last"
+								
+								"dashbaord.corona.emmc.firmware.status.edit",
+								"dashboard.corona.emmc.summary"
+								"sp_corona_emmc_test_last"
+							],
+							parameters : ["SAMPLE","FIRMWARE","SCRIPT_NAME","STATUS"]
+							
+						}
+					},
+					jsp_log_edit : {
+						edit_type: "inline_edit",
+						inputs : ["PASS","FAIL"],
+						"참조": {
+								
+						},
+						sqlid: [
+							"dashbaord.corona.firmware.log.status.edit",
+							"dashbaord.corona.emmc.firmware.log.status.edit"
+						],
+						parameters : ["YYYYMM","TEST_BOARD","SAMPLE","FIRMWARE","SCRIPT_NAME","SAMPLE_NUMBER","SCRIPT","STATUS"],
+						after_udate_logic: [
+							"if all detail pass ==> pass",
+							"but do not"
+						]
+					}
+						
+					
+				}
+			}
+			// Test Script Param 수정 시, 그 test categry / script  - Comment Log를 변경 내용 / 변경자 / 시간",
+			,{
+				name: "",
+				desc: "Test Script Param 수정 시, 그 test categry / script  - Comment Log를 변경 내용 / 변경자 / 시간",
+				edit_resources: [
+					"corona_manage_template_edit.jsp",
+					"corona_emmc/corona_manage_template_edit.jsp"
+				],
+				process : {
+					01: {
+						desc: "editable column",
+						edit_column: "SCRIPT_NAME"
+					},
+					02: {
+						desc: "sql if(script_name) then update process",
+						sqlId: [
+							"dashboard.corona.script_master.update",
+							"dashboard.corona.emmc.script_master.update"
+						],
+						update_process: [
+							{
+								name: "update_firmware_table",
+								table_name: [
+									"CORONA_FIRMWARE_SCRIPT_MAP",
+									
+									"CORONA_EMMC_F_S_MAP"
+								]
+							},
+							{
+								name: "update_log_table",
+								table_name: [
+									"CORONA_TEST_DETAIL",
+									"CORONA_TEST_DETAIL_LAST",
+									
+									"CORONA_EMMC_TEST_DETAIL",
+									"CORONA_EMMC_TEST_DETAIL_LAST"
+								]
+							},
+							{
+								name: "update_comment",
+								table_name: [
+									"CORONA_SCRIPT_MASTER",
+									
+									"CORONA_EMMC_SCRIPT_MASTER"
+								]
+							}
+						]
+					}
+				}
+				
+			}
+   			
+   			//- FW version을 보고, 가장 최근 Test Set을 사용한 FW Verion의 test script들을 copy
+			//- Procedure : 새로 생긴 FW Version에 대한 Test set을 파악하고, copy하는 기능을 만들도록...
+			, {
+				name: "FW version을 보고, 가장 최근 Test Set을 사용한 FW Verion의 test script들을 copy",
+				procedure: [
+					"sp_corona_test_last",
+					"SP_CORONA_EMMC_TEST_LAST"
+				]
+				process : [
+					"select firmware list",
+					"determine fw_script has list",
+					"if nothing fw_script ==> find before fw that has same test_set_id",
+					"copy fw_script"
+				]
+			}
    		]
    	
    	} ,
    	
+   		
    	"FW Complier License Usage" : {
    		"sourceAnalysis": {
    			"url" :  "http://chanjoo.skhynix.com:8080/nspim/dash/retrieveLicenseUsage.do",
@@ -2484,23 +2659,28 @@
    			"schema": {
    				"entities": [
    					{
-   						table_name : "" , 
-   						columns: [
+   						"table_name" : "" , 
+   						"columns": [
    							{
-   								column_name : "",
-   								type : "",
-   								data_length: "int"
+   								"column_name" : "",
+   								"type" : "",
+   								"data_length": "int"
    							}
    						],
-   						constraints: {
-   							primary_key:[],
-   							foreign_key:[]
-   						}
+   						"constraints": {
+   							"primary_key":[],
+   							"foreign_key":[]
+   						},
+   						"indexes" : [
+   						
+   						]
    					}
    				],
-   				"work_flows" : [
+   				"work_flows" : {
    					"task": {
+   						"id": "",
    						"task_name": "",
+   						"task_type": ["main","return"]
    						"search_condition": {
    							"elements" : [
    								{
@@ -2525,11 +2705,23 @@
    								}
    							]
    						}
-   					}
-   				]
+   					},
+   					"connections": [
+   						{
+   							"id": "",
+   							"source": {
+   								"id": ""
+   							},
+   							"target" : {
+   								"id": ""
+   							}
+   						}
+   					]
+   				}
    					
    				
    			}
+   		
    		]
    	}	
 }

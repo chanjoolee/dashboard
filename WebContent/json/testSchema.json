@@ -1,0 +1,64 @@
+{
+	"entities": [
+		{
+			"table_name" : "" , 
+			"columns": [
+				{
+					"column_name" : "",
+					"type" : "",
+					"data_length": 100
+				}
+			],
+			"constraints": {
+				"primary_key":[],
+				"foreign_key":[]
+			},
+			"indexes" : [
+				
+			]
+		}
+	],
+	"work_flows" : {
+		"task": {
+			"id": "",
+			"task_name": "",
+			"task_type": [ "main","return" ] ,
+			"search_condition": {
+				"elements" : [
+					{
+						"type": ["multiCombo","text_input","date_input"]
+					}
+				]	
+			}
+			,
+			"entities" : [
+				{
+					"table_name": ""
+				},
+				{
+					"table_name": ""
+				}
+				
+			], 
+			"contents": {
+				"elements": [
+					{
+						"type": ["..."]
+					}
+				]
+			}
+		},
+		"connections": [
+			{
+				"id": "",
+				"source": {
+					"id": ""
+				},
+				"target" : {
+					"id": ""
+				}
+			}
+		]
+	}
+		
+}
