@@ -69,6 +69,8 @@
 	
 	<%-- 4. local common --%>
 	<script src="js/dashboard.js?version=2017.08.31.01"></script>
+	<script src="/dashboard/js/performance/category_new.1.002.js"></script>
+	<script src="/dashboard/js/performance/category_sustain.1.001.js"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -93,6 +95,7 @@
 	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
 	
 	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
 	
 	<script type="text/javascript" title="schemaSearchCondition">
 	var EfContextPath = "";
@@ -2541,6 +2544,11 @@
     			});
 	    	});
 	    	
+	    	//데이타추가
+	    	if(vCateInfo.addRows != undefined){
+	    		vCateInfo.addRows.apply(dataList);
+	    	}
+	    	
 	    	$.each(vCateInfo.filters,function(i,f){
 	    		filters.push(f);
 	    	});
@@ -2608,30 +2616,48 @@
 			var cur = "";
 			var j=0;
 			
+			//series 별 스타일이 있는경우
+			var selectedStyle = null;
+			var selectedStyle_pre = null;
+			selectedStyleCount = 0;
 			$.each(vColsG,function(i,col){
 				var isNewLine = false;			
 				var vdevide =  vCateInfo.multichart.oneLineChatNum != undefined ? vCateInfo.multichart.oneLineChatNum  : 2 ;
 				if(i%vdevide == 0)
 					isNewLine = true;
 				
-				//series 별 스타일이 있는경우
-				var selectedStyle = null;
+				
 				if(vCateInfo.multichart.customStyle != undefined){
 					
 					$.each(vCateInfo.multichart.customStyle,function(i1,style){
 						var re = new RegExp('^' + style.name,'i');
 						var re_result = re.exec(col[vCateInfo.multichart.splitCol]);
 						if(re_result != null){
-							selectedStyle = style;
+							selectedStyle = style;							
+							return false;
 						}
 					});
 					if(selectedStyle != null){
 						vdevide = selectedStyle.oneLineChatNum != undefined ? selectedStyle.oneLineChatNum  : 2 ;
-						if(selectedStyle.count % vdevide == 0)
+						//if(selectedStyle.count % vdevide == 0){
+						if (selectedStyle_pre != selectedStyle )
+							selectedStyleCount = 0;
+						
+						if (selectedStyleCount == 0 )
 							isNewLine = true;
-						else
+						else if(selectedStyleCount % vdevide == 0){
+							isNewLine = true;
+							selectedStyleCount = 0;
+						}
+						else{
 							isNewLine = false;
-						selectedStyle.count = selectedStyle.count + 1;
+						}
+							
+						//selectedStyle.count = selectedStyle.count + 1;
+						selectedStyleCount = selectedStyleCount + 1;
+						
+						selectedStyle_pre = selectedStyle;
+						
 					}
 				}
 				//pre = vColsG[i-1] != undefined ? vColsG[i-1];
@@ -2674,9 +2700,11 @@
 					$lineContainer.append($subContainer);
 				}
 				
+				
 				vCols.push({
 					containerId : subId,
 					filter:[{col:vCateInfo.multichart.splitCol,val:col[vCateInfo.multichart.splitCol]}]
+					//chartType: vCateInfo.chartType != undefined ? vCateInfo.chartType  : 'column'
 				});
 				
 			});
@@ -2707,6 +2735,9 @@
 		}
 		
 		$.each(vCols,function(i,col){
+			var chart_title = "";
+			
+			
 			
 			var filteredDataSub = dataFilter(filteredData,col.filter);
 			var series = {};
@@ -2752,6 +2783,18 @@
 				var category2 = makeGroupCategory(category1);
 				series.category = category2;
 				
+				///Start chart Type 2017.11.13
+			    var chartType = 'column';
+			    if(vCateInfo.chartType != undefined ){
+					chartType = vCateInfo.chartType;
+				}
+			    if(vCateInfo.multichart != undefined && vCateInfo.multichart.chartType != undefined){
+			    	if(vCateInfo.multichart.chartType[this.filter[0].val] != undefined)
+						chartType = vCateInfo.multichart.chartType[this.filter[0].val];
+				}
+				
+				///End chart Type 2017.11.13
+				
 				/** Start addSeries **/
 				var yAxisTitle = "";
 				if(vCateInfo.yAxisTitle != undefined){
@@ -2778,6 +2821,8 @@
 			            }
 			            //,tickInterval:5
 			    }];
+			    
+			    
 				
 				if(vCateInfo.addSeries != undefined && vCateInfo.addSeries.length > 0){
 					$.each(vCateInfo.addSeries,function(addSIndex,addSeries){
@@ -2821,7 +2866,7 @@
 			var chartOption = {};
 			if(vCateInfo.fn_chartOption != undefined){
 				chartOption = vCateInfo.fn_chartOption.call(this,series);
-			}else{
+			}else{				
 				chartOption = {
 						 exporting: {
 						        chartOptions: { // specific options for the exported image
@@ -2838,7 +2883,7 @@
 						        fallbackToExportServer: false
 						    },
 				        chart: {
-				            type: vCateInfo.chartType != undefined ? vCateInfo.chartType  : 'column',
+				            type: chartType,
 				            zoomType:'x',
 				            height: 400
 				            //,animation: false
@@ -2850,7 +2895,7 @@
 				        title: {
 				        	//text:pDataSrc.split(".")[0],
 				        	//text:pDataSrc,
-				        	text:'',
+				        	text: chart_title,
 			            	useHTML: true
 				        },
 				        subtitle: {
@@ -3131,6 +3176,7 @@
 		//$("[id='"+chartContainerId+"']" ).trigger('resize');
 		//$(".nav-tabs a[target='" + pDataSrc + "']").click();
 	}
+	
 	
 	function makeGroupCategory(incoming){
 	    
@@ -6417,6 +6463,7 @@
  		  	     			gridColWidth: '58px',
   		 	     			orderby: 7
 	     		 	},
+	     		 	
 	     		 	{
 	     				category:'CDM301.xlsx',
 	     				calculateCols:[
@@ -7648,7 +7695,15 @@
 	     		 
 	     	];
 	
-	
+		// 새롭게 추가된 PCI 2017년 9월 27일 수요일 오후 2:34:37
+		$.each(category_new,function(i,ca){
+			categoryInfo.push(ca);
+		});
+		
+		// 새롭게 추가된 PCI 2017년 9월 27일 수요일 오후 2:34:37
+		$.each(category_sustain,function(i,ca){
+			categoryInfo.push(ca);
+		});
 		
 	
 	//공통적인 컬럼. 

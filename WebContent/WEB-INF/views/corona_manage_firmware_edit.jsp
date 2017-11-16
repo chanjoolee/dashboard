@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>corona summary</title>
+    <title>UFS Firmware Edit</title>
     <%-- 1. jquery --%>
     <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
@@ -583,6 +583,10 @@
 									async: false,
 									success:  function(response){
 										rtnList = response.dataList;
+										$.each(rtnList,function(i,d){
+											if(d.SAMPLE == "${param.search_sample}")
+												d.selected = "selected";											
+										});
 									}
 								});
 								return rtnList;
@@ -660,6 +664,10 @@
 									async: false,
 									success:  function(response){
 										rtnList = response.dataList;
+										$.each(rtnList,function(i,d){
+											if(d.FIRMWARE == "${param.search_firmware}")
+												d.selected = "selected";											
+										});
 									}
 								});
 								return rtnList;
@@ -731,6 +739,8 @@
 						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
 						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
+						,{label:'TAT LVL', name:'SCRIPT_TAT_LVL', id:'SCRIPT_TAT_LVL', width:100, align:'left', sortable:false , editable: false }
+						,{label:'Script Version', name:'SCRIPT_VERSION', id:'SCRIPT_VERSION', width:100, align:'left', sortable:false , editable: false }
 			    		
 			    	],	
 			    	data: function(){
@@ -937,7 +947,11 @@
 		    				);
 		    				
 		    				$("#grid_firmware tbody input[type=checkbox].groupHeader").change(function (e) {		
-    							parent.$("#loader").show();
+    							if("${param.search_sample}" == ""){ 
+    								parent.$("#loader").show(); 
+    							}else{
+    								$("#loader").show();
+    							}
     							var currentCB = $(this);
     							setTimeout( function(){
 								    var grid = jQuery('#grid_firmware');
@@ -951,7 +965,11 @@
 								            grid.setSelection($(this).closest('tr').attr('id'), isChecked);
 										});		
 									}
-									parent.$("#loader").hide();
+									if("${param.search_sample}" == ""){ 
+	    								parent.$("#loader").hide(); 
+	    							}else{
+	    								$("#loader").hide();
+	    							}
     							},50);
 							    
 							});	
@@ -1118,7 +1136,11 @@
 	
 	//target search condition change
 	function fn_search_firmware(){
-		parent.$("#loader").show();
+		if("${param.search_sample}" == ""){ 
+			parent.$("#loader").show(); 
+		}else{
+			$("#loader").show();
+		}
 		setTimeout( function(){
 			var rtnList = [];
 			var paramObj = {
@@ -1140,7 +1162,11 @@
 					theGrid.jqGrid('clearGridData');
 					theGrid.jqGrid('setGridParam', { data: rtnList});
 					theGrid.trigger('reloadGrid');	
-					parent.$("#loader").hide();
+					if("${param.search_sample}" == ""){ 
+						parent.$("#loader").hide(); 
+					}else{
+						$("#loader").hide();
+					}
 					
 				}
 			});		
@@ -1151,7 +1177,11 @@
 	
 	//target search condition change
 	function fn_search_script(){
-		parent.$("#loader").show();
+		if("${param.search_sample}" == ""){ 
+			parent.$("#loader").show(); 
+		}else{
+			$("#loader").show();
+		}
 		setTimeout( function(){
 			var rtnList = [];
 			var paramObj = {
@@ -1173,7 +1203,12 @@
 					theGrid.jqGrid('clearGridData');
 					theGrid.jqGrid('setGridParam', { data: rtnList});
 					theGrid.trigger('reloadGrid');	
-					parent.$("#loader").hide();
+					
+					if("${param.search_sample}" == ""){ 
+						parent.$("#loader").hide(); 
+					}else{
+						$("#loader").hide();
+					}
 					
 				}
 			});		
@@ -1188,14 +1223,22 @@
 	
 	
 	$(function () {
-		parent.$("#loader").show();
+		if("${param.search_sample}" == ""){ 
+			parent.$("#loader").show(); 
+		}else{
+			$("#loader").show();
+		}
 		setTimeout( function(){
 			fn_makeHtml('contentMain',schemaContent);
 			
 			$( window ).resize(function() {
 				//console.log("aaaaa");
 			});
-			parent.$("#loader").hide();
+			if("${param.search_sample}" == ""){ 
+				parent.$("#loader").hide(); 
+			}else{
+				$("#loader").hide();
+			}
 		},50);
 		fn_search_firmware();
 		
@@ -1219,7 +1262,7 @@
 
 	<div id="div1"></div>
 	<div id="div2"></div>
-	
+	<div id="loader" style="display:none;"></div>
 	<div id="dialog-confirm"></div>
 </form>
 

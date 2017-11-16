@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+	<select id="dashboard.corona.manage.scriptsets.search" resultType="hashmap">
+		with tbl as (
+			select 
+				a.SCRIPTSET,
+				case a.SCRIPTSET 
+					when 'normal' then 0 
+					when 'Normal' then 0 
+					else 1 
+				end as col_order ,
+				count(b.SCRIPT_NAME) cnt
+			from CORONA_SCRIPT_SETS a
+			left outer join CORONA_SCRIPTSET_MAP b
+				on a.SCRIPTSET = b.SCRIPTSET
+			group by a.SCRIPTSET
+			order by a.SCRIPTSET
+		) 
+		
+		select * from tbl 
+		order by col_order, SCRIPTSET
+		
+		
+	</select>
+	
+	<update id="dashboard.corona.scriptset.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		insert into CORONA_SCRIPT_SETS (SCRIPTSET, INS_DT)
+                values (#{SCRIPTSET}, sysdate) ;
+                
+                <if test="copyfrom  != null and copyfrom != '' ">
+				delete from CORONA_SCRIPTSET_MAP where SCRIPTSET = #{SCRIPTSET};
+				
+				insert into CORONA_SCRIPTSET_MAP (SCRIPTSET, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, STATUS, INS_DT)
+				select 
+					#{SCRIPTSET}, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, STATUS, sysdate
+				from CORONA_SCRIPTSET_MAP
+				where scriptset = #{copyfrom};
+				
+				</if>
+       	 
+	    end;
+    
+    </update>
+    
+    <update id="dashboard.corona.scriptset.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	if #{origindata.SCRIPTSET} != 'Normal' Then
+	    		update CORONA_SCRIPT_SETS set 
+	    		SCRIPTSET = #{SCRIPTSET},
+	    		mod_dt = sysdate
+	    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+	    		
+	    		
+	    		update CORONA_SCRIPTSET_MAP set
+	    		SCRIPTSET = #{SCRIPTSET}
+	    		where 	SCRIPTSET = #{origindata.SCRIPTSET} ;
+	    		
+	    		update CORONA_SCRIPTSET_MAP_F set
+	    		SCRIPTSET = #{SCRIPTSET}
+	    		where 	SCRIPTSET = #{origindata.SCRIPTSET} ;
+	    		
+	    		
+               end if;
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.corona.scriptset.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		if #{origindata.SCRIPTSET} != 'Normal' Then
+		    		delete from CORONA_SCRIPT_SETS
+		    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+		    		
+		    		delete from CORONA_SCRIPTSET_MAP
+		    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+		    		
+		    		
+		    		
+					for rec in ( 
+						select FIRMWARE, SAMPLE from CORONA_SCRIPTSET_MAP_F where SCRIPTSET = #{origindata.SCRIPTSET}
+					) loop
+						delete from CORONA_FIRMWARE_SCRIPT_MAP where firmware = rec.firmware and sample = rec.sample;
+						
+						insert into CORONA_FIRMWARE_SCRIPT_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE,  INS_DT )
+				    	select 
+				    		rec.firmware,  rec.sample, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE,  sysdate
+				    	from CORONA_SCRIPTSET_MAP 
+				    	where scriptset = 'Normal';
+					end loop;
+					
+					                
+	       	 		delete from CORONA_SCRIPTSET_MAP_F 
+		    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+		    	End if;
+	    		
+	    		
+	    end;
+    
+    </update>
+    
+    <select id="dashboard.corona.manage.scriptsets.map.search" resultType="hashmap">
+		select 
+			a.FIRMWARE,
+			a.FIRMWARE FIRMWARE_NM,
+			a.SAMPLE,
+			b.SCRIPTSET,
+			(
+				select 
+					to_char(min(TEST_TIME),'YYYY-MM-DD')
+				from CORONA_TEST_DETAIL t
+				where a.sample = t.SAMPLE
+				and a.firmware = t.FIRMWARE
+			) as START_DT
+		from CORONA_FIRMWARE_MASTER a
+		left outer join CORONA_SCRIPTSET_MAP_F b
+			on a.FIRMWARE = b.FIRMWARE
+			and a.SAMPLE = b.SAMPLE
+		where 1=1
+		<if test="project  != null and project != '' ">
+		and a.sample = #{project}
+		</if>
+		order by START_DT desc
+		
+	</select>
+	<update id="dashboard.corona.scriptset.map.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    	v_status varchar2(10);
+	    begin
+	    		select count(*) into cnt from CORONA_SCRIPTSET_MAP_F
+	    		where firmware = #{FIRMWARE}
+	    		and sample = #{project};
+	    		
+	    		if cnt = 0 then
+	    			insert into CORONA_SCRIPTSET_MAP_F (FIRMWARE, SAMPLE, SCRIPTSET, INS_DT)
+	    			values (#{FIRMWARE},#{project},#{SCRIPTSET},sysdate);
+	    		else
+	    			update CORONA_SCRIPTSET_MAP_F set
+	    			SCRIPTSET = #{SCRIPTSET},
+	    			mod_dt = sysdate
+	    			where firmware = #{FIRMWARE}
+	    			and sample = #{project};
+	    		end if;
+	    		
+	    		delete from CORONA_FIRMWARE_SCRIPT_MAP 
+	    		where firmware = #{FIRMWARE}
+	    		and sample = #{project};
+	    		
+	    		insert into CORONA_FIRMWARE_SCRIPT_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE,  INS_DT )
+	    		select 
+	    			#{FIRMWARE}, #{project}, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, sysdate
+	    		
+	    		from CORONA_SCRIPTSET_MAP 
+	    		where scriptset = #{SCRIPTSET};
+	    		
+	    		--//Start. status update
+	    		for rec in (
+	    			select  FIRMWARE, SAMPLE, SCRIPT_NAME,STATUS  from CORONA_FIRMWARE_SCRIPT_MAP
+	    			where firmware = #{FIRMWARE}
+	    			and sample = #{project}
+	    		) loop
+	    		
+	    			for rec_detail in (
+						select
+							STATUS
+						from CORONA_TEST_DETAIL a
+						where a.sample= rec.firmware
+						and a.firmware = rec.sample
+						and a.script = rec.script_name
+						order by YYYYMM
+					) loop
+						v_status := rec_detail.STATUS;
+						if rec_detail.STATUS = 'FAIL' then 
+							exit;
+						end if;
+					end loop;
+					
+					UPDATE CORONA_FIRMWARE_SCRIPT_MAP SET						
+						status = v_status,
+						USER_COMMENT = USER_COMMENT || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) '
+					where firmware = rec.firmware
+					and sample = rec.sample
+					and script_name = rec.script_name;
+	    			
+	    		end loop;
+	    		--// End. status update
+       	 
+	    end;
+    
+    </update>
+    <select id="dashboard.corona.manage.script.scriptset.mapping" resultType="hashmap">
+		with tbl_a as (	
+			SELECT
+				SCRIPTSET ,
+				SCRIPT_NAME, 
+				CATEGORY, 
+				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
+				TEST_ITEM, 
+				SINGLE_MULTI, 
+				POWER_MODE_SPEED, 
+				TEST_TIME, 
+				NEED_VENDOR_CMD, 
+				LUCONFIG_YN, 
+				UFS_VER, 
+				TARGET_OPERATION, 
+				PRECONDITION, 
+				POR, 
+				HW_RESET, 
+				EP_RESET, 
+				H8, 
+				SSU, 
+				TARGET_LU, 
+				POWER_CONTROL, 
+				ITEM_NAME, 
+				substr(ITEM_PURPOSE,1,20) || ' ...' as  ITEM_PURPOSE_SIMPLE ,
+				nvl(ITEM_PURPOSE,' ' ) ITEM_PURPOSE, 
+				substr(ITEM_DESCRIPTION,1,20) || ' ...'  as  ITEM_DESCRIPTION_SIMPLE, 
+				ITEM_DESCRIPTION, 
+				substr(REPLACE(INPUT_PARAMETER,CHR(10),' ,')  ,1,20) || ' ...' as INPUT_PARAMETER_SIMPLE,
+				INPUT_PARAMETER, 
+				SCRIPT_TAT_LVL, 
+				SCRIPT_VERSION, 
+				PF110, 
+				EXYNOS_7420, 
+				P4_REV, 
+				PRIORITY, 
+				TG645, 
+				substr(REPLACE(USER_COMMENT,CHR(10),' ,')  ,1,20) || ' ...' as USER_COMMENT_SIMPLE, 
+				USER_COMMENT, 		
+				NEED_POWER_CYCLE, 
+				RESET_YN, 
+				SCRIPT_LVL, 
+				REFACTORING, 
+				RESET_TYPE,
+				INS_DT, 
+				MOD_DT
+			from CORONA_SCRIPTSET_MAP m
+			where m.SCRIPTSET = #{scriptset}
+			order by category,test_item, script_name
+		)
+		select 
+			case 
+				when a.row_num > 0 and a.row_num <![CDATA[ <= ]]>  500 then '01. ~500'
+				when a.row_num >500 and a.row_num <![CDATA[ <=  ]]> 1000 then '02. 500~1000'
+				when a.row_num > 1000 and a.row_num <![CDATA[ <=  ]]> 1500 then '03. 1000~1500'
+				when a.row_num > 1500 and a.row_num <![CDATA[ <=  ]]> 2000 then '04. 1500~2000'
+				when a.row_num > 2000 then '05. 2000~'				
+			end as rownum_grp
+			,a.*
+		from tbl_a a
+		
+	</select>
+    <select id="dashboard.corona.manage.script.scriptset.mapping.one" resultType="hashmap">
+		
+		SELECT
+				SCRIPTSET,
+				SCRIPT_NAME, 
+				CATEGORY, 
+				TEST_ITEM, 
+				SINGLE_MULTI, 
+				POWER_MODE_SPEED, 
+				TEST_TIME, 
+				NEED_VENDOR_CMD, 
+				LUCONFIG_YN, 
+				UFS_VER, 
+				TARGET_OPERATION, 
+				PRECONDITION, 
+				POR, 
+				HW_RESET, 
+				EP_RESET, 
+				H8, 
+				SSU, 
+				TARGET_LU, 
+				POWER_CONTROL, 
+				ITEM_NAME, 
+				substr(ITEM_PURPOSE,1,20) || ' ...' as  ITEM_PURPOSE_SIMPLE ,
+				nvl(ITEM_PURPOSE,' ' ) ITEM_PURPOSE, 
+				substr(ITEM_DESCRIPTION,1,20) || ' ...'  as  ITEM_DESCRIPTION_SIMPLE, 
+				ITEM_DESCRIPTION, 
+				substr(REPLACE(INPUT_PARAMETER,CHR(10),' ,')  ,1,20) || ' ...' as INPUT_PARAMETER_SIMPLE,
+				INPUT_PARAMETER, 
+				SCRIPT_TAT_LVL, 
+				SCRIPT_VERSION, 
+				PF110, 
+				EXYNOS_7420, 
+				P4_REV, 
+				PRIORITY, 
+				TG645, 
+				substr(REPLACE(USER_COMMENT,CHR(10),' ,')  ,1,20) || ' ...' as USER_COMMENT_SIMPLE, 
+				USER_COMMENT, 		
+				NEED_POWER_CYCLE, 
+				RESET_YN, 
+				SCRIPT_LVL, 
+				REFACTORING, 
+				RESET_TYPE,
+				INS_DT, 
+				MOD_DT
+			from CORONA_SCRIPTSET_MAP m
+			where m.SCRIPTSET = #{scriptset}
+			and m.script_name = #{script_name}
+			order by category,test_item, script_name
+		
+	</select>
+	
+	<update id="dashboard.corona.manage.insert.historyno.copy_template_scriptset" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    	INSERT INTO CORONA_HISTORY_NO (HISTORY_NO, INS_DT) VALUES (v_history_no , sysdate );
+	    	insert into CORONA_MAP_HISTORY (HISTORY_NO, FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, INS_DT, MOD_DT)
+	    		select 
+	    			v_history_no,
+	    			#{searchJson.target.scriptset}, 'ScriptSet', SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, INS_DT, MOD_DT
+	    		from CORONA_SCRIPTSET_MAP
+	    		where 1=1
+	    		and scriptset = #{searchJson.target.scriptset}
+	    		 ;
+	    End;
+    </update>
+    
+    <update id="dashboard.corona.manage.script_copy_scriptset.update" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    	v_status varchar2(10);
+	    BEGIN
+	    		
+	    	--// Revision Start	    		
+	    	For rec_firmware in (
+	    		select distinct SCRIPTSET from CORONA_SCRIPT_SETS where SCRIPTSET = #{searchJson.target.scriptset} 
+	    	) Loop
+	    		
+	    		--// second Loop
+	    		FOR rec in (
+	    			select * from CORONA_SCRIPT_MASTER
+					where 1=1
+					and script_name = #{detail.SCRIPT_NAME}    			
+	    		) LOOP 
+		    		
+			    			
+					select count(*) into cnt from CORONA_SCRIPTSET_MAP
+					where SCRIPTSET = rec_firmware.SCRIPTSET
+					and script_name = rec.SCRIPT_NAME;
+					
+					IF cnt = 0 THEN
+						insert into CORONA_SCRIPTSET_MAP (SCRIPTSET,  SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, INS_DT)
+						values (
+							rec_firmware.SCRIPTSET 
+							, rec.SCRIPT_NAME, rec.CATEGORY, rec.TEST_ITEM, rec.SINGLE_MULTI, rec.POWER_MODE_SPEED, rec.TEST_TIME, rec.NEED_VENDOR_CMD, rec.LUCONFIG_YN, rec.UFS_VER, rec.TARGET_OPERATION, rec.PRECONDITION, rec.POR, rec.HW_RESET, rec.EP_RESET, rec.H8, rec.SSU, rec.TARGET_LU, rec.POWER_CONTROL, rec.ITEM_NAME, rec.ITEM_PURPOSE, rec.ITEM_DESCRIPTION, rec.INPUT_PARAMETER, rec.SCRIPT_TAT_LVL, rec.SCRIPT_VERSION, rec.PF110, rec.EXYNOS_7420, rec.P4_REV, rec.PRIORITY, rec.TG645, rec.USER_COMMENT, rec.NEED_POWER_CYCLE, rec.RESET_YN, rec.SCRIPT_LVL, rec.REFACTORING, rec.RESET_TYPE
+							, sysdate
+						);
+					ELSE
+					
+						UPDATE CORONA_SCRIPTSET_MAP SET						
+							CATEGORY = rec.CATEGORY,
+							TEST_ITEM = rec.TEST_ITEM,
+							SINGLE_MULTI = rec.SINGLE_MULTI,
+							POWER_MODE_SPEED = rec.POWER_MODE_SPEED,
+							TEST_TIME = rec.TEST_TIME,
+							NEED_VENDOR_CMD = rec.NEED_VENDOR_CMD,
+							LUCONFIG_YN = rec.LUCONFIG_YN,
+							UFS_VER = rec.UFS_VER,
+							TARGET_OPERATION = rec.TARGET_OPERATION,
+							PRECONDITION = rec.PRECONDITION,
+							POR = rec.POR,
+							HW_RESET = rec.HW_RESET,
+							EP_RESET = rec.EP_RESET,
+							H8 = rec.H8,
+							SSU = rec.SSU,
+							TARGET_LU = rec.TARGET_LU,
+							POWER_CONTROL = rec.POWER_CONTROL,
+							ITEM_NAME = rec.ITEM_NAME,
+							ITEM_PURPOSE = rec.ITEM_PURPOSE,
+							ITEM_DESCRIPTION = rec.ITEM_DESCRIPTION,
+							INPUT_PARAMETER = rec.INPUT_PARAMETER,
+							SCRIPT_TAT_LVL = rec.SCRIPT_TAT_LVL,
+							SCRIPT_VERSION = rec.SCRIPT_VERSION,
+							PF110 = rec.PF110,
+							EXYNOS_7420 = rec.EXYNOS_7420,
+							P4_REV = rec.P4_REV,
+							PRIORITY = rec.PRIORITY,
+							TG645 = rec.TG645,
+							USER_COMMENT = rec.USER_COMMENT,
+							NEED_POWER_CYCLE = rec.NEED_POWER_CYCLE,
+							RESET_YN = rec.RESET_YN,
+							SCRIPT_LVL = rec.SCRIPT_LVL,
+							REFACTORING = rec.REFACTORING,
+							RESET_TYPE = rec.RESET_TYPE,
+							MOD_DT = sysdate
+				
+						where SCRIPTSET = rec_firmware.SCRIPTSET
+						and script_name = rec.SCRIPT_NAME;
+						
+						
+					END IF;
+					
+					--// 해당 script set을 사용하는 firmware insert, update
+					For rec1 in (
+						select FIRMWARE, SAMPLE,SCRIPTSET from CORONA_SCRIPTSET_MAP_F
+						where 1=1
+						and SCRIPTSET = rec_firmware.SCRIPTSET    			
+					)
+					Loop
+						select count(*) into cnt From CORONA_FIRMWARE_SCRIPT_MAP
+						where firmware = rec1.firmware
+						and sample = rec1.sample
+						and script_name = rec.script_name;
+						
+						if cnt = 0 then
+							insert into CORONA_FIRMWARE_SCRIPT_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD, LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8, SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, INS_DT)
+							values (
+								rec1.firmware,
+								rec1.sample,
+								rec.SCRIPT_NAME, rec.CATEGORY, rec.TEST_ITEM, rec.SINGLE_MULTI, rec.POWER_MODE_SPEED, rec.TEST_TIME, rec.NEED_VENDOR_CMD, rec.LUCONFIG_YN, rec.UFS_VER, rec.TARGET_OPERATION, rec.PRECONDITION, rec.POR, rec.HW_RESET, rec.EP_RESET, rec.H8, rec.SSU, rec.TARGET_LU, rec.POWER_CONTROL, rec.ITEM_NAME, rec.ITEM_PURPOSE, rec.ITEM_DESCRIPTION, rec.INPUT_PARAMETER, rec.SCRIPT_TAT_LVL, rec.SCRIPT_VERSION, rec.PF110, rec.EXYNOS_7420, rec.P4_REV, rec.PRIORITY, rec.TG645, rec.USER_COMMENT, rec.NEED_POWER_CYCLE, rec.RESET_YN, rec.SCRIPT_LVL, rec.REFACTORING, rec.RESET_TYPE, sysdate
+							);
+						else
+						
+							UPDATE CORONA_FIRMWARE_SCRIPT_MAP SET						
+								CATEGORY = rec.CATEGORY,
+								TEST_ITEM = rec.TEST_ITEM,
+								SINGLE_MULTI = rec.SINGLE_MULTI,
+								POWER_MODE_SPEED = rec.POWER_MODE_SPEED,
+								TEST_TIME = rec.TEST_TIME,
+								NEED_VENDOR_CMD = rec.NEED_VENDOR_CMD,
+								LUCONFIG_YN = rec.LUCONFIG_YN,
+								UFS_VER = rec.UFS_VER,
+								TARGET_OPERATION = rec.TARGET_OPERATION,
+								PRECONDITION = rec.PRECONDITION,
+								POR = rec.POR,
+								HW_RESET = rec.HW_RESET,
+								EP_RESET = rec.EP_RESET,
+								H8 = rec.H8,
+								SSU = rec.SSU,
+								TARGET_LU = rec.TARGET_LU,
+								POWER_CONTROL = rec.POWER_CONTROL,
+								ITEM_NAME = rec.ITEM_NAME,
+								ITEM_PURPOSE = rec.ITEM_PURPOSE,
+								ITEM_DESCRIPTION = rec.ITEM_DESCRIPTION,
+								INPUT_PARAMETER = rec.INPUT_PARAMETER,
+								SCRIPT_TAT_LVL = rec.SCRIPT_TAT_LVL,
+								SCRIPT_VERSION = rec.SCRIPT_VERSION,
+								PF110 = rec.PF110,
+								EXYNOS_7420 = rec.EXYNOS_7420,
+								P4_REV = rec.P4_REV,
+								PRIORITY = rec.PRIORITY,
+								TG645 = rec.TG645,
+								USER_COMMENT = rec.USER_COMMENT,
+								NEED_POWER_CYCLE = rec.NEED_POWER_CYCLE,
+								RESET_YN = rec.RESET_YN,
+								SCRIPT_LVL = rec.SCRIPT_LVL,
+								REFACTORING = rec.REFACTORING,
+								RESET_TYPE = rec.RESET_TYPE,
+								MOD_DT = sysdate
+				
+							where firmware = rec1.firmware
+							and sample = rec1.sample
+							and script_name = rec.script_name;
+						
+						end if;
+						
+						--//Start. status update			
+						v_status := NULL ;			
+						for rec_detail in (
+							select
+								STATUS
+							from CORONA_TEST_DETAIL a
+							where a.sample= rec1.firmware
+							and a.firmware = rec1.sample
+							and a.script = rec.script_name
+							order by YYYYMM
+						) loop
+							v_status := rec_detail.STATUS;
+							if rec_detail.STATUS = 'FAIL' then 
+								exit;
+							end if;
+						end loop;
+						
+						UPDATE CORONA_FIRMWARE_SCRIPT_MAP SET						
+							status = v_status,
+							USER_COMMENT = USER_COMMENT || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) '
+						where firmware = rec1.firmware
+						and sample = rec1.sample
+						and script_name = rec.script_name;
+						--// End. status update
+						
+					end Loop;
+					--// end firmware update
+					
+				End Loop;
+	    	
+	    	End Loop;
+	    	 
+	    	
+	    		
+	    	
+	 			
+	    END;
+    
+    </update>
+    <update id="dashboard.corona.scriptset_script_map.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    	
+	    begin
+	    	
+	    		select count(*) into cnt from CORONA_SCRIPTSET_MAP
+	    		where 1=1
+	    		<choose>
+					<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+			       			and ${item.field} = #{item.value}
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   			and 1=2
+			   		</otherwise>
+		   		</choose>   
+	    		;
+	    		
+	    		if cnt = 1 then
+	              	update CORONA_SCRIPTSET_MAP set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+	          		
+	          		
+	          		--// firmware update
+	          		for rec in (
+	          			select a.SCRIPTSET, a.SCRIPT_NAME , b.FIRMWARE,b.SAMPLE
+	          			from CORONA_SCRIPTSET_MAP a
+	          			join CORONA_SCRIPTSET_MAP_F b
+	          				on a.scriptset = b.scriptset
+	          			where 1=1
+	          			<choose>
+							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+					       			and a.${item.field} = #{item.value}
+					       		</foreach>
+					   		</when>
+					   		<otherwise>
+					   			and 1=2
+					   		</otherwise>
+				   		</choose>  
+				   	) Loop
+				   		
+				   		update CORONA_FIRMWARE_SCRIPT_MAP set
+				   			${fieldName} = #{fieldValue},
+				   			MOD_DT = sysdate
+	              		where 1=1
+				   		<choose>
+							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+					       			and ${item.field} = #{item.value}
+					       		</foreach>
+					   		</when>
+					   		<otherwise>
+					   			and 1=2
+					   		</otherwise>
+				   		</choose>  
+				   		;
+				   	end Loop;
+				   	
+	        end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.corona.scriptset_script_map.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    		for rec in (
+	    			with tbl_list as (
+	    				select 'xxx' as scriptset , 'xxx' as script_name  from dual
+	    				union all
+			       		select #{detail.SCRIPTSET} as scriptset , #{detail.SCRIPT_NAME} as script_name  from dual
+	    			)
+	    			
+	    			select * from tbl_list
+	    			
+	    		) loop 
+	    			delete from CORONA_SCRIPTSET_MAP 
+	    			where scriptset = rec.scriptset
+	    			and script_name = rec.script_name;
+	    			
+	    			--//Start. 해당 script set을 사용하는 firmware insert, update
+	    			For rec1 in (
+						select FIRMWARE, SAMPLE,SCRIPTSET from CORONA_SCRIPTSET_MAP_F
+						where 1=1
+						and SCRIPTSET = rec.SCRIPTSET    			
+					)
+					Loop
+						delete from CORONA_FIRMWARE_SCRIPT_MAP
+						where firmware = rec1.firmware
+						and sample = rec1.sample
+						and script_name = rec.script_name;
+					
+					end Loop;
+					--// End. 해당 script set을 사용하는 firmware insert, update
+	    		
+	    		end loop;
+	    end;
+    
+    </update>
+    
+    
+    
+</mapper>    

@@ -455,7 +455,7 @@
 						{
 							"type": "tab_iframe",
 							"id" : "corona_ufs_summay",
-							"label" : "Corona UFS",							
+							"label" : "UFS",							
 							"connected_content" :  {
 								"viewName": "coronaSummary",
 								"form_id" : "form"
@@ -468,7 +468,7 @@
 						{
 							"type": "tab_iframe",
 							"id" : "corona_emmc_summay",
-							"label" : "Corona EMMC",							
+							"label" : "EMMC",							
 							"connected_content" :  {
 								"viewName": "corona_emmc/coronaSummary",
 								"form_id" : "form"
@@ -480,23 +480,23 @@
 								{ "code": "padding-top", "value": "3px" },
 								{ "code": "height", "value": "770px" }
 							]
-						},
-						{
-							"type": "tab_iframe",
-							"id" : "corona_emmc_summay1",
-							"label" : "Corona EMMC Platform",							
-							"connected_content" :  {
-								"viewName": "corona_emmc/coronaSummaryPlatform",
-								"form_id" : "form"
-							},
-							"events" : {
-								//"click" : tab_click
-							},
-							"iframe_css" : [
-								{ "code": "padding-top", "value": "3px" },
-								{ "code": "height", "value": "770px" }
-							]
 						}
+//						,{
+//							"type": "tab_iframe",
+//							"id" : "corona_emmc_summay1",
+//							"label" : "Corona EMMC Platform",							
+//							"connected_content" :  {
+//								"viewName": "corona_emmc/coronaSummaryPlatform",
+//								"form_id" : "form"
+//							},
+//							"events" : {
+//								//"click" : tab_click
+//							},
+//							"iframe_css" : [
+//								{ "code": "padding-top", "value": "3px" },
+//								{ "code": "height", "value": "770px" }
+//							]
+//						}
 					]
 				}
 						

@@ -11,35 +11,25 @@
 	
 	
 	<%-- 1. jquery --%>
-    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <!-- <script src="js/jquery/jquery.form.js"></script> -->
-    <!-- <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script> -->
+    <!--<script src="js/jquery/jquery-1.11.2.js"></script>-->
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
+    <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
     <!-- <script src="js/jquery.csv-0.71.js"></script> -->
     
-    
-    <%-- 2. high charts --%>
-    
-	<script src="js/highcharts/src/highcharts.src.js"></script>
-	<!-- <script src="js/Highstock-2.1.7/js/highstock.src.js"></script>
-	<script src="js/highcharts/modules/drilldown.src.js"></script>
-	<script src="js/Highstock-2.1.7/js/highcharts-more.js"></script>
-	<script src="js/highcharts/modules/no-data-to-display.src.js"></script> -->
-	
-	<%-- jqgrid --%>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+    <%-- jqgrid --%>
+    <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-	<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
-	<%-- datetimepicker --%>
-	<script src="/dashboard/js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
-	<link rel="stylesheet" href="/dashboard/js/datetimepicker-master/jquery.datetimepicker.css"> 
-	
+    
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>	
+	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+	<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
 	
 	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-	<!--  <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
@@ -48,44 +38,81 @@
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css"> -->
+	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+	 
+    
   
-	<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-	<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-	<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
-	<%--// jqgrid --%>
+   <!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+    <link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+    <!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+    
+    
+    
+    <%-- 2. high charts --%>
+	<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
 	
-	<!-- <script src="js/highcharts/multi-drilldown.js"></script> -->
-	
-	<!-- <script src="js/highcharts/src/highcharts-more.src.js"></script>
-	<script src="js/highcharts/src/exporting.src.js"></script> -->
+	<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 	
 	<%-- x축 그룹라벨 --%>
 	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
 	
 	<%-- 3. Additional files for the Highslide popup effect --%>
-	<!-- <script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
+	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.31.02"></script>
+	<script src="js/dashboard.js?version=2017.09.13.01"></script>
 	
 	<%-- 5. local --%>
-	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
-	<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-	
+	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
 	
 	<%-- multi select --%>
-	<!-- <script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+	<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
-	<!-- <link rel="stylesheet" type="text/css" href="/dashboard/css/stylesheet-image-based.css" /> -->
+	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+	<script src="/common/js/module.js"></script>
 	
-	<!-- <script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script> -->
-	<link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css">
+	<%-- File Saver --%>
+	<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+	
+	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+	
+	<%-- jqueryMohthPicker --%>
+    <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
+   	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+   	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+   	
+   	<%-- recat --%>
+   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+   	
+   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+	
 	<style>
 		html, body,form {
 			padding: 0;
@@ -461,10 +488,10 @@
 			    	gridOpt:{
 			    		datatype:'json',
 			    		pager: "#grid_detailPager",
-//			    		url: function(){
-//			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
-//			    		},
-			    		url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
+			    		url: function(){
+			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
+			    		},
+			    		//url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
 			    		editurl: "/dashboard/ssdCusDummySaveJson.html",
 			    		viewrecords: true,			    		
 			    		width: '100%',
@@ -505,18 +532,105 @@
 			    					label: '',
 			    					elements: [
 			    					    {
-			    					    	label: "Details",
+			    					    	label: "",
 			    					    	type: 'Group',
 			    					    	elements: [
 												{
-													type: "inline",
+													type: "inline_edit",
 													cols: 1,
-													data: function(){ return row},
+													data: function(){ 
+														var datas = [];
+														$.ajax({
+											    			type: "POST",
+											    			url: "/dashboard/genericlListJson.html",
+											    			data: {
+											    				sample: row.SAMPLE,
+											    				firmware: row.FIRMWARE,
+											    				script_name: row.SCRIPT_NAME_META
+											    				, sqlid: 'dashboard.corona.detail.subDetail'}, 
+											    			//data: $("#form").serialize(), 
+											    			async: false,
+											    			success:  function(response){
+											    				datas  = response.dataList;
+											    				
+											    			}
+											    		});
+														
+														return datas[0];
+													},
+													options : {
+														keys : ['FIRMWARE', 'SAMPLE', 'SCRIPT_NAME'],
+														fn_submit: function(){
+															//alert("submit function defined");
+															var state = true;
+															var paramObj = {
+																//origindatas: this.props.options.keys
+																origindatas: this.state.keys
+															};
+															
+															//if(this.props.options.value == this.state.value)
+															//	return state;
+															//return;
+															$.ajax({
+									                    		url: "/dashboard/genericSaveJson.html",
+									                    		type: "POST",
+									                    		data: {
+									                    			searchJson: JSON.stringify(paramObj),
+									                    			fieldName: this.state.name,
+									                    			fieldValue: this.state.value,
+									                    			fieldValueOrigin: this.state.value_origin,
+									                    			userId: $("#userId").val(),
+									                    			sqlid: "dashboard.corona.script_firmware.update"
+									                    		}, 
+									                    		async: false,			                    		
+									                    		success:  function(data){
+									                    			response1 = data;
+									                    			if(response1.result != 'success'){
+									                    				state = false;
+									                    				msg = "Save Success!";
+										                    			$("#dialog-confirm").html(response1.message);
+										                    			$("#dialog-confirm").dialog({
+										                    			    resizable: false,
+										                    			    modal: true,
+										                    			    title: "Error",
+										                    			    //height: 200,
+										                    			    width: 300,
+										                    			    dialogClass: 'no-close',
+										                    			    closeOnEscape: false,
+										                    			    buttons: [
+									                    			              {
+									                    			                text: "OK",
+									                    			                click: function() {
+									                    			                  $( this ).dialog( "close" );											                    			                  
+									                    			                }
+									                    			              }
+								                    			            ]
+										                    			});
+										                    			
+										                    			
+										                    			  
+									                    			}					                    			
+									                    		}
+									                    	});
+									                    	
+									                   		return state;
+														},
+														fn_afterSubmit: function(keyUpdatedObjects){
+															//var filter = dataFilter()
+//															$.each(keyUpdatedObjects,function(i,react){
+//																if(react.state.name == "SCRIPT_NAME"){
+//																	theGrid.setRowData(parentRowKey,{SCRIPT_NAME:react.state.value});
+//																}
+//															});
+															
+														},
+														progressObject: $("#loader")
+													},
 													items: [
-														{label:'Item Purpose', col: 'ITEM_PURPOSE'},
-														{label:'Item Description', col: 'ITEM_DESCRIPTION'},
-														{label:'Input Parameter', col: 'INPUT_PARAMETER'},
-														{label:'Comment', col: 'USER_COMMENT'},
+														{label:'Item Purpose', col: 'ITEM_PURPOSE',edit_tag: 'textarea'},
+														{label:'Item Description', col: 'ITEM_DESCRIPTION',edit_tag: 'textarea'},
+														{label:'Input Parameter', col: 'INPUT_PARAMETER',edit_tag: 'textarea'},
+														{label:'Comment', col: 'USER_COMMENT',edit_tag: 'textarea'},
 													]
 												}
 			    					    	
@@ -527,8 +641,7 @@
 			    					]
 			    			};
 			    			fn_makeHtml(childDiv,schema1);
-			    			
-			    			
+			    			childDiv.find(".right_section").css("float","left");			    			
 			    			
 			    			// ***  grid ***//
 			    			var childGridID = parentRowID + "_table";
@@ -735,8 +848,12 @@
 	});
 	
 	function fn_search(){
-		$("#contents").html("");
-		fn_makeHtml('contents',schemaContent);
+		$("#loader").show();
+		setTimeout( function(){
+			$("#contents").html("");
+			fn_makeHtml('contents',schemaContent);
+			$("#loader").hide();
+		},50);
 	}
 	
 	
@@ -855,10 +972,149 @@ jQuery.fn.center = function () {
        </div> 
        
     </div>
+    <div id="loader"></div>
     <div id="dialog-confirm"></div>
     <!-- ## //PAGE CONTENTS ## -->	
 </form>
 </body>
+<script type="text/babel">
+	var Greeting = React.createClass({
+	  render: function() {
+	    return (
+	      <p>Hello, Universe {this.props.name}</p>
+	    )
+	  }
+	});
 
+	
+	
+	window.fn_greeting=function(vLabel){
+		ReactDOM.render(
+		  <Greeting />,
+		  document.getElementById('div1')
+		);
+	}
+	
+	class ContactInfo extends React.Component {
+	    render() {
+	        return(
+	            <li>{this.props.name} {this.props.phone}</li>
+	            );
+	    }
+	}
+	
+	class App extends React.Component {
+	    render(){
+
+	        return (
+	                <Contacts/>
+	        );
+	    }
+	}
+	
+	class Contacts extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.state = {
+	            contactData: [
+	                {name: "Abet", phone: "010-0000-0001"},
+	                {name: "Betty", phone: "010-0000-0002"},
+	                {name: "Charlie", phone: "010-0000-0003"},
+	                {name: "David", phone: "010-0000-0004"}
+	            ]
+	        };
+	    }
+	    render(){
+	        return(
+	            <div>
+	                <h1>Contacts</h1>
+	                <ul>
+	                    {this.state.contactData.map((contact, i) => {
+	                        return (<ContactInfo name={contact.name}
+	                                            phone={contact.phone}
+	                                              key={i}/>);
+	                    })}
+	                </ul>
+	            </div>
+	        );
+	    }
+	}
+
+	
+	//ReactDOM.render(<App />, document.getElementById('div2'));
+	
+	window.fn_contacts=function(){
+		ReactDOM.render(<App />, document.getElementById('div2'));
+	}
+	
+	
+	class Td extends React.Component {
+		
+		constructor(props) {
+	        super(props);
+	        // Configure default state
+			this.state = this.props.options;
+			//this.dblclick.bind(this);
+			this.changeHandler = this.changeHandler.bind(this);
+	    }
+	    
+	    dblclick(){
+	    	//if(this.state.editable == true)
+	    	//	this.setState({mode: "edit"});
+	    }
+	    
+	    confirm(){
+	    	this.props.options.fn_submit.call(this);
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    cancel(){
+	    	this.setState({value: this.props.options.value});
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    changeHandler(e){
+	    	//alert("changeHandler");
+	    	this.setState({value: e.target.value });	    	
+	    }
+	    
+	    
+	    
+	    render(){
+	    	
+	    	if(this.props.options.editable == false || this.state.mode == "read"){
+	    		return(
+				<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
+					{this.state.value}
+				</div>
+	        	);
+	    	}else if(this.state.mode == "edit") {	  
+	    		if(this.state.edit_tag == "textarea"){
+	    			return (
+			    		<div>
+							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
+						</div>
+					);
+	    		}else {
+	    			return (
+			    		<div>
+							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
+						</div>
+					);
+	    		}		
+	    		
+				
+	    	}
+	        
+	            
+	    }
+	}
+	
+	window.fn_td = function(cell, options){
+		return ReactDOM.render(<Td options={options}/>, cell);
+	}
+	
+</script>
+ 
 <iframe id="file_iframe" style="display:none;"></iframe>
 </html>

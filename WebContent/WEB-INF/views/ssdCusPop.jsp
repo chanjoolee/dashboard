@@ -618,7 +618,14 @@
 										if(path != undefined && path != ""){
 											var link = document.createElement('a');
 											link.target = "_blank";
-											link.href = path;
+											if(path.match(/^(http)|(www)/gi) != null)
+												link.href = path;
+											else if(cm.name == 'JIRA'){
+												link.href = "http://jira.skhynix.com/browse/" + path;
+											}else if (cm.name == 'CONFLUENCE'){
+												link.href = "http://confluence.skhynix.com/pages/viewpage.action?pageId=" + path;
+											}
+												
 											//Firefox requires the link to be in the body
 											document.body.appendChild(link);
 											link.click();

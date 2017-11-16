@@ -664,6 +664,21 @@
 //						},
 						{
 							"type": "tab_iframe",
+							"id" : "scriptset_management",
+							"label" : "TestScript Set Mgmt.",							
+							"connected_content" :  {
+								"viewName": "corona_manage_scriptset_tabs",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							},
+							"iframe_css" : [
+								{ "code": "height", "value": "770px" }
+							]
+						},
+						{
+							"type": "tab_iframe",
 							"id" : "template_script_edit",
 							"label" : "Master TS Mgmt.",							
 							"connected_content" :  {
@@ -674,12 +689,14 @@
 								{ "code": "height", "value": "770px" }
 							]
 						},
+						
+						
 						{
 							"type": "tab_iframe",
-							"id" : "firmware_script_edit",
+							"id" : "project_management",
 							"label" : "Project TS Mgmt.",							
 							"connected_content" :  {
-								"viewName": "corona_manage_firmware_edit",
+								"viewName": "corona_manage_project_tabs",
 								"form_id" : "form"
 							},
 							"events" : {
@@ -688,43 +705,9 @@
 							"iframe_css" : [
 								{ "code": "height", "value": "770px" }
 							]
-						},
-//						{
-//							"type": "tab_iframe",
-//							"id" : "copy_template_to_project",
-//							"label" : "Copy Template To Project",							
-//							"connected_content" :  {
-//								"viewName": "corona_manage_copy_template_project",
-//								"form_id" : "form"
-//							},
-//							"events" : {
-//								//"click" : tab_click
-//							}
-//						},
-						{
-							"type": "tab_iframe",
-							"id" : "copy_template_to_firmware",
-							"label" : "Copy : Master TS -> Project TS",							
-							"connected_content" :  {
-								"viewName": "corona_manage_copy_template_firmware",
-								"form_id" : "form"
-							},
-							"events" : {
-								//"click" : tab_click
-							}
-						},
-						{
-							"type": "tab_iframe",
-							"id" : "copy_firmware_to_firmware",
-							"label" : "Copy : Project TS -> Project TS",							
-							"connected_content" :  {
-								"viewName": "corona_manage_copy_firmware_firmware",
-								"form_id" : "form"
-							},
-							"events" : {
-								//"click" : tab_click
-							}
 						}
+						
+						
 					]
 				},
 						

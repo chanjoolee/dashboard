@@ -1497,90 +1497,114 @@
 					label:' ',
 					items: gridModel,
 					gridOpt: options
-				},
-				{
-					containerCss:[
-						{code: 'margin-top', value:'20px'}
-					],		
-					type: 'grid',
-					id: 'grid_nonmanage',
-					label:' ',
-					items: [
-						{ label: 'Project', name: 'PJT_NAME', width: 210 ,align:'left' , sortable: true, formatter:'string',cellattr:  setAttrProject },
-			  			//{ label: 'dummy', name: 'POINT', width: 80 ,align:'center', sortable: true, hidden: true},
-			      		{ label: 'Index<br/>(200)', name: 'POINT', width: 90 ,align:'center', sortable: true, formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },  
-			      		{ label: 'Loc', name: 'LOC', width:  65 ,align:'center', sortable:false,  formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 0},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
-			      		{ label: 'Static Analysis<br/>(20)', name: 'STATIC_ANALYSIS', width:  65 ,align:'center', sortable:false,  formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
-			      		{ label: 'Function Parameter<br/>(20)', name: 'FUNC_PARAMETER', width: 70 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
-			      		{ label: 'Function LOC<br/>(20)', name: 'FUNCTION_SIZE', width: 65 ,align:'center', sortable:false , formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold' ,cursor:'pointer' },
-			      		{ label: 'Duplicate Code<br/>(20)', name: 'DUPLICATE', width:  65,align:'center' , sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer'  },
-			      		{ label: 'Coding Rule<br/>(20)', name: 'CODING_RULE', width:  65 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
-			      		{ label: 'Architecture Analysis<br/>(25)', name: 'ARCHITECTURE', width:  80 ,align:'center', sortable:false,formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
-			      		{ label: 'Complexity<br/>(25)', name: 'COMPLEXITY', width:  75,align:'center', sortable:false, formatter:  item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold'  ,cursor:'pointer' },
-			      		{ label: 'Simulator Test Coverage<br/>(25)', name: 'CODE_COVERAGE', width: 70,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold'  ,cursor:'pointer' }
-					],
-					gridOpt: {
-						datatype: "local",
-						styleUI : 'Bootstrap',
-						pager: "#grid_nonmanagePager",
-						data: fwqDataListNon,
-						rowNum: 10, 
-						rowList:[10,20,30],
-						caption:'Non-Project',
-						sortable: true,			
-						multiSort: true,
-						//sortname: 'POINT desc, PJT_NAME_PMS',
-				        //sortorder: 'asc',  
-				        emptyrecords: "No records to view",
-				        viewrecords: true,
-						//rownumbers: true, // show row numbers
-				        //multiSort: false,
-				        //multiselect: false,
-				        width: '100%' ,
-				        //width: '1020px' ,
-				        //width: '1200',
-				        height: '200',
-				        //pager:'#jqGridPager',
-				        //mtype: 'POST',
-				        //grouping:true,
-						onCellSelect: function (rowId, iCol, content, event) {
-							
-							var cm = jQuery("#grid_nonmanage").jqGrid("getGridParam", "colModel");
-							if(cm.name != ''){
-								var val = Number($('#grid_nonmanage').jqGrid('getCell', rowId, iCol));	
-								if(cm[iCol].name == 'PJT_NAME' ){
-									var val1 = $('#grid_nonmanage').jqGrid('getCell', rowId, 1);	
-									var object = dataFilter(fwqDataListNon,[{col:'PJT_NAME',val: val1}])[0];
-									if(object != undefined){
-										popFWQProjectSummary.call(object);
-									}
-								}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status'){
-									// nothing
-								}else {
-									//cell click
-									var projectName = $('#grid_nonmanage').jqGrid('getCell', rowId, 1);
-									var object = dataFilter(fwqDataListNon,[{col:'PJT_NAME',val: projectName}])[0];
-									var label = "";
-									if(cm[iCol].label.match(/[\w\s]+/) != null)
-										label = cm[iCol].label.match(/[\w\s]+/).join('');
-									popFWQProjectCategoryTrend.call(object,cm[iCol].name,label);
-								}
-								
-							}
-								
-					      }// end onclick
-					      ,gridComplete: function () {
-						    	var grid = $(this).jqGrid();
-				 				
-						    }
-						
-					}
-				}
+				}				
 				
 			]
 		};
+		
+		
+		// no manage 권한체크
+		var no_manage = {
+			containerCss:[
+				{code: 'margin-top', value:'20px'}
+			],		
+			type: 'grid',
+			id: 'grid_nonmanage',
+			label:' ',
+			items: [
+				{ label: 'Project', name: 'PJT_NAME', width: 210 ,align:'left' , sortable: true, formatter:'string',cellattr:  setAttrProject },
+	  			//{ label: 'dummy', name: 'POINT', width: 80 ,align:'center', sortable: true, hidden: true},
+	      		{ label: 'Index<br/>(200)', name: 'POINT', width: 90 ,align:'center', sortable: true, formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },  
+	      		{ label: 'Loc', name: 'LOC', width:  65 ,align:'center', sortable:false,  formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 0},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
+	      		{ label: 'Static Analysis<br/>(20)', name: 'STATIC_ANALYSIS', width:  65 ,align:'center', sortable:false,  formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
+	      		{ label: 'Function Parameter<br/>(20)', name: 'FUNC_PARAMETER', width: 70 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
+	      		{ label: 'Function LOC<br/>(20)', name: 'FUNCTION_SIZE', width: 65 ,align:'center', sortable:false , formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold' ,cursor:'pointer' },
+	      		{ label: 'Duplicate Code<br/>(20)', name: 'DUPLICATE', width:  65,align:'center' , sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer'  },
+	      		{ label: 'Coding Rule<br/>(20)', name: 'CODING_RULE', width:  65 ,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr,fontWeight:'bold' ,cursor:'pointer' },
+	      		{ label: 'Architecture Analysis<br/>(25)', name: 'ARCHITECTURE', width:  80 ,align:'center', sortable:false,formatter: item_formatter ,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2}, cellattr: setAttr,fontWeight:'bold'  ,cursor:'pointer' },
+	      		{ label: 'Complexity<br/>(25)', name: 'COMPLEXITY', width:  75,align:'center', sortable:false, formatter:  item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold'  ,cursor:'pointer' },
+	      		{ label: 'Simulator Test Coverage<br/>(25)', name: 'CODE_COVERAGE', width: 70,align:'center', sortable:false, formatter: item_formatter,formatoptions:{decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2},cellattr: setAttr ,fontWeight:'bold'  ,cursor:'pointer' }
+			],
+			gridOpt: {
+				datatype: "local",
+				styleUI : 'Bootstrap',
+				pager: "#grid_nonmanagePager",
+				data: fwqDataListNon,
+				rowNum: 10, 
+				rowList:[10,20,30],
+				caption:'Non-Project',
+				sortable: true,			
+				multiSort: true,
+				//sortname: 'POINT desc, PJT_NAME_PMS',
+		        //sortorder: 'asc',  
+		        emptyrecords: "No records to view",
+		        viewrecords: true,
+				//rownumbers: true, // show row numbers
+		        //multiSort: false,
+		        //multiselect: false,
+		        width: '100%' ,
+		        //width: '1020px' ,
+		        //width: '1200',
+		        height: '200',
+		        //pager:'#jqGridPager',
+		        //mtype: 'POST',
+		        //grouping:true,
+				onCellSelect: function (rowId, iCol, content, event) {
+					
+					var cm = jQuery("#grid_nonmanage").jqGrid("getGridParam", "colModel");
+					if(cm.name != ''){
+						var val = Number($('#grid_nonmanage').jqGrid('getCell', rowId, iCol));	
+						if(cm[iCol].name == 'PJT_NAME' ){
+							var val1 = $('#grid_nonmanage').jqGrid('getCell', rowId, 1);	
+							var object = dataFilter(fwqDataListNon,[{col:'PJT_NAME',val: val1}])[0];
+							if(object != undefined){
+								popFWQProjectSummary.call(object);
+							}
+						}else if( cm[iCol].name == 'Phase'  || cm[iCol].name == 'Status'){
+							// nothing
+						}else {
+							//cell click
+							var projectName = $('#grid_nonmanage').jqGrid('getCell', rowId, 1);
+							var object = dataFilter(fwqDataListNon,[{col:'PJT_NAME',val: projectName}])[0];
+							var label = "";
+							if(cm[iCol].label.match(/[\w\s]+/) != null)
+								label = cm[iCol].label.match(/[\w\s]+/).join('');
+							popFWQProjectCategoryTrend.call(object,cm[iCol].name,label);
+						}
+						
+					}
+						
+			      }// end onclick
+			      ,gridComplete: function () {
+				    	var grid = $(this).jqGrid();
+		 				
+				    }
+				
+			}
+		}
+		var is_no = false;
+		if($("#PMS_ROLE").val() == "ADMIN"){
+			is_no = true;
+		}
+		
+		switch($('#userId').val()) {
+		    case 'sungkwan.hong':
+		    case 'iksung.oh':
+		    case 'huijae.yu':
+		    case 'jeayoung.zhang':
+		    case 'kyoungku.cho':
+		    case 'seungyeop.kim':
+		    	is_no = true;
+		    	break;
+		    	
+		}
+		// End. no manage 권한체크
+		
+		if(is_no){
+			schemaGrid.elements.push(no_manage);
+		}
 		$("#containerGrid").html("");
-		fn_makeHtml('containerGrid',schemaGrid);
+		fn_makeHtml('containerGrid',schemaGrid);	
 		$(".ui-jqgrid-title").css("font-weight","bold");
 		$(".ui-jqgrid-title").css("font-size","13px");
 		$(".ui-jqgrid-title").css("color","red");
@@ -2008,8 +2032,8 @@
 <input type="hidden" id="sender" name="sender" value="${param.sender}"/>
 <input type="hidden" name="cookieName" value="${param.cookieName}"/>
 <input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
-<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 <input type="hidden" name="PMS_ROLE" id="PMS_ROLE" value="${param.PMS_ROLE}"/>
+<input type="hidden" id="pjt_code" name="pjt_code" value="${param.userId}"/> 
 <input type="hidden" id="pjt_code" name="pjt_code" value=""/> 
 <input type="hidden" id="pjt_name" name="pjt_name" value=""/>
 <input type="hidden" id ="phaseBase" name ="phaseBase" value="phase"/>

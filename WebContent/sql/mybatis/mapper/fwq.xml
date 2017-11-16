@@ -999,7 +999,7 @@
 	    		) a 
 	    		where row_num = 1;    
 	    		
-	    		if UTL_MATCH.edit_distance_similarity(vProject, rec.project )	 <![CDATA[ <= 50 ]]> then 
+	    		if UTL_MATCH.edit_distance_similarity(vProject, rec.project )	 <![CDATA[ <= 90 ]]> then 
 	    			continue;
 	    		end if;
 	    				
@@ -1160,7 +1160,7 @@
 										select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
 										union all 
 										select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
-										where UTL_MATCH.edit_distance_similarity(PROJECT,PROJECT_ORIGIN) > 50
+										where UTL_MATCH.edit_distance_similarity(PROJECT,PROJECT_ORIGIN) > 90
 										union all 
 										select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
 										union all 
@@ -1227,7 +1227,7 @@
 											select  'FW_QUALITY_DUPLICATE_CODE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_DUPLICATE_CODE
 											union all 
 											select  'FW_QUALITY_FUNC_PARAMETER' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_PARAMETER
-											where UTL_MATCH.edit_distance_similarity(PROJECT,PROJECT_ORIGIN) > 50
+											where UTL_MATCH.edit_distance_similarity(PROJECT,PROJECT_ORIGIN) >90
 											union all 
 											select  'FW_QUALITY_FUNC_SIZE' category,   pjt_code,project,measure_dt,point from FW_QUALITY_FUNC_SIZE
 											union all 

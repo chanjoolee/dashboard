@@ -1629,10 +1629,10 @@ function dateAdd(date,addnum,splitStr){
 	
 	var dateSplit = dt.split(splitStrNew);
 	
-	var dt1 = new Date(dateSplit[0],dateSplit[1],dateSplit[2]);
+	var dt1 = new Date(dateSplit[0],dateSplit[1] -1 ,dateSplit[2]);
 	var dt2= new Date(dt1.getFullYear(),dt1.getMonth(),dt1.getDate()+addnum); 
 	
-	var rtnDt = pad('0000',dt2.getFullYear(),true) + pad('00',dt2.getMonth(),true) + pad('00',dt2.getDate(),true);
+	var rtnDt = pad('0000',dt2.getFullYear(),true) + pad('00',dt2.getMonth() +1,true) + pad('00',dt2.getDate(),true);
 	
 	return rtnDt;
 }
@@ -1652,10 +1652,11 @@ function monthAdd(date,addnum,splitStr){
 	
 	var dateSplit = dt.split(splitStrNew);
 	
-	var dt1 = new Date(dateSplit[0],dateSplit[1],dateSplit[2]);
+	var dt1 = new Date(dateSplit[0],dateSplit[1]-1,dateSplit[2]);
 	var dt2= new Date(dt1.getFullYear(),dt1.getMonth() + addnum, dt1.getDate()); 
 	
-	var rtnDt = pad('0000',dt2.getFullYear(),true) + pad('00',dt2.getMonth(),true) + pad('00',dt2.getDate(),true);
+	var rtnDt = pad('0000',dt2.getFullYear(),true) + pad('00',dt2.getMonth() + 1,true) + pad('00',dt2.getDate(),true);
+	
 	
 	return rtnDt;
 }
@@ -2689,6 +2690,7 @@ function fn_makeHtml(container, _schema){
 				);
 				var selected ="selected";
 				var sb = [];
+				sortObjects(series.series,['name']);
 				$.each(series.series,function(index,s){
 					var optGrp = $(document.createElement( "optgroup" ));
 					optGrp.attr("label",s.name);
@@ -2751,9 +2753,11 @@ function fn_makeHtml(container, _schema){
 								if($(this).is(':selected')){
 									$("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "disabled", false );
 									//$("input[name=multiselect_pjtCodeList],[value="+$(this).val()+"]").prop( "disabled", true );
+									$("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "selected", true );
 								}else{
 									$("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "disabled", true );
 									//$("input[name=multiselect_pjtCodeList],[value="+$(this).val()+"]").prop( "disabled", false );
+									$("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "selected", false );
 								}
 							});
 							
@@ -2770,9 +2774,10 @@ function fn_makeHtml(container, _schema){
 								
 							});
 							
-							$("input[name=multiselect_"+ child.id+"]").each(function(){
-								$("select[name="+ child.id+"] option[value='"+$(this).val()+"']").prop( "selected", $(this).is(":checked") );
-							});
+							
+							//$("input[name=multiselect_"+ child.id+"]").each(function(){
+							//	$("select[name="+ child.id+"] option[value='"+$(this).val()+"']").prop( "selected", $(this).is(":checked") );
+							//});
 							
 							var childMultiselectOpt = {
 								//selectedList: 1,
@@ -2792,9 +2797,21 @@ function fn_makeHtml(container, _schema){
 							$("select[name="+ child.id+"]").multiselect(childMultiselectOpt).multiselectfilter();
 							//$("select[name="+ child.id+"]").multiselect(childSchema.multiselectOpt).multiselectfilter();
 							
-							$("div.ui-multiselect-menu").css("width","400px");
-							$(".ui-multiselect-filter input").css("width","150px");
+							// 해당하는 Object 만 refresh 한다.
+							var my = $("select[name="+ child.id+"]");
+							//my.multiselect('refresh');
+							$menu = $.data(my[0],"ech-multiselect").menu;
+							$menu.css("width","400px");
+							$menu.find(".ui-multiselect-filter input").css("width","150px");
+							
+							//$("div.ui-multiselect-menu").css("width","400px");
+							//$(".ui-multiselect-filter input").css("width","150px");
+							
+							var obj_child = $("#"+childSchema.id);
+							obj_child.trigger("change");
 						});
+						
+						
 					}
 					
 				} );
@@ -2874,6 +2891,29 @@ function fn_makeHtml(container, _schema){
 			mainControl.attr("name",_schema.name);
 			mainControl.attr("id",_schema.id);
 			mainControl.attr("readonly", "readonly");
+			mainContainer.append(mainControl);			
+			
+			container.append(mainContainer);
+			
+		}else if(_schema.type == 'input'){
+			//==chart container create
+			mainContainer = $(document.createElement( "div" ));
+			mainContainer.attr("id",_schema.id + 'Container');
+			
+			var containerType = container.attr("type");
+			if(_schema.parentSchema.type == 'HorizontalLayout'){
+				mainContainer.css("display","inline-block");
+				if(_schema.width != undefined)
+					mainContainer.css("width",_schema.width);
+				
+			}
+			
+			// text
+			mainControl = $(document.createElement("input"));
+			mainControl.attr("type","text");
+			mainControl.attr("name",_schema.name);
+			mainControl.attr("id",_schema.id);
+			//mainControl.attr("readonly", "readonly");
 			mainContainer.append(mainControl);			
 			
 			container.append(mainContainer);
@@ -3210,4 +3250,210 @@ function fn_makeHtml(container, _schema){
 		$("div.ui-multiselect-menu").css("width","400px");
 		$(".ui-multiselect-filter input").css("width","150px");
 	}
+	
+function fn_makeDataForChart(param){
+	//rturns		
+	var rtn_series = [];
+	var rtn_keys = [];
+	var rtn_category = {x:[],x1:[],xindex:{},y:[],y1:[],yindex:{}};
+	var rtn = {
+			series : rtn_series,
+			keys: rtn_keys,
+			category : rtn_category
+	};
+	
+	// parameters
+	var p_dataSrc = param.dataSrc;
+	var p_sorts = param.sorts;
+	var p_seriesKey = param.seriesKey;
+	var p_seriesIndex = param.seriesIndex;
+	//var p_filters = param.filters;
+	var p_convertDefiines = param.convertDefiines;
+	var p_xCategoryCol = param.xCategoryCol;
+	var p_xCategoryColOrderbyStr = param.xCategoryColOrderbyStr;
+	var p_xCategoryAddIfEmpty = param.xCategoryAddIfEmpty;
+	var p_xCategoryIndex = param.xCategoryIndex;
+	var p_xCategoryFn = param.xCategoryFn; // function을 쓰는 것은 추전하지 않음.
+	var p_xCategoryIndicate = param.xCategoryIndicate; // xCategory 의 index를 지정할 것인지. bubble chart의 경우.
+	var p_yCategoryCol = param.yCategoryCol;
+	var p_yCategoryFn = param.yCategoryFn;
+	var p_yCategoryIndicate = param.yCategoryIndicate;
+	//var p_xCategoryIndicateIndex = param.xCategoryIndicateIndex; // xCategoryIndicate 가 true인경우.  x축 에서 x축을 지정하는 경우 필요한 index.
+	var p_isGroupby = param.isGroupby; // group by를 안하는 것으로 가정한다. 
+	
+	
+	// alasql table
+	var v_tablename = param.tablename;
+	
+	//01. convertdata
+	//02. xCategory
+	//03. yCategory
+	//04. makeSeries
+	
+	
+	
+	//02. xCategory
+	if(p_xCategoryCol != undefined && p_xCategoryCol != ''){
+		if(p_xCategoryColOrderbyStr != undefined && p_xCategoryColOrderbyStr != '')
+			rtn_category.x = alasql('select distinct '+ p_xCategoryCol +' from  ' + v_tablename + ' order by ' + p_xCategoryColOrderbyStr) ;
+		else
+			rtn_category.x = alasql('select distinct '+ p_xCategoryCol +' from  ' + v_tablename + ' order by ' + p_xCategoryCol) ;
+		
+		rtn_category.x = _.map(rtn_category.x,function(m,i){
+			var rtn ={idx:i};
+			rtn_category.xindex[m[p_xCategoryCol]] = rtn;
+			if(p_xCategoryFn != undefined){
+				return p_xCategoryFn.call(m,rtn);
+			}else{
+				rtn[p_xCategoryCol] = m[p_xCategoryCol];
+				return rtn;
+			}
+				
+		});
+		rtn_category.x1 = _.pluck(rtn_category.x,p_xCategoryCol);
+		
+		
+		var v_sql = 'select ';
+		v_sql += p_seriesKey.cd + ', ' + p_seriesKey.name;
+		v_sql += ' from ' + v_tablename;
+		v_sql += ' group by ' + p_seriesKey.cd + ', ' + p_seriesKey.name
+		var v_group = alasql(v_sql);
+		if(p_xCategoryAddIfEmpty != undefined && p_xCategoryAddIfEmpty){
+			$.each(rtn_category.x,function(i,category){
+				$.each(v_group,function(j , s){
+					var v_data = [];
+					if(p_xCategoryIndex != undefined){
+						var index = category[p_xCategoryCol] + '`'+s[p_seriesKey.cd];
+						var indexDef = alasql.tables[v_tablename].inddefs[p_xCategoryIndex];
+						var indexTarget = alasql.tables[v_tablename].indices[indexDef.hh];
+						v_data = indexTarget[index];			
+						if(v_data == undefined)
+							v_data = [];
+					}else{
+						v_sql = 'select * from ' + v_tablename ;
+						v_sql += ' where ';
+						v_sql += p_xCategoryCol + ' = "'+category[p_xCategoryCol]+'"';
+						v_sql += ' and ' + p_seriesKey.cd + ' = "'+s[p_seriesKey.cd]+'"';
+						v_data = alasql(v_sql);
+					}
+					
+					if(v_data.length == 0 || v_data == undefined){
+						var nilObj = {};
+						$.each(alasql.tables[v_tablename].columns,function(j,col){
+							nilObj[col.columnid] = null;
+						});
+						nilObj[p_seriesKey.cd] = s[p_seriesKey.cd];
+						nilObj[p_seriesKey.name] = s[p_seriesKey.name];
+						nilObj[p_xCategoryCol] = category[p_xCategoryCol];
+						//nilObj['x'] = category['idx'];
+						
+						$.each(p_convertDefiines,function(index,col){
+							if((nilObj[col.col]==null || nilObj[col.col] == undefined || isNaN(nilObj[col.col]) ) && col.hasOwnProperty('isnull'))
+								nilObj[col.col] = col.isnull ;
+						});
+
+						v_sql = 'INSERT INTO '+ v_tablename +' VALUES (';
+						var vcolumns = [];
+						$.each(alasql.tables[v_tablename].columns,function(j,col){
+							if(nilObj[col.columnid] ==  null){
+								vcolumns.push('null');
+							}
+							else if(col.dbtypeid == 'STRING')
+								vcolumns.push('"'+nilObj[col.columnid]+'"');
+							else
+								vcolumns.push(nilObj[col.columnid]);
+						});
+						v_sql += vcolumns.join(",");
+						v_sql += ')';
+						//alasql(v_sql);
+						//alasql('INSERT INTO ' + v_tablename + ' SELECT * FROM ?',[nilObj]);
+						p_dataSrc.push(nilObj);
+					}
+					
+				});
+			});
+		}
+		
+		
+	}
+	
+	//03. yCategory
+	if(p_yCategoryCol != undefined && p_yCategoryCol != ''){
+		rtn_category.y = alasql('select distinct '+ p_yCategoryCol +' from  ' + v_tablename + ' order by ' + p_yCategoryCol) ;
+		
+		rtn_category.y = _.map(rtn_category.y,function(m,i){
+			var rtn ={idx:i};
+			rtn_category.yindex[m[p_yCategoryCol]]=rtn;
+			if(p_yCategoryFn != undefined){
+				return p_yCategoryFn.call(m,rtn);
+			}else{
+				rtn[p_yCategoryCol] = m[p_yCategoryCol];
+				return rtn;
+			}
+				
+		});
+		rtn_category.y1 = _.pluck(rtn_category.y,p_yCategoryCol);
+	}
+	
+	//04. makeSeries
+	alasql(p_seriesIndex.sql);
+	var indexDef = alasql.tables[v_tablename].inddefs[p_seriesIndex.index];
+	var indexTarget = alasql.tables[v_tablename].indices[indexDef.hh];
+	$.each(indexTarget,function(k,v){
+		if(p_xCategoryCol != undefined && p_xCategoryCol != "")
+			sortObjects(v,[p_xCategoryCol]);
+		rtn_series.push({name:k,id:k,data:v});
+		
+		if(p_xCategoryIndicate){
+			$.each(v,function(i,d){
+				//if(d[p_xCategoryCol] == '00022_[test_Host]_ncq_random_long')
+				//	var aaa = "";
+				//var index1 = d[p_xCategoryCol] + '`'+s[p_seriesKey.cd];
+				//var indexDef1 = alasql.tables[v_tablename].inddefs[p_xCategoryIndex];
+				//var indexTarget1 = alasql.tables[v_tablename].indices[indexDef.hh];
+// 					var  targetCategory = alasql('select idx from ? where '+ p_xCategoryCol +' = "' + d[p_xCategoryCol]  + '"', [rtn_category.x]);
+// 					if(targetCategory.length > 0)
+// 						d.x = targetCategory[0].idx;
+				d.x = rtn_category.xindex[d[p_xCategoryCol]].idx;
+				
+			});
+		}
+		
+		if(p_yCategoryIndicate){
+			$.each(v,function(i,d){
+				//var  targetCategory = alasql('select idx from ? where '+ p_yCategoryCol +' = "' + d[p_yCategoryCol]  + '"', [rtn_category.y]);
+				//if(targetCategory.length > 0)
+				//	d.y = targetCategory[0].idx;
+				d.y = rtn_category.yindex[d[p_yCategoryCol]].idx;
+			});
+		}
+		
+	});
+	
+	
+	//01. convertdata
+	if(p_convertDefiines != undefined && p_convertDefiines.length > 0){
+		$.each(rtn_series,function(i,s){
+			$.each(s.data,function(j,d){
+				$.each(p_convertDefiines,function(index,col){
+					if((d[col.col]==null || d[col.col] == undefined || isNaN(d[col.col]) ) && col.hasOwnProperty('isnull'))
+						d[col.col] = col.isnull ;
+					
+					if(col.datatype == 'date'){
+						d[col.convert] = convertDateToUct(d[col.col]);
+						
+					}else if(col.datatype == 'int'){
+						d[col.convert] = d[col.col]*1;
+					}else{
+						d[col.convert] = d[col.col];
+					}
+					
+				});			
+			});
+		});
+	}
+	
+	
+	return rtn;
+}
 	

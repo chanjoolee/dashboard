@@ -66,7 +66,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.31.01"></script>
+	<script src="js/dashboard.js?version=2017.10.31.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -108,7 +108,7 @@
 	        margin: 0;
 	        /* overflow-y: auto; */
 	       /*  overflow-x: hidden; */
-	       overflow: hidden;
+	       /*overflow: hidden;*/
 	        font-size:11px;
 	      }
 		
@@ -511,7 +511,11 @@
 											],
 											events:{
 												click : function(){
-													fn_create_entity();
+													$("#loader").show();
+													setTimeout(function(){ 
+														fn_create_entity();
+														$("#loader").hide();
+													}, 50);
 												}
 											}
 										}
@@ -548,12 +552,28 @@
 			fn_columns();
 			fn_constraints();
 			fn_make_enity();
-//			var saveStr = "zzzzzz";
+			
+			var schema = {
+				tables : tables,
+				columns : columns,
+				primarykeys : primarykeys,
+				entityInfo : entityInfo
+			};
+			var filename= 'entity_'+ $("#owner").val();
+			var blob = new Blob([JSON.stringify(schema)], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, filename+".json");
+
+
+//			var newWin1 = window.open("", "MS_WordReport", "width=1200,height=800, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 //			
+//			var oFrm = document.getElementById("formReport");
+//			oFrm.searchJson.value = JSON.stringify(schema);
 //			
-//			var filename= 'entity_'+ $("#owner").val();
-//			var blob = new Blob([saveStr], {type: "text/plain;charset=utf-8"});
-//			saveAs(blob, filename+".json");
+//			oFrm.action =  '/dashboard/performanceReportJson.html';
+//			oFrm.method = "post";
+//			oFrm.target = 'MS_WordReport';
+//		    oFrm.submit();		    
+//		    newWin1.focus();	
 		}
 		
 		function fn_tables(){
@@ -622,6 +642,9 @@
 
 	<div id="loader"></div>
 	<div id="dialog-confirm"></div>
+</form>
+<form name="formReport" id="formReport" class="">
+	<input type="hidden" id="searchJson" name="searchJson" value=""/>
 </form>
 </body>
 <script src="js/highcharts/themes/dashboard-simple.js"></script>

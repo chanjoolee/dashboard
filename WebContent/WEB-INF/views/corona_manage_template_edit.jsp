@@ -857,7 +857,9 @@
 										
 									}
 								 }
-								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true }
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:600, align:'left', sortable:false , editable: true }
+								,{label:'TAT LVL', name:'SCRIPT_TAT_LVL', id:'SCRIPT_TAT_LVL', width:100, align:'left', sortable:false , editable: true }
+								,{label:'Script Version', name:'SCRIPT_VERSION', id:'SCRIPT_VERSION', width:100, align:'left', sortable:false , editable: true }
 					    		
 					    	],	
 					    	data: function(){
@@ -1030,7 +1032,7 @@
 															items: [
 																{label:'Script Name', col: 'SCRIPT_NAME', editable: true},
 																{label:'Category', col: 'CATEGORY', editable: true},
-																{label:'Test Item', col: 'TEST_ITEM', editable: false},
+																{label:'Test Item', col: 'TEST_ITEM', editable: true},
 																{label:'Single Multi', col: 'SINGLE_MULTI'},
 																{label:'Power Mode Speed', col: 'POWER_MODE_SPEED'},
 																{label:'Test Time', col: 'TEST_TIME'},
@@ -1593,4 +1595,5 @@
 	}
 	
 </script>
+ 
 </html>

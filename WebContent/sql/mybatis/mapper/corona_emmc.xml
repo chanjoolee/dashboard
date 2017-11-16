@@ -13,7 +13,8 @@
 				m.CATEGORY,
 				m.TEST_ITEM,
 				count(*) total_count,
-				count(case when m.status = 'PASS' then 1 else null end) pass_count
+				count(case when m.status = 'PASS' then 1 else null end) pass_count,
+				count(case when m.status = 'FAIL' then 1 else null end) fail_count
 			from CORONA_EMMC_F_S_MAP m 
 			join CORONA_EMMC_FIRMWARE_MASTER f
 				on f.firmware = m.firmware
@@ -49,6 +50,7 @@
 			c.COMPUTE_CRETERIA,
 			--nvl(c.COMPUTE_CRETERIA,'None') COMPUTE_CRETERIA,
 			c.COMPUTE_VALUE,
+			c.TEST_STATE as "testState" ,
 			case 
 				when c.COMPUTE_CRETERIA = 'hrs' Then 96
 				when c.COMPUTE_CRETERIA = 'sec' Then 86400
@@ -56,8 +58,7 @@
 				when c.COMPUTE_CRETERIA = 'min' Then 10000
 				else null
 			end as max_value,
-			a.TOTAL_COUNT - a.PASS_COUNT AS FAIL_COUNT,
-			(a.PASS_COUNT/a.TOTAL_COUNT) AS TEST_PROGRESS
+			a.FAIL_COUNT
 		from tbl_data  a
 		left outer join tbl_order b
 			 on a.CATEGORY = b.CATEGORY
@@ -163,7 +164,7 @@
 						d.SCRIPT,
 						d.SEQ,
 						d.TEST_TIME,
-						d.STATUS,
+						nvl(d.STATUS,'No Data') as STATUS,
 						d.STATUS_DETAIL,
 						d.DURATION,	
 						
@@ -245,12 +246,13 @@
 		select 
 			a.SAMPLE,
 			a.FIRMWARE,
-			a.FIRMWARE ||
-			case  
-				when c.TEST_SET_ID  is not null then 
-					'( ' || c.TEST_SET_NAME || ' )'
-				else ''
-			end as FIRMWARE_NM,
+			a.FIRMWARE || '' 
+			--case  
+			--	when c.TEST_SET_ID  is not null then 
+			--		'( ' || c.TEST_SET_NAME || ' )'
+			--	else ''
+			-- end 
+			as FIRMWARE_NM,
 			b.REQUEST_ID,
 			(SELECT CASE WHEN CODE_ID = 'SPM_00005011' THEN 'eMMC' ELSE 'SSD' END FROM SOLUTIONPMS.PJT_BASE_INFO WHERE CODE_NAME = 'Application' AND PJT_ID = B.PJT_ID)  as APP_TYPE  ,
 			b.RELEASE_STATUS_CD,
@@ -258,7 +260,14 @@
 			b.VERIFY_RESULT_CD,
 			SOLUTIONPMS.FN_CODE_VALUE_ID(b.VERIFY_RESULT_CD) VERIFY_RESULT_NM,
 			c.TEST_SET_ID,
-			c.TEST_SET_NAME
+			c.TEST_SET_NAME,
+			(
+				select 
+					to_char(min(nvl(TEST_TIME,ins_dt)),'YYYY-MM-DD')
+				from CORONA_EMMC_TEST_DETAIL t
+				where a.sample = t.SAMPLE
+				and a.firmware = t.FIRMWARE
+			) as START_DT
 		from CORONA_EMMC_FIRMWARE_MASTER A
 		left outer join SOLUTIONPMS.FW_RELEASE b
 			on A.firmware = b.fw_version
@@ -277,7 +286,7 @@
 				and 1 = 2
 			</otherwise>
 		</choose>
-		order by 1
+		order by START_DT desc
 	</select>
 	
 	<select id="dashboard.corona.emmc.search.sample" resultType="hashmap">
@@ -289,7 +298,15 @@
 		order by 1
 	
 	</select>
-	
+	<select id="dashboard.corona.emmc.scriptsets.search.by.fimware" resultType="hashmap">
+		select
+			SCRIPTSET
+		from CORONA_EMMC_SCRIPTSET_MAP_F
+		where firmware = #{firmware}
+		and sample= #{sample}
+		
+		
+	</select>
 	<update id="dashboard.corona.emmc.testitem.master.update" parameterType="hashmap">
     	declare
 	    	cnt number;
@@ -306,15 +323,15 @@
 	                	WEIGHT = #{WEIGHT}, 
 	                	COMPUTE_CRETERIA = #{COMPUTE_CRETERIA}, 
 	                	COMPUTE_VALUE = #{COMPUTE_VALUE}, 
-	  
+	  					TEST_STATE = #{testState},
 	                	MOD_DT = sysdate
 	                where FIRMWARE = #{origindata.FIRMWARE}
 	                and  SAMPLE = #{origindata.SAMPLE}
 	                and  CATEGORY = #{origindata.CATEGORY} 
 	                and  TEST_ITEM = #{origindata.TEST_ITEM};
 	          	else
-	          		insert into CORONA_EMMC_TESTITEM_MASTER(FIRMWARE, SAMPLE, CATEGORY, TEST_ITEM, WEIGHT, COMPUTE_CRETERIA, COMPUTE_VALUE,  INS_DT)
-	          		values (#{origindata.FIRMWARE}, #{origindata.SAMPLE}, #{origindata.CATEGORY}, #{origindata.TEST_ITEM}, #{WEIGHT}, #{COMPUTE_CRETERIA}, #{COMPUTE_VALUE}, sysdate);
+	          		insert into CORONA_EMMC_TESTITEM_MASTER(FIRMWARE, SAMPLE, CATEGORY, TEST_ITEM, WEIGHT, COMPUTE_CRETERIA, COMPUTE_VALUE, TEST_STATE, INS_DT)
+	          		values (#{origindata.FIRMWARE}, #{origindata.SAMPLE}, #{origindata.CATEGORY}, #{origindata.TEST_ITEM}, #{WEIGHT}, #{COMPUTE_CRETERIA}, #{COMPUTE_VALUE}, #{testState},sysdate);
 	          	
 	          	end if;
                 

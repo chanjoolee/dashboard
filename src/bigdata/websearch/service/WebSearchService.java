@@ -145,6 +145,7 @@ public class WebSearchService {
 				response.append("\r\n");
 			}
 			in.close();
+			//site.put("response", net.sf.json.JSONObject.fromObject(response.toString()));
 			site.put("response", response.toString());
 			
 		}

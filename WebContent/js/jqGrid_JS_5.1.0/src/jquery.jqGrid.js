@@ -2560,7 +2560,7 @@ $.fn.jqGrid = function( pin ) {
 				case "xml":
 				case "script":
 					$.ajax($.extend({
-						url:ts.p.url,
+						url:typeof ts.p.url == 'function'?ts.p.url(): ts.p.url,
 						type:ts.p.mtype,
 						dataType: dt ,
 						data: $.isFunction(ts.p.serializeGridData)? ts.p.serializeGridData.call(ts,ts.p.postData) : ts.p.postData,

@@ -1,147 +1,228 @@
-WITH projectList AS (
-        SELECT
-                *
-            FROM
-                (
-                    SELECT
-                            DISTINCT NVL(m.pjt_name, a.project) pjt_code
-                            ,a.project
-                        FROM
-                            (
-                                SELECT
-                                        DISTINCT project
-                                    FROM
-                                        JIRA_ISSUE
-                            ) a
-                                LEFT OUTER JOIN PJT_MAPPING m
-                                    ON m.legacy_pjt_name = A.project
-                                    AND LEGACY_NAME = 'JIRA'
-                ) a
-    WHERE
-        a.pjt_code = 'Armstrong'
-)
-,dt AS (
-    SELECT
-            project AS project
-            ,MIN(dt) start_dt
-            ,MAX(dt) end_dt
-        FROM
-            (
-                SELECT
-                        jira.project AS project
-                        ,TO_CHAR(MIN(created), 'YYYY-MM-DD') dt
-                    FROM
-                        JIRA_ISSUE jira
-                            JOIN projectList list
-                                ON list.project = jira.project
-                    WHERE
-                        list.pjt_code = 'Armstrong'
-                    group by jira.project
-                UNION ALL
-                SELECT
-                        jira.project AS project
-                        ,TO_CHAR(MAX(created), 'YYYY-MM-DD') dt
-                    FROM
-                        JIRA_ISSUE jira
-                            JOIN projectList list
-                                ON list.project = jira.project
-                    WHERE
-                        list.pjt_code = 'Armstrong'
-                    group by jira.project
-                UNION ALL
-                SELECT
-                        jira.project AS project
-                        ,TO_CHAR(MIN(RESOLUTIONDATE), 'YYYY-MM-DD') dt
-                    FROM
-                        JIRA_ISSUE jira
-                            JOIN projectList list
-                                ON list.project = jira.project
-                    WHERE
-                        list.pjt_code = 'Armstrong'
-                    group by jira.project
-                UNION ALL
-                SELECT
-                        jira.project AS project
-                        ,TO_CHAR(MAX(RESOLUTIONDATE), 'YYYY-MM-DD') dt
-                    FROM
-                        JIRA_ISSUE jira
-                            JOIN projectList list
-                                ON list.project = jira.project
-                    WHERE
-                        list.pjt_code = 'Armstrong'
-                    group by jira.project
-            )
-        group by project
-)
-	SELECT
-        projectList.project
-        ,TO_CHAR(a.pre_dt, 'YYYY/MM/DD') pre_dt
-        ,TO_CHAR(a.dt, 'YYYY/MM/DD') defects_date
-        ,(
-            SELECT
-                    COUNT(*)
-                FROM
-                    JIRA_ISSUE b
- 				where b.created IS NOT null
-                    AND b.created >= (a.pre_dt +1)
-                    AND b.created < (a.dt + 1)
-                    and projectList.project = b.project
-        ) created
-        ,(
-            SELECT
-                    COUNT(*)
-                FROM
-                    JIRA_ISSUE b
-				where b.RESOLUTIONDATE IS NOT null
-                    AND b.RESOLUTIONDATE >= (a.pre_dt +1)
-                    AND b.RESOLUTIONDATE < (a.dt + 1)
-                    and projectList.project = b.project
-        ) resolved
-    FROM
-    	projectList, 
-        (
-            SELECT
-                  a.dt
-                    ,NVL(lag(a.dt) OVER (
-                    ORDER BY
-                        a.levelno
-                    ), a.dt -1) pre_dt
-                FROM
-                    (
-                        SELECT
-                                *
-                            FROM
-                                (
-                                    SELECT
-                                            TO_DATE((
-                                                SELECT
-                                                        min(start_dt)
-                                                    FROM
-                                                        dt
-                                            ), 'YYYY-MM-DD') + ROWNUM -1 dt
-                                            ,LEVEL AS levelno
-                                        FROM
-                                            dual CONNECT BY LEVEL <= TO_DATE((
-                                                SELECT
-                                                        max(end_dt)
-                                                    FROM
-                                                        dt
-                                            ), 'YYYY-MM-DD') - TO_DATE((
-                                                SELECT
-                                                        min(start_dt)
-                                                    FROM
-                                                        dt
-                                            ), 'YYYY-MM-DD') +1
-                                )
-                            WHERE
-                                MOD(levelno, 7) = 0
-                                OR levelno = 1
-                                OR dt = TO_DATE((
-                                    SELECT
-                                            max(end_dt)
-                                        FROM
-                                            dt
-                                ), 'YYYY-MM-DD')
-                    ) a
-        ) a
-        order by 2;
+with tbl as ( 
+    		select *
+ from (
+				select
+					MEASURE_DT, PJT_CODE, MEASURE, POINT, IS_LATEST, row_number() over (order by MEASURE_DT desc) row_num
+				from FW_QUALITY_HISTORY 
+				where measure_dt   <    '20171010'
+				and pjt_code = 'UFS_COMMON_PLATFORM.platform_dev.columbus'
+			)
+ where row_num = 1
+		)
+		, tbl_dt as (
+			 select
+			 	--his.PJT_CODE,
+			 	p.project, 
+			 	--p.measure_dt,
+			 	--TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') monday,
+				--to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') weekday,
+				max(stc.MEASURE_DT) stc_real_measure_dt,
+				max(fs.MEASURE_DT) fs_real_measure_dt,
+				max(dup.MEASURE_DT) dup_real_measure_dt,
+				max(com.MEASURE_DT) com_real_measure_dt,
+				max(arc.MEASURE_DT) arc_real_measure_dt,
+				max(cov.MEASURE_DT) cov_real_measure_dt,
+				max(cod.MEASURE_DT) cod_real_measure_dt,
+				max(fd.MEASURE_DT) fp_real_measure_dt
+				
+				--to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD')   est_measure_dt
+			from FW_QUALITY_HISTORY his
+			join tbl 
+				on tbl.pjt_code = his.pjt_code
+				and tbl.measure_dt = his.measure_dt
+			join FW_QUALITY_POINT p
+				on p.measure_dt = his.measure_dt
+				and p.pjt_code = his.pjt_code
+			
+			left outer join FW_QUALITY_STATIC_ANALISIS stc
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(stc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(stc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  stc.MEASURE_DT
+												end
+			 	and stc.project = p.project
+			 	
+			left outer join FW_QUALITY_FUNC_SIZE fs
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fs.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fs.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  fs.MEASURE_DT
+												end
+			 	and fs.project = p.project
+			left outer join FW_QUALITY_DUPLICATE_CODE dup
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(dup.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(dup.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  dup.MEASURE_DT
+												end
+			 	and dup.project = p.project
+			 	
+			left outer join FW_QUALITY_COMPLEXITY com
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(com.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(com.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  com.MEASURE_DT
+												end
+			 	and com.project = p.project
+			 
+			 left outer join FW_QUALITY_ARCHITECTURE arc
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(arc.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(arc.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  arc.MEASURE_DT
+												end
+			 	and arc.project = p.project
+			 
+			 left outer join FW_QUALITY_TESTCOVERAGE cov
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cov.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cov.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  cov.MEASURE_DT
+												end
+			 	and cov.project = p.project
+			 	
+			 left outer join FW_QUALITY_CODING_RULE cod
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(cod.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(cod.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  cod.MEASURE_DT
+												end
+			 	and cod.project = p.project
+			 	
+			left outer join FW_QUALITY_FUNC_PARAMETER fd
+			 	on p.measure_dt = 	case 
+													when p.measure_dt > '20160708' then   to_char(TRUNC(to_date(fd.measure_dt,'YYYYMMDD'), 'iw') + (case to_char(to_date(fd.measure_dt,'YYYYMMDD'),'D') when '2' then 1 when '3' then 1 else 8 end),'YYYYMMDD') 
+													else  fd.MEASURE_DT
+												end
+			 	and fd.project = p.project
+			 	
+			 
+			
+ where 1=1 
+			--and his.IS_LATEST = 'Y' 
+			--and p.project = 'Columbus_PCPU'
+			--and his.pjt_code = 'PJT_00062245'  
+			and his.pjt_code = 'UFS_COMMON_PLATFORM.platform_dev.hil_caribe'
+			group by p.PROJECT
+		)
+    	
+		select
+			HIS.MEASURE_DT, 
+			HIS.PJT_CODE, 
+			PL.PJT_NAME,
+			max(PL.PJT_NAME_PMS) as PJT_NAME_PMS,
+			round(max(HIS.MEASURE),2) as MEASURE, 
+			round(max(HIS.POINT),2) as POINT, 
+			
+			nvl(sum(p.LOC),0)  as loc,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(stc.point)/count(*)
+				else nvl(sum(p.LOC*stc.point)/sum(p.LOC),0) 
+			end as STATIC_ANALYSIS
+			,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(FP.POINT)/count(*)
+				else nvl(sum(p.LOC*FP.POINT)/sum(p.LOC),0) 
+			end as FUNC_PARAMETER,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(FS.POINT)/count(*)
+				else nvl(sum(p.LOC*FS.POINT)/sum(p.LOC),0) 
+			end as FUNCTION_SIZE,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(DUP.POINT)/count(*)
+				else nvl(sum(p.LOC*DUP.POINT)/sum(p.LOC),0) 
+			end as DUPLICATE,				
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(cod.POINT)/count(*)
+				else nvl(sum(p.LOC*cod.POINT)/sum(p.LOC),0) 
+			end AS CODING_RULE ,
+			
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(ARC.POINT)/count(*)
+				else nvl(sum(p.LOC*ARC.POINT)/sum(p.LOC),0) 
+			end as ARCHITECTURE,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(COM.POINT)/count(*)
+				else nvl(sum(p.LOC*COM.POINT)/sum(p.LOC),0) 
+			end as COMPLEXITY,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then sum(COV.POINT)/count(*)
+				else nvl(sum(p.LOC*COV.POINT)/sum(p.LOC),0) 
+			end as CODE_COVERAGE,	
+			
+			nvl2(sum(p.LOC) ,'Y','N')  LOC_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(p.stc.point),'Y','N') 
+				else nvl2(sum(p.LOC*stc.point)/sum(p.LOC),'Y','N') 
+			end as STATIC_ANALYSIS_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(FP.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*FP.POINT)/sum(p.LOC),'Y','N') 
+			end as FUNC_PARAMETER_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(FS.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*FS.POINT)/sum(p.LOC),'Y','N') 
+			end as FUNCTION_SIZE_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(DUP.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*DUP.POINT)/sum(p.LOC),'Y','N') 
+			end as DUPLICATE_EXISTS,					
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(cod.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*cod.POINT)/sum(p.LOC),'Y','N') 
+			end AS CODING_RULE_EXISTS ,
+			
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(ARC.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*ARC.POINT)/sum(p.LOC),'Y','N') 
+			end as ARCHITECTURE_EXISTS,
+			case 
+				when nvl(sum(p.LOC),0) = 0 then nvl2(sum(COM.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*COM.POINT)/sum(p.LOC),'Y','N') 
+			end as COMPLEXITY_EXISTS,	
+			case 
+				when nvl(sum(p.LOC),0) = 0 then  nvl2(sum(COV.POINT),'Y','N') 
+				else nvl2(sum(p.LOC*COV.POINT)/sum(p.LOC),'Y','N') 
+			end as CODE_COVERAGE_EXISTS,
+			
+			'XXX' GUBUN,
+			row_number() over (order by his.MEASURE_DT desc) row_num
+		from FW_QUALITY_HISTORY his
+		join tbl 
+			on tbl.pjt_code = his.pjt_code
+			and tbl.measure_dt = his.measure_dt
+			
+		left outer join FW_QUALITY_POINT p
+			on p.measure_dt = his.measure_dt
+			and p.pjt_code = his.pjt_code
+		left outer join tbl_dt  dt
+			on dt.project = p.project
+			
+		left outer join FW_QUALITY_STATIC_ANALISIS  stc
+			on stc.MEASURE_DT = dt.stc_real_measure_dt
+			and stc.project = p.project
+		left outer join FW_QUALITY_FUNC_SIZE fs
+			on fs.MEASURE_DT = dt.fs_real_measure_dt
+			and fs.project = p.project
+		left outer join FW_QUALITY_DUPLICATE_CODE dup
+			on dup.MEASURE_DT = dt.dup_real_measure_dt
+			and dup.project = p.project
+		left outer join FW_QUALITY_COMPLEXITY com
+			on com.MEASURE_DT = dt.com_real_measure_dt
+			and com.project = p.project
+		left outer join FW_QUALITY_ARCHITECTURE arc
+			on arc.MEASURE_DT =  dt.arc_real_measure_dt
+			and arc.project = p.project			
+		left outer join FW_QUALITY_TESTCOVERAGE cov
+			on cov.MEASURE_DT = dt.cov_real_measure_dt
+			and cov.project = p.project
+		left outer join FW_QUALITY_CODING_RULE cod
+			on cod.MEASURE_DT = dt.cod_real_measure_dt
+			and cod.project = p.project
+		left outer join FW_QUALITY_FUNC_PARAMETER fp
+			on fp.MEASURE_DT = dt.fp_real_measure_dt
+			and fp.project = p.project
+		
+			
+		left outer join pjt_list pl
+			on his.pjt_code = pl.pjt_code
+			and pl.use_yn = 'Y'
+		left outer join PJT_MAPPING pm
+			on pm.LEGACY_NAME = 'FWQ'
+			and pm.LEGACY_PJT_NAME = p.project
+			and pm.PJT_NAME = p.pjt_code
+		
+		group by HIS.MEASURE_DT, HIS.PJT_CODE, PL.PJT_NAME

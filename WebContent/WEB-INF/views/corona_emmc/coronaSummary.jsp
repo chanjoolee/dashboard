@@ -633,7 +633,7 @@
 													$.ajax({
 														type: "POST",
 														url: "/dashboard/genericlListJson.html",
-														data: {sqlid: "dashboard.corona.emmc.search.firmware",sample: $("#sample").val() }, 
+														data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.map.search",project: $("#sample").val() }, 
 														async: false,
 														success:  function(response){
 															datas = response.dataList;
@@ -656,6 +656,7 @@
 													
 													$("#loader").show();
 													setTimeout( function(){
+														fn_set_testCase();
 														$("#contentMain").html("");
 														fn_makeHtml("contentMain",schemaContent);
 														$("#loader").hide();
@@ -686,7 +687,7 @@
 												var rtnList = [];
 												$.ajax({
 													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.search.firmware", sample: $("#sample").val() }, 
+													data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.map.search", project: $("#sample").val() }, 
 													async: false,
 													success:  function(response){
 														rtnList = response.dataList;
@@ -716,14 +717,33 @@
 												change : function(){
 													$("#loader").show();
 													setTimeout( function(){
+														fn_set_testCase();
 														$("#contentMain").html("");
 														fn_makeHtml("contentMain",schemaContent);
 														$("#loader").hide();
 													},50); 
 												}
 											}
+										},
+										{
+											type:'SearchHeader',
+											id: 'testCaseHead',
+											name: 'testCaseHead',
+											label:'',
+											text:'TestCase Set',
+											width: '100px'
+										},
+										{
+											type:'SearchHeader',
+											id: 'testCaseValueHead',
+											name: 'testCaseValueHead',
+											label:'',
+											text:' ',
+											width: '100px',
+											controlCss: [
+												{code: 'text-align', value:'left'}
+											]
 										}
-										
 										
 									]
 								}
@@ -840,16 +860,15 @@
 		    				this.COMPUTE_CRETERIA  = "";
 		    			}
 		    			var total = this.TOTAL_COUNT;
-		    			var pass = this.PASS_COUNT;
-		    			var fail = total - pass;
-		    			var progress = pass/total;
-		    			var progress1 = progress * 100;
-		    			var progress2 = progress1.toFixed(2);
-		    			this.progress = progress;
-		    			this.progressStr = progress2 + '%' + ' ( ' + pass + ' / ' + total + ' )';
-		    			
-		    			this.failRateStr = fail + ' / ' + total ;
-		    			this.failRateStr = fail;
+			    		var pass = this.PASS_COUNT;
+			    		var notyet = total - pass - this.FAIL_COUNT;
+			    		var progress = pass/total;
+			    		var progress1 = progress * 100;
+			    		var progress2 = progress1.toFixed(2);
+			    		this.progress = progress;
+			    		this.progressStr = progress2 + '%' + ' ( ' + pass + ' / ' + total + ' )';
+			    			
+			    		this.notyet = notyet;
 		    		});
 		    		
 		    		return dataList;
@@ -867,7 +886,7 @@
 		    			, editrules:{edithidden:true}
 		    		},
 		    		
-		    		{label:'Category',name:'CATEGORY', id:'CATEGORY',width: 150 , cellattr: mergeRow , sortable: false
+		    		{label:'Category',name:'CATEGORY', id:'CATEGORY',width: 110 , cellattr: mergeRow , sortable: false
 						//,stype: "select"
 						//, searchoptions: gridSearchOption.foldername
 						, editable: false
@@ -879,8 +898,16 @@
 		    			, editrules:{edithidden:false}
 		    		},
 					
-					{label:'Test state', name:'testState', id:'testState',width: 100, sortable: false
-						,formatter: function (cellvalue,col,row) {
+					{label:'Test state', name:'testState', id:'testState',width: 90, sortable: false, align: 'center'
+						,formatter: function (cellvalue,col,row,type) {
+							if(type == "edit")
+								return cellvalue;
+							if(cellvalue != undefined && cellvalue.trim() != ""){
+								//if(cellvalue != 'On-going' && cellvalue != 'PASS' )
+								//	return cellvalue;
+								return cellvalue;
+							}
+									
 							var total = row.TOTAL_COUNT;
 			    			var pass = row.PASS_COUNT;
 			    			var fail = total - pass;
@@ -914,12 +941,12 @@
 			    				status = "On-going";
 			    			return status;
                         }
-                        , editable: false
-                        , editrules:{edithidden:true}
+                        , editable: true
+                        //, editrules:{edithidden:true}
 					
 					},
 					
-					{label:'Total',name:'TOTAL_COUNT', id:'TOTAL_COUNT',width: 110 , sortable: false
+					{label:'Total',name:'TOTAL_COUNT', id:'TOTAL_COUNT',width: 50 , sortable: false
 						,sorttype: 'number', formatter:'number', align:'right',formatoptions:{decimalSeparator:",", thousandsSeparator: ",", decimalPlaces: 0}
 						,searchoptions : {
                             // show search options
@@ -927,22 +954,48 @@
 						}
 						, editable: false
 						, editrules:{edithidden:true}		
+						,cellattr: function(){
+							var result = " style=\"background:white;vertical-align: middle;";
+							result += "color: black;font-weight: bolder;";
+							return result;
+						}	
 					},
 					
-					{label:'Pass',name:'PASS_COUNT', id:'PASS_COUNT',width: 110 , sortable: false
+					{label:'Pass',name:'PASS_COUNT', id:'PASS_COUNT',width: 50 , sortable: false
 						,sorttype: 'number', formatter:'number', align:'right',formatoptions:{decimalSeparator:",", thousandsSeparator: ",", decimalPlaces: 0}
 						,searchoptions : {
                             // show search options
                             sopt: ["ge","le","eq"] // ge = greater or equal to, le = less or equal to, eq = equal to  							
 						}
-						, editable: false
-						, editrules:{edithidden:true}		
-					},
-					
-					{label:'Fail',name:'failRateStr', id:'failRateStr', align:'center', width: 110, sortable: false
 						, editable: false
 						, editrules:{edithidden:true}
+						,cellattr: function(){
+							var result = " style=\"background:white;vertical-align: middle;";
+							result += "color: blue;font-weight: bolder;";
+							return result;
+						}			
 					},
+					
+					{label:'Fail',name:'FAIL_COUNT', id:'FAIL_COUNT', align:'center', width: 50, sortable: false, align:'right'
+						, editable: false
+						, editrules:{edithidden:true}
+						,cellattr: function(){
+							var result = " style=\"background:white;vertical-align: middle;";
+							result += "color: red;font-weight: bolder;";
+							return result;
+						}	
+					},
+					
+					{label:'Not<br>Yet',name:'notyet', id:'notyet', align:'center', width: 50, sortable: false, align:'right'
+						, editable: false
+						, editrules:{edithidden:true}
+						,cellattr: function(){
+							var result = " style=\"background:white;vertical-align: middle;";
+							result += "color: black;font-weight: bolder;";
+							return result;
+						}	
+					},
+					
 					
 					{label:'Test progress',name:'progressStr', id:'progressStr', align:'center', width: 110, sortable: false
 						,formatter: function (cellvalue,col,row) {
@@ -974,9 +1027,7 @@
 							return gradientNumberFormat(progress2, "gradient2", 0, 100, 0, 100);
                         }
                         , editrules:{edithidden:true}
-					},
-					
-					
+					},					
 					
 					{label:'Weight',name:'WEIGHT', id:'WEIGHT', align:'center', width: 60, sortable: false
 						, editable: true
@@ -1002,7 +1053,7 @@
 					},
 
 					
-					{label:'Progress Value',name:'COMPUTE_VALUE', id:'COMPUTE_VALUE', align:'center', width: 110, sortable: false
+					{label:'Progress<br/>Value',name:'COMPUTE_VALUE', id:'COMPUTE_VALUE', align:'center', width: 70, sortable: false
 						, editable: true
 						, formatter: 'integer'
 					}, 
@@ -1070,6 +1121,7 @@
 	                        ,onEdit :function(rowid,actop){
 	                        	var grid = $(this).jqGrid();
 	                        	beforEditRow = grid.jqGrid('getRowData',rowid);
+	                        	$("#grid_summary").find("tr#"+ rowid + " [name=testState]").val('');
 	    					}
 	                        
 	                    } 
@@ -1359,6 +1411,7 @@
 		setTimeout( function(){
 			createDB();
 			fn_makeHtml('searchCondition',schemaSearch);
+			fn_set_testCase();
 			fn_makeHtml('contentMain',schemaContent);
 			$( window ).resize(function() {
 				//console.log("aaaaa");
@@ -1464,6 +1517,25 @@
 	    oFrm.submit();
 		newwin.focus();
 	}
+	
+	function fn_set_testCase(){
+		
+		$.ajax({
+			url: "/dashboard/genericlListJson.html",
+			data: {sqlid: "dashboard.corona.emmc.scriptsets.search.by.fimware", sample: $("#sample").val(), firmware: $("#firmware").val() }, 
+			async: false,
+			success:  function(response){
+				if(response.dataList.length > 0){
+					$("#testCaseValueHeadContainer").find('h3').html(": " + response.dataList[0].SCRIPTSET);
+				}else{
+					$("#testCaseValueHeadContainer").find('h3').html(": Not Defined");
+				}
+				
+				
+			}
+		});
+	}
+	
 	</script>
 	
 	</head>

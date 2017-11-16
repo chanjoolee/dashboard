@@ -22,14 +22,12 @@
 	      {
 	        id: "polar 밑에 쫙 펼쳐진 차트'",
 	        desc: "polar 를 제외하고 하나를 추가한다.",
-	        result: "ing"
+	        result: "ok"
 	        process: [
 	        	"smart: chart option 에서 ispolar 를 false",
 	        	"실적로그의 testname과 meta의 testname 이 일치하지 않는 것을 일치시킨다.",
 	        	"속도가 너무 안나온다.",
 	        	"1. regression_meta 에서 ",
-	        	
-	        	
 	        	"hostinfo: chart option 에서 ispolar 를 false",
 	        	"errorlog: chart option 에서 ispolar 를 false"
 	        ]
@@ -1386,10 +1384,70 @@
 					"copy fw_script"
 				]
 			}
+   		
+   			, {
+   				name: "testScript Set",
+   				tables: {
+   					corona_script_sets : [
+   						"scriptset",
+   						"ins_dt",
+   						"mod_dt"
+   					],
+   					corona_scriptset_map : [
+   					
+   					],
+   					CORONA_SCRIPTSET_MAP_F
+   				},
+   				jsp: {
+   					corona_manage_scriptset_edit:{
+   						description: "scriptset 을 정의한다."
+   					},
+   					corona_manage_map_firmware_scriptset:{
+   						description: "firmware 와 scriptset을 mapping 한다."
+   					},
+   					corona_manage_copy_template_scriptset:{
+   						description: "template 로 부터 scriptset에 script를 copy 한다."
+   					},   					
+   					corona_manage_scriptset_script_edit:{
+   						description: "template 로 부터 scriptset에 script를 copy 한 후 script 들을 관리한다. edit, add, del"
+   					}
+   				}
+   				
+   				, copy_emmc: {
+   					tables : [
+   						"CORONA_EMMC_SCRIPT_SETS",
+   						"CORONA_EMMC_SCRIPTSET_MAP",
+   						"CORONA_EMMC_SCRIPTSET_MAP_F"
+   					],
+   					jsp_add: [
+   						"corona_manage_project_tabs",
+   						"corona_manage_scriptset_tabs",
+   						"corona_manage_scriptset_edit",
+   						"corona_manage_map_firmware_scriptset",
+   						"corona_manage_copy_template_scriptset",
+   						"corona_manage_scriptset_script_edit"
+   					
+   					],
+   					jsp_update: [
+   						"coronaSummary",
+   						"corona_portal",
+   						"corona_manage_tabs",
+   						"corona_manage_firmware_edit"
+   						   					
+   					],
+   					sql_add: [
+   						"corona_script_set"
+   					],
+   					sql_update: [
+   						"corona.xml"
+   					]
+   					
+   				}
+   				
+   			}
    		]
    	
    	} ,
-   	
    		
    	"FW Complier License Usage" : {
    		"sourceAnalysis": {
@@ -2496,8 +2554,6 @@
    		}
    		
    	}
-   	
-   	
    	
    	"My" : {
    		"webSearch" : {

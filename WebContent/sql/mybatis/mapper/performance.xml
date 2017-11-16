@@ -4,6 +4,45 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="">
 	<select id="dashboard.preformance.datalist" resultType="hashmap">
+		
+		<if test="data_src != null and data_src != '' and data_src=='CDM_PCI' ">
+   			with tbl_cdm_avg as (
+   				select 
+					p.FOLDER_NAME,
+					f.MEASURE_DT, f.VENDOR, f.PRODUCT_NAME, f.CONTROLLER, f.NAND_TECH, f.CELL_TYPE, f.FORM_FACTOR, f.CAPACITY, f.FIRMWARE, f.SLC_BUFFER, f.SERIAL_NUMBER, f.TEST_COUNT, f.IS_GOOD_DATA,
+					p.TOOL,
+					p.DATA_SRC,
+					p.SPEC,
+					'Average' as SPEC1,
+					nvl(p.SPEC_LABEL,spec) as SPEC_LABEL,
+					p.QUEUE_DEPTH,
+					p.FIELD,
+					round(avg(nvl(to_number(regexp_replace(p.measure, '[^([:digit:].)]')),0)),2) measure
+				from PERFORMANCE p
+				join PERFORMANCE_FOLDER f
+					on p.folder_name = f.folder_name
+				where 1=1
+				<if test="FOLDER_NAME != null and FOLDER_NAME != '' ">
+		       	  and f.folder_name in
+		       		<foreach collection="FOLDER_NAME" item="item" index="index"  open="(" separator="," close=")">
+		           		#{item}
+		       		</foreach>
+		   		</if>
+		   		<if test="data_src != null and data_src != '' ">
+		   			and p.data_src = #{data_src}
+		   		</if>
+				and p.measure is not null
+				group by p.FOLDER_NAME,
+				f.MEASURE_DT, f.VENDOR, f.PRODUCT_NAME, f.CONTROLLER, f.NAND_TECH, f.CELL_TYPE, f.FORM_FACTOR, f.CAPACITY, f.FIRMWARE, f.SLC_BUFFER, f.SERIAL_NUMBER, f.TEST_COUNT, f.IS_GOOD_DATA,
+				p.TOOL,
+				p.DATA_SRC,
+				p.SPEC,
+				--p.SPEC1,
+				nvl(p.SPEC_LABEL,spec) ,
+				p.QUEUE_DEPTH,
+				p.FIELD
+   			) 
+   		</if>
 		select 
 			p.FOLDER_NAME,
 			f.MEASURE_DT, f.VENDOR, f.PRODUCT_NAME, f.CONTROLLER, f.NAND_TECH, f.CELL_TYPE, f.FORM_FACTOR, f.CAPACITY, f.FIRMWARE, f.SLC_BUFFER, f.SERIAL_NUMBER, f.TEST_COUNT, f.IS_GOOD_DATA,
@@ -48,7 +87,43 @@
 			)
 			or p.tool != 'Iometer'
 		)
+		and is_num(p.MEASURE) = 'T'
+		<if test="data_src != null and data_src != '' and data_src=='CDM_PCI' ">
+			union all
+			select * from tbl_cdm_avg
+		</if>
 		
+	</select>
+	<select id="dashboard.preformance.datalist.sustain" resultType="hashmap">
+		select 
+			p.FOLDER_NAME,p.TOOL,
+			f.MEASURE_DT, f.VENDOR, f.PRODUCT_NAME, f.CONTROLLER, f.NAND_TECH, f.CELL_TYPE, f.FORM_FACTOR, f.CAPACITY, f.FIRMWARE, f.SLC_BUFFER, f.SERIAL_NUMBER, f.TEST_COUNT, f.IS_GOOD_DATA,
+			p.TOOL,
+			p.DATA_SRC,
+			p.SPEC,
+			p.SPEC1,
+			nvl(p.SPEC_LABEL,spec) as SPEC_LABEL,
+			p.QUEUE_DEPTH,
+			p.FIELD,
+			nvl(to_number(regexp_replace(p.measure, '[^([:digit:].)]')),0) measure
+		from PERFORMANCE p
+		join PERFORMANCE_FOLDER f
+			on p.folder_name = f.folder_name
+		where 1=1
+		<if test="FOLDER_NAME != null and FOLDER_NAME != '' ">
+       	  and f.folder_name in
+       		<foreach collection="FOLDER_NAME" item="item" index="index"  open="(" separator="," close=")">
+           		#{item}
+       		</foreach>
+   		</if>
+   		and p.tool = 'Sustain'
+   		<if test="data_src != null and data_src != '' ">
+   			and p.data_src = #{data_src}
+   		</if>
+   		
+		and p.measure is not null
+		
+		and is_num(p.MEASURE) = 'T'
 	</select>
 	<select id="dashboard.preformance.tablist" resultType="hashmap">
 		select 
@@ -201,7 +276,7 @@
 			, count(*) cnt 	
 		from PERFORMANCE_FOLDER a
 		where 1=1
-		--and A.CATEGORY in ('CSSD','ESSD')
+		and A.CATEGORY not in ('HMS')
 		<if test="filters != null and filters.fields != null and filters.fields != ''  " >
             <foreach collection="filters.fields" item="item" index="index"  open="" separator="" close="">
                 and ${item} is not null

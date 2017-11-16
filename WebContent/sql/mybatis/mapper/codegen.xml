@@ -14,7 +14,7 @@
 		left outer join all_cons_columns col
 			on con.owner = col.owner
 			and con.constraint_name = col.constraint_name
-		where  con.owner = 'SOLUTIONPMS' and con.constraint_type = 'P'
+		where  con.owner = #{owner}' and con.constraint_type = 'P'
 		and con.table_name not like  'BIN$%'
 		order by con.table_name, col.position
     </select>
@@ -23,7 +23,7 @@
 			t.table_name			
 		from all_tables  t
 		
-		where t.owner = 'SOLUTIONPMS'
+		where t.owner = #{owner}
 		and t.table_name not like  'BIN$%'
 		order by t.table_name
     </select>
@@ -41,7 +41,7 @@
 		left outer join all_tab_cols c
 			on t.owner = c.owner 
 			and t.table_name = c.table_name
-		where t.owner = 'SOLUTIONPMS'
+		where t.owner = #{owner}
 		and t.table_name not like  'BIN$%'
 		order by t.table_name, c.column_id
     </select>

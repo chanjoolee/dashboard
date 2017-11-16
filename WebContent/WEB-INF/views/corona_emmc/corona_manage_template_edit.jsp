@@ -595,7 +595,7 @@
 												var rtnList = [];
 												$.ajax({
 													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "codegen.tables"}, 
+													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
 													async: false,
 													success:  function(response){
 														rtnList = response.dataList;
