@@ -463,8 +463,8 @@
     				
     				if(i > 0)
     					v_sql += ',';
-    				//if(k == 'NUM')
-    				//	v_sql += 'NumberA' + ' ' + typeof v;
+    				if(k == 'NUM')
+    					v_sql += 'NumberA' + ' ' + typeof v;
     				else
     					v_sql += k + ' ' + typeof v;
 					i += 1;
