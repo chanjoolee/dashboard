@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿<%@ page contentType="text/html;charset=utf-8" %>
+<%@ page contentType="text/html;charset=utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 <!DOCTYPE html>
@@ -110,7 +110,21 @@
 		{ region:'JAPAN',region_name:'일본',id:'NGO',name: '나고야' },
 		{ region:'JAPAN',region_name:'일본',id:'FUK',name: '후쿠오카' },
 		{ region:'JAPAN',region_name:'일본',id:'OKA',name: '오키나와' },
-		{ region:'JAPAN',region_name:'일본',id:'CTS',name: '삿포로' }
+		{ region:'JAPAN',region_name:'일본',id:'CTS',name: '삿포로' },
+		
+		{ region:'pacific',region_name:'대양주',id:'SYD',name: '시드니' },
+		{ region:'pacific',region_name:'대양주',id:'AKL',name: '오클랜드' },
+		{ region:'pacific',region_name:'대양주',id:'BNE',name: '브리즈번' },
+		{ region:'pacific',region_name:'대양주',id:'MEL',name: '멜버른' },
+		{ region:'pacific',region_name:'대양주',id:'GUM',name: '괌' },
+		{ region:'pacific',region_name:'대양주',id:'SPN',name: '사이판' },
+		{ region:'pacific',region_name:'대양주',id:'ROR',name: '팔라우' },
+		{ region:'pacific',region_name:'대양주',id:'CNS',name: '케언즈' },
+		{ region:'pacific',region_name:'대양주',id:'PER',name: '퍼스' },
+		{ region:'pacific',region_name:'대양주',id:'CHC',name: '크라이스트쳐치' }
+		
+		
+		
 	];
 	var schemaSearch = {
 			containerId:'searchCondition',
@@ -268,10 +282,55 @@
 										},
 										{
 											type:'SearchHeader',
+											id: 'searchGubunHead',
+											name: 'searchGubunHead',
+											label:'',
+											text:'Search Gubun(day/month) ',
+											width: '200px',
+											containerCss:[
+									    		{code:'text-align',value:'right'}
+									    	]
+										},
+										{
+											type:'multiCombo',
+											id: 'search_gubun',
+											name: 'search_gubun',
+											label:'',
+											text:'Project',
+											width: '110px',
+											data: function(){
+												return [
+													{  id: 'day',name:'day'},
+													{  id: 'month',name:'month'}
+												];
+												
+											},
+											//value :'CSSD',
+											options: {
+												cd:'id',
+												name:'name'
+											},
+											multiselectOpt:{
+												selectedList: 1 ,
+												multiple: false,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													 var sb = [];
+													 $.each(checkedItems,function(){
+														 sb.push($(this).val());
+													 });
+													 return sb.join(",");
+												}
+											},
+											events:{
+											
+											}
+										} ,
+										{
+											type:'SearchHeader',
 											id: 'searchRangMMHead',
 											name: 'searchRangMMHead',
 											label:'',
-											text:'Search Range(Month) ',
+											text:'Search Range ',
 											width: '150px',
 											containerCss:[
 									    		{code:'text-align',value:'right'}
@@ -279,8 +338,8 @@
 										},
 										{
 											type: 'input',
-											id: 'searchRangMM',
-											name: 'searchRangMM',
+											id: 'searchRange',
+											name: 'searchRange',
 											label:'',
 											//value:'7',
 											//width:'100px',
@@ -393,8 +452,14 @@
 		v_list = [];
 		v_sites = {};
 		var start = $('#dateFrom').val().split("-").join("");
-		var searchRangMM = parseInt($("#searchRangMM").val());
-		var end = monthAdd(start,searchRangMM);
+		var search_gubun = $("#search_gubun").val();
+		var searchRange = parseInt($("#searchRange").val());
+		var end = "";
+		if(search_gubun == 'day'){
+			end = dateAdd(start,searchRange);
+		}else{
+			end = monthAdd(start,searchRange);
+		}
 		var dt1 = start; //dateAdd(dt1,Number($("#travel_term").val());
 		//var year = dt1.substr(0,4);
 		//var mm = dt1.substr(4,2);
@@ -469,7 +534,8 @@
 		//url += "&MoreKey=636462660768456428372";
 		url += "&inf=0";
 		url += "&trip=RT";
-		url += "&AirLine=KE";
+		//url += "&AirLine=KE";
+		url += "&AirLine=";
 		url += "&StayLength=";
 		url += "&JSON=Y";
 		url += "&Callback=onJsonResult";
@@ -525,10 +591,6 @@
 //					if(cnt == 0) 
 //						return true;
 						
-					sortObjects(site.responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
-					var goods = site.responseJson.Responses.GoodsList.Goods;
-					// site list add to v_sites
-					
 					if( v_sites[site.name] == undefined ){
 						v_sites[site.name] = {
 							list : [],
@@ -536,11 +598,19 @@
 						};
 					}	
 					
-					$.each(goods,function(j,good){
-						var v1 = dataFilter(airports,[{col:"id",val:airport}])[0];
-						good.airport = v1.name;
-						v_sites[site.name].list.push(good);
-					});	
+					if($.isArray(site.responseJson.Responses.GoodsList.Goods)){
+						sortObjects(site.responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
+						var goods = site.responseJson.Responses.GoodsList.Goods;
+						// site list add to v_sites
+						$.each(goods,function(j,good){
+							var v1 = dataFilter(airports,[{col:"id",val:airport}])[0];
+							good.airport = v1.name;
+							v_sites[site.name].list.push(good);
+						});
+					}else{
+						v_sites[site.name].list.push(site.responseJson.Responses.GoodsList.Goods);
+					}
+					
 					console.log(dt1);
 					/////////// best logic 01.
 					// site best
