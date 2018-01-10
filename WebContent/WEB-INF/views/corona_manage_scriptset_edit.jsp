@@ -82,7 +82,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -1084,6 +1084,11 @@
 						                        $(formid).attr('action','');
 						                        $(formid).attr('enctype','multipart/form-data');
 						                        $(formid).css("font-size","14px");
+						                      	//$(formid).find("#tr_copyfrom td:eq(0) label").text("Copy From(not required)");
+						                        var el = $(document.createElement("span"));
+						                        el.text(" (not required)");
+						                        el.css("color","blue");
+						                        $(formid).find("#tr_copyfrom td:eq(0) label").append(el);
 						                        $(formid).find("#tr_copyfrom").show();
 						                    },
 										    afterSubmit: function(response, postdata) 

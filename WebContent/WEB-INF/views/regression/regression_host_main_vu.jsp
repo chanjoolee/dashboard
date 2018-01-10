@@ -256,7 +256,7 @@
             			    ,tooltip: {
             			        useHTML: true,
             			        headerFormat: '<table>',
-            			        pointFormat: '<tr><th>slot name:</th><td>{series.name}</td</tr>' +
+            			        pointFormat: '<tr><th>slot name:</th><td>{point.SLOTNAME}</td</tr>' +
             			            '<tr><th>command:</th><td>{point.COMMAND}</td></tr>'  +
             			            '<tr><th>test name:</th><td>{point.TESTNAME}</td></tr>' +
             			            '<tr><th>count:</th><td>{point.y}</td></tr>' ,

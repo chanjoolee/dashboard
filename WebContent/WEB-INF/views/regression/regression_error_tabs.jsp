@@ -783,10 +783,10 @@
     	schemaContent.elements[0].elements = [];
     	var el = {
 			"type": "tab_iframe",
-			"id" : "regression_smart_main",
+			"id" : "regression_smart_main_circos",
 			"label" : "Error Main",							
 			"connected_content" :  {
-				"viewName": "regression/regression_error_main",
+				"viewName": "regression/regression_error_main_circos",
 				"form_id" : "form"
 			},
 			"events" : {
@@ -798,6 +798,24 @@
 			]
 		};
 		schemaContent.elements[0].elements.push(el);
+		
+// 		var el1 = {
+// 				"type": "tab_iframe",
+// 				"id" : "regression_smart_main",
+// 				"label" : "Error Main",							
+// 				"connected_content" :  {
+// 					"viewName": "regression/regression_error_main",
+// 					"form_id" : "form"
+// 				},
+// 				"events" : {
+// 					//"click" : tab_click
+// 				},
+// 				"iframe_css" : [
+// 					{ "code": "height", "value": "750px" },
+// 					{ "code": "margin-top", "value": "-7px" }
+// 				]
+// 			};
+// 		schemaContent.elements[0].elements.push(el1);
 		// Main Chart End
 		
 		

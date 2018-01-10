@@ -60,7 +60,7 @@
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 	
-	<%-- xì¶?ê·¸ë£¹?¼ë²¨ --%>
+	<%-- xï¿½?ê·¸ë£¹?ï¿½ë²¨ --%>
 	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
 	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
 	
@@ -81,7 +81,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -239,7 +239,7 @@
 		  width: 100px;
 		}
 		
-		<%-- ??·°--%>
+		<%-- ??ï¿½ï¿½--%>
 		a:hover,a:focus{
 		    text-decoration: none;
 		    outline: none;
@@ -305,7 +305,7 @@
 		
 		
 		<%--
-		/* chartê°€ ?¨ê????‘ì•„ì§€???„ìƒ ?†ì•° */
+		/* chartê°€ ?ï¿½ï¿½????ï¿½ì•„ì§€???ï¿½ìƒ ?ï¿½ì•° */
 		
 		.tab-content > .tab-pane,
 		.pill-content > .pill-pane {
@@ -404,7 +404,7 @@
             float:right;
         }
 		
-		<%--  jqGrid?ì„œ dialogê°€ ?¤ë¡œ ?¨ëŠ” ë¬¸ì œ.--%>
+		<%--  jqGrid?ï¿½ì„œ dialogê°€ ?ï¿½ë¡œ ?ï¿½ëŠ” ë¬¸ì œ.--%>
 		.ui-dialog { z-index: 1000 !important ;}
 		div button.ui-button.ui-dialog-titlebar-close {
 			display: none;
@@ -541,7 +541,7 @@
 		
 	</script>
 	<script  id="script_schemaSearchCondition">
-	//ê·¸ë¦¬???¸ì§‘???°ì´?€
+	//ê·¸ë¦¬???ï¿½ì§‘???ï¿½ì´?ï¿½
 	var tempList = [];
 	var beforEditRow = {};
 	
@@ -723,7 +723,7 @@
 								
 							]
 					 	},
-					 	//ê²€?‰ë²„??					
+					 	//ê²€?ï¿½ë²„??					
 					 	{
 					 		label:'',
 					 		type: 'VerticalLayout',
@@ -1511,7 +1511,7 @@
 			]								
 	};
 		
-	// Å×½ºÆ® Áß. ±×·ìº°·Î »ó¼¼¸®½ºÆ® ¸¸µé±â
+	// ï¿½×½ï¿½Æ® ï¿½ï¿½. ï¿½×·ìº°ï¿½ï¿½ ï¿½ó¼¼¸ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½
 	function groupbyList(json,pkeys){
 		var abcArr = json;
 		var items = {}, base, key,val ;

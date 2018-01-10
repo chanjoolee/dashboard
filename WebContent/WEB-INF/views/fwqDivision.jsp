@@ -1598,6 +1598,13 @@
 		    	break;
 		    	
 		}
+		
+		switch("${param.pmsLastName}") {
+		    case 'Mobile FW UFS':
+		    	is_no = true;
+		    	break;
+		    	
+		}
 		// End. no manage 권한체크
 		
 		if(is_no){
@@ -2033,7 +2040,7 @@
 <input type="hidden" name="cookieName" value="${param.cookieName}"/>
 <input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 <input type="hidden" name="PMS_ROLE" id="PMS_ROLE" value="${param.PMS_ROLE}"/>
-<input type="hidden" id="pjt_code" name="pjt_code" value="${param.userId}"/> 
+<input type="hidden" id="userId" name="userId" value="${param.userId}"/> 
 <input type="hidden" id="pjt_code" name="pjt_code" value=""/> 
 <input type="hidden" id="pjt_name" name="pjt_name" value=""/>
 <input type="hidden" id ="phaseBase" name ="phaseBase" value="phase"/>

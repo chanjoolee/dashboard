@@ -14,7 +14,7 @@
 		left outer join all_cons_columns col
 			on con.owner = col.owner
 			and con.constraint_name = col.constraint_name
-		where  con.owner = #{owner}' and con.constraint_type = 'P'
+		where  con.owner = #{owner} and con.constraint_type = 'P'
 		and con.table_name not like  'BIN$%'
 		order by con.table_name, col.position
     </select>

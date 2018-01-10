@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+
+    <select id="dashboard.trendSyn.main" resultType="hashmap">
+		SELECT 
+			MODULE_NAME, 
+			START_TIME,	
+			AREA_TOTAL, 
+			GATE_COUNT_TOTAL, 
+			LOGIC_AREA_TOTAL, 
+			LOGIC_GC_TOTAL, 
+			LOGIC_PERCENTAGE, 
+			MACRO_AREA_TOTAL, 
+			MACRO_GC_TOTAL, 
+			MACRO_PERCENTAGE
+		FROM SOC_SYNTHESIS
+		order by MODULE_NAME,START_TIME
+    </select>
+    
+    <select id="dashboard.trendSyn.latest" resultType="hashmap">
+		with tbl_time as (
+			select max(start_time) start_time from SOC_SYNTHESIS
+		)
+		
+		select 
+			a.START_TIME, 
+			a.MODULE_NAME, 
+			a.AREA_TOTAL, 
+			a.GATE_COUNT_TOTAL, 
+			a.LOGIC_AREA_TOTAL, 
+			a.LOGIC_GC_TOTAL, 
+			a.LOGIC_PERCENTAGE, 
+			a.MACRO_AREA_TOTAL, 
+			a.MACRO_GC_TOTAL, 
+			a.MACRO_PERCENTAGE
+		from SOC_SYNTHESIS a
+		join tbl_time b 
+			on a.start_time = b.start_time
+    </select>
+</mapper>

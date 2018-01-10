@@ -250,7 +250,8 @@
 		         			            '<tr><th>Test Name:</th><td>{point.TESTNAME}</td></tr>' +
 		         			            '<tr><th>Start Time:</th><td>{point.START_TIME_STR}</td></tr>' +
 		         			            '<tr><th>Attribute:</th><td>{point.ID}. {point.NAME}</td></tr>' +
-		         			            '<tr><th>Value:</th><td>{point.y}</td></tr>',
+		         			            '<tr><th>Normalized:</th><td>{point.y}</td></tr>' +
+		         			           	'<tr><th>Value:</th><td>{point.VAL}</td></tr>',
    	            			        footerFormat: '</table>',
    	            			        followPointer: true
    	            			    }
@@ -322,11 +323,11 @@
 	
 	
 	function loaderShow(){
-		parent.parent.$("#loader").show(); 
+		$("#loader").show(); 
 	}
 	
 	function loaderHide(){
-		parent.parent.$("#loader").hide(); 
+		$("#loader").hide(); 
 	}
 	</script>
 	

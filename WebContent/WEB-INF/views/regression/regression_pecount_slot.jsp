@@ -243,7 +243,7 @@
    	            			        pointFormat: '<tr><th>Series:</th><td>{series.name}</td</tr>' +
 		         			            '<tr><th>Test Name:</th><td>{point.TESTNAME}</td></tr>' +
 		         			            '<tr><th>Group Name:</th><td>{point.GROUP_NAME}</td></tr>' +
-		         			            '<tr><th>Averate:</th><td>{point.y}</td></tr>',
+		         			            '<tr><th>Average:</th><td>{point.y}</td></tr>',
    	            			        footerFormat: '</table>',
    	            			        followPointer: true
    	            			    }
@@ -322,7 +322,7 @@
 							//, searchoptions: gridSearchOption.slotname 
 						},
 						{label:'Group Name',name:'GROUP_NAME', id:'GROUP_NAME',width: 100 },
-						{label:'Average',name:'AVG', id:'AVG',sorttype: 'number',  formatter:'number', align:'right',formatoptions:{decimalSeparator:",", thousandsSeparator: ",", decimalPlaces: 0,}, width: 110 ,
+						{label:'Average',name:'Average', id:'Average',sorttype: 'number',  formatter:'number', align:'right',formatoptions:{decimalSeparator:",", thousandsSeparator: ",", decimalPlaces: 0,}, width: 110 ,
 							searchoptions : {
 	                            // show search options
 	                            sopt: ["ge","le","eq"] // ge = greater or equal to, le = less or equal to, eq = equal to  							

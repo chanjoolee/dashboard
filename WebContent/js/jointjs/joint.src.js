@@ -3066,7 +3066,7 @@
         },
         pointermove: function(a, b, c) {
             this.notify("cell:pointermove", a, b, c);
-			console.log("pointermove:" + this.arguments;
+			//console.log("pointermove:" + this.arguments );
         },
         pointerup: function(a, b, c) {
             this.notify("cell:pointerup", a, b, c), this._graph && (this._graph.stopBatch("pointer", {

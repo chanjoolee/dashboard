@@ -84,9 +84,9 @@
 	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
-	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+	<link rel="stylesheet" type="text/css" href="/dashboard/pms/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/dashboard/pms/css/new.css" />
+	<link rel="stylesheet" type="text/css" href="/dashboard/pms/css/board.css" />
 	<script src="/common/js/module.js"></script>
 	
 	<%-- File Saver --%>

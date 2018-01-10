@@ -145,7 +145,7 @@ public class CommonController {
     	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
     	commonService.requestToVo(request, searchVO);
     	Object filterStr = searchVO.get("filters");
-    	if(filterStr != null){
+    	if(filterStr != null && !filterStr.equals("")){
     		JSONObject filters = JSONObject.fromObject(filterStr.toString());
         	searchVO.put("filtersOrigin", filterStr.toString());
         	searchVO.put("filters", filters);

@@ -82,7 +82,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -755,6 +755,38 @@
 													fn_search_script();
 												}
 											}
+										},
+										{
+											type:'Button',
+											id: 'btnUpload',
+											name: 'btnUpload',
+											label:'UPLOAD',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													$('#fileInput').click();
+												}
+											}
+										},
+										{
+											type:'Button',
+											id: 'btnDownload',
+											name: 'btndownload',
+											label:'DOWNLOAD',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													fn_FileDownloadAjax();
+												}
+											}
 										}
 									
 									 ]
@@ -1409,6 +1441,65 @@
 		}
 	}
 	
+	function fn_FileUploadAjax() {
+		
+		if ($("#fileInput").val() == '') {
+			return;
+		}
+		
+		var ext = $("#fileInput").val().substring($("#fileInput").val().lastIndexOf('.')+1);
+		if($.inArray(ext, ['xls','xlsx']) == -1) {
+			alert('No Excel File.');
+			return;
+		}
+		
+		if (!confirm('upload 하시겠습니까?\n단 upload된 파일 기준으로 Master가 Update되오니 주의 바랍니다.')) {
+			//input file reset
+			$('#fileInput').val('');
+			$('#fileInput').replaceWith($('#fileInput').clone(true));		
+			return;
+		}
+		
+		var formData = new FormData();
+		formData.append("datafile", $("#fileInput")[0].files[0]);
+		formData.append("type", "UFS");
+		
+		parent.$("#loader").show();
+		
+		setTimeout( function(){
+			$.ajax({
+	            type : 'post',
+	            url : '/dashboard/fvtExcelUploadJson.html',
+	            async : false,
+	            data : formData,
+	            processData : false,
+	            contentType : false,
+	            success : function(data) {
+	            	parent.$("#loader").hide();
+	                if (data.result == "success") {
+	                	alert('Success');
+	                	fn_search_script();
+	                } else {
+	                	alert('Fail');
+	                }
+	            },
+	            error : function(error) {
+	                console.log(error);
+	                console.log(error.status);
+	            }
+	        });
+			
+			//input file reset
+			$('#fileInput').val('');
+			$('#fileInput').replaceWith($('#fileInput').clone(true));
+		}, 50);
+	}
+	
+	function fn_FileDownloadAjax() {
+		$("#excelForm").attr("action", "/dashboard/fvtExcelDownJson.html");
+		$("#excelForm").attr("target", "popHiddenFrame");
+		$("#excelForm").submit();
+	}
 	</script>
 	<script  id="script_main">
 	
@@ -1445,6 +1536,7 @@
 	<input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
+	<input type="file" id="fileInput" style="display:none" onchange="fn_FileUploadAjax()"/>
 	
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
@@ -1595,5 +1687,9 @@
 	}
 	
 </script>
- 
+
+<form name="excelForm" id="excelForm" method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="type" value="UFS" />
+</form>
+<iframe name="popHiddenFrame" width="0" height="0" style="display:none;" /> 
 </html>

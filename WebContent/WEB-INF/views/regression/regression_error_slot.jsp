@@ -324,7 +324,7 @@
 							//, stype: "select"
 							//, searchoptions: gridSearchOption.testname 
 						},
-						{label:'No',name:'NO', id:'NO',width: 60,sorttype: 'number', search:false },
+						{label:'No',name:'ERR_NO', id:'ERR_NO',width: 60,sorttype: 'number', search:false },
 						{label:'Error Type',name:'ERROR_TYPE', id:'ERROR_TYPE',width: 100 },
 						{label:'Block',name:'BLOCK', id:'BLOCK',sorttype: 'number',  formatter:'number', align:'right',formatoptions:{decimalSeparator:",", thousandsSeparator: ",", decimalPlaces: 0,}, width: 70 ,
 							searchoptions : {
@@ -368,7 +368,7 @@
 			    		height: '100%',
 			    		sortable: true,
 			    		multiSort:true,
-			    		sortname: 'FIRMWARE, SLOTNAME, TESTNAME, NO',
+			    		sortname: 'FIRMWARE, SLOTNAME, TESTNAME, ERR_NO',
 			    		rowNum: 20,
 						rowList:[10,20,30,50,100],
 			    		//forceFit : false ,

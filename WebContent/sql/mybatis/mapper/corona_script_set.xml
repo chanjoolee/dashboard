@@ -173,12 +173,13 @@
 	    			and sample = #{project}
 	    		) loop
 	    		
+	    			v_status := null;
 	    			for rec_detail in (
 						select
 							STATUS
 						from CORONA_TEST_DETAIL a
-						where a.sample= rec.firmware
-						and a.firmware = rec.sample
+						where a.sample= rec.sample
+						and a.firmware = rec.firmware
 						and a.script = rec.script_name
 						order by YYYYMM
 					) loop
@@ -478,8 +479,8 @@
 							select
 								STATUS
 							from CORONA_TEST_DETAIL a
-							where a.sample= rec1.firmware
-							and a.firmware = rec1.sample
+							where a.sample= rec1.sample
+							and a.firmware = rec1.firmware
 							and a.script = rec.script_name
 							order by YYYYMM
 						) loop

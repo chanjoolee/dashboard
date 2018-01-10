@@ -118,49 +118,49 @@
 					"elements" : [
 						{
 							"type": "tab_iframe",
-							"id" : "hostinfo_data_commands",
+							"id" : "hostinfo_data_commands_circos",
 							"label" : "Data Commands",							
 							"connected_content" :  { 
-								"viewName": "regression/regression_host_main_data",
+								"viewName": "regression/regression_host_main_data_circos1",
 								"form_id" : "form"
 							},
 							"events" : {
 								//"click" : tab_click
 							},
 							"iframe_css" : [
-								{ "code": "height", "value": "700px" },
+								{ "code": "height", "value": "2000px" },
 								{ "code": "margin-top", "value": "-7px" }
 							]
 						},
 						{
 							"type": "tab_iframe",
-							"id" : "hostinfo_nondata_commands",
+							"id" : "hostinfo_nondata_commands_circos",
 							"label" : "Non-Data Commands",							
 							"connected_content" :  { 
-								"viewName": "regression/regression_host_main_nodata",
+								"viewName": "regression/regression_host_main_nodata_circos1",
 								"form_id" : "form"
 							},
 							"events" : {
 								//"click" : tab_click
 							},
 							"iframe_css" : [
-								{ "code": "height", "value": "700px" },
+								{ "code": "height", "value": "2000px" },
 								{ "code": "margin-top", "value": "-7px" }
 							]
 						},
 						{
 							"type": "tab_iframe",
-							"id" : "hostinfo_vu_commands",
+							"id" : "hostinfo_vu_commands_circos",
 							"label" : "Vu",							
 							"connected_content" :  { 
-								"viewName": "regression/regression_host_main_vu",
+								"viewName": "regression/regression_host_main_vu_circos1",
 								"form_id" : "form"
 							},
 							"events" : {
 								//"click" : tab_click
 							},
 							"iframe_css" : [
-								{ "code": "height", "value": "700px" },
+								{ "code": "height", "value": "2000px" },
 								{ "code": "margin-top", "value": "-7px" }
 							]
 						}

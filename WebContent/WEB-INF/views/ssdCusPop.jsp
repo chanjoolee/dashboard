@@ -11,35 +11,29 @@
 	
 	
 	<%-- 1. jquery --%>
-    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <!-- <script src="js/jquery/jquery.form.js"></script> -->
-    <!-- <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script> -->
+    <!--<script src="js/jquery/jquery-1.11.2.js"></script>-->
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
+    <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
     <!-- <script src="js/jquery.csv-0.71.js"></script> -->
     
-    
-    <%-- 2. high charts --%>
-    
-	<script src="js/highcharts/src/highcharts.src.js"></script>
-	<!-- <script src="js/Highstock-2.1.7/js/highstock.src.js"></script>
-	<script src="js/highcharts/modules/drilldown.src.js"></script>
-	<script src="js/Highstock-2.1.7/js/highcharts-more.js"></script>
-	<script src="js/highcharts/modules/no-data-to-display.src.js"></script> -->
-	
-	<%-- jqgrid --%>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+    <%-- jqgrid --%>
+    <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-	<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
-	<%-- datetimepicker --%>
+    
+    <%-- datetimepicker --%>
 	<script src="/dashboard/js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
 	<link rel="stylesheet" href="/dashboard/js/datetimepicker-master/jquery.datetimepicker.css"> 
-	
+    
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>	
+	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+	<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
 	
 	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-	<!--  <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
@@ -48,44 +42,80 @@
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css"> -->
+	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+	 
+    
   
-	<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-	<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-	<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
-	<%--// jqgrid --%>
+   <!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+    <link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+    <!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+    
+    
+    
+    <%-- 2. high charts --%>
+	<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
 	
-	<!-- <script src="js/highcharts/multi-drilldown.js"></script> -->
-	
-	<!-- <script src="js/highcharts/src/highcharts-more.src.js"></script>
-	<script src="js/highcharts/src/exporting.src.js"></script> -->
+	<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 	
 	<%-- x축 그룹라벨 --%>
 	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
 	
 	<%-- 3. Additional files for the Highslide popup effect --%>
-	<!-- <script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
+	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.05.26"></script>
+	<script src="js/dashboard.js?version=2017.09.13.01"></script>
 	
 	<%-- 5. local --%>
-	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
-	<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-	
+	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
 	
 	<%-- multi select --%>
-	<!-- <script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+	<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
+	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
-	<!-- <link rel="stylesheet" type="text/css" href="/dashboard/css/stylesheet-image-based.css" /> -->
+	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+	<script src="/common/js/module.js"></script>
 	
-	<!-- <script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script> -->
-	<link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css">
+	<%-- File Saver --%>
+	<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+	
+	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+	
+	<%-- jqueryMohthPicker --%>
+    <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
+   	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+   	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+   	
+   	<%-- recat --%>
+   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+   	
+   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
 	<style>
 		html, body,form {
 			padding: 0;
@@ -148,6 +178,9 @@
 		
 		<%--  jqGrid에서 dialog가 뒤로 숨는 문제.--%>
 		.ui-dialog { z-index: 1000 !important ;}
+		input[type="text"], input[type="password"]{
+	    	height: 34px;
+	    }
 		
 	</style>
 	<style type="text/css" title="nspmstyle">
@@ -470,7 +503,8 @@
 								        	var el = document.createElement("input");
 								        	el.type="text";
 								        	var data = $(this).jqGrid('getRowData',options.rowId);
-								        	el.value = data[options.name + '_ORIGIN'];
+								        	if(data[options.name + '_ORIGIN'] != undefined)
+								        		el.value = data[options.name + '_ORIGIN'];
 								        	//el.value = '';
 								        	return el;
 								        }
@@ -1210,9 +1244,18 @@
 											//document.getElementById('file_iframe').src =  src;
 											var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
 											if (isIE){
-												var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
-									            var blobObject = new Blob(fileData);
-									            window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+												//var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
+									            //var blobObject = new Blob(fileData);
+									           // window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+									            
+									            var link = document.createElement('a');
+												link.download = row.FILE_NAME;
+												link.href = "${pageContext.request.contextPath}" + row.FILE_PATH;
+												//Firefox requires the link to be in the body
+												document.body.appendChild(link);
+												link.click();
+												link.target = '_blank';
+												document.body.removeChild(link);
 
 											}else{
 												var link = document.createElement('a');
@@ -1358,9 +1401,17 @@
 											
 											var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
 											if (isIE){
-												var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
-									            var blobObject = new Blob(fileData);
-									            window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+												//var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
+									            //var blobObject = new Blob(fileData);
+									            //window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+												var link = document.createElement('a');
+												link.download = row.FILE_NAME;
+												link.href = "${pageContext.request.contextPath}" + row.FILE_PATH;
+												//Firefox requires the link to be in the body
+												document.body.appendChild(link);
+												link.click();
+												link.target = '_blank';
+												document.body.removeChild(link);
 
 											}else{
 												var link = document.createElement('a');
@@ -1681,9 +1732,17 @@
 											
 											var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
 											if (isIE){
-												var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
-									            var blobObject = new Blob(fileData);
-									            window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+												//var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
+									            //var blobObject = new Blob(fileData);
+									            //window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+												var link = document.createElement('a');
+												link.download = row.FILE_NAME;
+												link.href = "${pageContext.request.contextPath}" + row.FILE_PATH;
+												//Firefox requires the link to be in the body
+												document.body.appendChild(link);
+												link.click();
+												link.target = '_blank';
+												document.body.removeChild(link);
 
 											}else{
 												var link = document.createElement('a');

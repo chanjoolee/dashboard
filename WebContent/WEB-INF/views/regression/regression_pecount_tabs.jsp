@@ -787,22 +787,40 @@
 		//Main Chart
     	schemaContent.elements[0].elements = [];
     	var el = {
-			"type": "tab_iframe",
-			"id" : "regression_pecount_main",
-			"label" : "PECount Main",							
-			"connected_content" :  {
-				"viewName": "regression/regression_pecount_main",
-				"form_id" : "form"
-			},
-			"events" : {
-				//"click" : tab_click
-			},
-			"iframe_css" : [
-				{ "code": "height", "value": "2000px" },
-				{ "code": "margin-top", "value": "-7px" }
-			]
-		};
-		schemaContent.elements[0].elements.push(el);
+    			"type": "tab_iframe",
+    			"id" : "regression_pecount_main_circos",
+    			"label" : "PECount Main",							
+    			"connected_content" :  {
+    				"viewName": "regression/regression_pecount_main_circos",
+    				"form_id" : "form"
+    			},
+    			"events" : {
+    				//"click" : tab_click
+    			},
+    			"iframe_css" : [
+    				{ "code": "height", "value": "2000px" },
+    				{ "code": "margin-top", "value": "-7px" }
+    			]
+    	};
+    	schemaContent.elements[0].elements.push(el);
+    	
+//     	var el1 = {
+// 			"type": "tab_iframe",
+// 			"id" : "regression_pecount_main",
+// 			"label" : "PECount Main",							
+// 			"connected_content" :  {
+// 				"viewName": "regression/regression_pecount_main",
+// 				"form_id" : "form"
+// 			},
+// 			"events" : {
+// 				//"click" : tab_click
+// 			},
+// 			"iframe_css" : [
+// 				{ "code": "height", "value": "2000px" },
+// 				{ "code": "margin-top", "value": "-7px" }
+// 			]
+// 		};
+// 		schemaContent.elements[0].elements.push(el1);
 		// Main Chart End
 		
 		
@@ -840,7 +858,7 @@
 			var el1 = {
 				"type": "tab_iframe",
 				"id" : "regression_pecount_slot_" + slotname,
-				"label" : slotname,							
+				"label" : slotname.replace(/^regress-/i,''),							
 				"connected_content" :  {
 					"viewName": "regression/regression_pecount_slot&slotName=" + slotname,
 					"form_id" : "form"

@@ -464,7 +464,7 @@
 								//"click" : tab_click
 							},
 							"iframe_css" : [
-								{ "code": "height", "value": "770px" },
+								{ "code": "height", "value": "1000px" },
 								{ "code": "margin-top", "value": "-7px" }
 								
 								
@@ -486,70 +486,38 @@
 								{ "code": "margin-top", "value": "-7px" }
 							]
 						},
-//						{
-//							"type": "tab_iframe",
-//							"id" : "category_task_duration",
-//							"label" : "Category/Task Duration",							
-//							"connected_content" :  {
-//								"viewName": "regression/regression_main_03_category_task_duration",
-//								"form_id" : "form"
-//							},
-//							"events" : {
-//								//"click" : tab_click
-//							},
-//							"iframe_css" : [
-//								{ "code": "height", "value": "730px" },
-//								{ "code": "margin-top", "value": "-7px" }
-//							]
-//						},
-//						{
-//							"type": "tab_iframe",
-//							"id" : "task_count",
-//							"label" : "Task Count",							
-//							"connected_content" :  {
-//								"viewName": "regression/regression_main_04_task_count",
-//								"form_id" : "form"
-//							},
-//							"events" : {
-//								//"click" : tab_click
-//							},
-//							"iframe_css" : [
-//								{ "code": "height", "value": "730px" },
-//								{ "code": "margin-top", "value": "-7px" }
-//							]
-//						},
-//						{
-//							"type": "tab_iframe",
-//							"id" : "task_duration",
-//							"label" : "Task Duration",							
-//							"connected_content" :  {
-//								"viewName": "regression/regression_main_05_task_duration",
-//								"form_id" : "form"
-//							},
-//							"events" : {
-//								//"click" : tab_click
-//							},
-//							"iframe_css" : [
-//								{ "code": "height", "value": "730px" },
-//								{ "code": "margin-top", "value": "-7px" }
-//							]
-//						},
-//						{
-//							"type": "tab_iframe",
-//							"id" : "task_grid",
-//							"label" : "Raw Datas",							
-//							"connected_content" :  {
-//								"viewName": "regression/regression_main_datagrid",
-//								"form_id" : "form"
-//							},
-//							"events" : {
-//								//"click" : tab_click
-//							},
-//							"iframe_css" : [
-//								{ "code": "height", "value": "770px" },
-//								{ "code": "margin-top", "value": "-7px" }
-//							]
-//						}
+						{
+							"type": "tab_iframe",
+							"id" : "category_task_time_table",
+							"label" : "Category/Task Time(Table)",							
+							"connected_content" :  {
+								"viewName": "regression/regression_main_02.1_category_task_time",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							},
+							"iframe_css" : [
+								{ "code": "height", "value": "2000px" },
+								{ "code": "margin-top", "value": "-7px" }
+							]
+						},
+						{
+							"type": "tab_iframe",
+							"id" : "category_count_duration",
+							"label" : "Count / Duration",							
+							"connected_content" :  {
+								"viewName": "regression/regression_main_03_count_duration",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							},
+							"iframe_css" : [
+								{ "code": "height", "value": "1000px" },
+								{ "code": "margin-top", "value": "-7px" }
+							]
+						}
 						
 						
 					]

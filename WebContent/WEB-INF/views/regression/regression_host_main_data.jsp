@@ -208,25 +208,51 @@
 	            		var xAxis = {
 	            			 tickmarkPlacement: 'on'
 	            		};
-	            		//xAxis.categories = series.category.x1;
-	            		xAxis.categories = _.map(series.category.x1,function(m,i){
-	            			return m.split("`")[0];
-	            		});
-	            		xAxis.categoriesOrigine = series.category.x;
-	            		
+	            		// xTickPositions
 	            		var xTickPositions = [];
 	            		var pre = '';
 	            		var cur = '';
 	            		$.each(series.category.x, function(i,c){
+	            			c.label = "";
 	            			var command = c.COMMAND_TESTNAME.split("`")[0];
 	            			cur = command;
 	            			if(i == 0)
 	            				xTickPositions.push(c.idx);
-	            			if(i > 0 && pre != cur)
+	            			if(i > 0 && pre != cur){
 	            				xTickPositions.push(c.idx);
+	            				var pos1 = xTickPositions[xTickPositions.length -2];
+	            				var pos2 = xTickPositions[xTickPositions.length -1];
+	            				var label_pos = pos1 + Math.round((pos2-pos1)/2 , 0) ;
+	            				series.category.x[label_pos].label = command;
+	            			}
+	            				
 	            			pre = command;
 	            		} );
 	            		xAxis.tickPositions = xTickPositions;
+	            		
+	            		
+	            		//xAxis.categories = series.category.x1;
+	            		xAxis.categories = _.map(series.category.x1,function(m,i){
+	            			return m.split("`")[0];
+	            			//return i;
+	            		});
+	            		xAxis.categoriesOrigine = series.category.x;
+	            		
+	            		var vxpos = -1;
+	            		xAxis.labels = {
+	            			//format: '{value}',
+	            			formatter: function () {
+	            				vxpos += 1;
+	            				return this.value;
+	            				//return series.category.x1[this.value];
+	            				//return series.category.x[vxpos].label;
+	            				//return series.category.x[this.value].label;
+    				
+    						}
+    						//,rotation: 290
+	            		};
+	            		
+	            		
 	            		rtn.xAxis = xAxis;	
 	            		
 	            		// return start
@@ -256,7 +282,7 @@
             			    ,tooltip: {
             			        useHTML: true,
             			        headerFormat: '<table>',
-            			        pointFormat: '<tr><th>slot name:</th><td>{series.name}</td</tr>' +
+            			        pointFormat: '<tr><th>slot name:</th><td>{point.SLOTNAME}</td</tr>' +
             			            '<tr><th>command:</th><td>{point.COMMAND}</td></tr>'  +
             			            '<tr><th>test name:</th><td>{point.TESTNAME}</td></tr>' +
             			            '<tr><th>count:</th><td>{point.y}</td></tr>' ,
@@ -282,6 +308,7 @@
 		loaderShow();
 		setTimeout( function(){
 			fn_makeHtml('contentMain',schemaContent);
+			$("#host_polarContainer svg g path:eq(0)").css("stroke-width","0");
 			loaderHide();
 		},50);
 		$( window ).resize(function() {

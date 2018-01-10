@@ -538,8 +538,8 @@
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_2_dragAndDrop.html');">02-2. diagram drag and drop sample</a>	
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_3_joint.html');">02-3. diagram joint</a>
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_4_joint.html');">02-4. diagram joint: template</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagramGeneral.html?viewname=diagram02_5_joint');">02-5. diagram joint: template</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram02_6_joint');">02-6. diagram joint: template</a>		
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewname=diagram/diagram02_5_joint');">02-5. diagram joint: template</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram02_6_joint');">02-6. diagram joint: template</a>		
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram_erd');">diagram: erd</a>	
 							
 				</div>
@@ -551,6 +551,7 @@
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=websearch/webSearch');">Web Search</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=websearch/webSearch2');">Web Search2</a>
 				</div>
 			</li>
 		</ul>

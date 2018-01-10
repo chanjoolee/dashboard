@@ -59,7 +59,7 @@ public class FwqCodingRule {
 	
 	@SuppressWarnings("unchecked")
 	@GET
-	@Path("/list/{pjt_code}{project: /(\\w+)?}/{measureDt1}/{measureDt2}") 
+	@Path("/list/{pjt_code}{project: /([\\w-]+)?}/{measureDt1}/{measureDt2}") 
 	@Produces("application/json")
 	@Consumes({MediaType.APPLICATION_JSON})
 	public Response getList(

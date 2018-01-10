@@ -81,7 +81,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -972,41 +972,28 @@
 																}
 															},
 															items: [
-																{label:'Script Name', col: 'SCRIPT_NAME', editable: false},
-																{label:'Category', col: 'CATEGORY', editable: false},
+																{label:'Script Name', col: 'SCRIPT_NAME', editable: true},
+																{label:'Category', col: 'CATEGORY', editable: true},
 																{label:'Test Item', col: 'TEST_ITEM', editable: false},
-																{label:'Single Multi', col: 'SINGLE_MULTI'},
-																{label:'Power Mode Speed', col: 'POWER_MODE_SPEED'},
-																{label:'Test Time', col: 'TEST_TIME'},
+																{label:'TIME', col: 'TIME'},
+																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
 																{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-																{label:'Luconfig 유무', col: 'LUCONFIG_YN'},
-																{label:'UFS Ver', col: 'UFS_VER'},
-																{label:'Precondition', col: 'PRECONDITION'},
-																{label:'POR', col: 'POR'},
-																{label:'HW Reset', col: 'HW_RESET'},
-																{label:'EP Reset', col: 'EP_RESET'},
-																{label:'H8', col: 'H8'},
-																{label:'SSU', col: 'SSU'},
-																{label:'Target LU', col: 'TARGET_LU'},
-																{label:'Power Control', col: 'POWER_CONTROL'},
-																{label:'Item Name', col: 'ITEM_NAME'},
-																{label:'Script TAT LVL', col: 'SCRIPT_TAT_LVL'},
-																{label:'Script Version', col: 'SCRIPT_VERSION'},
-																{label:'PF110', col: 'PF110'},
-																{label:'EXYNOS 7420', col: 'EXYNOS_7420'},
-																{label:'P4 Rev', col: 'P4_REV'},
-																{label:'Priority', col: 'PRIORITY'},
-																{label:'TG645', col: 'TG645'},
-																{label:'Need Power Cycle', col: 'NEED_POWER_CYCLE'},
-																{label:'Reset YN', col: 'RESET_YN'},
-																{label:'Script LVL', col: 'SCRIPT_LVL'},
-																{label:'Refactoring', col: 'REFACTORING'},
-																{label:'Reset Type', col: 'RESET_TYPE'},
+																{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
+																{label:'EMMC Ver', col: 'EMMC_VER'},
+																{label:'Target Device', col: 'TARGET_DEVICE'},
+																{label:'Target Partition', col: 'TARGET_PARTITION'},
+																{label:'Category1', col: 'CATEGORY1'},
+																{label:'Category2', col: 'CATEGORY2'},
+																{label:'Category3', col: 'CATEGORY3'},
+																{label:'Category4', col: 'CATEGORY4'},
+																{label:'Category5', col: 'CATEGORY5'},
+																{label:'Write Mode', col: 'WRITE_MODE'},
+																{label:'Read Mode', col: 'READ_MODE'},
+																{label:'Platform', col: 'PLATFORM'},
+																{label:'Function Name', col: 'FUNCTION_NAME'},
 																
-																{label:'Item Purpose', col: 'ITEM_PURPOSE', edit_tag: 'textarea'},
-																{label:'Item Description', col: 'ITEM_DESCRIPTION' , edit_tag: 'textarea'},
-																{label:'Input Parameter', col: 'INPUT_PARAMETER' , edit_tag: 'textarea'},
-																{label:'Comment', col: 'USER_COMMENT' , edit_tag: 'textarea'}
+																{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+																{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
 															]
 															
 														}
@@ -1645,6 +1632,7 @@
 		$.ajax({
 			url: "/dashboard/genericlListJson.html",
 			type: "POST",
+			timeout: 200000,
 			data: {
 				sqlid: "dashboard.corona.historyno"
 			}, 
@@ -1659,6 +1647,7 @@
 		$.ajax({
 			url: "/dashboard/genericSaveJson.html",
 			type: "POST",
+			timeout: 200000,
 			data: {
 				searchJson: JSON.stringify(paramObj),
 				history_no : v_hystoryno ,

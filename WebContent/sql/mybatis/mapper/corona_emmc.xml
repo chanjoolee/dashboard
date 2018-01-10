@@ -80,6 +80,7 @@
 				A.*, ROWNUM AS ROW_NUM
 			from 
 			(
+					
 				select
 					d.YYYYMM,
 					d.TEST_BOARD,
@@ -87,14 +88,16 @@
 					m.FIRMWARE,
 					d.SCRIPT_NAME,
 					d.SAMPLE_NUMBER,
-					d.SCRIPT,					
+					d.SCRIPT,		
+					
 					d.SEQ,
 					d.TEST_TIME,
-					nvl(m.STATUS,'No Data') as STATUS,
+					nvl(m.STATUS,'Not Yet') as STATUS,
 					d.STATUS_DETAIL,
 					d.DURATION,	
 					
 					m.SCRIPT_NAME as SCRIPT_NAME_META,
+					sm.CONVERT_SCRIPT,	
 					m.CATEGORY, 
 					m.TEST_ITEM, 
 					m.TIME TEST_TIME_MASTER, 
@@ -116,29 +119,50 @@
 					substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
 					m.ARGUMENT, 
 					m.PLATFORM, 
-					m.FUNCTION_NAME
+					m.FUNCTION_NAME,
+					m.JIRA
 					
 				from CORONA_EMMC_F_S_MAP m
 				left outer join CORONA_EMMC_TEST_DETAIL_LAST d
 					on m.firmware = d.firmware
 					and m.sample = d.sample
 					and m.script_name = d.script
-				where m.sample = #{sample}
-				and m.FIRMWARE = #{firmware}
-				and m.CATEGORY = #{category}
+				left outer join CORONA_EMMC_SCRIPT_MASTER sm 
+					on sm.script_name = m.script_name
+				where 1=1 
+				<if test="sample != null and sample != '' " >and m.sample = #{sample}</if>
+				<if test="firmware != null and firmware != '' " >and m.FIRMWARE = #{firmware}</if>
+				<if test="category != null and category != '' " >and m.CATEGORY = #{category}</if>
+				<if test="testItem != null and testItem != '' " > and m.test_item = #{testItem}</if>
+				<if test="script_name != null and script_name != '' " > and m.script_name = #{script_name}</if>
+				<if test="countGubun != null and countGubun != '' and countGubun == 'pass' " > and m.STATUS = 'PASS'</if>
+				<if test="countGubun != null and countGubun != '' and countGubun == 'fail' " > and m.STATUS = 'FAIL'</if>
+				<if test="countGubun != null and countGubun != '' and countGubun == 'notyet' " > and m.STATUS is null</if>
 				
-				order by d.YYYYMM,d.TEST_BOARD, d.SAMPLE, d.FIRMWARE, d.SCRIPT_NAME, d.SAMPLE_NUMBER, d.SCRIPT
+				order by m.SAMPLE,m.FIRMWARE, m.TEST_ITEM,d.YYYYMM,d.TEST_BOARD, d.SAMPLE, d.FIRMWARE, d.SCRIPT_NAME, d.SAMPLE_NUMBER, d.SCRIPT
 			) A
 			where 1=1
 			<choose>
-				<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
-		       		<foreach collection="filters.rules" item="item" index="index"  >
-		           		and REGEXP_LIKE(${item.field},#{item.data},'i') 
-		       		</foreach>
-		   		</when>
-		   		<otherwise>
-		   		</otherwise>
-	   		</choose>
+			<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+				and (
+				<if test="filters.rules.size() > 0" >
+		       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+		           		<if test="index > 0 "> ${filters.groupOp} </if>  REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+		       		</foreach>	
+		       	</if>	
+		       	<if test="filters.groups != null and filters.groups.size() > 0">
+	       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+		       			<if test="group.rules.size() > 0">
+		       			${filters.groupOp}
+			           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+				        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+				       	</foreach>
+				       	</if>
+			       	</foreach>
+	       		</if> 
+	       		 )
+	   		</when>
+  			</choose>
 		) A
 		where
     	<![CDATA[
@@ -164,12 +188,13 @@
 						d.SCRIPT,
 						d.SEQ,
 						d.TEST_TIME,
-						nvl(d.STATUS,'No Data') as STATUS,
+						nvl(m.STATUS,'Not Yet') as STATUS,
 						d.STATUS_DETAIL,
 						d.DURATION,	
 						
 						
 						m.SCRIPT_NAME as SCRIPT_NAME_META,
+						sm.CONVERT_SCRIPT,
 						m.CATEGORY, 
 						m.TEST_ITEM, 
 						m.TIME TEST_TIME_MASTER, 
@@ -191,34 +216,88 @@
 						substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
 						m.ARGUMENT, 
 						m.PLATFORM, 
-						m.FUNCTION_NAME
+						m.FUNCTION_NAME,
+						m.JIRA
 						
 					from CORONA_EMMC_F_S_MAP m
 					left outer join CORONA_EMMC_TEST_DETAIL_LAST d
 						on m.firmware = d.firmware
 						and m.sample = d.sample
 						and m.script_name = d.script
-					where m.sample = #{sample}
-					and m.FIRMWARE = #{firmware}
-					and m.CATEGORY = #{category}
+					left outer join CORONA_EMMC_SCRIPT_MASTER sm 
+						on sm.script_name = m.script_name
+					where 1=1 
+					<if test="sample != null and sample != '' " >and m.sample = #{sample}</if>
+					<if test="firmware != null and firmware != '' " >and m.FIRMWARE = #{firmware}</if>
+					<if test="category != null and category != '' " >and m.CATEGORY = #{category}</if>
+					<if test="testItem != null and testItem != '' " > and m.test_item = #{testItem}</if>
+					<if test="script_name != null and script_name != '' " > and m.script_name = #{script_name}</if>
+					<if test="countGubun != null and countGubun != '' and countGubun == 'pass' " > and m.STATUS = 'PASS'</if>
+					<if test="countGubun != null and countGubun != '' and countGubun == 'fail' " > and m.STATUS = 'FAIL'</if>
+					<if test="countGubun != null and countGubun != '' and countGubun == 'notyet' " > and m.STATUS is null</if>
+					order by m.SAMPLE,m.FIRMWARE, m.TEST_ITEM,d.YYYYMM,d.TEST_BOARD, d.SAMPLE, d.FIRMWARE, d.SCRIPT_NAME, d.SAMPLE_NUMBER, d.SCRIPT
 				) A
 				where 1=1
 				<choose>
-					<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
-			       		<foreach collection="filters.rules" item="item" index="index"  >
-			           		and REGEXP_LIKE(${item.field},#{item.data},'i') 
-			       		</foreach>
-			   		</when>
-			   		<otherwise>
-			   		</otherwise>
-		   		</choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>  REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	  			</choose>
 			)
 		
 		
 		
 				
 	</select>
-	
+	<select id="dashboard.corona.emmc.detail.subDetail" resultType="hashmap">
+		select
+			nvl(m.STATUS,'Not Yet') as STATUS,
+			m.SCRIPT_NAME as SCRIPT_NAME_META,
+			m.CATEGORY, 
+			m.TEST_ITEM, 
+			m.TIME TEST_TIME_MASTER, 
+			m.CUSTOMER_ITEM, 
+			m.NEED_VENDOR_CMD, 
+			m.NEED_POWER_CYCLE, 
+			m.EMMC_VER, 
+			m.TARGET_DEVICE, 
+			m.TARGET_PARTITION, 
+			m.CATEGORY1, 
+			m.CATEGORY2, 
+			m.CATEGORY3, 
+			m.CATEGORY4, 
+			m.CATEGORY5, 
+			m.WRITE_MODE, 
+			m.READ_MODE, 
+			substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+			m.DESCRIPTION,
+			substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+			m.ARGUMENT, 
+			m.PLATFORM, 
+			m.FUNCTION_NAME,
+			m.JIRA
+			
+		from CORONA_EMMC_F_S_MAP m
+		where m.sample = #{sample}
+		and m.FIRMWARE = #{firmware}
+		and m.SCRIPT_NAME = #{script_name}
+	</select>
 	<select id="dashboard.corona.emmc.detail" resultType="hashmap">
 		select
 			d.YYYYMM,
@@ -228,12 +307,24 @@
 			d.SCRIPT_NAME,
 			d.SAMPLE_NUMBER,
 			d.SCRIPT,			
+			sm.CONVERT_SCRIPT,
 			d.SEQ,
 			to_char(d.TEST_TIME,'YYYY-MM-DD HH24:MI:SS') as TEST_TIME,
 			d.STATUS,
 			d.STATUS_DETAIL,
-			d.DURATION			
+			d.DURATION,
+			s.FILE_NAME,
+			s.FILA_PATH			
 		from CORONA_EMMC_TEST_DETAIL d
+		left outer join CORONA_EMMC_TEST_SUMMARY s
+			on s.YYYYMM = d.YYYYMM
+			and s.TEST_BOARD = d.TEST_BOARD
+			and s.SAMPLE = d.SAMPLE
+			and s.FIRMWARE = d.FIRMWARE
+			and s.SCRIPT_NAME = d.SCRIPT_NAME
+			and s.SAMPLE_NUMBER = d.SAMPLE_NUMBER
+		left outer join CORONA_EMMC_SCRIPT_MASTER sm
+			on sm.script_name = d.script
 		where 1=1
 		and d.test_board = #{test_board}		
 		and d.sample = #{sample}
@@ -290,11 +381,25 @@
 	</select>
 	
 	<select id="dashboard.corona.emmc.search.sample" resultType="hashmap">
-		select
-			distinct SAMPLE
-		from CORONA_EMMC_FIRMWARE_MASTER
-		where 1=1
-		--firmware = 'U3AE351C5419'
+		with tbl_project as (
+			select
+				distinct a.SAMPLE
+			from CORONA_EMMC_FIRMWARE_MASTER a
+			where 1=1
+			and not exists (
+				select * from CORONA_EMMC_PROJECT t
+				where t.use_yn = 'N'
+				and a.sample = t.project
+			)
+		)
+		
+		select 
+			a.sample,
+			b.use_yn,
+			nvl(b.scriptset,'Normal') as default_scriptset
+		from tbl_project a
+		left outer join CORONA_EMMC_PROJECT b
+		on a.sample = b.project
 		order by 1
 	
 	</select>
@@ -539,6 +644,8 @@
 	<update id="dashboard.corona.emmc.script_master.update" parameterType="hashmap" >
     	declare
 	    	cnt number;
+	    	v_script_name varchar2(2000);
+	    	v_status varchar2(10);
 	    begin
 	    	
 	    		select count(*) into cnt from CORONA_EMMC_SCRIPT_MASTER
@@ -554,6 +661,9 @@
 			   		</otherwise>
 		   		</choose>   
 	    		;
+	    		
+	    		
+	    		
 	    		
 	    		if cnt = 1 then
 	              	update CORONA_EMMC_SCRIPT_MASTER set
@@ -572,10 +682,70 @@
 			   		</choose>          	
 	          		;
 	          		
+	          		update CORONA_EMMC_SCRIPTSET_MAP set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+	          		
+	          		
+	          		update CORONA_EMMC_F_S_MAP set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+	          		
+	          		if '${fieldName}' != 'SCRIPT_NAME' then
+		          		select script_name into v_script_name from CORONA_EMMC_SCRIPT_MASTER
+		          		where 1=1
+			    		<choose>
+								<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+					       			and ${item.field} = #{item.value}
+					       		</foreach>
+					   		</when>
+					   		<otherwise>
+					   			and 1=2
+					   		</otherwise>
+				   		</choose> 		   	
+				   		;
+				   		
+			   		end if;
+	          		
 	          		if '${fieldName}' = 'SCRIPT_NAME' then
+	          			v_script_name := #{fieldValue};          			
+	          			
+	          			--// update CORONA_EMMC_SCRIPTSET_MAP
+	          			 update CORONA_EMMC_SCRIPTSET_MAP set
+	          			 SCRIPT_NAME = #{fieldValue},
+	          			 DESCRIPTION = DESCRIPTION || case when DESCRIPTION is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
+	          			 MOD_DT = sysdate
+	          			 where SCRIPT_NAME = #{fieldValueOrigin};
+	          		
 	          			--// update_firmware_table	          			
 	          			update CORONA_EMMC_F_S_MAP set
 	          			SCRIPT_NAME = #{fieldValue},
+	          			DESCRIPTION = DESCRIPTION || case when DESCRIPTION is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
 	          			MOD_DT = sysdate
 	          			where SCRIPT_NAME = #{fieldValueOrigin};
 	          			
@@ -599,7 +769,58 @@
 	          			where SCRIPT_NAME = #{fieldValue};
 	          			
 	          		end if;
+	          		
+	          		--//  Status
+	          		for rec_scriptset in (
+	          			select SCRIPTSET from CORONA_EMMC_SCRIPT_SETS
+	          		) loop 
+	          			for rec_firmwares in (
+	          				select  FIRMWARE, SAMPLE, SCRIPTSET  from CORONA_EMMC_SCRIPTSET_MAP_F
+	          				where SCRIPTSET = rec_scriptset.SCRIPTSET
+	          			) loop
+	          				--//Start. status update
+							v_status := null;
+							for rec_detail in (
+								select
+									STATUS
+								from CORONA_EMMC_TEST_DETAIL a
+								where a.sample= rec_firmwares.sample
+								and a.firmware = rec_firmwares.firmware
+								and a.script = v_script_name
+								order by YYYYMM
+							) loop
+								v_status := rec_detail.STATUS;
+								if rec_detail.STATUS = 'FAIL' then 
+									exit;
+								end if;
+							end loop;
+							
+							UPDATE CORONA_EMMC_F_S_MAP SET						
+								status = v_status
+								,DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) '
+								,MOD_DT = sysdate
+							where firmware = rec_firmwares.firmware
+							and sample = rec_firmwares.sample
+							and script_name =  v_script_name;
+							--// End. status update
+							
+	          				
+	          			
+	          			end loop;
+	          			--// end rec_firmwares
+	          			
+	          		end loop;
+	          		--// end rec_scriptset
+	          		--// End Status  		
+			         
+			         
+			         
+			         
+			         
+			         
 	        end if;
+	        
+	         
                 
        	 
 	    end;
@@ -608,10 +829,79 @@
     <update id="dashboard.corona.emmc.script_master.insert" parameterType="hashmap" >
     	declare
 	    	cnt number;
+	    	v_status varchar2(100);
 	    begin
 	    	
-	    		insert into CORONA_EMMC_SCRIPT_MASTER (SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
-                values (#{SCRIPT_NAME},#{CATEGORY},#{TEST_ITEM}, sysdate) ;
+    		insert into CORONA_EMMC_SCRIPT_MASTER (SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
+            values (#{SCRIPT_NAME},#{CATEGORY},#{TEST_ITEM}, sysdate) ;
+                
+            select count(*) into cnt from CORONA_EMMC_SCRIPTSET_MAP
+            where SCRIPTSET = 'Normal'
+            and SCRIPT_NAME = #{SCRIPT_NAME};
+            
+            if cnt = 0 then
+            	insert into CORONA_EMMC_SCRIPTSET_MAP (SCRIPTSET, SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
+            	values ('Normal', #{SCRIPT_NAME},#{CATEGORY},#{TEST_ITEM}, sysdate);
+            end if;
+	              
+	        For rec_firmware in (
+				select FIRMWARE, SAMPLE,SCRIPTSET from CORONA_EMMC_SCRIPTSET_MAP_F
+				where 1=1
+				and SCRIPTSET = 'Normal'
+			)
+			Loop
+				-- DELETE	
+				delete from CORONA_EMMC_F_S_MAP 
+				where FIRMWARE = rec_firmware.firmware
+				and SAMPLE = rec_firmware.sample
+				and SCRIPT_NAME = #{SCRIPT_NAME};
+				-- INSERT
+				insert into CORONA_EMMC_F_S_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
+				select
+					rec_firmware.firmware,
+					rec_firmware.sample,
+					SCRIPT_NAME, 
+					CATEGORY,
+					TEST_ITEM,
+					sysdate
+				from CORONA_EMMC_SCRIPTSET_MAP
+				where SCRIPTSET = 'Normal'
+				and script_name = #{SCRIPT_NAME};
+					
+					
+				--// 04 STATUS UPDATE
+				for rec_script in (
+					select * from CORONA_EMMC_F_S_MAP 
+					where firmware = rec_firmware.firmware and sample = rec_firmware.sample
+					and script_name = #{SCRIPT_NAME}
+				) loop 
+					v_status := null;
+					for rec_detail in (
+						select
+							STATUS
+						from CORONA_EMMC_TEST_DETAIL a
+						where a.sample= rec_script.sample
+						and a.firmware = rec_script.firmware
+						and a.script = rec_script.script_name
+						order by YYYYMM
+					) loop
+						v_status := rec_detail.STATUS;
+						if rec_detail.STATUS = 'FAIL' then 
+							exit;
+						end if;
+					end loop;
+					
+					UPDATE CORONA_EMMC_F_S_MAP SET						
+						status = v_status,
+						DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) ',
+						MOD_DT = sysdate
+					where firmware = rec_script.firmware
+					and sample = rec_script.sample
+					and script_name = rec_script.script_name;
+				End Loop;
+				--// END 04 STATUS UPDATE	
+				
+			End Loop;
        	 
 	    end;
     
@@ -624,6 +914,17 @@
 	    begin
 	    	
 	    		delete from CORONA_EMMC_SCRIPT_MASTER
+	    		where 1=1
+	    		and SCRIPT_NAME = #{detail.SCRIPT_NAME};
+	    		
+	    		--// 01. delete script set
+	    		delete from CORONA_EMMC_SCRIPTSET_MAP
+	    		where 1=1
+	    		and SCRIPT_NAME = #{detail.SCRIPT_NAME};
+	    		
+	    		
+	    		--// 02. delete firmware
+	    		delete from CORONA_EMMC_F_S_MAP
 	    		where 1=1
 	    		and SCRIPT_NAME = #{detail.SCRIPT_NAME};
 	    end;
@@ -1024,7 +1325,7 @@
                 and  SCRIPT_NAME = #{origindata.SCRIPT_NAME_META} ;
 	    		
 	    		if cnt = 1 then
-	    			if vStatus = 'No Data' then 
+	    			if vStatus = 'Not Yet' then 
 	    				vStatus1 := '';
 	    			else
 	    				vStatus1 := vStatus;
@@ -1032,6 +1333,7 @@
 	    		
 	                update CORONA_EMMC_F_S_MAP set
 	                	STATUS = vStatus1, 
+	                	JIRA = #{JIRA},
 	                	DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || #{STATUS} || ' ( ${userId} )'  ,
 	  
 	                	MOD_DT = sysdate
@@ -1063,7 +1365,7 @@
                 and  SAMPLE_NUMBER = #{origindata.SAMPLE_NUMBER};                
 	    		
 	    		if cnt = 1 then
-	    			if vStatus = 'No Data' then 
+	    			if vStatus = 'Not Yet' then 
 	    				vStatus1 := '';
 	    			else
 	    				vStatus1 := vStatus;
@@ -1141,6 +1443,118 @@
 		from CORONA_EMMC_SCRIPT_MASTER
 		where REGEXP_LIKE(${field} ,#{term},'i')  
 		order by 1
+	
+	</select>
+	
+	
+	<select id="dashboard.corona.emmc.project.useYn" resultType="hashmap">
+		with tbl_project as (
+			select distinct sample as project from CORONA_EMMC_FIRMWARE_MASTER			
+		)
+		
+		select a.* from (
+			select
+				a.project as project,
+				b.USE_YN,
+				nvl(b.SCRIPTSET,'Normal') SCRIPTSET
+			from tbl_project a
+			left outer join CORONA_EMMC_PROJECT  b
+				on a.project = b.project
+			
+		) A
+		where 1=1
+		<choose>
+					<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
+			       		<foreach collection="filters.rules" item="item" index="index"  >
+			           		and REGEXP_LIKE(${item.field},#{item.data},'i') 
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   		</otherwise>
+		   		</choose>
+		order by a.project
+		
+	
+	</select>
+	
+	<select id="dashboard.corona.emmc.project.useYn.page" resultType="hashmap">
+		with tbl_project as (
+			select distinct sample as project from CORONA_EMMC_FIRMWARE_MASTER			
+		)
+		
+		select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+					select
+						a.project as project,
+						b.USE_YN,
+						b.SCRIPTSET
+					from tbl_project a
+					left outer join CORONA_EMMC_PROJECT  b
+						on a.project = b.project
+					order by a.project
+			) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != ''  and filters.rules.size() > 0 " >
+			       		<foreach collection="filters.rules" item="item" index="index"  >
+			           		and REGEXP_LIKE(${item.field},#{item.data},'i') 
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   		</otherwise>
+		   		</choose>
+			)
+	
+	</select>
+	
+	<update id="dashbaord.corona.emmc.project.useYn.edit" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    	vUseyn varchar2(10) := #{USE_YN};
+	    begin
+	    		
+	    		select count(*) into cnt from CORONA_EMMC_PROJECT
+	    		where PROJECT = #{origindata.PROJECT} ;
+	    		
+	    		if cnt = 0 then
+	    			insert into CORONA_EMMC_PROJECT(PROJECT, USE_YN, SCRIPTSET,  INS_DT)
+	    			values (#{origindata.PROJECT},#{USE_YN}, #{SCRIPTSET}, sysdate);
+	    		else	    		
+	                update CORONA_EMMC_PROJECT set
+	                	USE_YN = vUseyn, 
+	                	SCRIPTSET = #{SCRIPTSET} ,
+	                	MOD_DT = sysdate
+	               where PROJECT = #{origindata.PROJECT} ;
+	                
+	          	end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <select id="dashboard.corona.emmc.summay.firmware.pms" resultType="hashmap">
+		select 
+			a.SAMPLE,
+			a.FIRMWARE,
+			b.FW_VERSION
+			
+		from CORONA_EMMC_FIRMWARE_MASTER A
+		join SOLUTIONPMS.FW_RELEASE b
+			on REGEXP_REPLACE(a.FIRMWARE,'-([0-9]+)$','') = b.fw_version
+			and REGEXP_REPLACE(a.FIRMWARE,'^(.+)-([0-9]+)$','\2') = b.BUILD_NO
+			and (SELECT CASE WHEN CODE_ID = 'SPM_00005011' THEN 'eMMC' ELSE 'SSD' END FROM SOLUTIONPMS.PJT_BASE_INFO WHERE CODE_NAME = 'Application' AND PJT_ID = B.PJT_ID) != 'SSD'
+			and SOLUTIONPMS.FN_CODE_VALUE_ID(b.VERIFY_RESULT_CD) = 'Pass'
+			and SOLUTIONPMS.FN_CODE_VALUE_ID(b.RELEASE_STATUS_CD) != 'Cancelled'
+			and NVL(b.OVT_YN, 'N') = 'N'		
+		where 1=1
+		<if test="project  != null and project != '' ">
+		and a.sample = #{project}
+		</if>
 	
 	</select>
     

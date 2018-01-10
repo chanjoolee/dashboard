@@ -528,7 +528,9 @@
 													theGrid.jqGrid('setGridState','hidden');	
 													$("#contentMain").html("");	
 													$.each(schemaTabs.elements[0].elements,function(i,el){
+														$("#"+ el.id + 'Frame').remove();
 														$("#"+ el.id + 'Content').remove();
+														
 													});									
 													fn_makeHtml('contentMain',schemaTabs);
 													
@@ -574,7 +576,7 @@
 								//"click" : tab_click
 							},
 							"iframe_css" : [
-								{ "code": "height", "value": "1000px" },
+								{ "code": "height", "value": "3000px" },
 								{ "code": "margin-top", "value": "-7px" }
 							]
 						},
@@ -590,7 +592,7 @@
 								//"click" : tab_click
 							},
 							"iframe_css" : [
-								{ "code": "height", "value": "1000px" },
+								{ "code": "height", "value": "30000px" },
 								{ "code": "margin-top", "value": "3px" }
 								
 							]
@@ -691,7 +693,7 @@
 				rownumbers: true, // show row numbers
 		        multiSort:true,
 		        multiselect: true,
-		        multiboxonly:true,
+		        //multiboxonly:true,
 		        caption: 'Analysis List',
 		        width: '100%' ,
 		        forceFit : false ,

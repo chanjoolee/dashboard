@@ -82,7 +82,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -633,7 +633,25 @@
 												}
 											}
 										} ,
-										
+										{
+											type:'SearchHeader',
+											id: 'testCaseHead',
+											name: 'testCaseHead',
+											label:'',
+											text:'TestCase Set',
+											width: '75px'
+										},
+										{
+											type:'SearchHeader',
+											id: 'testCaseValueHead',
+											name: 'testCaseValueHead',
+											label:'',
+											text:' ',
+											width: '80px',
+											controlCss: [
+												{code: 'text-align', value:'left'}
+											]
+										}
 									]
 								}
 								//2line
@@ -912,6 +930,8 @@
 					    			// script master add
 					    			
 					    			$('#grid_scriptPager .ui-paging-pager').hide();
+					    			var default_scriptset = $("#search_sample").find("option:selected").attr("default_scriptset");
+					    			$("#testCaseValueHeadContainer").find('h3').html(": " + default_scriptset);
 					    		}
 						    	
 						    	, onCellSelect: function (rowId, iCol, content, event) {
@@ -1036,6 +1056,9 @@
 //			parent.$("#loader").hide();
 //			
 //		},50);
+
+		//var default_scriptset = $("#search_sample").find("option:selected").attr("default_scriptset");
+		//$("#testCaseValueHeadContainer").find('h3').html(": " + default_scriptset);
 
 		var grid = $("#grid_script").jqGrid();
 		grid.jqGrid('clearGridData');

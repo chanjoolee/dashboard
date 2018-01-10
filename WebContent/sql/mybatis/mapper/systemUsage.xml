@@ -100,7 +100,10 @@
         FROM (
                 SELECT B.SYSTEM_ID
                      , B.FUNCTION_ID
-                     , CASE WHEN B.SYSTEM_ID = 'SolutionPMS' THEN B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.FUNCTION_NAME ELSE '[' || B.MENU_LEVEL_1 || '] ' || B.FUNCTION_NAME END FUNCTION_NAME
+                     , CASE WHEN B.SYSTEM_ID = 'SolutionPMS' THEN CASE WHEN B.MENU_LEVEL_4 IS NULL THEN B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.FUNCTION_NAME 
+                                                                                                   ELSE B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.MENU_LEVEL_3 || ' > ' || B.FUNCTION_NAME 
+                                                                  END
+                       ELSE '[' || B.MENU_LEVEL_1 || '] ' || B.FUNCTION_NAME END FUNCTION_NAME
                      , NVL(A.EMPLOYEE_COUNT, 0) EMPLOYEE_COUNT
                      , NVL(A.USE_COUNT, 0) USE_COUNT
                 FROM (  
@@ -121,6 +124,7 @@
                              , MENU_LEVEL_1
                              , MENU_LEVEL_2
                              , MENU_LEVEL_3
+                             , MENU_LEVEL_4
                         FROM IT_SYSTEM_MENU_HIERARCHY
                         WHERE SYSTEM_ID = #{systemId}
                       ) B
@@ -139,7 +143,10 @@
         FROM (
                 SELECT B.SYSTEM_ID
                      , B.FUNCTION_ID
-                     , CASE WHEN B.SYSTEM_ID = 'SolutionPMS' THEN B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.FUNCTION_NAME ELSE '[' || B.MENU_LEVEL_1 || '] ' || B.FUNCTION_NAME END FUNCTION_NAME
+                     , CASE WHEN B.SYSTEM_ID = 'SolutionPMS' THEN CASE WHEN B.MENU_LEVEL_4 IS NULL THEN B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.FUNCTION_NAME 
+                                                                                                   ELSE B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.MENU_LEVEL_3 || ' > ' || B.FUNCTION_NAME 
+                                                                  END
+                       ELSE '[' || B.MENU_LEVEL_1 || '] ' || B.FUNCTION_NAME END FUNCTION_NAME
                      , NVL(A.EMPLOYEE_COUNT, 0) EMPLOYEE_COUNT
                      , NVL(A.USE_COUNT, 0) USE_COUNT
                 FROM (  
@@ -160,6 +167,7 @@
                              , MENU_LEVEL_1
                              , MENU_LEVEL_2
                              , MENU_LEVEL_3
+                             , MENU_LEVEL_4
                         FROM IT_SYSTEM_MENU_HIERARCHY
                         WHERE SYSTEM_ID = #{systemId}
                       ) B

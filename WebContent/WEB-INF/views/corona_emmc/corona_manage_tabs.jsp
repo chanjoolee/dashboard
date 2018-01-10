@@ -81,7 +81,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -577,8 +577,12 @@
 											id: 'categoryHead',
 											name: 'categoryHead',
 											label:'',
-											text:' ',
-											width: '50px'
+											text:'Corona EMMC Management',
+											width: '300px',
+											controlCss:[
+									    		{code:'text-align',value:'left'},
+									    		{code:'font-size',value:'14px'}
+									    	]
 										}
 										
 									]
@@ -703,9 +707,24 @@
 							"iframe_css" : [
 								{ "code": "height", "value": "770px" }
 							]
+						},
+						{
+							"type": "tab_iframe",
+							"id" : "project_config",
+							"label" : "Project Config",							
+							"connected_content" :  {
+								"viewName": "corona_emmc/corona_manage_project_showview",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							},
+							"iframe_css" : [
+								{ "code": "height", "value": "770px" }
+							]
 						}
 					]
-				},
+				}
 						
 				
 			]								

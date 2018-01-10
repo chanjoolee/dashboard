@@ -610,7 +610,13 @@
 		function fn_make_enity(){
 			entityInfo.entities = [];
 			$.each(tables,function(i,table){
-				var entity = {table_name : table.TABLE_NAME};
+				var entity = {
+						table_name : table.TABLE_NAME,
+						constraints: { 
+							primary_key:[],
+							foreign_key:[]
+						}
+				};
 				entity.columns = [];
 				var vColumns = dataFilter(columns,[{col:'TABLE_NAME',val: table.TABLE_NAME}]);
 				vColumns = $.map(vColumns,function(col){
@@ -622,6 +628,9 @@
 					};
 				});
 				entity.columns = vColumns;
+				//===primary_key===
+				var vPrimary = primarykeys.filter()
+				
 				entityInfo.entities.push(entity);				
 			});
 		}

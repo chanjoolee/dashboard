@@ -224,6 +224,14 @@
    	            		var xAxis = {};
    	            		xAxis.categories =	 series.category.x1;
    	            		xAxis.categoriesOrigine = series.category.x;
+//    	            		xAxis.labels = {
+// 	 	            			//format: '{value}',
+// 	 	            			formatter: function () {
+// 	 	            				return series.category.x1[this.value];
+	        				
+// 	        					},
+// 	        					rotation: 290
+// 	 	            	};
    	            		
    	            		xAxis.tickAmount =  series.category.x1.length;
    	            		rtn.xAxis = xAxis;
@@ -433,12 +441,15 @@
 	
 	$(function () {
 		loaderShow();
-		fn_makeHtml('contentMain',schemaContent);
-		
+		setTimeout( function(){
+			fn_makeHtml('contentMain',schemaContent);
+			$("#mainContainer svg g path:eq(0)").css("stroke-width","0");
+			loaderHide();
+		},50);
 		$( window ).resize(function() {
 			//console.log("aaaaa");
 		});
-		loaderHide();
+		
 	});
 	
 	

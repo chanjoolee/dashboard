@@ -108,6 +108,7 @@
 	        ]
 	      }
 	      
+	  	
 	  	]
 		, debug : [
 	       {
@@ -1444,6 +1445,17 @@
    					
    				}
    				
+   			}
+   		
+   			, {
+   				id: "copy_master_to_scriptset",
+   				gubun: "emmc",
+   				desc: "master에서 test set으로 copy시 firmware 가 업데이트 되지 않는다. "
+   			}
+   			, {
+   				id: "update_master",
+   				gubun: "emmc",
+   				desc: "master에서 script 수정수 하위 script set 과 firmware에도 반영할 수 있도록"
    			}
    		]
    	

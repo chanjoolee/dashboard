@@ -68,7 +68,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.22.01"></script>
+	<script src="js/dashboard.js?version=2017.11.17.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
@@ -86,6 +86,15 @@
 	
 	<!-- <script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script> -->
 	<link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css">
+	
+	<%-- recat --%>
+   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+   	
+   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+   	
 	<style>
 		html, body,form {
 			padding: 0;
@@ -253,6 +262,12 @@
 		    text-align: right;
 		}
 		<%--//  table style--%>
+		
+		input[type="text"], input[type="password"] {
+		    height: auto;
+    		font-size: 14px;
+    		line-height: 1.42857143;
+		}
 	
 	</style>
 <script title="schema">
@@ -362,16 +377,41 @@
 						
 						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true, editable: false}  
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false, editable: false }
-						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false, editable: false }
+						,{label:'SCRIPT_NAME_META', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						,{label:'Script', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:400, align:'left', sortable:false, editable: false 
+							, cellattr: function (rowId, val, rowObj, cm, rowData, isCustom){
+								result = " style=\"vertical-align: middle;";
+								result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;"
+								result += "\" ";
+								return result;
+							}						
+						}
+						,{label:'Jira No', name:'JIRA', id:'JIRA', width:80, align:'center', sortable:false, editable: true
+							, edittype: "text"							
+							,cellattr: function(rowId, val, rowObj, cm, rowData) {
+								var result = '';
+								if(rowObj.JIRA != undefined && rowObj.JIRA != ""){
+									result = ' style="cursor:pointer;';
+									result += 'color: blue;font-weight: bolder;"';
+								}
+								return result;
+							}
+						}
 						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true, editable: false }
-						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true, editable: false}
+						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true, editable: false
+							,cellattr: function(){
+								var result = " style=\"background:white;vertical-align: middle;cursor:pointer;";
+								result += "color: blue;font-weight: bolder;";
+								return result;
+							}
+						}
 						,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false
 							, editable: true
 							, edittype: "select"
 							, formatter:"select"
 							, editoptions: {
 								value: {
-									"No Data":"No Data",
+									"Not Yet":"Not Yet",
 									"PASS":"PASS",
 									"FAIL": "FAIL"
 								}
@@ -429,11 +469,11 @@
 			    	gridOpt:{
 			    		datatype:'json',
 			    		pager: "#grid_detailPager",
-//			    		url:function(){ 
-//			    			//return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
-//			    			return	"/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
-//			    		},
-			    		url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page",
+			    		url:function(){ 
+			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
+			    			//return	"/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
+			    		},
+			    		//url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page",
 			    		viewrecords: true,			    		
 			    		width: '100%',
 			    		height: '100%',
@@ -473,16 +513,108 @@
 			    					label: '',
 			    					elements: [
 			    					    {
-			    					    	label: "Details",
+			    					    	label: "",
 			    					    	type: 'Group',
 			    					    	elements: [
 												{
-													type: "inline",
+													type: "inline_edit",
 													cols: 1,
-													data: function(){ return row},
+													data: function(){ 
+														var datas = [];
+														$.ajax({
+											    			type: "POST",
+											    			url: "/dashboard/genericlListJson.html",
+											    			data: {
+											    				sample: row.SAMPLE,
+											    				firmware: row.FIRMWARE,
+											    				script_name: row.SCRIPT_NAME_META
+											    				, sqlid: 'dashboard.corona.emmc.detail.subDetail'}, 
+											    			//data: $("#form").serialize(), 
+											    			async: false,
+											    			success:  function(response){
+											    				datas  = response.dataList;
+											    				
+											    			}
+											    		});
+														
+														return datas[0];
+													},
+													options : {
+														keys : ['FIRMWARE', 'SAMPLE', 'SCRIPT_NAME'],
+														fn_submit: function(){
+															//alert("submit function defined");
+															var state = true;
+															var paramObj = {
+																//origindatas: this.props.options.keys
+																origindatas: this.state.keys
+															};
+															
+															//if(this.props.options.value == this.state.value)
+															//	return state;
+															//return;
+															$.ajax({
+									                    		url: "/dashboard/genericSaveJson.html",
+									                    		type: "POST",
+									                    		data: {
+									                    			searchJson: JSON.stringify(paramObj),
+									                    			fieldName: this.state.name,
+									                    			fieldValue: this.state.value,
+									                    			fieldValueOrigin: this.state.value_origin,
+									                    			userId: $("#userId").val(),
+									                    			sqlid: "dashboard.corona.emmc.firmware_script_map.update"
+									                    		}, 
+									                    		async: false,			                    		
+									                    		success:  function(data){
+									                    			response1 = data;
+									                    			if(response1.result != 'success'){
+									                    				state = false;
+									                    				msg = "Save Success!";
+										                    			$("#dialog-confirm").html(response1.message);
+										                    			$("#dialog-confirm").dialog({
+										                    			    resizable: false,
+										                    			    modal: true,
+										                    			    title: "Error",
+										                    			    //height: 200,
+										                    			    width: 300,
+										                    			    dialogClass: 'no-close',
+										                    			    closeOnEscape: false,
+										                    			    buttons: [
+									                    			              {
+									                    			                text: "OK",
+									                    			                click: function() {
+									                    			                  $( this ).dialog( "close" );											                    			                  
+									                    			                }
+									                    			              }
+								                    			            ]
+										                    			});
+										                    			
+										                    			
+										                    			  
+									                    			}					                    			
+									                    		}
+									                    	});
+									                    	
+									                   		return state;
+														},
+														fn_afterSubmit: function(keyUpdatedObjects){
+															$.each(this,function(i,react){
+																if(react.state.name == "JIRA"){
+																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
+																}
+															});
+// 															$.each(keyUpdatedObjects,function(i,react){
+// 																if(react.state.name == "JIRA"){
+// 																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
+// 																}
+// 															});
+															
+														},
+														progressObject: $("#loader")
+													},													
 													items: [
-														{label:'Description', col: 'DESCRIPTION'},
-														{label:'Argument', col: 'ARGUMENT'},
+														//{label:'Jira No', col: 'JIRA'},
+														{label:'Description', col: 'DESCRIPTION',edit_tag: 'textarea'},
+														{label:'Argument', col: 'ARGUMENT',edit_tag: 'textarea'},
 													]
 												}
 			    					    	
@@ -494,7 +626,7 @@
 			    			};
 			    			
 			    			fn_makeHtml(childDiv,schema1);
-			    			
+			    			childDiv.find(".right_section").css("float","left");
 			    			
 			    			
 			    			// ***  grid ***//
@@ -602,9 +734,16 @@
 									,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'center', sortable:false,hidden: true, editable: false }  
 									,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false, editable: false }  
 									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false, editable: false }
-									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false, editable: false }
+									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false, editable: false 
+										,cellattr: function(){
+											var result = " style=\"cursor:pointer;";
+											result += "color: blue;font-weight: bolder;";
+											return result;
+										}
+									}
 									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false, editable: false }
-									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false }
+									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false, hidden: true }
+									,{label:'Script', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:250, align:'left', sortable:false, editable: false , hidden: true}
 									,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false 
 										, editable: true
 										, edittype: "select"
@@ -619,11 +758,68 @@
 									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false, editable: false }
 									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false, editable: false }
 									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false, editable: false }
-									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false, editable: false }         
+									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false, editable: false }
+									,{label:'FILA_PATH', name:'FILA_PATH', id:'FILA_PATH', width:100, align:'center', sortable:false, editable: false, hidden: true }
+									,{label:'FILE_NAME', name:'FILE_NAME', id:'FILE_NAME', width:100, align:'center', sortable:false, editable: false, hidden: true }
 			                    ],
 			    				loadonce: true,
 			                    width: '100%'
 			                    ,height: '100%'
+		                    	,onCellSelect: function (rowId, iCol, content, event) {
+					    			var test = "";
+							    	//var grid = $("#attachments");
+							    	var grid = $(this).jqGrid();
+							    	var row = grid.jqGrid('getRowData',rowId);
+							    	var cms = grid.jqGrid("getGridParam", "colModel");
+									var cm = cms[iCol];
+									
+									var oFrm = document.getElementById("form");
+									if(cm.name  == 'SAMPLE_NUMBER'){
+										
+										//var path = 'file:///' + row.FILA_PATH + '.parsed.log' ;
+										var path = row.FILA_PATH;
+										var path = path.replace(/\.parsed\.log$/gi,"");
+										var path = path + '.parsed.log' ;
+										//var path1 = path.replace(/z:\//gi,"/dashboard/das_sol/");
+										var path1 = path.replace(/^z:\//gi,"http://solutionpms.skhynix.com/dashboard/das_sol/");
+										
+										var path2 = path1.replace(/\\/g,"/");
+										var path3 = path2.replace(/#/g,"%23");
+										if(true){
+											var newWin1 = window.open("", "filedownload_log", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+											
+											oFrm.action =  path3;
+											oFrm.method = "post";
+											oFrm.target = 'filedownload_log'; 
+										    oFrm.submit();		
+										    newWin1.focus();	
+										}
+										
+										// localfile 이기 때문에 보안에 걸림
+										if(false){
+											var path = 'file:///' + row.FILA_PATH + '.parsed.log' ;
+											var path1 = path.replace(/#/g,"%23");
+											var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+											if (isIE){
+												//var fileData = ['\ufeff' + path1];
+												var fileData = [path1];
+									            var blobObject = new Blob(fileData);
+									            window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+
+											}else{
+												var link = document.createElement('a');
+												link.download = row.FILE_NAME;
+												link.href = path1;
+												//Firefox requires the link to be in the body
+												document.body.appendChild(link);
+												link.click();
+												document.body.removeChild(link);
+											}
+										}
+										
+
+									}
+					    		}
 			                    //pager: "#" + childGridPagerID
 			                });
 			                
@@ -640,6 +836,62 @@
 			    			
 			    			
 			    		} ,
+			    		onCellSelect: function (rowId, iCol, content, event) {
+			    			var test = "";
+					    	//var grid = $("#attachments");
+					    	var grid = $(this).jqGrid();
+					    	var row = grid.jqGrid('getRowData',rowId);
+					    	var cms = grid.jqGrid("getGridParam", "colModel");
+							var cm = cms[iCol];
+							
+							var oFrm = document.getElementById("form1");
+							if(cm.name  == 'JIRA' || cm.name  == 'CONFLUENCE'){
+								if(row[cm.name] == undefined || row[cm.name] == "")
+									return;
+								//var orgRow = dataFilter(testResults,[{col:'DISPLAY_ORDER',val:row.DISPLAY_ORDER}])[0];
+								//if(orgRow == undefined)
+								//	return;										
+								//var path = orgRow[cm.name];
+								
+								var path = row[cm.name];
+								if(path != undefined && path != ""){
+									var link = document.createElement('a');
+									link.target = "_blank";
+									if(path.match(/^(http)|(www)/gi) != null)
+										link.href = path;
+									else if(cm.name == 'JIRA'){
+										link.href = "http://jira.skhynix.com/browse/" + path;
+									}else if (cm.name == 'CONFLUENCE'){
+										link.href = "http://confluence.skhynix.com/pages/viewpage.action?pageId=" + path;
+									}
+										
+									//Firefox requires the link to be in the body
+									document.body.appendChild(link);
+									link.click();
+									document.body.removeChild(link);
+								}
+																			
+							}
+							
+							if(cm.name  == 'SCRIPT_NAME_META' || cm.name  == 'CONVERT_SCRIPT' ){
+								if(row[cm.name] == undefined || row[cm.name] == "")
+									return;
+								
+								var colname = 'SCRIPT_NAME_META';
+								var newWin1 = window.open("", "coronaDetailScript_emmc:" + row[colname], "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
+								var oFrm = document.getElementById("form");
+								oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/coronaDetailScript';
+								oFrm.method = "post";
+								oFrm.target = "coronaDetailScript_emmc:" + row[colname]; 
+							    $("#script_name").val(row.SCRIPT_NAME_META);
+							    $("#convert_script").val(row.CONVERT_SCRIPT);
+								oFrm.submit();		
+							    newWin1.focus();	
+																			
+							}
+							
+					
+			    		},
 			    		//subgrid end
 			    		gridComplete: function () {
 			    			var grid = $(this).jqGrid();
@@ -652,6 +904,22 @@
 		    		                //,searchOperators: true
 		    		            }
 		    				);
+			    			
+			    			grid.navGrid('#grid_detailPager' ,
+					    			// the buttons to appear on the toolbar of the grid
+					    			{ edit: false, add: false, del: false, search: true, refresh: true, view: false, position: "left", cloneToTop: false  },
+					    			// options for the Edit Dialog
+					    			{  } ,
+					    			// options for the Script Master Add Dialog
+					    			{	},
+					    			// options for the Script Master Del Dialog 
+					    			{  },
+					    			{ 
+					    				multipleSearch: true,
+					    				multipleGroup: true
+					    			}
+					    			
+				    			);
 			    			
 			    		}
 				    	
@@ -700,8 +968,12 @@
 	});
 	
 	function fn_search(){
-		$("#contents").html("");
-		fn_makeHtml('contents',schemaContent);
+		$("#loader").show();
+		setTimeout( function(){
+			$("#contents").html("");
+			fn_makeHtml('contents',schemaContent);
+			$("#loader").hide();
+		},50);
 	}
 	
 	
@@ -722,10 +994,19 @@
 <input type="hidden" id="sample" name="sample" value="${param.sample}"/>
 <input type="hidden" id="firmware" name="firmware" value="${param.firmware}"/>
 <input type="hidden" id="category" name="category" value="${param.category}"/>
+<input type="hidden" id="testItem" name="testItem" value="${param.testItem}"/>
+<input type="hidden" id="countGubun" name="countGubun" value="${param.countGubun}"/>
+<input type="hidden" id="script_name" name="script_name" value=""/>
+<input type="hidden" id="convert_script" name="convert_script" value=""/>
 	<div class="pop_window">
 		<div class="pop_tit_wrap">
 			<!-- <span class="baseline"></span> -->
-			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.firmware} / ${param.category}</h2>
+			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.firmware} / ${param.category}
+			<c:if test="${param.testItem != null and param.testItem != ''}"> / ${param.testItem}</c:if>
+			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'pass'}"> (PASS)</c:if>
+			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'fail'}"> (FAIL)</c:if>
+			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'notyet'}"> (Not Yet)</c:if>
+			</h2>
 		</div>
 		
        <div class="pop_con_area" style="padding-top: 3px;"> 
@@ -746,11 +1027,149 @@
        </div> 
        
     </div>
+    <div id="loader"></div>
     <div id="dialog-confirm"></div>
     <!-- ## //PAGE CONTENTS ## -->	
 </form>
 </body>
+<script type="text/babel">
+	var Greeting = React.createClass({
+	  render: function() {
+	    return (
+	      <p>Hello, Universe {this.props.name}</p>
+	    )
+	  }
+	});
 
+	
+	
+	window.fn_greeting=function(vLabel){
+		ReactDOM.render(
+		  <Greeting />,
+		  document.getElementById('div1')
+		);
+	}
+	
+	class ContactInfo extends React.Component {
+	    render() {
+	        return(
+	            <li>{this.props.name} {this.props.phone}</li>
+	            );
+	    }
+	}
+	
+	class App extends React.Component {
+	    render(){
+
+	        return (
+	                <Contacts/>
+	        );
+	    }
+	}
+	
+	class Contacts extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.state = {
+	            contactData: [
+	                {name: "Abet", phone: "010-0000-0001"},
+	                {name: "Betty", phone: "010-0000-0002"},
+	                {name: "Charlie", phone: "010-0000-0003"},
+	                {name: "David", phone: "010-0000-0004"}
+	            ]
+	        };
+	    }
+	    render(){
+	        return(
+	            <div>
+	                <h1>Contacts</h1>
+	                <ul>
+	                    {this.state.contactData.map((contact, i) => {
+	                        return (<ContactInfo name={contact.name}
+	                                            phone={contact.phone}
+	                                              key={i}/>);
+	                    })}
+	                </ul>
+	            </div>
+	        );
+	    }
+	}
+
+	
+	//ReactDOM.render(<App />, document.getElementById('div2'));
+	
+	window.fn_contacts=function(){
+		ReactDOM.render(<App />, document.getElementById('div2'));
+	}
+	
+	
+	class Td extends React.Component {
+		
+		constructor(props) {
+	        super(props);
+	        // Configure default state
+			this.state = this.props.options;
+			//this.dblclick.bind(this);
+			this.changeHandler = this.changeHandler.bind(this);
+	    }
+	    
+	    dblclick(){
+	    	//if(this.state.editable == true)
+	    	//	this.setState({mode: "edit"});
+	    }
+	    
+	    confirm(){
+	    	this.props.options.fn_submit.call(this);
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    cancel(){
+	    	this.setState({value: this.props.options.value});
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    changeHandler(e){
+	    	//alert("changeHandler");
+	    	this.setState({value: e.target.value });	    	
+	    }
+	    
+	    
+	    
+	    render(){
+	    	
+	    	if(this.props.options.editable == false || this.state.mode == "read"){
+	    		return(
+				<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
+					{this.state.value}
+				</div>
+	        	);
+	    	}else if(this.state.mode == "edit") {	  
+	    		if(this.state.edit_tag == "textarea"){
+	    			return (
+			    		<div>
+							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
+						</div>
+					);
+	    		}else {
+	    			return (
+			    		<div>
+							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
+						</div>
+					);
+	    		}		
+	    		
+				
+	    	}
+	        
+	            
+	    }
+	}
+	
+	window.fn_td = function(cell, options){
+		return ReactDOM.render(<Td options={options}/>, cell);
+	}
+	
+</script>
 <iframe id="file_iframe" style="display:none;"></iframe>
 
 </html>

@@ -61,6 +61,14 @@
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 	
+	<!-- <script src="/dashboard/js/Highstock-6.0.4/code/highstock.src.js"></script>
+	<script src="/dashboard/js/Highstock-6.0.4/code/modules/heatmap.src.js"></script>
+	<script src="/dashboard/js/Highstock-6.0.4/code/highcharts-more.src.js"></script>
+	<script src="/dashboard/js/Highstock-6.0.4/code/modules/drilldown.src.js"></script>
+	<script src="/dashboard/js/Highstock-6.0.4/code/modules/no-data-to-display.js"></script>
+	<script src="/dashboard/js/Highstock-6.0.4/code/modules/exporting.src.js"></script>
+	<script src="/dashboard/js/Highstock-6.0.4/code/modules/offline-exporting.src.js"></script> -->
+	
 	<%-- x축 그룹라벨 --%>
 	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
 	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
@@ -70,7 +78,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.10.01"></script>
+	<script src="js/dashboard.js?version=2017.12.21"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -191,7 +199,7 @@
    	            				xCategoryCol : 'TESTNAME',
    	            				xCategoryColOrderbyStr : 'TESTNAME',
    	            				//xCategoryAddIfEmpty: true ,
-   	            				//xCategoryIndex :'idx_TESTNAME', // xCategoryAddIfEmpty == true 인경우 유효. 속도에 절대적인 요소.  
+   	            				xCategoryIndex :'idx_TESTNAME', // xCategoryAddIfEmpty == true 인경우 유효. 속도에 절대적인 요소.  
    	            				xCategoryIndicate: true,
    	            				yCategoryCol : 'FIRMWARE_REVISION',
    	            				yCategoryIndicate: true,
@@ -205,6 +213,7 @@
    	            			this.minSize = "3";
    	            			this.maxSize = "20";
    	            			this.turboThreshold = this.data.length;
+   	            			sortObjects(this.data,['x']);
    	            		});
    	            		
    	            		//////////// Category Start
@@ -233,13 +242,15 @@
            			        startOnTick: true,
            			        endOnTick: true,
            			        title: {
-           			            text: 'FW Revision'
+           			            text: ''
            			        }
            			        ,labels: {
            			            //format: '{value}',
-           			            align: 'right',
-           			            x: -3
+           			            //align: 'right',
+           			            x: 70,
+           			         	overflow: 'justify'
            			        }
+           			     	
            			    };
            			    
 	            		
@@ -285,7 +296,19 @@
 	            					type: 'heatmap'
 	            					, plotBorderWidth: 1
 	            			        , zoomType: 'xy'
-	            			        , height: 700
+	            			        , height: 800
+	            			        , marginRight: 70
+	            			        , events: {
+	            			        	redraw: function(){
+	            			        		var cur = $("g.highcharts-yaxis-labels text:eq(-1)");
+	            			        		var last = $("g.highcharts-yaxis-labels text:eq(-2)");
+	            			        		var last1 = $("g.highcharts-yaxis-labels text:eq(-3)");
+	            			        		var gap = parseInt(last1.attr("Y")) - parseInt(last.attr("Y"));
+		            			        	cur.attr("x",last.attr("x"));
+	            			        		cur.attr("y",parseInt(last.attr("Y")) - gap );
+	            			        	}
+	            			        	
+	            			        }
 	            				}
 	            			    ,legend: {
 	            			    	enabled: false,
@@ -308,7 +331,8 @@
 						        	height: 40
 						        }
 	            				, title: {
-	            			        text: ' '
+	            			        text: '&nbsp; ',
+	            			        useHTML: true
 	            			    },
 	            			    colorAxis: {
 							        min: 0,
@@ -330,6 +354,14 @@
 	            			            
 	            			        footerFormat: '</table>',
 	            			        followPointer: true
+	            			    },
+	            			    complete : function(){
+	            			    	var cur = $("g.highcharts-yaxis-labels text:eq(-1)");
+        			        		var last = $("g.highcharts-yaxis-labels text:eq(-2)");
+        			        		var last1 = $("g.highcharts-yaxis-labels text:eq(-3)");
+        			        		var gap = parseInt(last1.attr("Y")) - parseInt(last.attr("Y"));
+            			        	cur.attr("x",last.attr("x"));
+        			        		cur.attr("y",parseInt(last.attr("Y")) - gap );
 	            			    }
 	            				
 	            		};
@@ -347,12 +379,14 @@
 	
 	$(function () {
 		loaderShow();
-		fn_makeHtml('contentMain',schemaContent);
-		
+		setTimeout( function(){
+			fn_makeHtml('contentMain',schemaContent);
+			loaderHide();
+		},50);
 		$( window ).resize(function() {
 			//console.log("aaaaa");
 		});
-		loaderHide();
+		
 	});
 	
 	

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+	<update id="dashboard.corona.ufs.script.master.upload.insert" parameterType="hashmap" >
+    	INSERT
+    	INTO CORONA_SCRIPT_MASTER
+			(SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD,
+			LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8,
+			SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER,
+			SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT,
+			INS_DT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, CONVERT_SCRIPT) 
+		VALUES
+			(#{scriptName}, #{category}, #{testItem}, #{singleMulti}, #{powerModeSpeed}, #{testTime}, #{needVendorCmd},
+			#{luconfigYn}, #{ufsVer}, #{targetOperation}, #{precondition}, #{por}, #{hwReset}, #{epReset}, #{h8},
+			#{ssu}, #{targetLu}, #{powerControl}, #{itemName}, #{itemPurpose}, #{itemDescription}, #{inputParameter},
+			#{scriptTatLvl}, #{scriptVersion}, #{pf110}, #{exynos7420}, #{p4Rev}, #{priority}, #{tg645}, #{userComment},
+			SYSDATE, #{needPowerCycle}, #{resetYn}, #{scriptLvl}, #{refactoring}, #{resetType}, #{convertScript}
+            )
+    </update>
+    
+    <update id="dashboard.corona.ufs.script.master.upload.merge" parameterType="hashmap" >
+    	MERGE INTO CORONA_SCRIPT_MASTER M1
+    	USING DUAL
+    	ON (M1.SCRIPT_NAME = #{scriptName})
+    	WHEN MATCHED THEN
+    		UPDATE 
+	    	   SET M1.CATEGORY = #{category}
+	    	     , M1.TEST_ITEM = #{testItem}, M1.SINGLE_MULTI = #{singleMulti}, M1.POWER_MODE_SPEED = #{powerModeSpeed}, M1.TEST_TIME = #{testTime}
+	    	     , M1.NEED_VENDOR_CMD = #{needVendorCmd}, M1.LUCONFIG_YN = #{luconfigYn}, M1.UFS_VER = #{ufsVer}, M1.TARGET_OPERATION = #{targetOperation}
+	    	     , M1.PRECONDITION = #{precondition}, M1.POR = #{por}, M1.HW_RESET = #{hwReset}, M1.EP_RESET = #{epReset}, M1.H8 = #{h8}, M1.SSU = #{ssu}
+	    	     , M1.TARGET_LU = #{targetLu}, M1.POWER_CONTROL = #{powerControl}, M1.ITEM_NAME = #{itemName}, M1.ITEM_PURPOSE = #{itemPurpose}
+	    	     , M1.ITEM_DESCRIPTION = #{itemDescription}, M1.INPUT_PARAMETER = #{inputParameter}, M1.SCRIPT_TAT_LVL = #{scriptTatLvl}
+	    	     , M1.SCRIPT_VERSION = #{scriptVersion}, M1.PF110 = #{pf110}, M1.EXYNOS_7420 = #{exynos7420}, M1.P4_REV = #{p4Rev}, M1.PRIORITY = #{priority}
+	    	     , M1.TG645 = #{tg645}, M1.USER_COMMENT = #{userComment},	MOD_DT = SYSDATE, M1.NEED_POWER_CYCLE = #{needPowerCycle}, M1.RESET_YN = #{resetYn}
+	    	     , M1.SCRIPT_LVL = #{scriptLvl}, M1.REFACTORING = #{refactoring}, M1.RESET_TYPE = #{resetType}, M1.CONVERT_SCRIPT = #{convertScript}
+	    	     
+	   	WHEN NOT MATCHED THEN
+	    	INSERT
+				(M1.SCRIPT_NAME, M1.CATEGORY, M1.TEST_ITEM, M1.SINGLE_MULTI, M1.POWER_MODE_SPEED, M1.TEST_TIME, M1.NEED_VENDOR_CMD,
+				M1.LUCONFIG_YN, M1.UFS_VER, M1.TARGET_OPERATION, M1.PRECONDITION, M1.POR, M1.HW_RESET, M1.EP_RESET, M1.H8,
+				M1.SSU, M1.TARGET_LU, M1.POWER_CONTROL, M1.ITEM_NAME, M1.ITEM_PURPOSE, M1.ITEM_DESCRIPTION, M1.INPUT_PARAMETER,
+				M1.SCRIPT_TAT_LVL, M1.SCRIPT_VERSION, M1.PF110, M1.EXYNOS_7420, M1.P4_REV, M1.PRIORITY, M1.TG645, M1.USER_COMMENT,
+				M1.INS_DT, M1.NEED_POWER_CYCLE, M1.RESET_YN, M1.SCRIPT_LVL, M1.REFACTORING, M1.RESET_TYPE, M1.CONVERT_SCRIPT) 
+			VALUES
+				(#{scriptName}, #{category}, #{testItem}, #{singleMulti}, #{powerModeSpeed}, #{testTime}, #{needVendorCmd},
+				#{luconfigYn}, #{ufsVer}, #{targetOperation}, #{precondition}, #{por}, #{hwReset}, #{epReset}, #{h8},
+				#{ssu}, #{targetLu}, #{powerControl}, #{itemName}, #{itemPurpose}, #{itemDescription}, #{inputParameter},
+				#{scriptTatLvl}, #{scriptVersion}, #{pf110}, #{exynos7420}, #{p4Rev}, #{priority}, #{tg645}, #{userComment},
+				SYSDATE, #{needPowerCycle}, #{resetYn}, #{scriptLvl}, #{refactoring}, #{resetType}, #{convertScript}
+               )
+    </update>
+    
+    <update id="dashboard.corona.ufs.script.master.upload.update" parameterType="hashmap" >
+    	UPDATE CORONA_SCRIPT_MASTER
+    	   SET CATEGORY = #{category}
+    	     , TEST_ITEM = #{testItem}, SINGLE_MULTI = #{singleMulti}, POWER_MODE_SPEED = #{powerModeSpeed}, TEST_TIME = #{testTime}
+    	     , NEED_VENDOR_CMD = #{needVendorCmd}, LUCONFIG_YN = #{luconfigYn}, UFS_VER = #{ufsVer}, TARGET_OPERATION = #{targetOperation}
+    	     , PRECONDITION = #{precondition}, POR = #{por}, HW_RESET = #{hwReset}, EP_RESET = #{epReset}, H8 = #{h8}, SSU = #{ssu}
+    	     , TARGET_LU = #{targetLu}, POWER_CONTROL = #{powerControl}, ITEM_NAME = #{itemName}, ITEM_PURPOSE = #{itemPurpose}
+    	     , ITEM_DESCRIPTION = #{itemDescription}, INPUT_PARAMETER = #{inputParameter}, SCRIPT_TAT_LVL = #{scriptTatLvl}
+    	     , SCRIPT_VERSION = #{scriptVersion}, PF110 = #{pf110}, EXYNOS_7420 = #{exynos7420}, P4_REV = #{p4Rev}, PRIORITY = #{priority}
+    	     , TG645 = #{tg645}, USER_COMMENT = #{userComment},	MOD_DT = SYSDATE, NEED_POWER_CYCLE = #{needPowerCycle}, RESET_YN = #{resetYn}
+    	     , SCRIPT_LVL = #{scriptLvl}, REFACTORING = #{refactoring}, RESET_TYPE = #{resetType}, M1.CONVERT_SCRIPT = #{convertScript}
+    	 WHERE SCRIPT_NAME = #{scriptName} 
+    </update>
+    
+    <update id="dashboard.corona.ufs.script.master.upload.deleteAll">
+		DELETE FROM CORONA_SCRIPT_MASTER    	
+    </update>
+    
+    <select id="dashboard.corona.ufs.script.master.upload.dupCheck" parameterType="hashmap" resultType="hashmap">
+    	SELECT COUNT(1) AS CNT
+    	  FROM CORONA_SCRIPT_MASTER
+    	 WHERE SCRIPT_NAME = #{scriptName}
+    </select>
+    
+    <update id="dashboard.corona.ufs.script.master.sp">
+    	begin
+    		SP_CORONA_NORMAL;    		
+    	end;
+    </update>
+    
+    <select id="dashboard.corona.ufs.script.master.selectAll" resultType="hashmap">
+    	SELECT CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD,
+				LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8,
+				SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_NAME,
+				SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT,
+				NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE
+  		  FROM (  
+				SELECT CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD,
+						LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8,
+						SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER, SCRIPT_NAME,
+						SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT,
+						INS_DT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, 
+						CASE WHEN CATEGORY = 'Protocol' THEN 1
+						 		WHEN CATEGORY = 'Functional Test' AND TEST_ITEM = 'Function scenario' THEN 2
+						 		WHEN CATEGORY = 'Functional Test' AND TEST_ITEM = 'Random Function' THEN 3
+						 		WHEN CATEGORY = 'Functional Test' AND TEST_ITEM = 'Function Aging' THEN 4
+						 		WHEN CATEGORY = 'LBT' AND TEST_ITEM = 'Function Aging' THEN 5
+						 		WHEN CATEGORY = 'Read Stress' AND TEST_ITEM = 'BASIC RRC' THEN 6
+						 		WHEN CATEGORY = 'Read Stress' AND TEST_ITEM = 'RRC SPO1' THEN 7
+								WHEN CATEGORY = 'Read Stress' AND TEST_ITEM = 'RRC SPO2' THEN 8
+						 		WHEN CATEGORY = 'Write Stress' AND TEST_ITEM = 'SYNC LBT' THEN 9
+						 		WHEN CATEGORY = 'Write Stress' AND TEST_ITEM = 'ASYNC LBT' THEN 10
+						 		WHEN CATEGORY = 'Write Stress' AND TEST_ITEM = 'H8 LBT' THEN 11
+						 		WHEN CATEGORY = 'SPOR Test' AND TEST_ITEM = 'SPOR Cycle' THEN 12
+						 		WHEN CATEGORY = 'SPOR Test' AND TEST_ITEM = 'SPOR scenario' THEN 13
+						 		WHEN CATEGORY = 'Lesson Learn' THEN 14
+						 	ELSE 15
+						 END RNUM
+ 				 FROM CORONA_SCRIPT_MASTER
+				) A
+		  ORDER BY RNUM
+    </select>
+    
+    <update id="dashboard.corona.emmc.script.master.upload.merge" parameterType="hashmap" >
+    	MERGE INTO CORONA_EMMC_SCRIPT_MASTER M1
+    	USING DUAL
+    	ON (M1.SCRIPT_NAME = #{scriptName})
+    	WHEN MATCHED THEN
+    		UPDATE 
+	    	   SET M1.CATEGORY = #{category}, M1.TEST_ITEM = #{testItem}, M1.TIME = #{time}, M1.CUSTOMER_ITEM = #{customerItem}, M1.NEED_VENDOR_CMD = #{needVendorCmd}
+	    	     , M1.NEED_POWER_CYCLE = #{needPowerCycle}, M1.EMMC_VER = #{emmcVer},	TARGET_DEVICE = #{targetDevice}, M1.TARGET_PARTITION = #{targetPartition}
+	    	     , M1.CATEGORY1 = #{category1}, M1.CATEGORY2 = #{category2}, M1.CATEGORY3 = #{category3}, M1.CATEGORY4 = #{category4}, M1.CATEGORY5 = #{category5}
+	    	     , M1.WRITE_MODE = #{writeMode}, M1.READ_MODE = #{readMode}, M1.DESCRIPTION = #{description}, M1.ARGUMENT = #{argument}, M1.MOD_DT = SYSDATE
+	    	     , M1.PLATFORM = #{platform}, M1.FUNCTION_NAME = #{functionName}, M1.CONVERT_SCRIPT = #{convertScript}
+	    	     
+	   	WHEN NOT MATCHED THEN
+	    	INSERT    		
+				(M1.SCRIPT_NAME, M1.CATEGORY, M1.TEST_ITEM, M1.TIME, M1.CUSTOMER_ITEM, M1.NEED_VENDOR_CMD, M1.NEED_POWER_CYCLE, M1.EMMC_VER
+				 , M1.TARGET_DEVICE, M1.TARGET_PARTITION, M1.CATEGORY1, M1.CATEGORY2, M1.CATEGORY3, M1.CATEGORY4, M1.CATEGORY5
+				 , M1.WRITE_MODE, M1.READ_MODE, M1.DESCRIPTION, M1.ARGUMENT, M1.INS_DT, M1.PLATFORM, M1.FUNCTION_NAME, M1.CONVERT_SCRIPT)
+			VALUES
+				(#{scriptName}, #{category}, #{testItem}, #{time}, #{customerItem}, #{needVendorCmd}, #{needPowerCycle}, #{emmcVer},
+				 #{targetDevice}, #{targetPartition}, #{category1}, #{category2}, #{category3}, #{category4}, #{category5},
+				 #{writeMode}, #{readMode}, #{description}, #{argument}, SYSDATE, #{platform}, #{functionName}, #{convertScript} 
+               )
+    	
+    </update>
+    
+    <update id="dashboard.corona.emmc.script.master.upload.insert" parameterType="hashmap" >
+    	
+    	INSERT INTO CORONA_EMMC_SCRIPT_MASTER   		
+			(SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER
+			 , TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5
+			 , WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, INS_DT, PLATFORM, FUNCTION_NAME, CONVERT_SCRIPT)
+		VALUES
+			(#{scriptName}, #{category}, #{testItem}, #{time}, #{customerItem}, #{needVendorCmd}, #{needPowerCycle}, #{emmcVer},
+			 #{targetDevice}, #{targetPartition}, #{category1}, #{category2}, #{category3}, #{category4}, #{category5},
+			 #{writeMode}, #{readMode}, #{description}, #{argument}, SYSDATE, #{platform}, #{functionName}, #{convertScript} 
+              )
+    	
+    </update>
+    
+    <update id="dashboard.corona.emmc.script.master.upload.update" parameterType="hashmap" >
+		UPDATE CORONA_EMMC_SCRIPT_MASTER
+    	   SET CATEGORY = #{category}, TEST_ITEM = #{testItem}, TIME = #{time}, CUSTOMER_ITEM = #{customerItem}, NEED_VENDOR_CMD = #{needVendorCmd}
+    	     , NEED_POWER_CYCLE = #{needPowerCycle}, EMMC_VER = #{emmcVer},	TARGET_DEVICE = #{targetDevice}, TARGET_PARTITION = #{targetPartition}
+    	     , CATEGORY1 = #{category1}, CATEGORY2 = #{category2}, CATEGORY3 = #{category3}, CATEGORY4 = #{category4}, CATEGORY5 = #{category5}
+    	     , WRITE_MODE = #{writeMode}, READ_MODE = #{readMode}, DESCRIPTION = #{description}, ARGUMENT = #{argument}, MOD_DT = SYSDATE
+    	     , PLATFORM = #{platform}, FUNCTION_NAME = #{functionName}, CONVERT_SCRIPT = #{convertScript}
+    	 WHERE SCRIPT_NAME = #{scriptName}
+    </update>
+    
+    <update id="dashboard.corona.emmc.script.master.upload.deleteAll">
+		DELETE FROM CORONA_EMMC_SCRIPT_MASTER
+    </update>
+    
+    <select id="dashboard.corona.emmc.script.master.upload.dupCheck" parameterType="hashmap" resultType="hashmap">
+    	SELECT COUNT(1) AS CNT
+    	  FROM CORONA_EMMC_SCRIPT_MASTER
+    	 WHERE SCRIPT_NAME = #{scriptName}
+    </select>
+    
+    <update id="dashboard.corona.emmc.script.master.sp">
+    	begin
+    		SP_CORONA_NORMAL_EMMC_V1;
+    	end;
+
+    </update>
+    
+    <select id="dashboard.corona.emmc.script.master.selectAll" resultType="hashmap">
+    	<![CDATA[
+    	SELECT SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5
+		     , WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, PLATFORM, FUNCTION_NAME
+		   FROM (SELECT PLATFORM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2
+				     , CATEGORY3,  CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, FUNCTION_NAME, DESCRIPTION, ARGUMENT
+				     , CATEGORY, TEST_ITEM
+				     , SCRIPT_NAME
+				     , CASE WHEN CATEGORY = 'Protocol' THEN 1
+				     		WHEN CATEGORY = 'Function Test' AND TEST_ITEM = 'Function Scenario' THEN 2
+				     		WHEN CATEGORY = 'Function Test' AND TEST_ITEM = 'Random Function' THEN 3
+				     		WHEN CATEGORY = 'Function Test' AND TEST_ITEM = 'Copy & Compare' THEN 4
+				     		WHEN CATEGORY = 'SPOR Test' AND TEST_ITEM = 'SPOR Cycle' THEN 5
+				     		WHEN CATEGORY = 'SPOR Test' AND TEST_ITEM = 'Random SPOR' THEN 6
+				    		WHEN CATEGORY = 'SPOR Test' AND TEST_ITEM = 'SPOR Scenario' THEN 7
+				     		WHEN CATEGORY = 'Field Lesson' AND TEST_ITEM = 'Field Lesson' THEN 8
+				     		WHEN CATEGORY = 'SSRequirement' AND TEST_ITEM = 'SSRequirement' THEN 9
+				     		WHEN CATEGORY = 'Function Test' AND TEST_ITEM = 'Random Function' THEN 10
+				     		WHEN CATEGORY = 'Reliability' THEN 11
+				     		WHEN CATEGORY = 'Latency' THEN 12
+				       END RNUM
+				  FROM CORONA_EMMC_SCRIPT_MASTER
+				) A
+		 ORDER BY RNUM
+		 ]]>
+    </select>
+    
+    <update id="dashboard.corona.ufs.script.target.insert" parameterType="hashmap" >
+    	
+    	INSERT INTO CORONA_SCRIPT_TARGET
+			(SCRIPT_NAME, CATEGORY, TEST_ITEM, SINGLE_MULTI, POWER_MODE_SPEED, TEST_TIME, NEED_VENDOR_CMD,
+			LUCONFIG_YN, UFS_VER, TARGET_OPERATION, PRECONDITION, POR, HW_RESET, EP_RESET, H8,
+			SSU, TARGET_LU, POWER_CONTROL, ITEM_NAME, ITEM_PURPOSE, ITEM_DESCRIPTION, INPUT_PARAMETER,
+			SCRIPT_TAT_LVL, SCRIPT_VERSION, PF110, EXYNOS_7420, P4_REV, PRIORITY, TG645, USER_COMMENT,
+			INS_DT, NEED_POWER_CYCLE, RESET_YN, SCRIPT_LVL, REFACTORING, RESET_TYPE, CONVERT_SCRIPT) 
+		VALUES
+			(#{scriptName}, #{category}, #{testItem}, #{singleMulti}, #{powerModeSpeed}, #{testTime}, #{needVendorCmd},
+			#{luconfigYn}, #{ufsVer}, #{targetOperation}, #{precondition}, #{por}, #{hwReset}, #{epReset}, #{h8},
+			#{ssu}, #{targetLu}, #{powerControl}, #{itemName}, #{itemPurpose}, #{itemDescription}, #{inputParameter},
+			#{scriptTatLvl}, #{scriptVersion}, #{pf110}, #{exynos7420}, #{p4Rev}, #{priority}, #{tg645}, #{userComment},
+			SYSDATE, #{needPowerCycle}, #{resetYn}, #{scriptLvl}, #{refactoring}, #{resetType}, #{convertScript}
+            )
+    	
+    </update>
+    
+    <update id="dashboard.corona.ufs.script.target.deleteAll">
+		DELETE FROM CORONA_SCRIPT_TARGET
+    </update>
+    
+    <update id="dashboard.corona.emmc.script.target.insert" parameterType="hashmap" >
+    	
+    	INSERT INTO CORONA_EMMC_SCRIPT_TARGET   		
+			(SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER
+			 , TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5
+			 , WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT, INS_DT, PLATFORM, FUNCTION_NAME, CONVERT_SCRIPT)
+		VALUES
+			(#{scriptName}, #{category}, #{testItem}, #{time}, #{customerItem}, #{needVendorCmd}, #{needPowerCycle}, #{emmcVer},
+			 #{targetDevice}, #{targetPartition}, #{category1}, #{category2}, #{category3}, #{category4}, #{category5},
+			 #{writeMode}, #{readMode}, #{description}, #{argument}, SYSDATE, #{platform}, #{functionName}, #{convertScript} 
+              )
+    	
+    </update>
+    
+    <update id="dashboard.corona.emmc.script.target.deleteAll">
+		DELETE FROM CORONA_EMMC_SCRIPT_TARGET
+    </update>
+    
+    
+</mapper>    

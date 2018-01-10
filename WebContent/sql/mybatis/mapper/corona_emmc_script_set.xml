@@ -172,13 +172,13 @@
 	    			where firmware = #{FIRMWARE}
 	    			and sample = #{project}
 	    		) loop
-	    		
+	    			v_status := null;
 	    			for rec_detail in (
 						select
 							STATUS
 						from CORONA_EMMC_TEST_DETAIL a
-						where a.sample= rec.firmware
-						and a.firmware = rec.sample
+						where a.sample= rec.sample
+						and a.firmware = rec.firmware
 						and a.script = rec.script_name
 						order by YYYYMM
 					) loop
@@ -201,6 +201,9 @@
 	    end;
     
     </update>
+    
+    
+    
     <select id="dashboard.corona.emmc.manage.script.scriptset.mapping" resultType="hashmap">
 		with tbl_a as (	
 			SELECT
@@ -414,12 +417,13 @@
 						end if;
 						
 						--//Start. status update
+						v_status := null;
 						for rec_detail in (
 							select
 								STATUS
 							from CORONA_EMMC_TEST_DETAIL a
-							where a.sample= rec1.firmware
-							and a.firmware = rec1.sample
+							where a.sample= rec1.sample
+							and a.firmware = rec1.firmware
 							and a.script = rec.script_name
 							order by YYYYMM
 						) loop

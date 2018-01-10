@@ -68,8 +68,8 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.31.01"></script>
-	<script src="/dashboard/js/performance/category_new.1.002.js"></script>
+	<script src="js/dashboard.js?version=2017.11.17.01"></script>
+	<script src="/dashboard/js/performance/category_new.20171220.js"></script>
 	<script src="/dashboard/js/performance/category_sustain.1.001.js"></script>
 	
 	<%-- 5. local --%>
@@ -1541,6 +1541,7 @@
 			if(vCateInfos.length> 0 ){
 				vCateInfo = vCateInfos[0];
 				tabList1.push(src);
+				src.categoryInfo = vCateInfo;
 			}else{
 		    	//alert('category 정보가 없습니다.' + '('+ src.DATA_SRC +')');		    	
 		    	return true;
@@ -1557,8 +1558,10 @@
 			$("#container .nav-tabs").append($li);
 			var $a = $(document.createElement( "a" ));
 			$a.attr("target",src.DATA_SRC);
-			//$a.attr("href","#chart_" + src.DATA_SRC);
+			//$a.attr("href","#chart_" + src.DATA_SRC);			
 			$a.text(src.DATA_SRC);
+			if(src.categoryInfo.category_name != undefined && src.categoryInfo.category_name != "" )
+				$a.text(src.categoryInfo.category_name);
 			$li.append($a);
 			
 			//drawchart(i,src.DATA_SRC);	
@@ -2491,6 +2494,16 @@
 			$subject.css( "font-size","15px");
 			//$subject.text(pDataSrc.split(".")[0]);
 			$subject.text(pDataSrc);
+			var v_categories = categoryInfo.filter(function(d){
+				return d.category == pDataSrc;
+			});			
+			if(v_categories.length>0){
+				var v_category = v_categories[0];
+				if(v_category.category_name != undefined)
+					$subject.text(v_category.category_name);
+			}
+				
+			
 			$subjectDiv.append($subject);
 			$chartContainer.append($subjectDiv);
 			
@@ -2812,6 +2825,9 @@
 					yAxisTitle = vCateInfo.multichart.yAxisTitle[this.filter[0].val];
 				}
 				
+				if((yAxisTitle == undefined) && vCateInfo.multichart.yAxisTitle != undefined){
+					yAxisTitle = vCateInfo.yAxisTitle;
+				}				
 				
 				
 				var yAxis = [{
@@ -2850,6 +2866,21 @@
 			
 			
 			//Start DrawChart
+			var formatoptions = undefined;
+			if(vCateInfo.multichart != undefined 
+					&& vCateInfo.multichart != undefined 
+					&& vCateInfo.multichart.gridColformat != undefined
+					&& col.filter != undefined 
+					&& col.filter.length > 0 
+					&& vCateInfo.multichart.gridColformat[col.filter[0].val] != undefined ){
+				formatoptions =  vCateInfo.multichart.gridColformat[col.filter[0].val]  ;
+			}
+			if(formatoptions == undefined && vCateInfo.girdColFormat != undefined)
+				formatoptions = vCateInfo.girdColFormat;
+			
+			if(formatoptions != undefined)
+				decimalPoint = formatoptions.decimalPlaces;
+			
 			var legendVal = $("[name=optLegend]:checked").val();
 			var isLegend = false;
 			if(legendVal == "on")
@@ -2867,6 +2898,7 @@
 			if(vCateInfo.fn_chartOption != undefined){
 				chartOption = vCateInfo.fn_chartOption.call(this,series);
 			}else{				
+				
 				chartOption = {
 						 exporting: {
 						        chartOptions: { // specific options for the exported image
@@ -2938,7 +2970,7 @@
 				            	cursor: 'pointer' ,
 				            	
 				            	point:{	                	
-				                	events:{
+				            		events:{
 				                		click: function(e){
 //		 		                			e.point.select(true,false);
 //			 	                			if(this.drillSeries){
@@ -3134,6 +3166,18 @@
 				$.each(chart.xAxis[0].categories,function(icategory,category){
 					//var gridcol = {name: category,index: category};
 					var gridcol = {name: category.name ,index: category.name,formatter: 'number', align: 'right',width: '110px'};
+					
+					if(vCateInfo.multichart != undefined 
+							&& vCateInfo.multichart != undefined 
+							&& vCateInfo.multichart.gridColformat != undefined
+							&& col.filter != undefined 
+							&& col.filter.length > 0 
+							&& vCateInfo.multichart.gridColformat[col.filter[0].val] != undefined ){
+						gridcol.formatoptions =  vCateInfo.multichart.gridColformat[col.filter[0].val];
+					}
+					if(gridcol.formatoptions == undefined && vCateInfo.girdColFormat != undefined)
+						gridcol.formatoptions = vCateInfo.girdColFormat;
+					
 					if(vCateInfo.gridColWidth != undefined){
 						gridcol.width = vCateInfo.gridColWidth; 
 					}

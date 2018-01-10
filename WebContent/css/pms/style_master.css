@@ -1,0 +1,20 @@
+/* 공통 */
+@import url("common.css");
+
+/* 레이아웃 */
+@import url("layout.css");
+
+/* GNB */
+@import url("gnb.css");
+
+/* LNB */
+@import url("lnb.css");
+
+/* 게시판 */
+@import url("board.css");
+
+/* 팝업 */
+@import url("popup.css");
+
+/* 디자인 변경 */
+@import url("new.css");

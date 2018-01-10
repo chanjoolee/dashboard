@@ -571,14 +571,17 @@
 							    		{code:'height',value:'30px'}
 							    	],
 									elements:[
-										
 										{
 											type:'SearchHeader',
 											id: 'categoryHead',
 											name: 'categoryHead',
 											label:'',
-											text:' ',
-											width: '50px'
+											text:'Corona UFS Management',
+											width: '300px',
+											controlCss:[
+									    		{code:'text-align',value:'left'},
+									    		{code:'font-size',value:'14px'}
+									    	]
 										}
 										
 									]
@@ -697,6 +700,21 @@
 							"label" : "Project TS Mgmt.",							
 							"connected_content" :  {
 								"viewName": "corona_manage_project_tabs",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							},
+							"iframe_css" : [
+								{ "code": "height", "value": "770px" }
+							]
+						},
+						{
+							"type": "tab_iframe",
+							"id" : "project_config",
+							"label" : "Project Config",							
+							"connected_content" :  {
+								"viewName": "corona_manage_project_showview",
 								"form_id" : "form"
 							},
 							"events" : {

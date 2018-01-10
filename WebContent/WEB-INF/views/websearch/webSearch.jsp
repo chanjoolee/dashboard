@@ -6,12 +6,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>corona summary</title>
+    <title>Air Search</title>
     <%-- 1. jquery --%>
     <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
     <!-- <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script> -->
-     <!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> 
     <!-- <script src="js/jquery.csv-0.71.js"></script> -->
     
     <%-- jqgrid --%>
@@ -81,7 +81,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!--<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />-->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -96,10 +96,18 @@
 	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
 	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
 	
+	<%-- jqueryDatePicker --%>
+	<script type="text/javascript" src="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.js"></script>
+	<link rel="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.css" />
+	<!--<link rel="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" />-->
+	
+	
 	<%-- jqueryMohthPicker --%>
     <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
    	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
    	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+	
+	
 	
 	
 	<script type="text/javascript" id="script_common" >
@@ -149,7 +157,21 @@
 		{ region:'JAPAN',region_name:'일본',id:'NGO',name: '나고야' },
 		{ region:'JAPAN',region_name:'일본',id:'FUK',name: '후쿠오카' },
 		{ region:'JAPAN',region_name:'일본',id:'OKA',name: '오키나와' },
-		{ region:'JAPAN',region_name:'일본',id:'CTS',name: '삿포로' }
+		{ region:'JAPAN',region_name:'일본',id:'CTS',name: '삿포로' },
+		
+		{ region:'pacific',region_name:'대양주',id:'SYD',name: '시드니' },
+		{ region:'pacific',region_name:'대양주',id:'AKL',name: '오클랜드' },
+		{ region:'pacific',region_name:'대양주',id:'BNE',name: '브리즈번' },
+		{ region:'pacific',region_name:'대양주',id:'MEL',name: '멜버른' },
+		{ region:'pacific',region_name:'대양주',id:'GUM',name: '괌' },
+		{ region:'pacific',region_name:'대양주',id:'SPN',name: '사이판' },
+		{ region:'pacific',region_name:'대양주',id:'ROR',name: '팔라우' },
+		{ region:'pacific',region_name:'대양주',id:'CNS',name: '케언즈' },
+		{ region:'pacific',region_name:'대양주',id:'PER',name: '퍼스' },
+		{ region:'pacific',region_name:'대양주',id:'CHC',name: '크라이스트쳐치' }
+		
+		
+		
 	];
 	var schemaSearch = {
 			containerId:'searchCondition',
@@ -175,7 +197,53 @@
 							    		{code:'height',value:'30px'}
 							    	],
 									elements:[
-										
+										// date pick gubun
+										{
+											type:'SearchHeader',
+											id: 'searchdatePickGubunHead',
+											name: 'searchdatePickGubunHead',
+											label:'',
+											text:'Multi Date',
+											width: '150px',
+											containerCss:[
+									    		{code:'text-align',value:'right'}
+									    	]
+										},
+										{
+											type:'multiCombo',
+											id: 'search_multi_date',
+											name: 'search_multi_date',
+											label:'',
+											text:'Project',
+											width: '110px',
+											data: function(){
+												return [
+													{  id: 'Single',name:'Single'},
+													{  id: 'Multi',name:'Multi'}
+												];
+												
+											},
+											//value :'CSSD',
+											options: {
+												cd:'id',
+												name:'name'
+											},
+											multiselectOpt:{
+												selectedList: 1 ,
+												multiple: false,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													 var sb = [];
+													 $.each(checkedItems,function(){
+														 sb.push($(this).val());
+													 });
+													 return sb.join(",");
+												}
+											},
+											events:{
+											
+											}
+										} ,
+										//Start Date
 										{
 											type:'SearchHeader',
 											id: 'sampleHead',
@@ -184,6 +252,7 @@
 											text:'Start Date ',
 											width: '100px'
 										},
+										//dateFrom
 										{
 											type: 'dateInput',
 											id: 'dateFrom',
@@ -193,11 +262,12 @@
 											//width:'100px',
 // 											cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
-												
+												{code: 'margin-left', value:'10px'}
 											],
 											controlCss:[
 												{code: 'text-align', value:'center'},
-												{code: 'height', value:'1.8em'}
+												{code: 'height', value:'1.8em'},
+												{code: 'width', value:'100px'}
 											],
 											events:{
 												click : function(){
@@ -217,6 +287,7 @@
 										    	//$("#dateButtonFrom").val(today.toISOString('YYYY-MM-DD').substr(0,10));
 											}
 										},
+										//dateButtonFrom
 										{
 											type: 'dateButton',
 											id: 'dateButtonFrom',
@@ -235,25 +306,47 @@
 											],
 											events:{
 												click : function(){
-													calendar.calendar_show(event, this, 'dateFrom');
+													if($("#search_multi_date").val() == 'Single')
+														calendar.calendar_show(event, this, 'dateFrom');
+													else {
+														var today = new Date();
+														var y = today.getFullYear();
+														var md = $('#mdp-demo');
+														md.css({top: event.clientY + 10 , left: event.clientX + 10, position:'absolute'});
+														if(md.html() == ""){
+															md.multiDatesPicker({
+																//addDates: ['10/14/'+y, '02/19/'+y, '01/14/'+y, '11/16/'+y],
+																numberOfMonths: [3,4],
+																dateFormat: 'yy-mm-dd'
+																//defaultDate: '1/1/'+y
+																//defaultDate: y+'/1/1'
+																
+															});
+														}else{
+															md.toggle();
+														}
+														
+													}
+													
 												}
 											}
 										}
 										,
+										//Airport
 										{
 											type:'SearchHeader',
 											id: 'airportHead',
 											name: 'airportHead',
 											label:'',
 											text:'Airport',
-											width: '100px'
+											width: '60px'
 										},
 										{
 											type:'multiCombo',
 											id: 'search_airport',
 											name: 'search_airport',
 											label:'',
-											text:'Project',
+											text:'Airport',
 											width: '110px',
 											data: function(){
 												
@@ -269,10 +362,149 @@
 												}
 											},
 											multiselectOpt:{
+												//selectedList: 1 ,
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													 //return numChecked + ' of ' + numTotal + ' checked';
+													 
+													 var rtn = "";
+													 var sb = [];
+													 $.each(checkedItems,function(i,d){
+													 	 if(i < 2)
+														 	sb.push($(this).val());
+													 });
+													 rtn = sb.join(",");
+													 if((checkedItems.length-2) > 0){
+													 	rtn += " ..." + (checkedItems.length-2)+" more"
+													 }
+													 return rtn;
+												}
+											},
+											events:{
+											
+											}
+										} ,
+										// Travel Days
+										{
+											type:'SearchHeader',
+											id: 'termHead',
+											name: 'termHead',
+											label:'',
+											text:'Travel Days ',
+											width: '80px',
+											containerCss:[
+									    		{code:'text-align',value:'right'}
+									    	]
+										},
+										{
+											type: 'input',
+											id: 'travel_term',
+											name: 'travel_term',
+											label:'',
+											//value:'7',
+											//width:'100px',
+// 											cls: 'btn_txt btn_type_d btn_color_b',
+											containerCss:[
+												{code: 'margin-left', value:'10px'}
+											],
+											controlCss:[
+												{code: 'text-align', value:'center'},
+												{code: 'height', value:'1.8em'},
+												{code: 'width', value:'50px'}
+											],
+											events:{
+												click : function(){
+													//alert($("[name=radioDate]").val());
+												}
+											},
+											value: function(){
+												return '10';
+											}
+										},
+										// Person
+										{
+											type:'SearchHeader',
+											id: 'requestCountHead',
+											name: 'requestCountHead',
+											label:'',
+											text:'Seats',
+											width: '80px',
+											containerCss:[
+									    		{code:'text-align',value:'right'}
+									    	]
+										},
+										{
+											type: 'input',
+											id: 'requestCount',
+											name: 'requestCount',
+											label:'',
+											//value:'7',
+											//width:'100px',
+// 											cls: 'btn_txt btn_type_d btn_color_b',
+											containerCss:[
+												{code: 'margin-left', value:'10px'}
+											],
+											controlCss:[
+												{code: 'text-align', value:'center'},
+												{code: 'height', value:'1.8em'},
+												{code: 'width', value:'50px'}
+											],
+											events:{
+												click : function(){
+													//alert($("[name=radioDate]").val());
+												}
+											},
+											value: function(){
+												return '1';
+											}
+										}
+										
+									
+									]
+								},
+								//2line
+								{
+									label:'',
+									type: 'HorizontalLayout',
+									containerCss:[
+							    		{code:'height',value:'30px'}
+							    	],
+									elements:[
+										// Search Gubun(day/month)
+										{
+											type:'SearchHeader',
+											id: 'searchGubunHead',
+											name: 'searchGubunHead',
+											label:'',
+											text:'Search Gubun(day/month) ',
+											width: '150px',
+											containerCss:[
+									    		{code:'text-align',value:'right'}
+									    	]
+										},
+										{
+											type:'multiCombo',
+											id: 'search_gubun',
+											name: 'search_gubun',
+											label:'',
+											text:'Project',
+											width: '110px',
+											data: function(){
+												return [
+													{  id: 'day',name:'day'},
+													{  id: 'month',name:'month'}
+												];
+												
+											},
+											//value :'CSSD',
+											options: {
+												cd:'id',
+												name:'name'
+											},
+											multiselectOpt:{
 												selectedList: 1 ,
 												multiple: false,
 												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
 													 var sb = [];
 													 $.each(checkedItems,function(){
 														 sb.push($(this).val());
@@ -284,60 +516,33 @@
 											
 											}
 										} ,
-										{
-											type:'SearchHeader',
-											id: 'termHead',
-											name: 'termHead',
-											label:'',
-											text:'travel days ',
-											width: '100px'
-										},
-										{
-											type: 'input',
-											id: 'travel_term',
-											name: 'travel_term',
-											label:'',
-											//value:'7',
-											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
-											containerCss:[
-												
-											],
-											controlCss:[
-												{code: 'text-align', value:'center'},
-												{code: 'height', value:'1.8em'}
-											],
-											events:{
-												click : function(){
-													//alert($("[name=radioDate]").val());
-												}
-											},
-											value: function(){
-												return '10';
-											}
-										},
+										// searchRange
 										{
 											type:'SearchHeader',
 											id: 'searchRangMMHead',
 											name: 'searchRangMMHead',
 											label:'',
-											text:'Search Range(Month) ',
-											width: '150px'
+											text:'Search Range ',
+											width: '100px',
+											containerCss:[
+									    		{code:'text-align',value:'right'}
+									    	]
 										},
 										{
 											type: 'input',
-											id: 'searchRangMM',
-											name: 'searchRangMM',
+											id: 'searchRange',
+											name: 'searchRange',
 											label:'',
 											//value:'7',
 											//width:'100px',
 // 											cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
-												
+												{code: 'margin-left', value:'10px'}
 											],
 											controlCss:[
 												{code: 'text-align', value:'center'},
-												{code: 'height', value:'1.8em'}
+												{code: 'height', value:'1.8em'},
+												{code: 'width', value:'50px'}
 											],
 											events:{
 												click : function(){
@@ -347,13 +552,60 @@
 											value: function(){
 												return '6';
 											}
+										},
+										
+										// Direct Gubun : ItinList.StartSeg.ItinItem ItinList.ReturnSeg.ItinItem
+										{
+											type:'SearchHeader',
+											id: 'searchHead',
+											name: 'searchStopTimeHead',
+											label:'',
+											text:'Stop Time',
+											width: '100px',
+											containerCss:[
+									    		{code:'text-align',value:'right'},
+									    		{code:'margin-left',value:'33px'}
+									    	]
+										},
+										{
+											type:'multiCombo',
+											id: 'search_stops',
+											name: 'search_stops',
+											label:'',
+											text:'Project',
+											width: '100px',
+											data: function(){
+												return [
+													{  id: '0',name:'0'},
+													{  id: '1',name:'1'},
+													{  id: '2',name:'2'}
+												];
+												
+											},
+											//value :'CSSD',
+											options: {
+												cd:'id',
+												name:'name'
+											},
+											multiselectOpt:{
+												selectedList: 1 ,
+												multiple: false,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													 var sb = [];
+													 $.each(checkedItems,function(){
+														 sb.push($(this).attr("title"));
+													 });
+													 return sb.join(",");
+												}
+											},
+											events:{
+											
+											}
 										}
 										
 									
 									]
 								}
-								//2line
-								
 								
 							]
 					 	},
@@ -383,7 +635,8 @@
 											//width: '50px',
 											cls: 'btn_txt btn_type_e btn_color_a',
 											containerCss:[
-												{code: 'margin-right', value:'3px'}
+												{code: 'margin-right', value:'15px'},
+												{code: 'padding-top', value:'3px'},
 											],
 											events: {
 												click: function(){
@@ -406,7 +659,6 @@
 					]
 				}
 			
-				
 			
 			]
 			
@@ -438,19 +690,37 @@
 		v_list = [];
 		v_sites = {};
 		var start = $('#dateFrom').val().split("-").join("");
-		var searchRangMM = parseInt($("#searchRangMM").val());
-		var end = monthAdd(start,searchRangMM);
-		var dt1 = start; //dateAdd(dt1,Number($("#travel_term").val());
-		//var year = dt1.substr(0,4);
-		//var mm = dt1.substr(4,2);
-		//var dd = dt1.substr(6,2);
-		//var dt1a = new Date(year,mm - 1, dd);
-		
-		while( dt1 < end ){
-			searchSite(dt1);
-			dt1 = dateAdd(dt1,1);
-			//break;
+		var search_gubun = $("#search_gubun").val();
+		var searchRange = parseInt($("#searchRange").val());
+		var end = "";
+		if(search_gubun == 'day'){
+			end = dateAdd(start,searchRange);
+		}else{
+			end = monthAdd(start,searchRange);
 		}
+		
+		// date single
+		if($("#search_multi_date").val() == 'Single'){
+			var dt1 = start; 		
+			while( dt1 < end ){
+				$.each($("#search_airport").val(),function(i,dep){
+					searchSite(dt1,dep,1);
+				});
+				dt1 = dateAdd(dt1,1);
+				//break;
+			}
+		}else{
+			// date multy
+			var md = $('#mdp-demo');
+			var dts = md.val().split(",");
+			$.each(dts, function(i,dt){
+				var dt1 = dt.trim().replace(/-/g,"");
+				$.each($("#search_airport").val(),function(i,dep){
+					searchSite(dt1,dep,1);
+				});
+			});
+		}
+		
 		
 		$.each(v_sites,function(name,site){
 			//console.log(k);
@@ -472,19 +742,20 @@
     			v_sql += ')';
     			alasql(v_sql);
 			}
-    			
+			sortObjects(site.list,[['TotalSaleFare','asc'],'StartDT']);	
     		alasql.tables[name].data = site.list;
-			alasql('create index idx_TotalSaleFare on '+ name +'(TotalSaleFare)');
-			alasql('create index idx_StartDT on '+ name +'(StartDT,TotalSaleFare)');
+			alasql('create index idx_Price on '+ name +'(TotalSaleFare)');
+			alasql('create index idx_AirPort_Price on '+ name +'(airport,TotalSaleFare)');
+			alasql('create index idx_StartDT on '+ name +'(StartDT)');
 		});
+		
 		
 		alert("Complete!");
 		
 	}
 	
-	function searchSite(dt1){
+	function searchSite(dt1,airport, pageno){
     	var dt2 = dateAdd(dt1,Number($("#travel_term").val()));  
-    	var airport = $("#search_airport").val();
     	
 		//해외항공
 		url = "http://smartair.interpark.com/HtmlSearch/GetGoodsSmartList.aspx";
@@ -502,7 +773,7 @@
 		url += "&SeatType=A";
 		url += "&FLEX=Y";
 		url += "&Change=";
-		url += "&PageNo=1";
+		url += "&PageNo=" + pageno;
 		url += "&SplitNo=50";
 		url += "&retdate="+dt2;
 		url += "&adt=2";
@@ -511,7 +782,8 @@
 		//url += "&MoreKey=636462660768456428372";
 		url += "&inf=0";
 		url += "&trip=RT";
-		url += "&AirLine=KE";
+		//url += "&AirLine=KE";
+		url += "&AirLine=";
 		url += "&StayLength=";
 		url += "&JSON=Y";
 		url += "&Callback=onJsonResult";
@@ -558,62 +830,129 @@
 			data: {searchJson: JSON.stringify(paramObj)}, 
 			async: false,
 			success:  function(response){
+				v_list.push(response);
 				$.each(response.result.searchJson.sites,function(i,site){
 					site.responseJson = eval(site.response.substr(12));
-					if(site.responseJson.Responses.GoodsList == "") 
-						return true;						
-//					var cnt = parseInt(site.responseJson.Responses.GoodsSummary.RealGoodCnt);
-//					//var cnt = parseInt(site.responseJson.Responses.GoodsSummary.TotalGoodCnt);
-//					if(cnt == 0) 
-//						return true;
-						
-					sortObjects(site.responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
-					var goods = site.responseJson.Responses.GoodsList.Goods;
-					// site list add to v_sites
 					
+					// log
+					console.log([dt1,airport, pageno, site.responseJson]);
+					
+					var moreKey = site.responseJson.Responses.GoodsSummary.MoreKey;
+					var pageNo = site.responseJson.Responses.GoodsSummary.PageNO;
+					var maxPageNo = site.responseJson.Responses.GoodsSummary.MaxPageNO;
+						
 					if( v_sites[site.name] == undefined ){
 						v_sites[site.name] = {
 							list : [],
 							best : {}
 						};
-					}	
+					}
 					
-					$.each(goods,function(j,good){
-						v_sites[site.name].list.push(good);
-					});	
-					console.log(dt1);
-					/////////// best logic 01.
-					// site best
-					//sortObjects(v_sites[site.name].list, [['TotalSaleFare','asc']]);
-					//v_sites[site.name].best = v_sites[site.name].list[0];
+					if(site.responseJson.Responses.GoodsList != ""){
+						if($.isArray(site.responseJson.Responses.GoodsList.Goods)){
+							sortObjects(site.responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
+							var goods = site.responseJson.Responses.GoodsList.Goods;
+							// site list add to v_sites
+							$.each(goods,function(j,good){
+								var requestCount = parseInt($("#requestCount").val());
+								
+								// 가능 좌석일때만!! 대기도 뺀다~~
+								var isSeat = false;
+								if(parseInt(good.StartCheck) >= requestCount
+										&& parseInt(good.ReturnCheck) >= requestCount
+										&& good.FareFix == "확정"
+										&& good.SiteCode != "MOBILE" ){
+									isSeat = true;
+								}
+								
+								// 경유
+								var isVia = false;
+								var viaType = parseInt($("#search_stops").val()) + 1;
+								var maxViaType = 0;
+								if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
+									if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
+										if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
+											maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
+										}
+									} else {
+										for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
+											if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
+												maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
+											}
+										}
+									}
+								}
+								
+								if( maxViaType < 3 && maxViaType != 0) {
+									if( viaType == 1) {
+										if( maxViaType == 1) {
+											isVia = true;
+										}
+									} else {
+										isVia = true;
+									}
+								}
+								if(isSeat && isVia){
+									var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
+									good.airport = v1.name;
+									v_sites[site.name].list.push(good);
+								}
+									
+								
+							});
+						}else if(site.responseJson.Responses.GoodsList.Goods != undefined ){
+							var good = site.responseJson.Responses.GoodsList.Goods;
+							// 가능 좌석일때만!! 대기도 뺀다~~
+							var isSeat = false;
+							if(parseInt(good.StartCheck) >= requestCount
+									&& parseInt(good.ReturnCheck) >= requestCount
+									&& good.FareFix == "확정"
+									&& good.SiteCode != "MOBILE" ){
+								isSeat = true;
+							}
+							// 경유
+							var isVia = false;
+							var viaType = parseInt($("search_stops").val()) + 1;
+							var maxViaType =0;
+							if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
+								if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
+									if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
+										maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
+									}
+								} else {
+									for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
+										if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
+											maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
+										}
+									}
+								}
+							}
+							if( maxViaType < 3 && maxViaType != 0) {
+								if( viaType == 1) {
+									if( maxViaType == 1) {
+										isVia = true;
+									}
+								} else {
+									isVia = true;
+								}
+							}
+							if(isSeat && isVia){
+								var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
+								good.airport = v1.name;
+								v_sites[site.name].list.push(good);
+							}
+							
+						}
+					}					
 					
-					/////////// best logic 02.
-//					sortObjects(goods, [['TotalSaleFare','asc']]);
-//					site.best = goods[0];
-//					console.log(dt1 + ' Best:');
-//					console.log(goods[0]);
-//					if(v_sites[site.name]['best']['TotalSaleFare'] == undefined){
-//						v_sites[site.name].best = goods[0];
-//						console.log(v_sites[site.name].best);
-//					}
-//						
-//					if(Number(goods[0].TotalSaleFare) < Number(v_sites[site.name].best.TotalSaleFare)){
-//						v_sites[site.name].best = goods[0];
-//						console.log('Best:');
-//						console.log(v_sites[site.name].best);
-//					}
-
-					// BEST Logic alasql create index by TotalSaleFare
-						
 					
-					//console.log(v_sites[site.name].best);
+					
+					if( parseInt(pageNo) < parseInt(maxPageNo) ) {
+						searchSite(dt1,airport, parseInt(pageNo) +1);
+					}
 					
 				});
-				v_list.push(response);	
-				//console.log(v_response);
-				// v_list[0].result.searchJson.sites[0].responseJson.Responses.GoodsList
-				// v_list[0].result.searchJson.sites[0].responseJson.Responses.GoodsList.Goods
-				// sortObjects(v_list[0].result.searchJson.sites[0].responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']])
+				
 			}
 		});
 	}
@@ -630,9 +969,7 @@
 	        width: 100%;
 	        padding: 0;
 	        margin: 0;
-	        /* overflow-y: auto; */
-	       /*  overflow-x: hidden; */
-	       overflow: hidden;
+	        
 	        font-size:11px;
 	      }
 		
@@ -924,11 +1261,11 @@
 <body  style="min-width:920px" >
 <form name="form" id="form" class="">
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
-
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
 
 	<div id="loader"></div>
+	<div id="mdp-demo"></div>
 </form>
 
  <div id="dialog-confirm"></div>

@@ -81,7 +81,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -630,15 +630,44 @@
 											events:{
 												change : function(){
 													var datas = [];
+													var list1 = [];
 													$.ajax({
 														type: "POST",
 														url: "/dashboard/genericlListJson.html",
 														data: {sqlid: "dashboard.corona.manage.scriptsets.map.search",project: $("#sample").val() }, 
 														async: false,
 														success:  function(response){
-															datas = response.dataList;
+															list1 = response.dataList;
 														}
 													});
+													
+													//  firmware gubun
+													if($("#firmware_gubun").val()== "pms"){
+														var list2 = [];
+														$.ajax({
+															url: "/dashboard/genericlListJson.html",
+															data: {sqlid: "dashboard.corona.summay.firmware.pms", project: $("#sample").val() }, 
+															async: false,
+															success:  function(response){
+																list2 = response.dataList;
+															}
+														});
+														
+														// pms firmware version 
+														datas = list1.filter(function(d,i){
+															var pms = list2.filter(function(d1){
+																return d1.FIRMWARE == d.FIRMWARE;
+														    });
+															if( pms.length > 0 )
+																return true;
+															else
+																return false;
+
+														});
+													}else {
+														datas = list1;
+													}
+													
 													
 													var sampleObj = $("#firmware");
 													sampleObj.html("");
@@ -682,18 +711,47 @@
 											name: 'firmware',
 											label:'',
 											text:'Firmware',
-											width: '200px',
+											width: '150px',
 											data: function(){
 												var rtnList = [];
+												var list1 = [];
 												$.ajax({
 													url: "/dashboard/genericlListJson.html",
 													data: {sqlid: "dashboard.corona.manage.scriptsets.map.search", project: $("#sample").val() }, 
 													async: false,
 													success:  function(response){
-														rtnList = response.dataList;
+														list1 = response.dataList;
 													}
 												});
+												
+												if($("#firmware_gubun").val()== "pms"){
+													var list2 = [];
+													$.ajax({
+														url: "/dashboard/genericlListJson.html",
+														data: {sqlid: "dashboard.corona.summay.firmware.pms", project: $("#sample").val() }, 
+														async: false,
+														success:  function(response){
+															list2 = response.dataList;
+														}
+													});
+													
+													// pms firmware version 
+													rtnList = list1.filter(function(d,i){
+														var pms = list2.filter(function(d1){
+															return d1.FIRMWARE == d.FIRMWARE;
+													    });
+														if( pms.length > 0 )
+															return true;
+														else
+															return false;
+
+													});
+												}else{
+													rtnList = list1;
+												}
+												
 												return rtnList;
+												
 											},
 											//value :'CSSD',
 											options: {
@@ -725,13 +783,47 @@
 												}
 											}
 										},
+										
+										{
+											type:'Button',
+											id: 'btnFimwareAll',
+											name: 'btnFimwareAll',
+											label:'All',
+											//width: '50px',
+											cls: 'btn_txt btn_type_d btn_color_b',
+											containerCss:[
+												{code: 'margin-left', value:'2px'}
+											],
+											controlCss:[
+												{code: 'margin-top', value:'-3px'}
+											],
+											events:{
+												click : function(){
+													$("#loader").show();
+													if($("#firmware_gubun").val()== "pms"){
+														$("#firmware_gubun").val("all");
+														$("#btnFimwareAllContainer").find("a span span").text("PMS");
+													}else{
+														$("#firmware_gubun").val("pms");
+														$("#btnFimwareAllContainer").find("a span span").text("All");
+													}
+													setTimeout( function(){
+														//var el_sample = findAll("sample",schemaSearch);
+														//el_sample.events.change();
+														$("#sample").trigger("change");
+														
+														$("#loader").hide();
+													},50);
+												}
+											}
+										},
 										{
 											type:'SearchHeader',
 											id: 'testCaseHead',
 											name: 'testCaseHead',
 											label:'',
 											text:'TestCase Set',
-											width: '100px'
+											width: '75px'
 										},
 										{
 											type:'SearchHeader',
@@ -739,7 +831,7 @@
 											name: 'testCaseValueHead',
 											label:'',
 											text:' ',
-											width: '100px',
+											width: '80px',
 											controlCss: [
 												{code: 'text-align', value:'left'}
 											]
@@ -854,6 +946,9 @@
 			    			}
 			    		});
 			    		
+			    		if ( dataList == undefined)
+			    			dataList = [];
+			    		
 			    		$.each(dataList,function(){
 			    			
 			    			if(this.COMPUTE_CRETERIA == undefined){
@@ -892,6 +987,12 @@
 			    		{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM',width: 100, sortable: false
 			    			, editable: false
 			    			, editrules:{edithidden:false}
+							, cellattr: function (rowId, val, rowObj, cm, rowData, isCustom){
+								result = " style=\"background:white;vertical-align: middle;";
+								result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;"
+								result += "\" ";
+								return result;
+							}
 			    		},
 						{label:'Test state', name:'testState', id:'testState',width: 90, sortable: false ,align:'center'
 							,formatter: function (cellvalue,col,row,type) {
@@ -950,7 +1051,7 @@
 							, editable: false
 							, editrules:{edithidden:true}	
 							,cellattr: function(){
-								var result = " style=\"background:white;vertical-align: middle;";
+								var result = " style=\"background:white;vertical-align: middle;cursor:pointer;";
 								result += "color: black;font-weight: bolder;";
 								return result;
 							}	
@@ -964,7 +1065,7 @@
 							, editable: false
 							, editrules:{edithidden:true}
 							,cellattr: function(){
-								var result = " style=\"background:white;vertical-align: middle;";
+								var result = " style=\"background:white;vertical-align: middle;cursor:pointer;";
 								result += "color: blue;font-weight: bolder;";
 								return result;
 							}			
@@ -973,7 +1074,7 @@
 							, editable: false
 							, editrules:{edithidden:true}
 							,cellattr: function(){
-								var result = " style=\"background:white;vertical-align: middle;";
+								var result = " style=\"background:white;vertical-align: middle;cursor:pointer;";
 								result += "color: red;font-weight: bolder;";
 								return result;
 							}	
@@ -982,7 +1083,7 @@
 							, editable: false
 							, editrules:{edithidden:true}
 							,cellattr: function(){
-								var result = " style=\"background:white;vertical-align: middle;";
+								var result = " style=\"background:white;vertical-align: middle;cursor:pointer;";
 								result += "color: black;font-weight: bolder;";
 								return result;
 							}	
@@ -1327,14 +1428,43 @@
 							if(cm.name  == "CATEGORY"){
 								ispop = true;
 								oFrm.category.value = row.CATEGORY;
+								oFrm.testItem.value = "";
+								oFrm.countGubun.value = "all";
+							}else if(cm.name == "TEST_ITEM"){
+								ispop = true;
+								oFrm.category.value = row.CATEGORY;
+								oFrm.testItem.value = row.TEST_ITEM;
+								oFrm.countGubun.value = "all";
+							}else if(cm.name == "TOTAL_COUNT"){
+								ispop = true;
+								oFrm.category.value = row.CATEGORY;
+								oFrm.testItem.value = row.TEST_ITEM;
+								oFrm.countGubun.value = "alll";
+							}else if(cm.name == "PASS_COUNT"){
+								ispop = true;
+								oFrm.category.value = row.CATEGORY;
+								oFrm.testItem.value = row.TEST_ITEM;
+								oFrm.countGubun.value = "pass";
+							}else if(cm.name == "FAIL_COUNT"){
+								ispop = true;
+								oFrm.category.value = row.CATEGORY;
+								oFrm.testItem.value = row.TEST_ITEM;
+								oFrm.countGubun.value = "fail";
+							}else if(cm.name == "notyet"){
+								ispop = true;
+								oFrm.category.value = row.CATEGORY;
+								oFrm.testItem.value = row.TEST_ITEM;
+								oFrm.countGubun.value = "notyet";
 							}
 							
+							
+							
 							if(ispop){
-								var newWin1 = window.open("", "coronaDetail", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+								var newWin1 = window.open("", "coronaDetail_ufs", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 								
 								oFrm.action =  '/dashboard/generic.html?viewName=coronaDetail';
 								oFrm.method = "post";
-								oFrm.target = "coronaDetail"; 
+								oFrm.target = "coronaDetail_ufs"; 
 							    oFrm.submit();		
 							    newWin1.focus();	
 							}
@@ -1959,6 +2089,7 @@
 		setTimeout( function(){
 			createDB();
 			makeHtml('searchCondition',schemaSearch);
+			$("button.ui-multiselect").css("padding-bottom","8px");
 			fn_set_testCase();
 			makeHtml('contentMain',schemaContent);
 			$( window ).resize(function() {
@@ -2096,7 +2227,10 @@
 	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 	
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
+	<input type="hidden" id="firmware_gubun" name="firmware_gubun" value="pms"/>
 	<input type="hidden" id="category" name="category" value=""/>
+	<input type="hidden" id="testItem" name="testItem" value=""/>
+	<input type="hidden" id="countGubun" name="countGubun" value="all"/>
 
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>

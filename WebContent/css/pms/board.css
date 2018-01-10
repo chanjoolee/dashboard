@@ -1,0 +1,1219 @@
+
+
+/*==================================
+Board Gallery : board_gallery.css
+==================================*/
+.board_gallery {margin:0 auto;}
+.board_gallery:after {content:''; display:block; clear:both; }
+.board_gallery .gallery_wrap {margin-left:-10px; }
+.board_gallery .gallery_list {float:left; overflow:hidden; margin-left:10px; margin-bottom:10px;}
+.board_gallery .gallery_list .gallery_link {position:relative; display:block; width:100%; height:100%; }
+.board_gallery .gallery_list .gallery_link .thumb {display:none; position:absolute; top:0; left:0; width:100%; height:100%; background-color:#000; opacity:0.5; }
+.ie8 .board_gallery .gallery_list .gallery_link .thumb {filter:alpha(opacity=50); }
+.board_gallery .gallery_list .gallery_link:hover .thumb {display:block; }
+.board_gallery .gallery_list img {min-width:100% !important; min-height:100% !important;}
+
+/* 조합 */
+.page_tit + .board_gallery,
+.opt_tit + .board_gallery {padding-top:15px;}
+
+
+/*==================================
+Board Tile : board_gallery.css
+1단 레이아웃 (lay_col1)에 board_gallery를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:172px; height:172px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_gallery .gallery_list {width:188px; height:188px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:188px; height:188px;}
+
+
+/*==================================
+Board Tile : board_gallery.css
+2단 레이아웃 (lay_col2)에 board_gallery를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:185px; height:185px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:178px; height:178px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:188px; height:188px;}
+
+
+/*==================================
+Board Tile : board_gallery.css
+3단 레이아웃 (lay_col3)에 board_gallery를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:185px; height:185px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:188px; height:188px;}
+
+
+/*==================================
+Board Tile : board_gallery.css
+확장형 레이아웃 (lay_expand)에 board_gallery를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:185px; height:185px;}
+.folded .board_gallery .gallery_list {width:172px; height:172px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:178px; height:178px;}
+.folded .board_gallery .gallery_list {width:188px; height:188px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_gallery .gallery_list {width:188px; height:188px;}
+
+
+/*==================================
+Board Tile : board_gallery.css
+반응형 레이아웃 (lay_responsive)에 board_gallery를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_gallery .gallery_list {width:178px; height:178px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_gallery .gallery_list {width:185px; height:185px;}
+}
+
+
+
+/*==================================
+Board List : board_list.css
+==================================*/
+/* Board List */
+.board_list {width:100%; table-layout:fixed; text-align:center; border:1px solid #d2d4d9; border-width:1px 0px; color:#595C65; margin-bottom:15px;}
+.board_list .board_list_row {border-top:1px solid #d2d4d9;}
+.board_list .board_list_row:hover,
+.board_list .board_list_row.selected {background-color:#edeef3;}
+.board_list .board_list_data {padding:4px 5px;}
+.board_list .board_list_data_left {padding:4px 5px; text-align:left}
+
+.board_list .board_list_data.tit {font-weight:bold; text-align:left;}
+.board_list .tit_link {display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.board_list .tit_link .board_list_ico_new {margin-left:7px;}
+.board_list thead .board_list_head {font-weight:bold; padding:4px 5px; background-color:#edeef3;}
+.board_list thead {border-top:3px solid #757984;}
+/*.board_list tbody {border-top:3px solid #757984;}*/
+
+/* Board List - 2 Columns */
+.board_2col {width:100%; height:230px; table-layout:fixed; position:relative; margin-bottom:15px;}
+.board_2col:after {clear:both; display:block; content:'';}
+.board_2col .board_list {margin-bottom:0;}
+.board_2col .board_2col_left {display:inline-block; width:45%; overflow-y:scroll; height:100%;}
+.board_2col .board_2col_right {display:inline-block; float:right; width:45%; overflow-y:scroll; height:100%;}
+.board_2col .between_area {display:inline-block;}
+.board_2col .between_area.button {position:absolute; top:50%; left:50%; margin-top:-32px; margin-left:-28px; text-align:center; }
+.board_2col .between_area.button .btn_fix {display:block;}
+.board_2col .between_area.button .btn_rounded_arr_right {margin-top:8px}
+.board_2col .between_area.drag {position:absolute; top:50%; left:50%; margin-top:-32px; margin-left:-15px; text-align:center;}
+
+/* Board List - 2 Rows  */
+.board_2row {width:100%; margin-bottom:15px;}
+.board_2row .board_list {margin-bottom:0;}
+.board_2row .board_row {overflow-y:scroll; height:230px;}
+.board_2row .between_area {display:inline-block; width:100%; margin-bottom:10px; text-align:center;}
+.board_2row .between_area .btn_rounded_arr_up {margin-right:10px;}
+
+/* Icon */
+.board_list_ico {display:inline-block; vertical-align: middle; background:url('../images/board/board_list.png'); }
+.board_list_ico_new {width:15px; height:14px; background-position:left top;} 
+.board_list_ico_drag {width:33px; height:64px; background-position:left -25px;}
+
+/* board title */
+.ex_info {font-size:20px; line-height:30px; color:#333; margin-top:30px; margin-bottom:5px;}
+.ex_info2 {font-size:20px; line-height:30px; color:#333; margin:20px 0;}
+
+
+.ex_desc {font-size:13px; line-height:18px; font-weight:normal; margin-bottom:30px;}
+.ex_title1 {font-size:16px; line-height:30px; margin-bottom:5px; margin-top:40px; text-align:left}
+.ex_title1_1 {font-size:20px; line-height:30px; margin-bottom:5px; margin-top:10px; text-align:left; color:#333}
+.ex_title1_2 {font-size:16px; line-height:30px; text-align:left}
+
+.ex_title2 {font-size:13px; line-height:1.3em; color:#999; margin:15px 0 5px;}
+.ex_info + .ex_title1 {margin-top:10px;}
+
+
+
+/*==================================
+Board Schedule : baord_schedule.css
+==================================*/
+.board_schedule {padding-top:25px;}
+
+/* Schedule Option */
+.board_schedule .option_area .left_area {float:left; }
+.board_schedule .option_area .right_area {float:right;}
+.board_schedule .option_area .center_area {text-align:center; margin-bottom:-4px; }
+.board_schedule .option_area .date_wrap {display:inline-block; }
+.board_schedule .option_area .date_set {margin:0 15px;}
+.board_schedule .option_area .date {font-family:Arial; font-size:24px; font-weight:normal; color:#000; margin:0 18px; vertical-align:middle; line-height:1.33em; }
+.board_schedule .schedule_area {margin-top:10px; border:1px solid #d2d4d9; border-bottom:0;}
+.board_schedule .schedule {width:100%; table-layout:fixed; border-collapse:collapse; border-spacing:0; }
+
+/* Schedule Head */
+.board_schedule .schedule_t_row_head {border-bottom:2px solid #757984;}
+.board_schedule .schedule_t_head_cate {width:150px; vertical-align:middle; text-align:center;  background-color:#edeef3;}
+.board_schedule .schedule_t_head_cate .tit_wrap {padding:15px 0;}
+.board_schedule .schedule_t_head_cate .tit {font-size:12px; font-weight:bold; color:#3c404a; }
+.board_schedule .schedule_t_head_date .schedule_date {width:100%; height:100%; border-collapse:collapse; border-spacing:0; table-layout:fixed; }
+.board_schedule .schedule_t_head_date .schedule_date .date {font-family:Arial; font-size:12px; font-weight:bold; color:#3c404a; vertical-align:middle; text-align:center; }
+.board_schedule .schedule_t_head_date .grid {width:100%; height:100%; border-collapse:collapse; border-spacing:0; table-layout:fixed; }
+.board_schedule .schedule_t_head_date .grid_date {border-left:1px solid #d2d4d9; vertical-align:top; height:45px; vertical-align:middle;}
+.schedule.month .schedule_t_head_date .grid_date {background-color:#edeef3}
+.ie .board_schedule .schedule_t_head_date .grid_date,
+.ff .board_schedule .schedule_t_head_date .grid_date,
+.schedule.week .schedule_t_head_date .grid_date,
+.board_schedule .schedule_t_head_date .grid_date {height:46px;}
+.board_schedule .schedule_t_head_date .grid_date .date {display:block; font-weight:bold; color:#3c404a; }
+.board_schedule .schedule_t_head_date .grid_date .day {display:block; font-size:11px; color:#76787c; }
+
+/* Schedule Body */
+.board_schedule .schedule_cate {width:150px; text-align:left; vertical-align:middle; border-bottom:1px solid #d2d4d9; }
+.board_schedule .schedule_cate .tit_wrap {padding:15px 15px;}
+.board_schedule .schedule_cate .tit {font-size:13px; font-weight:normal; color:#3c404a; line-height:1.33em; margin-bottom:1px; }
+.board_schedule .schedule_cate .status {font-size:13px; font-weight:normal; color:#a4a7a9; line-height:1.33em;}
+.board_schedule .schedule_cate .prefix_wrap {margin-bottom:1px; }
+.board_schedule .schedule_data {position:relative; border-bottom:1px solid #d2d4d9; overflow:hidden;}
+.board_schedule .schedule_data .grid_wrap {position:absolute; top:0; left:0; width:100%;}
+.board_schedule .schedule_data .grid {width:100%; height:100%; border-collapse:collapse; border-spacing:0; table-layout:fixed; }
+.board_schedule .schedule_data .grid_date {border-left:1px solid #d2d4d9; vertical-align:top; }
+.board_schedule .schedule_data .grid_date.weekend,
+.board_schedule .schedule_data .grid_date.off {background-color:#f3f2f6; }
+.board_schedule .schedule_data .schedule_list {position:relative; width:100%; border-collapse:collapse; border-spacing:0; table-layout:fixed;}
+
+/* Schedule Legend */
+.board_schedule .schedule_legend {margin-top:6px; text-align:right; }
+.board_schedule .schedule_legend ul {display:inline-block;}
+.board_schedule .schedule_legend .legend_list {float:left; margin-left:22px; }
+.board_schedule .schedule_legend .legend_list:first-child {margin-left:0; }
+.board_schedule .schedule_legend .legend_list .txt {font-size:12px; font-weight:normal; color:#76787c; line-height:1.33em; vertical-align:middle; margin-left:1px; }
+.board_schedule .board_schedule_ico {display:inline-block; vertical-align:middle; width:9px; height:9px;}
+.board_schedule .board_schedule_ico_ongoing {background-color:#fdab06;}
+.board_schedule .board_schedule_ico_scheduled {background-color:#00a0ae;}
+.board_schedule .board_schedule_ico_completed {background-color:#737984;}
+
+/* Schedule Graph */
+.board_schedule .schedule_graph {position:relative; display:block; overflow:hidden; height:20px; line-height:20px; vertical-align:middle; white-space:nowrap; cursor:pointer; margin:1px 0;}
+.board_schedule .schedule_graph .name {font-size:12px; font-weight:bold; color:#fff; display:block; padding:0 5px; text-align:center; line-height:18px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.board_schedule .schedule_graph.completed {background-color:#737984; }
+.board_schedule .schedule_graph.ongoing {background-color:#fdab06; }
+.board_schedule .schedule_graph.scheduled {background-color:#00a0ae; }
+
+/* Schedule prefix */
+.board_schedule .board_schedule_pre {display:inline-block; vertical-align:middle; }
+.board_schedule .board_schedule_pre {height:22px; padding-left:12px; margin-right:12px; background-image:url('../images/board/board_schedule.png');}
+.board_schedule .board_schedule_pre .name {font-size:12px; font-weight:normal; color:#ffffff; display:inline-block; height:22px; margin-right:-12px; padding-right:12px; line-height:20px; background-image:url('../images/board/board_schedule.png');}
+.board_schedule .board_schedule_pre_type_1 {background-position:left -25px; }/* 컬러명 or Index */
+.board_schedule .board_schedule_pre_type_1 .name {background-position:right -25px; }
+.board_schedule .board_schedule_pre_type_2 {}/* 컬러명 or Index */
+.board_schedule .board_schedule_pre_type_2 .name {}
+.board_schedule .board_schedule_pre_type_3 {}/* 컬러명 or Index */
+.board_schedule .board_schedule_pre_type_3 .name {}
+
+/* Schedule btn - 월/주/일/이동버튼 */
+.board_schedule .board_schedule_btn {display:inline-block; vertical-align:middle; }
+.board_schedule .board_schedule_btn .name {font-size:14px; font-weight:bold; color:#fff; display:block; text-align:center; }
+.board_schedule .board_schedule_btn_month,
+.board_schedule .board_schedule_btn_week,
+.board_schedule .board_schedule_btn_day {width:27px; height:27px; line-height:27px; background-color:#c6c7cc; }
+.board_schedule .board_schedule_btn_month.selected, 
+.board_schedule .board_schedule_btn_week.selected, 
+.board_schedule .board_schedule_btn_day.selected,
+.board_schedule .board_schedule_btn_month:hover, 
+.board_schedule .board_schedule_btn_week:hover, 
+.board_schedule .board_schedule_btn_day:hover {background-color:#fb6c07; }
+.board_schedule .week_set .board_schedule_btn, 
+.board_schedule .date_set .board_schedule_btn {width:6px; height:12px; background-image:url('../images/board/board_schedule.png');}
+.board_schedule .board_schedule_prev { background-position:0 0;}
+.board_schedule .board_schedule_next {background-position:-25px 0;}
+
+/* Schedule Week & Schedule Day */
+.schedule_t_head_date .grid_wrap {position:absolute; top:0; left:0;}
+.schedule_t_head_date .date_list {width:100%; table-layout:fixed; background-color:#edeef3;}
+.schedule_t_head_date .date_list .date_head .date{display:block; font-weight:bold; color:#3c404a;}
+.schedule_t_head_date .date_list .date_head .day{display: block; font-size: 11px; color: #76787c;}
+.schedule.week .schedule_t_head_date,
+.schedule.day .schedule_t_head_date {position:relative; }
+.schedule.week .schedule_t_head_date .grid_wrap .grid_date.odd,
+.schedule.day .schedule_t_head_date .grid_wrap .grid_date.odd {border-left:1px solid #d2d4d9;}
+.schedule.week .schedule_t_head_date .grid_date,
+.schedule.day .schedule_t_head_date .grid_date {height:46px; vertical-align:middle; border-left:none;}
+.win.safari .schedule.week .schedule_t_head_date .grid_date,
+.win.safari .schedule.day .schedule_t_head_date .grid_date {border-left:1px solid #d2d4d9;}
+.schedule.day .schedule_t_head_date,
+.schedule.week .schedule_t_head_date {border:none}
+
+
+
+/*==================================
+Board Profile : board_profile.css
+==================================*/
+.board_profile {width:100%; border-spacing:0; border-collapse:separate; border-top:2px solid #757984; table-layout:fixed; margin-bottom:15px; background-color:#ffffff;}
+.board_profile .profile_info_area {padding-right:17px; text-align:left; border-top:20px solid #FFF; padding-bottom:20px; border-bottom:1px solid #d4d6da; }
+.board_profile .member_img_wrap {display:inline-block; margin-right:15px; width:50px; height:50px; position:relative; vertical-align:middle; }
+.board_profile .member_img_wrap .member_mask {display:inline-block; position:absolute; width:50px; height:50px; background:url("../images/board/board_profile.png") 0 bottom no-repeat;}
+.board_profile .member_img_wrap .member_img {width:50px; height:50px; }
+.board_profile .member_img_wrap .member_img img {width:50px; height:50px; }
+.board_profile .member_info_wrap {display:inline-block; overflow: hidden; white-space:normal; vertical-align:middle; }
+.board_profile .member_info > dt.member_name {font-size:16px; font-weight:normal; color:#000000; line-height:1.33em; margin-bottom:4px; }
+.board_profile .member_info > dd.member_team,
+.board_profile .member_info > dd.member_jobs {font-size:12px; font-weight:normal; color:#76787c; float:left; margin-right:20px; line-height:1.33em;}
+
+.board_profile .desc_info_area {width:20%; text-align:left; border-top:20px solid #FFF; padding-left:20px; padding-right:20px; padding-bottom:20px; border-bottom:1px solid #d4d6da; background:url("../images/board/board_profile_ver_line.gif") 0 bottom no-repeat; }
+.board_profile .desc_info > li {margin-top:5px;}
+.board_profile .desc_info > li:first-child {margin-top:0;}
+.board_profile .desc_info > li.profile_email strong,
+.board_profile .desc_info > li.profile_tel,
+.board_profile .desc_info > li.profile_tel strong {font-size:13px; font-weight:normal; color:#3c404a;}
+.board_profile .desc_info > li.profile_email a {font-family:Arial; font-size:13px; font-weight:normal; color:#0490da; }
+
+.board_profile .btn_area {width:300px; border-top:20px solid #FFF; padding-left:20px; padding-bottom:20px; border-bottom:1px solid #d4d6da; background:url("../images/board/board_profile_ver_line.gif") 0 bottom no-repeat; text-align:right; }
+.win.safari .board_profile .btn_area {width:320px; }
+.board_profile .btn_area > .btn_txt.btn_type_f .name {width:125px; text-align:center; }
+
+
+
+/*==================================
+Board Thumbnails : board_thumb.css
+==================================*/
+.board_thumb {width:100%; border-spacing:0; border-collapse:separate; border-top:2px solid #757984; table-layout:fixed; margin-bottom:15px; background-color:#ffffff;}
+.board_thumb .post_info_area {padding-right:20px; text-align:left; border-top:20px solid #FFF; padding-bottom:20px; border-bottom:1px solid #d4d6da; }
+.board_thumb .post_info_area .thumb_wrap {position:relative; float:left; padding-right:20px; width:145px; height:95px; }
+.board_thumb .post_info_area .thumb_wrap > .cate {position:absolute; top:0; left:0; }
+.board_thumb .post_info_area .tit_wrap {overflow: hidden; white-space:normal; vertical-align:top; }
+.board_thumb .post_info_area .tit_wrap .tit_list {margin-bottom:10px; }
+.board_thumb .post_info_area .tit_wrap .tit_list > .cate {margin-right:6px; vertical-align:-2px; }
+.board_thumb .post_info_area .tit_wrap .tit_list > a.tit_link {font-size:16px; font-weight:normal; color:#000000; line-height:1.33em; vertical-align:middle; }
+.board_thumb .post_info_area .tit_wrap .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_thumb .post_info_area .tit_wrap .tit_desc {font-size:12px; font-weight:normal; color:#a4a7a9; margin-bottom:10px; line-height:1.33em; }
+.board_thumb .post_info_area .tit_wrap .write_info {}
+.board_thumb .post_info_area .tit_wrap .write_info >.writer_team,
+.board_thumb .post_info_area .tit_wrap .write_info >.writer,
+.board_thumb .post_info_area .tit_wrap .write_info >.write_date {font-size:12px; font-weight:bold; color:#595c65; float:left; margin-right:20px; line-height:1.33em; }
+
+/* view */
+.board_thumb .detail_info_area {width:140px; border-top:20px solid #FFF; padding-bottom:20px; border-bottom:1px solid #d4d6da; background:url("../images/board/board_thumb_ver_line.gif") 0 bottom no-repeat; }
+.board_thumb .detail_info_area .info_wrap {padding:0 3px 0 15px; }
+.board_thumb .detail_info_area .info_list {margin-top:15px; }
+.board_thumb .detail_info_area .info_list:first-child {margin-top:0; }
+.board_thumb .detail_info_area .info_list {font-size:12px; font-weight:bold; color:#a4a7a9; line-height:1.33em; }
+.board_thumb .detail_info_area .info_list .num {float:right; margin-right:3px; }
+
+/* btn */
+.board_thumb .btn_area {width:145px; border-top:20px solid #FFF; padding-bottom:20px; text-align:right; border-bottom:1px solid #d4d6da; background-image:none; }
+.win.safari .board_thumb .btn_area {width:165px; }
+.board_thumb .btn_area > .btn_txt.btn_type_f .name {width:125px; text-align:center; }
+
+/* ico */
+.board_thumb_ico {display:inline-block; vertical-align:middle;  background:url("../images/board/board_thumb.png"); background-repeat:no-repeat;}
+.board_thumb_ico.board_thumb_ico_new {width:15px; height:14px; margin-left:7px; background-position:0 0;}
+.board_thumb_ico.board_thumb_ico_view {width:16px; height:14px; margin-right:5px; background-position:0 -25px;}
+.board_thumb_ico.board_thumb_ico_cmt {width:16px; height:16px; margin-right:5px; background-position:-25px -25px;}
+.board_thumb_ico.board_thumb_ico_like {width:17px; height:15px; margin-right:5px; background-position:-50px -25px; }
+
+/* index */
+.cate_wrap {margin-bottom:5px;}
+.cate {display:inline-block; padding:1px 8px;}
+.cate_a {background-color:#e60724;}/* 컬러명 or Index명 */
+.cate_b {background-color:#14aed7;}/* 컬러명 or Index명 */
+.cate .name {font-size:12px; line-height:16px; font-weight:bold; color:#fff;}
+
+
+/*==================================
+Board Status : board_status.css
+==================================*/
+.board_status {width:100%; border-spacing:0; border-collapse:separate; border-top:2px solid #757984; table-layout:fixed; margin-bottom:15px; background-color:#ffffff;}
+.board_status .post_info_area {padding-right:20px; text-align:left; border-top:20px solid #FFF; padding-bottom:20px; border-bottom:1px solid #d4d6da; }
+.board_status .tit_wrap {overflow: hidden; white-space:normal; vertical-align:top; }
+.board_status .thumb_wrap {padding-right:20px; width:100px; height:70px; float:left;}
+.board_status .tit_wrap .tit_list {margin-bottom:8px; }
+.board_status .tit_wrap .tit_list > a.tit_link {font-size:16px; font-weight:normal; color:#000000; line-height:1.33em; }
+.board_status .tit_wrap .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_status .tit_wrap .period {font-size:12px; font-weight:normal; color:#76787c; line-height:1.33em; }
+.board_status .tit_wrap .period strong {font-size:12px; font-weight:normal; color:#76787c; line-height:1.33em; }
+
+.board_status .status_info_area {text-align:center; padding:0 20px 20px 20px; border-top:20px solid #FFF; border-bottom:1px solid #d4d6da; background:url("../images/board/board_status_ver_line.gif") 0 bottom no-repeat;}
+.board_status .progress {font-family:Arial; font-size:18px; line-height:1.33em; font-weight:normal; color:#e60724; margin-bottom:5px; color:#3C404A;}
+.board_status .progress .color_a {color:#e60624;}
+.board_status .progress .color_b {color:#04B3ED;}
+.board_status .status  {font-size:13px; line-height:1.33em; font-weight:normal; color:#3c404a; }
+
+.board_status .btn_area {border-top:20px solid #FFF; padding-left:20px; padding-bottom:20px; border-bottom:1px solid #d4d6da; background:url("../images/board/board_status_ver_line.gif") 0 bottom no-repeat; }
+.win.safari .board_status .btn_area {width:165px; text-align:right; }
+.board_status .btn_area > .btn_txt.btn_type_f .name {width:125px; text-align:center; }
+
+/* index */
+.cate_wrap {margin-bottom:5px;}
+.cate {display:inline-block; padding:1px 8px;}
+.cate_a {background-color:#e60724;}
+.cate_b {background-color:#14aed7;}
+.cate .name {font-size:12px; line-height:16px; font-weight:bold; color:#fff;}
+
+
+
+/*==================================
+Board Tile : board_tile_large.css
+==================================*/
+.board_tile_large {overflow:hidden; padding-top:20px;}
+.board_tile_large .board_box {margin-left:-10px; }
+.board_tile_large .board_tile_list {float:left; padding-left:10px; margin-bottom:10px; }
+
+/* post_info */
+.board_tile_large .post_info_area {position:relative; height:321px; overflow:hidden; border:1px solid #d2d4d9; }
+.board_tile_large .post_info_area .board_tile_large_ico.board_tile_large_ico_new {position:absolute; top:0; right:0; }
+.board_tile_large .post_info_area.thumb .thumb_area {width:214px; height:142px; overflow:hidden; }
+.board_tile_large .post_info_area .tit_wrap {padding:25px 15px 15px 15px; }
+.board_tile_large .post_info_area.thumb .tit_wrap {padding:15px; }
+.board_tile_large .tit_wrap .tit_list {padding-bottom:7px; }
+.board_tile_large .tit_wrap .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#000000; line-height:1.33em; }
+.board_tile_large .tit_wrap .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_large .tit_wrap .tit_desc {font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+.board_tile_large .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_large .write_info_wrap:before {position:relative; height:15px; margin-bottom:-15px; top:-15px; content:''; display:block; background:url("../images/board/board_tile_large_gradient.png") 0 bottom repeat-x; }
+.board_tile_large .write_info {padding:0 15px 15px 15px; }
+.board_tile_large .write_info >.writer {font-size:12px; font-weight:bold; color:#595c65; margin-bottom:3px; line-height:1.33em; }
+.board_tile_large .write_info >.write_date {font-family:Arial; font-size:11px; color:#a4a7a9; line-height:1.33em; }
+
+/* ico */
+.board_tile_large_ico {display:inline-block; vertical-align:middle; background:url("../images/board/board_tile_large.png"); background-repeat:no-repeat; }
+.board_tile_large_ico.board_tile_large_ico_new {width:23px; height:23px; background-position:0 0; }
+
+/* index */
+.cate_wrap {margin-bottom:5px;}
+.cate {display:inline-block; padding:1px 8px;}
+.cate_a {background-color:#e60724;}
+.cate_b {background-color:#14aed7;}
+.cate .name {font-size:12px; line-height:16px; font-weight:bold; color:#fff;}
+
+
+/*==================================
+Board Tile : board_tile_large.css
+1단 레이아웃 (lay_col1)에 board_tile_large를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:235px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_tile_large .board_tile_list {width:228px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large.css
+2단 레이아웃 (lay_col2)에 board_tile_large를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:236px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large.css
+3단 레이아웃 (lay_col3)에 board_tile_large를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:236px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large.css
+확장형 레이아웃 (lay_expand)에 board_tile_large를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:236px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+.folded .board_tile_large .board_tile_list {width:235px;}
+.folded .board_tile_large .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+.folded .board_tile_large .board_tile_list {width:228px;}
+.folded .board_tile_large .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large.css
+반응형 레이아웃 (lay_responsive)에 board_tile_large를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_tile_large .board_tile_list {width:225px;}
+.board_tile_large .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_tile_large .board_tile_list {width:236px;}
+	.board_tile_large .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+}
+
+
+
+/*==================================
+Board Tile : board_tile_large_view.css
+==================================*/
+.board_tile_large_view {overflow:hidden; padding-top:20px;}
+.board_tile_large_view .board_box {margin-left:-10px; }
+.board_tile_large_view .board_tile_list {float:left; padding-left:10px; margin-bottom:10px; }
+
+/* post_info */
+.board_tile_large_view .post_info_area {position:relative; height:321px; overflow:hidden; border:1px solid #d2d4d9; border-bottom:0; }
+.board_tile_large_view .post_info_area .board_tile_large_view_ico.board_tile_large_view_ico_new {position:absolute; top:0; right:0; }
+.board_tile_large_view .post_info_area.thumb .thumb_area {overflow:hidden; }
+.board_tile_large_view .post_info_area .tit_wrap {padding:25px 15px 15px 15px; }
+.board_tile_large_view .post_info_area.thumb .tit_wrap {padding:15px; }
+.board_tile_large_view .tit_wrap .tit_list {padding-bottom:7px; }
+.board_tile_large_view .tit_wrap .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#000000; line-height:1.33em; }
+.board_tile_large_view .tit_wrap .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_large_view .tit_wrap .tit_desc {font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+.board_tile_large_view .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_large_view .write_info_wrap:before {position:relative; height:15px; margin-bottom:-15px; top:-15px; content:''; display:block; background:url("../images/board/board_tile_large_view_gradient.png") 0 bottom repeat-x; }
+.board_tile_large_view .write_info {padding:0 15px 15px 15px; }
+.board_tile_large_view .write_info >.writer {font-size:12px; font-weight:bold; color:#595c65; margin-bottom:3px; line-height:1.33em; }
+.board_tile_large_view .write_info >.write_date {font-family:Arial; font-size:11px; color:#a4a7a9; line-height:1.33em; }
+
+/* detail_info */
+.board_tile_large_view .detail_info_area {height:37px; padding:0 15px; border-left:1px solid #d2d4d9; border-bottom:1px solid #d2d4d9; border-right:1px solid #d2d4d9; }
+.board_tile_large_view .info_wrap {padding:10px 0; border-top:1px solid #d2d4d9; }
+.board_tile_large_view .info_wrap li {float:left; width:33.3%; }
+.board_tile_large_view .info_wrap > .view {text-align:left; }
+.board_tile_large_view .info_wrap > .cmt {text-align:center; }
+.board_tile_large_view .info_wrap > .like {text-align:right; }
+.board_tile_large_view .info_wrap li .num {font-size:12px; font-weight:bold; color:#a4a7a9; line-height:1.33em; }
+
+/* ico */
+.board_tile_large_view_ico {display:inline-block; vertical-align:middle; background:url("../images/board/board_tile_large_view.png"); background-repeat:no-repeat; }
+.board_tile_large_view_ico.board_tile_large_view_ico_new {width:23px; height:23px; background-position:0 0;}
+.board_tile_large_view_ico.board_tile_large_view_ico_view {width:16px; height:14px; margin-right:2px; background-position:0 -50px; }
+.board_tile_large_view_ico.board_tile_large_view_ico_cmt {width:16px; height:16px; margin-right:2px; background-position:-25px -50px; }
+.board_tile_large_view_ico.board_tile_large_view_ico_like {width:17px; height:15px; margin-right:2px; background-position:-50px -50px; }
+
+/* index */
+.cate_wrap {margin-bottom:5px;}
+.cate {display:inline-block; padding:1px 8px;}
+.cate_a {background-color:#e60724;}
+.cate_b {background-color:#14aed7;}
+.cate .name {font-size:12px; line-height:16px; font-weight:bold; color:#fff;}
+
+
+/*==================================
+Board Tile : board_tile_large_view.css
+1단 레이아웃 (lay_col1)에 board_tile_large_view를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:235px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_tile_large_view .board_tile_list {width:228px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large_view.css
+2단 레이아웃 (lay_col2)에 board_tile_large_view를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:236px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large_view.css
+3단 레이아웃 (lay_col3)에 board_tile_large_view를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:236px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large_view.css
+확장형 레이아웃 (lay_expand)에 board_tile_large_view를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:236px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+.folded .board_tile_large_view .board_tile_list {width:235px;}
+.folded .board_tile_large_view .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+.folded .board_tile_large_view .board_tile_list {width:228px;}
+.folded .board_tile_large_view .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_large_view.css
+반응형 레이아웃 (lay_responsive)에 board_tile_large_view를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_tile_large_view .board_tile_list {width:225px;}
+.board_tile_large_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_tile_large_view .board_tile_list {width:236px;}
+	.board_tile_large_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+}
+
+
+
+/*==================================
+Board Tile : board_tile_medium_view.css
+==================================*/
+.board_tile_medium_view {overflow:hidden; padding-top:20px;}
+.board_tile_medium_view .board_box {margin-left:-10px; }
+.board_tile_medium_view .board_tile_list {float:left; padding-left:10px; margin-bottom:10px; }
+
+/* post_info */
+.board_tile_medium_view .post_info_area {position:relative; height:270px; overflow:hidden; border:1px solid #d2d4d9; border-bottom:0; }
+.board_tile_medium_view .post_info_area .board_tile_medium_view_ico.board_tile_medium_view_ico_new {position:absolute; top:0; right:0; }
+.board_tile_medium_view .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_medium_view .write_info_wrap:before {position:relative; height:15px; margin-bottom:-15px; top:-15px; content:''; display:block; background:url("../images/board/board_tile_medium_view_gradient.png") 0 bottom repeat-x; }
+.board_tile_medium_view .write_info {padding:0 15px 15px 15px; }
+.board_tile_medium_view .write_info >.writer {font-size:12px; font-weight:bold; color:#595c65; margin-bottom:3px; line-height:1.33em; }
+.board_tile_medium_view .write_info >.write_date {font-family:Arial; font-size:11px; color:#a4a7a9; line-height:1.33em; }
+.board_tile_medium_view .detail_info_area {height:37px; padding:0 15px; border-left:1px solid #d2d4d9; border-bottom:1px solid #d2d4d9; border-right:1px solid #d2d4d9; }
+.board_tile_medium_view .info_wrap {padding:10px 0; border-top:1px solid #d2d4d9; }
+.board_tile_medium_view .info_wrap li {float:left; width:33.3%; }
+.board_tile_medium_view .info_wrap > .view {text-align:left; }
+.board_tile_medium_view .info_wrap > .cmt {text-align:center; }
+.board_tile_medium_view .info_wrap > .like {text-align:right; }
+.board_tile_medium_view .info_wrap li .num {font-size:12px; font-weight:bold; color:#a4a7a9; line-height:1.33em; }
+
+/* thumbnail 있는 경우 */
+.board_tile_medium_view .post_info_area.thumb .tit_wrap {position:relative; }
+.board_tile_medium_view .post_info_area.thumb .thumb_area {position:relative; overflow:hidden; }
+.board_tile_medium_view .post_info_area.thumb .tit_list {position:absolute; bottom:0; left:0; padding:4px 5px; background:url("../images/board/board_tile_medium_view_tit_bg.png") 0 bottom repeat; }
+.board_tile_medium_view .post_info_area.thumb .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#fefefe; line-height:1.33em; }
+.board_tile_medium_view .post_info_area.thumb .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_medium_view .post_info_area.thumb .tit_desc {padding:15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+
+/* thumbnail 없을 경우 */
+.board_tile_medium_view .post_info_area .tit_list {padding:25px 15px 10px 15px; }
+.board_tile_medium_view .post_info_area .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#000; line-height:1.33em; }
+.board_tile_medium_view .post_info_area .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_medium_view .post_info_area .tit_desc {padding:0 15px 15px 15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+
+/* ico */
+.board_tile_medium_view_ico {display:inline-block; vertical-align:middle; background:url("../images/board/board_tile_medium_view.png"); background-repeat:no-repeat; }
+.board_tile_medium_view_ico.board_tile_medium_view_ico_new {width:23px; height:23px; background-position:0 0; }
+.board_tile_medium_view_ico.board_tile_medium_view_ico_view {width:16px; height:14px; margin-right:2px; background-position:0 -50px; }
+.board_tile_medium_view_ico.board_tile_medium_view_ico_cmt {width:16px; height:16px; margin-right:2px; background-position:-25px -50px; }
+.board_tile_medium_view_ico.board_tile_medium_view_ico_like {width:17px; height:15px; margin-right:2px; background-position:-50px -50px; }
+
+
+/*==================================
+Board Tile : board_tile_medium_view.css
+1단 레이아웃 (lay_col1)에 board_tile_medium_view를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:235px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:228px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium_view.css
+2단 레이아웃 (lay_col2)에 board_tile_medium_view를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:236px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium_view.css
+3단 레이아웃 (lay_col3)에 board_tile_medium_view를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:236px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium_view.css
+확장형 레이아웃 (lay_expand)에 board_tile_medium_view를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:236px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+.folded .board_tile_medium_view .board_tile_list {width:235px;}
+.folded .board_tile_medium_view .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+.folded .board_tile_medium_view .board_tile_list {width:228px;}
+.folded .board_tile_medium_view .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium_view.css
+반응형 레이아웃 (lay_responsive)에 board_tile_medium_view를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_tile_medium_view .board_tile_list {width:225px;}
+.board_tile_medium_view .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_tile_medium_view .board_tile_list {width:236px;}
+	.board_tile_medium_view .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+}
+
+
+/*==================================
+Board Tile : board_tile_medium.css
+==================================*/
+.board_tile_medium {overflow:hidden; padding-top:20px;}
+.board_tile_medium .board_box {margin-left:-10px; }
+.board_tile_medium .board_tile_list {float:left; padding-left:10px; margin-bottom:10px; }
+
+/* post_info */
+.board_tile_medium .post_info_area {position:relative; height:270px; overflow:hidden; border:1px solid #d2d4d9; }
+.board_tile_medium .post_info_area .board_tile_medium_ico.board_tile_medium_ico_new {position:absolute; top:0; right:0; }
+.board_tile_medium .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_medium .write_info_wrap:before {position:relative; height:15px; margin-bottom:-15px; top:-15px; content:''; display:block; background:url("../images/board/board_tile_medium_gradient.png") 0 bottom repeat-x; }
+.board_tile_medium .write_info {padding:0 15px 15px 15px; }
+.board_tile_medium .write_info >.writer {font-size:12px; font-weight:bold; color:#595c65; margin-bottom:3px; line-height:1.33em; }
+.board_tile_medium .write_info >.write_date {font-family:Arial; font-size:11px; color:#a4a7a9; line-height:1.33em; }
+
+/* thumbnail 있는 경우 */
+.board_tile_medium .post_info_area.thumb .tit_wrap {position:relative; }
+.board_tile_medium .post_info_area.thumb .thumb_area {width:214px; height:142px; position:relative; overflow:hidden; }
+.board_tile_medium .post_info_area.thumb .tit_list {position:absolute; bottom:0; left:0; padding:4px 5px; background:url("../images/board/board_tile_medium_tit_bg.png") 0 bottom repeat; }
+.board_tile_medium .post_info_area.thumb .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#fefefe; line-height:1.33em; }
+.board_tile_medium .post_info_area.thumb .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_medium .post_info_area.thumb .tit_desc {padding:15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+
+/* thumbnail 없을 경우 */
+.board_tile_medium .post_info_area .tit_list {padding:25px 15px 10px 15px; }
+.board_tile_medium .post_info_area .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#000; line-height:1.33em; }
+.board_tile_medium .post_info_area .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_medium .post_info_area .tit_desc {padding:0 15px 15px 15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+
+/* ico */
+.board_tile_medium_ico {display:inline-block; vertical-align:middle; background:url("../images/board/board_tile_medium.png"); background-repeat:no-repeat; }
+.board_tile_medium_ico.board_tile_medium_ico_new {width:23px; height:23px; background-position:0 0; }
+
+
+/*==================================
+Board Tile : board_tile_medium.css
+1단 레이아웃 (lay_col1)에 board_tile_medium를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:235px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_tile_medium .board_tile_list {width:228px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium.css
+2단 레이아웃 (lay_col2)에 board_tile_medium를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:236px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium.css
+3단 레이아웃 (lay_col3)에 board_tile_medium를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:236px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium.css
+확장형 레이아웃 (lay_expand)에 board_tile_medium를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:236px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+.folded .board_tile_medium .board_tile_list {width:235px;}
+.folded .board_tile_medium .post_info_area.thumb .thumb_area {width:233px; height:176px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+.folded .board_tile_medium .board_tile_list {width:228px;}
+.folded .board_tile_medium .post_info_area.thumb .thumb_area {width:226; height:169px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+
+
+/*==================================
+Board Tile : board_tile_medium.css
+반응형 레이아웃 (lay_responsive)에 board_tile_medium를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_tile_medium .board_tile_list {width:225px;}
+.board_tile_medium .post_info_area.thumb .thumb_area {width:223px; height:167px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_tile_medium .board_tile_list {width:236px;}
+	.board_tile_medium .post_info_area.thumb .thumb_area {width:234px; height:175px;}
+}
+
+
+
+/*==================================
+Board Tile : board_tile_small_b.css
+==================================*/
+.board_tile_small_b {overflow:hidden; padding-top:20px;}
+.board_tile_small_b .board_box {margin-left:-10px; }
+.board_tile_small_b .board_tile_list {float:left; padding-left:10px; margin-bottom:10px; }
+.board_tile_small_b .post_info_area {position:relative; height:208px; overflow:hidden; border:1px solid #d2d4d9; }
+.board_tile_small_b .post_info_area .board_tile_small_b_ico_new {position:absolute; top:0; right:0; }
+.board_tile_small_b .post_info_area .cate_wrap {position:absolute; top:0; left:0; }
+.board_tile_small_b .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_small_b .write_info_wrap:before {position:relative; height:15px; margin-bottom:-15px; top:-15px; content:''; display:block; background:url("../images/board/board_tile_small_b_gradient.png") 0 bottom repeat-x; }
+.board_tile_small_b .write_info {padding:0 15px 15px 15px; }
+.board_tile_small_b .write_info >.writer {font-size:12px; font-weight:bold; color:#595c65; margin-bottom:3px; line-height:1.33em; }
+.board_tile_small_b .write_info >.write_date {font-family:Arial; font-size:11px; color:#a4a7a9; line-height:1.33em; }
+
+/* thumbnail 있는 경우 */
+.board_tile_small_b .post_info_area.thumb .tit_wrap {position:relative; }
+.board_tile_small_b .post_info_area.thumb .thumb_area {height:208px; position:relative; overflow:hidden; }
+.board_tile_small_b .post_info_area.thumb .tit_list {position:absolute; bottom:0; left:0; padding:4px 5px; background:url("../images/board/board_tile_small_b_tit_bg.png") 0 bottom repeat; }
+.board_tile_small_b .post_info_area.thumb .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#fefefe; line-height:1.33em; }
+.board_tile_small_b .post_info_area.thumb .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_small_b .post_info_area.thumb .tit_desc {padding:15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+.board_tile_small_b .post_info_area.thumb .write_info_wrap {display:none; }
+
+/* thumbnail 없을 경우 */
+.board_tile_small_b .post_info_area .tit_list {padding:25px 15px 10px 15px; }
+.board_tile_small_b .post_info_area .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#000; line-height:1.33em; }
+.board_tile_small_b .post_info_area .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_small_b .post_info_area .tit_desc {padding:0 15px 15px 15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+.board_tile_small_b .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_small_b .write_info {padding:0 15px 15px 15px; }
+.board_tile_small_b .write_info >.writer {display:none; }
+.board_tile_small_b .write_info >.write_date {display:none; }
+
+/* ico */
+.board_tile_small_b_ico {display:inline-block; vertical-align:middle; background:url("../images/board/board_tile_small_b.png"); background-repeat:no-repeat; }
+.board_tile_small_b_ico.board_tile_small_b_ico_new {width:23px; height:23px; background-position:0 0; }
+
+/* index */
+.cate_wrap {margin-bottom:5px;}
+.cate {display:inline-block; padding:1px 8px;}
+.cate_a {background-color:#e60724;}
+.cate_b {background-color:#14aed7;}
+.cate .name {font-size:12px; line-height:16px; font-weight:bold; color:#fff;}
+
+
+/*==================================
+Board Tile : board_tile_small_b.css
+1단 레이아웃 (lay_col1)에 board_tile_small_b를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:235px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_tile_small_b .board_tile_list {width:228px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_b.css
+2단 레이아웃 (lay_col2)에 board_tile_small_b를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:236px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_b.css
+3단 레이아웃 (lay_col3)에 board_tile_small_b를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:236px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_b.css
+확장형 레이아웃 (lay_expand)에 board_tile_small_b를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:236px;}
+.folded .board_tile_small_b .board_tile_list {width:235px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+.folded .board_tile_small_b .board_tile_list {width:228px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_b.css
+반응형 레이아웃 (lay_responsive)에 board_tile_small_b를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_tile_small_b .board_tile_list {width:225px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_tile_small_b .board_tile_list {width:236px;}
+}
+
+
+/*==================================
+Board Tile : board_tile_small_a.css
+==================================*/
+.board_tile_small_a {overflow:hidden; padding-top:20px;}
+.board_tile_small_a .board_box {margin-left:-10px; }
+.board_tile_small_a .board_tile_list {float:left; padding-left:10px; margin-bottom:10px; }
+
+.board_tile_small_a .post_info_area {position:relative; height:208px; overflow:hidden; border:1px solid #d2d4d9; }
+.board_tile_small_a .post_info_area .board_tile_small_a_ico.board_tile_small_a_ico_new {position:absolute; top:0; right:0; }
+.board_tile_small_a .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_small_a .write_info_wrap:before {position:relative; height:15px; margin-bottom:-15px; top:-15px; content:''; display:block; background:url("../images/board/board_tile_small_a_gradient.png") 0 bottom repeat-x; }
+.board_tile_small_a .write_info {padding:0 15px 15px 15px; }
+.board_tile_small_a .write_info >.writer {font-size:12px; font-weight:bold; color:#595c65; margin-bottom:3px; line-height:1.33em; }
+.board_tile_small_a .write_info >.write_date {font-family:Arial; font-size:11px; color:#a4a7a9; line-height:1.33em; }
+
+/* thumbnail 있는 경우 */
+.board_tile_small_a .post_info_area.thumb .tit_wrap {position:relative; }
+.board_tile_small_a .post_info_area.thumb .thumb_area {width:100%; height:208px; position:relative; overflow:hidden; }
+.board_tile_small_a .post_info_area.thumb .tit_list {position:absolute; bottom:0; left:0; padding:4px 5px; }
+.board_tile_small_a .post_info_area.thumb .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#fefefe; line-height:1.33em; }
+.board_tile_small_a .post_info_area.thumb .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_small_a .post_info_area.thumb .tit_desc {padding:15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+.board_tile_small_a .post_info_area.thumb .write_info_wrap {display:none; }
+
+/* thumbnail 없을 경우 */
+.board_tile_small_a .post_info_area .tit_list {padding:25px 15px 10px 15px; }
+.board_tile_small_a .post_info_area .tit_list > a.tit_link {font-size:14px; font-weight:normal; color:#000; line-height:1.33em; }
+.board_tile_small_a .post_info_area .tit_list > a.tit_link:hover {text-decoration:underline; }
+.board_tile_small_a .post_info_area .tit_desc {padding:0 15px 15px 15px; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+.board_tile_small_a .write_info_wrap {position:absolute; width:100%; display:block; bottom:0; left:0; background-color:#fff; }
+.board_tile_small_a .write_info {padding:0 15px 15px 15px; }
+.board_tile_small_a .write_info >.writer {display:none; }
+.board_tile_small_a .write_info >.write_date {display:none; }
+
+/* ico */
+.board_tile_small_a_ico {display:inline-block; vertical-align:middle; background:url("../images/board/board_tile_small_a.png"); background-repeat:no-repeat; }
+.board_tile_small_a_ico.board_tile_small_a_ico_new {width:23px; height:23px; background-position:0 0; }
+
+/* index */
+.cate_wrap {margin-bottom:5px;}
+.cate {display:inline-block; padding:1px 8px;}
+.cate_a {background-color:#e60724;}
+.cate_b {background-color:#14aed7;}
+.cate .name {font-size:12px; line-height:16px; font-weight:bold; color:#fff;}
+
+
+/*==================================
+Board Tile : board_tile_small_a.css
+1단 레이아웃 (lay_col1)에 board_tile_small_a를 적용할 경우
+==================================*/
+/* 1단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:235px;}
+
+/* 1단 레이아웃에서 1280 기준일 떄, 적용내용 */
+.board_tile_small_a .board_tile_list {width:228px;}
+
+/* 1단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_a.css
+2단 레이아웃 (lay_col2)에 board_tile_small_a를 적용할 경우
+==================================*/
+/* 2단 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:236px;}
+
+/* 2단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+
+/* 2단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_a.css
+3단 레이아웃 (lay_col3)에 board_tile_small_a를 적용할 경우
+==================================*/
+/* 3단 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:236px;}
+
+/* 3단 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_a.css
+확장형 레이아웃 (lay_expand)에 board_tile_small_a를 적용할 경우
+==================================*/
+/* 확장형 레이아웃에서 1024 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:236px;}
+.folded .board_tile_small_a .board_tile_list {width:235px;}
+
+/* 확장형 레이아웃에서 1280 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+.folded .board_tile_small_a .board_tile_list {width:228px;}
+
+/* 확장형 레이아웃에서 100% 기준일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+
+
+/*==================================
+Board Tile : board_tile_small_a.css
+반응형 레이아웃 (lay_responsive)에 board_tile_small_a를 적용할 경우
+==================================*/
+/* 반응형 레이아웃일 때, 적용내용 */
+.board_tile_small_a .board_tile_list {width:225px;}
+@media only screen and (min-width: 0px) and (max-width: 1279px) {
+	.board_tile_small_a .board_tile_list {width:236px;}
+}
+
+
+
+
+
+/*==================================
+Board Timeline : board_timeline.css
+==================================*/
+.board_timeline {position:relative; z-index:1; margin-bottom:15px; padding-top:20px; background:url('../images/board/board_timeline_y.png') center top repeat-y; }
+
+/* timeline */
+.timeline_wrap .timeline_list_area {position:relative; }
+.timeline_wrap .timeline_list {position:absolute; width:50%; }
+.timeline_wrap .timeline_list.t_right {right:0; }
+.timeline_wrap .timeline_list.t_left {left:0; }
+.timeline_wrap .timeline_list .prefix_area {position:absolute; top:15px; width:80px; text-align:center; }
+.timeline_wrap .timeline_list.t_left .prefix_area {right:-40px; background:url('../images/board/board_timeline_x_left.png') left 8px no-repeat; }
+.timeline_wrap .timeline_list.t_right .prefix_area {left:-40px; background:url('../images/board/board_timeline_x_right.png') right 8px no-repeat; }
+.timeline_wrap .timeline_list .timeline_box {border:1px solid #d2d4d9; background-color:#ffffff; padding:15px 20px 0 20px; }
+.timeline_wrap .timeline_list.t_left .timeline_box {margin-right:39px;}
+.timeline_wrap .timeline_list.t_right .timeline_box {margin-left:39px;}
+
+/* write_info_area */
+.timeline_wrap .timeline_box .write_info_area {margin-bottom:15px; }
+.timeline_wrap .timeline_box .member_info_wrap {position:relative; margin-right:15px; width:50px; height:50px; float:left; }
+.timeline_wrap .timeline_box .member_info_wrap .member_mask {position:absolute; top:0; left:0; display:inline-block; width:50px; height:50px; background:url("../images/board/board_timeline.png") 0 -175px no-repeat; }
+.timeline_wrap .timeline_box .member_info_wrap img {width:50px; height:50px; }
+.timeline_wrap .timeline_box .write_info_wrap {overflow:hidden; white-space:normal; vertical-align:top; }
+.timeline_wrap .timeline_box .write_info_wrap .member_info {}
+.timeline_wrap .timeline_box .write_info_wrap .member_info > dt.member_name {font-size:16px; font-weight:normal; color:#000000; line-height:1.33em; margin-bottom:3px;}
+.timeline_wrap .timeline_box .write_info_wrap .member_info > dd.member_team,
+.timeline_wrap .timeline_box .write_info_wrap .member_info > dd.member_jobs {font-size:12px; font-weight:normal; color:#76787c; line-height:1.33em; display:inline-block; margin-bottom:3px; margin-right:20px; }
+.timeline_wrap .timeline_box .write_info_wrap .write_date {font-family:Arial; font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; }
+
+/* contents_area */
+.timeline_wrap .timeline_box .contents_area {}
+.timeline_wrap .timeline_box .contents_area .txt {font-size:13px; font-weight:normal; color:#595c65; line-height:1.33em; margin:15px 0; }
+.timeline_wrap .timeline_box .contents_area img {width:100%; }
+.timeline_wrap .timeline_box .link_section {border:1px solid #d2d4d9; border-bottom:0; }
+.timeline_wrap .timeline_box .link_section .link_info {padding:15px 15px 20px 15px; }
+.timeline_wrap .timeline_box .link_section .link_info .tit_link {font-size:13px; font-weight:normal; color:#3c404a; line-height:1.33em; display:inline-block; }
+.timeline_wrap .timeline_box .link_section .link_info .tit_link:hover {text-decoration:underline; }
+.timeline_wrap .timeline_box .link_section .link_info .link {font-size:12px; font-weight:normal; color:#a4a7a9; line-height:1.33em; display:inline-block; margin-top:3px; }
+
+/* detail_info_area */
+.timeline_wrap .timeline_box .detail_info_area {border-top:1px solid #d2d4d9; height:16px; padding:15px 0 14px 0; }
+.timeline_wrap .timeline_box .detail_info_area .left_area {text-align:left; float:left; height:100%; }
+.timeline_wrap .timeline_box .detail_info_area .left_area .info_wrap {display:inline-block; vertical-align:middle; white-space:nowrap; }
+.timeline_wrap .timeline_box .detail_info_area .left_area .info_list {display:inline-block; margin-right:30px; vertical-align:middle; white-space:normal; }
+.timeline_wrap .timeline_box .detail_info_area .left_area .info_list .num {font-family:Arial; font-size:12px; font-weight:bold; color:#9c9da2; line-height:1.33em; padding-left:2px; }
+.timeline_wrap .timeline_box .detail_info_area .right_area {text-align:right; float:right; height:100%; }
+.timeline_wrap .timeline_box .detail_info_area .right_area .txt {font-size:12px; font-weight:bold; color:#9c9da2; line-height:1.33em; padding-left:2px; }
+
+/* timeline more */
+.more_wrap {clear:both; width:100%; text-align:center;}
+
+/* btn */
+.btn_timeline {display:inline-block; vertical-align:middle; }
+.btn_timeline.btn_timeline_more {padding-left:50px; margin-right:50px; height:40px; background:url('../images/board/board_timeline.png') left top no-repeat; }
+.btn_timeline.btn_timeline_more .name {margin-right:-50px; padding-right:50px; display:inline-block; height:40px; background:url('../images/board/board_timeline.png') right top no-repeat; }
+.btn_timeline.btn_timeline_more .name .txt {font-size:12px; font-weight:bold; color:#ffffff; vertical-align:middle; }
+.mac.ff .btn_timeline.btn_timeline_more .name .txt {vertical-align:-1px; }
+
+/* ico */
+.board_timeline_ico {display:inline-block; vertical-align:middle; background:url('../images/board/board_timeline.png') no-repeat; }
+.board_timeline_ico.board_timeline_ico_cmt {width:16px; height:16px; background-position:0 -75px; }
+.board_timeline_ico.board_timeline_ico_like {width:17px; height:15px; background-position:-25px -75px; }
+.board_timeline_ico.board_timeline_ico_share {width:16px; height:16px; background-position:-50px -75px; }
+
+/* prefix */
+.prefix {display:inline-block; vertical-align:middle; background:url('../images/board/board_timeline.png') no-repeat; }
+.prefix.prefix_type_a {width:40px; height:40px; text-align:center; background-position:0 -125px; }
+.prefix.prefix_type_b {width:40px; height:40px; text-align:center; background-position:-50px -125px; }
+.prefix_ico {display:inline-block; vertical-align:middle; background:url('../images/board/board_timeline.png') no-repeat; }
+.safari .prefix_ico, .ff .prefix_ico {margin-left:1px; }
+.prefix_ico.prefix_ico_bell {width:16px; height:16px; background-position:0 -100px; }
+.prefix_ico.prefix_ico_notice {width:16px; height:16px; background-position:-25px -100px; }
+.prefix_ico.prefix_ico_clock {width:16px; height:16px; background-position:-50px -100px; }
+
+
+
+/* 추가 150406 */
+.search_reset{width:50px; margin-bottom:10px}
+
+.star_off{background:url(../images/board/star.png) no-repeat; width:17px; height:16px; background-position:0 0; display:block; margin:0 auto}
+.star_on{background:url(../images/board/star.png) no-repeat; width:17px; height:16px; background-position:-17px 0; display:block; margin:0 auto}
+
+/* 추가 150407 */
+.btn {display:inline-block; vertical-align:middle; }
+.btn_close {width:12px; height:12px; background:url(../images/pop/pop_alert.png) -25px 0 no-repeat; margin:0}
+
+.data_section{width:100%; min-width:890px; overflow-x:auto}
+
+/* 추가 150408 */
+.txt_color_a {color:#e60624;}
+.txt_color_a a{color:#e60624;}
+.txt_color_a a:hover{ text-decoration:underline}
+
+.txt_color_b {color:#04B3ED;}
+.txt_color_b a{color:#04B3ED;}
+.txt_color_a a:hover{ text-decoration:underline}
+
+.txt_color_c {color:#EDEEF3;}
+.txt_color_c a{color:#EDEEF3;}
+.txt_color_a a:hover{ text-decoration:underline}
+
+.txt_color_d {color:#3c404a;}
+.txt_color_d a{color:#3c404a;}
+.txt_color_a a:hover{ text-decoration:underline}
+
+.txt_color_e {color:#fff;}
+.txt_color_e a{color:#fff;}
+.txt_color_a a:hover{ text-decoration:underline}
+
+.txt_color_f {color:#d3d4d8;}
+.txt_color_f a{color:#d3d4d8;}
+.txt_color_a a:hover{ text-decoration:underline}
+
+strong a:hover{ text-decoration:underline}
+
+/*  추가 150414 */
+.margin_none{margin:0}
+.padding_none{padding::0}
+
+/*  추가 150417 */
+.txt_gray {color:#EDEEF3;}
+
+.input_color{background:#f7bc60; border:1px solid #f7bc60}
+
+
+/* 추가 150427 */
+
+.signal1{background:url(../images/board/signal.png) no-repeat; width:20px; height:20px; background-position:0 0; display:block; margin:0 auto} /* red */
+.signal2{background:url(../images/board/signal.png) no-repeat; width:20px; height:20px; background-position:-20px 0; display:block; margin:0 auto} /* yellow */
+.signal3{background:url(../images/board/signal.png) no-repeat; width:20px; height:20px; background-position:-40px 0; display:block; margin:0 auto} /* green */
+.signal4{background:url(../images/board/signal.png) no-repeat; width:20px; height:20px; background-position:-60px 0; display:block; margin:0 auto} /* yellow + M */
+.signal5{background:url(../images/board/signal.png) no-repeat; width:20px; height:20px; background-position:-80px 0; display:block; margin:0 auto} /* green + M */
+
+
+/* 추가 20150428 */
+.icon_file{background:url(../images/board/icon_file.png) no-repeat; width:15px; height:18px; display:inline-block; margin:0 auto}
+
+
+/* 추가150430 */
+.btn_add {width:27px; height:27px; line-height:27px; background-color:#c6c7cc; display:block; text-align:center; color:#fff}
+.btn_add:hover{background-color:#fb6c07; color:#fff}
+
+

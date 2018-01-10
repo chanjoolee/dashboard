@@ -1,1 +1,127 @@
-\\10.15.202.120\DAS_SOL\SSD_Regression\PJT_00064243\C1016T34.633197\
+CREATE OR REPLACE PROCEDURE SWDASHBOARD.SP_CORONA_EMMC_TEST_LAST
+IS 
+	/*  script 별로 가장 마지막에 실행된 script 찾기.  */
+	v_cnt number;
+	v_status varchar2(10);
+	v_history_no varchar2(100);
+	v_origin_firmware varchar2(100);
+	v_origin_sample varchar2(100);
+	v_test_set_id varchar2(100);
+BEGIN 
+	delete from CORONA_EMMC_TEST_DETAIL_LAST;
+	for rec in (
+		
+		select 
+			YYYYMM, 
+			TEST_BOARD, 
+			SAMPLE, 
+			FIRMWARE, 
+			SCRIPT_NAME, 
+			SAMPLE_NUMBER, 
+			SCRIPT, 
+			row_number() over(partition by TEST_BOARD, SAMPLE, FIRMWARE, SCRIPT order by TEST_TIME desc) as rnum,
+			SEQ, 
+			TEST_TIME, 
+			STATUS, 
+			STATUS_DETAIL, 
+			DURATION, 
+			INS_DT, 
+			MOD_DT	
+		from CORONA_EMMC_TEST_DETAIL
+	) loop
+	
+		if rec.rnum = 1 then
+			insert into CORONA_EMMC_TEST_DETAIL_LAST(YYYYMM, TEST_BOARD, SAMPLE, FIRMWARE, SCRIPT_NAME, SAMPLE_NUMBER, SCRIPT, SEQ, TEST_TIME, STATUS, STATUS_DETAIL, DURATION, INS_DT, MOD_DT)
+			values (rec.YYYYMM, rec.TEST_BOARD, rec.SAMPLE, rec.FIRMWARE, rec.SCRIPT_NAME, rec.SAMPLE_NUMBER, rec.SCRIPT, rec.SEQ, rec.TEST_TIME, rec.STATUS, rec.STATUS_DETAIL, rec.DURATION, rec.INS_DT, rec.MOD_DT);
+		end if;
+	end loop;
+	
+	
+	
+	DELETE FROM CORONA_EMMC_FIRMWARE_MASTER;
+	
+	INSERT INTO CORONA_EMMC_FIRMWARE_MASTER (FIRMWARE, SAMPLE, INS_DT)
+	SELECT DISTINCT FIRMWARE
+	     , SAMPLE
+	     , SYSDATE     
+	  FROM CORONA_EMMC_TEST_SUMMARY
+	 ORDER BY FIRMWARE, SAMPLE
+	;
+
+
+	--////////////////////////////     FW version을 보고, 가장 최근 Test Set을 사용한 FW Verion의 test script들을 copy    로직 생략. ///////////////////////////////	
+	--////////////////////////////     Firmware Script Set 설정    ///////////////////////////////
+	-- 01. firmware list
+	-- 02. if has not sciptset ==> set Normal  and copy script set
+	
+	-- 01. firmware list
+	for rec in (
+		select 
+			a.FIRMWARE,
+			a.SAMPLE,
+			b.SCRIPTSET,
+			nvl(p.SCRIPTSET,'Normal') as default_scriptset
+		from CORONA_EMMC_FIRMWARE_MASTER a
+		left outer join CORONA_EMMC_SCRIPTSET_MAP_F b
+			on a.FIRMWARE = b.FIRMWARE
+			and a.sample = b.sample
+		left outer join CORONA_PROJECT p
+			on b.sample = p.project
+	) loop 
+		-- 02. if has not sciptset ==> set Normal  and copy script set
+		if rec.SCRIPTSET is null then
+			
+			insert into CORONA_EMMC_SCRIPTSET_MAP_F (FIRMWARE, SAMPLE, SCRIPTSET, INS_DT)
+			--values (rec.firmware, rec.sample, 'Normal', sysdate);
+			values (rec.firmware, rec.sample, rec.default_scriptset, sysdate);
+			
+			delete from CORONA_EMMC_F_S_MAP 
+	    	where firmware = rec.firmware
+	    	and sample = rec.sample;
+			
+			insert into CORONA_EMMC_F_S_MAP (FIRMWARE, SAMPLE, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT,PLATFORM, FUNCTION_NAME, STATUS,INS_DT)
+	    	select 
+	    		rec.firmware,  rec.sample, SCRIPT_NAME, CATEGORY, TEST_ITEM, TIME, CUSTOMER_ITEM, NEED_VENDOR_CMD, NEED_POWER_CYCLE, EMMC_VER, TARGET_DEVICE, TARGET_PARTITION, CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4, CATEGORY5, WRITE_MODE, READ_MODE, DESCRIPTION, ARGUMENT,PLATFORM, FUNCTION_NAME, STATUS, sysdate
+	    	from CORONA_EMMC_SCRIPTSET_MAP 
+	    	--where scriptset = 'Normal';
+	    	where scriptset = rec.default_scriptset;
+	    	
+		end if;
+	end loop;
+
+	--////////////////////////////     Firmware status    ///////////////////////////////
+	-- 01. firmware script list
+	for rec in (
+		select
+			FIRMWARE,SAMPLE, SCRIPT_NAME
+		from CORONA_EMMC_F_S_MAP
+		--order by FIRMWARE, SAMPLE, SCRIPT_NAME
+	) loop
+	-- 02. detail log list , determine status
+		v_status := '';
+		for rec1 in (
+			select
+				STATUS
+			from CORONA_EMMC_TEST_DETAIL a
+			where a.sample= rec.sample
+			and a.firmware = rec.firmware
+			and a.script = rec.script_name
+			order by YYYYMM
+		) loop
+			v_status := rec1.STATUS;
+			if rec1.STATUS = 'FAIL' then 
+				exit;
+			end if;
+		end loop;
+		
+		update CORONA_EMMC_F_S_MAP set
+			status = v_status,
+			DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (system) ',
+			MOD_DT = sysdate
+		where firmware = rec.firmware
+		and sample= rec.sample
+		and script_name = rec.script_name;
+		
+	end loop;
+
+END ;

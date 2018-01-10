@@ -527,7 +527,7 @@
 				    //console.log(lines[line]);
 				    enityStr += lines[line];
 				  }
-				  enity = JSON.parse(workFlowStr);
+				  enity = JSON.parse(enityStr);
 				  fn_create_workflow();
 				};
 				reader.readAsText(file);
@@ -553,12 +553,15 @@
 			
 			
 			
+			
+			
 			// 01. table list
 			// 02. find connections
 			// 02.1. parents
 			// 02.2. childs
 			// 03. make search condition
 			// 04. make grid
+			
 			
 			
 			

@@ -85,7 +85,7 @@
 	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
 	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
 	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
 	
 	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
@@ -280,6 +280,12 @@
 		    text-align: right;
 		}
 		<%--//  table style--%>
+		
+		input[type="text"], input[type="password"] {
+		    height: auto;
+    		font-size: 14px;
+    		line-height: 1.42857143;
+		}
 	
 	</style>
 <script title="schema">
@@ -390,7 +396,26 @@
 						
 						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true, editable: false}  
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false, editable: false }
-						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false, editable: false }
+						,{label:'SCRIPT_NAME_META', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						,{label:'Script', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:400, align:'left', sortable:false, editable: false
+							,searchOperators: true
+							, cellattr: function (rowId, val, rowObj, cm, rowData, isCustom){
+								result = " style=\"vertical-align: middle;";
+								result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;"
+								result += "\" ";
+								return result;
+							}							
+						}
+						,{label:'Jira No', name:'JIRA', id:'JIRA', width:80, align:'center', sortable:false, editable: true
+							, edittype: "text"							
+							,cellattr: function(rowId, val, rowObj, cm, rowData) {
+								var result = '';
+								if(rowObj.JIRA != undefined && rowObj.JIRA != "")
+									result = ' style="cursor:pointer;"';
+									result += "color: blue;font-weight: bolder;";
+								return result;
+							}
+						}
 						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true, editable: false }
 						,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false ,hidden: true, editable: false}
 						,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false
@@ -399,7 +424,7 @@
 							, formatter:"select"
 							, editoptions: {
 								value: {
-									"No Data":"No Data",
+									"Not Yet":"Not Yet",
 									"PASS":"PASS",
 									"FAIL": "FAIL"
 								}
@@ -415,7 +440,9 @@
 			    		,{label:'Power Mode<br>(Speed)', name:'POWER_MODE_SPEED', id:'POWER_MODE_SPEED', width:100, align:'center', sortable:false , editable: false}
 			    		,{label:'Test Time', name:'TEST_TIME_MASTER', id:'TEST_TIME_MASTER', width:90, align:'center', sortable:false, editable: false }
 			    		,{label:'Need Vendor<br>CMD', name:'NEED_VENDOR_CMD', id:'NEED_VENDOR_CMD', width:90, align:'center', sortable:false, editable: false }
-			    		,{label:'Luconfig<br>유무', name:'LUCONFIG_YN', id:'LUCONFIG_YN', width:70, align:'center', sortable:false, editable: false }
+			    		,{label:'Luconfig<br>유무', name:'LUCONFIG_YN', id:'LUCONFIG_YN', width:70, align:'center', sortable:false, editable: false
+
+			    		}
 			    		,{label:'UFS<br>Ver', name:'UFS_VER', id:'UFS_VER', width:50, align:'center', sortable:false, editable: false }
 			    		,{label:'Taget<br>Operation', name:'TARGET_OPERATION', id:'TARGET_OPERATION', width:70, align:'center', sortable:false, editable: false }
 			    		,{label:'Precondition', name:'PRECONDITION', id:'PRECONDITION', width:90, align:'center', sortable:false, editable: false }
@@ -616,21 +643,26 @@
 									                   		return state;
 														},
 														fn_afterSubmit: function(keyUpdatedObjects){
-															//var filter = dataFilter()
-//															$.each(keyUpdatedObjects,function(i,react){
-//																if(react.state.name == "SCRIPT_NAME"){
-//																	theGrid.setRowData(parentRowKey,{SCRIPT_NAME:react.state.value});
-//																}
-//															});
+															$.each(this,function(i,react){
+																if(react.state.name == "JIRA"){
+																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
+																}
+															});
+// 															$.each(keyUpdatedObjects,function(i,react){
+// 																if(react.state.name == "JIRA"){
+// 																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
+// 																}
+// 															});
 															
 														},
 														progressObject: $("#loader")
 													},
 													items: [
-														{label:'Item Purpose', col: 'ITEM_PURPOSE',edit_tag: 'textarea'},
-														{label:'Item Description', col: 'ITEM_DESCRIPTION',edit_tag: 'textarea'},
-														{label:'Input Parameter', col: 'INPUT_PARAMETER',edit_tag: 'textarea'},
-														{label:'Comment', col: 'USER_COMMENT',edit_tag: 'textarea'},
+														{label:'Item Purpose', col: 'ITEM_PURPOSE',edit_tag: 'textarea',editable:false },
+														{label:'Item Description', col: 'ITEM_DESCRIPTION',edit_tag: 'textarea',editable:false},
+														{label:'Input Parameter', col: 'INPUT_PARAMETER',edit_tag: 'textarea',editable:false},
+														//{label:'Jira No', col: 'JIRA'},
+														{label:'Comment', col: 'USER_COMMENT',edit_tag: 'textarea'}
 													]
 												}
 			    					    	
@@ -748,9 +780,18 @@
 									,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'center', sortable:false,hidden: true, editable: false }  
 									,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:100, align:'center', sortable:false, editable: false }  
 									,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:100, align:'center', sortable:false, editable: false }
-									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false, editable: false }
-									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false, editable: false }
-									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false }
+									,{label:'Sample Number', name:'SAMPLE_NUMBER', id:'SAMPLE_NUMBER', width:80, align:'center', sortable:false, editable: false 
+										,cellattr: function(){
+											var result = " style=\"cursor:pointer;";
+											result += "color: blue;font-weight: bolder;";
+											return result;
+										}
+									}
+									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false, editable: false 
+													
+									}
+									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false, hidden: true }
+									,{label:'Script', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:250, align:'left', sortable:false, editable: false , hidden: true}
 									,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false 
 										, editable: true
 										, edittype: "select"
@@ -765,11 +806,68 @@
 									,{label:'Status Detail', name:'STATUS_DETAIL', id:'STATUS_DETAIL', width:100, align:'center', sortable:false, editable: false }
 									,{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'center', sortable:false, editable: false }
 									,{label:'Test Time', name:'TEST_TIME', id:'TEST_TIME', width:120, align:'center', sortable:false, editable: false }
-									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false, editable: false }         
+									,{label:'Duration', name:'DURATION', id:'DURATION', width:100, align:'center', sortable:false, editable: false }    
+									,{label:'FILA_PATH', name:'FILA_PATH', id:'FILA_PATH', width:100, align:'center', sortable:false, editable: false, hidden: true }
+									,{label:'FILE_NAME', name:'FILE_NAME', id:'FILE_NAME', width:100, align:'center', sortable:false, editable: false, hidden: true }
 			                    ],
 			    				loadonce: true,
 			                    width: '100%'
 			                    ,height: '100%'
+		                    	,onCellSelect: function (rowId, iCol, content, event) {
+					    			var test = "";
+							    	//var grid = $("#attachments");
+							    	var grid = $(this).jqGrid();
+							    	var row = grid.jqGrid('getRowData',rowId);
+							    	var cms = grid.jqGrid("getGridParam", "colModel");
+									var cm = cms[iCol];
+									
+									var oFrm = document.getElementById("form");
+									if(cm.name  == 'SAMPLE_NUMBER'){
+										
+										//var path = 'file:///' + row.FILA_PATH + '.parsed.log' ;
+										var path = row.FILA_PATH;
+										var path = path.replace(/\.parsed\.log$/gi,"");
+										var path = path + '.parsed.log' ;
+										//var path1 = path.replace(/z:\//gi,"/dashboard/das_sol/");
+										var path1 = path.replace(/^z:\//gi,"http://solutionpms.skhynix.com/dashboard/das_sol/");
+										
+										var path2 = path1.replace(/\\/g,"/");
+										var path3 = path2.replace(/#/g,"%23");
+										if(true){
+											var newWin1 = window.open("", "filedownload_log", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+											
+											oFrm.action =  path3;
+											oFrm.method = "post";
+											oFrm.target = 'filedownload_log'; 
+										    oFrm.submit();		
+										    newWin1.focus();	
+										}
+										
+										// localfile 이기 때문에 보안에 걸림
+										if(false){
+											var path = 'file:///' + row.FILA_PATH + '.parsed.log' ;
+											var path1 = path.replace(/#/g,"%23");
+											var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+											if (isIE){
+												//var fileData = ['\ufeff' + path1];
+												var fileData = [path1];
+									            var blobObject = new Blob(fileData);
+									            window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+
+											}else{
+												var link = document.createElement('a');
+												link.download = row.FILE_NAME;
+												link.href = path1;
+												//Firefox requires the link to be in the body
+												document.body.appendChild(link);
+												link.click();
+												document.body.removeChild(link);
+											}
+										}
+										
+
+									}
+					    		}
 			                    //pager: "#" + childGridPagerID
 			                });
 			                
@@ -786,6 +884,58 @@
 			    			
 			    			
 			    		} ,
+			    		onCellSelect: function (rowId, iCol, content, event) {
+			    			var test = "";
+					    	//var grid = $("#attachments");
+					    	var grid = $(this).jqGrid();
+					    	var row = grid.jqGrid('getRowData',rowId);
+					    	var cms = grid.jqGrid("getGridParam", "colModel");
+							var cm = cms[iCol];
+							
+							var oFrm = document.getElementById("form1");
+							if(cm.name  == 'JIRA' || cm.name  == 'CONFLUENCE'){
+								if(row[cm.name] == undefined || row[cm.name] == "")
+									return;
+								//var orgRow = dataFilter(testResults,[{col:'DISPLAY_ORDER',val:row.DISPLAY_ORDER}])[0];
+								//if(orgRow == undefined)
+								//	return;										
+								//var path = orgRow[cm.name];
+								
+								var path = row[cm.name];
+								if(path != undefined && path != ""){
+									var link = document.createElement('a');
+									link.target = "_blank";
+									if(path.match(/^(http)|(www)/gi) != null)
+										link.href = path;
+									else if(cm.name == 'JIRA'){
+										link.href = "http://jira.skhynix.com/browse/" + path;
+									}else if (cm.name == 'CONFLUENCE'){
+										link.href = "http://confluence.skhynix.com/pages/viewpage.action?pageId=" + path;
+									}
+										
+									//Firefox requires the link to be in the body
+									document.body.appendChild(link);
+									link.click();
+									document.body.removeChild(link);
+								}
+																			
+							}
+							if(cm.name  == 'SCRIPT_NAME_META' || cm.name  == 'CONVERT_SCRIPT' ){
+								if(row[cm.name] == undefined || row[cm.name] == "")
+									return;
+								var colname = 'SCRIPT_NAME_META';
+								var newWin1 = window.open("", "coronaDetailScript_ufs:" + row[colname], "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
+								var oFrm = document.getElementById("form");
+								oFrm.action =  '/dashboard/generic.html?viewName=corona_ufs/coronaDetailScript';
+								oFrm.method = "post";
+								oFrm.target = "coronaDetailScript_ufs:" + row[colname]; 
+								$("#script_name").val(row.SCRIPT_NAME_META);
+							    $("#convert_script").val(row.CONVERT_SCRIPT);
+								oFrm.submit();		
+							    newWin1.focus();	
+																			
+							}
+			    		},
 			    		//subgrid end
 			    		gridComplete: function () {
 			    			var grid = $(this).jqGrid();
@@ -798,6 +948,22 @@
 		    		                //,searchOperators: true
 		    		            }
 		    				);
+			    			
+			    			grid.navGrid('#grid_detailPager' ,
+				    			// the buttons to appear on the toolbar of the grid
+				    			{ edit: false, add: false, del: false, search: true, refresh: true, view: false, position: "left", cloneToTop: false  },
+				    			// options for the Edit Dialog
+				    			{  } ,
+				    			// options for the Script Master Add Dialog
+				    			{	},
+				    			// options for the Script Master Del Dialog 
+				    			{  },
+				    			{ 
+				    				multipleSearch: true,
+				    				multipleGroup: true
+				    			}
+				    			
+			    			);
 		    				
 		    				
 			    			
@@ -948,10 +1114,19 @@ jQuery.fn.center = function () {
 <input type="hidden" id="sample" name="sample" value="${param.sample}"/>
 <input type="hidden" id="firmware" name="firmware" value="${param.firmware}"/>
 <input type="hidden" id="category" name="category" value="${param.category}"/>
+<input type="hidden" id="testItem" name="testItem" value="${param.testItem}"/>
+<input type="hidden" id="countGubun" name="countGubun" value="${param.countGubun}"/>
+<input type="hidden" id="script_name" name="script_name" value=""/>
+<input type="hidden" id="convert_script" name="convert_script" value=""/>
 	<div class="pop_window">
 		<div class="pop_tit_wrap">
 			<!-- <span class="baseline"></span> -->
-			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.firmware} / ${param.category}</h2>
+			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.firmware} / ${param.category}
+			<c:if test="${param.testItem != null and param.testItem != ''}"> / ${param.testItem}</c:if>
+			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'pass'}"> (PASS)</c:if>
+			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'fail'}"> (FAIL)</c:if>
+			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'notyet'}"> (Not Yet)</c:if>
+			</h2>
 		</div>
 		
        <div class="pop_con_area" style="padding-top: 3px;"> 

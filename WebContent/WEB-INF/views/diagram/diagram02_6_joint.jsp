@@ -15,7 +15,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
   
-  <!--<link rel="stylesheet" href="/dashboard/js/jointjs/joint.css" />-->
+  <link rel="stylesheet" href="/dashboard/js/jointjs/joint.min.css" />
   
   <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
   <script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
@@ -33,7 +33,15 @@
   <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
   <script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script> 
   -->
- <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
+ <!--<link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />-->
+ 
+ 	<%-- recat --%>
+   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+   	
+   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
   
   
   <style>
@@ -70,94 +78,119 @@
     }
   </style>
   <style title="htmlElement">
- #paper-html-elements {
-    position: relative;
-    border: 1px solid gray;
-    display: inline-block;
-    background: transparent;
-    overflow: hidden;
-}
-#paper-html-elements svg {
-    background: transparent;
-}
-#paper-html-elements svg .link {
-    z-index: 2;
-}
-.html-element {
-    position: absolute;
-    background: #3498DB;
-    /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
-    pointer-events: none;
-    -webkit-user-select: none;
-    border-radius: 4px;
-    border: 2px solid #2980B9;
-    box-shadow: inset 0 0 5px black, 2px 2px 1px gray;
-    /*padding: 5px;*/
-    padding: 0;
-    
-    box-sizing: border-box;
-    z-index: 2;
-}
-.html-element select,
-.html-element input,
-.html-element button {
-    /* Enable interacting with inputs only. */
-    pointer-events: auto;
-}
-.html-element button.delete {
-    color: white;
-    border: none;
-    background-color: #C0392B;
-    border-radius: 20px;
-    width: 15px;
-    height: 15px;
-    line-height: 15px;
-    text-align: middle;
-    position: absolute;
-    top: -15px;
-    left: -15px;
-    padding: 0;
-    margin: 0;
-    font-weight: bold;
-    cursor: pointer;
-}
-.html-element button.delete:hover {
-    width: 20px;
-    height: 20px;
-    line-height: 20px; 
-}
-.html-element select {
-    position: absolute;
-    right: 2px;
-    bottom: 28px;
-}
-.html-element input.title {
-    position: relative;
-    /*top: 0;*/
-    /*left: 0;*/
-    /*right: 0;*/
-    border: none;
-    color: #333;
-    padding: 5px;
-    height: 16px;
-    width: 100%;
-}
-.html-element label {
-    color: #333;
-    text-shadow: 1px 0 0 lightgray;
-    font-weight: bold;
-}
-.html-element span {
-    position: absolute;
-    top: 2px;
-    right: 9px;
-    color: white;
-    font-size: 10px;
-}
-.joint-paper.joint-theme-default {
-    background-color: transparent;
-}
+	 #paper-html-elements {
+	    position: relative;
+	    border: 1px solid gray;
+	    display: inline-block;
+	    background: transparent;
+	    overflow: hidden;
+	}
+	#paper-html-elements svg {
+	    background: transparent;
+	}
+	#paper-html-elements svg .link {
+	    z-index: 2;
+	}
+	.html-element {
+	    position: absolute;
+	    background: #3498DB;
+	    /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
+	    pointer-events: none;
+	    -webkit-user-select: none;
+	    border-radius: 4px;
+	    border: 2px solid #2980B9;
+	    box-shadow: inset 0 0 5px black, 2px 2px 1px gray;
+	    /*padding: 5px;*/
+	    padding: 0;
+	    
+	    box-sizing: border-box;
+	    z-index: 2;
+	}
+	.html-element select,
+	.html-element input,
+	.html-element button {
+	    /* Enable interacting with inputs only. */
+	    pointer-events: auto;
+	}
+	.html-element button.delete {
+	    color: white;
+	    border: none;
+	    background-color: #C0392B;
+	    border-radius: 20px;
+	    width: 15px;
+	    height: 15px;
+	    line-height: 15px;
+	    text-align: middle;
+	    position: absolute;
+	    top: -15px;
+	    left: -5px;
+	    padding: 0;
+	    margin: 0;
+	    font-weight: bold;
+	    cursor: pointer;
+	}
+	.html-element button.delete:hover {
+	    width: 20px;
+	    height: 20px;
+	    line-height: 20px; 
+	}
+
+	.html-element button.add {
+	    color: white;
+	    border: none;
+	    background-color: #C0392B;
+	    border-radius: 20px;
+	    width: 15px;
+	    height: 15px;
+	    line-height: 15px;
+	    text-align: middle;
+	    position: absolute;
+	    top: -15px;
+	    right: -5px;
+	    padding: 0;
+	    margin: 0;
+	    font-weight: bold;
+	    cursor: pointer;
+	}
+	.html-element button.add:hover {
+	    width: 20px;
+	    height: 20px;
+	    line-height: 20px; 
+	}
+
+	.html-element select {
+	    position: absolute;
+	    right: 2px;
+	    bottom: 28px;
+	}
+	.html-element input.title {
+	    position: relative;
+	    /*top: 0;*/
+	    /*left: 0;*/
+	    /*right: 0;*/
+	    border: none;
+	    color: #333;
+	    padding: 5px;
+	    height: 16px;
+	    width: 100%;
+	}
+	.html-element label {
+	    color: #333;
+	    text-shadow: 1px 0 0 lightgray;
+	    font-weight: bold;
+	}
+	.html-element span {
+	    position: absolute;
+	    top: 2px;
+	    right: 9px;
+	    color: white;
+	    font-size: 10px;
+	}
+	.joint-paper.joint-theme-default {
+	    background-color: transparent;
+	}
   </style>
+  
   <script type="text/javascript">
   		_.templateSettings = {
 		    interpolate: /\<\@\=(.+?)\@\>/gim,
@@ -179,12 +212,18 @@
 	        template: [
 	            '<div class="html-element">',
 	            '<button class="delete">x</button>',
+	            '<button class="add">+</button>',
 	            '<input class="title" type="text" value="" />',
+	            '<div class="entity-container" style="overflow:hidden">',	            
+	            '</div>',
 	            '</div>'
 	        ].join(''),
 	        initialize: function() {
 	            _.bindAll(this, 'updateBox');
 	            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+	            
+	            this.model.set('column_names', []);
+	            
 				this.expand = false;
 				this.expandPosition = null;
 				this.$box = $(_.template(this.template)());
@@ -192,19 +231,102 @@
 	            //this.$box.find('input,select').on('mousedown click', function(evt) {
 	            //    evt.stopPropagation();
 	            //});
+	            this.$box.find('div[name=div_column_name]').on('mousedown click dblclick', function(evt) {
+	                evt.stopPropagation();
+	            });
 	            //// This is an example of reacting on the input change and storing the input data in the cell model.
 	            this.$box.find('input').on('change', _.bind(function(evt) {
-	                this.model.set('input', $(evt.target).val());
+	                this.model.set('table_name', $(evt.target).val());
 	            }, this));
 	            //this.$box.find('select').on('change', _.bind(function(evt) {
 	            //    this.model.set('select', $(evt.target).val());
 	            //}, this));
 	            //this.$box.find('select').val(this.model.get('select'));
 	            this.$box.find('.delete').on('click', _.bind(this.model.remove, this.model));
+	            this.$box.find('.add').on('click', _.bind(function(evt) {
+	                var el = $(document.createElement("div"));	                
+	                el.attr("name","div_column_name");
+	                
+	                // index
+	                var col_index = this.$box.find("[name=div_column_name]").length + 1;
+	                col_index = "column_" + col_index;
+	                el.attr("id",col_index);
+	                //el.css("cursor","pointer");
+	                
+	                //var column_names = this.model.get("column_names");
+	                //column_names.push({
+	                //	column_name: "",
+	                //	column_id : col_index
+	                //});
+	                
+	                el.addClass("column-contents");
+	                this.$box.find("div.entity-container").append(el);
+	                el.dblclick(function(){
+						console.log("dblclick");
+					});
+	                
+	                el.click(function(){
+						console.log("dblclick");
+					});
+	                // start. react
+	                var colOption = {
+	                	column_name : col_index,
+	                	col_index : col_index,
+	                	editable: true,
+	                	mode: "read",
+	                	edit_style: {
+	                		width: "90px"
+	                	}
+	                	
+	                };
+	                
+	                var reactel = window.fn_column(el[0], colOption );
+	                // end. react
+	                
+	                //// size
+	                //var bbox = this.model.getBBox();
+	                //var boxW = bbox.width;
+	                //var boxH = bbox.height;
+	                //var newH = 0;
+	                //this.$box.find("div.column-contents").each(function(i,el){
+	                //	var h = parseInt($(el).css("height").match(/[\d]+/g)[0]);
+	                //	newH += h +4;
+	                //});
+	                //this.$box.find("div.entity-container").css("height",newH+"px");
+	                //this.model.set({"size":{width:boxW,  height:Math.max(newH, boxH )}});	                
+	                //this.updateBox();
+	                
+	                var h = parseInt(this.$box.css("height").match(/[\d]+/g)[0])-20;
+	                this.$box.find("div.entity-container").css("height",h + "px");
+	                
+	                
+	                el.on('focusin', _.bind(function(evt) {
+	                	//$(evt.target).data('old_val', $(evt.target).val());
+	                	console.log("focusin");
+		            }, this));
+		            el.on('change', _.bind(function(evt) {
+		            	//var oldval = $(evt.target).data('val');
+		                //var newval = $(evt.target).val();
+		                
+		            	//var col_id = $(evt.target).attr("id");
+		            	//var column_names = this.model.get("column_names");
+		            	//var filters = column_names.filter(function(col){
+		                //	return col.column_id == col_id;
+		                //});
+		                //if(filters.length > 0){
+		                //	filters[0].column_name = newval;
+		                //}
+		                
+		            }, this));
+		            
+	               
+	            }, this));
+	            
 	            //// Update the box position whenever the underlying model changes.
 	            this.model.on('change', this.updateBox, this);
 	            //// Remove the box when the model gets removed from the graph.
 	            this.model.on('remove', this.removeBox, this);
+	            this.model.on('add', this.addInput, this);
 	            this.updateBox();
 	        },
 	        render: function() {
@@ -229,6 +351,9 @@
 	        },
 	        removeBox: function(evt) {
 	            this.$box.remove();
+	        },
+	        addInput: function(evt) {
+	            var a = "aaa";
 	        },
 	        
 	        pointerdown: function(evt, x, y) {
@@ -265,7 +390,9 @@
 				var mod_h = origin_h + diff_y;
 				var mod_w = origin_w + diff_x;
 				if(this.expand && this.expandPosition == 2){
-					this.model.set({size:{width: mod_w ,height: mod_h }}) ;				
+					this.model.set({size:{width: mod_w ,height: mod_h }}) ;		
+					this.$box.find("div.entity-container").css("height", ( (mod_h -20)  + "px"));	
+						
 				}else {
 					joint.dia.ElementView.prototype.pointermove.apply(this, [evt, x, y]);
 				}
@@ -324,7 +451,12 @@
 		 	    // console.log(arguments);
 		 	// });
 	  	        
-			
+			paper.on('cell:pointerdblclick', 
+				function(cellView, evt, x,y ) {
+					console.log('cell view ' + cellView.model.id + ' was clicked'); 
+					//evt.stopPropagation();
+				}
+			);
 			// paper.on('cell:pointerdown', function(cellView, evt, x, y) {
 			    // var bbox = cellView.getBBox();
 			    // var strokeWidth = cellView.model.attr('rect/stroke-width') || 1;
@@ -441,15 +573,23 @@
 		}
 		
 		function createTask(){
-			
 			/* var rect = new joint.shapes.basic.Rect({
 		        position: { x: 0, y: 0 },
 		        size: { width: 100, height: 50 },
 		        attrs: { rect: { fill: 'skyblue' }, text: { text: '', fill: 'white' } }
 		    }); */
 			
+			
+			//var vx = event.screenX;
+			//var vy = event.screenY;
+			
+			var vx = event.clientX - $(".col-sm-2.sidenav").width();
+			var vy = event.clientY;
+			
+			
 			var rect = new joint.shapes.html.Element({
-		        position: { x: 80, y: 80 },
+		        //position: { x: 80, y: 80 },
+		        position: { x: vx, y: vy },
 		        size: { width: 170, height: 100 }
 		        //label: 'I am HTML',
 		        //select: 'one'
@@ -585,4 +725,187 @@
   <p>Footer Text</p>
 </footer>
 </body>
+<script type="text/babel">
+	
+	
+	
+	
+	class Td extends React.Component {
+		
+		constructor(props) {
+	        super(props);
+	        // Configure default state
+			this.state = this.props.options;
+			//this.dblclick.bind(this);
+			this.changeHandler = this.changeHandler.bind(this);
+	    }
+	    
+	    dblclick(){
+	    	//if(this.state.editable == true)
+	    	//	this.setState({mode: "edit"});
+	    }
+	    
+	    confirm(){
+	    	this.props.options.fn_submit.call(this);
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    cancel(){
+	    	this.setState({value: this.props.options.value});
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    changeHandler(e){
+	    	//alert("changeHandler");
+	    	this.setState({value: e.target.value });	    	
+	    }
+	    
+	    
+	    
+	    render(){
+	    	
+	    	if(this.props.options.editable == false || this.state.mode == "read"){
+	    		return(
+				<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
+					{this.state.value}
+				</div>
+	        	);
+	    	}else if(this.state.mode == "edit") {	  
+	    		if(this.state.edit_tag == "textarea"){
+	    			return (
+			    		<div>
+							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
+						</div>
+					);
+	    		}else {
+	    			return (
+			    		<div>
+							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
+						</div>
+					);
+	    		}		
+				
+	    	}
+	        
+	            
+	    }
+	    
+	}
+	
+	window.fn_td = function(cell, options){
+		return ReactDOM.render(<Td options={options}/>, cell);
+	}
+	
+	
+	class Column extends React.Component {
+		
+		constructor(props) {
+	        super(props);
+	        // Configure default state
+			this.state = this.props.options;
+			//this.dblclick.bind(this);
+			this.changeHandler = this.changeHandler.bind(this);
+	    }
+	    
+	    dblclick(){
+	    	alert('aaaaa');
+	    	if(this.state.editable == true){
+	    		this.setState({mode: "edit"});
+	    		
+	    	}
+	    		
+	    }
+	    
+	    confirm(){
+	    	this.props.options.fn_submit.call(this);
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    cancel(){
+	    	this.setState({column_name: this.props.options.column_name});
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    changeHandler(e){
+	    	//alert("changeHandler");
+	    	this.setState({column_name: e.target.value });	    	
+	    }
+	    
+	    
+	    
+	    render(){
+	    	
+	    	if(this.props.options.editable == false || this.state.mode == "read"){
+	    		return(
+						
+						<div style={{width:"100%",height:"100%", cursor:"pointer"}} onDoubleClick={this.dblclick.bind(this)}>
+							<img className="gwt-Image typeIcon"
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxElEQVR42mNgoDZY9f8/86lrD/5jwyA5vJovvv6vDlN8+fU/FAwTB6khWTNBQ5Cd3T533X+H0DSsuLhjFnbvINsMUhSQWv6/bc76/55xBWCNIHZMYdP/uOJWFJegGABzZl7ztP/pNX1gdmh2DdgAELtu8rL/4Xn1KN7BasDcLcf+T19/EMOAFfsv/u9dvI2wAcgY2QBsAUpdA5ANWXngEkYgztl8FCM6sUYjOCY6Z2NEISgWkDVjpEqKEhJVkjJVMhM5AADzgio+6KAFDwAAAABJRU5ErkJggg=="
+								style={{width:"16", height:"16"}}
+							/>
+							<img
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABOklEQVR42mNgGN7gfz0D062ZBp0PV7udvj1VJ5lkA25M0ix4czL//+/PJ/8/3xX+9my7sgfRmm9O0017dTD27+8Pi/9/uNLw/83xuv93Fwd83Z6rFEmUAXcXWK3/+W7l/x/P6v7/eDHr/4eLdf+/PWr4f3OG/QeiDLg9w7jty93O/98eZP3//qj4/7f78f+/3Qr9f7be4jN+f0/WMXm4yvXU0x0B9z7djPv/7bbf/+93o/9/vQHU3KD3fXGkQiQeW/Vj7s2zOvft0cz/X+8E//920+3/mQnmX843m7641GL2Ylm8fDBe2x+udj//49nC/58uWfz/ds39/9kp1l9nRSslbfQT4T2SJMJL0N+P13mc/Pmy7f/Xm77/z0yy+jwnQSWWpHg/2WfSenW+68vTvVYPlmWohDGMDAAAQwSrOupcdgsAAAAASUVORK5CYII="
+								className="keyIcon" 
+								aria-hidden="true"
+								style={{display:"none",width:"16", height:"16"}}
+							/>
+							<img
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAQCAQAAACFdibLAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQffBhcNNSocYAbvAAAAq0lEQVQY062PPQ4BQQCFv8GyN9Bu6EjcwA2UFBLRqPQSF9jGCTRbcACJQu0GIpGoNiq9YnfszP7M0kyoJV755eXLe/D/CFh2GfJwAl/Netko2e9OFVhdmZQtX4EI9SA8QwUgT7UECFR8v5RQA9Dk1vYUYGFCZqHkC4vUsdCAdcptNO43wZuqw6ep1nE92Xg6PZrA7oROW6ZRnlE4pmFutsmiql0EL4zL/Jfvb9WyP8r8UM2lAAAAAElFTkSuQmCC"
+								className="uniqueIcon" 
+								aria-hidden="true"
+								style={{display:"none",width:"16", height:"16"}}
+							/>
+							<div 
+								className="ebox feature-box widget-name"
+								style={{display:"inline-block"}}
+							>
+								<div className="gwt-Label">{this.state.column_name}</div>
+							</div>
+	        			</div>
+	        	);					
+
+	    	}else if(this.state.mode == "edit") {	  
+	    		return(
+					<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
+						<div className="widget-contents">
+							<img className="gwt-Image typeIcon"
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxElEQVR42mNgoDZY9f8/86lrD/5jwyA5vJovvv6vDlN8+fU/FAwTB6khWTNBQ5Cd3T533X+H0DSsuLhjFnbvINsMUhSQWv6/bc76/55xBWCNIHZMYdP/uOJWFJegGABzZl7ztP/pNX1gdmh2DdgAELtu8rL/4Xn1KN7BasDcLcf+T19/EMOAFfsv/u9dvI2wAcgY2QBsAUpdA5ANWXngEkYgztl8FCM6sUYjOCY6Z2NEISgWkDVjpEqKEhJVkjJVMhM5AADzgio+6KAFDwAAAABJRU5ErkJggg=="
+								style={{width:"16", height:"16"}}
+							/>
+							<img
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABOklEQVR42mNgGN7gfz0D062ZBp0PV7udvj1VJ5lkA25M0ix4czL//+/PJ/8/3xX+9my7sgfRmm9O0017dTD27+8Pi/9/uNLw/83xuv93Fwd83Z6rFEmUAXcXWK3/+W7l/x/P6v7/eDHr/4eLdf+/PWr4f3OG/QeiDLg9w7jty93O/98eZP3//qj4/7f78f+/3Qr9f7be4jN+f0/WMXm4yvXU0x0B9z7djPv/7bbf/+93o/9/vQHU3KD3fXGkQiQeW/Vj7s2zOvft0cz/X+8E//920+3/mQnmX843m7641GL2Ylm8fDBe2x+udj//49nC/58uWfz/ds39/9kp1l9nRSslbfQT4T2SJMJL0N+P13mc/Pmy7f/Xm77/z0yy+jwnQSWWpHg/2WfSenW+68vTvVYPlmWohDGMDAAAQwSrOupcdgsAAAAASUVORK5CYII="
+								className="keyIcon" 
+								aria-hidden="true"
+								style={{display:"none",width:"16", height:"16"}}
+							/>
+							<img
+								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAQCAQAAACFdibLAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQffBhcNNSocYAbvAAAAq0lEQVQY062PPQ4BQQCFv8GyN9Bu6EjcwA2UFBLRqPQSF9jGCTRbcACJQu0GIpGoNiq9YnfszP7M0kyoJV755eXLe/D/CFh2GfJwAl/Netko2e9OFVhdmZQtX4EI9SA8QwUgT7UECFR8v5RQA9Dk1vYUYGFCZqHkC4vUsdCAdcptNO43wZuqw6ep1nE92Xg6PZrA7oROW6ZRnlE4pmFutsmiql0EL4zL/Jfvb9WyP8r8UM2lAAAAAElFTkSuQmCC"
+								className="uniqueIcon" 
+								aria-hidden="true"
+								style={{display:"none",width:"16", height:"16"}}
+							/>
+							<div 
+								className="ebox feature-box widget-name"
+								style={{display:"inline-block"}}
+							>
+								<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.column_name}></input>
+							</div>
+						</div>
+					</div>
+	        	);
+				
+	    	}
+	        
+	            
+	    }
+	    
+	}
+	
+	window.fn_column = function(cell, options){
+		return ReactDOM.render(<Column options={options}/>, cell);
+	}
+	
+	
+	
+</script>
 </html>

@@ -560,7 +560,8 @@
 		$("#buttonRawData").remove();
 		$("#buttonGuide").remove();
 		
-		if($('#PMS_ROLE').val() == "ADMIN" && $('#category').val() == "CODING_RULE" ){
+		//if($('#PMS_ROLE').val() == "ADMIN" && $('#category').val() == "CODING_RULE" ){
+		if($('#category').val() == "CODING_RULE" ){
 			chart.renderer.label('Raw Data', width -20 - 80  -90 ,10 )
 	        .attr({
 	        	width:80,

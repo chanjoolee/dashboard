@@ -2264,6 +2264,102 @@ function fn_makeHtml(container, _schema){
 				
 			});
 			// --tbody
+		}else if(_schema.type == 'inline_iframe'){
+			var cols = 2;
+			if(_schema.cols != undefined)
+				cols = _schema.cols;
+			
+			//tableCreate
+			mainContainer = $(document.createElement("table"));
+			//table.addClass("table_hori m_bottom_20");
+			mainContainer.addClass("table_hori");
+			container.append(mainContainer);
+			
+			// colgroup
+			var colgroup = $(document.createElement("colgroup"));
+			mainContainer.append(colgroup);
+			
+			for(var i=0; i< cols;i++){
+				colgroup.append("<col width=\"150\"/>");
+			}
+			// -- colgroup
+			
+			// tbody
+			var tbody = $(document.createElement("tbody"));
+			mainContainer.append(tbody); 
+			var tr = null;
+			$.each(_schema.items,function(i,item){
+				if(i%cols == 0 ){
+					tr =$(document.createElement("tr"));
+					tbody.append(tr);
+				}
+				//header	
+				//td value
+				var td = $(document.createElement("td"));
+				td.addClass("hori_t_data");
+				//td.text(_schema.data()[item.col]);
+				tr.append(td);
+				td.css("border","0px");
+				
+				
+				
+				var tabContainer = $(document.createElement( "div" ));
+				tabContainer.attr("id",_schema.id + item.name +  'TabContainer' )
+				tabContainer.addClass("tit_btn");
+				tabContainer.addClass("m_top_10");		
+				tabContainer.css("display","inline-block");
+				td.append(tabContainer);
+				
+				$ul = $(document.createElement( "ul" )); 
+				$ul.attr("id",_schema.id +  item.name +  'Ul');
+				$ul.addClass("tab_2depth");
+				tabContainer.append($ul);
+				
+				var $li = $(document.createElement( "li" ));
+				$li.attr("id", _schema.id +  item.name +  'Tab' );
+				$li.addClass("on")
+				$ul.append($li);
+				
+				
+				var $a = $(document.createElement( "a" ));
+				$a.attr("id", _schema.id + '_a' );
+				$a.attr("origin_id", _schema.id );
+				$a.text(item.label);
+				$li.append($a);		
+			
+				v_content = $(document.createElement( "div" ));
+				td.append(v_content);
+				v_content.attr("id", _schema.id + item.name +  'Content');
+				v_content.css("height",_schema.height);
+				//v_content.css("margin-top","10px");
+				//v_content.css("padding","0 10px 0 10px");
+				v_content.css("width","100%");
+				
+				//iframe
+				var v_frame = $(document.createElement( "iframe" ));
+				v_frame.attr("id", _schema.id + '_'+ item.name +'Frame');
+				v_frame.attr("name",  _schema.id + '_'+ item.name +'Frame');
+				v_frame.css("width","100%");
+				v_frame.css("height","100%");
+				
+				if(_schema.iframe_css != null){
+					$.each(_schema.iframe_css,function(i,v){
+						v_frame.css(v.code,v.value);
+					});
+				}
+				v_content.append(v_frame);
+				var viewName = item.viewName;
+				var form_id = _schema.form_id;
+				
+				var vform =  document.getElementById(form_id);
+				vform.action = '/dashboard/generic.html?viewName='+viewName;
+				vform.method = "post";
+				vform.target = _schema.id + '_'+ item.name +'Frame';
+				//vform.target = v_content[0];
+				vform.submit();
+				
+			});
+			// --tbody
 		}else if(_schema.type == 'inline_edit'){
 			var cols = 3;
 			if(_schema.cols != undefined)
@@ -2390,7 +2486,7 @@ function fn_makeHtml(container, _schema){
 					tdOption.fn_submit = _schema.options.fn_submit;
 				else {
 					tdOption.fn_submit = function(){
-						alert("submit function not defined")
+						alert("submit function not defined");
 					};
 				}
 				
@@ -2601,12 +2697,19 @@ function fn_makeHtml(container, _schema){
 //		    	
 // 	 		});
 			
+			
+			
 			if(options.stockchart != undefined && options.stockchart){
 				$(mainContainer).highcharts('StockChart',options,function(chart){
+					if(options.complete != undefined && typeof options.complete == 'function' ){
+						options.complete.call(chart);
+					}
 				});
 			}else{
 				$(mainContainer).highcharts(options,function(chart){
-		    	
+					if(options.complete != undefined && typeof options.complete == 'function' ){
+						options.complete.call(chart);
+					}
 			 	});
 			}
 			

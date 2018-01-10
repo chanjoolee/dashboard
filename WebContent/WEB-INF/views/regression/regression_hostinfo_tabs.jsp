@@ -796,7 +796,7 @@
 				//"click" : tab_click
 			},
 			"iframe_css" : [
-				{ "code": "height", "value": "750px" },
+				{ "code": "height", "value": "3000px" },
 				{ "code": "margin-top", "value": "-17px" }
 			]
 		};
@@ -838,7 +838,7 @@
 			var el1 = {
 				"type": "tab_iframe",
 				"id" : "regression_smart_slot_" + slotname,
-				"label" : slotname,							
+				"label" : slotname.replace(/^regress-/i,''),							
 				"connected_content" :  {
 					"viewName": "regression/regression_host_slot&slotName=" + slotname,
 					"form_id" : "form"

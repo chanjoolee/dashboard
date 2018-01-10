@@ -1,0 +1,92 @@
+/*==================================================================================
+ UI & design consuting - FOR C&C (주)에프오알씨앤씨 - UI Creative Team 
+www.forcnc.co.kr  / (02)322-0637
+2단 Layout : lay_col2.css
+==================================================================================*/
+
+
+
+/* 1024기준
+body {min-width: 1000px;}
+.lay_col2 #lay_container,
+.gnb_top .gnb_top_wrap,
+.gnb_bot .gnb_bot_wrap,
+.gnb_top_status_wrap,
+.gnb_sub .gnb_sub_wrap,
+.footer_wrap,
+.pop_gnb .pop_gnb_wrap {width: 980px; margin: 0 auto;} */
+
+/* 1280 기준 
+body {min-width: 1200px;}
+.lay_col2 #lay_container,
+.gnb_top .gnb_top_wrap,
+.gnb_bot .gnb_bot_wrap,
+.gnb_top_status_wrap,
+.gnb_sub .gnb_sub_wrap,
+.footer_wrap,
+.pop_gnb .pop_gnb_wrap {width: 1180px; margin: 0 auto;} */
+
+/* 100% 기준 */
+/*body {min-width: 1020px;}
+body {min-width: 1100px;}
+.lay_col2 #lay_container,
+.gnb_top .gnb_top_wrap,
+.gnb_bot .gnb_bot_wrap,
+.gnb_top_status_wrap,
+.gnb_sub .gnb_sub_wrap,
+.footer_wrap,
+.pop_gnb .pop_gnb_wrap {margin: 0 30px;}*/
+
+body {min-width: 1200px;}
+/*.lay_col2 #lay_container,*/
+#lay_container,
+.gnb_top .gnb_top_wrap,
+.gnb_bot .gnb_bot_wrap,
+.gnb_top_status_wrap,
+.gnb_sub .gnb_sub_wrap,
+.footer_wrap,
+.pop_gnb .pop_gnb_wrap {margin: 0 30px;}
+
+
+/* Layout */
+#lay_header {position: relative; z-index: 3;}
+#lay_container {margin-top:20px; background:url(../images/lnb/bg01.gif) repeat-y left}
+#lay_container:after {clear:both; display:block; content:'';}
+#lay_lnb {width: 230px; float: left; position:relative; top:-15px; overflow:hidden;; padding-bottom:60px}
+#lay_contents {margin-left: 250px; overflow:hidden}
+#lay_footer {position: relative; z-index: 2;}
+
+
+/*.lay_col2 #lay_header {position:relative; background:url(../images/main/header_bg.gif) repeat-x;}*/
+#lay_header {position:relative; order-bottom:1px solid #ccc;}
+#lay_footer {background-color: #f1f3f6; }
+/*.lay_col2 #lay_footer {padding:30px 0; background-color: #f1f3f6; border-top:1px solid #ccc;}*/
+#lay_container .temp {height:100px;}
+
+
+.ex_info {font-size:20px; line-height:30px; color:#333; margin-top:30px; margin-bottom:5px; padding-left:20px;}
+.ex_desc {font-size:13px; line-height:18px; font-weight:normal; margin-bottom:30px;}
+.ex_title1 {font-size:16px; line-height:30px; margin-bottom:5px; margin-top:40px;}
+.ex_title2 {font-size:13px; line-height:1.3em; color:#999; margin:15px 0 5px;}
+.ex_info + .ex_title1 {margin-top:10px;}
+
+
+/* ### FOOTER ### */
+
+/*==================================
+Footer : footer_basic_light.css
+==================================*/
+.footer_basic_light {background-color:#fff; margin:0 auto}
+/*.footer_basic_light {padding:17px 0 20px 0; border-top:1px solid #e1e2e6; background-color:#fff; margin:0 auto}*/
+.footer_basic_light:after {content:''; display:block; clear:both; }
+.footer_basic_light .footer_left {float:left; }
+.footer_basic_light .footer_left .footer_logo {display:inline-block; margin:0 75px 0 65px; vertical-align:middle; }
+/*.footer_basic_light .footer_left .footer_logo {display:inline-block; margin:0 40px 0 0; vertical-align:middle; }*/
+.footer_basic_light .footer_left .footer_txt_area {display:inline-block; vertical-align:middle; }
+.footer_basic_light .footer_left .footer_txt_area .copyright {font-size:11px; font-weight:bold; font-style:normal; line-height:1.33em; color:#a4a7a9; }
+
+.footer_wrap{padding:17px 0 20px 0; border-top:1px solid #e1e2e6; height:32px}
+
+/* logo */
+.footer_basic_light .footer_logo_img {display:inline-block; width:106px; height:31px; background:url(../images/footer/footer_basic_light.png) -106px 0 ; }
+
