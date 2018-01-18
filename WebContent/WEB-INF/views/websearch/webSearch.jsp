@@ -828,7 +828,7 @@
 			type: "POST",
 			url: "/dashboard/webSearchJson.html",
 			data: {searchJson: JSON.stringify(paramObj)}, 
-			async: false,
+			//async: false,
 			success:  function(response){
 				v_list.push(response);
 				$.each(response.result.searchJson.sites,function(i,site){

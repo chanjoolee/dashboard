@@ -2490,6 +2490,8 @@ function fn_makeHtml(container, _schema){
 					};
 				}
 				
+				if(_schema.options != undefined && _schema.options.fn_change != undefined)
+					tdOption.fn_change = _schema.options.fn_change;
 				
 				
 				if( item.edit_tag != undefined )	{
@@ -2515,7 +2517,10 @@ function fn_makeHtml(container, _schema){
 				
 				var reacttd = window.fn_td(td[0], tdOption );
 				//td.addClass("hori_t_data");
-				//td.text(_schema.data()[item.col]);
+				//td.text(_schema.data()[item.col]);				
+				
+				// reactDom 으로 부터 특정 component 를 찾을 수 없으므로 
+				reacttd.reactObjects = reactObjects;
 				reactObjects.push(reacttd);
 				tr.append(th);
 				tr.append(td);
@@ -2542,6 +2547,7 @@ function fn_makeHtml(container, _schema){
 				setTimeout(function(){
 					
 					var keyUpdatedObjects = [];
+					// key 가 아닌것을 먼저 update
 					$.each(reactObjects,function(i,item){
 						var isKeyUpdate = false;
 						if(this.state.value_origin != this.state.value){
@@ -2553,9 +2559,10 @@ function fn_makeHtml(container, _schema){
 								}
 									
 							});
-							
-							state = item.props.options.fn_submit.call(this);
-							this.setState({value_origin: this.state.value});
+							if(!isKeyUpdate){
+								state = item.props.options.fn_submit.call(this);
+								this.setState({value_origin: this.state.value});
+							}							
 						}
 							
 						if(!state)
@@ -2565,6 +2572,18 @@ function fn_makeHtml(container, _schema){
 							keyUpdatedObjects.push(item);
 						}
 					});
+					
+					// key 는 나중에 업데이트 한다. 만약 키다 두개이상인 경우는 cover가 안됨
+					$.each(keyUpdatedObjects,function(i,item){
+						state = item.props.options.fn_submit.call(this);
+						this.setState({value_origin: this.state.value});
+							
+						if(!state)
+							return false;
+						this.setState({mode: "read"});
+						
+					});
+					
 					if(state){
 						btnConfirm.hide();
 						btnCancel.hide();

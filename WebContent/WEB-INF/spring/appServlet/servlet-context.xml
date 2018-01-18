@@ -49,6 +49,11 @@
             </props>
         </property>
     </bean>
+    
+	<!-- ================================== -->  
+	<!-- 0. Set up task executor for async  -->
+	<!-- ================================== -->
+	
     <!-- view resolver start -->
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

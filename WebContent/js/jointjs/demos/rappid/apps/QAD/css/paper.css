@@ -1,0 +1,11 @@
+#paper {
+    margin: 30px auto;
+    width: 800px;
+    display: block;
+    position: relative;
+    border: 1px solid lightgray;
+}
+
+.link-tools .tool-options {
+    display: none;
+}

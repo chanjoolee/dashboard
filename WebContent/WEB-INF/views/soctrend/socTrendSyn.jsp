@@ -426,6 +426,12 @@
 												linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_log('"+ event.point.options.START_TIME +"',this);\">";
 												linkUrl +="Log";
 												linkUrl +="</span>";	
+												linkUrl +="<br/><br/>";
+												// 3
+												linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_timing('"+ event.point.options.START_TIME +"',this);\">";
+												linkUrl +="Timing";
+												linkUrl +="</span>";	
+												linkUrl +="<br/><br/>";
 												
 												// hs.Expand 두번뜨는것 방지
 												for(var i=0 ;i<hs.expanders.length;i++){
@@ -437,8 +443,8 @@
 												
 												hs.htmlExpand(null, {
 											        pageOrigin: {
-											            x: event.pageX || event.clientX ,
-											            y: (event.pageY || event.clientY)  + 62 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
+											            x: (event.pageX || event.clientX) + 250/2 + 10 ,
+											            y: (event.pageY || event.clientY)  + 72 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
 											        },
 											        headingText: 'Select Option',
 											        maincontentText: linkUrl,
@@ -480,6 +486,17 @@
 		var newWin1 = window.open("", "socTrendDetail", "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
 		var oFrm = document.getElementById("form");
 		oFrm.action =  "http://solutionpms.skhynix.com/dashboard/das_sol/SoC_Methodology/Synthesis_log/" + start_time + "_log.json";
+		oFrm.method = "post";
+		oFrm.target = "socTrendDetail"; 
+	    oFrm.submit();		
+	    newWin1.focus();	
+	}
+	
+	function fn_pop_timing(start_time){
+		
+		var newWin1 = window.open("", "socTrendDetail", "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
+		var oFrm = document.getElementById("form");
+		oFrm.action =  "http://solutionpms.skhynix.com/dashboard/das_sol/SoC_Methodology/Synthesis_timing/" + start_time + "_timing.json";
 		oFrm.method = "post";
 		oFrm.target = "socTrendDetail"; 
 	    oFrm.submit();		

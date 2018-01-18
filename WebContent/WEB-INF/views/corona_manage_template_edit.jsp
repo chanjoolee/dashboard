@@ -70,7 +70,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.09.13.01"></script>
+	<script src="js/dashboard.js?version=2018.01.10.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -889,7 +889,8 @@
 										
 									}
 								 }
-								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:600, align:'left', sortable:false , editable: true }
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:300, align:'left', sortable:false , editable: true }
+								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:300, align:'left', sortable:false , editable: true }
 								,{label:'TAT LVL', name:'SCRIPT_TAT_LVL', id:'SCRIPT_TAT_LVL', width:100, align:'left', sortable:false , editable: true }
 								,{label:'Script Version', name:'SCRIPT_VERSION', id:'SCRIPT_VERSION', width:100, align:'left', sortable:false , editable: true }
 					    		
@@ -995,6 +996,29 @@
 															},
 															options : {
 																keys : ['SCRIPT_NAME'],
+																fn_change: function( input ){
+																	//
+																	if(this.props.options.name == 'SCRIPT_NAME'){
+																		var convert = this.reactObjects.find(function(td){
+																			return td.props.options.name == 'CONVERT_SCRIPT';
+																		});	
+																		//convert digit
+																		//var v_hax = this.state.value;
+																		var v_hax = input;
+																		var v_digit = [];
+																		$.each(v_hax.split(" "), function(i,str){
+																			var d = "";
+																			if(str.startsWith("0x")){
+																				v_digit.push(parseInt(str,16));
+																			}else{
+																				v_digit.push(str);
+																			}
+																		});																		
+																		convert.setState({value : v_digit.join(" ")});
+																		
+																	}
+																	
+																},
 																fn_submit: function(){
 																	//alert("submit function defined");
 																	var state = true;
@@ -1051,10 +1075,12 @@
 											                   		return state;
 																},
 																fn_afterSubmit: function(keyUpdatedObjects){
-																	//var filter = dataFilter()
-																	$.each(keyUpdatedObjects,function(i,react){
+																	$.each(this,function(i,react){
 																		if(react.state.name == "SCRIPT_NAME"){
-																			theGrid.setRowData(parentRowKey,{SCRIPT_NAME:react.state.value});
+																			theGrid.setRowData(parentRowKey,{SCRIPT_NAME: react.state.value});
+																		}
+																		if(react.state.name == "CONVERT_SCRIPT"){
+																			theGrid.setRowData(parentRowKey,{CONVERT_SCRIPT: react.state.value});
 																		}
 																	});
 																	
@@ -1062,7 +1088,8 @@
 																progressObject: parent.$("#loader")
 															},
 															items: [
-																{label:'Script Name', col: 'SCRIPT_NAME', editable: true},
+																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: true},
+																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
 																{label:'Category', col: 'CATEGORY', editable: true},
 																{label:'Test Item', col: 'TEST_ITEM', editable: true},
 																{label:'Single Multi', col: 'SINGLE_MULTI'},
@@ -1647,7 +1674,8 @@
 	    
 	    changeHandler(e){
 	    	//alert("changeHandler");
-	    	this.setState({value: e.target.value });	    	
+	    	this.setState({value: e.target.value });
+			this.props.options.fn_change.call(this, e.target.value);
 	    }
 	    
 	    

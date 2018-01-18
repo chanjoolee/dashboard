@@ -25,11 +25,11 @@
 			and m.FIRMWARE = #{firmware}
 			and m.SAMPLE = #{sample}
 			group by 
-				m.SAMPLE,
 				m.FIRMWARE,
+				m.SAMPLE,
 				m.CATEGORY,
 				m.TEST_ITEM
-			order by m.CATEGORY,m.TEST_ITEM
+			--order by m.CATEGORY,m.TEST_ITEM
 		)	,
 		tbl_order as (
 			select 'Protocol' CATEGORY , 1 as seq from dual  union all
@@ -466,6 +466,7 @@
 				SELECT
 						CATEGORY, 
 						SCRIPT_NAME, 	
+						CONVERT_SCRIPT,
 						row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
 						TEST_ITEM, 
 						TIME, 
@@ -525,6 +526,7 @@
 	<select id="dashboard.corona.emmc.manage.script.search.one" resultType="hashmap">
 			SELECT
 				SCRIPT_NAME, 
+				CONVERT_SCRIPT,
 				CATEGORY, 
 				TEST_ITEM, 
 				TIME, 
@@ -558,38 +560,41 @@
 	<select id="dashboard.corona.emmc.manage.script.firmware.mapping" resultType="hashmap">
 		with tbl_a as (	
 			SELECT
-				SAMPLE,
-				FIRMWARE,
-				SCRIPT_NAME, 
-				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
-				CATEGORY, 
-				TEST_ITEM, 
-				TIME, 
-				CUSTOMER_ITEM, 
-				NEED_VENDOR_CMD, 
-				NEED_POWER_CYCLE, 
-				EMMC_VER, 
-				TARGET_DEVICE, 
-				TARGET_PARTITION, 
-				CATEGORY1, 
-				CATEGORY2, 
-				CATEGORY3, 
-				CATEGORY4, 
-				CATEGORY5, 
-				WRITE_MODE, 
-				READ_MODE, 
-				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
-				DESCRIPTION,
-				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
-				ARGUMENT, 
-				PLATFORM, 
-				FUNCTION_NAME,
-				INS_DT, 
-				MOD_DT
+				m.SAMPLE,
+				m.FIRMWARE,
+				m.SCRIPT_NAME, 
+				sm.CONVERT_SCRIPT,
+				row_number() over (partition by m.category order by m.CATEGORY,m.SCRIPT_NAME) row_num,
+				m.CATEGORY, 
+				m.TEST_ITEM, 
+				m.TIME, 
+				m.CUSTOMER_ITEM, 
+				m.NEED_VENDOR_CMD, 
+				m.NEED_POWER_CYCLE, 
+				m.EMMC_VER, 
+				m.TARGET_DEVICE, 
+				m.TARGET_PARTITION, 
+				m.CATEGORY1, 
+				m.CATEGORY2, 
+				m.CATEGORY3, 
+				m.CATEGORY4, 
+				m.CATEGORY5, 
+				m.WRITE_MODE, 
+				m.READ_MODE, 
+				substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				m.DESCRIPTION,
+				substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				m.ARGUMENT, 
+				m.PLATFORM, 
+				m.FUNCTION_NAME,
+				m.INS_DT, 
+				m.MOD_DT
 			from CORONA_EMMC_F_S_MAP m
+			left outer join CORONA_EMMC_SCRIPT_MASTER sm
+				on sm.script_name = m.script_name
 			where m.sample = #{sample}
 			and m.FIRMWARE = #{firmware}
-			order by category,test_item, script_name
+			order by m.category, m.test_item, m.script_name
 		)
 		select 
 			case 
@@ -606,38 +611,41 @@
 	<select id="dashboard.corona.emmc.manage.script.firmware.mapping.one" resultType="hashmap">
 		
 		SELECT
-				SAMPLE,
-				FIRMWARE,
-				SCRIPT_NAME, 
-				CATEGORY, 
-				TEST_ITEM, 
-				TIME, 
-				CUSTOMER_ITEM, 
-				NEED_VENDOR_CMD, 
-				NEED_POWER_CYCLE, 
-				EMMC_VER, 
-				TARGET_DEVICE, 
-				TARGET_PARTITION, 
-				CATEGORY1, 
-				CATEGORY2, 
-				CATEGORY3, 
-				CATEGORY4, 
-				CATEGORY5, 
-				WRITE_MODE, 
-				READ_MODE, 
-				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
-				DESCRIPTION,
-				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
-				ARGUMENT, 
-				PLATFORM, 
-				FUNCTION_NAME,
-				INS_DT, 
-				MOD_DT
+				m.SAMPLE,
+				m.FIRMWARE,
+				m.SCRIPT_NAME, 		
+				sm.CONVERT_SCRIPT,		
+				m.CATEGORY, 
+				m.TEST_ITEM, 
+				m.TIME, 
+				m.CUSTOMER_ITEM, 
+				m.NEED_VENDOR_CMD, 
+				m.NEED_POWER_CYCLE, 
+				m.EMMC_VER, 
+				m.TARGET_DEVICE, 
+				m.TARGET_PARTITION, 
+				m.CATEGORY1, 
+				m.CATEGORY2, 
+				m.CATEGORY3, 
+				m.CATEGORY4, 
+				m.CATEGORY5, 
+				m.WRITE_MODE, 
+				m.READ_MODE, 
+				substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				m.DESCRIPTION,
+				substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				m.ARGUMENT, 
+				m.PLATFORM, 
+				m.FUNCTION_NAME,
+				m.INS_DT, 
+				m.MOD_DT
 			from CORONA_EMMC_F_S_MAP m
+			left outer join CORONA_EMMC_SCRIPT_MASTER sm
+				on sm.script_name = m.script_name
 			where m.sample = #{sample}
 			and m.FIRMWARE = #{firmware}
 			and m.script_name = #{script_name}
-			order by category,test_item, script_name
+			order by m.category, m.test_item, m.script_name
 		
 	</select>
 	
@@ -645,6 +653,7 @@
     	declare
 	    	cnt number;
 	    	v_script_name varchar2(2000);
+	    	v_convert_script varchar2(2000);
 	    	v_status varchar2(10);
 	    begin
 	    	
@@ -662,16 +671,13 @@
 		   		</choose>   
 	    		;
 	    		
-	    		
-	    		
-	    		
 	    		if cnt = 1 then
-	              	update CORONA_EMMC_SCRIPT_MASTER set
+	    			update CORONA_EMMC_SCRIPT_MASTER set
 	              	${fieldName} = #{fieldValue},	  
 	              	MOD_DT = sysdate
 	              	where 1=1
 		    		<choose>
-							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
 				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
 				       			and ${item.field} = #{item.value}
 				       		</foreach>
@@ -682,42 +688,11 @@
 			   		</choose>          	
 	          		;
 	          		
-	          		update CORONA_EMMC_SCRIPTSET_MAP set
-	              	${fieldName} = #{fieldValue},	  
-	              	MOD_DT = sysdate
-	              	where 1=1
-		    		<choose>
-							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
-				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
-				       			and ${item.field} = #{item.value}
-				       		</foreach>
-				   		</when>
-				   		<otherwise>
-				   			and 1=2
-				   		</otherwise>
-			   		</choose>          	
-	          		;
-	          		
-	          		
-	          		update CORONA_EMMC_F_S_MAP set
-	              	${fieldName} = #{fieldValue},	  
-	              	MOD_DT = sysdate
-	              	where 1=1
-		    		<choose>
-							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
-				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
-				       			and ${item.field} = #{item.value}
-				       		</foreach>
-				   		</when>
-				   		<otherwise>
-				   			and 1=2
-				   		</otherwise>
-			   		</choose>          	
-	          		;
-	          		
-	          		if '${fieldName}' != 'SCRIPT_NAME' then
-		          		select script_name into v_script_name from CORONA_EMMC_SCRIPT_MASTER
-		          		where 1=1
+	          		<if test= "fieldName != 'CONVERT_SCRIPT' ">
+		          		update CORONA_EMMC_SCRIPTSET_MAP set
+		              	${fieldName} = #{fieldValue},	  
+		              	MOD_DT = sysdate
+		              	where 1=1
 			    		<choose>
 								<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
 					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
@@ -727,13 +702,36 @@
 					   		<otherwise>
 					   			and 1=2
 					   		</otherwise>
-				   		</choose> 		   	
-				   		;
-				   		
-			   		end if;
+				   		</choose>          	
+		          		;
 	          		
-	          		if '${fieldName}' = 'SCRIPT_NAME' then
-	          			v_script_name := #{fieldValue};          			
+	          		
+		          		update CORONA_EMMC_F_S_MAP set
+		              	${fieldName} = #{fieldValue},	  
+		              	MOD_DT = sysdate
+		              	where 1=1
+			    		<choose>
+								<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+					       			and ${item.field} = #{item.value}
+					       		</foreach>
+					   		</when>
+					   		<otherwise>
+					   			and 1=2
+					   		</otherwise>
+				   		</choose>          	
+		          		;
+	          		
+		          </if>		
+			       <if test= "fieldName == 'CONVERT_SCRIPT' ">
+			        	update CORONA_EMMC_TEST_DETAIL set
+	          			CONVERT_SCRIPT = #{fieldValue},
+	          			MOD_DT = sysdate
+	          			where CONVERT_SCRIPT = #{fieldValueOrigin};
+			        </if>
+	          		
+	          		<if test= "fieldName == 'SCRIPT_NAME' ">
+	          			v_script_name := #{fieldValue};   
 	          			
 	          			--// update CORONA_EMMC_SCRIPTSET_MAP
 	          			 update CORONA_EMMC_SCRIPTSET_MAP set
@@ -768,59 +766,56 @@
 	          			MOD_DT = sysdate
 	          			where SCRIPT_NAME = #{fieldValue};
 	          			
-	          		end if;
+	          			
+	          			--//  Status
+		          		for rec_scriptset in (
+		          			select SCRIPTSET from CORONA_EMMC_SCRIPT_SETS
+		          		) loop 
+		          			for rec_firmwares in (
+		          				select  FIRMWARE, SAMPLE, SCRIPTSET  from CORONA_EMMC_SCRIPTSET_MAP_F
+		          				where SCRIPTSET = rec_scriptset.SCRIPTSET
+		          			) loop
+		          				--//Start. status update
+								v_status := null;
+								for rec_detail in (
+									select
+										STATUS
+									from CORONA_EMMC_TEST_DETAIL a
+									where a.sample= rec_firmwares.sample
+									and a.firmware = rec_firmwares.firmware
+									and a.script = v_script_name
+									order by YYYYMM
+								) loop
+									v_status := rec_detail.STATUS;
+									if rec_detail.STATUS = 'FAIL' then 
+										exit;
+									end if;
+								end loop;
+								
+								UPDATE CORONA_EMMC_F_S_MAP SET						
+									status = v_status
+									,DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) '
+									,MOD_DT = sysdate
+								where firmware = rec_firmwares.firmware
+								and sample = rec_firmwares.sample
+								and script_name =  v_script_name;
+								--// End. status update
+								
+		          				
+		          			
+		          			end loop;
+		          			--// end rec_firmwares
+		          			
+		          		end loop;
+		          		--// end rec_scriptset
+		          		--// End Status  		
+		          		
+	          		</if>
 	          		
-	          		--//  Status
-	          		for rec_scriptset in (
-	          			select SCRIPTSET from CORONA_EMMC_SCRIPT_SETS
-	          		) loop 
-	          			for rec_firmwares in (
-	          				select  FIRMWARE, SAMPLE, SCRIPTSET  from CORONA_EMMC_SCRIPTSET_MAP_F
-	          				where SCRIPTSET = rec_scriptset.SCRIPTSET
-	          			) loop
-	          				--//Start. status update
-							v_status := null;
-							for rec_detail in (
-								select
-									STATUS
-								from CORONA_EMMC_TEST_DETAIL a
-								where a.sample= rec_firmwares.sample
-								and a.firmware = rec_firmwares.firmware
-								and a.script = v_script_name
-								order by YYYYMM
-							) loop
-								v_status := rec_detail.STATUS;
-								if rec_detail.STATUS = 'FAIL' then 
-									exit;
-								end if;
-							end loop;
-							
-							UPDATE CORONA_EMMC_F_S_MAP SET						
-								status = v_status
-								,DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || v_status || ' (management) '
-								,MOD_DT = sysdate
-							where firmware = rec_firmwares.firmware
-							and sample = rec_firmwares.sample
-							and script_name =  v_script_name;
-							--// End. status update
-							
-	          				
-	          			
-	          			end loop;
-	          			--// end rec_firmwares
-	          			
-	          		end loop;
-	          		--// end rec_scriptset
-	          		--// End Status  		
+	          		
+	          		
 			         
-			         
-			         
-			         
-			         
-			         
-	        end if;
-	        
-	         
+	        	end if;
                 
        	 
 	    end;

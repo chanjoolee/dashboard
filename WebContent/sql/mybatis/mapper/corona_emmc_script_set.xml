@@ -207,36 +207,39 @@
     <select id="dashboard.corona.emmc.manage.script.scriptset.mapping" resultType="hashmap">
 		with tbl_a as (	
 			SELECT
-				SCRIPTSET ,
-				SCRIPT_NAME, 
-				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
-				CATEGORY, 
-				TEST_ITEM, 
-				TIME, 
-				CUSTOMER_ITEM, 
-				NEED_VENDOR_CMD, 
-				NEED_POWER_CYCLE, 
-				EMMC_VER, 
-				TARGET_DEVICE, 
-				TARGET_PARTITION, 
-				CATEGORY1, 
-				CATEGORY2, 
-				CATEGORY3, 
-				CATEGORY4, 
-				CATEGORY5, 
-				WRITE_MODE, 
-				READ_MODE, 
-				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
-				DESCRIPTION,
-				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
-				ARGUMENT, 
-				PLATFORM, 
-				FUNCTION_NAME,
-				INS_DT, 
-				MOD_DT
+				m.SCRIPTSET ,
+				m.SCRIPT_NAME, 
+				sm.CONVERT_SCRIPT,
+				row_number() over (partition by m.category order by m.CATEGORY,m.SCRIPT_NAME) row_num,
+				m.CATEGORY, 
+				m.TEST_ITEM, 
+				m.TIME, 
+				m.CUSTOMER_ITEM, 
+				m.NEED_VENDOR_CMD, 
+				m.NEED_POWER_CYCLE, 
+				m.EMMC_VER, 
+				m.TARGET_DEVICE, 
+				m.TARGET_PARTITION, 
+				m.CATEGORY1, 
+				m.CATEGORY2, 
+				m.CATEGORY3, 
+				m.CATEGORY4, 
+				m.CATEGORY5, 
+				m.WRITE_MODE, 
+				m.READ_MODE, 
+				substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				m.DESCRIPTION,
+				substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				m.ARGUMENT, 
+				m.PLATFORM, 
+				m.FUNCTION_NAME,
+				m.INS_DT, 
+				m.MOD_DT
 			from CORONA_EMMC_SCRIPTSET_MAP m
+			left outer join CORONA_EMMC_SCRIPT_MASTER sm
+				on sm.script_name = m.script_name
 			where m.SCRIPTSET = #{scriptset}
-			order by category,test_item, script_name
+			order by m.category, m.test_item, m.script_name
 		)
 		select 
 			case 
@@ -253,37 +256,40 @@
     <select id="dashboard.corona.emmc.manage.script.scriptset.mapping.one" resultType="hashmap">
 		
 		SELECT
-				SCRIPTSET,
-				SCRIPT_NAME, 
-				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
-				CATEGORY, 
-				TEST_ITEM, 
-				TIME, 
-				CUSTOMER_ITEM, 
-				NEED_VENDOR_CMD, 
-				NEED_POWER_CYCLE, 
-				EMMC_VER, 
-				TARGET_DEVICE, 
-				TARGET_PARTITION, 
-				CATEGORY1, 
-				CATEGORY2, 
-				CATEGORY3, 
-				CATEGORY4, 
-				CATEGORY5, 
-				WRITE_MODE, 
-				READ_MODE, 
-				substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
-				DESCRIPTION,
-				substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
-				ARGUMENT, 
-				PLATFORM, 
-				FUNCTION_NAME,
-				INS_DT, 
-				MOD_DT
+				m.SCRIPTSET,
+				m.SCRIPT_NAME, 
+				sm.CONVERT_SCRIPT,
+				row_number() over (partition by m.category order by m.CATEGORY, m.SCRIPT_NAME) row_num,
+				m.CATEGORY, 
+				m.TEST_ITEM, 
+				m.TIME, 
+				m.CUSTOMER_ITEM, 
+				m.NEED_VENDOR_CMD, 
+				m.NEED_POWER_CYCLE, 
+				m.EMMC_VER, 
+				m.TARGET_DEVICE, 
+				m.TARGET_PARTITION, 
+				m.CATEGORY1, 
+				m.CATEGORY2, 
+				m.CATEGORY3, 
+				m.CATEGORY4, 
+				m.CATEGORY5, 
+				m.WRITE_MODE, 
+				m.READ_MODE, 
+				substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+				m.DESCRIPTION,
+				substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+				m.ARGUMENT, 
+				m.PLATFORM, 
+				m.FUNCTION_NAME,
+				m.INS_DT, 
+				m.MOD_DT
 			from CORONA_EMMC_SCRIPTSET_MAP m
+			left outer join CORONA_EMMC_SCRIPT_MASTER sm
+				on sm.script_name = m.script_name
 			where m.SCRIPTSET = #{scriptset}
 			and m.script_name = #{script_name}
-			order by category,test_item, script_name
+			order by m.category, m.test_item, m.script_name
 		
 	</select>
 	

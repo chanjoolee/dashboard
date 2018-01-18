@@ -26,11 +26,11 @@
 			and m.FIRMWARE = #{firmware}
 			and m.SAMPLE = #{sample}
 			group by 
-				m.SAMPLE,
 				m.FIRMWARE,
+				m.SAMPLE,
 				m.CATEGORY,
 				m.TEST_ITEM
-			order by m.CATEGORY,m.TEST_ITEM
+			--order by m.CATEGORY,m.TEST_ITEM
 		)	,
 		tbl_order as (
 			select 'Protocol' CATEGORY , 1 as seq from dual  union all
@@ -513,6 +513,7 @@
 		with tbl_a as (	
 			SELECT
 				SCRIPT_NAME, 
+				CONVERT_SCRIPT,
 				CATEGORY, 
 				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
 				TEST_ITEM, 
@@ -588,6 +589,7 @@
 	<select id="dashboard.corona.manage.script.search.one" resultType="hashmap">
 			SELECT
 				SCRIPT_NAME, 
+				CONVERT_SCRIPT,
 				CATEGORY, 
 				TEST_ITEM, 
 				SINGLE_MULTI, 
@@ -637,54 +639,57 @@
 	<select id="dashboard.corona.manage.script.firmware.mapping" resultType="hashmap">
 		with tbl_a as (	
 			SELECT
-				SAMPLE,
-				FIRMWARE,
-				SCRIPT_NAME, 
+				m.SAMPLE,
+				m.FIRMWARE,
+				m.SCRIPT_NAME, 
+				sm.CONVERT_SCRIPT,
 				CATEGORY, 
-				row_number() over (partition by category order by CATEGORY,SCRIPT_NAME) row_num,
-				TEST_ITEM, 
-				SINGLE_MULTI, 
-				POWER_MODE_SPEED, 
-				TEST_TIME, 
-				NEED_VENDOR_CMD, 
-				LUCONFIG_YN, 
-				UFS_VER, 
-				TARGET_OPERATION, 
-				PRECONDITION, 
-				POR, 
-				HW_RESET, 
-				EP_RESET, 
-				H8, 
-				SSU, 
-				TARGET_LU, 
-				POWER_CONTROL, 
-				ITEM_NAME, 
-				substr(ITEM_PURPOSE,1,20) || ' ...' as  ITEM_PURPOSE_SIMPLE ,
-				nvl(ITEM_PURPOSE,' ' ) ITEM_PURPOSE, 
-				substr(ITEM_DESCRIPTION,1,20) || ' ...'  as  ITEM_DESCRIPTION_SIMPLE, 
-				ITEM_DESCRIPTION, 
-				substr(REPLACE(INPUT_PARAMETER,CHR(10),' ,')  ,1,20) || ' ...' as INPUT_PARAMETER_SIMPLE,
-				INPUT_PARAMETER, 
-				SCRIPT_TAT_LVL, 
-				SCRIPT_VERSION, 
-				PF110, 
-				EXYNOS_7420, 
-				P4_REV, 
-				PRIORITY, 
-				TG645, 
-				substr(REPLACE(USER_COMMENT,CHR(10),' ,')  ,1,20) || ' ...' as USER_COMMENT_SIMPLE, 
-				USER_COMMENT, 		
-				NEED_POWER_CYCLE, 
-				RESET_YN, 
-				SCRIPT_LVL, 
-				REFACTORING, 
-				RESET_TYPE,
-				INS_DT, 
-				MOD_DT
+				row_number() over (partition by m.category order by m.CATEGORY,m.SCRIPT_NAME) row_num,
+				m.TEST_ITEM, 
+				m.SINGLE_MULTI, 
+				m.POWER_MODE_SPEED, 
+				m.TEST_TIME, 
+				m.NEED_VENDOR_CMD, 
+				m.LUCONFIG_YN, 
+				m.UFS_VER, 
+				m.TARGET_OPERATION, 
+				m.PRECONDITION, 
+				m.POR, 
+				m.HW_RESET, 
+				m.EP_RESET, 
+				m.H8, 
+				m.SSU, 
+				m.TARGET_LU, 
+				m.POWER_CONTROL, 
+				m.ITEM_NAME, 
+				substr(m.ITEM_PURPOSE,1,20) || ' ...' as  ITEM_PURPOSE_SIMPLE ,
+				nvl(m.ITEM_PURPOSE,' ' ) ITEM_PURPOSE, 
+				substr(m.ITEM_DESCRIPTION,1,20) || ' ...'  as  ITEM_DESCRIPTION_SIMPLE, 
+				m.ITEM_DESCRIPTION, 
+				substr(REPLACE(m.INPUT_PARAMETER,CHR(10),' ,')  ,1,20) || ' ...' as INPUT_PARAMETER_SIMPLE,
+				m.INPUT_PARAMETER, 
+				m.SCRIPT_TAT_LVL, 
+				m.SCRIPT_VERSION, 
+				m.PF110, 
+				m.EXYNOS_7420, 
+				m.P4_REV, 
+				m.PRIORITY, 
+				m.TG645, 
+				substr(REPLACE(m.USER_COMMENT,CHR(10),' ,')  ,1,20) || ' ...' as USER_COMMENT_SIMPLE, 
+				m.USER_COMMENT, 		
+				m.NEED_POWER_CYCLE, 
+				m.RESET_YN, 
+				m.SCRIPT_LVL, 
+				m.REFACTORING, 
+				m.RESET_TYPE,
+				m.INS_DT, 
+				m.MOD_DT
 			from CORONA_FIRMWARE_SCRIPT_MAP m
+			left outer join CORONA_SCRIPT_MASTER sm
+				on sm.script_name = m.script_name
 			where m.sample = #{sample}
 			and m.FIRMWARE = #{firmware}
-			order by category,test_item, script_name
+			order by m.category,m.test_item, m.script_name
 		)
 		select 
 			case 
@@ -701,54 +706,54 @@
 	<select id="dashboard.corona.manage.script.firmware.mapping.one" resultType="hashmap">
 		
 		SELECT
-				SAMPLE,
-				FIRMWARE,
-				SCRIPT_NAME, 
-				CATEGORY, 
-				TEST_ITEM, 
-				SINGLE_MULTI, 
-				POWER_MODE_SPEED, 
-				TEST_TIME, 
-				NEED_VENDOR_CMD, 
-				LUCONFIG_YN, 
-				UFS_VER, 
-				TARGET_OPERATION, 
-				PRECONDITION, 
-				POR, 
-				HW_RESET, 
-				EP_RESET, 
-				H8, 
-				SSU, 
-				TARGET_LU, 
-				POWER_CONTROL, 
-				ITEM_NAME, 
-				substr(ITEM_PURPOSE,1,20) || ' ...' as  ITEM_PURPOSE_SIMPLE ,
-				nvl(ITEM_PURPOSE,' ' ) ITEM_PURPOSE, 
-				substr(ITEM_DESCRIPTION,1,20) || ' ...'  as  ITEM_DESCRIPTION_SIMPLE, 
-				ITEM_DESCRIPTION, 
-				substr(REPLACE(INPUT_PARAMETER,CHR(10),' ,')  ,1,20) || ' ...' as INPUT_PARAMETER_SIMPLE,
-				INPUT_PARAMETER, 
-				SCRIPT_TAT_LVL, 
-				SCRIPT_VERSION, 
-				PF110, 
-				EXYNOS_7420, 
-				P4_REV, 
-				PRIORITY, 
-				TG645, 
-				substr(REPLACE(USER_COMMENT,CHR(10),' ,')  ,1,20) || ' ...' as USER_COMMENT_SIMPLE, 
-				USER_COMMENT, 		
-				NEED_POWER_CYCLE, 
-				RESET_YN, 
-				SCRIPT_LVL, 
-				REFACTORING, 
-				RESET_TYPE,
-				INS_DT, 
-				MOD_DT
+				m.SAMPLE,
+				m.FIRMWARE,
+				m.SCRIPT_NAME, 
+				m.CATEGORY, 
+				m.TEST_ITEM, 
+				m.SINGLE_MULTI, 
+				m.POWER_MODE_SPEED, 
+				m.TEST_TIME, 
+				m.NEED_VENDOR_CMD, 
+				m.LUCONFIG_YN, 
+				m.UFS_VER, 
+				m.TARGET_OPERATION, 
+				m.PRECONDITION, 
+				m.POR, 
+				m.HW_RESET, 
+				m.EP_RESET, 
+				m.H8, 
+				m.SSU, 
+				m.TARGET_LU, 
+				m.POWER_CONTROL, 
+				m.ITEM_NAME, 
+				substr(m.ITEM_PURPOSE,1,20) || ' ...' as  ITEM_PURPOSE_SIMPLE ,
+				nvl(m.ITEM_PURPOSE,' ' ) ITEM_PURPOSE, 
+				substr(m.ITEM_DESCRIPTION,1,20) || ' ...'  as  ITEM_DESCRIPTION_SIMPLE, 
+				m.ITEM_DESCRIPTION, 
+				substr(REPLACE(m.INPUT_PARAMETER,CHR(10),' ,')  ,1,20) || ' ...' as INPUT_PARAMETER_SIMPLE,
+				m.INPUT_PARAMETER, 
+				m.SCRIPT_TAT_LVL, 
+				m.SCRIPT_VERSION, 
+				m.PF110, 
+				m.EXYNOS_7420, 
+				m.P4_REV, 
+				m.PRIORITY, 
+				m.TG645, 
+				substr(REPLACE(m.USER_COMMENT,CHR(10),' ,')  ,1,20) || ' ...' as USER_COMMENT_SIMPLE, 
+				m.USER_COMMENT, 		
+				m.NEED_POWER_CYCLE, 
+				m.RESET_YN, 
+				m.SCRIPT_LVL, 
+				m.REFACTORING, 
+				m.RESET_TYPE,
+				m.INS_DT, 
+				m.MOD_DT
 			from CORONA_FIRMWARE_SCRIPT_MAP m
 			where m.sample = #{sample}
 			and m.FIRMWARE = #{firmware}
 			and m.script_name = #{script_name}
-			order by category,test_item, script_name
+			order by m.category,m.test_item, m.script_name
 		
 	</select>
 	
@@ -756,6 +761,7 @@
     	declare
 	    	cnt number;
 	    	v_script_name varchar2(2000);
+	    	v_convert_script varchar2(2000);
 	    	v_status varchar2(10);
 	    begin
 	    	
@@ -779,7 +785,7 @@
 	              	MOD_DT = sysdate
 	              	where 1=1
 		    		<choose>
-							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
 				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
 				       			and ${item.field} = #{item.value}
 				       		</foreach>
@@ -789,7 +795,7 @@
 				   		</otherwise>
 			   		</choose>          	
 	          		;
-	          		
+	          	<if test= "fieldName != 'CONVERT_SCRIPT' ">
 	          		update CORONA_SCRIPTSET_MAP set
 	              	${fieldName} = #{fieldValue},	  
 	              	MOD_DT = sysdate
@@ -823,60 +829,48 @@
 			   		</choose>          	
 	          		;
 	          		
-	          		
-	          		if '${fieldName}' != 'SCRIPT_NAME' then
-		          		select script_name into v_script_name from CORONA_SCRIPT_MASTER
-		          		where 1=1
-			    		<choose>
-								<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
-					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
-					       			and ${item.field} = #{item.value}
-					       		</foreach>
-					   		</when>
-					   		<otherwise>
-					   			and 1=2
-					   		</otherwise>
-				   		</choose> 	
-		          		;
-	          		end if;
-	          		
-	          		if '${fieldName}' = 'SCRIPT_NAME' then
-	          			v_script_name := #{fieldValue}; 
+	          	</if>
+	          	<if test= "fieldName == 'CONVERT_SCRIPT' ">
+	          		update CORONA_TEST_DETAIL set
+          			CONVERT_SCRIPT = #{fieldValue},
+          			MOD_DT = sysdate
+          			where CONVERT_SCRIPT = #{fieldValueOrigin};
+	          	</if>
+	          	<if test= "fieldName == 'SCRIPT_NAME' ">
+	          		v_script_name := #{fieldValue}; 
 	          			
-	          			--// update CORONA_SCRIPTSET_MAP
-	          			update CORONA_SCRIPTSET_MAP set
-	          			SCRIPT_NAME = #{fieldValue},
-	          			USER_COMMENT = USER_COMMENT || case when USER_COMMENT is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
-	          			MOD_DT = sysdate
-	          			where SCRIPT_NAME = #{fieldValueOrigin};
+          			--// update CORONA_SCRIPTSET_MAP
+          			update CORONA_SCRIPTSET_MAP set
+          			SCRIPT_NAME = #{fieldValue},
+          			USER_COMMENT = USER_COMMENT || case when USER_COMMENT is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
+          			MOD_DT = sysdate
+          			where SCRIPT_NAME = #{fieldValueOrigin};
 	          			
-	          			--// update_firmware_table	          			
-	          			update CORONA_FIRMWARE_SCRIPT_MAP set
-	          			SCRIPT_NAME = #{fieldValue},
-	          			USER_COMMENT = USER_COMMENT || case when USER_COMMENT is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
-	          			MOD_DT = sysdate
-	          			where SCRIPT_NAME = #{fieldValueOrigin};
+          			--// update_firmware_table	          			
+          			update CORONA_FIRMWARE_SCRIPT_MAP set
+          			SCRIPT_NAME = #{fieldValue},
+          			USER_COMMENT = USER_COMMENT || case when USER_COMMENT is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
+          			MOD_DT = sysdate
+          			where SCRIPT_NAME = #{fieldValueOrigin};
 	          			
 				   		
-				   		--// update_log_table
-	          			update CORONA_TEST_DETAIL set
-	          			SCRIPT = #{fieldValue},
-	          			MOD_DT = sysdate
-	          			where Script = #{fieldValueOrigin};
+			   		--// update_log_table
+          			update CORONA_TEST_DETAIL set
+          			SCRIPT = #{fieldValue},
+          			MOD_DT = sysdate
+          			where Script = #{fieldValueOrigin};
 	          			
-	          			--// update_log_table
-	          			update CORONA_TEST_DETAIL_LAST set
-	          			SCRIPT = #{fieldValue},
-	          			MOD_DT = sysdate
-	          			where Script = #{fieldValueOrigin};
+          			--// update_log_table
+          			update CORONA_TEST_DETAIL_LAST set
+          			SCRIPT = #{fieldValue},
+          			MOD_DT = sysdate
+          			where Script = #{fieldValueOrigin};
 	          			
-	          			--// update_comment
-	          			update CORONA_SCRIPT_MASTER set
-	          			USER_COMMENT = USER_COMMENT || case when USER_COMMENT is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
-	          			MOD_DT = sysdate
-	          			where SCRIPT_NAME = #{fieldValue};
-	          			
-	          		end if;
+          			--// update_comment
+          			update CORONA_SCRIPT_MASTER set
+          			USER_COMMENT = USER_COMMENT || case when USER_COMMENT is not null then  chr(10) end  || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || #{fieldValueOrigin} || ' ==> ' || #{fieldValue} || ' ( ${userId} )'  ,
+          			MOD_DT = sysdate
+          			where SCRIPT_NAME = #{fieldValue};
 	          		
 	          		--//  Status
 	          		for rec_scriptset in (
@@ -920,6 +914,7 @@
 	          		end loop;
 	          		--// end rec_scriptset
 	          		--// End Status  		
+	          	</if>
 	          		
 	        end if;
                 

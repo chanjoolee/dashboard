@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.31.02"></script>
+	<script src="js/dashboard.js?version=2018.01.10.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -819,7 +819,8 @@
 								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
 								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
+								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
 					    		
 					    	],	
 					    	data: function(){
@@ -972,7 +973,8 @@
 																}
 															},
 															items: [
-																{label:'Script Name', col: 'SCRIPT_NAME', editable: true},
+																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
+																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
 																{label:'Category', col: 'CATEGORY', editable: true},
 																{label:'Test Item', col: 'TEST_ITEM', editable: false},
 																{label:'TIME', col: 'TIME'},
@@ -1231,7 +1233,8 @@
 						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
 						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
+						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
+						,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
 			    		
 			    	],	
 			    	data: function(){
@@ -1373,7 +1376,8 @@
 														}
 													},
 													items: [
-														{label:'Script Name', col: 'SCRIPT_NAME', editable: false},
+														{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
+														{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
 														{label:'Category', col: 'CATEGORY', editable: false},
 														{label:'Test Item', col: 'TEST_ITEM', editable: false},
 														{label:'Single Multi', col: 'SINGLE_MULTI'},
