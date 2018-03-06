@@ -15010,6 +15010,7 @@ hs=function(w,t,c){return w.each(function(){var s=this._jqm;$(t).each(function()
 			successfunc: op.onSuccess,
 			url: op.url,
 			extraparam: op.extraparam,
+			beforeEditRow: op.beforeEditRow,
 			aftersavefunc: saverow,
 			errorfunc: op.onError,
 			afterrestorefunc: restorerow,
