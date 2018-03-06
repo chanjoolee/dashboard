@@ -60,12 +60,12 @@
     <script src="/dashboard/js/jointjs/demos/rappid/build/rappid.src.18.01.js"></script>
 
 
-    <script src="/dashboard/js/jointjs/demos/rappid/apps/QAD/src/joint.shapes.qad.js"></script>
-    <script src="/dashboard/js/jointjs/demos/rappid/apps/QAD/src/selection.js"></script>
-    <script src="/dashboard/js/jointjs/demos/rappid/apps/QAD/src/factory.js"></script>
-    <script src="/dashboard/js/jointjs/demos/rappid/apps/QAD/src/snippet.js"></script>
-    <script src="/dashboard/js/jointjs/demos/rappid/apps/QAD/src/app.js"></script>
-    <script src="/dashboard/js/jointjs/demos/rappid/apps/QAD/src/index.js"></script>
+    <script src="/dashboard/js/jointjs/myqad/2018.010/joint.shapes.qad.js"></script>
+    <script src="/dashboard/js/jointjs/myqad/2018.010/selection.js"></script>
+    <script src="/dashboard/js/jointjs/myqad/2018.010/factory.js"></script>
+    <script src="/dashboard/js/jointjs/myqad/2018.010/snippet.js"></script>
+    <script src="/dashboard/js/jointjs/myqad/2018.010/app.js"></script>
+    <script src="/dashboard/js/jointjs/myqad/2018.010/index.js"></script>
     <script>joint.setTheme('modern');</script>
   </body>
 </html>
