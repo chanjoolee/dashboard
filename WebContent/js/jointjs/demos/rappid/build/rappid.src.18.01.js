@@ -817,33 +817,33 @@
             throw new Error("SVG is required to use Vectorizer.")
         };
         var b = {
-                xmlns: "http://www.w3.org/2000/svg",
-                xml: "http://www.w3.org/XML/1998/namespace",
-                xlink: "http://www.w3.org/1999/xlink"
-            },
-            c = "1.1",
-            d = function(a, c, e) {
-                if (!(this instanceof d)) return d.apply(Object.create(d.prototype), arguments);
-                if (a) {
-                    if (d.isV(a) && (a = a.node), c = c || {}, d.isString(a)) {
-                        if ("svg" === a.toLowerCase()) a = d.createSvgDocument();
-                        else if ("<" === a[0]) {
-                            var f = d.createSvgDocument(a);
-                            if (f.childNodes.length > 1) {
-                                var g, h, i = [];
-                                for (g = 0, h = f.childNodes.length; g < h; g++) {
-                                    var j = f.childNodes[g];
-                                    i.push(new d(document.importNode(j, !0)))
-                                }
-                                return i
+            xmlns: "http://www.w3.org/2000/svg",
+            xml: "http://www.w3.org/XML/1998/namespace",
+            xlink: "http://www.w3.org/1999/xlink"
+        },
+        c = "1.1",
+        d = function(a, c, e) {
+            if (!(this instanceof d)) return d.apply(Object.create(d.prototype), arguments);
+            if (a) {
+                if (d.isV(a) && (a = a.node), c = c || {}, d.isString(a)) {
+                    if ("svg" === a.toLowerCase()) a = d.createSvgDocument();
+                    else if ("<" === a[0]) {
+                        var f = d.createSvgDocument(a);
+                        if (f.childNodes.length > 1) {
+                            var g, h, i = [];
+                            for (g = 0, h = f.childNodes.length; g < h; g++) {
+                                var j = f.childNodes[g];
+                                i.push(new d(document.importNode(j, !0)))
                             }
-                            a = document.importNode(f.firstChild, !0)
-                        } else a = document.createElementNS(b.xmlns, a);
-                        d.ensureId(a)
-                    }
-                    return this.node = a, this.setAttributes(c), e && this.append(e), this
+                            return i
+                        }
+                        a = document.importNode(f.firstChild, !0)
+                    } else a = document.createElementNS(b.xmlns, a);
+                    d.ensureId(a)
                 }
-            };
+                return this.node = a, this.setAttributes(c), e && this.append(e), this
+            }
+        };
         d.prototype.getTransformToElement = function(a) {
             return a = d.toNode(a), a.getScreenCTM().inverse().multiply(this.node.getScreenCTM())
         }, d.prototype.transform = function(a, b) {
@@ -2329,7 +2329,9 @@
                     return d && d.apply(this, arguments), this.onRender(), this
                 }, Backbone.View.extend.call(this, b, c)
             }
-        }), joint.dia.GraphCells = Backbone.Collection.extend({
+        }
+    ), 
+    joint.dia.GraphCells = Backbone.Collection.extend({
             cellNamespace: joint.shapes,
             initialize: function(a, b) {
                 b.cellNamespace && (this.cellNamespace = b.cellNamespace), this.graph = b.graph
@@ -3275,7 +3277,8 @@
                 var e = this.extend(c, d);
                 return joint.util.setByPath(joint.shapes, a, e, "."), e
             }
-        }), joint.dia.CellView = joint.mvc.View.extend({
+        }), 
+        joint.dia.CellView = joint.mvc.View.extend({
             tagName: "g",
             svgElement: !0,
             className: function() {
@@ -7162,7 +7165,9 @@
         }
     }, {
         markup: '<g class="rotatable"><g class="scalable"><polygon class="outer"/><polygon class="inner"/></g><text/></g>'
-    }), joint.shapes.erd.Entity.define("erd.WeakEntity", {
+    }), 
+
+    joint.shapes.erd.Entity.define("erd.WeakEntity", {
         attrs: {
             ".inner": {
                 display: "auto"
@@ -7171,7 +7176,8 @@
                 text: "Weak Entity"
             }
         }
-    }), joint.dia.Element.define("erd.Relationship", {
+    }), 
+    joint.dia.Element.define("erd.Relationship", {
         size: {
             width: 80,
             height: 80
@@ -7202,7 +7208,8 @@
         }
     }, {
         markup: '<g class="rotatable"><g class="scalable"><polygon class="outer"/><polygon class="inner"/></g><text/></g>'
-    }), joint.shapes.erd.Relationship.define("erd.IdentifyingRelationship", {
+    }), 
+    joint.shapes.erd.Relationship.define("erd.IdentifyingRelationship", {
         attrs: {
             ".inner": {
                 display: "auto"
@@ -7211,7 +7218,8 @@
                 text: "Identifying"
             }
         }
-    }), joint.dia.Element.define("erd.Attribute", {
+    }), 
+    joint.dia.Element.define("erd.Attribute", {
         size: {
             width: 100,
             height: 50
@@ -7250,7 +7258,8 @@
         }
     }, {
         markup: '<g class="rotatable"><g class="scalable"><ellipse class="outer"/><ellipse class="inner"/></g><text/></g>'
-    }), joint.shapes.erd.Attribute.define("erd.Multivalued", {
+    }), 
+    joint.shapes.erd.Attribute.define("erd.Multivalued", {
         attrs: {
             ".inner": {
                 display: "block"
@@ -7259,7 +7268,8 @@
                 text: "multivalued"
             }
         }
-    }), joint.shapes.erd.Attribute.define("erd.Derived", {
+    }), 
+    joint.shapes.erd.Attribute.define("erd.Derived", {
         attrs: {
             ".outer": {
                 "stroke-dasharray": "3,5"
@@ -7268,7 +7278,8 @@
                 text: "derived"
             }
         }
-    }), joint.shapes.erd.Attribute.define("erd.Key", {
+    }), 
+    joint.shapes.erd.Attribute.define("erd.Key", {
         attrs: {
             ellipse: {
                 "stroke-width": 4
@@ -7279,13 +7290,15 @@
                 "text-decoration": "underline"
             }
         }
-    }), joint.shapes.erd.Attribute.define("erd.Normal", {
+    }), 
+    joint.shapes.erd.Attribute.define("erd.Normal", {
         attrs: {
             text: {
                 text: "Normal"
             }
         }
-    }), joint.dia.Element.define("erd.ISA", {
+    }), 
+    joint.dia.Element.define("erd.ISA", {
         type: "erd.ISA",
         size: {
             width: 100,
@@ -7309,7 +7322,8 @@
         }
     }, {
         markup: '<g class="rotatable"><g class="scalable"><polygon/></g><text/></g>'
-    }), joint.dia.Link.define("erd.Line", {}, {
+    }), 
+    joint.dia.Link.define("erd.Line", {}, {
         cardinality: function(a) {
             this.set("labels", [{
                 position: -20,
