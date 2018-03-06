@@ -2,46 +2,67 @@
 <html lang="en">
 <head>
   <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/jquery/dist/jquery.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-  
-  <link rel="stylesheet" href="/dashboard/js/jointjs/joint.min.css" />
-  
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
-  <!--<script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script>-->
-  <script src="/dashboard/js/jointjs/joint.src.js"></script>
-  
-  <!-- <script src="/dashboard/js/jointjs/lodash.min.js"></script>
-  <script src="/dashboard/js/jointjs/backbone.js"></script>
-  <script src="/dashboard/js/jointjs/joint.js"></script> -->
-  <!-- <script src="/dashboard/js/jointjs/rappid.js"></script> -->
-  
-  <!-- 
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
-  <script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
-  <link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
-  <script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script> 
-  -->
- <!--<link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />-->
- 
- 	<%-- recat --%>
-   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
-   	
-   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"> -->
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
+	<!-- <link rel="stylesheet" href="/dashboard/js/bootstrap/bootstrap.3.3.4.min.css"> -->
+	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+	
+	<!-- <script src="http://resources.jointjs.com/tutorials/joint/node_modules/jquery/dist/jquery.js"></script> -->
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+	
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+	<!-- <script src="/dashboard/js/bootstrap/bootstrap.3.3.7.min.js"></script> -->
+	<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	
+	
+	<link rel="stylesheet" href="/dashboard/js/jointjs/joint.min.css" />
+	
+	<link rel="stylesheet" type="text/css" href="/dashboard/js/jointjs/demos/rappid/build/rappid.css">
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/header.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/toolbar.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/statusbar.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/paper.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/preview.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/tooltip.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/snippet.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/dialog.css" rel="stylesheet"/>
+    <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/index.css" rel="stylesheet"/>
+
+	<script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
+	<script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
+	<!--<script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script>-->
+	<!-- <script src="/dashboard/js/jointjs/joint.src.js"></script> -->
+	<script src="/dashboard/js/jointjs/demos/rappid/build/rappid.src.18.01.js"></script>
+	
+	<!-- <script src="/dashboard/js/jointjs/lodash.min.js"></script>
+	<script src="/dashboard/js/jointjs/backbone.js"></script>
+	<script src="/dashboard/js/jointjs/joint.js"></script> -->
+	<!-- <script src="/dashboard/js/jointjs/rappid.js"></script> -->
+	
+	<!-- 
+	<script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
+	<script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
+	<link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />
+	<script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script> 
+	-->
+	<!--<link rel="stylesheet" href="http://resources.jointjs.com/tutorials/joint/build/joint.min.css" />-->
+	
+	<%-- recat --%>
+	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+	
+	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
   
   
   <style>
@@ -180,9 +201,9 @@
 	    font-weight: bold;
 	}
 	.html-element span {
-	    position: absolute;
-	    top: 2px;
-	    right: 9px;
+	    /* position: absolute; */
+	    /* top: 2px; */
+	    /* right: 9px; */
 	    color: white;
 	    font-size: 10px;
 	}
@@ -200,6 +221,8 @@
 	  // custom 
 	 	joint.shapes.html = {};
 	    joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
+			// markup: '<rect class="body"/><text class="question-text"/><g class="options"></g><path class="btn-add-option" d="M5,0 10,0 10,5 15,5 15,10 10,10 10,15 5,15 5,10 0,10 0,5 5,5z"/>',
+    		markupMinus: '<g class="option"><rect class="option-rect"/><path class="btn-remove-option" d="M0,0 15,0 15,5 0,5z"/><text class="option-text"/></g>',
 	        defaults: joint.util.deepSupplement({
 	            type: 'html.Element',
 	            attrs: {
@@ -262,25 +285,49 @@
 	                el.addClass("column-contents");
 	                this.$box.find("div.entity-container").append(el);
 	                el.dblclick(function(){
-						console.log("dblclick");
+						// console.log("dblclick");
 					});
 	                
 	                el.click(function(){
-						console.log("dblclick");
+						// console.log("dblclick");
 					});
-	                // start. react
+					// start. react
+					var v_model = this.model;
 	                var colOption = {
-	                	column_name : col_index,
+						markupMinus : this.model.markupMinus,
+						column_name : col_index,
 	                	col_index : col_index,
 	                	editable: true,
 	                	mode: "read",
 	                	edit_style: {
 	                		width: "90px"
-	                	}
+						},
+						fn_submit: function(){
+							var v_cols = v_model.get("column_names");
+							var v_col = _.find(v_cols,{col_index: col_index});
+							v_col.column_name = this.state.column_name;
+							v_model.set("column_names" , v_cols );
+						},
+						fn_delete: function(){
+							var v_cols = v_model.get("column_names");
+							var v_col = _.find(v_cols,{col_index: col_index});
+							var removed = _.remove(v_cols,function(c){
+								return c.col_index == v_col.col_index;
+							});
+							v_model.set("column_names" , v_cols );
+							var node = ReactDOM.findDOMNode(this);
+							ReactDOM.unmountComponentAtNode(el[0]);
+						}
 	                	
-	                };
-	                
-	                var reactel = window.fn_column(el[0], colOption );
+					};
+					
+					
+					var reactel = window.fn_column(el[0], colOption );
+					var cols = this.model.get("column_names");
+					cols.push(colOption);
+	                this.model.set("column_names",cols);
+					
+
 	                // end. react
 	                
 	                //// size
@@ -301,8 +348,8 @@
 	                
 	                
 	                el.on('focusin', _.bind(function(evt) {
-	                	//$(evt.target).data('old_val', $(evt.target).val());
-	                	console.log("focusin");
+	                	// $(evt.target).data('old_val', $(evt.target).val());
+	                	// console.log("focusin");
 		            }, this));
 		            el.on('change', _.bind(function(evt) {
 		            	//var oldval = $(evt.target).data('val');
@@ -613,16 +660,29 @@
 			
 			var link = new joint.dia.Link({
 			    source: { x: 170, y: 20 }, 
-			    target: { x: 480, y: 20 }
-//			    , attrs: {
-//			        // Define a filter for the whole link (special selector '.' means the root element )
-//			        '.': { filter: { name: 'dropShadow', args: { dx: 1, dy: 1, blur: 2 } } },
-//			        '.connection': {
-//			            'stroke-width': 5, stroke: '#34495E'
-//			        },
-//			        //'.marker-source': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' },
-//			        '.marker-target': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' }
-//			    }
+				target: { x: 480, y: 20 },
+				router: { name: 'manhattan' },
+				connector: { name: 'rounded' },
+				attrs: {
+					'.marker-target': {
+						d: 'M 10 0 L 0 5 L 10 10 z',
+						fill: '#6a6c8a',
+						stroke: '#6a6c8a'
+					},
+					'.connection': {
+						stroke: '#6a6c8a',
+						strokeWidth: 2
+					}
+				}
+			    // , attrs: {
+			    //     // Define a filter for the whole link (special selector '.' means the root element )
+			    //     '.': { filter: { name: 'dropShadow', args: { dx: 1, dy: 1, blur: 2 } } },
+			    //     '.connection': {
+			    //         'stroke-width': 5, stroke: '#34495E'
+			    //     },
+			    //     //'.marker-source': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' },
+			    //     '.marker-target': { stroke: '#E74C3C', fill: '#E74C3C', d: 'M 10 0 L 0 5 L 10 10 z' }
+			    // }
 			});
 			
 			graph.addCells([link]);
@@ -799,26 +859,43 @@
 	
 	class Column extends React.Component {
 		
-		constructor(props) {
+		constructor(props,container) {
 	        super(props);
 	        // Configure default state
 			this.state = this.props.options;
 			//this.dblclick.bind(this);
 			this.changeHandler = this.changeHandler.bind(this);
+			this.container = container;
 	    }
 	    
 	    dblclick(){
-	    	alert('aaaaa');
+	    	// alert('aaaaa');
 	    	if(this.state.editable == true){
 	    		this.setState({mode: "edit"});
 	    		
 	    	}
 	    		
 	    }
-	    
+		
+		handleKeyPress(event){
+			if(event.key == 'Enter'){
+				//this.setState({mode: "read"});
+				this.confirm();
+			}
+		}
+		blurHandler(event){
+			this.confirm();
+			// console.log('blur');
+		}
+
 	    confirm(){
 	    	this.props.options.fn_submit.call(this);
 	    	this.setState({mode: "read"});
+		}
+		
+		fn_delete(){
+			this.props.options.fn_delete.call(this);
+			// this.remove();
 	    }
 	    
 	    cancel(){
@@ -838,7 +915,10 @@
 	    	if(this.props.options.editable == false || this.state.mode == "read"){
 	    		return(
 						
-						<div style={{width:"100%",height:"100%", cursor:"pointer"}} onDoubleClick={this.dblclick.bind(this)}>
+						<div className="widget-contents" style={{width:"100%",height:"100%", cursor:"pointer", pointerEvents:"auto"}} onDoubleClick={this.dblclick.bind(this)} >
+							<span className="glyphicon glyphicon-minus" 
+								onClick={this.fn_delete.bind(this)} 
+							></span>
 							<img className="gwt-Image typeIcon"
 								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxElEQVR42mNgoDZY9f8/86lrD/5jwyA5vJovvv6vDlN8+fU/FAwTB6khWTNBQ5Cd3T533X+H0DSsuLhjFnbvINsMUhSQWv6/bc76/55xBWCNIHZMYdP/uOJWFJegGABzZl7ztP/pNX1gdmh2DdgAELtu8rL/4Xn1KN7BasDcLcf+T19/EMOAFfsv/u9dvI2wAcgY2QBsAUpdA5ANWXngEkYgztl8FCM6sUYjOCY6Z2NEISgWkDVjpEqKEhJVkjJVMhM5AADzgio+6KAFDwAAAABJRU5ErkJggg=="
 								style={{width:"16", height:"16"}}
@@ -866,8 +946,8 @@
 
 	    	}else if(this.state.mode == "edit") {	  
 	    		return(
-					<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
-						<div className="widget-contents">
+					<div style={{width:"100%",height:"100%"}} >
+						<div className="widget-contents" >
 							<img className="gwt-Image typeIcon"
 								src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxElEQVR42mNgoDZY9f8/86lrD/5jwyA5vJovvv6vDlN8+fU/FAwTB6khWTNBQ5Cd3T533X+H0DSsuLhjFnbvINsMUhSQWv6/bc76/55xBWCNIHZMYdP/uOJWFJegGABzZl7ztP/pNX1gdmh2DdgAELtu8rL/4Xn1KN7BasDcLcf+T19/EMOAFfsv/u9dvI2wAcgY2QBsAUpdA5ANWXngEkYgztl8FCM6sUYjOCY6Z2NEISgWkDVjpEqKEhJVkjJVMhM5AADzgio+6KAFDwAAAABJRU5ErkJggg=="
 								style={{width:"16", height:"16"}}
@@ -888,7 +968,12 @@
 								className="ebox feature-box widget-name"
 								style={{display:"inline-block"}}
 							>
-								<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.column_name}></input>
+								<input style={this.props.options.edit_style} 
+									onChange={this.changeHandler.bind(this)} 
+									value={this.state.column_name}
+									onKeyPress={this.handleKeyPress.bind(this)} 
+									onBlur={this.blurHandler.bind(this)} 
+								></input>
 							</div>
 						</div>
 					</div>
@@ -909,3 +994,6 @@
 	
 </script>
 </html>
+<%--
+graph.attributes.cells.models
+--%>
