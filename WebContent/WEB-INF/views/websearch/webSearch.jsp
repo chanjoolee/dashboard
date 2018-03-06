@@ -260,7 +260,7 @@
 											label:'',
 											//value:'',
 											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'}
 											],
@@ -403,7 +403,7 @@
 											label:'',
 											//value:'7',
 											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'}
 											],
@@ -440,7 +440,7 @@
 											label:'',
 											//value:'7',
 											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'}
 											],
@@ -535,7 +535,7 @@
 											label:'',
 											//value:'7',
 											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'}
 											],
@@ -687,6 +687,7 @@
 	
 	
 	function searchStart(){
+		// $("#loader").show();
 		v_list = [];
 		v_sites = {};
 		var start = $('#dateFrom').val().split("-").join("");
@@ -722,35 +723,8 @@
 		}
 		
 		
-		$.each(v_sites,function(name,site){
-			//console.log(k);
-			if(alasql.tables[name] == undefined && site.list.length >0){
-				var v_sql = 'create table '+ name +'(';
-    			var i = 0;
-    			$.each(site.list[0],function(k,v){
-    				//if( typeof v != "string")
-    				//	return true;
-    				
-    				if(i > 0)
-    					v_sql += ',';
-    				if(k == 'NUM')
-    					v_sql += 'NumberA' + ' ' + typeof v;
-    				else
-    					v_sql += k + ' ' + typeof v;
-					i += 1;
-    			});
-    			v_sql += ')';
-    			alasql(v_sql);
-			}
-			sortObjects(site.list,[['TotalSaleFare','asc'],'StartDT']);	
-    		alasql.tables[name].data = site.list;
-			alasql('create index idx_Price on '+ name +'(TotalSaleFare)');
-			alasql('create index idx_AirPort_Price on '+ name +'(airport,TotalSaleFare)');
-			alasql('create index idx_StartDT on '+ name +'(StartDT)');
-		});
 		
-		
-		alert("Complete!");
+		// alert("Complete!");
 		
 	}
 	
@@ -786,179 +760,358 @@
 		url += "&AirLine=";
 		url += "&StayLength=";
 		url += "&JSON=Y";
-		url += "&Callback=onJsonResult";
+		// url += "&Callback=onJsonResult";
+		url += "&callback=fn_successJsonp";
 		var paramObj = {};
 		paramObj.sites = [
-//			{
-//				name: "koreaAirline",
-//				//url: "https://kr.koreanair.com/korea/ko/booking/booking-gate.html"
-//				url: "https://kr.koreanair.com"
-//			},
-//			{
-//				name: "koreaAirline-booking",
-//				//url: "https://kr.koreanair.com/korea/ko/booking/booking-gate.html"
-//				url: "https://kr.koreanair.com/korea/ko/booking/booking-gate.html"
-//			},
-			// 국내항공
-//			{
-//				name: "interpark-air",
-//				//url: "http://domair.interpark.com/api/booking/airJourney.do?format=json&dep=CJU&arr=GMP&depDate=20171015&adt=1&chd=0&inf=0&tripDivi=0&airlineCode=KE"
-//				url: "http://domair.interpark.com/api/booking/airJourney.do?format=json&dep=CJU&arr=GMP&depDate="+dt1+"&adt=1&chd=0&inf=0&tripDivi=0"
-//			},
 			// 해외항공
 			{
 				name: "interpark_air",
 				url: url
 			}
-//			,{
-//				name: "koreaAirline-booking",
-//				url: "https://kr.koreanair.com/content/koreanair/global/en.html"
-//			}
-//			,{
-//				name: "naver",
-//				url: "https://www.naver.com/"
-//			}
-//			,{
-//				name: "jira",
-//				url: "http://jira.skhynix.com/secure/RapidBoard.jspa?rapidView=902&quickFilter=1005"
-//			}
 		];
 		
 		$.ajax({
-			type: "POST",
-			url: "/dashboard/webSearchJson.html",
-			data: {searchJson: JSON.stringify(paramObj)}, 
+			// type: "POST",
+			//url: "/dashboard/webSearchJson.html",
+			url: url,
+			dataType: 'jsonp', 
+			// data: {searchJson: JSON.stringify(paramObj)}, 
+			
 			//async: false,
-			success:  function(response){
-				v_list.push(response);
-				$.each(response.result.searchJson.sites,function(i,site){
-					site.responseJson = eval(site.response.substr(12));
-					
-					// log
-					console.log([dt1,airport, pageno, site.responseJson]);
-					
-					var moreKey = site.responseJson.Responses.GoodsSummary.MoreKey;
-					var pageNo = site.responseJson.Responses.GoodsSummary.PageNO;
-					var maxPageNo = site.responseJson.Responses.GoodsSummary.MaxPageNO;
-						
-					if( v_sites[site.name] == undefined ){
-						v_sites[site.name] = {
-							list : [],
-							best : {}
-						};
-					}
-					
-					if(site.responseJson.Responses.GoodsList != ""){
-						if($.isArray(site.responseJson.Responses.GoodsList.Goods)){
-							sortObjects(site.responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
-							var goods = site.responseJson.Responses.GoodsList.Goods;
-							// site list add to v_sites
-							$.each(goods,function(j,good){
-								var requestCount = parseInt($("#requestCount").val());
-								
-								// 가능 좌석일때만!! 대기도 뺀다~~
-								var isSeat = false;
-								if(parseInt(good.StartCheck) >= requestCount
-										&& parseInt(good.ReturnCheck) >= requestCount
-										&& good.FareFix == "확정"
-										&& good.SiteCode != "MOBILE" ){
-									isSeat = true;
-								}
-								
-								// 경유
-								var isVia = false;
-								var viaType = parseInt($("#search_stops").val()) + 1;
-								var maxViaType = 0;
-								if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
-									if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
-										if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
-											maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
-										}
-									} else {
-										for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
-											if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
-												maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
-											}
-										}
-									}
-								}
-								
-								if( maxViaType < 3 && maxViaType != 0) {
-									if( viaType == 1) {
-										if( maxViaType == 1) {
-											isVia = true;
-										}
-									} else {
-										isVia = true;
-									}
-								}
-								if(isSeat && isVia){
-									var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
-									good.airport = v1.name;
-									v_sites[site.name].list.push(good);
-								}
-									
-								
-							});
-						}else if(site.responseJson.Responses.GoodsList.Goods != undefined ){
-							var good = site.responseJson.Responses.GoodsList.Goods;
-							// 가능 좌석일때만!! 대기도 뺀다~~
-							var isSeat = false;
-							if(parseInt(good.StartCheck) >= requestCount
-									&& parseInt(good.ReturnCheck) >= requestCount
-									&& good.FareFix == "확정"
-									&& good.SiteCode != "MOBILE" ){
-								isSeat = true;
-							}
-							// 경유
-							var isVia = false;
-							var viaType = parseInt($("search_stops").val()) + 1;
-							var maxViaType =0;
-							if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
-								if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
-									if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
-										maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
-									}
-								} else {
-									for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
-										if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
-											maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
-										}
-									}
-								}
-							}
-							if( maxViaType < 3 && maxViaType != 0) {
-								if( viaType == 1) {
-									if( maxViaType == 1) {
-										isVia = true;
-									}
-								} else {
-									isVia = true;
-								}
-							}
-							if(isSeat && isVia){
-								var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
-								good.airport = v1.name;
-								v_sites[site.name].list.push(good);
-							}
-							
-						}
-					}					
-					
-					
-					
-					if( parseInt(pageNo) < parseInt(maxPageNo) ) {
-						searchSite(dt1,airport, parseInt(pageNo) +1);
-					}
-					
-				});
-				
+			success: function(data) {
+				console.log('성공 - ', data);
+			},
+			error: function(xhr) {
+				console.log('실패 - ', xhr);
 			}
 		});
 	}
 	
+	// var onJsonResult = function(response){
+	// 	var aaa = "aaa";
+	// }
 	
+	var fn_success = function(response){
+		v_list.push(response);
+		$.each(response.result.searchJson.sites,function(i,site){
+			site.responseJson = eval(site.response.substr(12));
+			
+			// log
+			console.log([dt1,airport, pageno, site.responseJson]);
+			
+			var moreKey = site.responseJson.Responses.GoodsSummary.MoreKey;
+			var pageNo = site.responseJson.Responses.GoodsSummary.PageNO;
+			var maxPageNo = site.responseJson.Responses.GoodsSummary.MaxPageNO;
+				
+			if( v_sites[site.name] == undefined ){
+				v_sites[site.name] = {
+					list : [],
+					best : {}
+				};
+			}
+			
+			if(site.responseJson.Responses.GoodsList != ""){
+				if($.isArray(site.responseJson.Responses.GoodsList.Goods)){
+					sortObjects(site.responseJson.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
+					var goods = site.responseJson.Responses.GoodsList.Goods;
+					// site list add to v_sites
+					$.each(goods,function(j,good){
+						var requestCount = parseInt($("#requestCount").val());
+						
+						// 가능 좌석일때만!! 대기도 뺀다~~
+						var isSeat = false;
+						if(parseInt(good.StartCheck) >= requestCount
+								&& parseInt(good.ReturnCheck) >= requestCount
+								&& good.FareFix == "확정"
+								&& good.SiteCode != "MOBILE" ){
+							isSeat = true;
+						}
+						
+						// 경유
+						var isVia = false;
+						var viaType = parseInt($("#search_stops").val()) + 1;
+						var maxViaType = 0;
+						if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
+							if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
+								if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
+									maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
+								}
+							} else {
+								for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
+									if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
+										maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
+									}
+								}
+							}
+						}
+						
+						if( maxViaType < 3 && maxViaType != 0) {
+							if( viaType == 1) {
+								if( maxViaType == 1) {
+									isVia = true;
+								}
+							} else {
+								isVia = true;
+							}
+						}
+						if(isSeat && isVia){
+							var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
+							good.airport = v1.name;
+							v_sites[site.name].list.push(good);
+						}
+							
+						
+					});
+				}else if(site.responseJson.Responses.GoodsList.Goods != undefined ){
+					var good = site.responseJson.Responses.GoodsList.Goods;
+					// 가능 좌석일때만!! 대기도 뺀다~~
+					var isSeat = false;
+					if(parseInt(good.StartCheck) >= requestCount
+							&& parseInt(good.ReturnCheck) >= requestCount
+							&& good.FareFix == "확정"
+							&& good.SiteCode != "MOBILE" ){
+						isSeat = true;
+					}
+					// 경유
+					var isVia = false;
+					var viaType = parseInt($("search_stops").val()) + 1;
+					var maxViaType =0;
+					if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
+						if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
+							if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
+								maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
+							}
+						} else {
+							for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
+								if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
+									maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
+								}
+							}
+						}
+					}
+					if( maxViaType < 3 && maxViaType != 0) {
+						if( viaType == 1) {
+							if( maxViaType == 1) {
+								isVia = true;
+							}
+						} else {
+							isVia = true;
+						}
+					}
+					if(isSeat && isVia){
+						var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
+						good.airport = v1.name;
+						v_sites[site.name].list.push(good);
+					}
+					
+				}
+			}					
+			
+			
+			
+			if( parseInt(pageNo) < parseInt(maxPageNo) ) {
+				searchSite(dt1,airport, parseInt(pageNo) +1);
+			}
+			
+		});
+	}
+
 	
+	var fn_successJsonp = function(response){
+		console.log("dkjfkjdfkjdkjf");
+		v_list.push(response.Responses);
+		
+		// log
+		// console.log([dt1,airport, pageno, response]);
+		
+		var airport = this.url.match(/dep1=([\w]+)&/i)[1];
+		var airport_name = _.findWhere(airports,{id: airport}).name;
+
+		var depdate = this.url.match(/depdate0=([\w]+)&/i)[1];
+
+		var moreKey = response.Responses.GoodsSummary.MoreKey;
+		var pageNo = response.Responses.GoodsSummary.PageNO;
+		var maxPageNo = response.Responses.GoodsSummary.MaxPageNO;
+		
+			
+		if( v_sites[airport_name] == undefined ){			
+			v_sites[airport_name] = {
+				pages:{
+					
+				},				
+				list : [],
+				best : {}
+			};
+		}
+
+		if(v_sites[airport_name].pages[depdate] == undefined){
+			v_sites[airport_name].pages[depdate] = {};
+			for(var i=1 ; i < Number(maxPageNo) ; i++){
+				v_sites[airport_name].pages[depdate][i+""] = {dataRecieved :false};
+			}
+		}
+			
+		
+
+	
+		
+		if(response.Responses.GoodsList != ""){
+			if($.isArray(response.Responses.GoodsList.Goods)){
+				sortObjects(response.Responses.GoodsList.Goods,[['TotalSaleFare','asc']]);
+				var goods = response.Responses.GoodsList.Goods;
+				// site list add to v_sites
+				$.each(goods,function(j,good){
+					var requestCount = parseInt($("#requestCount").val());
+					
+					// 가능 좌석일때만!! 대기도 뺀다~~
+					var isSeat = false;
+					if(parseInt(good.StartCheck) >= requestCount
+							&& parseInt(good.ReturnCheck) >= requestCount
+							&& good.FareFix == "확정"
+							&& good.SiteCode != "MOBILE" ){
+						isSeat = true;
+					}
+					
+					// 경유
+					var isVia = false;
+					var viaType = parseInt($("#search_stops").val()) + 1;
+					var maxViaType = 0;
+					if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
+						if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
+							if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
+								maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
+							}
+						} else {
+							for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
+								if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
+									maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
+								}
+							}
+						}
+					}
+					
+					if( maxViaType < 3 && maxViaType != 0) {
+						if( viaType == 1) {
+							if( maxViaType == 1) {
+								isVia = true;
+							}
+						} else {
+							isVia = true;
+						}
+					}
+					if(isSeat && isVia){
+						var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
+						good.airport = v1.name;
+						v_sites[airport_name].list.push(good);
+					}
+						
+					
+				});
+			}else if(response.Responses.GoodsList.Goods != undefined ){
+				var good = response.Responses.GoodsList.Goods;
+				// 가능 좌석일때만!! 대기도 뺀다~~
+				var isSeat = false;
+				if(parseInt(good.StartCheck) >= requestCount
+						&& parseInt(good.ReturnCheck) >= requestCount
+						&& good.FareFix == "확정"
+						&& good.SiteCode != "MOBILE" ){
+					isSeat = true;
+				}
+				// 경유
+				var isVia = false;
+				var viaType = parseInt($("search_stops").val()) + 1;
+				var maxViaType =0;
+				if(typeof (good.AirAvail.ReturnAvail.AirItn) != 'undefined') {
+					if( typeof (good.AirAvail.ReturnAvail.AirItn.length) == 'undefined') {
+						if (parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg) > maxViaType){
+							maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn.Total_Seg);
+						}
+					} else {
+						for( var j=0; j< good.AirAvail.ReturnAvail.AirItn.length; j++) {
+							if (parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg) > maxViaType){
+								maxViaType = parseInt(good.AirAvail.ReturnAvail.AirItn[j].Total_Seg);
+							}
+						}
+					}
+				}
+				if( maxViaType < 3 && maxViaType != 0) {
+					if( viaType == 1) {
+						if( maxViaType == 1) {
+							isVia = true;
+						}
+					} else {
+						isVia = true;
+					}
+				}
+				if(isSeat && isVia){
+					var v1 = dataFilter(airports,[{col:"id",val: airport}])[0];
+					good.airport = v1.name;
+					v_sites[airport_name].list.push(good);
+				}
+				
+			}
+		}					
+		
+		v_sites[airport_name].pages[depdate][pageNo].dataRecieved = true;
+		
+		var cnt_all = _.filter(v_sites,function(site){
+			var v_cnt_dt = _.filter(site.pages,function(dt){
+				var v_cnt = _.where(dt,{dataRecieved: false});
+				return v_cnt.length == 0;
+			});
+			return v_cnt_dt.length == 0;
+		});
+
+		if(cnt_all.length == v_sites.length)
+			fn_sqlcall();
+
+		if(pageNo == 1){
+			for( var i=2 ; i < Number(maxPageNo) ; i++ ){
+				searchSite(depdate,airport, i);
+			}
+		}
+
+		
+		// if( parseInt(pageNo) < parseInt(maxPageNo) ) {
+		// 	searchSite(dt1,airport, parseInt(pageNo) +1);
+		// }
+			
+		
+		
+	}
+
+
+	function fn_sqlcall(){
+		$.each(v_sites,function(name,site){
+			//console.log(k);
+			if(alasql.tables[name] == undefined && site.list.length >0){
+				var v_sql = 'create table '+ name +'(';
+    			var i = 0;
+    			$.each(site.list[0],function(k,v){
+    				//if( typeof v != "string")
+    				//	return true;
+    				
+    				if(i > 0)
+    					v_sql += ',';
+    				if(k == 'NUM')
+    					v_sql += 'NumberA' + ' ' + typeof v;
+    				else
+    					v_sql += k + ' ' + typeof v;
+					i += 1;
+    			});
+    			v_sql += ')';
+    			alasql(v_sql);
+			}
+			sortObjects(site.list,[['TotalSaleFare','asc'],'StartDT']);	
+    		alasql.tables[name].data = site.list;
+			alasql('create index idx_Price on '+ name +'(TotalSaleFare)');
+			alasql('create index idx_AirPort_Price on '+ name +'(airport,TotalSaleFare)');
+			alasql('create index idx_StartDT on '+ name +'(StartDT)');
+		});
+
+		alert("Complete!");
+	}
 	
 	</script>
 	
