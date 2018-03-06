@@ -2501,10 +2501,12 @@ function fn_makeHtml(container, _schema){
 					} else {
 						if(item.edit_tag == "textarea"){
 							tdOption.edit_style = {height:"200px",width: "450px"};
-						} else {
-							tdOption.edit_style = {
-								
-							};
+						} else if(item.edit_tag == "select"){
+							tdOption.edit_style = {width: "300px"};
+							tdOption.selectOptions = item.selectOptions;
+						}
+						else {
+							tdOption.edit_style = {};
 						}
 					}
 				}else {
@@ -2712,9 +2714,9 @@ function fn_makeHtml(container, _schema){
 				if(vData.yAxis != undefined)
 					options.yAxis = vData.yAxis;
 			}
-// 			var chartUser = Highcharts.stockChart($(mainContainer).attr('id') ,options,function(chart){
-//		    	
-// 	 		});
+			// var chartUser = Highcharts.stockChart($(mainContainer).attr('id') ,options,function(chart){
+		    	
+	 		// });
 			
 			
 			
@@ -2736,9 +2738,9 @@ function fn_makeHtml(container, _schema){
 			//var chart = mainContainer.highcharts();
 			//chart.reflow();
 			
-// 			$(mainContainer).highcharts(options,function(chart){
+			// $(mainContainer).highcharts(options,function(chart){
 		    	
-// 			 });
+			//  });
 			
 		}else if(_schema.type == 'SearchHeader'){
 			//==chart container create
@@ -2863,6 +2865,9 @@ function fn_makeHtml(container, _schema){
 			if(_schema.multiselectOpt != undefined)
 				$.extend(multiselectOpt, _schema.multiselectOpt);
 			var vMultiSelect = mainControl.multiselect(multiselectOpt).multiselectfilter();
+			mainControl.multiselect('widget').css("width","400px");
+			mainControl.multiselect('widget').find(".ui-multiselect-filter input").css("width","150px");
+			// mainControl.multiselectOption = multiselectOpt;
 			
 			//filter by parent
 			if(_schema.options.childrens != undefined){
@@ -3369,8 +3374,8 @@ function fn_makeHtml(container, _schema){
 		
 		
 		
-		$("div.ui-multiselect-menu").css("width","400px");
-		$(".ui-multiselect-filter input").css("width","150px");
+		// $("div.ui-multiselect-menu").css("width","400px");
+		// $(".ui-multiselect-filter input").css("width","150px");
 	}
 	
 function fn_makeDataForChart(param){

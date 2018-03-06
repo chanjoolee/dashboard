@@ -215,7 +215,15 @@
 			</li>
 			
 	          
-	          
+	        <li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          SSD Script Management
+		        </a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/manage_tabs');">Manage Script</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/SummaryAll');">Summary ALL</a>
+				</div>
+			</li>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		          Corona
@@ -549,6 +557,7 @@
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/jointjs/demos/rappid/apps/QAD/qad');">Qad</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/jointjs/myqad/2018.010/qad');">MyQad.1</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
