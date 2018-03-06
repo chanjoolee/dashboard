@@ -899,7 +899,7 @@
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
 		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_copy_template_scriptset';
+		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_copy_template_scriptset';
 		oFrm.method = "post";
 		oFrm.target = 'ScriptSetCopy_UFS'; 
 	    oFrm.submit();
@@ -912,7 +912,7 @@
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
 		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_scriptset_script_edit';
+		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_scriptset_script_edit_paging';
 		oFrm.method = "post";
 		oFrm.target = 'ScriptSetMgmt_UFS'; 
 	    oFrm.submit();

@@ -6,9 +6,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>mapping firmware and scriptset</title>
+    <title>corona summary</title>
     <%-- 1. jquery --%>
-    <!--<script src="js/jquery/jquery-1.11.2.js"></script>-->
+    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
     <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
@@ -17,11 +17,11 @@
     <%-- jqgrid --%>
     <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2017.10.18"></script>    
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
     
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>	
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
 	<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
 	
@@ -70,10 +70,10 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.09.13.01"></script>
+	<script src="js/dashboard.js?version=2018.01.10.01"></script>
 	
 	<%-- 5. local --%>
-	<link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
 	
@@ -414,11 +414,6 @@
 		    padding-bottom: 3px;
 		}
 		
-		<%--  jqGrid에서 add popup에서 scroll--%>
-		.ui-jqdialog-content .FormGrid {
-		    overflow: hidden;
-		}
-		
 	</style>
 	
 	<script  id="script_common" >
@@ -538,10 +533,8 @@
 	//그리드 편집전 데이타
 	var tempList = [];
 	var beforEditRow = {};
-	var edit_option_scriptset = {};
 	
 	var EfContextPath = "";
-	
 	
 	var schemaSearch = {
 			containerId:'searchCondition',
@@ -549,14 +542,14 @@
 			label:'',
 			
 			elements:[
-//				{
-//					containerCss:[
-//						{code: 'margin-top', value:'10px'},
-//					],		
-//					type:"title",
-//					id: "title_script",
-//					label: "Script Template"
-//				},
+				// {
+				// 	containerCss:[
+				// 		{code: 'margin-top', value:'10px'},
+				// 	],		
+				// 	type:"title",
+				// 	id: "title_script",
+				// 	label: "Script Template"
+				// },
 				{
 					label:'',
 					type: 'HorizontalLayout',
@@ -581,28 +574,28 @@
 							    		{code:'height',value:'30px'}
 							    	],
 									elements:[
-										
+										//categoryHead
 										{
 											type:'SearchHeader',
-											id: 'projectHead',
-											name: 'projectHead',
+											id: 'categoryHead',
+											name: 'categoryHead',
 											label:'',
-											text:'Project',
+											text:'Category',
 											width: '50px'
 										},
-										
+										//Category
 										{
 											type:'multiCombo',
-											id: 'search_sample',
-											name: 'search_sample',
+											id: 'category',
+											name: 'category',
 											label:'',
-											text:'Project',
-											width: '230px',
+											text:'Category',
+											width: '300px',
 											data: function(){
 												var rtnList = [];
 												$.ajax({
 													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.search.sample"}, 
+													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
 													async: false,
 													success:  function(response){
 														rtnList = response.dataList;
@@ -612,47 +605,110 @@
 											},
 											//value :'CSSD',
 											options: {
-												cd:'SAMPLE',
-												name:'SAMPLE'
+												cd:'CATEGORY',
+												name:'CATEGORY',
+												childrens : [
+													{
+														id: "testItem" ,
+														topElement: "schemaSearch.elements"
+													}
+												]
 											},
 											multiselectOpt:{
-												selectedList: 1 ,
-												multiple: false,
+												//selectedList: 1 ,
+												multiple: true,
 												selectedText: function(numChecked, numTotal, checkedItems){
 													 //return numChecked + ' of ' + numTotal + ' checked';
+													 var rtn = "";
 													 var sb = [];
-													 $.each(checkedItems,function(){
-														 sb.push($(this).val());
+													 $.each(checkedItems,function(i,d){
+													 	 if(i < 2)
+														 	sb.push($(this).val());
 													 });
-													 return sb.join(",");
+													 rtn = sb.join(",");
+													 if((checkedItems.length-2) > 0){
+													 	rtn += " ..." + (checkedItems.length-2)+" more"
+													 }
+													 return rtn;
 												}
 											},
 											events:{
-												change : function(){													
-													
-													fn_search_script();
-												}
+												
 											}
 										} ,
+										
+										
 										{
 											type:'SearchHeader',
-											id: 'testCaseHead',
-											name: 'testCaseHead',
+											id: 'testItemHead',
+											name: 'testItemHead',
 											label:'',
-											text:'TestCase Set',
-											width: '75px'
+											text:'Test Item',
+											width: '60px'
 										},
+										
+										
 										{
-											type:'SearchHeader',
-											id: 'testCaseValueHead',
-											name: 'testCaseValueHead',
+											type:'multiCombo',
+											id: 'testItem',
+											name: 'testItem',
 											label:'',
-											text:' ',
-											width: '80px',
-											controlCss: [
-												{code: 'text-align', value:'left'}
-											]
+											text:'Test Item',
+											width: '300px',
+											data: function(){
+												var rtnList = [];
+												$.ajax({
+													url: "/dashboard/genericlListJson.html",
+													data: {sqlid: "dashboard.corona.emmc.script.test_item.distinct", sample: $("#category").val() }, 
+													async: false,
+													success:  function(response){
+														rtnList = response.dataList;
+														tempList = rtnList;
+													}
+												});
+												return rtnList;
+											},
+											//value :'CSSD',
+											options: {
+												cd:'TEST_ITEM' ,
+												name:'TEST_ITEM',
+												group: {
+													cd:'CATEGORY',
+													name: 'CATEGORY'
+												}
+												
+											},
+											multiselectOpt:{
+												//selectedList: 1 ,
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													 //return numChecked + ' of ' + numTotal + ' checked';
+													 var rtn = "";
+													 var sb = [];
+													 $.each(checkedItems,function(i,d){
+													 	 if(i < 2)
+														 	sb.push($(this).val());
+													 });
+													 rtn = sb.join(",");
+													 if((checkedItems.length-2) > 0){
+													 	rtn += " ..." + (checkedItems.length-2)+" more"
+													 }
+													 return rtn;
+												}
+											},
+											events:{
+												change : function(){
+													// parent.$("#loader").show();
+													// setTimeout( function(){
+													// 	$("#contentMain").html("");
+													// 	makeHtml("contentMain",schemaContent);
+													// 	parent.$("#loader").hide();
+													// },50); 
+												}
+											}
 										}
+										
+										
 									]
 								}
 								//2line
@@ -699,6 +755,38 @@
 													fn_search_script();
 												}
 											}
+										},
+										{
+											type:'Button',
+											id: 'btnUpload',
+											name: 'btnUpload',
+											label:'UPLOAD',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													$('#fileInput').click();
+												}
+											}
+										},
+										{
+											type:'Button',
+											id: 'btnDownload',
+											name: 'btndownload',
+											label:'DOWNLOAD',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													fn_FileDownloadAjax();
+												}
+											}
 										}
 									
 									 ]
@@ -736,187 +824,307 @@
 						{
 							containerCss:[
 								{code: 'width', value:'100%'}
-								//,{code: 'float', value:'left'}
+								// ,{code: 'float', value:'left'}
 							],			
 					    	type:'grid',
 					    	id: 'grid_script',
 					    	label:' ',
-					    	items:[
-								{
-									label:'FW Version', name:'FIRMWARE', id:'FIRMWARE', width:200, align:'left', sortable:false , editable: false
-									,cellattr: function(){
-										var result = " style=\"background:white;vertical-align: middle;";
-										result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;";
-										return result;
-									}
-								}
-								,{
-									label:'Test Start Date', name:'START_DT', id:'START_DT', width:200, align:'center', sortable:false , editable: false
-								}
-								,{
-									label:'TestScript Set', name:'SCRIPTSET', id:'SCRIPTSET', width:200, align:'left', sortable:false
-									,editable: true	
-									,edittype: 'select'
-									//,formatter: 'select'
-									, editoptions: {
-										//value: edit_option_scriptset
-										value: function(){
-											var rtn = {};
-											$.ajax({
-								    			type: "POST",
-								    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.search",
-								    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-								    			data: $("#form").serialize(), 
-								    			async: false,
-								    			success:  function(response){
-								    				var tmp = "{";
-								    				//tmp += "\"\":\"Select\"";
-													$.each(response.dataList,function(i,d){
-														if(i> 0)
-															tmp += ",";
-														tmp += "\"" + d.SCRIPTSET + "\":\"" + d.SCRIPTSET + "\"";
-														
-													});
-													tmp += "}";
-													rtn = JSON.parse(tmp);
-								    				
-								    			}
-								    		});
-								    		return rtn;
-								    		
-										}
-									}
-									,cellattr: function(){
-										var result = " style=\"background:white;vertical-align: middle;";
-										result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;";
-										return result;
-									}							
-									
-								}
-								,{
-									label: " ",
-									search: false,
-									name: "actions",
-									align:'center',
-									width: 90,
-									formatter: "actions",	
-									formatoptions: {
-				                        keys: true
-				                        ,delbutton:false
-				                        ,editformbutton: false
-				                        ,editOptions: {} // editformbutton 가 true 인경우
-				                        ,addOptions: {}
-				                        ,delOptions: {}
-				                        ,beforeSaveRow : function(options,rowid){
-				                        	//alert("beforeSaveRow")	;
-				                        	return true;
-				                        }
-				                        ,reloadAfterSubmit: false
-				                        ,afterSave : function(rowid,res) {
-				                        	var grid = $(this).jqGrid();
-				                        	var row = grid.jqGrid('getRowData',rowid);
-				                        	row.project = $("#search_sample").val();
-				                        	row.sqlid = "dashboard.corona.scriptset.map.update";
-				                        	row.origindata = JSON.stringify(beforEditRow);
-				                        	
-				                        	
-				                        	var response1 = {};
-				                        	$.ajax({
-					                    		url: "/dashboard/genericSaveJson.html",
-					                    		type: "POST",
-					                    		data: row, 
-					                    		async: false,			                    		
-					                    		success:  function(data){
-					                    			response1 = data;
-					                    			if(response1.result != 'success'){
-						                    			$("#dialog-confirm").html(response1.message);
-						                    			$("#dialog-confirm").dialog({
-						                    			    resizable: false,
-						                    			    modal: true,
-						                    			    title: "Error",
-						                    			    //height: 200,
-						                    			    width: 500,
-						                    			    dialogClass: 'no-close',
-						                    			    closeOnEscape: false,
-						                    			    buttons: [
-					                    			              {
-					                    			                text: "OK",
-					                    			                click: function() {
-					                    			                  $( this ).dialog( "close" );											                    			                  
-					                    			                }
-					                    			              }
-				                    			            ]
-						                    			});
-						                    			
-						                    			
-						                    			  
-					                    			}							                    			
-					                    		}
-					                    	});
-				                        	
-				                        }
-				                        
-				                        ,afterRestore : function(rowid) {
-				                        	
-				                        }
-				                        ,onEdit :function(rowid,actop){
-				                        	var grid = $(this).jqGrid();
-				                        	beforEditRow = grid.jqGrid('getRowData',rowid);
-				                        	
+					    	items:[						
+								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}
+									,edittype: "text"
+									,editoptions: {
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+										   $(element).attr("autocomplete","off").typeahead({ 
+											   	appendTo : "body",
+												source: function(query, proxy) {
+													$.ajax({
+														url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.autocomplete.script&callback=?&field=CATEGORY',
+														//dataType: "jsonp",
+														data: {term: query},
+														//dataType: "json",
+														//success : proxy
+														success: function (data) {
+								                            proxy($.map(data.dataList, function(item) {
+								                            	return item.name;
+							                                 }));//END Response
+								                        } //END Success
+								                        
+													});//END AJAX
+												}
+												
+											});
 											
-				    					}
-				    					
-				    					
-				                        
-				                    } 
-				                    
-				                	
+										}
+										
+									}
 								}
+								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true 
+								 	,edittype: "text"
+									,editoptions: {
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+										   $(element).attr("autocomplete","off").typeahead({ 
+											   	appendTo : "body",
+												source: function(query, proxy) {
+													$.ajax({
+														url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.autocomplete.script&callback=?&field=TEST_ITEM',
+														//dataType: "jsonp",
+														data: {term: query},
+														//dataType: "json",
+														//success : proxy
+														success: function (data) {
+								                            proxy($.map(data.dataList, function(item) {
+								                            	return item.name;
+							                                 }));//END Response
+								                        } //END Success
+								                        
+													});//END AJAX
+												}
+												
+											});
+										}
+										
+									}
+								 }
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:400, align:'left', sortable:false , editable: true, hidden: false
+									,editoptions: {
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+											$(element).change(function(){
+												var $_convert = $(this.form).find("input#CONVERT_SCRIPT");
+												var v_hax = $(this).val();
+												var v_digit = [];
+												$.each(v_hax.split(" "), function(i,str){
+													var d = "";
+													if(str.startsWith("0x")){
+														v_digit.push(parseInt(str,16));
+													}else{
+														v_digit.push(str);
+													}
+												});
+												$_convert.val(v_digit.join(" "));
+											});
+										}
+										
+									}
+								}
+								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:400, align:'left', sortable:false , editable: true}
 					    		
 					    	],	
-//					    	data: function(){
-//					    		var rtnList = [];
-//					    		$.ajax({
-//					    			type: "POST",
-//					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.search",
-//					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-//					    			data: $("#form").serialize(), 
-//					    			async: false,
-//					    			success:  function(response){
-//					    				rtnList  = response.dataList;
-//					    				
-//					    			}
-//					    		});
-//					    		
-//					    		return rtnList;
-//					    	},		
-					    	
 					    	// script grid option		
 					    	gridOpt:{
-					    		datatype:'json',
-					    		pager: "#grid_scriptPager"
-					    		
-					    		,url: function(){
-					    			return '/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.map.search&project='+$("#search_sample").val();
-					    		}
-					    		//url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.map.search&project='+$("#search_sample").val()
-					    		,jsonReader: {
-								      root: function(data){
-									    return data.dataList;
-								      }
-								     ,repeatitems:false
+								datatype:'json',
+					    		// loadonce: false,
+					    		pager: "#grid_scriptPager",
+								url: function(){
+									return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.manage.script.search.paging&paging_sqlid=dashboard.corona.emmc.manage.script.search.paging.page";
 								},
-								editurl: '/dashboard/ssdCusDummySaveJson.html',
-					    		viewrecords: true,	
-					    		emptyrecords: "No records to view",		    		
+					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
+					    		styleUI : 'Bootstrap',
+					    		viewrecords: true,			    		
 					    		width: '100%',
-					    		height: '500',
-					    		sortable: false,
-					    		multiSort:false,
-					    		//sortname: 'CATEGORY, TEST_ITEM ',
-					    		rowNum: 30,
-								rowList:[10,20,30],
+					    		height: 500,
+					    		sortable: true,
+					    		multiSort:true,
+					    		multiselect: true,
+					    		// multiboxonly:true, 
+					    		// sortname: 'CATEGORY, SCRIPT_NAME',
+								rowNum: 20,
+								rowList:[10,15,20,30],
 					    		//forceFit : false ,
+					    		emptyrecords: "No records to view",
+					    		//rownumbers: true, // show row numbers
+					    		
+					    		//subgrid start
+					    		subGrid: true,
+					    		subgridtype:'json',
+					    		subGridRowExpanded: function(parentRowID, parentRowKey){
+					    			var test = "";
+							    	var theGrid = $(this).jqGrid();
+							    	var row = theGrid.jqGrid('getRowData',parentRowKey);
+							    	var cms = theGrid.jqGrid("getGridParam", "colModel");
+							    	
+					    			
+					    			
+					    			// ***  grid ***//
+					    			var childDivId = parentRowID + "_div_input";
+					    			var childDiv = $(document.createElement("div"));
+					    			childDiv.attr("id",childDivId);
+					    			// add a table and pager HTML elements to the parent grid row - we will render the child grid here			    			
+					                $('#' + parentRowID).append(childDiv);
+					    			
+					    			var detailList = [];
+									$.ajax({
+						    			type: "POST",
+						    			url: "/dashboard/genericlListJson.html",
+						    			data: {
+						    				script_name: row.SCRIPT_NAME
+						    				, sqlid: 'dashboard.corona.emmc.manage.script.search.one'}, 
+						    			//data: $("#form").serialize(), 
+						    			async: false,
+						    			success:  function(response){
+						    				detailList  = response.dataList;
+						    				
+						    			}
+						    		});
+						    		
+						    		// script grid detail
+					    			var schema1 = {
+					    					containerId: childDivId,
+					    					type:'Vertical',
+					    					label: '',
+					    					elements: [
+					    					    {
+					    					    	label: "",
+					    					    	type: 'Group',
+					    					    	elements: [
+														{
+															type: "inline_edit",
+															cols: 1,
+															data: function(){ 
+																return detailList[0];
+															},
+															options : {
+																keys : ['SCRIPT_NAME'],
+																fn_change: function( input ){
+																	//
+																	if(this.props.options.name == 'SCRIPT_NAME'){
+																		var convert = this.reactObjects.find(function(td){
+																			return td.props.options.name == 'CONVERT_SCRIPT';
+																		});	
+																		//convert digit
+																		//var v_hax = this.state.value;
+																		var v_hax = input;
+																		var v_digit = [];
+																		$.each(v_hax.split(" "), function(i,str){
+																			var d = "";
+																			if(str.startsWith("0x")){
+																				v_digit.push(parseInt(str,16));
+																			}else{
+																				v_digit.push(str);
+																			}
+																		});																		
+																		convert.setState({value : v_digit.join(" ")});
+																		
+																	}
+																	
+																},
+																fn_submit: function(){
+																	//alert("submit function defined");
+																	var state = true;
+																	var paramObj = {
+																		//origindatas: this.props.options.keys
+																		origindatas: this.state.keys
+																	};
+																	
+																	if(this.props.options.value == this.state.value)
+																		return state;
+																	$.ajax({
+											                    		url: "/dashboard/genericSaveJson.html",
+											                    		type: "POST",
+											                    		data: {
+											                    			searchJson: JSON.stringify(paramObj),
+											                    			fieldName: this.state.name,
+											                    			fieldValue: this.state.value,
+											                    			fieldValueOrigin: this.state.value_origin,
+											                    			userId: $("#userId").val(),
+											                    			sqlid: "dashboard.corona.emmc.script_master.update"
+											                    		}, 
+											                    		async: false,			                    		
+											                    		success:  function(data){
+											                    			response1 = data;
+											                    			if(response1.result != 'success'){
+											                    				state = false;
+											                    				msg = "Save Success!";
+												                    			$("#dialog-confirm").html(response1.message);
+												                    			$("#dialog-confirm").dialog({
+												                    			    resizable: false,
+												                    			    modal: true,
+												                    			    title: "Error",
+												                    			    //height: 200,
+												                    			    width: 300,
+												                    			    dialogClass: 'no-close',
+												                    			    closeOnEscape: false,
+												                    			    buttons: [
+											                    			              {
+											                    			                text: "OK",
+											                    			                click: function() {
+											                    			                  $( this ).dialog( "close" );											                    			                  
+											                    			                }
+											                    			              }
+										                    			            ]
+												                    			});
+												                    			
+												                    			
+												                    			  
+											                    			}						                    			
+											                    		}
+											                    	});
+											                    	
+											                   		return state;
+																},
+																fn_afterSubmit: function(keyUpdatedObjects){
+																	
+																	$.each(this,function(i,react){
+																		if(react.state.name == "SCRIPT_NAME"){
+																			theGrid.setRowData(parentRowKey,{SCRIPT_NAME: react.state.value});
+																		}
+																		if(react.state.name == "CONVERT_SCRIPT"){
+																			theGrid.setRowData(parentRowKey,{CONVERT_SCRIPT: react.state.value});
+																		}
+																	});
+																	
+																},
+																progressObject: parent.$("#loader")
+															},
+															items: [
+																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: true},
+																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
+																{label:'Category', col: 'CATEGORY', editable: true},
+																{label:'Test Item', col: 'TEST_ITEM', editable: false},
+																{label:'TIME', col: 'TIME'},
+																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
+																{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
+																{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
+																{label:'EMMC Ver', col: 'EMMC_VER'},
+																{label:'Target Device', col: 'TARGET_DEVICE'},
+																{label:'Target Partition', col: 'TARGET_PARTITION'},
+																{label:'Category1', col: 'CATEGORY1'},
+																{label:'Category2', col: 'CATEGORY2'},
+																{label:'Category3', col: 'CATEGORY3'},
+																{label:'Category4', col: 'CATEGORY4'},
+																{label:'Category5', col: 'CATEGORY5'},
+																{label:'Write Mode', col: 'WRITE_MODE'},
+																{label:'Read Mode', col: 'READ_MODE'},
+																{label:'Platform', col: 'PLATFORM'},
+																{label:'Function Name', col: 'FUNCTION_NAME'},
+																
+																{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+																{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
+															]
+															
+														}
+														
+					    					    	
+					    					    	]
+					    					    }
+					    						
+					    					
+					    					]
+					    			};
+					    			fn_makeHtml(childDiv,schema1);
+					    			
+					    		} ,
+					    		// subgrid end
+					    		
+					    		// onSelectAll: function(rowIds, allChecked) {
+								// 	$("#grid_script input.groupHeader").prop('checked', allChecked);
+								// },
 					    		gridComplete: function () {
 					    			var v_grid = $(this).jqGrid();
 					    			v_grid.jqGrid('filterToolbar',
@@ -928,68 +1136,155 @@
 				    		                //,searchOperators: true
 				    		            }
 				    				);
+				    				
 					    			// script master add
+					    			v_grid.navGrid('#grid_scriptPager' ,
+						    			// the buttons to appear on the toolbar of the grid
+						    			{ edit: false, add: true, del: true, search: false, refresh: true, view: false, position: "left", cloneToTop: false  },
+						    			// options for the Edit Dialog
+						    			{  } ,
+						    			// options for the Script Master Add Dialog
+						    			{
+						    				addCaption: "Add Script Master",
+						    				modal:true,
+						                    recreateForm: true,
+						                    closeAfterAdd: true,
+						                    reloadAfterSubmit: true,
+											//template: template,
+						                    errorTextFormat: function (data) {
+						                        return 'Error: ' + data.responseText
+						                    },
+						                    onInitializeForm : function(formid){
+						                        $(formid).attr('method','POST');
+						                        $(formid).attr('action','');
+						                        $(formid).attr('enctype','multipart/form-data');
+						                        $(formid).css("font-size","14px");
+						                        $(formid).find("#tr_CATEGORY").show();
+						                    },
+										    afterSubmit: function(response, postdata) 
+										    { 
+										    	var aaa = "a";
+										    	var formdata = this.ownerDocument.FormPost;
+						                    	var fd = new FormData(formdata);  	
+						                    	var response1 = {};
+						                    	$.ajax({
+						                    		url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.emmc.script_master.insert",
+						                    		type: "POST",
+						                    		data: fd, 
+						                    		async: false,
+						                    		cache: false,
+						                    		contentType: false,
+						                    		processData: false,
+						                    		success:  function(data){
+						                    			response1 = data;
+						                    			if(response1.result == 'success'){
+						                    				msg = "Add Success!";
+							                    			$("#dialog-confirm").html(msg);
+							                    			$("#dialog-confirm").dialog({
+							                    			    resizable: false,
+							                    			    modal: true,
+							                    			    title: "Success",
+							                    			    //height: 200,
+							                    			    width: 200,
+							                    			    dialogClass: 'no-close',
+							                    			    closeOnEscape: false,
+							                    			    buttons: [
+						                    			            {
+																		text: "OK",
+																		click: function() {
+																			$( this ).dialog( "close" );	
+																			// fn_search_script();										                    			                  
+																		}
+						                    			            }
+					                    			            ]
+							                    			});
+						                    			}
+						                    			
+						                    		}
+						                    	});
+						                    	
+						                    	//return [success,message,new_id] ;
+										    	if(response1.result == 'success'){
+										    		//$(this).trigger('reloadGrid'); 
+										    		return [true, response1.result, ''];
+										    	}
+										    	else
+										    		return [false, response1.result + ":<br/>" + response1.message , ''];
+										    		
+										    }
+						    			},
+						    			// options for the Script Master Del Dialog 
+						    			{
+						    				
+						    				afterSubmit: function(response, postdata) 
+										    { 
+										    	//$("#refresh_grid_script").hide();
+										    	var grid = $(this);
+										    	var paramObj = {
+										    		delRows : []
+										    	};
+										    	$.each(postdata.id.split(","),function(i,rowid){
+										    		var row = grid.getRowData(rowid);
+										    		paramObj.delRows.push(row);
+										    	});
+										    	
+									    		//  
+									    		paramObj.loop_id = "delRows";
+						                    	$.ajax({
+						                    		url: "/dashboard/genericSaveJson.html",
+						                    		type: "POST",
+						                    		data: {
+						                    			searchJson: JSON.stringify(paramObj),
+						                    			sqlid: "dashboard.corona.emmc.script_master.delete"
+						                    		}  , 
+						                    		async: false,
+						                    		success:  function(data){
+						                    			response1 = data;
+						                    			if(response1.result == 'success'){
+						                    			
+						                    				msg = "Del Success!";
+							                    			$("#dialog-confirm").html(msg);
+							                    			$("#dialog-confirm").dialog({
+							                    			    resizable: false,
+							                    			    modal: true,
+							                    			    title: "Success",
+							                    			    //height: 200,
+							                    			    width: 200,
+							                    			    dialogClass: 'no-close',
+							                    			    closeOnEscape: false,
+							                    			    buttons: [
+																	{
+																		text: "OK",
+																		click: function() {
+																			$( this ).dialog( "close" );		
+																			// fn_search_script();
+																		}
+																	}
+					                    			            ]
+							                    			});
+						                    			}
+						                    			
+						                    		}
+						                    	});
+						                    	
+						                    	//return [success,message,new_id] ;
+										    	if(response1.result == 'success'){
+										    		//$(this).trigger('reloadGrid'); 
+										    		return [true, response1.result, ''];
+										    	}
+										    	else
+										    		return [false, response1.result + ":<br/>" + response1.message , ''];
+										    		
+										    }
+						    			}
+					    			);
 					    			
-					    			$('#grid_scriptPager .ui-paging-pager').hide();
-					    			
-					    			var default_scriptset = $("#search_sample").find("option:selected").attr("default_scriptset");
-					    			$("#testCaseValueHeadContainer").find('h3').html(": " + default_scriptset);
-
+					    			// $('#grid_scriptPager .ui-paging-pager').hide();
 					    		}
 						    	
-						    	, onCellSelect: function (rowId, iCol, content, event) {
-							    	
-						    		var e = event;
-							    	var test = "";
-							    	var theGrid = $(this).jqGrid();
-							    	var row = theGrid.jqGrid('getRowData',rowId);
-							    	var cms = theGrid.jqGrid("getGridParam", "colModel");
-									var cm = cms[iCol];
-									
-									//beforEditRow = theGrid.jqGrid('getRowData',rowId);
-									if(cm.name == "FIRMWARE"){
-										fn_pop_mgmt_fimware(row.FIRMWARE);
-										
-									}
-									
-									if(cm.name == "SCRIPTSET" && row[cm.name] != ""){
-										
-										// hs.Expand 두번뜨는것 방지
-										for(var i=0 ;i<hs.expanders.length;i++){
-											if(hs.expanders[i] == null)
-												continue;
-											else
-												hs.expanders[i].close();
-											//if(hs.expanders[i].maincontentText ==  linkUrl)
-											//	hs.expanders[i].close(); //return;
-										}
-										
-										var linkUrl = "";
-										// 1
-										linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_mgmt('"+ row.SCRIPTSET +"',this);\">";
-										linkUrl +="Edit/Remove Current TestScript Set.";
-										linkUrl +="</span>";
-										linkUrl +="<br/><br/>";
-										// 2
-										linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_copy('"+ row.SCRIPTSET +"',this);\">";
-										linkUrl +="Copy from Master TestScript.";
-										linkUrl +="</span>";	
-										
-										hs.htmlExpand(null, {
-									        pageOrigin: {
-									            x: e.pageX || e.clientX ,
-									            y: (e.pageY || e.clientY)  + 62 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
-									        },
-									        headingText: 'Select Job',
-									        maincontentText: linkUrl,
-									        width: 300
-									    });
-										
-									}
-									
-									
-							    }
+						    	
 					    	}
+							
 						}
 					
 
@@ -1048,24 +1343,49 @@
 		return outputArr;
 	}
 	
+	//target search condition change
+	function fn_search_firmware(){
+		parent.$("#loader").show();
+		setTimeout( function(){
+			var rtnList = [];
+			var paramObj = {
+				sample : $("#to_sample").val(),
+				firmware : $("#to_firmware").val(),
+				sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"
+			};
+			$.ajax({
+				type: "POST",
+				url: "/dashboard/genericlListJson.html",
+				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
+				//data: $("#form").serialize(), 
+				data: paramObj,
+				async: false,
+				success:  function(response){
+					rtnList  = response.dataList;
+					//return rtnList;
+					var theGrid = $("#grid_firmware").jqGrid();
+					theGrid.jqGrid('clearGridData');
+					theGrid.jqGrid('setGridParam', { data: rtnList});
+					theGrid.trigger('reloadGrid');	
+					parent.$("#loader").hide();
+					
+				}
+			});		
+			
+		},50);
+			
+	}
 	
 	//target search condition change
 	function fn_search_script(){
-//		parent.$("#loader").show();
-//		
-//		setTimeout( function(){
-//			$("#contentMain").html("");
-//			fn_makeHtml('contentMain',schemaContent);
-//			parent.$("#loader").hide();
-//			
-//		},50);
+		parent.$("#loader").show();
+		setTimeout( function(){
+			$("#contentMain").html("");
+			fn_makeHtml('contentMain',schemaContent);
+			parent.$("#loader").hide();
 
-		//var default_scriptset = $("#search_sample").find("option:selected").attr("default_scriptset");
-		//$("#testCaseValueHeadContainer").find('h3').html(": " + default_scriptset);
-
-		var grid = $("#grid_script").jqGrid();
-		grid.jqGrid('clearGridData');
-		grid.trigger('reloadGrid');	
+			
+		},50);
 			
 	}
 	
@@ -1081,70 +1401,64 @@
 		}
 	}
 	
-	function fn_search_scriptsets(){
-		$.ajax({
-			type: "POST",
-			url: "/dashboard/genericlListJson.html",
-			data: {sqlid: "dashboard.corona.manage.scriptsets.search"}, 
-			async: false,
-			success:  function(response){
-				var tmp = "{";
-				$.each(response.dataList,function(i,d){
-					if( i > 0 )
-					tmp += ",";
-					tmp += "\"" + d.SCRIPTSET + "\":\"" + d.SCRIPTSET + "\"";
-					
-				});
-				tmp += "}";
-				edit_option_scriptset = JSON.parse(tmp);
-				var schema_grid = findAll("grid_script",schemaContent.elements);
-				schema_grid[0].items[2].editoptions.value = edit_option_scriptset;
-				//schema_grid[0].gridOpt.url = function(){
-	    		//	return '/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.map.search&project='+$("#search_sample").val();
-	    		//};
-				
-			}
-		});
+	function fn_FileUploadAjax() {
 		
+		if ($("#fileInput").val() == '') {
+			return;
+		}
+		
+		var ext = $("#fileInput").val().substring($("#fileInput").val().lastIndexOf('.')+1);
+		if($.inArray(ext, ['xls','xlsx']) == -1) {
+			alert('No Excel File.');
+			return;
+		}
+		
+		if (!confirm('upload 하시겠습니까?\n단 upload된 파일 기준으로 Master가 Update되오니 주의 바랍니다.')) {
+			//input file reset
+			$('#fileInput').val('');
+			$('#fileInput').replaceWith($('#fileInput').clone(true));		
+			return;
+		}
+		
+		var formData = new FormData();
+		formData.append("datafile", $("#fileInput")[0].files[0]);
+		formData.append("type", "EMMC");
+		
+		parent.$("#loader").show();
+		
+		setTimeout( function(){
+			$.ajax({
+	            type : 'post',
+	            url : '/dashboard/fvtExcelUploadJson.html',
+	            async : false,
+	            data : formData,
+	            processData : false,
+	            contentType : false,
+	            success : function(data) {
+	            	parent.$("#loader").hide();
+	                if (data.result == "success") {
+	                	alert('Success');
+	                	fn_search_script();
+	                } else {
+	                	alert('Fail');
+	                }
+	            },
+	            error : function(error) {
+	                console.log(error);
+	                console.log(error.status);
+	            }
+	        });
+			
+			//input file reset
+			$('#fileInput').val('');
+			$('#fileInput').replaceWith($('#fileInput').clone(true));
+		}, 50);
 	}
 	
-	function fn_pop_mgmt_fimware(v_fimware){
-		$("#search_firmware").val(v_fimware);		
-		var newwin = window.open("", "FimwareScriptMgmt_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_firmware_edit_paging';
-		oFrm.method = "post";
-		oFrm.target = 'FimwareScriptMgmt_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
-	}
-	
-	function fn_pop_copy(v_scriptset){
-		$("#scriptset").val(v_scriptset);
-		var newwin = window.open("", "ScriptSetCopy_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_copy_template_scriptset';
-		oFrm.method = "post";
-		oFrm.target = 'ScriptSetCopy_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
-	}
-	
-	function fn_pop_mgmt(v_scriptset){
-		$("#scriptset").val(v_scriptset);
-		var newwin = window.open("", "ScriptSetMgmt_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_scriptset_script_edit_paging';
-		oFrm.method = "post";
-		oFrm.target = 'ScriptSetMgmt_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
+	function fn_FileDownloadAjax() {
+		$("#excelForm").attr("action", "/dashboard/fvtExcelDownJson.html");
+		$("#excelForm").attr("target", "popHiddenFrame");
+		$("#excelForm").submit();
 	}
 	
 	</script>
@@ -1154,7 +1468,6 @@
 	$(function () {
 		parent.$("#loader").show();
 		setTimeout( function(){
-			//fn_search_scriptsets();
 			fn_makeHtml('searchCondition',schemaSearch);
 			fn_makeHtml('contentMain',schemaContent);
 			
@@ -1172,6 +1485,8 @@
 		
 	});
 	
+	
+	
 	</script>
 	
 	</head>
@@ -1184,8 +1499,7 @@
 	<input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
-	<input type="hidden" id="search_firmware" name="search_firmware" value=""/>
-	<input type="hidden" id="scriptset" name="scriptset" value=""/>
+	<input type="file" id="fileInput" style="display:none" onchange="fn_FileUploadAjax()"/>
 	
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
@@ -1296,7 +1610,9 @@
 	    
 	    changeHandler(e){
 	    	//alert("changeHandler");
-	    	this.setState({value: e.target.value });	    	
+	    	this.setState({value: e.target.value });
+			this.props.options.fn_change.call(this, e.target.value);
+				    	
 	    }
 	    
 	    
@@ -1336,4 +1652,9 @@
 	}
 	
 </script>
+
+<form name="excelForm" id="excelForm" method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="type" value="EMMC" />
+</form>
+<iframe name="popHiddenFrame" width="0" height="0" style="display:none;" />
 </html>

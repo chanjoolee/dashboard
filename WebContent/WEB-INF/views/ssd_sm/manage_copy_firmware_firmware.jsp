@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Corona manage copy template to scriptset</title>
+    <title>Corona manage copy template to firmware</title>
     <%-- 1. jquery --%>
     <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
@@ -17,7 +17,7 @@
     <%-- jqgrid --%>
     <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2017.10.18"></script>    
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
     
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
@@ -60,7 +60,7 @@
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
 	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 	
-	<%-- x축 그룹라벨 --%>
+	<%-- x�?그룹?�벨 --%>
 	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
 	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
 	
@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2018.01.10.01"></script>
+	<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -161,7 +161,7 @@
 			font-size: 12px;
 		}
 		
-		/* multi-select 관련  */
+		/* multi-select 관?? */
 		.ui-multiselect-checkboxes li label{
 			font-size: 13px;
 			line-height: 1.3em;
@@ -180,9 +180,9 @@
 		
 		
 		#loader {
-		  position: fixed;
+		  position: absolute;
 		  left: 50%;
-		  top: 50%;
+		  top: 25%;
 		  z-index: 1;
 		  width: 150px;
 		  height: 150px;
@@ -239,7 +239,7 @@
 		  width: 100px;
 		}
 		
-		<%-- 탭뷰--%>
+		<%-- ??��--%>
 		a:hover,a:focus{
 		    text-decoration: none;
 		    outline: none;
@@ -305,7 +305,7 @@
 		
 		
 		<%--
-		/* chart가 숨김시 작아지는 현상 없앰 */
+		/* chart가 ?��????�아지???�상 ?�앰 */
 		
 		.tab-content > .tab-pane,
 		.pill-content > .pill-pane {
@@ -404,7 +404,7 @@
             float:right;
         }
 		
-		<%--  jqGrid에서 dialog가 뒤로 숨는 문제.--%>
+		<%--  jqGrid?�서 dialog가 ?�로 ?�는 문제.--%>
 		.ui-dialog { z-index: 1000 !important ;}
 		div button.ui-button.ui-dialog-titlebar-close {
 			display: none;
@@ -423,11 +423,6 @@
 		}
 		.cont_tit {
 		    padding-bottom: 3px;
-		}
-		
-		<%--  jqGrid에서 add popup에서 scroll--%>
-		.ui-jqdialog-content .FormGrid {
-		    overflow: hidden;
 		}
 		
 	</style>
@@ -546,7 +541,7 @@
 		
 	</script>
 	<script  id="script_schemaSearchCondition">
-	//그리드 편집전 데이타
+	//그리???�집???�이?�
 	var tempList = [];
 	var beforEditRow = {};
 	
@@ -564,7 +559,7 @@
 					],		
 					type:"title",
 					id: "title_script",
-					label: "Source: Master TS"
+					label: "Source: Project TS"
 				},
 				{
 					label:'',
@@ -593,25 +588,25 @@
 										
 										{
 											type:'SearchHeader',
-											id: 'categoryHead',
-											name: 'categoryHead',
+											id: 'projectFromHead',
+											name: 'projectFromHead',
 											label:'',
-											text:'Category',
+											text:'Project',
 											width: '50px'
 										},
 										
 										{
 											type:'multiCombo',
-											id: 'category',
-											name: 'category',
+											id: 'from_sample',
+											name: 'from_sample',
 											label:'',
-											text:'Category',
-											width: '300px',
+											text:'Project',
+											width: '230px',
 											data: function(){
 												var rtnList = [];
 												$.ajax({
 													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
+													data: {sqlid: "dashboard.corona.emmc.search.sample"}, 
 													async: false,
 													success:  function(response){
 														rtnList = response.dataList;
@@ -621,109 +616,105 @@
 											},
 											//value :'CSSD',
 											options: {
-												cd:'CATEGORY',
-												name:'CATEGORY',
-												childrens : [
-													{
-														id: "testItem" ,
-														topElement: "schemaSearch.elements"
-													}
-												]
+												cd:'SAMPLE',
+												name:'SAMPLE'
 											},
 											multiselectOpt:{
-												//selectedList: 1 ,
-												multiple: true,
+												selectedList: 1 ,
+												multiple: false,
 												selectedText: function(numChecked, numTotal, checkedItems){
 													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var rtn = "";
 													 var sb = [];
-													 $.each(checkedItems,function(i,d){
-													 	 if(i < 2)
-														 	sb.push($(this).val());
+													 $.each(checkedItems,function(){
+														 sb.push($(this).val());
 													 });
-													 rtn = sb.join(",");
-													 if((checkedItems.length-2) > 0){
-													 	rtn += " ..." + (checkedItems.length-2)+" more"
-													 }
-													 return rtn;
-												}
-											},
-											events:{
-												
-											}
-										} ,
-										
-										
-										{
-											type:'SearchHeader',
-											id: 'testItemHead',
-											name: 'testItemHead',
-											label:'',
-											text:'Test Item',
-											width: '60px'
-										},
-										
-										
-										{
-											type:'multiCombo',
-											id: 'testItem',
-											name: 'testItem',
-											label:'',
-											text:'Test Item',
-											width: '300px',
-											data: function(){
-												var rtnList = [];
-												$.ajax({
-													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.test_item.distinct", sample: $("#category").val() }, 
-													async: false,
-													success:  function(response){
-														rtnList = response.dataList;
-														tempList = rtnList;
-													}
-												});
-												return rtnList;
-											},
-											//value :'CSSD',
-											options: {
-												cd:'TEST_ITEM' ,
-												name:'TEST_ITEM',
-												group: {
-													cd:'CATEGORY',
-													name: 'CATEGORY'
-												}
-												
-											},
-											multiselectOpt:{
-												//selectedList: 1 ,
-												multiple: true,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var rtn = "";
-													 var sb = [];
-													 $.each(checkedItems,function(i,d){
-													 	 if(i < 2)
-														 	sb.push($(this).val());
-													 });
-													 rtn = sb.join(",");
-													 if((checkedItems.length-2) > 0){
-													 	rtn += " ..." + (checkedItems.length-2)+" more"
-													 }
-													 return rtn;
+													 return sb.join(",");
 												}
 											},
 											events:{
 												change : function(){
-													// parent.$("#loader").show();
-													// setTimeout( function(){
-													// 	$("#contentMain").html("");
-													// 	makeHtml("contentMain",schemaContent);
-													// 	parent.$("#loader").hide();
-													// },50); 
+													var datas = [];
+													$.ajax({
+														type: "POST",
+														url: "/dashboard/genericlListJson.html",
+														data: {sqlid: "dashboard.corona.emmc.search.firmware",sample: $("#from_sample").val() }, 
+														async: false,
+														success:  function(response){
+															datas = response.dataList;
+														}
+													});
+													
+													var sampleObj = $("#from_firmware");
+													sampleObj.html("");
+													$.each(datas ,function(){
+														var option = $(document.createElement( "option" ));
+														option.val(this.FIRMWARE);
+														option.text(this.FIRMWARE_NM);
+														sampleObj.append(option);
+													});
+													
+													$("select[name=from_firmware]").multiselect('refresh');
+													$("div.ui-multiselect-menu").css("width","400px");
+													$(".ui-multiselect-filter input").css("width","150px");
+													// end change events
+													
+													fn_search_firmware_from();
 												}
 											}
-										}
+										} ,
 										
+										{
+											type:'SearchHeader',
+											id: 'from_firmwareHead',
+											name: 'from_firmwareHead',
+											label:'',
+											text:'Firmware',
+											width: '60px'
+										},
+										
+										{
+											type:'multiCombo',
+											id: 'from_firmware',
+											name: 'from_firmware',
+											label:'',
+											text:'Firmware',
+											width: '200px',
+											data: function(){
+												var rtnList = [];
+												$.ajax({
+													url: "/dashboard/genericlListJson.html",
+													data: {sqlid: "dashboard.corona.emmc.search.firmware", sample: $("#from_sample").val() }, 
+													async: false,
+													success:  function(response){
+														rtnList = response.dataList;
+													}
+												});
+												return rtnList;
+											},
+											//value :'CSSD',
+											options: {
+												cd:'FIRMWARE',
+												name:'FIRMWARE_NM'
+											},
+											multiselectOpt:{
+												selectedList: 1 ,
+												multiple: false,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													 //return numChecked + ' of ' + numTotal + ' checked';
+													 var sb = [];
+													 $.each(checkedItems,function(){
+														 sb.push($(this).attr('title'));
+													 });
+													 return sb.join(",");
+												}
+											},
+											events:{
+												change : function(){
+													fn_search_firmware_from();
+												}
+											}
+										},
+									
 										
 									]
 								}
@@ -732,7 +723,7 @@
 								
 							]
 					 	},
-					 	//검색버튼
+					 	//검?�버??					
 					 	{
 					 		label:'',
 					 		type: 'VerticalLayout',
@@ -762,13 +753,7 @@
 											],
 											events:{
 												click : function(){
-													//parent.$("#loader").show();
-													//setTimeout( function(){
-													//	$("#contentMain").html("");
-													//	makeHtml("contentMain",schemaContent);
-													//	parent.$("#loader").hide();
-													//},50);
-													fn_search_script();
+													fn_search_firmware_from();
 												}
 											}
 										}
@@ -796,7 +781,7 @@
 				
 				
 				
-				//script master grid
+				//firmware from grid
 				{
 					label: '',
 					type: 'HorizontalLayout',
@@ -816,26 +801,32 @@
 					    	id: 'grid_script',
 					    	label:' ',
 					    	items:[						
-								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
+								{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: true, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
+					    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
+								,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
 								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
-								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 					    		
 					    	],	
 					    	data: function(){
 					    		var rtnList = [];
-					    		$.ajax({
-					    			type: "POST",
-					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
-					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-					    			data: $("#form").serialize(), 
-					    			async: false,
-					    			success:  function(response){
-					    				rtnList  = response.dataList;
-					    				
-					    			}
-					    		});
+								var paramObj = {
+									sample : $("#from_sample").val(),
+									firmware : $("#from_firmware").val(),
+									sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"
+								};
+								$.ajax({
+									type: "POST",
+									url: "/dashboard/genericlListJson.html",
+									//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
+									//data: $("#form").serialize(), 
+									data: paramObj,
+									async: false,
+									success:  function(response){
+										rtnList  = response.dataList;
+									}
+								});
 					    		
 					    		return rtnList;
 					    	},		
@@ -896,8 +887,11 @@
 						    			type: "POST",
 						    			url: "/dashboard/genericlListJson.html",
 						    			data: {
-						    				script_name: row.SCRIPT_NAME
-						    				, sqlid: 'dashboard.corona.emmc.manage.script.search.one'}, 
+						    				sample: row.SAMPLE
+						    				, firmware: row.FIRMWARE
+						    				, script_name: row.SCRIPT_NAME
+						    				, sqlid: 'dashboard.corona.emmc.manage.script.firmware.mapping.one'
+						    			}, 
 						    			//data: $("#form").serialize(), 
 						    			async: false,
 						    			success:  function(response){
@@ -923,7 +917,7 @@
 																return detailList[0];
 															},
 															options : {
-																keys : ['SCRIPT_NAME'],
+																keys : ['FIRMWARE','SAMPLE','SCRIPT_NAME'],
 																fn_submit: function(){
 																	//alert("submit function defined");
 																	var paramObj = {
@@ -937,7 +931,7 @@
 											                    			searchJson: JSON.stringify(paramObj),
 											                    			fieldName: this.state.name,
 											                    			fieldValue: this.state.value,
-											                    			sqlid: "dashboard.corona.emmc.script_master.update"
+											                    			sqlid: "dashboard.corona.emmc.firmware_script_map.update"
 											                    		}, 
 											                    		async: false,			                    		
 											                    		success:  function(data){
@@ -973,9 +967,8 @@
 																}
 															},
 															items: [
-																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
-																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
-																{label:'Category', col: 'CATEGORY', editable: true},
+																{label:'Script Name', col: 'SCRIPT_NAME', editable: false},
+																{label:'Category', col: 'CATEGORY', editable: false},
 																{label:'Test Item', col: 'TEST_ITEM', editable: false},
 																{label:'TIME', col: 'TIME'},
 																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
@@ -997,9 +990,7 @@
 																{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
 																{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
 															]
-															
 														}
-														
 					    					    	
 					    					    	]
 					    					    }
@@ -1007,6 +998,7 @@
 					    					
 					    					]
 					    			};
+					    			
 					    			fn_makeHtml(childDiv,schema1);
 					    			
 					    		} ,
@@ -1028,11 +1020,7 @@
 				    				);
 				    				
 				    				$("#grid_script tbody input[type=checkbox].groupHeader").change(function (e) {		
-		    							if("${param.scriptset}" == ""){ 
-		    								parent.$("#loader").show(); 
-		    							}else{
-		    								$("#loader").show();
-		    							}
+		    							parent.$("#loader").show();
 		    							var currentCB = $(this);
 		    							setTimeout( function(){		    								
 										    var grid = jQuery('#grid_script');
@@ -1047,11 +1035,7 @@
 												});		
 												var a = "a";
 											}
-											if("${param.scriptset}" == ""){ 
-			    								parent.$("#loader").hide(); 
-			    							}else{
-			    								$("#loader").hide();
-			    							}
+											parent.$("#loader").hide();
 		    							},50);
 									    
 									});	
@@ -1070,7 +1054,6 @@
 					
 					]
 				},
-				
 				// copy Button
 				{ 
 					type:'Button',
@@ -1098,11 +1081,7 @@
 //									}
 							
 							fn_validation(function(){
-								if("${param.scriptset}" == ""){ 
-    								parent.$("#loader").show(); 
-    							}else{
-    								$("#loader").show();
-    							}
+								parent.$("#loader").show();
 								setTimeout( function(){
 									fn_copy();
 									fn_search_firmware();
@@ -1113,13 +1092,12 @@
 						}
 					}
 				},
-				
 				{
 					controlCss:[
 						{code: 'margin-top', value:'10px'} 
 					],	
 					type:"title",
-					label: "Target: Script Set"
+					label: "Target: Project TS"
 				},
 				
 				// target search
@@ -1136,41 +1114,36 @@
 					elements: [
 						{
 							type:'SearchHeader',
-							id: 'scriptsetHead',
-							name: 'scriptsetHead',
+							id: 'projectHead',
+							name: 'projectHead',
 							label:'',
-							text:'Script Set',
-							width: '70px'
+							text:'Project',
+							width: '50px'
 						},
 						
 						{
 							type:'multiCombo',
-							id: 'to_scriptset',
-							name: 'to_scriptset',
+							id: 'to_sample',
+							name: 'to_sample',
 							label:'',
-							text:'Scriptset',
+							text:'Project',
 							width: '230px',
 							data: function(){
 								var rtnList = [];
 								$.ajax({
 									url: "/dashboard/genericlListJson.html",
-									data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.search"}, 
+									data: {sqlid: "dashboard.corona.emmc.search.sample"}, 
 									async: false,
 									success:  function(response){
 										rtnList = response.dataList;
-										$.each(rtnList,function(i,d){
-											if(d.SCRIPTSET == "${param.scriptset}")
-												d.selected = "selected";
-											
-										});
 									}
 								});
 								return rtnList;
 							},
 							//value :'CSSD',
 							options: {
-								cd:'SCRIPTSET',
-								name:'SCRIPTSET'
+								cd:'SAMPLE',
+								name:'SAMPLE'
 							},
 							multiselectOpt:{
 								selectedList: 1 ,
@@ -1186,11 +1159,88 @@
 							},
 							events:{
 								change : function(){
+									var datas = [];
+									$.ajax({
+										type: "POST",
+										url: "/dashboard/genericlListJson.html",
+										data: {sqlid: "dashboard.corona.emmc.search.firmware",sample: $("#to_sample").val() }, 
+										async: false,
+										success:  function(response){
+											datas = response.dataList;
+										}
+									});
+									
+									var sampleObj = $("#to_firmware");
+									sampleObj.html("");
+									$.each(datas ,function(){
+										var option = $(document.createElement( "option" ));
+										option.val(this.FIRMWARE);
+										option.text(this.FIRMWARE_NM);
+										sampleObj.append(option);
+									});
+									
+									$("select[name=to_firmware]").multiselect('refresh');
+									$("div.ui-multiselect-menu").css("width","400px");
+									$(".ui-multiselect-filter input").css("width","150px");
 									// end change events
+									
 									fn_search_firmware();
 								}
 							}
 						} ,
+						
+						{
+							type:'SearchHeader',
+							id: 'to_firmwareHead',
+							name: 'to_firmwareHead',
+							label:'',
+							text:'Firmware',
+							width: '60px'
+						},
+						
+						{
+							type:'multiCombo',
+							id: 'to_firmware',
+							name: 'to_firmware',
+							label:'',
+							text:'Firmware',
+							width: '200px',
+							data: function(){
+								var rtnList = [];
+								$.ajax({
+									url: "/dashboard/genericlListJson.html",
+									data: {sqlid: "dashboard.corona.emmc.search.firmware", sample: $("#to_sample").val() }, 
+									async: false,
+									success:  function(response){
+										rtnList = response.dataList;
+									}
+								});
+								return rtnList;
+							},
+							//value :'CSSD',
+							options: {
+								cd:'FIRMWARE',
+								name:'FIRMWARE_NM'
+							},
+							multiselectOpt:{
+								selectedList: 1 ,
+								multiple: false,
+								selectedText: function(numChecked, numTotal, checkedItems){
+									 //return numChecked + ' of ' + numTotal + ' checked';
+									 var sb = [];
+									 $.each(checkedItems,function(){
+										 sb.push($(this).attr('title'));
+									 });
+									 return sb.join(",");
+								}
+							},
+							events:{
+								change : function(){
+									fn_search_firmware();
+								}
+							}
+						},
+					
 						
 						// search Button
 						{
@@ -1229,12 +1279,12 @@
 			    	id: 'grid_firmware',
 			    	label:' ',
 			    	items:[	
-			    		{label:'ScriptSet', name:'SCRIPTSET', id:'SCRIPTSET', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
+			    		{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: true, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
+			    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
 						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
 						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
-						,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
+						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:700, align:'left', sortable:false , editable: true}
 			    		
 			    	],	
 			    	data: function(){
@@ -1256,7 +1306,7 @@
 			    		multiSort:true,
 			    		multiselect: true,
 			    		multiboxonly:true, 
-			    		sortname: 'CATEGORY,SCRIPT_NAME',
+			    		sortname: 'CATEGORY, SCRIPT_NAME',
 			    		rowNum: 1000000,
 			    		//forceFit : false ,
 			    		emptyrecords: "No records to view",
@@ -1297,10 +1347,10 @@
 				    			type: "POST",
 				    			url: "/dashboard/genericlListJson.html",
 				    			data: {
-				    				scriptset: row.SCRIPTSET
+				    				sample: row.SAMPLE
+				    				, firmware: row.FIRMWARE
 				    				, script_name: row.SCRIPT_NAME
-				    				, sqlid: 'dashboard.corona.emmc.manage.script.scriptset.mapping.one'
-				    			}, 
+				    				, sqlid: 'dashboard.corona.emmc.manage.script.firmware.mapping.one'}, 
 				    			//data: $("#form").serialize(), 
 				    			async: false,
 				    			success:  function(response){
@@ -1326,7 +1376,7 @@
 														return detailList[0];
 													},
 													options : {
-														keys : ['SCRIPTSET','SCRIPT_NAME'],
+														keys : ['FIRMWARE','SAMPLE','SCRIPT_NAME'],
 														fn_submit: function(){
 															//alert("submit function defined");
 															var paramObj = {
@@ -1340,7 +1390,7 @@
 									                    			searchJson: JSON.stringify(paramObj),
 									                    			fieldName: this.state.name,
 									                    			fieldValue: this.state.value,
-									                    			sqlid: "dashboard.corona.emmc.scriptset_script_map.update"
+									                    			sqlid: "dashboard.corona.emmc.firmware_script_map.update"
 									                    		}, 
 									                    		async: false,			                    		
 									                    		success:  function(data){
@@ -1376,42 +1426,28 @@
 														}
 													},
 													items: [
-														{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
-														{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
+														{label:'Script Name', col: 'SCRIPT_NAME', editable: false},
 														{label:'Category', col: 'CATEGORY', editable: false},
 														{label:'Test Item', col: 'TEST_ITEM', editable: false},
-														{label:'Single Multi', col: 'SINGLE_MULTI'},
-														{label:'Power Mode Speed', col: 'POWER_MODE_SPEED'},
-														{label:'Test Time', col: 'TEST_TIME'},
+														{label:'TIME', col: 'TIME'},
+														{label:'Customer Item', col: 'CUSTOMER_ITEM'},
 														{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-														{label:'Luconfig 유무', col: 'LUCONFIG_YN'},
-														{label:'UFS Ver', col: 'UFS_VER'},
-														{label:'Precondition', col: 'PRECONDITION'},
-														{label:'POR', col: 'POR'},
-														{label:'HW Reset', col: 'HW_RESET'},
-														{label:'EP Reset', col: 'EP_RESET'},
-														{label:'H8', col: 'H8'},
-														{label:'SSU', col: 'SSU'},
-														{label:'Target LU', col: 'TARGET_LU'},
-														{label:'Power Control', col: 'POWER_CONTROL'},
-														{label:'Item Name', col: 'ITEM_NAME'},
-														{label:'Script TAT LVL', col: 'SCRIPT_TAT_LVL'},
-														{label:'Script Version', col: 'SCRIPT_VERSION'},
-														{label:'PF110', col: 'PF110'},
-														{label:'EXYNOS 7420', col: 'EXYNOS_7420'},
-														{label:'P4 Rev', col: 'P4_REV'},
-														{label:'Priority', col: 'PRIORITY'},
-														{label:'TG645', col: 'TG645'},
-														{label:'Need Power Cycle', col: 'NEED_POWER_CYCLE'},
-														{label:'Reset YN', col: 'RESET_YN'},
-														{label:'Script LVL', col: 'SCRIPT_LVL'},
-														{label:'Refactoring', col: 'REFACTORING'},
-														{label:'Reset Type', col: 'RESET_TYPE'},
+														{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
+														{label:'EMMC Ver', col: 'EMMC_VER'},
+														{label:'Target Device', col: 'TARGET_DEVICE'},
+														{label:'Target Partition', col: 'TARGET_PARTITION'},
+														{label:'Category1', col: 'CATEGORY1'},
+														{label:'Category2', col: 'CATEGORY2'},
+														{label:'Category3', col: 'CATEGORY3'},
+														{label:'Category4', col: 'CATEGORY4'},
+														{label:'Category5', col: 'CATEGORY5'},
+														{label:'Write Mode', col: 'WRITE_MODE'},
+														{label:'Read Mode', col: 'READ_MODE'},
+														{label:'Platform', col: 'PLATFORM'},
+														{label:'Function Name', col: 'FUNCTION_NAME'},
 														
-														{label:'Item Purpose', col: 'ITEM_PURPOSE', edit_tag: 'textarea'},
-														{label:'Item Description', col: 'ITEM_DESCRIPTION' , edit_tag: 'textarea'},
-														{label:'Input Parameter', col: 'INPUT_PARAMETER' , edit_tag: 'textarea'},
-														{label:'Comment', col: 'USER_COMMENT' , edit_tag: 'textarea'}
+														{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+														{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
 													]
 												}
 			    					    	
@@ -1421,7 +1457,6 @@
 			    					
 			    					]
 			    			};
-			    			
 			    			fn_makeHtml(childDiv,schema1);
 			    			
 			    		} ,
@@ -1434,7 +1469,7 @@
 			    			var v_grid = $(this).jqGrid();
 			    			v_grid.jqGrid('filterToolbar',
 		    					{
-		    						defaultSearch:"cn"
+		    						defaultSearch:'cn'
 		    		                // JSON stringify all data from search, including search toolbar operators
 		    		                ,stringResult: true
 		    		                // instuct the grid toolbar to show the search options
@@ -1443,11 +1478,7 @@
 		    				);
 		    				
 		    				$("#grid_firmware tbody input[type=checkbox].groupHeader").change(function (e) {		
-    							if("${param.scriptset}" == ""){ 
-    								parent.$("#loader").show(); 
-    							}else{
-    								$("#loader").show();
-    							}
+    							parent.$("#loader").show();
     							var currentCB = $(this);
     							setTimeout( function(){
 								    var grid = jQuery('#grid_firmware');
@@ -1461,11 +1492,7 @@
 								            grid.setSelection($(this).closest('tr').attr('id'), isChecked);
 										});		
 									}
-									if("${param.scriptset}" == ""){ 
-	    								parent.$("#loader").hide(); 
-	    							}else{
-	    								$("#loader").hide();
-	    							}
+									parent.$("#loader").hide();
     							},50);
 							    
 							});	
@@ -1484,7 +1511,7 @@
 			]								
 	};
 		
-	// 테스트 중. 그룹별로 상세리스트 만들기
+	// �׽�Ʈ ��. �׷캰�� �󼼸���Ʈ �����
 	function groupbyList(json,pkeys){
 		var abcArr = json;
 		var items = {}, base, key,val ;
@@ -1531,22 +1558,52 @@
 	}
 	
 	//target search condition change
-	function fn_search_firmware(){
-		if("${param.scriptset}" == ""){ 
-			parent.$("#loader").show(); 
-		}else{
-			$("#loader").show();
-		}
+	function fn_search_firmware_from(){
+		parent.$("#loader").show();
 		setTimeout( function(){
 			var rtnList = [];
 			var paramObj = {
-				scriptset : $("#to_scriptset").val(),
-				sqlid: "dashboard.corona.emmc.manage.script.scriptset.mapping"
+				sample : $("#from_sample").val(),
+				firmware : $("#from_firmware").val(),
+				sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"
 			};
 			$.ajax({
 				type: "POST",
 				url: "/dashboard/genericlListJson.html",
-				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.scriptset.mapping"}, 
+				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
+				//data: $("#form").serialize(), 
+				data: paramObj,
+				async: false,
+				success:  function(response){
+					rtnList  = response.dataList;
+					//return rtnList;
+					var theGrid = $("#grid_script").jqGrid();
+					theGrid.jqGrid('clearGridData');
+					theGrid.jqGrid('setGridParam', { data: rtnList});
+					theGrid.trigger('reloadGrid');	
+					parent.$("#loader").hide();
+					
+				}
+			});		
+			
+		},50);
+			
+	}
+	
+	//target search condition change
+	function fn_search_firmware(){
+		parent.$("#loader").show();
+		setTimeout( function(){
+			var rtnList = [];
+			var paramObj = {
+				sample : $("#to_sample").val(),
+				firmware : $("#to_firmware").val(),
+				sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"
+			};
+			$.ajax({
+				type: "POST",
+				url: "/dashboard/genericlListJson.html",
+				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
 				//data: $("#form").serialize(), 
 				data: paramObj,
 				async: false,
@@ -1557,12 +1614,7 @@
 					theGrid.jqGrid('clearGridData');
 					theGrid.jqGrid('setGridParam', { data: rtnList});
 					theGrid.trigger('reloadGrid');	
-					
-					if("${param.scriptset}" == ""){ 
-						parent.$("#loader").hide(); 
-					}else{
-						$("#loader").hide();
-					}
+					parent.$("#loader").hide();
 					
 				}
 			});		
@@ -1573,11 +1625,7 @@
 	
 	//target search condition change
 	function fn_search_script(){
-		if("${param.scriptset}" == ""){ 
-			parent.$("#loader").show(); 
-		}else{
-			$("#loader").show();
-		}
+		parent.$("#loader").show();
 		setTimeout( function(){
 			var rtnList = [];
 			var paramObj = {
@@ -1599,11 +1647,7 @@
 					theGrid.jqGrid('clearGridData');
 					theGrid.jqGrid('setGridParam', { data: rtnList});
 					theGrid.trigger('reloadGrid');	
-					if("${param.scriptset}" == ""){ 
-						parent.$("#loader").hide(); 
-					}else{
-						$("#loader").hide();
-					}
+					parent.$("#loader").hide();
 					
 				}
 			});		
@@ -1620,7 +1664,8 @@
 				
 			},
 			target : {
-				scriptset : $("#to_scriptset").val()
+				firmware : $("#to_firmware").val(),
+				sample: $("#to_sample").val()
 			}
 		}
 		
@@ -1636,9 +1681,8 @@
 		$.ajax({
 			url: "/dashboard/genericlListJson.html",
 			type: "POST",
-			timeout: 200000,
 			data: {
-				sqlid: "dashboard.corona.historyno"
+				sqlid: "dashboard.corona.emmc.historyno"
 			}, 
 			async: false,			                    		
 			success:  function(data){
@@ -1651,11 +1695,10 @@
 		$.ajax({
 			url: "/dashboard/genericSaveJson.html",
 			type: "POST",
-			timeout: 200000,
 			data: {
 				searchJson: JSON.stringify(paramObj),
 				history_no : v_hystoryno ,
-				sqlid: "dashboard.corona.emmc.manage.insert.historyno.copy_template_scriptset"
+				sqlid: "dashboard.corona.emmc.manage.insert.historyno.copy_firmware_firmware"
 			}, 
 			async: false,			                    		
 			success:  function(data){
@@ -1697,7 +1740,7 @@
 			data: {
 				searchJson: JSON.stringify(paramObj),
 				history_no : v_hystoryno ,
-				sqlid: "dashboard.corona.emmc.manage.script_copy_scriptset.update"
+				sqlid: "dashboard.corona.emmc.manage.firmware_copy_firmware.update"
 			}, 
 			async: false,			                    		
 			success:  function(data){
@@ -1729,10 +1772,66 @@
 			}
 		});
 		
-		
 		if( !update_ok)
 			return;
 		// 04. stauts update
+		$.ajax({
+			url: "/dashboard/genericSaveJson.html",
+			type: "POST",
+			data: {
+				firmware : $("#to_firmware").val(),
+				sample: $("#to_sample").val(),
+				sqlid: "dashboard.corona.emmc.manage.firmware.status.update"
+			}, 
+			async: false,			                    		
+			success:  function(data){
+				response1 = data;
+				if(response1.result == 'success'){
+					update_ok = true;
+					msg = "Copied to Firmware ( " + $("#to_firmware").val() + " )" ;
+	    			$("#dialog-confirm").html(msg);
+	    			$("#dialog-confirm").dialog({
+	    			    resizable: false,
+	    			    modal: true,
+	    			    title: "Success",
+	    			    //height: 200,
+	    			    width: 400,
+	    			    dialogClass: 'no-close',
+	    			    closeOnEscape: false,
+	    			    buttons: [
+				              {
+				                text: "OK",
+				                click: function() {
+				                  $( this ).dialog( "close" );											                    			                  
+				                }
+				              }
+			            ]
+	    			});
+				}else {
+					update_ok = false;
+	    			$("#dialog-confirm").html(response1.message);
+	    			$("#dialog-confirm").dialog({
+	    			    resizable: false,
+	    			    modal: true,
+	    			    title: "Error",
+	    			    //height: 200,
+	    			    width: 400,
+	    			    dialogClass: 'no-close',
+	    			    closeOnEscape: false,
+	    			    buttons: [
+				              {
+				                text: "OK",
+				                click: function() {
+				                  $( this ).dialog( "close" );											                    			                  
+				                }
+				              }
+			            ]
+	    			});
+				}						                    			
+			}
+		});
+		
+		
 	}
 	
 	function fn_validation(onSuccess){
@@ -1743,7 +1842,7 @@
 			alert("select more than one item!");
 			return false;
 		}else{
-			var message = "Do you copy to \"" + $("#to_scriptset").val() + "\" ?";
+			var message = "Do you copy to \"" + $("#to_firmware").val() + "\" ?";
 			$("#dialog-confirm").html(message);
 			var rtn = $("#dialog-confirm").dialog({
 			    resizable: false,
@@ -1782,11 +1881,7 @@
 	
 	
 	$(function () {
-		if("${param.scriptset}" == ""){ 
-			parent.$("#loader").show(); 
-		}else{
-			$("#loader").show();
-		}
+		parent.$("#loader").show();
 		setTimeout( function(){
 			fn_makeHtml('searchCondition',schemaSearch);
 			fn_makeHtml('contentMain',schemaContent);
@@ -1794,12 +1889,8 @@
 			$( window ).resize(function() {
 				//console.log("aaaaa");
 			});
-			if("${param.scriptset}" == ""){ 
-				parent.$("#loader").hide(); 
-			}else{
-				$("#loader").hide();
-			}
-			fn_search_firmware();
+			parent.$("#loader").hide();
+			fn_search_firmware(); 
 		},50);
 		
 //		parent.$("body").css("overflow","");
@@ -1828,7 +1919,7 @@
 
 	<div id="div1"></div>
 	<div id="div2"></div>
-	<div id="loader" style="display:none;"></div>
+	
 	<div id="dialog-confirm"></div>
 </form>
 

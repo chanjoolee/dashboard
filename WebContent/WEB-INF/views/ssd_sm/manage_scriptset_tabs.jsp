@@ -4,110 +4,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Corona Emmc manage script</title>
-    <%-- 1. jquery --%>
-    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
-    <!-- <script src="js/jquery.csv-0.71.js"></script> -->
-    
-    <%-- jqgrid --%>
-    <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
-    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+	<!--   --> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<title>Corona UFS manage script</title>
+		<%-- 1. jquery --%>
+		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+		<!-- <script src="js/jquery.csv-0.71.js"></script> -->
+		
+		<%-- jqgrid --%>
+		<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
+		
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		
+		<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+		
+		
 	
-	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
-	 
-    
-  
-   <!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-    <link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-    <!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
-    
-    
-    
-    <%-- 2. high charts --%>
-	<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
-	
-	<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
-	
-	<%-- x축 그룹라벨 --%>
-	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
-	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
-	
-	<%-- 3. Additional files for the Highslide popup effect --%>
-	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
-	
-	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.08.22.01"></script>
-	
-	<%-- 5. local --%>
-	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
-	
-	<%-- multi select --%>
-	<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
-	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
-	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
-	
-	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
-	<script src="/common/js/module.js"></script>
-	
-	<%-- File Saver --%>
-	<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
-	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
-	
-	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
-	
-	<%-- jqueryMohthPicker --%>
-    <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
-   	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
-   	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
-   	
-   	<%-- recat --%>
-   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
-   	
-   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+		<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+		<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+		<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+		
+		
+		
+		<%-- 2. high charts --%>
+		<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
+		
+		<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
+		
+		<%-- x축 그룹라벨 --%>
+		<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+		<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
+		
+		<%-- 3. Additional files for the Highslide popup effect --%>
+		<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
+		
+		<%-- 4. local common --%>
+		<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
+		
+		<%-- 5. local --%>
+		<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
+		
+		<%-- multi select --%>
+		<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-li ghtness/jquery-ui.css" /> -->
+		<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+		<script src="/common/js/module.js"></script>
+		
+		<%-- File Saver --%>
+		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+		
+		<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+		<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+		
+		<%-- jqueryMohthPicker --%>
+		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
+		<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+		
+		<%-- recat --%>
+		<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+		
+		<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
    	
    	
 	<style type="text/css" title="main">
@@ -537,112 +538,16 @@
 			
 			return result;
 		}
-		
+	
 		
 	</script>
 	<script  id="script_schemaSearchCondition">
+		var v_path = 'ssd_sm';
 		//그리드 편집전 데이타
 		var tempList = [];
 		var beforEditRow = {};
 		
 		var EfContextPath = "";
-		
-		var schemaSearch = {
-				containerId:'searchCondition',
-				type:'Vertical',
-				label:'',
-				cls: 'srch_box2',
-				elements:[
-					{
-						label:'',
-						type: 'HorizontalLayout',
-						elements:[
-							{
-								containerCss:[
-									
-								],
-								label:'',
-								type:'Vertical',
-								elements:[
-									{
-										label:'',
-										type: 'HorizontalLayout',
-										containerCss:[
-											{code:'height',value:'30px'}
-										],
-										elements:[
-											
-											{
-												type:'SearchHeader',
-												id: 'categoryHead',
-												name: 'categoryHead',
-												label:'',
-												text:'Corona EMMC Management',
-												width: '300px',
-												controlCss:[
-													{code:'text-align',value:'left'},
-													{code:'font-size',value:'14px'}
-												]
-											}
-											
-										]
-									}
-									//2line
-									
-									
-								]
-							},
-							//검색버튼
-							{
-								label:'',
-								type: 'VerticalLayout',
-								cls: 'btn_txt',
-								containerCss:[
-									{code: 'margin-left', value:'10px'}
-									, {code: 'float', value:'right'}
-								]
-								, elements:[
-									{
-										label:'',
-										type: 'HorizontalLayout',
-										cls: 'btn_txt',
-										containerCss:[
-											{code: 'margin-left', value:'10px'}
-										],
-										elements:[
-											{
-												type:'Button',
-												id: 'btnSearch',
-												name: 'btnSearch',
-												label:'Refresh',
-												//width: '50px',
-												cls: 'btn_txt btn_type_e btn_color_b',
-												containerCss:[
-													{code: 'margin-right', value:'3px'}
-												],
-												events:{
-													click : function(){											
-														fn_refresh();
-													}
-												}
-											}
-										
-										]
-									}
-											
-								]
-								
-							}
-						]
-					}
-				
-					
-				
-				]
-				
-		};
-		
-		
 		
 		var schemaContent = {
 				containerId:'contentCoronaDetail',
@@ -657,121 +562,100 @@
 						"label" : "",
 						//
 						"elements" : [
-							// {
-							// 	"type": "tab_iframe",
-							// 	"id" : "script_manage",
-							// 	"label" : "Script Master Manage",							
-							// 	"connected_content" :  {
-							// 		"viewName": "corona_manage_script",
-							// 		"form_id" : "form"
-							// 	}
-							// },
 							{
 								"type": "tab_iframe",
-								"id" : "scriptset_management",
-								"label" : "TestScript Set Mgmt.",							
+								"id" : "scriptset_edit",
+								"label" : "TestScript Set",							
 								"connected_content" :  {
-									"viewName": "corona_emmc/corona_manage_scriptset_tabs",
+									"viewName": v_path + "/manage_scriptset_edit",
 									"form_id" : "form"
 								},
 								"events" : {
 									//"click" : tab_click
 								},
 								"iframe_css" : [
-									{ "code": "height", "value": "770px" }
+									{ "code": "height", "value": "720px" }
 								]
 							},
 							{
 								"type": "tab_iframe",
-								"id" : "template_script_edit",
-								"label" : "Master TS Mgmt.",							
+								"id" : "scriptset_firmware_map",
+								"label" : "FW Version",							
 								"connected_content" :  {
-									"viewName": "corona_emmc/corona_manage_template_edit",
-									"form_id" : "form"
-								},
-								"iframe_css" : [
-									{ "code": "height", "value": "770px" }
-								]
-							},
-							{
-								"type": "tab_iframe",
-								"id" : "template_script_edit_paging",
-								"label" : "Master TS Mgmt. Paging.",							
-								"connected_content" :  {
-									"viewName": "corona_emmc/corona_manage_template_edit_paging",
-									"form_id" : "form"
-								},
-								"iframe_css" : [
-									{ "code": "height", "value": "770px" }
-								]
-							},
-							{
-								"type": "tab_iframe",
-								"id" : "firmware_script_edit",
-								"label" : "Project TS Mgmt.",							
-								"connected_content" :  {
-									"viewName": "corona_emmc/corona_manage_firmware_edit_paging",
+									"viewName": v_path + "/manage_map_firmware_scriptset",
 									"form_id" : "form"
 								},
 								"events" : {
 									//"click" : tab_click
 								},
 								"iframe_css" : [
-									{ "code": "height", "value": "770px" }
-								]
-							},
-							{
-								"type": "tab_iframe",
-								"id" : "project_config",
-								"label" : "Project Config",							
-								"connected_content" :  {
-									"viewName": "corona_emmc/corona_manage_project_showview",
-									"form_id" : "form"
-								},
-								"events" : {
-									//"click" : tab_click
-								},
-								"iframe_css" : [
-									{ "code": "height", "value": "770px" }
+									{ "code": "height", "value": "720px" }
 								]
 							}
+							// ,{
+							// 	"type": "tab_iframe",
+							// 	"id" : "copy_template_to_scriptset",
+							// 	"label" : "Copy : Master TS -> Script Set",							
+							// 	"connected_content" :  {
+							// 		"viewName": "corona_manage_copy_template_scriptset",
+							// 		"form_id" : "form"
+							// 	},
+							// 	"events" : {
+							// 		//"click" : tab_click
+							// 	}
+							// }
+							// ,{
+							// 	"type": "tab_iframe",
+							// 	"id" : "scriptset_script_edit",
+							// 	"label" : "Scriptset TS Mgmt.",							
+							// 	"connected_content" :  {
+							// 		"viewName": "corona_manage_scriptset_script_edit",
+							// 		"form_id" : "form"
+							// 	},
+							// 	"events" : {
+							// 		//"click" : tab_click
+							// 	},
+							// 	"iframe_css" : [
+							// 		{ "code": "height", "value": "720px" }
+							// 	]
+							// }					
+							
 						]
-					}
+					},
 							
 					
 				]								
 		};
 		
-		</script>
-		<script  id="script_main">
-		
-		
-		$(function () {
-			//$("#loader").show();
-			setTimeout( function(){
-				fn_makeHtml('searchCondition',schemaSearch);
-				fn_makeHtml('contentMain',schemaContent);
-				
-				$( window ).resize(function() {
-					//console.log("aaaaa");
-				});
-				$("#loader").hide();
-			},50);
-			
-			// nspim 안에서 호출하는 경우
-			// parent.$("body").css("overflow","");
-			// parent.$("body .box_gray").css("height","1500px");
-			// $( window ).resize(function() {
-			// 	parent.$("body .box_gray").css("height","1500px");
-			// });
-			
-		});
-		
-		
-		function fn_refresh(){
-			$("#contentMain").html("");
+	</script>
+	<script  id="script_main">
+	
+	
+	$(function () {
+		//$("#loader").show();
+		setTimeout( function(){
 			fn_makeHtml('contentMain',schemaContent);
-		}
+			
+			$( window ).resize(function() {
+				//console.log("aaaaa");
+			});
+			$("#loader").hide();
+		},50);
+		
+		// //nspim 안에서 호출하는 경우
+		// parent.$("body").css("overflow","");
+		// parent.$("body .box_gray").css("height","1500px");
+		// $( window ).resize(function() {
+		// 	parent.$("body .box_gray").css("height","1500px");
+		// });
+		
+	});
+	
+	
+	function fn_refresh(){
+		$("#contentMain").html("");
+		fn_makeHtml('contentMain',schemaContent);
+	}
 	
 	</script>
 	

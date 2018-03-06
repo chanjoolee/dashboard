@@ -287,11 +287,8 @@
     		line-height: 1.42857143;
 		}
 	
-	</style>
-<script title="schema">
-// 	$.jgrid.defaults.width = 780;
-// 	$.jgrid.defaults.responsive = true;
-// 	$.jgrid.defaults.styleUI = 'Bootstrap';
+	</style>	
+	<script title="schema">
 	
 	var testInformation = {};
 	var testDisks = [];
@@ -308,9 +305,6 @@
 			elements:[ 
 				{
 					containerCss:[
-						//{code: 'display', value:''}
-						//,{code: 'float', value:'left'}
-						//{code: 'height', value:'1000px'},
 						{code: 'width', value:'99%'}
 					],			
 			    	type:'grid',
@@ -648,11 +642,7 @@
 																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
 																}
 															});
-// 															$.each(keyUpdatedObjects,function(i,react){
-// 																if(react.state.name == "JIRA"){
-// 																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
-// 																}
-// 															});
+
 															
 														},
 														progressObject: $("#loader")
@@ -925,7 +915,7 @@
 									return;
 								var colname = 'SCRIPT_NAME_META';
 								var newWin1 = window.open("", "coronaDetailScript_ufs:" + row[colname], "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
-								var oFrm = document.getElementById("form");
+								var oFrm = document.getElementById("form1");
 								oFrm.action =  '/dashboard/generic.html?viewName=corona_ufs/coronaDetailScript';
 								oFrm.method = "post";
 								oFrm.target = "coronaDetailScript_ufs:" + row[colname]; 
@@ -1116,8 +1106,7 @@ jQuery.fn.center = function () {
 <input type="hidden" id="category" name="category" value="${param.category}"/>
 <input type="hidden" id="testItem" name="testItem" value="${param.testItem}"/>
 <input type="hidden" id="countGubun" name="countGubun" value="${param.countGubun}"/>
-<input type="hidden" id="script_name" name="script_name" value=""/>
-<input type="hidden" id="convert_script" name="convert_script" value=""/>
+
 	<div class="pop_window">
 		<div class="pop_tit_wrap">
 			<!-- <span class="baseline"></span> -->
@@ -1150,6 +1139,14 @@ jQuery.fn.center = function () {
     <div id="loader"></div>
     <div id="dialog-confirm"></div>
     <!-- ## //PAGE CONTENTS ## -->	
+</form>
+<form name="form1" id="form1" method="post" >
+	<input type="hidden" name ="sender" value="${param.sender}"/>
+	<input type="hidden" name="cookieName" value="${param.cookieName}"/>
+	<input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
+	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
+	<input type="hidden" id="script_name" name="script_name" value=""/>
+	<input type="hidden" id="convert_script" name="convert_script" value=""/>
 </form>
 </body>
 <script type="text/babel">

@@ -522,6 +522,174 @@
 				
 	
 	</select>
+	<select id="dashboard.corona.emmc.manage.script.search.paging" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(		
+				SELECT
+						CATEGORY, 
+						SCRIPT_NAME, 	
+						CONVERT_SCRIPT,
+						TEST_ITEM, 
+						TIME, 
+						CUSTOMER_ITEM, 
+						NEED_VENDOR_CMD, 
+						NEED_POWER_CYCLE, 
+						EMMC_VER, 
+						TARGET_DEVICE, 
+						TARGET_PARTITION, 
+						CATEGORY1, 
+						CATEGORY2, 
+						CATEGORY3, 
+						CATEGORY4, 
+						CATEGORY5, 
+						WRITE_MODE, 
+						READ_MODE, 
+						substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						DESCRIPTION,
+						substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+						ARGUMENT, 
+						PLATFORM, 
+						FUNCTION_NAME,
+						INS_DT, 
+						MOD_DT				
+					from CORONA_EMMC_SCRIPT_MASTER a
+					where 1=1
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and a.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="testItemArr  != null and testItemArr != '' ">
+						and a.test_item in 
+						<foreach collection="testItemArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					--order by category,test_item, script_name
+					order by category ,script_name
+				) A
+			where 1=1 			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+				
+				
+			
+	
+	</select>
+	<select id="dashboard.corona.emmc.manage.script.search.paging.page" resultType="hashmap">
+		select 
+			ceil(count(*)/ #{rows} ) as total,
+			#{page} as page ,
+			count(*) records 
+		from 
+		(
+			select a.* from (
+				SELECT
+						CATEGORY, 
+						SCRIPT_NAME, 	
+						CONVERT_SCRIPT,
+						TEST_ITEM, 
+						TIME, 
+						CUSTOMER_ITEM, 
+						NEED_VENDOR_CMD, 
+						NEED_POWER_CYCLE, 
+						EMMC_VER, 
+						TARGET_DEVICE, 
+						TARGET_PARTITION, 
+						CATEGORY1, 
+						CATEGORY2, 
+						CATEGORY3, 
+						CATEGORY4, 
+						CATEGORY5, 
+						WRITE_MODE, 
+						READ_MODE, 
+						substr(DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						DESCRIPTION,
+						substr(ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+						ARGUMENT, 
+						PLATFORM, 
+						FUNCTION_NAME,
+						INS_DT, 
+						MOD_DT				
+					from CORONA_EMMC_SCRIPT_MASTER a
+					where 1=1
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and a.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="testItemArr  != null and testItemArr != '' ">
+						and a.test_item in 
+						<foreach collection="testItemArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					--order by category,test_item, script_name
+					order by category ,script_name
+				) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+						and (
+						<if test="filters.rules.size() > 0" >
+				       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+				           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+				       		</foreach>	
+				       	</if>	
+				       	<if test="filters.groups != null and filters.groups.size() > 0">
+			       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+				       			<if test="group.rules.size() > 0">
+				       			${filters.groupOp}
+					           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+						       	</foreach>
+						       	</if>
+					       	</foreach>
+			       		</if> 
+			       		 )
+			   		</when>
+	   			</choose>
+			)
+				
+				
+			
+	
+	</select>
 	
 	<select id="dashboard.corona.emmc.manage.script.search.one" resultType="hashmap">
 			SELECT
@@ -606,6 +774,154 @@
 			end as rownum_grp
 			,a.*
 		from tbl_a a
+		
+	</select>
+	<select id="dashboard.corona.emmc.manage.script.firmware.mapping.paging" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+				SELECT
+					m.SAMPLE,
+					m.FIRMWARE,
+					m.SCRIPT_NAME, 
+					sm.CONVERT_SCRIPT,
+					m.CATEGORY, 
+					m.TEST_ITEM, 
+					m.TIME, 
+					m.CUSTOMER_ITEM, 
+					m.NEED_VENDOR_CMD, 
+					m.NEED_POWER_CYCLE, 
+					m.EMMC_VER, 
+					m.TARGET_DEVICE, 
+					m.TARGET_PARTITION, 
+					m.CATEGORY1, 
+					m.CATEGORY2, 
+					m.CATEGORY3, 
+					m.CATEGORY4, 
+					m.CATEGORY5, 
+					m.WRITE_MODE, 
+					m.READ_MODE, 
+					substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+					m.DESCRIPTION,
+					substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+					m.ARGUMENT, 
+					m.PLATFORM, 
+					m.FUNCTION_NAME,
+					m.INS_DT, 
+					m.MOD_DT
+				from CORONA_EMMC_F_S_MAP m
+				left outer join CORONA_EMMC_SCRIPT_MASTER sm
+					on sm.script_name = m.script_name
+				where m.sample = #{sample}
+				and m.FIRMWARE = #{firmware}
+				order by m.category, m.test_item, m.script_name
+			)  A
+			where 1=1 			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+		
+		
+	</select>
+	<select id="dashboard.corona.emmc.manage.script.firmware.mapping.paging.page" resultType="hashmap">
+		select 
+			ceil(count(*)/ #{rows} ) as total,
+			#{page} as page ,
+			count(*) records 
+		from 
+		(
+			select a.* from (
+				SELECT
+					m.SAMPLE,
+					m.FIRMWARE,
+					m.SCRIPT_NAME, 
+					sm.CONVERT_SCRIPT,
+					m.CATEGORY, 
+					m.TEST_ITEM, 
+					m.TIME, 
+					m.CUSTOMER_ITEM, 
+					m.NEED_VENDOR_CMD, 
+					m.NEED_POWER_CYCLE, 
+					m.EMMC_VER, 
+					m.TARGET_DEVICE, 
+					m.TARGET_PARTITION, 
+					m.CATEGORY1, 
+					m.CATEGORY2, 
+					m.CATEGORY3, 
+					m.CATEGORY4, 
+					m.CATEGORY5, 
+					m.WRITE_MODE, 
+					m.READ_MODE, 
+					substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+					m.DESCRIPTION,
+					substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+					m.ARGUMENT, 
+					m.PLATFORM, 
+					m.FUNCTION_NAME,
+					m.INS_DT, 
+					m.MOD_DT
+				from CORONA_EMMC_F_S_MAP m
+				left outer join CORONA_EMMC_SCRIPT_MASTER sm
+					on sm.script_name = m.script_name
+				where m.sample = #{sample}
+				and m.FIRMWARE = #{firmware}
+				order by m.category, m.test_item, m.script_name
+			) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+						and (
+						<if test="filters.rules.size() > 0" >
+				       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+				           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+				       		</foreach>	
+				       	</if>	
+				       	<if test="filters.groups != null and filters.groups.size() > 0">
+			       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+				       			<if test="group.rules.size() > 0">
+				       			${filters.groupOp}
+					           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+						       	</foreach>
+						       	</if>
+					       	</foreach>
+			       		</if> 
+			       		 )
+			   		</when>
+	   			</choose>
+			)
+		
 		
 	</select>
 	<select id="dashboard.corona.emmc.manage.script.firmware.mapping.one" resultType="hashmap">
@@ -827,8 +1143,8 @@
 	    	v_status varchar2(100);
 	    begin
 	    	
-    		insert into CORONA_EMMC_SCRIPT_MASTER (SCRIPT_NAME, CATEGORY, TEST_ITEM,INS_DT)
-            values (#{SCRIPT_NAME},#{CATEGORY},#{TEST_ITEM}, sysdate) ;
+    		insert into CORONA_EMMC_SCRIPT_MASTER (SCRIPT_NAME, CONVERT_SCRIPT,  CATEGORY, TEST_ITEM,INS_DT)
+            values (#{SCRIPT_NAME}, #{CONVERT_SCRIPT} ,#{CATEGORY},#{TEST_ITEM}, sysdate) ;
                 
             select count(*) into cnt from CORONA_EMMC_SCRIPTSET_MAP
             where SCRIPTSET = 'Normal'
@@ -1328,6 +1644,7 @@
 	    		
 	                update CORONA_EMMC_F_S_MAP set
 	                	STATUS = vStatus1, 
+	                	STATUS_CUSTOM = 'Y', 
 	                	JIRA = #{JIRA},
 	                	DESCRIPTION = DESCRIPTION || chr(10) || to_char(sysdate,'YYYY-MM-DD HH24:MI') || ': ' || STATUS || ' ==> ' || #{STATUS} || ' ( ${userId} )'  ,
 	  
@@ -1552,5 +1869,1632 @@
 		</if>
 	
 	</select>
+	
+	
+	<select id="dashboard.ssd_sm.manage.scriptsets.search" resultType="hashmap">
+		with tbl as (
+			select 
+				a.SCRIPTSET,
+				case a.SCRIPTSET 
+					when 'normal' then 0 
+					when 'Normal' then 0 
+					else 1 
+				end as col_order ,
+				count(b.SCRIPT_NAME) cnt
+			from SSD_SM_SCRIPTSET a
+			left outer join SSD_SM_SCRIPTSET_MAP b
+				on a.SCRIPTSET = b.SCRIPTSET
+			group by a.SCRIPTSET
+			order by a.SCRIPTSET
+		) 
+		
+		select * from tbl 
+		order by col_order, SCRIPTSET
+		
+		
+	</select>
+	
+	<select id="dashboard.ssd_sm.manage.scriptsets.map.search.paging" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+				select 
+					a.PROJECT,
+					a.FIRMWARE,
+					a.FIRMWARE FIRMWARE_NM,
+					a.NAND_TYPE, 
+					a.REMARK, 
+					to_char(a.RELEASE_DATE,'YYYY-MM-DD') as RELEASE_DATE,
+					a.SCRIPTSET,
+					a.INS_DT, 
+					a.MOD_DT
+				from SSD_SM_FIRMWARE a		
+				where 1=1
+				<if test="project  != null and project != '' ">
+					and a.PROJECT = #{project}
+				</if>
+				order by a.project, RELEASE_DATE desc
+			) A
+			where 1=1 
+			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+		
+	</select>
+	<select id="dashboard.ssd_sm.manage.scriptsets.map.search.paging.page" resultType="hashmap">
+		select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+					select 
+					a.PROJECT,
+					a.FIRMWARE,
+					a.FIRMWARE FIRMWARE_NM,
+					a.NAND_TYPE, 
+					a.REMARK, 
+					to_char(a.RELEASE_DATE,'YYYY-MM-DD') as RELEASE_DATE,
+					a.SCRIPTSET,
+					a.INS_DT, 
+					a.MOD_DT
+				from SSD_SM_FIRMWARE a		
+				where 1=1
+				<if test="project  != null and project != '' ">
+					and a.PROJECT = #{project}
+				</if>
+				order by a.project, RELEASE_DATE desc
+			) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+						and (
+						<if test="filters.rules.size() > 0" >
+				       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+				           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+				       		</foreach>	
+				       	</if>	
+				       	<if test="filters.groups != null and filters.groups.size() > 0">
+			       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+				       			<if test="group.rules.size() > 0">
+				       			${filters.groupOp}
+					           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+						       	</foreach>
+						       	</if>
+					       	</foreach>
+			       		</if> 
+			       		 )
+			   		</when>
+	   			</choose>
+			)
+		
+	</select>
+	<update id="dashboard.ssd_sm.scriptset.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		insert into SSD_SM_SCRIPTSET (SCRIPTSET, INS_DT)
+                values (#{SCRIPTSET}, sysdate) ;
+                
+                <if test="copyfrom  != null and copyfrom != '' ">
+				delete from SSD_SM_SCRIPTSET_MAP where SCRIPTSET = #{SCRIPTSET};
+				
+				insert into SSD_SM_SCRIPTSET_MAP (SCRIPTSET, SCRIPT_NAME, INS_DT)
+				select 
+					#{SCRIPTSET}, SCRIPT_NAME, sysdate
+				from SSD_SM_SCRIPTSET_MAP
+				where scriptset = #{copyfrom};
+				
+				</if>
+       	 
+	    end;
     
+    </update>
+	<update id="dashboard.ssd_sm.scriptset.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		if #{origindata.SCRIPTSET} != 'Normal' Then
+		    		delete from SSD_SM_SCRIPTSET
+		    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+		    		
+		    		delete from SSD_SM_SCRIPTSET_MAP
+		    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+		    		
+		    	
+		    	End if;
+	    		
+	    		
+	    end;
+    
+    </update>
+	<update id="dashboard.ssd_sm.scriptset.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	if #{origindata.SCRIPTSET} != 'Normal' Then
+	    		update SSD_SM_SCRIPTSET set 
+	    		SCRIPTSET = #{SCRIPTSET},
+	    		mod_dt = sysdate
+	    		where SCRIPTSET = #{origindata.SCRIPTSET} ;
+	    		
+	    		
+	    		update SSD_SM_SCRIPTSET_MAP set
+	    		SCRIPTSET = #{SCRIPTSET}
+	    		where 	SCRIPTSET = #{origindata.SCRIPTSET} ;
+	    		
+	    		update SSD_SM_SCRIPTSET_MAP_F set
+	    		SCRIPTSET = #{SCRIPTSET}
+	    		where 	SCRIPTSET = #{origindata.SCRIPTSET} ;
+	    		
+	    		
+               end if;
+       	 
+	    end;
+    
+    </update>
+	<select id="dashboard.ssd_sm.search.project" resultType="hashmap">
+		select
+			PROJECT, 
+			SCRIPTSET, 
+			USE_YN,
+			INS_DT, 
+			MOD_DT
+		from SSD_SM_PROJECT
+		where use_yn != 'N'
+		order by project
+	
+	</select>
+	<update id="dashboard.ssd_sm.firmware.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		insert into SSD_SM_FIRMWARE (PROJECT, FIRMWARE, NAND_TYPE, REMARK, RELEASE_DATE, SCRIPTSET,INS_DT)
+                values (#{PROJECT},#{FIRMWARE},#{NAND_TYPE},#{REMARK},#{RELEASE_DATE},#{SCRIPTSET}, sysdate) ;
+       	 
+	    end;
+    
+    </update>
+    
+    <update id="dashboard.ssd_sm.firmware.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	select count(*) into cnt from SSD_SM_FIRMWARE 
+	    	where project = #{origindata.PROJECT}
+	    	and firmware = #{origindata.FIRMWARE};
+	    	
+	    	update SSD_SM_FIRMWARE set
+		    	MOD_DT = sysdate
+		    	<if test="NAND_TYPE != origindata.NAND_TYPE">,NAND_TYPE = #{NAND_TYPE}</if>
+		    	<if test="REMARK != origindata.REMARK">,REMARK = #{REMARK}</if>
+		    	<if test="RELEASE_DATE != origindata.RELEASE_DATE">,RELEASE_DATE = to_date(#{RELEASE_DATE},'YYYY-MM-DD')</if>
+		    	<if test="SCRIPTSET != origindata.SCRIPTSET">,SCRIPTSET = #{SCRIPTSET}</if>
+		 
+	    	where project = #{origindata.PROJECT}
+	    	and firmware = #{origindata.FIRMWARE};
+	    	
+	    end;
+    
+    </update>
+    <update id="dashboard.ssd_sm.firmware.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    	delete from SSD_SM_FIRMWARE 		 
+	    	where project = #{origindata.PROJECT}
+	    	and firmware = #{origindata.FIRMWARE};
+	    	
+	    end;
+    
+    </update>
+	
+	<select id="dashboard.ssd_sm.project" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+				select 
+					a.PROJECT,
+					a.SCRIPTSET,
+					a.USE_YN,
+					a.INS_DT, 
+					a.MOD_DT
+				from SSD_SM_PROJECT a		
+				where 1=1
+				order by a.project, ins_dt desc
+			) A
+			where 1=1 
+			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+		
+	
+	</select>
+	
+	<select id="dashboard.ssd_sm.project.page" resultType="hashmap">
+		select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+					select 
+						a.PROJECT,
+						a.SCRIPTSET,
+						a.USE_YN,
+						a.INS_DT, 
+						a.MOD_DT
+					from SSD_SM_PROJECT a		
+					where 1=1
+					order by a.project, ins_dt desc
+			) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+						and (
+						<if test="filters.rules.size() > 0" >
+				       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+				           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+				       		</foreach>	
+				       	</if>	
+				       	<if test="filters.groups != null and filters.groups.size() > 0">
+			       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+				       			<if test="group.rules.size() > 0">
+				       			${filters.groupOp}
+					           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+						       	</foreach>
+						       	</if>
+					       	</foreach>
+			       		</if> 
+			       		 )
+			   		</when>
+	   			</choose>
+			)
+	
+	</select>
+    <update id="dashbaord.ssd_sm.project.edit" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    	vUseyn varchar2(10) := #{USE_YN};
+	    begin
+	    		
+	    		select count(*) into cnt from SSD_SM_PROJECT
+	    		where PROJECT = #{origindata.PROJECT} ;
+	    		
+	    		if cnt = 0 then
+	    			insert into SSD_SM_PROJECT(PROJECT, USE_YN, SCRIPTSET,  INS_DT)
+	    			values (#{origindata.PROJECT},#{USE_YN}, #{SCRIPTSET}, sysdate);
+	    		else	    		
+	                update SSD_SM_PROJECT set
+	                	USE_YN = vUseyn, 
+	                	SCRIPTSET = #{SCRIPTSET} ,
+	                	MOD_DT = sysdate
+	               where PROJECT = #{origindata.PROJECT} ;
+	                
+	          	end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.ssd_sm.project.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		insert into SSD_SM_PROJECT(PROJECT, USE_YN, SCRIPTSET,  INS_DT)
+	    		values (#{PROJECT},#{USE_YN}, #{SCRIPTSET}, sysdate);
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.ssd_sm.project.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    	delete from SSD_SM_PROJECT		 
+	    	where project = #{origindata.PROJECT};
+	    	
+	    end;
+    
+    </update>
+    
+    <select id="dashboard.ssd_sm.script.category.distinct" resultType="hashmap">
+		select
+			distinct category,  'SELECTED' selected
+		from SSD_SM_MASTER
+		order by 1
+	
+	</select>
+    <select id="dashboard.ssd_sm.script.sub_category.distinct" resultType="hashmap">
+		select
+			distinct CATEGORY, SUB_CATEGORY , 'SELECTED' selected
+		from SSD_SM_MASTER
+		order by 1
+	
+	</select>
+	<select id="dashboard.ssd_sm.manage.script.search" resultType="hashmap">
+			with tbl_a as (	
+				SELECT
+						a.SCRIPT_NAME, 
+						a.STAGE, 
+						b.SCRIPT_GROUP,
+						b.GROUP_NAME,
+						b.seq,
+						a.CATEGORY, 
+						row_number() over (partition by b.SCRIPT_GROUP, a.category order by b.seq,a.CATEGORY,a.SCRIPT_NAME) row_num,
+						a.SUB_CATEGORY, 
+						a.ITEM, 
+						a.SUB_ITEM, 
+						substr(a.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						a.DESCRIPTION,
+						a.TESTER, 
+						a.INS_DT, 
+						a.MOD_DT				
+					from SSD_SM_MASTER a
+					left outer join SSD_SM_MASTER_GROUP b
+						on b.SCRIPT_GROUP = a.SCRIPT_GROUP
+					where 1=1
+					<if test="stageArr  != null and stageArr != '' ">
+						and a.stage in 
+						<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="scriptGroupArr  != null and scriptGroupArr != '' ">
+						and b.script_group in 
+						<foreach collection="scriptGroupArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and a.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="subCategoryArr  != null and subCategoryArr != '' ">
+						and a.SUB_CATEGORY in 
+						<foreach collection="subCategoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="testItemArr  != null and testItemArr != '' ">
+						and a.item in 
+						<foreach collection="testItemArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					--order by category,test_item, script_name
+					order by b.seq,category ,script_name
+				)
+				
+				select 
+					case 
+						when a.row_num > 0 and a.row_num <![CDATA[ <= ]]>  500 then '01. ~500'
+						when a.row_num >500 and a.row_num <![CDATA[ <=  ]]> 1000 then '02. 500~1000'
+						when a.row_num > 1000 and a.row_num <![CDATA[ <=  ]]> 1500 then '03. 1000~1500'
+						when a.row_num > 1500 and a.row_num <![CDATA[ <=  ]]> 2000 then '04. 1500~2000'
+						when a.row_num > 2000 then '05. 2000~'				
+					end as rownum_grp
+					,a.*
+				from tbl_a a
+				
+	
+	</select>
+	<select id="dashboard.ssd_sm.manage.script.search.paging" resultType="hashmap">
+		Select
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(		
+				SELECT
+						a.SCRIPT_NAME, 
+						a.STAGE,
+						b.SCRIPT_GROUP,
+						b.GROUP_NAME,
+						a.CATEGORY, 
+						a.SUB_CATEGORY, 
+						a.ITEM, 
+						a.SUB_ITEM, 
+						substr(a.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						a.DESCRIPTION,
+						a.TESTER, 
+						a.INS_DT, 
+						a.MOD_DT				
+					from SSD_SM_MASTER a
+					left outer join SSD_SM_MASTER_GROUP b
+						on b.SCRIPT_GROUP = a.SCRIPT_GROUP
+					where 1=1
+					<if test="stageArr  != null and stageArr != '' ">
+						and a.stage in 
+						<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="scriptGroupArr  != null and scriptGroupArr != '' ">
+						and a.script_group in 
+						<foreach collection="scriptGroupArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and a.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="subCategoryArr  != null and subCategoryArr != '' ">
+						and a.SUB_CATEGORY in 
+						<foreach collection="subCategoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="testItemArr  != null and testItemArr != '' ">
+						and a.item in 
+						<foreach collection="testItemArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					--order by category,test_item, script_name
+					order by b.seq,a.category ,a.script_name
+				) A
+			where 1=1 			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+	</select>
+	<select id="dashboard.ssd_sm.manage.script.search.paging.page" resultType="hashmap">
+		select 
+			ceil(count(*)/ #{rows} ) as total,
+			#{page} as page ,
+			count(*) records 
+		from 
+		(
+			select a.* from (		
+				SELECT
+						a.SCRIPT_NAME, 
+						a.STAGE,
+						b.SCRIPT_GROUP,
+						b.GROUP_NAME,
+						a.CATEGORY, 
+						a.SUB_CATEGORY, 
+						a.ITEM, 
+						a.SUB_ITEM, 
+						substr(a.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+						a.DESCRIPTION,
+						a.TESTER, 
+						a.INS_DT, 
+						a.MOD_DT				
+					from SSD_SM_MASTER a
+					left outer join SSD_SM_MASTER_GROUP b
+						on b.SCRIPT_GROUP = a.SCRIPT_GROUP
+					where 1=1 and 2=2
+					<if test="stageArr  != null and stageArr != '' ">
+						and a.stage in 
+						<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="scriptGroupArr  != null and scriptGroupArr != '' ">
+						and a.script_group in 
+						<foreach collection="scriptGroupArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and a.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="subCategoryArr  != null and subCategoryArr != '' ">
+						and a.SUB_CATEGORY in
+						<foreach collection="subCategoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="testItemArr  != null and testItemArr != '' ">
+						and a.item in 
+						<foreach collection="testItemArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					--order by category,test_item, script_name
+					order by b.seq,a.category ,a.script_name
+				) A
+			where 1=1 			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		
+	</select>
+	<select id="dashboard.ssd_sm.autocomplete.script" resultType="hashmap">
+		select
+			distinct ${field} "id", ${field} "name"
+		from SSD_SM_MASTER
+		where REGEXP_LIKE(${field} ,#{term},'i')  
+		
+		order by 1
+	
+	</select>
+	<select id="dashboard.ssd_sm.manage.script.search.one" resultType="hashmap">
+		select	
+			a.SCRIPT_NAME, 
+			b.SCRIPT_GROUP,
+			b.GROUP_NAME,
+			a.STAGE, 
+			a.CATEGORY, 
+			a.SUB_CATEGORY, 
+			a.ITEM, 
+			a.SUB_ITEM, 
+			substr(a.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+			a.DESCRIPTION,
+			a.TESTER, 
+			a.INS_DT, 
+			a.MOD_DT				
+		from SSD_SM_MASTER a
+		left outer join SSD_SM_MASTER_GROUP b
+			on b.SCRIPT_GROUP = a.SCRIPT_GROUP
+		where script_name = #{script_name}
+	
+	</select>
+	<update id="dashboard.ssd_sm.script_master.insert" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    	v_status varchar2(100);
+	    begin
+	    	
+    		insert into SSD_SM_MASTER (SCRIPT_NAME, SCRIPT_GROUP, STAGE, CATEGORY, SUB_CATEGORY, ITEM, SUB_ITEM, INS_DT)
+            values (#{SCRIPT_NAME}, #{SCRIPT_GROUP}, #{STAGE}, #{CATEGORY}, #{SUB_CATEGORY}, #{ITEM}, #{SUB_ITEM}, sysdate) ;
+                
+            select count(*) into cnt from SSD_SM_SCRIPTSET_MAP
+            where SCRIPTSET = 'Normal'
+            and SCRIPT_NAME = #{SCRIPT_NAME};
+            
+            if cnt = 0 then
+            	insert into SSD_SM_SCRIPTSET_MAP (SCRIPTSET, SCRIPT_NAME,INS_DT)
+            	values ('Normal', #{SCRIPT_NAME}, sysdate);
+            end if;
+       	 
+	    end;
+    
+    </update>
+    <update id="dashboard.ssd_sm.script_master.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+	    	
+	    		delete from SSD_SM_MASTER
+	    		where 1=1
+	    		and SCRIPT_NAME = #{detail.SCRIPT_NAME};
+	    		
+	    		--// 01. delete script set
+	    		delete from SSD_SM_SCRIPTSET_MAP
+	    		where 1=1
+	    		and SCRIPT_NAME = #{detail.SCRIPT_NAME};
+	    		
+	    end;
+    
+    </update>
+    <update id="dashboard.ssd_sm.script_master.update" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    	v_script_name varchar2(2000);
+	    	v_convert_script varchar2(2000);
+	    	v_status varchar2(10);
+	    begin
+	    	
+	    		select count(*) into cnt from SSD_SM_MASTER
+	    		where 1=1
+	    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+			       			and ${item.field} = #{item.value}
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   			and 1=2
+			   		</otherwise>
+		   		</choose>   
+	    		;
+	    		
+	    		if cnt = 1 then
+	    			update SSD_SM_MASTER set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+	          		
+	          		
+	          		<if test= "fieldName == 'SCRIPT_NAME' ">
+	          			v_script_name := #{fieldValue};   
+	          			
+	          			--// update SSD_SM_SCRIPTSET_MAP
+	          			 update SSD_SM_SCRIPTSET_MAP set
+	          			 SCRIPT_NAME = #{fieldValue},
+	          			 MOD_DT = sysdate
+	          			 where SCRIPT_NAME = #{fieldValueOrigin};
+	          		
+	          			--// update_log_table
+	          			update SSD_SM_RESULT set
+	          			SCRIPT_NAME = #{fieldValue},
+	          			MOD_DT = sysdate
+	          			where SCRIPT_NAME = #{fieldValueOrigin};
+	          			
+		          		
+	          		</if>
+	          		
+	          		
+	          		
+			         
+	        	end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <select id="dashboard.ssd_sm.manage.scriptset_script_map.search" resultType="hashmap">
+    	with tbl_a as (	
+			select 
+					a.SCRIPTSET,
+					a.SCRIPT_NAME, 
+					b.STAGE, 
+					c.SCRIPT_GROUP,
+					c.GROUP_NAME,
+					c.SEQ,
+					b.CATEGORY, 
+					row_number() over (partition by c.SCRIPT_GROUP, b.category order by c.seq,b.CATEGORY ,b.SCRIPT_NAME) row_num,
+					b.SUB_CATEGORY, 
+					b.ITEM, 
+					b.SUB_ITEM, 
+					b.DESCRIPTION, 
+					b.TESTER, 
+					a.INS_DT, 
+					a.MOD_DT
+				from SSD_SM_SCRIPTSET_MAP a		
+				left outer join SSD_SM_MASTER b
+					on a.script_name = b.script_name
+				left outer join SSD_SM_MASTER_GROUP c
+						on c.SCRIPT_GROUP = b.SCRIPT_GROUP
+				where 1=1
+				<if test="search_scriptset  != null and search_scriptset != '' ">
+					and a.SCRIPTSET = #{search_scriptset}
+				</if>
+				order by 
+					c.SEQ ,
+					b.CATEGORY, 
+					b.SUB_CATEGORY, 
+					b.ITEM, 
+					b.SUB_ITEM, 
+					b.SCRIPT_NAME
+			)
+			
+			select 
+				case 
+					when a.row_num > 0 and a.row_num <![CDATA[ <= ]]>  500 then '01. ~500'
+					when a.row_num >500 and a.row_num <![CDATA[ <=  ]]> 1000 then '02. 500~1000'
+					when a.row_num > 1000 and a.row_num <![CDATA[ <=  ]]> 1500 then '03. 1000~1500'
+					when a.row_num > 1500 and a.row_num <![CDATA[ <=  ]]> 2000 then '04. 1500~2000'
+					when a.row_num > 2000 then '05. 2000~'				
+				end as rownum_grp
+				,a.*
+			from tbl_a a
+    </select>
+	<select id="dashboard.ssd_sm.manage.scriptset_script_map.search.paging" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+				select 
+					a.SCRIPTSET,
+					a.SCRIPT_NAME, 
+					b.STAGE, 
+					c.SCRIPT_GROUP,
+					c.GROUP_NAME,
+					c.SEQ,
+					b.CATEGORY, 
+					b.SUB_CATEGORY, 
+					b.ITEM, 
+					b.SUB_ITEM, 
+					b.DESCRIPTION, 
+					b.TESTER, 
+					a.INS_DT, 
+					a.MOD_DT
+				from SSD_SM_SCRIPTSET_MAP a		
+				left outer join SSD_SM_MASTER b
+					on a.script_name = b.script_name
+				left outer join SSD_SM_MASTER_GROUP c
+						on c.SCRIPT_GROUP = b.SCRIPT_GROUP
+				where 1=1
+				<if test="search_scriptset  != null and search_scriptset != '' ">
+					and a.SCRIPTSET = #{search_scriptset}
+				</if>
+				<if test="stageArr  != null and stageArr != '' ">
+					and b.stage in 
+					<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+		       			#{item}
+		       		</foreach>
+				</if>
+				<if test="scriptGroupArr  != null and scriptGroupArr != '' ">
+					and c.script_group in 
+					<foreach collection="scriptGroupArr" item="item" index="index" open="(" separator="," close=")" >
+		       			#{item}
+		       		</foreach>
+				</if>
+				<if test="categoryArr  != null and categoryArr != '' ">
+					and b.category in 
+					<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+		       			#{item}
+		       		</foreach>
+				</if>
+				<if test="subCategoryArr  != null and subCategoryArr != '' ">
+					and b.SUB_CATEGORY in 
+					<foreach collection="subCategoryArr" item="item" index="index" open="(" separator="," close=")" >
+		       			#{item}
+		       		</foreach>
+				</if>
+				order by c.seq , 
+					b.CATEGORY, 
+					b.SUB_CATEGORY, 
+					b.ITEM, 
+					b.SUB_ITEM, 
+					b.SCRIPT_NAME
+			) A
+			where 1=1 
+			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+		
+	</select>
+	<select id="dashboard.ssd_sm.manage.scriptset_script_map.search.paging.page" resultType="hashmap">
+		select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+					select 
+						a.SCRIPTSET,
+						a.SCRIPT_NAME, 
+						b.STAGE, 
+						c.SCRIPT_GROUP,
+						c.GROUP_NAME,
+						c.SEQ,
+						b.CATEGORY, 
+						b.SUB_CATEGORY, 
+						b.ITEM, 
+						b.SUB_ITEM, 
+						b.DESCRIPTION, 
+						b.TESTER, 
+						a.INS_DT, 
+						a.MOD_DT
+					from SSD_SM_SCRIPTSET_MAP a		
+					left outer join SSD_SM_MASTER b
+						on a.script_name = b.script_name
+					left outer join SSD_SM_MASTER_GROUP c
+						on c.SCRIPT_GROUP = b.SCRIPT_GROUP
+					where 1=1
+					<if test="search_scriptset  != null and search_scriptset != '' ">
+						and a.SCRIPTSET = #{search_scriptset}
+					</if>
+					<if test="stageArr  != null and stageArr != '' ">
+						and b.stage in 
+						<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="scriptGroupArr  != null and scriptGroupArr != '' ">
+						and c.script_group in 
+						<foreach collection="scriptGroupArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="categoryArr  != null and categoryArr != '' ">
+						and b.category in 
+						<foreach collection="categoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					<if test="subCategoryArr  != null and subCategoryArr != '' ">
+						and b.SUB_CATEGORY in 
+						<foreach collection="subCategoryArr" item="item" index="index" open="(" separator="," close=")" >
+			       			#{item}
+			       		</foreach>
+					</if>
+					order by 
+						c.seq,
+						b.CATEGORY, 
+						b.SUB_CATEGORY, 
+						b.ITEM, 
+						b.SUB_ITEM, 
+						b.SCRIPT_NAME
+			) A
+				where 1=1
+				<choose>
+					<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+						and (
+						<if test="filters.rules.size() > 0" >
+				       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+				           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+				       		</foreach>	
+				       	</if>	
+				       	<if test="filters.groups != null and filters.groups.size() > 0">
+			       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+				       			<if test="group.rules.size() > 0">
+				       			${filters.groupOp}
+					           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+						       	</foreach>
+						       	</if>
+					       	</foreach>
+			       		</if> 
+			       		 )
+			   		</when>
+	   			</choose>
+			)
+		
+	</select>
+    <update id="dashboard.ssd_sm.scriptset_script_map.delete" parameterType="hashmap" >
+    	declare
+	    	cnt number;
+	    begin
+    		delete from SSD_SM_SCRIPTSET_MAP
+    		where SCRIPTSET = #{origindata.SCRIPTSET} 
+    		and SCRIPT_NAME = #{origindata.SCRIPT_NAME} 
+	    		
+	    end;
+    
+    </update>
+	<select id="dashboard.ssd_sm.historyno" resultType="hashmap">
+		SELECT LPAD(TO_NUMBER(nvl(max(HISTORY_NO),'0'))+1, 10,'0') HISTORY_NO from  SSD_SM_HISTORY_NO
+    </select>
+	<update id="dashboard.ssd_sm.manage.insert.historyno.copy_template_scriptset" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    BEGIN
+	    	INSERT INTO SSD_SM_HISTORY_NO (HISTORY_NO, INS_DT, TYPE, USER_COMMENT) 
+	    	VALUES (v_history_no , sysdate,'COPY', 'scriptset_copy_from_master' );
+	    	
+	    	insert into SSD_SM_SCRIPTSET_MAP_H (HISTORY_NO, SCRIPTSET, SCRIPT_NAME, INS_DT, MOD_DT)
+	    		select 
+	    			v_history_no,
+	    			SCRIPTSET,
+	    			SCRIPT_NAME,
+	    			INS_DT, 
+	    			MOD_DT
+	    		from SSD_SM_SCRIPTSET_MAP
+	    		where 1=1
+	    		and scriptset = #{searchJson.target.scriptset}
+	    		 ;
+	    		 
+	    End;
+    </update>
+    <update id="dashboard.ssd_smc.manage.script_copy_scriptset.update" parameterType="hashmap" >
+    	DECLARE
+	    	cnt number;
+	    	v_history_no varchar2(100) := #{history_no};
+	    	v_status varchar2(10);
+	    BEGIN
+	    		
+	    	--// Revision Start	    		
+	    	For rec_firmware in (
+	    		select distinct SCRIPTSET from SSD_SM_SCRIPTSET where SCRIPTSET = #{searchJson.target.scriptset} 
+	    	) Loop
+	    		
+	    		--// second Loop
+	    		FOR rec in (
+	    			select * from SSD_SM_MASTER
+					where 1=1
+					and script_name = #{detail.SCRIPT_NAME}    			
+	    		) LOOP 
+			    			
+					select count(*) into cnt from SSD_SM_SCRIPTSET_MAP
+					where SCRIPTSET = rec_firmware.SCRIPTSET
+					and script_name = rec.SCRIPT_NAME;
+					
+					IF cnt = 0 THEN
+						insert into SSD_SM_SCRIPTSET_MAP (SCRIPTSET, SCRIPT_NAME, INS_DT)
+						values (
+							rec_firmware.SCRIPTSET 
+							, rec.SCRIPT_NAME
+							, sysdate
+						);
+					END IF;
+					
+				End Loop;
+	    	
+	    	End Loop;
+	    	 
+	 			
+	    END;
+    
+    </update>
+    <select id="dashboard.ssd_sm.script.group.list" resultType="hashmap">
+    	select
+    		SCRIPT_GROUP,
+    		GROUP_NAME, 
+    		SEQ,
+    		'selected' SELECTED
+    	from SSD_SM_MASTER_GROUP
+    	order by SEQ
+    </select>
+    
+    <select id="dashboard.ssd_sm.summary.all" resultType="hashmap">
+		with tbl_list as (
+			select 
+			f.PROJECT,
+			f.FIRMWARE,		
+			count(sm.SCRIPT_NAME) TOTAL,
+			(
+				select count(*) cnt from SSD_SM_RESULT rt 
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'PASSED'
+			) PASSED,
+			(
+				select count(*) cnt from SSD_SM_RESULT rt 
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'FAILED'
+			) FAILED,
+			(
+				select count(*) cnt from SSD_SM_RESULT rt 
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'ING'
+			) ING,
+			(
+				select count(*) cnt from SSD_SM_RESULT rt 
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'PENDING'
+			) PENDING,
+			(
+				select count(*) cnt from SSD_SM_RESULT rt 
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'N/A'
+			) "N/A"
+			
+			
+		from SSD_SM_FIRMWARE f
+		left outer join SSD_SM_SCRIPTSET_MAP sm
+			on sm.SCRIPTSET = f.SCRIPTSET
+		left outer join SSD_SM_MASTER m
+			on m.script_name = sm.script_name
+		left outer join SSD_SM_RESULT r
+			on r.PROJECT = f.PROJECT
+			and r.FIRMWARE = f.FIRMWARE
+			and r.SCRIPT_NAME = sm.SCRIPT_NAME
+		where 1=1
+		<if test="stageArr  != null and stageArr != '' ">
+			and m.stage in 
+			<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+       			#{item}
+       		</foreach>
+		</if>
+		group by f.PROJECT, f.FIRMWARE
+		), 
+		tbl_list1 as ( 
+			select 
+				a.*
+				, a.total - ( a.passed + a.failed + a.ing + a.pending + a."N/A") as blank
+			from tbl_list a
+		) 
+
+		select 
+			a.project
+			, a.FIRMWARE
+			, f.NAND_TYPE
+			, f.REMARK
+			, to_char(f.RELEASE_DATE,'YYYY-MM-DD') as RELEASE_DATE
+			, f.SCRIPTSET
+			, a.TOTAL
+			, a.BLANK
+			, case a.total when 0 then 0 else a.blank/a.total end as BLANK_RATIO
+			, a.PASSED
+			, case a.total when 0 then 0 else a.PASSED/a.total end as PASSED_RATIO
+			, a.FAILED
+			, case a.total when 0 then 0 else a.failed/a.total  end as FAILED_RATIO
+			, a.ING
+			, case a.total when 0 then 0 else a.ing/a.total end as ING_RATIO
+			, a.PENDING
+			, case a.total when 0 then 0 else a.pending/a.total end as PENDING_RATIO
+			, a."N/A" as NA
+			, case a.total when 0 then 0 else a."N/A"/a.total end as NA_RATIO
+			
+		from tbl_list1 a
+		left outer join SSD_SM_FIRMWARE f
+			on f.project = a.project
+			and f.firmware = a.firmware
+		order by a.project, a.firmware
+    </select>
+    <select id="dashboard.ssd_sm.summary.firmware" resultType="hashmap">
+		with tbl_list as (
+			select 
+			f.PROJECT,
+			f.FIRMWARE,		
+			m.SCRIPT_GROUP,
+			count(sm.SCRIPT_NAME) TOTAL,
+			(
+				select count(*) cnt 
+				from SSD_SM_RESULT rt
+				join SSD_SM_MASTER tsm 
+					on rt.script_name= tsm.script_name
+					
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'PASSED'
+				and m.SCRIPT_GROUP = tsm.SCRIPT_GROUP
+				
+			) PASSED,
+			(
+				select count(*) cnt
+				from SSD_SM_RESULT rt
+				join SSD_SM_MASTER tsm 
+					on rt.script_name= tsm.script_name
+					
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'FAILED'
+				and m.SCRIPT_GROUP = tsm.SCRIPT_GROUP
+			) FAILED,
+			(
+				select count(*) cnt 
+				from SSD_SM_RESULT rt
+				join SSD_SM_MASTER tsm 
+					on rt.script_name= tsm.script_name
+					
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'ING'
+				and m.SCRIPT_GROUP = tsm.SCRIPT_GROUP
+			) ING,
+			(
+				select count(*) cnt 
+				from SSD_SM_RESULT rt
+				join SSD_SM_MASTER tsm 
+					on rt.script_name= tsm.script_name
+					
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'PENDING'
+				and m.SCRIPT_GROUP = tsm.SCRIPT_GROUP
+			) PENDING,
+			(
+				select count(*) cnt 
+				from SSD_SM_RESULT rt
+				join SSD_SM_MASTER tsm 
+					on rt.script_name= tsm.script_name
+					
+				where rt.PROJECT = f.PROJECT
+				and rt.FIRMWARE = f.FIRMWARE
+				and rt.status = 'N/A'
+				and m.SCRIPT_GROUP = tsm.SCRIPT_GROUP
+			) "N/A"
+			
+			
+		from SSD_SM_FIRMWARE f
+		join SSD_SM_SCRIPTSET_MAP sm
+			on sm.SCRIPTSET = f.SCRIPTSET
+		join SSD_SM_MASTER m
+			on m.script_name = sm.script_name
+		left outer join SSD_SM_RESULT r
+			on r.PROJECT = f.PROJECT
+			and r.FIRMWARE = f.FIRMWARE
+			and r.SCRIPT_NAME = sm.SCRIPT_NAME
+		where 1=1
+		and f.firmware = #{search_firmware}
+		<if test="stageArr  != null and stageArr != '' ">
+			and m.stage in 
+			<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >
+       			#{item}
+       		</foreach>
+		</if>
+		group by f.PROJECT, f.FIRMWARE , m.SCRIPT_GROUP
+		), 
+		tbl_list1 as ( 
+			select 
+				a.*
+				, a.total - ( a.passed + a.failed + a.ing + a.pending + a."N/A") as blank
+			from tbl_list a
+		) 
+
+		select 
+			a.project
+			, a.FIRMWARE
+			, a.SCRIPT_GROUP
+			, mg.GROUP_NAME
+			, f.NAND_TYPE
+			, f.REMARK
+			, to_char(f.RELEASE_DATE,'YYYY-MM-DD') as RELEASE_DATE
+			, f.SCRIPTSET
+			, a.TOTAL
+			, a.BLANK
+			, case a.total when 0 then 0 else  a.blank/a.total end as BLANK_RATIO
+			, a.PASSED
+			, case a.total when 0 then 0 else a.PASSED/a.total end as PASSED_RATIO
+			, a.FAILED
+			, case a.total when 0 then 0 else a.failed/a.total  end as FAILED_RATIO
+			, a.ING
+			, case a.total when 0 then 0 else a.ing/a.total end as ING_RATIO
+			, a.PENDING
+			, case a.total when 0 then 0 else a.pending/a.total end as PENDING_RATIO
+			, a."N/A" as NA
+			, case a.total when 0 then 0 else a."N/A"/a.total end as NA_RATIO
+			
+		from tbl_list1 a
+		left outer join SSD_SM_FIRMWARE f
+			on f.project = a.project
+			and f.firmware = a.firmware
+		left outer join SSD_SM_MASTER_GROUP mg
+			on mg.SCRIPT_GROUP = a.SCRIPT_GROUP
+		order by mg.seq
+    </select>
+    <select id="dashboard.ssd_sm.detail.paging" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	select 
+					f.PROJECT,
+					f.FIRMWARE,	
+					m.SCRIPT_NAME,	
+					m.SCRIPT_GROUP,
+					m.STAGE, 
+					m.CATEGORY, 
+					m.SUB_CATEGORY, 
+					m.ITEM, 
+					m.SUB_ITEM, 
+					m.DESCRIPTION, 
+					m.TESTER,
+					-- r.SCRIPT_NAME,
+					to_char(r.START_DT,'YYYY-MM-DD') as START_DT, 
+					to_char(r.END_DT,'YYYY-MM-DD') as END_DT, 
+					r.STATUS, 
+					r.REMARK, 
+					r.ASSIGNEE, 
+					r.INS_DT, 
+					r.MOD_DT
+					
+				from SSD_SM_FIRMWARE f
+				join SSD_SM_SCRIPTSET_MAP sm
+					on sm.SCRIPTSET = f.SCRIPTSET
+				join SSD_SM_MASTER m
+					on m.script_name = sm.script_name
+				left outer join SSD_SM_RESULT r
+					on r.PROJECT = f.PROJECT
+					and r.FIRMWARE = f.FIRMWARE
+					and r.SCRIPT_NAME = sm.SCRIPT_NAME
+				where 1=1
+				and f.firmware = #{search_firmware}
+				<if test="countGubun != null and countGubun != '' and countGubun == 'BLANK'  " > and r.STATUS is null</if>
+				<if test="countGubun != null and countGubun != '' and countGubun != 'BLANK' and countGubun != 'TOTAL'  " > and r.STATUS =  #{countGubun} </if>
+				<if test="scriptGroup != null and scriptGroup != '' " > and m.SCRIPT_GROUP  = #{scriptGroup}</if>
+				<if test="stageArr  != null and stageArr != '' ">
+				and m.stage in
+				<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >#{item}</foreach>
+				</if>
+				order by m.STAGE, m.SCRIPT_GROUP, m.CATEGORY, m.SUB_CATEGORY, m.ITEM, m.SUB_ITEM, m.SCRIPT_NAME
+			) A
+			where 1=1 
+			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>	
+		
+    </select>
+    <select id="dashboard.ssd_sm.detail.paging.page" resultType="hashmap">
+    	select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+		    		select 
+						f.PROJECT,
+						f.FIRMWARE,
+						m.SCRIPT_NAME,	
+						m.SCRIPT_GROUP,
+						m.STAGE, 
+						m.CATEGORY, 
+						m.SUB_CATEGORY, 
+						m.ITEM, 
+						m.SUB_ITEM, 
+						m.DESCRIPTION, 
+						m.TESTER,
+						-- r.SCRIPT_NAME,
+						to_char(r.START_DT,'YYYY-MM-DD') as START_DT, 
+						to_char(r.END_DT,'YYYY-MM-DD') as END_DT, 
+						r.STATUS, 
+						r.REMARK, 
+						r.ASSIGNEE, 
+						r.INS_DT, 
+						r.MOD_DT
+						
+					from SSD_SM_FIRMWARE f
+					join SSD_SM_SCRIPTSET_MAP sm
+						on sm.SCRIPTSET = f.SCRIPTSET
+					join SSD_SM_MASTER m
+						on m.script_name = sm.script_name
+					left outer join SSD_SM_RESULT r
+						on r.PROJECT = f.PROJECT
+						and r.FIRMWARE = f.FIRMWARE
+						and r.SCRIPT_NAME = sm.SCRIPT_NAME
+					where 1=1
+					and f.firmware = #{search_firmware}
+					<if test="countGubun != null and countGubun != '' and countGubun == 'BLANK'  " > and r.STATUS is null</if>
+					<if test="countGubun != null and countGubun != '' and countGubun != 'BLANK' and countGubun != 'TOTAL'  " > and r.STATUS =  #{countGubun} </if>
+					<if test="scriptGroup != null and scriptGroup != '' " > and m.SCRIPT_GROUP  = #{scriptGroup}</if>
+					<if test="stageArr  != null and stageArr != '' ">
+					and m.stage in
+					<foreach collection="stageArr" item="item" index="index" open="(" separator="," close=")" >#{item}</foreach>
+					</if>
+					order by m.STAGE, m.SCRIPT_GROUP, m.CATEGORY, m.SUB_CATEGORY, m.ITEM, m.SUB_ITEM, m.SCRIPT_NAME
+			) A
+			where 1=1 
+			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		)
+		
+		
+    </select>
+    <select id="dashboard.ssd_sm.detail.select.one" resultType="hashmap">
+    	select 
+			f.PROJECT,
+			f.FIRMWARE,
+			m.SCRIPT_NAME,	
+			m.SCRIPT_GROUP,
+			m.STAGE, 
+			m.CATEGORY, 
+			m.SUB_CATEGORY, 
+			m.ITEM, 
+			m.SUB_ITEM, 
+			m.DESCRIPTION, 
+			m.TESTER,
+			-- r.SCRIPT_NAME,
+			to_char(r.START_DT,'YYYY-MM-DD') as START_DT, 
+			to_char(r.END_DT,'YYYY-MM-DD') as END_DT, 
+			r.STATUS, 
+			r.REMARK, 
+			r.ASSIGNEE, 
+			r.INS_DT, 
+			r.MOD_DT
+			
+		from SSD_SM_FIRMWARE f
+		join SSD_SM_SCRIPTSET_MAP sm
+			on sm.SCRIPTSET = f.SCRIPTSET
+		join SSD_SM_MASTER m
+			on m.script_name = sm.script_name
+		left outer join SSD_SM_RESULT r
+			on r.PROJECT = f.PROJECT
+			and r.FIRMWARE = f.FIRMWARE
+			and r.SCRIPT_NAME = sm.SCRIPT_NAME
+		where 1=1
+		and f.firmware = #{firmware}
+		and m.script_name = #{script_name}
+    </select>
+    <update id="dashbaord.ssd_sm.firmware.status.edit" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    begin
+	    		
+	    		select count(*) into cnt from SSD_SM_RESULT
+	    		where PROJECT = #{origindata.PROJECT}
+	    		and FIRMWARE = #{origindata.FIRMWARE}
+                and  SCRIPT_NAME = #{origindata.SCRIPT_NAME} ;
+	    			
+	    		if cnt = 0 then
+	    			insert into SSD_SM_RESULT (PROJECT, FIRMWARE, SCRIPT_NAME, START_DT, END_DT, STATUS, ASSIGNEE, INS_DT)
+	    			values (
+	    				#{origindata.PROJECT}
+	    				, #{origindata.FIRMWARE}
+	    				, #{origindata.SCRIPT_NAME}
+	    				, to_date(#{START_DT},'YYYY-MM-DD')
+	    				,  to_date(#{END_DT},'YYYY-MM-DD')
+	    				, #{STATUS}
+	    				, ''
+	    				, sysdate
+	    			);
+	    		else
+	    		
+	                update SSD_SM_RESULT set
+	  					MOD_DT = sysdate
+	  					<if test="START_DT != origindata.START_DT">,START_DT = to_date(#{START_DT},'YYYY-MM-DD')</if>
+	  					<if test="END_DT != origindata.END_DT">,END_DT = to_date(#{END_DT},'YYYY-MM-DD')</if>
+	  					<if test="STATUS != null and STATUS != ''  and STATUS != origindata.STATUS">,STATUS = #{STATUS}</if>
+	                where PROJECT = #{origindata.PROJECT}
+		    		and FIRMWARE = #{origindata.FIRMWARE}
+	                and  SCRIPT_NAME = #{origindata.SCRIPT_NAME} ;
+	               
+	          	end if;
+                
+       	 
+	    end;
+    
+    </update>
+    <update id="dashbaord.ssd_sm.firmware.status.edit.by.react" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    	v_script_name varchar2(2000);
+	    	v_convert_script varchar2(2000);
+	    	v_status varchar2(10);
+	    begin
+	    	
+	    		select count(*) into cnt from SSD_SM_RESULT
+	    		where 1=1
+	    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+			       			and ${item.field} = #{item.value}
+			       		</foreach>
+			   		</when>
+			   		<otherwise>
+			   			and 1=2
+			   		</otherwise>
+		   		</choose>   
+	    		;
+	    		
+	    		if cnt = 1 then
+	    			update SSD_SM_RESULT set
+	              	${fieldName} = #{fieldValue},	  
+	              	MOD_DT = sysdate
+	              	where 1=1
+		    		<choose>
+						<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			and ${item.field} = #{item.value}
+				       		</foreach>
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>          	
+	          		;
+			    else
+			    	insert into    SSD_SM_RESULT (
+			    		INS_DT
+			    		<if test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			,${item.field}
+				       		</foreach>
+				   		</if>
+				   		,${fieldName}
+			    	)
+			    	values (
+			    		SYSDATE
+			    		<if test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				       			,#{item.value}
+				       		</foreach>
+				   		</if>
+				   		,#{fieldValue}
+			    	
+			    	);
+			    	
+	        	end if;
+                
+       	 
+	    end;
+    </update>
 </mapper>    

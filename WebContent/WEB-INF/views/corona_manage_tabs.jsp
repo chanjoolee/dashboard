@@ -427,345 +427,354 @@
 		
 	</style>
 	
-	<script  id="script_common" >
-	var dataList = [];
-	function mergeRow(rowId, val, rowObj, cm, rowData, isCustom) {
-		var result = "";
-		var grid = $(this).jqGrid();
-		var curRow = dataList[parseInt(rowId)-1];
-		var colModel = grid.jqGrid('getGridParam','colModel');
-		
-		var getColumnSrcIndexByName = function(columnName) {
-		    var cm = grid.jqGrid('getGridParam','colModel'),
-		        i=0, index=0, l=cm.length, cmName;
-		    while (i<l) {
-		        cmName = cm[i].name;
-		        i++;
-		        if (cmName===columnName) {
-		            return index;
-		        } else if (cmName!=='rn' && cmName!=='cb' && cmName!=='subgrid') {
-		            index++;
-		        }
-		    }
-		    return -1;
-		};
-		
-		var colid = getColumnSrcIndexByName(cm.name);
-		
-		var colModel1 = [];
-		if( colModel[0].name == "rn"){
-			colModel1 = colModel.slice(1,colModel.length -1);			
-		}else{
-			colModel1 = colModel;
-		}
-		var parentCols = colModel1.slice(0,colid + 1);
-		
-		
-		var fn_equal = function(list1,list2,cols){  
-			var isEqual = true;
-			$.each(cols,function(i,col){
-				if(list1[col.name] != list2[col.name]){
-					isEqual = false;
-					return false;
+	<script id="script_common" >
+		var dataList = [];
+		function mergeRow(rowId, val, rowObj, cm, rowData, isCustom) {
+			var result = "";
+			var grid = $(this).jqGrid();
+			var curRow = dataList[parseInt(rowId)-1];
+			var colModel = grid.jqGrid('getGridParam','colModel');
+			
+			var getColumnSrcIndexByName = function(columnName) {
+				var cm = grid.jqGrid('getGridParam','colModel'),
+					i=0, index=0, l=cm.length, cmName;
+				while (i<l) {
+					cmName = cm[i].name;
+					i++;
+					if (cmName===columnName) {
+						return index;
+					} else if (cmName!=='rn' && cmName!=='cb' && cmName!=='subgrid') {
+						index++;
+					}
 				}
-			});
-			return isEqual;
+				return -1;
+			};
 			
-		};
-		
-		var fn_lastRow = function(p_list,p_rowid,p_col,span){
-			span++;
-			var rowid = parseInt(p_rowid) -1;
-			var cur_row = p_list[rowid];
-			var next_row = p_list[rowid+1];
+			var colid = getColumnSrcIndexByName(cm.name);
+			
+			var colModel1 = [];
+			if( colModel[0].name == "rn"){
+				colModel1 = colModel.slice(1,colModel.length -1);			
+			}else{
+				colModel1 = colModel;
+			}
+			var parentCols = colModel1.slice(0,colid + 1);
 			
 			
-			if(next_row == undefined)
-				return {span: span, row: cur_row}; 
+			var fn_equal = function(list1,list2,cols){  
+				var isEqual = true;
+				$.each(cols,function(i,col){
+					if(list1[col.name] != list2[col.name]){
+						isEqual = false;
+						return false;
+					}
+				});
+				return isEqual;
+				
+			};
 			
-			//else if(cur_row[p_col] == next_row[p_col]){
-			var equal = fn_equal(cur_row,next_row,parentCols);
-			if(equal){
-				return fn_lastRow(p_list, parseInt(p_rowid) + 1 ,p_col,span);
-			}else
-				return {span: span, row: cur_row};
-		};
-		
-		var fn_firstRow = function(p_list,p_rowid,p_col){
+			var fn_lastRow = function(p_list,p_rowid,p_col,span){
+				span++;
+				var rowid = parseInt(p_rowid) -1;
+				var cur_row = p_list[rowid];
+				var next_row = p_list[rowid+1];
+				
+				
+				if(next_row == undefined)
+					return {span: span, row: cur_row}; 
+				
+				//else if(cur_row[p_col] == next_row[p_col]){
+				var equal = fn_equal(cur_row,next_row,parentCols);
+				if(equal){
+					return fn_lastRow(p_list, parseInt(p_rowid) + 1 ,p_col,span);
+				}else
+					return {span: span, row: cur_row};
+			};
 			
-			var rowid = parseInt(p_rowid) -1;
-			var cur_row = p_list[rowid];
-			var pre_row = p_list[rowid - 1];
+			var fn_firstRow = function(p_list,p_rowid,p_col){
+				
+				var rowid = parseInt(p_rowid) -1;
+				var cur_row = p_list[rowid];
+				var pre_row = p_list[rowid - 1];
+				
+				if(pre_row == undefined)
+					return cur_row;
+				
+				var equal = fn_equal(cur_row,pre_row,parentCols);
+				if(equal){
+				//else if(cur_row[p_col] == pre_row[p_col]){
+					return fn_firstRow(p_list, parseInt(p_rowid) - 1 ,p_col);
+				}else
+					return cur_row;
+			};
 			
-			if(pre_row == undefined)
-				return cur_row;
-			
-			var equal = fn_equal(cur_row,pre_row,parentCols);
-			if(equal){
-			//else if(cur_row[p_col] == pre_row[p_col]){
-				return fn_firstRow(p_list, parseInt(p_rowid) - 1 ,p_col);
-			}else
-				return cur_row;
-		};
-		
-		var firstRow = fn_firstRow(grid.jqGrid("getGridParam","data"),rowId,cm.name);
-		var lastRow = fn_lastRow(grid.jqGrid("getGridParam","data"),rowId,cm.name,0);
-		//var firstRow = fn_firstRow(dataList ,rowId,cm.name);
-		//var lastRow = fn_lastRow(dataList ,rowId,cm.name,0);
-		if(curRow == firstRow){
-			result = " style=\"background:white;vertical-align: middle;";
-			//result = " style=\"vertical-align: middle;";
-			if(!isCustom){
-				switch(cm.name) {
-				    case 'CATEGORY':
-				    	result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;"
-				        break;
-				    
-				    default:
+			var firstRow = fn_firstRow(grid.jqGrid("getGridParam","data"),rowId,cm.name);
+			var lastRow = fn_lastRow(grid.jqGrid("getGridParam","data"),rowId,cm.name,0);
+			//var firstRow = fn_firstRow(dataList ,rowId,cm.name);
+			//var lastRow = fn_lastRow(dataList ,rowId,cm.name,0);
+			if(curRow == firstRow){
+				result = " style=\"background:white;vertical-align: middle;";
+				//result = " style=\"vertical-align: middle;";
+				if(!isCustom){
+					switch(cm.name) {
+						case 'CATEGORY':
+							result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;"
+							break;
+						
+						default:
+					}
 				}
+				
+				result += "\" ";
+				result += 'rowspan=' + lastRow.span;
+			}else{
+				result = " style=\"display:none;\"";
+				result += "\" ";
+				
 			}
 			
-			result += "\" ";
-			result += 'rowspan=' + lastRow.span;
-		}else{
-			result = " style=\"display:none;\"";
-			result += "\" ";
 			
+			
+			return result;
 		}
-		
-		
-		
-		return result;
-	}
 	
 		
 	</script>
 	<script  id="script_schemaSearchCondition">
-	//그리드 편집전 데이타
-	var tempList = [];
-	var beforEditRow = {};
-	
-	var EfContextPath = "";
-	
-	var schemaSearch = {
-			containerId:'searchCondition',
-			type:'Vertical',
-			label:'',
-			cls: 'srch_box2',
-			elements:[
-				{
-					label:'',
-					type: 'HorizontalLayout',
-					elements:[
-					 	{
-					 		containerCss:[
-								
-							],
-							label:'',
-							type:'Vertical',
-							elements:[
-								{
-									label:'',
-									type: 'HorizontalLayout',
-									containerCss:[
-							    		{code:'height',value:'30px'}
-							    	],
-									elements:[
-										{
-											type:'SearchHeader',
-											id: 'categoryHead',
-											name: 'categoryHead',
-											label:'',
-											text:'Corona UFS Management',
-											width: '300px',
-											controlCss:[
-									    		{code:'text-align',value:'left'},
-									    		{code:'font-size',value:'14px'}
-									    	]
-										}
-										
-									]
-								}
-								//2line
-								
-								
-							]
-					 	},
-					 	//검색버튼
-					 	{
-					 		label:'',
-					 		type: 'VerticalLayout',
-							cls: 'btn_txt',
-							containerCss:[
-								{code: 'margin-left', value:'10px'}
-								, {code: 'float', value:'right'}
-							]
-					 		, elements:[
-					 			{
-					 				label:'',
-							 		type: 'HorizontalLayout',
-									cls: 'btn_txt',
-									containerCss:[
-										{code: 'margin-left', value:'10px'}
-									],
-									elements:[
-										{
-											type:'Button',
-											id: 'btnSearch',
-											name: 'btnSearch',
-											label:'Refresh',
-											//width: '50px',
-											cls: 'btn_txt btn_type_e btn_color_b',
-											containerCss:[
-												{code: 'margin-right', value:'3px'}
-											],
-											events:{
-												click : function(){											
-													fn_refresh();
+		//그리드 편집전 데이타
+		var tempList = [];
+		var beforEditRow = {};
+		
+		var EfContextPath = "";
+		
+		var schemaSearch = {
+				containerId:'searchCondition',
+				type:'Vertical',
+				label:'',
+				cls: 'srch_box2',
+				elements:[
+					{
+						label:'',
+						type: 'HorizontalLayout',
+						elements:[
+							{
+								containerCss:[
+									
+								],
+								label:'',
+								type:'Vertical',
+								elements:[
+									{
+										label:'',
+										type: 'HorizontalLayout',
+										containerCss:[
+											{code:'height',value:'30px'}
+										],
+										elements:[
+											{
+												type:'SearchHeader',
+												id: 'categoryHead',
+												name: 'categoryHead',
+												label:'',
+												text:'Corona UFS Management',
+												width: '300px',
+												controlCss:[
+													{code:'text-align',value:'left'},
+													{code:'font-size',value:'14px'}
+												]
+											}
+											
+										]
+									}
+									//2line
+									
+									
+								]
+							},
+							//검색버튼
+							{
+								label:'',
+								type: 'VerticalLayout',
+								cls: 'btn_txt',
+								containerCss:[
+									{code: 'margin-left', value:'10px'}
+									, {code: 'float', value:'right'}
+								]
+								, elements:[
+									{
+										label:'',
+										type: 'HorizontalLayout',
+										cls: 'btn_txt',
+										containerCss:[
+											{code: 'margin-left', value:'10px'}
+										],
+										elements:[
+											{
+												type:'Button',
+												id: 'btnSearch',
+												name: 'btnSearch',
+												label:'Refresh',
+												//width: '50px',
+												cls: 'btn_txt btn_type_e btn_color_b',
+												containerCss:[
+													{code: 'margin-right', value:'3px'}
+												],
+												events:{
+													click : function(){											
+														fn_refresh();
+													}
 												}
 											}
-										}
-									
-									 ]
-					 			}
-					 		            
-					 		]
+										
+										]
+									}
+											
+								]
+								
+							}
+						]
+					}
+				
+					
+				
+				]
+				
+		};
+		
+		var schemaContent = {
+				containerId:'contentCoronaDetail',
+				type:'Vertical', 
+				label:'',
+				elements:[ 
+					
+					//tab list
+					{
+						"type": "tab_list",
+						"id" : "tab_list",
+						"label" : "",
+						//
+						"elements" : [
+							// {
+							// 	"type": "tab_iframe",
+							// 	"id" : "script_manage",
+							// 	"label" : "Script Master Manage",							
+							// 	"connected_content" :  {
+							// 		"viewName": "corona_manage_script",
+							// 		"form_id" : "form"
+							// 	}
+							// },
+							{
+								"type": "tab_iframe",
+								"id" : "scriptset_management",
+								"label" : "TestScript Set Mgmt.",							
+								"connected_content" :  {
+									"viewName": "corona_manage_scriptset_tabs",
+									"form_id" : "form"
+								},
+								"events" : {
+									//"click" : tab_click
+								},
+								"iframe_css" : [
+									{ "code": "height", "value": "770px" }
+								]
+							},
+							{
+								"type": "tab_iframe",
+								"id" : "template_script_edit",
+								"label" : "Master TS Mgmt.",							
+								"connected_content" :  {
+									"viewName": "corona_manage_template_edit",
+									"form_id" : "form"
+								},
+								"iframe_css" : [
+									{ "code": "height", "value": "770px" }
+								]
+							},
+							{
+								"type": "tab_iframe",
+								"id" : "template_script_edit_paging",
+								"label" : "Master TS Mgmt. Paging.",							
+								"connected_content" :  {
+									"viewName": "corona_manage_template_edit_paging",
+									"form_id" : "form"
+								},
+								"iframe_css" : [
+									{ "code": "height", "value": "770px" }
+								]
+							},
 							
-					 	}
-					]
-				}
-			
+							
+							{
+								"type": "tab_iframe",
+								"id" : "project_management",
+								"label" : "Project TS Mgmt.",							
+								"connected_content" :  {
+									"viewName": "corona_manage_firmware_edit_paging",
+									"form_id" : "form"
+								},
+								"events" : {
+									//"click" : tab_click
+								},
+								"iframe_css" : [
+									{ "code": "height", "value": "770px" }
+								]
+							},
+							{
+								"type": "tab_iframe",
+								"id" : "project_config",
+								"label" : "Project Config",							
+								"connected_content" :  {
+									"viewName": "corona_manage_project_showview",
+									"form_id" : "form"
+								},
+								"events" : {
+									//"click" : tab_click
+								},
+								"iframe_css" : [
+									{ "code": "height", "value": "770px" }
+								]
+							}
+							
+							
+						]
+					},
+							
+					
+				]								
+		};
+		
+		</script>
+		<script  id="script_main">
+		
+		
+		$(function () {
+			//$("#loader").show();
+			setTimeout( function(){
+				fn_makeHtml('searchCondition',schemaSearch);
+				fn_makeHtml('contentMain',schemaContent);
 				
+				$( window ).resize(function() {
+					//console.log("aaaaa");
+				});
+				$("#loader").hide();
+			},50);
 			
-			]
+			// nspim 안에서 호출하는 경우
+			// parent.$("body").css("overflow","");
+			// parent.$("body .box_gray").css("height","1500px");
+			// $( window ).resize(function() {
+			// 	parent.$("body .box_gray").css("height","1500px");
+			// });
 			
-	};
-	
-	
-	
-	var schemaContent = {
-			containerId:'contentCoronaDetail',
-			type:'Vertical', 
-			label:'',
-			elements:[ 
-				
-				//tab list
-				{
-					"type": "tab_list",
-					"id" : "tab_list",
-					"label" : "",
-					//
-					"elements" : [
-//						{
-//							"type": "tab_iframe",
-//							"id" : "script_manage",
-//							"label" : "Script Master Manage",							
-//							"connected_content" :  {
-//								"viewName": "corona_manage_script",
-//								"form_id" : "form"
-//							}
-//						},
-						{
-							"type": "tab_iframe",
-							"id" : "scriptset_management",
-							"label" : "TestScript Set Mgmt.",							
-							"connected_content" :  {
-								"viewName": "corona_manage_scriptset_tabs",
-								"form_id" : "form"
-							},
-							"events" : {
-								//"click" : tab_click
-							},
-							"iframe_css" : [
-								{ "code": "height", "value": "770px" }
-							]
-						},
-						{
-							"type": "tab_iframe",
-							"id" : "template_script_edit",
-							"label" : "Master TS Mgmt.",							
-							"connected_content" :  {
-								"viewName": "corona_manage_template_edit",
-								"form_id" : "form"
-							},
-							"iframe_css" : [
-								{ "code": "height", "value": "770px" }
-							]
-						},
-						
-						
-						{
-							"type": "tab_iframe",
-							"id" : "project_management",
-							"label" : "Project TS Mgmt.",							
-							"connected_content" :  {
-								"viewName": "corona_manage_project_tabs",
-								"form_id" : "form"
-							},
-							"events" : {
-								//"click" : tab_click
-							},
-							"iframe_css" : [
-								{ "code": "height", "value": "770px" }
-							]
-						},
-						{
-							"type": "tab_iframe",
-							"id" : "project_config",
-							"label" : "Project Config",							
-							"connected_content" :  {
-								"viewName": "corona_manage_project_showview",
-								"form_id" : "form"
-							},
-							"events" : {
-								//"click" : tab_click
-							},
-							"iframe_css" : [
-								{ "code": "height", "value": "770px" }
-							]
-						}
-						
-						
-					]
-				},
-						
-				
-			]								
-	};
-	
-	</script>
-	<script  id="script_main">
-	
-	
-	$(function () {
-		//$("#loader").show();
-		setTimeout( function(){
-			fn_makeHtml('searchCondition',schemaSearch);
+		});
+		
+		
+		function fn_refresh(){
+			$("#contentMain").html("");
 			fn_makeHtml('contentMain',schemaContent);
-			
-			$( window ).resize(function() {
-				//console.log("aaaaa");
-			});
-			$("#loader").hide();
-		},50);
-		
-		// nspim 안에서 호출하는 경우
-//		parent.$("body").css("overflow","");
-//		parent.$("body .box_gray").css("height","1500px");
-//		$( window ).resize(function() {
-//			parent.$("body .box_gray").css("height","1500px");
-//		});
-		
-	});
-	
-	
-	function fn_refresh(){
-		$("#contentMain").html("");
-		fn_makeHtml('contentMain',schemaContent);
-	}
+		}
 	
 	</script>
-	
 	</head>
 
 

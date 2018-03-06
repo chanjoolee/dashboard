@@ -8,7 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>corona summary</title>
     <%-- 1. jquery --%>
-    <!--<script src="js/jquery/jquery-1.11.2.js"></script>-->
+    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
     <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
@@ -17,11 +17,11 @@
     <%-- jqgrid --%>
     <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
     
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>	
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
 	<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
 	
@@ -70,10 +70,10 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.09.13.01"></script>
+	<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
 	
 	<%-- 5. local --%>
-	<link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
 	
@@ -414,11 +414,6 @@
 		    padding-bottom: 3px;
 		}
 		
-		<%--  jqGrid에서 add popup에서 scroll--%>
-		.ui-jqdialog-content .FormGrid {
-		    overflow: hidden;
-		}
-		
 	</style>
 	
 	<script  id="script_common" >
@@ -579,7 +574,7 @@
 							    		{code:'height',value:'30px'}
 							    	],
 									elements:[
-										
+										//categoryHead
 										{
 											type:'SearchHeader',
 											id: 'categoryHead',
@@ -588,7 +583,7 @@
 											text:'Category',
 											width: '50px'
 										},
-										
+										//Category
 										{
 											type:'multiCombo',
 											id: 'category',
@@ -760,6 +755,38 @@
 													fn_search_script();
 												}
 											}
+										},
+										{
+											type:'Button',
+											id: 'btnUpload',
+											name: 'btnUpload',
+											label:'UPLOAD',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													$('#fileInput').click();
+												}
+											}
+										},
+										{
+											type:'Button',
+											id: 'btnDownload',
+											name: 'btndownload',
+											label:'DOWNLOAD',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													fn_FileDownloadAjax();
+												}
+											}
 										}
 									
 									 ]
@@ -802,255 +829,305 @@
 					    	type:'grid',
 					    	id: 'grid_script',
 					    	label:' ',
-					    	items:[
-								{
-									label:'TestScript Set', name:'SCRIPTSET', id:'SCRIPTSET', width:150, align:'left', sortable:false , editable: true
-									//,edittype: "text"
-									,cellattr: function(){
-										var result = " style=\"background:white;vertical-align: middle;";
-										result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;";
-										return result;
-									},
-									editrules:{
-										//custom rules
-			                            custom_func: function(value, column) {
-			                            	var isOk = true;
-			                            	var strConflict = "";
-			                            	var grid = $(this).jqGrid();
-			                            	var datas = grid.getRowData();
-			                            	var re = new RegExp(value, 'gi');
-			                            	$.each(datas,function(){
-			                            		var match = re.exec(this['SCRIPTSET']);
-			                            		if(match != null){
-			                            			isOk = false;
-			                            			strConflict = this['SCRIPTSET'];
-			                            			return false;
-			                            		}
-			                            	});
-			                            	if(!isOk)
-			                            		return [false, "It's conflict with \"" + strConflict + "\""];
-			                            	else 
-			                            		return [true,""];
-			                            },
-			                            custom: true,
-			                            required: true
-			                        },
-									
-								}
-								,{
-									label:'# of TS', name:'CNT', id:'CNT', width:100, align:'right', sortable:false , 
-									formatter:'number', align:'right',formatoptions:{decimalSeparator:",", thousandsSeparator: ",", decimalPlaces: 0}
-									,editable: false
-									,search: false
-									
-								}
-								,{
-									label:'Copy From', name:'copyfrom', id:'copyfrom', width:100, align:'left', sortable:false
-									,hidden: true
-									,editable: true
-									,edittype: 'select'
-									,formatter: 'select'
+					    	items:[						
+								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}
+									,edittype: "text"
 									,editoptions: {
-										value: function(){
-											var rtn = {};
-											$.ajax({
-								    			type: "POST",
-								    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.scriptsets.search",
-								    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-								    			data: $("#form").serialize(), 
-								    			async: false,
-								    			success:  function(response){
-								    				var tmp = "{";
-								    				tmp += "\"\":\"Select\"";
-													$.each(response.dataList,function(i,d){
-														tmp += ",";
-														tmp += "\"" + d.SCRIPTSET + "\":\"" + d.SCRIPTSET + "\"";
-														
-													});
-													tmp += "}";
-													rtn = JSON.parse(tmp);
-								    				
-								    			}
-								    		});
-								    		return rtn;
-								    		
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+										   $(element).attr("autocomplete","off").typeahead({ 
+											   	appendTo : "body",
+												source: function(query, proxy) {
+													$.ajax({
+														url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.autocomplete.script&callback=?&field=CATEGORY',
+														//dataType: "jsonp",
+														data: {term: query},
+														//dataType: "json",
+														//success : proxy
+														success: function (data) {
+								                            proxy($.map(data.dataList, function(item) {
+								                            	return item.name;
+							                                 }));//END Response
+								                        } //END Success
+								                        
+													});//END AJAX
+												}
+												
+											});
 										}
-									}							
-									,editrules:{edithidden:false}
-									,search: false
-									
+										
+									}
 								}
-								,{
-									label: " ",
-									search: false,
-									name: "actions",
-									align:'center',
-									width: 90,
-									formatter: "actions",	
-									formatoptions: {
-				                        keys: true
-				                        ,delbutton:true
-				                        ,editbutton: function(){
-				                        	return false;
-				                        }
-				                        ,editformbutton: false
-				                        ,editOptions: {} // editformbutton 가 true 인경우
-				                        ,addOptions: {}
-				                        ,delOptions: {
-				                        	onclickSubmit : function(options, rowid) {
-					                        	var grid = $(this).jqGrid();
-					                        	var row = grid.jqGrid('getRowData',rowid);
-					                        	row.sqlid = "dashboard.corona.emmc.scriptset.delete";					                        	;
-					                        	row.origindata = JSON.stringify(grid.jqGrid('getRowData',rowid));
-					                        	
-					                        	
-					                        	var response1 = {};
-					                        	$.ajax({
-						                    		url: "/dashboard/genericSaveJson.html",
-						                    		type: "POST",
-						                    		data: row, 
-						                    		async: false,			                    		
-						                    		success:  function(data){
-						                    			response1 = data;
-						                    			if(response1.result != 'success'){
-							                    			$("#dialog-confirm").html(response1.message);
-							                    			$("#dialog-confirm").dialog({
-							                    			    resizable: false,
-							                    			    modal: true,
-							                    			    title: "Error",
-							                    			    //height: 200,
-							                    			    width: 300,
-							                    			    dialogClass: 'no-close',
-							                    			    closeOnEscape: false,
-							                    			    buttons: [
-						                    			              {
-						                    			                text: "OK",
-						                    			                click: function() {
-						                    			                  $( this ).dialog( "close" );											                    			                  
-						                    			                }
-						                    			              }
-					                    			            ]
-							                    			});
-							                    			
-							                    			
-							                    			  
-						                    			}							                    			
-						                    		}
-						                    	});
-						                    	if(response1.result == 'success'){
-						                    		return true;
-						                    	}else
-						                    		return false;
-					                        	
-					                        }
-					                        
-				                        }
-				                        ,beforeSaveRow : function(options,rowid){
-				                        	//alert("beforeSaveRow")	;
-				                        	return true;
-				                        }
-				                        ,reloadAfterSubmit: false
-				                        ,afterSave : function(rowid,res) {
-				                        	var grid = $(this).jqGrid();
-				                        	var row = grid.jqGrid('getRowData',rowid);
-				                        	row.sqlid = "dashboard.corona.emmc.scriptset.update";
-				                        	row.origindata = JSON.stringify(beforEditRow);
-				                        	
-				                        	var response1 = {};
-				                        	$.ajax({
-					                    		url: "/dashboard/genericSaveJson.html",
-					                    		type: "POST",
-					                    		data: row, 
-					                    		async: false,			                    		
-					                    		success:  function(data){
-					                    			response1 = data;
-					                    			if(response1.result != 'success'){
-						                    			$("#dialog-confirm").html(response1.message);
-						                    			$("#dialog-confirm").dialog({
-						                    			    resizable: false,
-						                    			    modal: true,
-						                    			    title: "Error",
-						                    			    //height: 200,
-						                    			    width: 300,
-						                    			    dialogClass: 'no-close',
-						                    			    closeOnEscape: false,
-						                    			    buttons: [
-					                    			              {
-					                    			                text: "OK",
-					                    			                click: function() {
-					                    			                  $( this ).dialog( "close" );											                    			                  
-					                    			                }
-					                    			              }
-				                    			            ]
-						                    			});
-						                    			
-						                    			
-						                    			  
-					                    			}							                    			
-					                    		}
-					                    	});
-				                        	
-				                        }
-				                        
-				                        ,afterRestore : function(rowid) {
-				                        	
-				                        }
-				                        ,onEdit :function(rowid,actop){
-				                        	var grid = $(this).jqGrid();
-				                        	beforEditRow = grid.jqGrid('getRowData',rowid);
-				                        	var objid = $(beforEditRow.SCRIPTSET).attr("id");
-											var val = $("#" + objid).val();
-											beforEditRow.SCRIPTSET = val;
-											
-				    					}
-				    					
-				    					
-				                        
-				                    } 
-				                    
-				                	
-								}
+								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
+								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true 
+								 	,edittype: "text"
+									,editoptions: {
+			                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+			                            // use it to place a third party control to customize the toolbar
+			                            dataInit: function (element) {
+										   $(element).attr("autocomplete","off").typeahead({ 
+											   	appendTo : "body",
+												source: function(query, proxy) {
+													$.ajax({
+														url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.autocomplete.script&callback=?&field=TEST_ITEM',
+														//dataType: "jsonp",
+														data: {term: query},
+														//dataType: "json",
+														//success : proxy
+														success: function (data) {
+								                            proxy($.map(data.dataList, function(item) {
+								                            	return item.name;
+							                                 }));//END Response
+								                        } //END Success
+								                        
+													});//END AJAX
+												}
+												
+											});
+										}
+										
+									}
+								 }
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true, hidden: false}
+								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
 					    		
 					    	],	
-//					    	data: function(){
-//					    		var rtnList = [];
-//					    		$.ajax({
-//					    			type: "POST",
-//					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.scriptsets.search",
-//					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-//					    			data: $("#form").serialize(), 
-//					    			async: false,
-//					    			success:  function(response){
-//					    				rtnList  = response.dataList;
-//					    				
-//					    			}
-//					    		});
-//					    		
-//					    		return rtnList;
-//					    	},		
+					    	data: function(){
+					    		var rtnList = [];
+					    		$.ajax({
+					    			type: "POST",
+					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
+					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
+					    			data: $("#form").serialize(), 
+					    			async: false,
+					    			success:  function(response){
+					    				rtnList  = response.dataList;
+					    				
+					    			}
+					    		});
+					    		
+					    		return rtnList;
+					    	},		
 					    	
 					    	// script grid option		
 					    	gridOpt:{
-					    		datatype:'json',
+					    		datatype:'local',
+					    		loadonce: false,
 					    		pager: "#grid_scriptPager",
-					    		url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.scriptsets.search',
-					    		 jsonReader: {
-								      root: function(data){
-									    return data.dataList;
-								      }
-								     ,repeatitems:false
-								},
-								editurl: '/dashboard/ssdCusDummySaveJson.html',
-					    		viewrecords: true,	
-					    		emptyrecords: "No records to view",		    		
+					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
+					    		styleUI : 'Bootstrap',
+					    		viewrecords: true,			    		
 					    		width: '100%',
-					    		height: '550',
-					    		sortable: false,
-					    		multiSort:false,
-					    		//sortname: 'CATEGORY, TEST_ITEM ',
-					    		rowNum: 30,
-								rowList:[10,20,30],
+					    		height: 500,
+					    		sortable: true,
+					    		multiSort:true,
+					    		multiselect: true,
+					    		multiboxonly:true, 
+					    		sortname: 'CATEGORY, SCRIPT_NAME',
+					    		rowNum: 1000000,
 					    		//forceFit : false ,
+					    		emptyrecords: "No records to view",
+					    		//rownumbers: true, // show row numbers
+					    		
+					    		grouping: true,
+					    		groupingView: {
+									groupField: ["CATEGORY","ROWNUM_GRP"],
+									groupColumnShow: [false,false],
+									groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0} - {1} Item(s)  </b>'],
+									groupOrder: ["asc"],
+									//groupSummary: [true],
+									//groupSummaryPos: ["header"],
+									hideFirstGroupCol: true,
+									groupCollapse: true
+								},
+					    		
+					    		//subgrid start
+					    		subGrid: true,
+					    		subgridtype:'json',
+					    		subGridRowExpanded: function(parentRowID, parentRowKey){
+					    			var test = "";
+							    	var theGrid = $(this).jqGrid();
+							    	var row = theGrid.jqGrid('getRowData',parentRowKey);
+							    	var cms = theGrid.jqGrid("getGridParam", "colModel");
+							    	
+					    			
+					    			
+					    			// ***  grid ***//
+					    			var childDivId = parentRowID + "_div_input";
+					    			var childDiv = $(document.createElement("div"));
+					    			childDiv.attr("id",childDivId);
+					    			// add a table and pager HTML elements to the parent grid row - we will render the child grid here			    			
+					                $('#' + parentRowID).append(childDiv);
+					    			
+					    			var detailList = [];
+									$.ajax({
+						    			type: "POST",
+						    			url: "/dashboard/genericlListJson.html",
+						    			data: {
+						    				script_name: row.SCRIPT_NAME
+						    				, sqlid: 'dashboard.corona.emmc.manage.script.search.one'}, 
+						    			//data: $("#form").serialize(), 
+						    			async: false,
+						    			success:  function(response){
+						    				detailList  = response.dataList;
+						    				
+						    			}
+						    		});
+						    		
+						    		// script grid detail
+					    			var schema1 = {
+					    					containerId: childDivId,
+					    					type:'Vertical',
+					    					label: '',
+					    					elements: [
+					    					    {
+					    					    	label: "",
+					    					    	type: 'Group',
+					    					    	elements: [
+														{
+															type: "inline_edit",
+															cols: 1,
+															data: function(){ 
+																return detailList[0];
+															},
+															options : {
+																keys : ['SCRIPT_NAME'],
+																fn_change: function( input ){
+																	//
+																	if(this.props.options.name == 'SCRIPT_NAME'){
+																		var convert = this.reactObjects.find(function(td){
+																			return td.props.options.name == 'CONVERT_SCRIPT';
+																		});	
+																		//convert digit
+																		//var v_hax = this.state.value;
+																		var v_hax = input;
+																		var v_digit = [];
+																		$.each(v_hax.split(" "), function(i,str){
+																			var d = "";
+																			if(str.startsWith("0x")){
+																				v_digit.push(parseInt(str,16));
+																			}else{
+																				v_digit.push(str);
+																			}
+																		});																		
+																		convert.setState({value : v_digit.join(" ")});
+																		
+																	}
+																	
+																},
+																fn_submit: function(){
+																	//alert("submit function defined");
+																	var state = true;
+																	var paramObj = {
+																		//origindatas: this.props.options.keys
+																		origindatas: this.state.keys
+																	};
+																	
+																	if(this.props.options.value == this.state.value)
+																		return state;
+																	$.ajax({
+											                    		url: "/dashboard/genericSaveJson.html",
+											                    		type: "POST",
+											                    		data: {
+											                    			searchJson: JSON.stringify(paramObj),
+											                    			fieldName: this.state.name,
+											                    			fieldValue: this.state.value,
+											                    			fieldValueOrigin: this.state.value_origin,
+											                    			userId: $("#userId").val(),
+											                    			sqlid: "dashboard.corona.emmc.script_master.update"
+											                    		}, 
+											                    		async: false,			                    		
+											                    		success:  function(data){
+											                    			response1 = data;
+											                    			if(response1.result != 'success'){
+											                    				state = false;
+											                    				msg = "Save Success!";
+												                    			$("#dialog-confirm").html(response1.message);
+												                    			$("#dialog-confirm").dialog({
+												                    			    resizable: false,
+												                    			    modal: true,
+												                    			    title: "Error",
+												                    			    //height: 200,
+												                    			    width: 300,
+												                    			    dialogClass: 'no-close',
+												                    			    closeOnEscape: false,
+												                    			    buttons: [
+											                    			              {
+											                    			                text: "OK",
+											                    			                click: function() {
+											                    			                  $( this ).dialog( "close" );											                    			                  
+											                    			                }
+											                    			              }
+										                    			            ]
+												                    			});
+												                    			
+												                    			
+												                    			  
+											                    			}						                    			
+											                    		}
+											                    	});
+											                    	
+											                   		return state;
+																},
+																fn_afterSubmit: function(keyUpdatedObjects){
+																	
+																	$.each(this,function(i,react){
+																		if(react.state.name == "SCRIPT_NAME"){
+																			theGrid.setRowData(parentRowKey,{SCRIPT_NAME: react.state.value});
+																		}
+																		if(react.state.name == "CONVERT_SCRIPT"){
+																			theGrid.setRowData(parentRowKey,{CONVERT_SCRIPT: react.state.value});
+																		}
+																	});
+																	
+																},
+																progressObject: parent.$("#loader")
+															},
+															items: [
+																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: true},
+																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
+																{label:'Category', col: 'CATEGORY', editable: true},
+																{label:'Test Item', col: 'TEST_ITEM', editable: false},
+																{label:'TIME', col: 'TIME'},
+																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
+																{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
+																{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
+																{label:'EMMC Ver', col: 'EMMC_VER'},
+																{label:'Target Device', col: 'TARGET_DEVICE'},
+																{label:'Target Partition', col: 'TARGET_PARTITION'},
+																{label:'Category1', col: 'CATEGORY1'},
+																{label:'Category2', col: 'CATEGORY2'},
+																{label:'Category3', col: 'CATEGORY3'},
+																{label:'Category4', col: 'CATEGORY4'},
+																{label:'Category5', col: 'CATEGORY5'},
+																{label:'Write Mode', col: 'WRITE_MODE'},
+																{label:'Read Mode', col: 'READ_MODE'},
+																{label:'Platform', col: 'PLATFORM'},
+																{label:'Function Name', col: 'FUNCTION_NAME'},
+																
+																{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+																{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
+															]
+															
+														}
+														
+					    					    	
+					    					    	]
+					    					    }
+					    						
+					    					
+					    					]
+					    			};
+					    			fn_makeHtml(childDiv,schema1);
+					    			
+					    		} ,
+					    		//subgrid end
+					    		
+					    		onSelectAll: function(rowIds, allChecked) {
+									$("#grid_script input.groupHeader").prop('checked', allChecked);
+								},
 					    		gridComplete: function () {
 					    			var v_grid = $(this).jqGrid();
 					    			v_grid.jqGrid('filterToolbar',
@@ -1062,19 +1139,41 @@
 				    		                //,searchOperators: true
 				    		            }
 				    				);
+				    				
+				    				$("#grid_script tbody input[type=checkbox].groupHeader").change(function (e) {		
+		    							parent.$("#loader").show();
+		    							var currentCB = $(this);
+		    							setTimeout( function(){		    								
+										    var grid = jQuery('#grid_script');
+											var isChecked = this.checked;
+											if (currentCB.is(".groupHeader")) {	//if group header is checked, to check all child checkboxes						
+												var checkboxes = currentCB.closest('tr').
+										          nextUntil('tr.grid_scriptghead_0').find('.cbox[type="checkbox"]');
+												checkboxes.each(function(){
+												    //if (!this.checked || !isChecked)                   
+										            //    grid.setSelection($(this).closest('tr').attr('id'), true); 
+										            grid.setSelection($(this).closest('tr').attr('id'), isChecked);
+												});		
+												var a = "a";
+											}
+											parent.$("#loader").hide();
+		    							},50);
+									    
+									});	
+					    			
 					    			// script master add
 					    			v_grid.navGrid('#grid_scriptPager' ,
 						    			// the buttons to appear on the toolbar of the grid
-						    			{ edit: false, add: true, del: false, search: false, refresh: true, view: false, position: "left", cloneToTop: false  },
+						    			{ edit: false, add: true, del: true, search: false, refresh: true, view: false, position: "left", cloneToTop: false  },
 						    			// options for the Edit Dialog
 						    			{  } ,
 						    			// options for the Script Master Add Dialog
 						    			{
-						    				addCaption: "Add Script Set",
+						    				addCaption: "Add Script Master",
 						    				modal:true,
 						                    recreateForm: true,
 						                    closeAfterAdd: true,
-						                    reloadAfterSubmit: true,
+						                    reloadAfterSubmit: false,
 											//template: template,
 						                    errorTextFormat: function (data) {
 						                        return 'Error: ' + data.responseText
@@ -1084,12 +1183,7 @@
 						                        $(formid).attr('action','');
 						                        $(formid).attr('enctype','multipart/form-data');
 						                        $(formid).css("font-size","14px");
-						                        //$(formid).find("#tr_copyfrom td:eq(0) label").text("Copy From(not required)");
-						                        var el = $(document.createElement("span"));
-						                        el.text(" (not required)");
-						                        el.css("color","blue");
-						                        $(formid).find("#tr_copyfrom td:eq(0) label").append(el);
-						                        $(formid).find("#tr_copyfrom").show();
+						                        $(formid).find("#tr_CATEGORY").show();
 						                    },
 										    afterSubmit: function(response, postdata) 
 										    { 
@@ -1098,7 +1192,7 @@
 						                    	var fd = new FormData(formdata);  	
 						                    	var response1 = {};
 						                    	$.ajax({
-						                    		url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.emmc.scriptset.insert",
+						                    		url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.emmc.script_master.insert",
 						                    		type: "POST",
 						                    		data: fd, 
 						                    		async: false,
@@ -1107,27 +1201,28 @@
 						                    		processData: false,
 						                    		success:  function(data){
 						                    			response1 = data;
-						                    			
-						                    			if(response1.result != 'success'){
-							                    			$("#dialog-confirm").html(response1.message);
+						                    			if(response1.result == 'success'){
+						                    				msg = "Add Success!";
+							                    			$("#dialog-confirm").html(msg);
 							                    			$("#dialog-confirm").dialog({
 							                    			    resizable: false,
 							                    			    modal: true,
-							                    			    title: "Error",
+							                    			    title: "Success",
 							                    			    //height: 200,
-							                    			    width: 300,
+							                    			    width: 200,
 							                    			    dialogClass: 'no-close',
 							                    			    closeOnEscape: false,
 							                    			    buttons: [
 						                    			              {
 						                    			                text: "OK",
 						                    			                click: function() {
-						                    			                  $( this ).dialog( "close" );											                    			                  
+						                    			                  $( this ).dialog( "close" );	
+						                    			                  fn_search_script();										                    			                  
 						                    			                }
 						                    			              }
 					                    			            ]
-							                    			});							                    			
-						                    			}							           
+							                    			});
+						                    			}
 						                    			
 						                    		}
 						                    	});
@@ -1143,58 +1238,77 @@
 										    }
 						    			},
 						    			// options for the Script Master Del Dialog 
-						    			{  }
+						    			{
+						    				
+						    				afterSubmit: function(response, postdata) 
+										    { 
+										    	//$("#refresh_grid_script").hide();
+										    	var grid = $(this);
+										    	var paramObj = {
+										    		delRows : []
+										    	};
+										    	$.each(postdata.id.split(","),function(i,rowid){
+										    		var row = grid.getRowData(rowid);
+										    		paramObj.delRows.push(row);
+										    	});
+										    	
+									    		//  
+									    		paramObj.loop_id = "delRows";
+						                    	$.ajax({
+						                    		url: "/dashboard/genericSaveJson.html",
+						                    		type: "POST",
+						                    		data: {
+						                    			searchJson: JSON.stringify(paramObj),
+						                    			sqlid: "dashboard.corona.emmc.script_master.delete"
+						                    		}  , 
+						                    		async: false,
+						                    		success:  function(data){
+						                    			response1 = data;
+						                    			if(response1.result == 'success'){
+						                    			
+						                    				msg = "Del Success!";
+							                    			$("#dialog-confirm").html(msg);
+							                    			$("#dialog-confirm").dialog({
+							                    			    resizable: false,
+							                    			    modal: true,
+							                    			    title: "Success",
+							                    			    //height: 200,
+							                    			    width: 200,
+							                    			    dialogClass: 'no-close',
+							                    			    closeOnEscape: false,
+							                    			    buttons: [
+						                    			              {
+						                    			                text: "OK",
+						                    			                click: function() {
+						                    			                  $( this ).dialog( "close" );		
+						                    			                  fn_search_script();
+						                    			                }
+						                    			              }
+					                    			            ]
+							                    			});
+						                    			}
+						                    			
+						                    		}
+						                    	});
+						                    	
+						                    	//return [success,message,new_id] ;
+										    	if(response1.result == 'success'){
+										    		//$(this).trigger('reloadGrid'); 
+										    		return [true, response1.result, ''];
+										    	}
+										    	else
+										    		return [false, response1.result + ":<br/>" + response1.message , ''];
+										    		
+										    }
+						    			}
 					    			);
+					    			
 					    			$('#grid_scriptPager .ui-paging-pager').hide();
-					    			$("#1 td:eq(4) div:eq(0)").hide();
 					    		}
 						    	
-						    	, onCellSelect: function (rowId, iCol, content, event) {
-						    		var e = event;
-							    	var test = "";
-							    	var theGrid = $(this).jqGrid();
-							    	var row = theGrid.jqGrid('getRowData',rowId);
-							    	var cms = theGrid.jqGrid("getGridParam", "colModel");
-									var cm = cms[iCol];
-									
-									//beforEditRow = theGrid.jqGrid('getRowData',rowId);
-									if(cm.name == "SCRIPTSET"){
-										
-										// hs.Expand 두번뜨는것 방지
-										for(var i=0 ;i<hs.expanders.length;i++){
-											if(hs.expanders[i] == null)
-												continue;
-											else
-												hs.expanders[i].close();
-											//if(hs.expanders[i].maincontentText ==  linkUrl)
-											//	hs.expanders[i].close(); //return;
-										}
-										
-										var linkUrl = "";
-										// 1
-										linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_mgmt('"+ row.SCRIPTSET +"',this);\">";
-										linkUrl +="Edit/Remove Current TestScript Set.";
-										linkUrl +="</span>";
-										linkUrl +="<br/><br/>";
-										// 2
-										linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_copy('"+ row.SCRIPTSET +"',this);\">";
-										linkUrl +="Copy from Master TestScript.";
-										linkUrl +="</span>";	
-										
-										hs.htmlExpand(null, {
-									        pageOrigin: {
-									            x: e.pageX || e.clientX ,
-									            y: (e.pageY || e.clientY)  + 62 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
-									        },
-									        headingText: 'Select Job',
-									        maincontentText: linkUrl,
-									        width: 300
-									    });
-										
-									}
-									
-							    }
+						    	
 					    	}
+							
 						}
 					
 
@@ -1266,7 +1380,7 @@
 			$.ajax({
 				type: "POST",
 				url: "/dashboard/genericlListJson.html",
-				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
+				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
 				//data: $("#form").serialize(), 
 				data: paramObj,
 				async: false,
@@ -1289,39 +1403,11 @@
 	//target search condition change
 	function fn_search_script(){
 		parent.$("#loader").show();
-		
 		setTimeout( function(){
 			$("#contentMain").html("");
 			fn_makeHtml('contentMain',schemaContent);
 			parent.$("#loader").hide();
-			
-			
-			
-//			var rtnList = [];
-//			var paramObj = {
-//				sample : $("#category").val(),
-//				firmware : $("#testItem").val(),
-//				sqlid: "dashboard.corona.emmc.manage.script.search"
-//			};
-//			$.ajax({
-//				type: "POST",
-//				url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
-//				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
-//				data: $("#form").serialize(), 
-//				//data: paramObj,
-//				async: false,
-//				success:  function(response){
-//					rtnList  = response.dataList;
-//					//return rtnList;
-//					var theGrid = $("#grid_script").jqGrid();
-//					theGrid.jqGrid('clearGridData');
-//					theGrid.jqGrid('setGridParam', { data: rtnList});
-//					theGrid.trigger('reloadGrid');	
-//					parent.$("#loader").hide();
-//					
-//				}
-//			});
-					
+
 			
 		},50);
 			
@@ -1339,32 +1425,65 @@
 		}
 	}
 	
-	function fn_pop_copy(v_scriptset){
-		$("#scriptset").val(v_scriptset);
-		var newwin = window.open("", "ScriptSetCopy_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_copy_template_scriptset';
-		oFrm.method = "post";
-		oFrm.target = 'ScriptSetCopy_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
+	function fn_FileUploadAjax() {
+		
+		if ($("#fileInput").val() == '') {
+			return;
+		}
+		
+		var ext = $("#fileInput").val().substring($("#fileInput").val().lastIndexOf('.')+1);
+		if($.inArray(ext, ['xls','xlsx']) == -1) {
+			alert('No Excel File.');
+			return;
+		}
+		
+		if (!confirm('upload 하시겠습니까?\n단 upload된 파일 기준으로 Master가 Update되오니 주의 바랍니다.')) {
+			//input file reset
+			$('#fileInput').val('');
+			$('#fileInput').replaceWith($('#fileInput').clone(true));		
+			return;
+		}
+		
+		var formData = new FormData();
+		formData.append("datafile", $("#fileInput")[0].files[0]);
+		formData.append("type", "EMMC");
+		
+		parent.$("#loader").show();
+		
+		setTimeout( function(){
+			$.ajax({
+	            type : 'post',
+	            url : '/dashboard/fvtExcelUploadJson.html',
+	            async : false,
+	            data : formData,
+	            processData : false,
+	            contentType : false,
+	            success : function(data) {
+	            	parent.$("#loader").hide();
+	                if (data.result == "success") {
+	                	alert('Success');
+	                	fn_search_script();
+	                } else {
+	                	alert('Fail');
+	                }
+	            },
+	            error : function(error) {
+	                console.log(error);
+	                console.log(error.status);
+	            }
+	        });
+			
+			//input file reset
+			$('#fileInput').val('');
+			$('#fileInput').replaceWith($('#fileInput').clone(true));
+		}, 50);
 	}
 	
-	function fn_pop_mgmt(v_scriptset){
-		$("#scriptset").val(v_scriptset);
-		var newwin = window.open("", "ScriptSetMgmt_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_scriptset_script_edit_paging';
-		oFrm.method = "post";
-		oFrm.target = 'ScriptSetMgmt_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
+	function fn_FileDownloadAjax() {
+		$("#excelForm").attr("action", "/dashboard/fvtExcelDownJson.html");
+		$("#excelForm").attr("target", "popHiddenFrame");
+		$("#excelForm").submit();
 	}
-	
 	
 	</script>
 	<script  id="script_main">
@@ -1373,8 +1492,9 @@
 	$(function () {
 		parent.$("#loader").show();
 		setTimeout( function(){
-			//fn_makeHtml('searchCondition',schemaSearch);
+			fn_makeHtml('searchCondition',schemaSearch);
 			fn_makeHtml('contentMain',schemaContent);
+			
 			$( window ).resize(function() {
 				//console.log("aaaaa");
 			});
@@ -1389,6 +1509,8 @@
 		
 	});
 	
+	
+	
 	</script>
 	
 	</head>
@@ -1401,7 +1523,7 @@
 	<input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
-	<input type="hidden" id="scriptset" name="scriptset" value=""/>
+	<input type="file" id="fileInput" style="display:none" onchange="fn_FileUploadAjax()"/>
 	
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
@@ -1512,7 +1634,9 @@
 	    
 	    changeHandler(e){
 	    	//alert("changeHandler");
-	    	this.setState({value: e.target.value });	    	
+	    	this.setState({value: e.target.value });
+			this.props.options.fn_change.call(this, e.target.value);
+				    	
 	    }
 	    
 	    
@@ -1552,4 +1676,9 @@
 	}
 	
 </script>
+
+<form name="excelForm" id="excelForm" method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="type" value="EMMC" />
+</form>
+<iframe name="popHiddenFrame" width="0" height="0" style="display:none;" />
 </html>

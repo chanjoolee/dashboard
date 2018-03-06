@@ -4,112 +4,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>corona summary</title>
-		<!-- script import -->
-			<%-- 1. jquery --%>
-			<!--<script src="js/jquery/jquery-1.11.2.js"></script>-->
-			<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
-			<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-			<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
-			<!-- <script src="js/jquery.csv-0.71.js"></script> -->
-			
-			<%-- jqgrid --%>
-			<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
-			<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-			<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
-			
-			<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-			<!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-			<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>	
-			<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-			<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
-			
-			<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-			<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
-			
-			
+	<!--  -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<title>corona summary</title>
+		<%-- 1. jquery --%>
+		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+		<!-- <script src="js/jquery.csv-0.71.js"></script> -->
 		
-			<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-			<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-			<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
-			
-			
-			
-			<%-- 2. high charts --%>
-			<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
-			<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
-			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
-			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
-			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
-			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
-			
-			<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
-			<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
-			<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
-			<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
-			<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
-			<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
-			<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
-			
-			<%-- x축 그룹라벨 --%>
-			<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
-			<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
-			
-			<%-- 3. Additional files for the Highslide popup effect --%>
-			<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-			<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
-			
-			<%-- 4. local common --%>
-			<script src="js/dashboard.js?version=2018.01.10.01"></script>
-			
-			<%-- 5. local --%>
-			<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
-			<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-			<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
-			
-			<%-- multi select --%>
-			<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
-			<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-			<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
-			<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-			<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
-			<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
-			
-			<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-			<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-			<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
-			<script src="/common/js/module.js"></script>
-			
-			<%-- File Saver --%>
-			<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
-			<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
-			
-			<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-			<script src="/dashboard/js/jointjs/lodash.min.js"></script>
-			
-			<%-- jqueryMohthPicker --%>
-			<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
-			<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
-			<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
-			
-			<%-- recat --%>
-			<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
-			
-			<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
-			<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
-			<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
-			<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+		<%-- jqgrid --%>
+		<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
+		
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
+		
+		<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+		
+		
+	
+		<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+		<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+		<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+		
+		
+		
+		<%-- 2. high charts --%>
+		<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
+		
+		<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
+		
+		<%-- x축 그룹라벨 --%>
+		<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+		<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
+		
+		<%-- 3. Additional files for the Highslide popup effect --%>
+		<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
+		
+		<%-- 4. local common --%>
+		<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
+		
+		<%-- 5. local --%>
+		<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
+		
+		<%-- multi select --%>
+		<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
+		<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+		<script src="/common/js/module.js"></script>
+		
+		<%-- File Saver --%>
+		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+		
+		<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+		<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+		
+		<%-- jqueryMohthPicker --%>
+		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
+		<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+		
+		<%-- recat --%>
+		<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+		
+		<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+
+		<!-- <script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
+		<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
+		<script src="https://unpkg.com/prop-types@15.5.10/prop-types.js"></script>
+		<script src="https://unpkg.com/classnames@2.2.5/index.js"></script>
+		<script src="https://unpkg.com/react-input-autosize@2.0.0/dist/react-input-autosize.js"></script>
+		<script src="https://unpkg.com/react-select/dist/react-select.js"></script>
+
+		<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css"> -->
+
    	
    	
 	<style type="text/css" title="main">
@@ -419,6 +429,15 @@
 	
 	<script  id="script_common" >
 		var dataList = [];
+		var stageList = [
+			{STAGE:"WS1",value:"WS1",label:"WS1"},
+			{STAGE:"WS2",value:"WS2",label:"WS2"},
+			{STAGE:"ES1",value:"ES1",label:"ES1"},
+			{STAGE:"ES2",value:"ES2",label:"ES2"},
+			{STAGE:"CUS",value:"CUS",label:"CUS"}
+		];
+		var scriptGroupList = [];
+		var scriptGroupListStr = "";
 		function mergeRow(rowId, val, rowObj, cm, rowData, isCustom) {
 			var result = "";
 			var grid = $(this).jqGrid();
@@ -568,6 +587,7 @@
 								label:'',
 								type:'Vertical',
 								elements:[
+									// Stage
 									{
 										label:'',
 										type: 'HorizontalLayout',
@@ -575,7 +595,140 @@
 											{code:'height',value:'30px'}
 										],
 										elements:[
+											// Stage
+											{
+												type:'SearchHeader',
+												id: 'stageHead',
+												name: 'stageHead',
+												label:'',
+												text:'Stage',
+												width: '50px'
+											},
+											{
+												type:'multiCombo',
+												id: 'stage',
+												name: 'stage',
+												label:'',
+												text:'Stage',
+												width: '300px',
+												data: function(){
+													var rtnList = [
+														{STAGE:"WS1", selected: "selected"},
+														{STAGE:"WS2", selected: "selected"},
+														{STAGE:"ES1", selected: "selected"},
+														{STAGE:"ES2", selected: "selected"},
+														{STAGE:"CUS", selected: "selected"}
+													];
+													// $.ajax({
+													// 	url: "/dashboard/genericlListJson.html",
+													// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
+													// 	async: false,
+													// 	success:  function(response){
+													// 		rtnList = response.dataList;
+													// 	}
+													// });
+													return rtnList;
+												},
+												//value :'CSSD',
+												options: {
+													cd:'STAGE',
+													name:'STAGE'
+													
+												},
+												multiselectOpt:{
+													//selectedList: 1 ,
+													multiple: true,
+													selectedText: function(numChecked, numTotal, checkedItems){
+														//return numChecked + ' of ' + numTotal + ' checked';
+														var rtn = "";
+														var sb = [];
+														$.each(checkedItems,function(i,d){
+															if(i < 2)
+																sb.push($(this).val());
+														});
+														rtn = sb.join(",");
+														if((checkedItems.length-2) > 0){
+															rtn += " ..." + (checkedItems.length-2)+" more"
+														}
+														return rtn;
+													}
+												},
+												events:{
+													change : function(){
+														fn_search_script();
+													}
+												}
+											} 
 											
+										]
+									}
+									// Group
+									,{
+										label:'',
+										type: 'HorizontalLayout',
+										containerCss:[
+											{code:'height',value:'30px'}
+										],
+										elements:[
+											{
+												type:'SearchHeader',
+												id: 'scriptGroupHead',
+												name: 'scriptGroupHead',
+												label:'',
+												text:'Group',
+												width: '50px'
+											},
+											{
+												type:'multiCombo',
+												id: 'scriptGroup',
+												name: 'scriptGroup',
+												label:'',
+												text:'Group',
+												width: '300px',
+												data: function(){
+													return scriptGroupList;
+												},
+												//value :'CSSD',
+												options: {
+													cd:'SCRIPT_GROUP',
+													name:'GROUP_NAME'
+												},
+												multiselectOpt:{
+													//selectedList: 1 ,
+													multiple: true,
+													selectedText: function(numChecked, numTotal, checkedItems){
+														//return numChecked + ' of ' + numTotal + ' checked';
+														var rtn = "";
+														var sb = [];
+														$.each(checkedItems,function(i,d){
+															if(i < 2)
+																sb.push($(this).attr("title"));
+														});
+														rtn = sb.join(",");
+														if((checkedItems.length-2) > 0){
+															rtn += " ..." + (checkedItems.length-2)+" more"
+														}
+														return rtn;
+													}
+												},
+												events:{
+													change : function(){
+														fn_search_script();
+													}
+												}
+											} 
+											
+										]
+									}
+									//Category , SubCategory
+									,{
+										label:'',
+										type: 'HorizontalLayout',
+										containerCss:[
+											{code:'height',value:'30px'}
+										],
+										elements:[
+											//categoryHead
 											{
 												type:'SearchHeader',
 												id: 'categoryHead',
@@ -584,7 +737,7 @@
 												text:'Category',
 												width: '50px'
 											},
-											
+											//Category
 											{
 												type:'multiCombo',
 												id: 'category',
@@ -596,7 +749,7 @@
 													var rtnList = [];
 													$.ajax({
 														url: "/dashboard/genericlListJson.html",
-														data: {sqlid: "dashboard.corona.script.category.distinct"}, 
+														data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
 														async: false,
 														success:  function(response){
 															rtnList = response.dataList;
@@ -610,7 +763,7 @@
 													name:'CATEGORY',
 													childrens : [
 														{
-															id: "testItem" ,
+															id: "subCategory" ,
 															topElement: "schemaSearch.elements"
 														}
 													]
@@ -637,30 +790,28 @@
 													
 												}
 											} ,
-											
-											
+											// SubCategory mHead
 											{
 												type:'SearchHeader',
-												id: 'testItemHead',
-												name: 'testItemHead',
+												id: 'SubCategoryead',
+												name: 'SubCategoryead',
 												label:'',
-												text:'Test Item',
-												width: '60px'
+												text:'Sub Category',
+												width: '90px'
 											},
-											
-											
+											// SubCategory
 											{
 												type:'multiCombo',
-												id: 'testItem',
-												name: 'testItem',
+												id: 'subCategory',
+												name: 'subCategory',
 												label:'',
-												text:'Test Item',
+												text:'Sub Category',
 												width: '300px',
 												data: function(){
 													var rtnList = [];
 													$.ajax({
 														url: "/dashboard/genericlListJson.html",
-														data: {sqlid: "dashboard.corona.script.test_item.distinct", sample: $("#category").val() }, 
+														data: {sqlid: "dashboard.ssd_sm.script.sub_category.distinct", sample: $("#category").val() }, 
 														async: false,
 														success:  function(response){
 															rtnList = response.dataList;
@@ -671,8 +822,8 @@
 												},
 												//value :'CSSD',
 												options: {
-													cd:'TEST_ITEM' ,
-													name:'TEST_ITEM',
+													cd:'SUB_CATEGORY' ,
+													name:'SUB_CATEGORY',
 													group: {
 														cd:'CATEGORY',
 														name: 'CATEGORY'
@@ -699,6 +850,7 @@
 												},
 												events:{
 													change : function(){
+														fn_search_script();
 														// parent.$("#loader").show();
 														// setTimeout( function(){
 														// 	$("#contentMain").html("");
@@ -712,8 +864,6 @@
 											
 										]
 									}
-									//2line
-									
 									
 								]
 							},
@@ -756,39 +906,39 @@
 														fn_search_script();
 													}
 												}
-											},
-											{
-												type:'Button',
-												id: 'btnUpload',
-												name: 'btnUpload',
-												label:'UPLOAD',
-												//width: '50px',
-												cls: 'btn_txt btn_type_e btn_color_a',
-												containerCss:[
-													{code: 'margin-right', value:'3px'}
-												],
-												events:{
-													click : function(){
-														$('#fileInput').click();
-													}
-												}
-											},
-											{
-												type:'Button',
-												id: 'btnDownload',
-												name: 'btndownload',
-												label:'DOWNLOAD',
-												//width: '50px',
-												cls: 'btn_txt btn_type_e btn_color_a',
-												containerCss:[
-													{code: 'margin-right', value:'3px'}
-												],
-												events:{
-													click : function(){
-														fn_FileDownloadAjax();
-													}
-												}
 											}
+											// {
+											// 	type:'Button',
+											// 	id: 'btnUpload',
+											// 	name: 'btnUpload',
+											// 	label:'UPLOAD',
+											// 	//width: '50px',
+											// 	cls: 'btn_txt btn_type_e btn_color_a',
+											// 	containerCss:[
+											// 		{code: 'margin-right', value:'3px'}
+											// 	],
+											// 	events:{
+											// 		click : function(){
+											// 			$('#fileInput').click();
+											// 		}
+											// 	}
+											// },
+											// {
+											// 	type:'Button',
+											// 	id: 'btnDownload',
+											// 	name: 'btndownload',
+											// 	label:'DOWNLOAD',
+											// 	//width: '50px',
+											// 	cls: 'btn_txt btn_type_e btn_color_a',
+											// 	containerCss:[
+											// 		{code: 'margin-right', value:'3px'}
+											// 	],
+											// 	events:{
+											// 		click : function(){
+											// 			fn_FileDownloadAjax();
+											// 		}
+											// 	}
+											// }
 										
 										]
 									}
@@ -825,13 +975,153 @@
 							{
 								containerCss:[
 									{code: 'width', value:'100%'}
-									//,{code: 'float', value:'left'}
+									// ,{code: 'float', value:'left'}
 								],			
 								type:'grid',
 								id: 'grid_script',
 								label:' ',
 								items:[						
-									{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}
+									{label:'Stage', name:'STAGE', id:'STAGE', width:100, align:'left'
+										, sortable:false 
+										, editable: true
+										, editrules: { required: true}
+										, hidden: false
+										, edittype: 'select'
+										, editoptions: {
+											//value: edit_option_scriptset
+											value: function(){
+												var rtnList = stageList;
+												var tmp = "{";
+												tmp += "\"" + "" + "\":\"" + "Select" + "\"";
+												$.each(rtnList,function(i,d){
+													// if(i> 0)
+													tmp += ",";
+													tmp += "\"" + d.STAGE + "\":\"" + d.STAGE + "\"";
+												});
+												tmp += "}";
+												rtn = JSON.parse(tmp);
+
+												// $.ajax({
+												// 	type: "POST",
+												// 	url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.manage.scriptsets.search",
+												// 	//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
+												// 	data: $("#form").serialize(), 
+												// 	async: false,
+												// 	success:  function(response){
+												// 		var tmp = "{";
+												// 		//tmp += "\"\":\"Select\"";
+												// 		$.each(response.dataList,function(i,d){
+												// 			if(i> 0)
+												// 				tmp += ",";
+												// 			tmp += "\"" + d.SCRIPTSET + "\":\"" + d.SCRIPTSET + "\"";
+															
+												// 		});
+												// 		tmp += "}";
+												// 		rtn = JSON.parse(tmp);
+														
+												// 	}
+												// });
+												return rtn;
+												
+											}
+										}
+										, search: false
+									},
+
+									{label:'Group', name:'SCRIPT_GROUP', id:'SCRIPT_GROUP', width:150, align:'left'
+										, sortable:false 
+										, editable: true
+										, editrules: { required: true}
+										, hidden: false
+										, edittype: 'select'
+										, formatter:'select'
+										, editoptions: {
+											value: ""
+											//value: edit_option_scriptset
+										}
+										, search: false
+										, stype:"select"
+										, searchoptions: {
+											value: function(){
+												var obj = JSON.parse(scriptGroupListStr);
+												obj[""] = "ALL";
+												return obj;
+											}
+										}
+									},
+									{label:'Category', name:'CATEGORY', id:'CATEGORY', width:150, align:'left'
+										, sortable:false 
+										, editable: true
+										, editrules:{required: true, edithidden:false}
+										, edittype: "text"
+										, editoptions: {
+											// dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+											// use it to place a third party control to customize the toolbar
+											dataInit: function (element) {
+												$(element).attr("autocomplete","off").typeahead({ 
+													appendTo : "body",
+													source: function(query, proxy) {
+														$.ajax({
+															url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=CATEGORY',
+															//dataType: "jsonp",
+															data: {term: query},
+															//dataType: "json",
+															//success : proxy
+															success: function (data) {
+																proxy($.map(data.dataList, function(item) {
+																	return item.name;
+																}));//END Response
+															} //END Success
+															
+														});//END AJAX
+													}
+														
+												});
+												
+											}
+											
+										}
+										, search: false
+									}
+									,{label:'Sub Category', name:'SUB_CATEGORY', id:'SUB_CATEGORY', width:150, align:'left'
+										, sortable:false 
+										, editable: true
+										, editrules:{required: true, edithidden:false}
+										, edittype: "text"
+										, editoptions: {
+											// dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+											// use it to place a third party control to customize the toolbar
+											dataInit: function (element) {
+												$(element).attr("autocomplete","off").typeahead({ 
+													appendTo : "body",
+													source: function(query, proxy) {
+														$.ajax({
+															url: '/dashboard/genericlListJson.html?'+
+																'sqlid=dashboard.ssd_sm.autocomplete.script'+
+																'&callback=?'+
+																'&field=SUB_CATEGORY'
+																,
+															//dataType: "jsonp",
+															data: {term: query},
+															//dataType: "json",
+															//success : proxy
+															success: function (data) {
+																proxy($.map(data.dataList, function(item) {
+																	return item.name;
+																}));//END Response
+															} //END Success
+															
+														});//END AJAX
+													}
+														
+												});
+												
+											}
+											
+										}
+										, search: false
+									}
+									,{label:'Item', name:'ITEM', id:'ITEM', width:100, align:'left', sortable:false , editable: true 
 										,edittype: "text"
 										,editoptions: {
 											// dataInit is the client-side event that fires upon initializing the toolbar search field for a column
@@ -841,7 +1131,7 @@
 													appendTo : "body",
 													source: function(query, proxy) {
 														$.ajax({
-															url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.autocomplete.script&callback=?&field=CATEGORY',
+															url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=ITEM',
 															//dataType: "jsonp",
 															data: {term: query},
 															//dataType: "json",
@@ -860,8 +1150,7 @@
 											
 										}
 									}
-									,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
-									,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true 
+									,{label:'Sub Item', name:'SUB_ITEM', id:'SUB_ITEM', width:100, align:'left', sortable:false , editable: true 
 										,edittype: "text"
 										,editoptions: {
 											// dataInit is the client-side event that fires upon initializing the toolbar search field for a column
@@ -871,7 +1160,7 @@
 													appendTo : "body",
 													source: function(query, proxy) {
 														$.ajax({
-															url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.autocomplete.script&callback=?&field=TEST_ITEM',
+															url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=SUB_ITEM',
 															//dataType: "jsonp",
 															data: {term: query},
 															//dataType: "json",
@@ -890,34 +1179,24 @@
 											
 										}
 									}
-									,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:300, align:'left', sortable:false , editable: true }
-									,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:300, align:'left', sortable:false , editable: true }
-									,{label:'TAT LVL', name:'SCRIPT_TAT_LVL', id:'SCRIPT_TAT_LVL', width:100, align:'left', sortable:false , editable: true }
-									,{label:'Script Version', name:'SCRIPT_VERSION', id:'SCRIPT_VERSION', width:100, align:'left', sortable:false , editable: true }
+									,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left'
+										, sortable:false 
+										, editable: true
+										, editrules: { required: true}
+										, hidden: false
+									}
 									
 								],	
-								data: function(){
-									var rtnList = [];
-									$.ajax({
-										type: "POST",
-										url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.script.search",
-										//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-										data: $("#form").serialize(), 
-										async: false,
-										success:  function(response){
-											rtnList  = response.dataList;
-											
-										}
-									});
-									
-									return rtnList;
-								},		
-								
 								// script grid option		
 								gridOpt:{
-									datatype:'local',
-									loadonce: false,
+									datatype:'json',
+									// loadonce: false,
 									pager: "#grid_scriptPager",
+									url: function(){
+										return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + 
+										"&sqlid=dashboard.ssd_sm.manage.script.search.paging" + 
+										"&paging_sqlid=dashboard.ssd_sm.manage.script.search.paging.page";
+									},
 									editurl: '/dashboard/ssdCusDummySaveJson.html',
 									//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
 									styleUI : 'Bootstrap',
@@ -927,24 +1206,13 @@
 									sortable: true,
 									multiSort:true,
 									multiselect: true,
-									multiboxonly:true, 
-									sortname: 'CATEGORY, SCRIPT_NAME',
-									rowNum: 1000000,
+									// multiboxonly:true, 
+									// sortname: 'CATEGORY, SCRIPT_NAME',
+									rowNum: 20,
+									rowList:[10,15,20,30],
 									//forceFit : false ,
 									emptyrecords: "No records to view",
 									//rownumbers: true, // show row numbers
-									
-									grouping: true,
-									groupingView: {
-										groupField: ["CATEGORY","ROWNUM_GRP"],
-										groupColumnShow: [false,false],
-										groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0} - {1} Item(s)  </b>'],
-										groupOrder: ["asc"],
-										//groupSummary: [true],
-										//groupSummaryPos: ["header"],
-										hideFirstGroupCol: true,
-										groupCollapse: true
-									},
 									
 									//subgrid start
 									subGrid: true,
@@ -970,7 +1238,8 @@
 											url: "/dashboard/genericlListJson.html",
 											data: {
 												script_name: row.SCRIPT_NAME
-												, sqlid: 'dashboard.corona.manage.script.search.one'}, 
+												, sqlid: 'dashboard.ssd_sm.manage.script.search.one'
+											}, 
 											//data: $("#form").serialize(), 
 											async: false,
 											success:  function(response){
@@ -999,25 +1268,25 @@
 																	keys : ['SCRIPT_NAME'],
 																	fn_change: function( input ){
 																		//
-																		if(this.props.options.name == 'SCRIPT_NAME'){
-																			var convert = this.reactObjects.find(function(td){
-																				return td.props.options.name == 'CONVERT_SCRIPT';
-																			});	
-																			//convert digit
-																			//var v_hax = this.state.value;
-																			var v_hax = input;
-																			var v_digit = [];
-																			$.each(v_hax.split(" "), function(i,str){
-																				var d = "";
-																				if(str.startsWith("0x")){
-																					v_digit.push(parseInt(str,16));
-																				}else{
-																					v_digit.push(str);
-																				}
-																			});																		
-																			convert.setState({value : v_digit.join(" ")});
+																		// if(this.props.options.name == 'SCRIPT_NAME'){
+																		// 	var convert = this.reactObjects.find(function(td){
+																		// 		return td.props.options.name == 'CONVERT_SCRIPT';
+																		// 	});	
+																		// 	//convert digit
+																		// 	//var v_hax = this.state.value;
+																		// 	var v_hax = input;
+																		// 	var v_digit = [];
+																		// 	$.each(v_hax.split(" "), function(i,str){
+																		// 		var d = "";
+																		// 		if(str.startsWith("0x")){
+																		// 			v_digit.push(parseInt(str,16));
+																		// 		}else{
+																		// 			v_digit.push(str);
+																		// 		}
+																		// 	});																		
+																		// 	convert.setState({value : v_digit.join(" ")});
 																			
-																		}
+																		// }
 																		
 																	},
 																	fn_submit: function(){
@@ -1030,7 +1299,6 @@
 																		
 																		if(this.props.options.value == this.state.value)
 																			return state;
-																		//return;
 																		$.ajax({
 																			url: "/dashboard/genericSaveJson.html",
 																			type: "POST",
@@ -1040,7 +1308,7 @@
 																				fieldValue: this.state.value,
 																				fieldValueOrigin: this.state.value_origin,
 																				userId: $("#userId").val(),
-																				sqlid: "dashboard.corona.script_master.update"
+																				sqlid: "dashboard.ssd_sm.script_master.update"
 																			}, 
 																			async: false,			                    		
 																			success:  function(data){
@@ -1069,62 +1337,44 @@
 																					
 																					
 																					
-																				}					                    			
+																				}						                    			
 																			}
 																		});
 																		
 																		return state;
 																	},
 																	fn_afterSubmit: function(keyUpdatedObjects){
+																		
 																		$.each(this,function(i,react){
-																			if(react.state.name == "SCRIPT_NAME"){
-																				theGrid.setRowData(parentRowKey,{SCRIPT_NAME: react.state.value});
+																			if(_.find(cms,function(cm){return cm.name == react.state.name})){
+																				var vobject = {};
+																				vobject[react.state.name] = react.state.value;
+																				theGrid.setRowData(parentRowKey,vobject);
 																			}
-																			if(react.state.name == "CONVERT_SCRIPT"){
-																				theGrid.setRowData(parentRowKey,{CONVERT_SCRIPT: react.state.value});
-																			}
+																			
 																		});
 																		
 																	},
 																	progressObject: parent.$("#loader")
 																},
 																items: [
-																	{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: true},
-																	{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
-																	{label:'Category', col: 'CATEGORY', editable: true},
-																	{label:'Test Item', col: 'TEST_ITEM', editable: true},
-																	{label:'Single Multi', col: 'SINGLE_MULTI'},
-																	{label:'Power Mode Speed', col: 'POWER_MODE_SPEED'},
-																	{label:'Test Time', col: 'TEST_TIME'},
-																	{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-																	{label:'Luconfig 유무', col: 'LUCONFIG_YN'},
-																	{label:'UFS Ver', col: 'UFS_VER'},
-																	{label:'Precondition', col: 'PRECONDITION'},
-																	{label:'POR', col: 'POR'},
-																	{label:'HW Reset', col: 'HW_RESET'},
-																	{label:'EP Reset', col: 'EP_RESET'},
-																	{label:'H8', col: 'H8'},
-																	{label:'SSU', col: 'SSU'},
-																	{label:'Target LU', col: 'TARGET_LU'},
-																	{label:'Power Control', col: 'POWER_CONTROL'},
-																	{label:'Item Name', col: 'ITEM_NAME'},
-																	{label:'Script TAT LVL', col: 'SCRIPT_TAT_LVL'},
-																	{label:'Script Version', col: 'SCRIPT_VERSION'},
-																	{label:'PF110', col: 'PF110'},
-																	{label:'EXYNOS 7420', col: 'EXYNOS_7420'},
-																	{label:'P4 Rev', col: 'P4_REV'},
-																	{label:'Priority', col: 'PRIORITY'},
-																	{label:'TG645', col: 'TG645'},
-																	{label:'Need Power Cycle', col: 'NEED_POWER_CYCLE'},
-																	{label:'Reset YN', col: 'RESET_YN'},
-																	{label:'Script LVL', col: 'SCRIPT_LVL'},
-																	{label:'Refactoring', col: 'REFACTORING'},
-																	{label:'Reset Type', col: 'RESET_TYPE'},
-																	
-																	{label:'Item Purpose', col: 'ITEM_PURPOSE', edit_tag: 'textarea'},
-																	{label:'Item Description', col: 'ITEM_DESCRIPTION' , edit_tag: 'textarea'},
-																	{label:'Input Parameter', col: 'INPUT_PARAMETER' , edit_tag: 'textarea'},
-																	{label:'Comment', col: 'USER_COMMENT' , edit_tag: 'textarea'}
+																	{label:'Script Name(key)', col: 'SCRIPT_NAME', editable: false},
+																	{label:'Group', col: 'SCRIPT_GROUP'
+																		, editable: true
+																		, edit_tag : 'select'
+																		, selectOptions : scriptGroupList
+																	},
+																	{label:'Stage', col: 'STAGE', editable: true
+																		, edit_tag : 'select'
+																		, selectOptions : stageList
+																	},
+																	{label:'CATEGORY', col: 'CATEGORY', editable: true},
+																	{label:'Sub Category', col: 'SUB_CATEGORY', editable: true},
+																	{label:'Item', col: 'ITEM', editable: true},
+																	{label:'Sub Item', col: 'SUB_ITEM', editable: true},
+																	{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+																	{label:'Tester', col: 'TESTER' }
+
 																]
 																
 															}
@@ -1139,11 +1389,11 @@
 										fn_makeHtml(childDiv,schema1);
 										
 									} ,
-									//subgrid end
+									// subgrid end
 									
-									onSelectAll: function(rowIds, allChecked) {
-										$("#grid_script input.groupHeader").prop('checked', allChecked);
-									},
+									// onSelectAll: function(rowIds, allChecked) {
+									// 	$("#grid_script input.groupHeader").prop('checked', allChecked);
+									// },
 									gridComplete: function () {
 										var v_grid = $(this).jqGrid();
 										v_grid.jqGrid('filterToolbar',
@@ -1155,27 +1405,6 @@
 												//,searchOperators: true
 											}
 										);
-										
-										$("#grid_script tbody input[type=checkbox].groupHeader").change(function (e) {		
-											parent.$("#loader").show();
-											var currentCB = $(this);
-											setTimeout( function(){		    								
-												var grid = jQuery('#grid_script');
-												var isChecked = this.checked;
-												if (currentCB.is(".groupHeader")) {	//if group header is checked, to check all child checkboxes						
-													var checkboxes = currentCB.closest('tr').
-													nextUntil('tr.grid_scriptghead_0').find('.cbox[type="checkbox"]');
-													checkboxes.each(function(){
-														//if (!this.checked || !isChecked)                   
-														//    grid.setSelection($(this).closest('tr').attr('id'), true); 
-														grid.setSelection($(this).closest('tr').attr('id'), isChecked);
-													});		
-													var a = "a";
-												}
-												parent.$("#loader").hide();
-											},50);
-											
-										});	
 										
 										// script master add
 										v_grid.navGrid('#grid_scriptPager' ,
@@ -1189,7 +1418,7 @@
 												modal:true,
 												recreateForm: true,
 												closeAfterAdd: true,
-												reloadAfterSubmit: false,
+												reloadAfterSubmit: true,
 												//template: template,
 												errorTextFormat: function (data) {
 													return 'Error: ' + data.responseText
@@ -1208,7 +1437,7 @@
 													var fd = new FormData(formdata);  	
 													var response1 = {};
 													$.ajax({
-														url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert",
+														url: "/dashboard/genericSaveJson.html?sqlid=dashboard.ssd_sm.script_master.insert",
 														type: "POST",
 														data: fd, 
 														async: false,
@@ -1218,26 +1447,76 @@
 														success:  function(data){
 															response1 = data;
 															if(response1.result == 'success'){
-																msg = "Add Success!";
-																$("#dialog-confirm").html(msg);
-																$("#dialog-confirm").dialog({
-																	resizable: false,
-																	modal: true,
-																	title: "Success",
-																	//height: 200,
-																	width: 200,
-																	dialogClass: 'no-close',
-																	closeOnEscape: false,
-																	buttons: [
-																		{
-																			text: "OK",
-																			click: function() {
-																			$( this ).dialog( "close" );	
-																			fn_search_script();										                    			                  
-																			}
+																// select Category
+																	var category = $("#category");
+																	var category_opts  = $("#category option");
+																	var category_filters = category_opts.filter(function(i,opt){
+																		return opt.value == postdata.CATEGORY;
+																	});
+																	if(category_filters.length == 0 ){
+																		var opt = document.createElement("option");
+																		$(opt).val(postdata.CATEGORY);
+																		$(opt).text(postdata.CATEGORY);
+																		$(opt).prop('selected', true);
+																		// $(opt).attr("selected","selected")
+																		category.append(opt);
+																		category.trigger("change");
+																		category.multiselect('refresh');
+																		category.multiselect('widget').css("width","400px");
+																		category.multiselect('widget').find(".ui-multiselect-filter input").css("width","150px");
+																	}
+
+																// select Sub Category
+																	var category = $("#subCategory");
+																	var category_opts  = $("#subCategory option");
+																	var category_filters = category_opts.filter(function(i,opt){
+																		return (opt.value == postdata.SUB_CATEGORY && $(opt).attr('category') == postdata.CATEGORY );
+																	});
+																	if(category_filters.length == 0 ){
+																		var optgroup_filters = category.find("optgroup").filter(function(i,optgroup){
+																			return ($(optgroup).attr("label") == postdata.CATEGORY);
+																		});
+																		var optgroup;
+																		if(optgroup_filters.length == 0){
+																			optgroup = $(document.createElement('optgroup')); 
+																			optgroup.attr("label",postdata.CATEGORY);
+																			category.append(optgroup);
+																		}else{
+																			optgroup = $(optgroup_filters[0]);
 																		}
-																	]
-																});
+																		var opt = document.createElement("option");
+																		$(opt).val(postdata.SUB_CATEGORY);
+																		$(opt).attr("category",postdata.CATEGORY);
+																		$(opt).text(postdata.SUB_CATEGORY);
+																		$(opt).prop('selected', true);
+																		// $(opt).attr("selected","selected")
+																		optgroup.append(opt);
+																		category.multiselect('refresh');
+																		category.multiselect('widget').css("width","400px");
+																		category.multiselect('widget').find(".ui-multiselect-filter input").css("width","150px");
+																	}
+
+
+																// msg = "Add Success!";
+																// $("#dialog-confirm").html(msg);
+																// $("#dialog-confirm").dialog({
+																// 	resizable: false,
+																// 	modal: true,
+																// 	title: "Success",
+																// 	//height: 200,
+																// 	width: 200,
+																// 	dialogClass: 'no-close',
+																// 	closeOnEscape: false,
+																// 	buttons: [
+																// 		{
+																// 			text: "OK",
+																// 			click: function() {
+																// 				$( this ).dialog( "close" );	
+																// 				// fn_search_script();										                    			                  
+																// 			}
+																// 		}
+																// 	]
+																// });
 															}
 															
 														}
@@ -1255,7 +1534,7 @@
 											},
 											// options for the Script Master Del Dialog 
 											{
-												
+												reloadAfterSubmit: true,
 												afterSubmit: function(response, postdata) 
 												{ 
 													//$("#refresh_grid_script").hide();
@@ -1275,7 +1554,7 @@
 														type: "POST",
 														data: {
 															searchJson: JSON.stringify(paramObj),
-															sqlid: "dashboard.corona.script_master.delete"
+															sqlid: "dashboard.ssd_sm.script_master.delete"
 														}  , 
 														async: false,
 														success:  function(data){
@@ -1296,8 +1575,8 @@
 																		{
 																			text: "OK",
 																			click: function() {
-																			$( this ).dialog( "close" );		
-																			fn_search_script();
+																				$( this ).dialog( "close" );		
+																				// fn_search_script();
 																			}
 																		}
 																	]
@@ -1319,7 +1598,7 @@
 											}
 										);
 										
-										$('#grid_scriptPager .ui-paging-pager').hide();
+										// $('#grid_scriptPager .ui-paging-pager').hide();
 									}
 									
 									
@@ -1391,7 +1670,7 @@
 				var paramObj = {
 					sample : $("#to_sample").val(),
 					firmware : $("#to_firmware").val(),
-					sqlid: "dashboard.corona.manage.script.firmware.mapping"
+					sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"
 				};
 				$.ajax({
 					type: "POST",
@@ -1418,55 +1697,9 @@
 		
 		//target search condition change
 		function fn_search_script(){
-			parent.$("#loader").show();
-			
-			setTimeout( function(){
-				$("#contentMain").html("");
-				fn_makeHtml('contentMain',schemaContent);
-				parent.$("#loader").hide();
+			var theGrid = $("#grid_script").jqGrid();
+			theGrid.trigger('reloadGrid',[{page:1}]);
 				
-				
-				
-				// var rtnList = [];
-				// var paramObj = {
-				// 	sample : $("#category").val(),
-				// 	firmware : $("#testItem").val(),
-				// 	sqlid: "dashboard.corona.manage.script.search"
-				// };
-				// $.ajax({
-				// 	type: "POST",
-				// 	url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.script.search",
-				// 	//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
-				// 	data: $("#form").serialize(), 
-				// 	//data: paramObj,
-				// 	async: false,
-				// 	success:  function(response){
-				// 		rtnList  = response.dataList;
-				// 		//return rtnList;
-				// 		var theGrid = $("#grid_script").jqGrid();
-				// 		theGrid.jqGrid('clearGridData');
-				// 		theGrid.jqGrid('setGridParam', { data: rtnList});
-				// 		theGrid.trigger('reloadGrid');	
-				// 		parent.$("#loader").hide();
-						
-				// 	}
-				// });
-						
-				
-			},50);
-				
-		}
-		
-		
-		function fn_validation(){
-			var gridScript = $("#grid_script").jqGrid();
-			var selIds = gridScript.jqGrid('getGridParam','selarrrow');
-			if(selIds.length == 0){
-				alert("select more than one item!");
-				return false;
-			}else{
-				return true;
-			}
 		}
 		
 		function fn_FileUploadAjax() {
@@ -1490,7 +1723,7 @@
 			
 			var formData = new FormData();
 			formData.append("datafile", $("#fileInput")[0].files[0]);
-			formData.append("type", "UFS");
+			formData.append("type", "EMMC");
 			
 			parent.$("#loader").show();
 			
@@ -1528,30 +1761,63 @@
 			$("#excelForm").attr("target", "popHiddenFrame");
 			$("#excelForm").submit();
 		}
+	
+		function fn_load_scriptGroups() {
+			$.ajax({
+				url: "/dashboard/genericlListJson.html",
+				data: {sqlid: "dashboard.ssd_sm.script.group.list"}, 
+				async: false,
+				success:  function(response){
+					// for grid list
+					scriptGroupList = response.dataList;
+					$.each(scriptGroupList,function(){
+						this.value = this.SCRIPT_GROUP;
+						this.label = this.GROUP_NAME;
+					});
+					scriptGroupListStr = "{";
+					scriptGroupListStr += "\"" + "" + "\":\"" + "Select" + "\"";
+					$.each(scriptGroupList,function(i,d){
+						// if(i> 0)
+						scriptGroupListStr += ",";
+						scriptGroupListStr += "\"" + d.SCRIPT_GROUP + "\":\"" + d.GROUP_NAME + "\"";
+					});
+					scriptGroupListStr += "}";
+
+					var grid = findAll("grid_script",schemaContent.elements)[0];
+					if(grid != undefined){
+						_.find(grid.items,{name:'SCRIPT_GROUP'}).editoptions.value = JSON.parse(scriptGroupListStr);
+					}
+					// rtn = JSON.parse(tmp);
+				}
+			});
+		}
 	</script>
 	<script  id="script_main">
 	
 	
-		$(function () {
-			parent.$("#loader").show();
-			setTimeout( function(){
-				fn_makeHtml('searchCondition',schemaSearch);
-				fn_makeHtml('contentMain',schemaContent);
-				
-				$( window ).resize(function() {
-					//console.log("aaaaa");
-				});
-				parent.$("#loader").hide();
-			},50);
-			//fn_search_firmware();
-			parent.$("body").css("overflow","");
-			parent.$("body .box_gray").css("height","1500px");
-			$( window ).resize(function() {
-				parent.$("body .box_gray").css("height","1500px");
-			});
+	$(function () {
+		parent.$("#loader").show();
+		setTimeout( function(){
+			fn_load_scriptGroups();
+			fn_makeHtml('searchCondition',schemaSearch);
+			fn_makeHtml('contentMain',schemaContent);
 			
+			$( window ).resize(function() {
+				//console.log("aaaaa");
+			});
+			parent.$("#loader").hide();
+		},50);
+		//fn_search_firmware();
+		parent.$("body").css("overflow","");
+		parent.$("body .box_gray").css("height","1500px");
+		$( window ).resize(function() {
+			parent.$("body .box_gray").css("height","1500px");
 		});
 		
+	});
+	
+	
+	
 	</script>
 	
 	</head>
@@ -1566,6 +1832,10 @@
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
 	<input type="file" id="fileInput" style="display:none" onchange="fn_FileUploadAjax()"/>
 	
+	<input type="hidden" name="stage" value="x"/>
+	<input type="hidden" name="scriptGroup" value="x"/>
+	<input type="hidden" name="subCategory" value="x"/>
+	<input type="hidden" name="category" value="x"/>
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
 
@@ -1677,6 +1947,7 @@
 	    	//alert("changeHandler");
 	    	this.setState({value: e.target.value });
 			this.props.options.fn_change.call(this, e.target.value);
+				    	
 	    }
 	    
 	    
@@ -1684,22 +1955,62 @@
 	    render(){
 	    	
 	    	if(this.props.options.editable == false || this.state.mode == "read"){
-	    		return(
-				<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
-					{this.state.value}
-				</div>
-	        	);
+				if(this.props.options.edit_tag == "select"){
+					return (
+					<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
+						{this.props.options.selectOptions.map(opt => {
+							if ( this.state.value == opt.value){
+								return ( <div> {opt.label} </div> );
+							}
+							
+						})}
+					</div>
+					);
+				} else {
+					return (
+					<div style={{width:"100%",height:"100%"}} onDoubleClick={this.dblclick.bind(this)}>
+						{this.state.value}
+					</div>
+	        		);
+				} 
+	    		
 	    	}else if(this.state.mode == "edit") {	  
 	    		if(this.state.edit_tag == "textarea"){
 	    			return (
 			    		<div>
-							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
+							<textarea className="form-control" style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>
 						</div>
 					);
-	    		}else {
+	    		}else if(this.state.edit_tag == "select1") {
+					return (
+						<div>
+							<select className="form-control" onChange={this.changeHandler.bind(this)} value={this.state.value } >
+								<option value="grapefruit">Grapefruit</option>
+								<option value="lime">Lime</option>
+								<option value="coconut">Coconut</option>
+								<option value="mango">Mango</option>
+							</select>
+						</div>
+
+					);
+				}else if(this.state.edit_tag == "select") {
+					return (
+						<div>
+							<select  className="form-control" style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }>
+								<option value="">SELECT</option>
+								{this.props.options.selectOptions.map(opt => {
+									return (
+										<option key={opt.value} value={opt.value}>{opt.label}</option>
+									);
+								})}
+							</select>
+						</div>
+
+					);
+				}else{
 	    			return (
 			    		<div>
-							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
+							<input className="form-control" style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
 						</div>
 					);
 	    		}		
@@ -1718,7 +2029,7 @@
 </script>
 
 <form name="excelForm" id="excelForm" method="post" enctype="multipart/form-data" >
-	<input type="hidden" name="type" value="UFS" />
+	<input type="hidden" name="type" value="EMMC" />
 </form>
-<iframe name="popHiddenFrame" width="0" height="0" style="display:none;" /> 
+<iframe name="popHiddenFrame" width="0" height="0" style="display:none;" />
 </html>

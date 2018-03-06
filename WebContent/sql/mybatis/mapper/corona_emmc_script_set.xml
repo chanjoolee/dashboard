@@ -90,7 +90,7 @@
 		    		
 		    		
 					for rec in ( 
-						select FIRMWARE, SAMPLE from CORONA_SCRIPTSET_MAP_F where SCRIPTSET = #{origindata.SCRIPTSET}
+						select FIRMWARE, SAMPLE from CORONA_EMMC_SCRIPTSET_MAP_F where SCRIPTSET = #{origindata.SCRIPTSET}
 					) loop
 						delete from CORONA_EMMC_F_S_MAP where firmware = rec.firmware and sample = rec.sample;
 						
@@ -251,6 +251,148 @@
 			end as rownum_grp
 			,a.*
 		from tbl_a a
+		
+	</select>
+	<select id="dashboard.corona.emmc.manage.script.scriptset.mapping.paging" resultType="hashmap">
+		Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(			
+				SELECT
+					m.SCRIPTSET ,
+					m.SCRIPT_NAME, 
+					sm.CONVERT_SCRIPT,
+					m.CATEGORY, 
+					m.TEST_ITEM, 
+					m.TIME, 
+					m.CUSTOMER_ITEM, 
+					m.NEED_VENDOR_CMD, 
+					m.NEED_POWER_CYCLE, 
+					m.EMMC_VER, 
+					m.TARGET_DEVICE, 
+					m.TARGET_PARTITION, 
+					m.CATEGORY1, 
+					m.CATEGORY2, 
+					m.CATEGORY3, 
+					m.CATEGORY4, 
+					m.CATEGORY5, 
+					m.WRITE_MODE, 
+					m.READ_MODE, 
+					substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+					m.DESCRIPTION,
+					substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+					m.ARGUMENT, 
+					m.PLATFORM, 
+					m.FUNCTION_NAME,
+					m.INS_DT, 
+					m.MOD_DT
+				from CORONA_EMMC_SCRIPTSET_MAP m
+				left outer join CORONA_EMMC_SCRIPT_MASTER sm
+					on sm.script_name = m.script_name
+				where m.SCRIPTSET = #{to_scriptset}
+				order by m.category, m.test_item, m.script_name
+			) A
+			where 1=1 			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+	   		   
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>
+		
+	</select>
+	<select id="dashboard.corona.emmc.manage.script.scriptset.mapping.paging.page" resultType="hashmap">
+		select 
+			ceil(count(*)/ #{rows} ) as total,
+			#{page} as page ,
+			count(*) records 
+		from 
+		(
+			select a.* from (		
+				SELECT
+					m.SCRIPTSET ,
+					m.SCRIPT_NAME, 
+					sm.CONVERT_SCRIPT,
+					m.CATEGORY, 
+					m.TEST_ITEM, 
+					m.TIME, 
+					m.CUSTOMER_ITEM, 
+					m.NEED_VENDOR_CMD, 
+					m.NEED_POWER_CYCLE, 
+					m.EMMC_VER, 
+					m.TARGET_DEVICE, 
+					m.TARGET_PARTITION, 
+					m.CATEGORY1, 
+					m.CATEGORY2, 
+					m.CATEGORY3, 
+					m.CATEGORY4, 
+					m.CATEGORY5, 
+					m.WRITE_MODE, 
+					m.READ_MODE, 
+					substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
+					m.DESCRIPTION,
+					substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
+					m.ARGUMENT, 
+					m.PLATFORM, 
+					m.FUNCTION_NAME,
+					m.INS_DT, 
+					m.MOD_DT
+				from CORONA_EMMC_SCRIPTSET_MAP m
+				left outer join CORONA_EMMC_SCRIPT_MASTER sm
+					on sm.script_name = m.script_name
+				where m.SCRIPTSET = #{to_scriptset}
+				order by m.category, m.test_item, m.script_name
+			) A
+			where 1=1 			
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>   REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if> REGEXP_LIKE(${rule.field},#{rule.data},'i') 		           		 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+		) 
 		
 	</select>
     <select id="dashboard.corona.emmc.manage.script.scriptset.mapping.one" resultType="hashmap">
@@ -523,17 +665,9 @@
 				   			${fieldName} = #{fieldValue},
 				   			MOD_DT = sysdate
 	              		where 1=1
-				   		<choose>
-							<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
-					       		<foreach collection="searchJson.origindatas" item="item" index="index"  >
-					       			and ${item.field} = #{item.value}
-					       		</foreach>
-					   		</when>
-					   		<otherwise>
-					   			and 1=2
-					   		</otherwise>
-				   		</choose>  
-				   		;
+				   		and FIRMWARE = rec.FIRMWARE
+				   		and SAMPLE = rec.SAMPLE
+				   		and SCRIPT_NAME = rec.SCRIPT_NAME ;
 				   	end Loop;
 				   	
 	        end if;

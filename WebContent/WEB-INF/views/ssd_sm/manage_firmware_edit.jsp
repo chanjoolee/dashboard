@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Corona manage copy template to scriptset</title>
+    <title>EMMC Firmware Edit</title>
     <%-- 1. jquery --%>
     <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
@@ -17,7 +17,7 @@
     <%-- jqgrid --%>
     <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2017.10.18"></script>    
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
     
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
@@ -69,7 +69,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2018.01.10.01"></script>
+	<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -180,7 +180,7 @@
 		
 		
 		#loader {
-		  position: fixed;
+		  position: absolute;
 		  left: 50%;
 		  top: 50%;
 		  z-index: 1;
@@ -225,19 +225,6 @@
 		  to{ bottom:0; opacity:1 }
 		}
 		
-		.btn_n2 {
-		 	width: 100px;		 	
-		}
-		
-		.btn_n2:hover {
-			width: 100px;
-			cursor: pointer;
-			text-decoration: none;
-		}
-		
-		.btn_n2:active {
-		  width: 100px;
-		}
 		
 		<%-- 탭뷰--%>
 		a:hover,a:focus{
@@ -425,11 +412,6 @@
 		    padding-bottom: 3px;
 		}
 		
-		<%--  jqGrid에서 add popup에서 scroll--%>
-		.ui-jqdialog-content .FormGrid {
-		    overflow: hidden;
-		}
-		
 	</style>
 	
 	<script  id="script_common" >
@@ -551,576 +533,19 @@
 	var beforEditRow = {};
 	
 	var EfContextPath = "";
-	
-	var schemaSearch = {
-			containerId:'searchCondition',
-			type:'Vertical',
-			label:'',
-			
-			elements:[
-				{
-					containerCss:[
-						{code: 'margin-top', value:'10px'},
-					],		
-					type:"title",
-					id: "title_script",
-					label: "Source: Master TS"
-				},
-				{
-					label:'',
-					type: 'HorizontalLayout',
-					cls: 'srch_box2',
-					containerCss:[
-						{code: 'margin-top', value:'3px'},
-						{code: 'margin-left', value:'20px'},
-						{code: 'margin-right', value:'20px'}
-					],		
-					elements:[
-					 	{
-					 		containerCss:[
-								
-							],
-							label:'',
-							type:'Vertical',
-							elements:[
-								{
-									label:'',
-									type: 'HorizontalLayout',
-									containerCss:[
-							    		{code:'height',value:'30px'}
-							    	],
-									elements:[
-										
-										{
-											type:'SearchHeader',
-											id: 'categoryHead',
-											name: 'categoryHead',
-											label:'',
-											text:'Category',
-											width: '50px'
-										},
-										
-										{
-											type:'multiCombo',
-											id: 'category',
-											name: 'category',
-											label:'',
-											text:'Category',
-											width: '300px',
-											data: function(){
-												var rtnList = [];
-												$.ajax({
-													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
-													async: false,
-													success:  function(response){
-														rtnList = response.dataList;
-													}
-												});
-												return rtnList;
-											},
-											//value :'CSSD',
-											options: {
-												cd:'CATEGORY',
-												name:'CATEGORY',
-												childrens : [
-													{
-														id: "testItem" ,
-														topElement: "schemaSearch.elements"
-													}
-												]
-											},
-											multiselectOpt:{
-												//selectedList: 1 ,
-												multiple: true,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var rtn = "";
-													 var sb = [];
-													 $.each(checkedItems,function(i,d){
-													 	 if(i < 2)
-														 	sb.push($(this).val());
-													 });
-													 rtn = sb.join(",");
-													 if((checkedItems.length-2) > 0){
-													 	rtn += " ..." + (checkedItems.length-2)+" more"
-													 }
-													 return rtn;
-												}
-											},
-											events:{
-												
-											}
-										} ,
-										
-										
-										{
-											type:'SearchHeader',
-											id: 'testItemHead',
-											name: 'testItemHead',
-											label:'',
-											text:'Test Item',
-											width: '60px'
-										},
-										
-										
-										{
-											type:'multiCombo',
-											id: 'testItem',
-											name: 'testItem',
-											label:'',
-											text:'Test Item',
-											width: '300px',
-											data: function(){
-												var rtnList = [];
-												$.ajax({
-													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.test_item.distinct", sample: $("#category").val() }, 
-													async: false,
-													success:  function(response){
-														rtnList = response.dataList;
-														tempList = rtnList;
-													}
-												});
-												return rtnList;
-											},
-											//value :'CSSD',
-											options: {
-												cd:'TEST_ITEM' ,
-												name:'TEST_ITEM',
-												group: {
-													cd:'CATEGORY',
-													name: 'CATEGORY'
-												}
-												
-											},
-											multiselectOpt:{
-												//selectedList: 1 ,
-												multiple: true,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var rtn = "";
-													 var sb = [];
-													 $.each(checkedItems,function(i,d){
-													 	 if(i < 2)
-														 	sb.push($(this).val());
-													 });
-													 rtn = sb.join(",");
-													 if((checkedItems.length-2) > 0){
-													 	rtn += " ..." + (checkedItems.length-2)+" more"
-													 }
-													 return rtn;
-												}
-											},
-											events:{
-												change : function(){
-													// parent.$("#loader").show();
-													// setTimeout( function(){
-													// 	$("#contentMain").html("");
-													// 	makeHtml("contentMain",schemaContent);
-													// 	parent.$("#loader").hide();
-													// },50); 
-												}
-											}
-										}
-										
-										
-									]
-								}
-								//2line
-								
-								
-							]
-					 	},
-					 	//검색버튼
-					 	{
-					 		label:'',
-					 		type: 'VerticalLayout',
-							cls: 'btn_txt',
-							containerCss:[
-								{code: 'margin-left', value:'10px'}
-								, {code: 'float', value:'right'}
-							]
-					 		, elements:[
-					 			{
-					 				label:'',
-							 		type: 'HorizontalLayout',
-									cls: 'btn_txt',
-									containerCss:[
-										{code: 'margin-left', value:'10px'}
-									],
-									elements:[
-										{
-											type:'Button',
-											id: 'btnSearch',
-											name: 'btnSearch',
-											label:'SEARCH',
-											//width: '50px',
-											cls: 'btn_txt btn_type_e btn_color_a',
-											containerCss:[
-												{code: 'margin-right', value:'3px'}
-											],
-											events:{
-												click : function(){
-													//parent.$("#loader").show();
-													//setTimeout( function(){
-													//	$("#contentMain").html("");
-													//	makeHtml("contentMain",schemaContent);
-													//	parent.$("#loader").hide();
-													//},50);
-													fn_search_script();
-												}
-											}
-										}
-									
-									 ]
-					 			}
-					 		            
-					 		]
-							
-					 	}
-					]
-				}
-			
-				
-			
-			]
-			
-	};
-	
 	var schemaContent = {
 			containerId:'contentCoronaDetail',
 			type:'Vertical', 
 			label:'',
 			elements:[ 
 				
-				
-				
-				//script master grid
-				{
-					label: '',
-					type: 'HorizontalLayout',
-					containerCss:[
-						{code: 'display', value:'inline-block'},
-						{code: 'width', value:'100%'},
-						{code: 'padding-left', value:'20px'},
-						{code: 'padding-right', value:'20px'}
-					],			
-					elements: [
-						{
-							containerCss:[
-								{code: 'width', value:'100%'}
-								//,{code: 'float', value:'left'}
-							],			
-					    	type:'grid',
-					    	id: 'grid_script',
-					    	label:' ',
-					    	items:[						
-								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
-								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
-								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
-								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
-					    		
-					    	],	
-					    	data: function(){
-					    		var rtnList = [];
-					    		$.ajax({
-					    			type: "POST",
-					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
-					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-					    			data: $("#form").serialize(), 
-					    			async: false,
-					    			success:  function(response){
-					    				rtnList  = response.dataList;
-					    				
-					    			}
-					    		});
-					    		
-					    		return rtnList;
-					    	},		
-					    	
-					    	// script grid option		
-					    	gridOpt:{
-					    		datatype:'local',
-					    		//loadonce: true,
-					    		pager: "#grid_scriptPager",
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
-					    		//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.emmc.script_master.insert',
-					    		styleUI : 'Bootstrap',
-					    		viewrecords: true,			    		
-					    		width: '100%',
-					    		height: 500,
-					    		sortable: true,
-					    		multiSort:true,
-					    		multiselect: true,
-					    		multiboxonly:true, 
-					    		sortname: 'CATEGORY, SCRIPT_NAME',
-					    		rowNum: 1000000,
-					    		//forceFit : false ,
-					    		emptyrecords: "No records to view",
-					    		//rownumbers: true, // show row numbers
-					    		
-					    		grouping: true,
-					    		groupingView: {
-									groupField: ["CATEGORY","ROWNUM_GRP"],
-									groupColumnShow: [false,false],
-									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0} - {1} Item(s)  </b>'],
-									groupOrder: ["asc"],
-									//groupSummary: [true],
-									//groupSummaryPos: ["header"],
-									hideFirstGroupCol: true,
-									groupCollapse: true
-								},
-					    		
-					    		//subgrid start
-					    		subGrid: true,
-					    		subgridtype:'json',
-					    		subGridRowExpanded: function(parentRowID, parentRowKey){
-					    			var test = "";
-							    	var theGrid = $(this).jqGrid();
-							    	var row = theGrid.jqGrid('getRowData',parentRowKey);
-							    	var cms = theGrid.jqGrid("getGridParam", "colModel");
-							    	
-					    			
-					    			
-					    			// ***  grid ***//
-					    			var childDivId = parentRowID + "_div_input";
-					    			var childDiv = $(document.createElement("div"));
-					    			childDiv.attr("id",childDivId);
-					    			// add a table and pager HTML elements to the parent grid row - we will render the child grid here			    			
-					                $('#' + parentRowID).append(childDiv);
-					    			
-					    			var detailList = [];
-									$.ajax({
-						    			type: "POST",
-						    			url: "/dashboard/genericlListJson.html",
-						    			data: {
-						    				script_name: row.SCRIPT_NAME
-						    				, sqlid: 'dashboard.corona.emmc.manage.script.search.one'}, 
-						    			//data: $("#form").serialize(), 
-						    			async: false,
-						    			success:  function(response){
-						    				detailList  = response.dataList;
-						    				
-						    			}
-						    		});
-						    		
-						    		// script grid detail
-					    			var schema1 = {
-					    					containerId: childDivId,
-					    					type:'Vertical',
-					    					label: '',
-					    					elements: [
-					    					    {
-					    					    	label: "Details",
-					    					    	type: 'Group',
-					    					    	elements: [
-														{
-															type: "inline",
-															cols: 1,
-															data: function(){ 
-																return detailList[0];
-															},
-															options : {
-																keys : ['SCRIPT_NAME'],
-																fn_submit: function(){
-																	//alert("submit function defined");
-																	var paramObj = {
-																		origindatas: this.props.options.keys
-																	};
-																	
-																	$.ajax({
-											                    		url: "/dashboard/genericSaveJson.html",
-											                    		type: "POST",
-											                    		data: {
-											                    			searchJson: JSON.stringify(paramObj),
-											                    			fieldName: this.state.name,
-											                    			fieldValue: this.state.value,
-											                    			sqlid: "dashboard.corona.emmc.script_master.update"
-											                    		}, 
-											                    		async: false,			                    		
-											                    		success:  function(data){
-											                    			response1 = data;
-											                    			if(response1.result != 'success'){
-											                    				msg = "Save Success!";
-												                    			$("#dialog-confirm").html(response1.message);
-												                    			$("#dialog-confirm").dialog({
-												                    			    resizable: false,
-												                    			    modal: true,
-												                    			    title: "Success",
-												                    			    //height: 200,
-												                    			    width: 300,
-												                    			    dialogClass: 'no-close',
-												                    			    closeOnEscape: false,
-												                    			    buttons: [
-											                    			              {
-											                    			                text: "OK",
-											                    			                click: function() {
-											                    			                  $( this ).dialog( "close" );											                    			                  
-											                    			                }
-											                    			              }
-										                    			            ]
-												                    			});
-												                    			
-												                    			
-												                    			  
-											                    			}						                    			
-											                    		}
-											                    	});
-											                    	
-											                   
-																}
-															},
-															items: [
-																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
-																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
-																{label:'Category', col: 'CATEGORY', editable: true},
-																{label:'Test Item', col: 'TEST_ITEM', editable: false},
-																{label:'TIME', col: 'TIME'},
-																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
-																{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-																{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
-																{label:'EMMC Ver', col: 'EMMC_VER'},
-																{label:'Target Device', col: 'TARGET_DEVICE'},
-																{label:'Target Partition', col: 'TARGET_PARTITION'},
-																{label:'Category1', col: 'CATEGORY1'},
-																{label:'Category2', col: 'CATEGORY2'},
-																{label:'Category3', col: 'CATEGORY3'},
-																{label:'Category4', col: 'CATEGORY4'},
-																{label:'Category5', col: 'CATEGORY5'},
-																{label:'Write Mode', col: 'WRITE_MODE'},
-																{label:'Read Mode', col: 'READ_MODE'},
-																{label:'Platform', col: 'PLATFORM'},
-																{label:'Function Name', col: 'FUNCTION_NAME'},
-																
-																{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
-																{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
-															]
-															
-														}
-														
-					    					    	
-					    					    	]
-					    					    }
-					    						
-					    					
-					    					]
-					    			};
-					    			fn_makeHtml(childDiv,schema1);
-					    			
-					    		} ,
-					    		//subgrid end
-					    		
-					    		onSelectAll: function(rowIds, allChecked) {
-									$("#grid_script input.groupHeader").prop('checked', allChecked);
-								},
-					    		gridComplete: function () {
-					    			var v_grid = $(this).jqGrid();
-					    			v_grid.jqGrid('filterToolbar',
-				    					{
-				    						defaultSearch:'cn'
-				    		                // JSON stringify all data from search, including search toolbar operators
-				    		                ,stringResult: true
-				    		                // instuct the grid toolbar to show the search options
-				    		                //,searchOperators: true
-				    		            }
-				    				);
-				    				
-				    				$("#grid_script tbody input[type=checkbox].groupHeader").change(function (e) {		
-		    							if("${param.scriptset}" == ""){ 
-		    								parent.$("#loader").show(); 
-		    							}else{
-		    								$("#loader").show();
-		    							}
-		    							var currentCB = $(this);
-		    							setTimeout( function(){		    								
-										    var grid = jQuery('#grid_script');
-											var isChecked = this.checked;
-											if (currentCB.is(".groupHeader")) {	//if group header is checked, to check all child checkboxes						
-												var checkboxes = currentCB.closest('tr').
-										          nextUntil('tr.grid_scriptghead_0').find('.cbox[type="checkbox"]');
-												checkboxes.each(function(){
-												    //if (!this.checked || !isChecked)                   
-										            //    grid.setSelection($(this).closest('tr').attr('id'), true); 
-										            grid.setSelection($(this).closest('tr').attr('id'), isChecked);
-												});		
-												var a = "a";
-											}
-											if("${param.scriptset}" == ""){ 
-			    								parent.$("#loader").hide(); 
-			    							}else{
-			    								$("#loader").hide();
-			    							}
-		    							},50);
-									    
-									});	
-					    			
-					    			// script master add
-					    			//$("#grid_scriptContainer input.cbox").hide();
-					    			$('#grid_scriptPager .ui-paging-pager').hide();
-					    		}
-						    	
-						    	
-					    	}
-							
-						}
-					
-
-					
-					]
-				},
-				
-				// copy Button
-				{ 
-					type:'Button',
-					id: 'to_btnCopy',
-					name: 'to_btnCopy',
-					label:'Copy',
-					//width: '50px',
-					cls: 'btn_txt btn_type_e btn_color_c',
-					controlCss: [
-						{code: 'width', value:'300px'}
-					],
-					containerCls : "center_section",
-					containerCss:[
-						{code: 'margin-top', value:'20px'}
-					],
-					events:{
-						click : function(){
-//									if(fn_validation()){
-//										parent.$("#loader").show();
-//										setTimeout( function(){
-//											fn_copy();
-//											fn_search_firmware();
-//											//parent.$("#loader").show();
-//										},50);	
-//									}
-							
-							fn_validation(function(){
-								if("${param.scriptset}" == ""){ 
-    								parent.$("#loader").show(); 
-    							}else{
-    								$("#loader").show();
-    							}
-								setTimeout( function(){
-									fn_copy();
-									fn_search_firmware();
-									//parent.$("#loader").show();
-								},50);	
-							});
-							
-						}
-					}
-				},
-				
-				{
-					controlCss:[
-						{code: 'margin-top', value:'10px'} 
-					],	
-					type:"title",
-					label: "Target: Script Set"
-				},
+//				{
+//					controlCss:[
+//						{code: 'margin-top', value:'10px'} 
+//					],	
+//					type:"title",
+//					label: "Firmware Script"
+//				},
 				
 				// target search
 				{
@@ -1136,32 +561,31 @@
 					elements: [
 						{
 							type:'SearchHeader',
-							id: 'scriptsetHead',
-							name: 'scriptsetHead',
+							id: 'projectHead',
+							name: 'projectHead',
 							label:'',
-							text:'Script Set',
-							width: '70px'
+							text:'Project',
+							width: '50px'
 						},
 						
 						{
 							type:'multiCombo',
-							id: 'to_scriptset',
-							name: 'to_scriptset',
+							id: 'to_sample',
+							name: 'to_sample',
 							label:'',
-							text:'Scriptset',
+							text:'Project',
 							width: '230px',
 							data: function(){
 								var rtnList = [];
 								$.ajax({
 									url: "/dashboard/genericlListJson.html",
-									data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.search"}, 
+									data: {sqlid: "dashboard.corona.emmc.search.sample"}, 
 									async: false,
 									success:  function(response){
 										rtnList = response.dataList;
 										$.each(rtnList,function(i,d){
-											if(d.SCRIPTSET == "${param.scriptset}")
-												d.selected = "selected";
-											
+											if(d.SAMPLE == "${param.search_sample}")
+												d.selected = "selected";											
 										});
 									}
 								});
@@ -1169,8 +593,8 @@
 							},
 							//value :'CSSD',
 							options: {
-								cd:'SCRIPTSET',
-								name:'SCRIPTSET'
+								cd:'SAMPLE',
+								name:'SAMPLE'
 							},
 							multiselectOpt:{
 								selectedList: 1 ,
@@ -1186,12 +610,92 @@
 							},
 							events:{
 								change : function(){
+									var datas = [];
+									$.ajax({
+										type: "POST",
+										url: "/dashboard/genericlListJson.html",
+										data: {sqlid: "dashboard.corona.emmc.search.firmware",sample: $("#to_sample").val() }, 
+										async: false,
+										success:  function(response){
+											datas = response.dataList;
+										}
+									});
+									
+									var sampleObj = $("#to_firmware");
+									sampleObj.html("");
+									$.each(datas ,function(){
+										var option = $(document.createElement( "option" ));
+										option.val(this.FIRMWARE);
+										option.text(this.FIRMWARE_NM);
+										sampleObj.append(option);
+									});
+									
+									$("select[name=to_firmware]").multiselect('refresh');
+									$("div.ui-multiselect-menu").css("width","400px");
+									$(".ui-multiselect-filter input").css("width","150px");
 									// end change events
+									
 									fn_search_firmware();
 								}
 							}
 						} ,
 						
+						{
+							type:'SearchHeader',
+							id: 'to_firmwareHead',
+							name: 'to_firmwareHead',
+							label:'',
+							text:'Firmware',
+							width: '60px'
+						},
+						
+						{
+							type:'multiCombo',
+							id: 'to_firmware',
+							name: 'to_firmware',
+							label:'',
+							text:'Firmware',
+							width: '200px',
+							data: function(){
+								var rtnList = [];
+								$.ajax({
+									url: "/dashboard/genericlListJson.html",
+									data: {sqlid: "dashboard.corona.emmc.search.firmware", sample: $("#to_sample").val() }, 
+									async: false,
+									success:  function(response){
+										rtnList = response.dataList;
+										$.each(rtnList,function(i,d){
+											if(d.FIRMWARE == "${param.search_firmware}")
+												d.selected = "selected";											
+										});
+									}
+								});
+								return rtnList;
+							},
+							//value :'CSSD',
+							options: {
+								cd:'FIRMWARE',
+								name:'FIRMWARE_NM'
+							},
+							multiselectOpt:{
+								selectedList: 1 ,
+								multiple: false,
+								selectedText: function(numChecked, numTotal, checkedItems){
+									 //return numChecked + ' of ' + numTotal + ' checked';
+									 var sb = [];
+									 $.each(checkedItems,function(){
+										 sb.push($(this).attr('title'));
+									 });
+									 return sb.join(",");
+								}
+							},
+							events:{
+								change : function(){
+									fn_search_firmware();
+								}
+							}
+						},
+					
 						// search Button
 						{
 							type:'Button', 
@@ -1229,12 +733,13 @@
 			    	id: 'grid_firmware',
 			    	label:' ',
 			    	items:[	
-			    		{label:'ScriptSet', name:'SCRIPTSET', id:'SCRIPTSET', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
-						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
-						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
-						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
-						,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
+			    		{label:'Project', name:'SAMPLE', id:'SAMPLE', width:100, align:'left', sortable:false,hidden: true, editable: false, editrules: {edithidden:false } ,editoptions:{ readonly: "readonly"} }
+			    		,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:100, align:'left', sortable:false,hidden: true,editable: false, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
+						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: false, editrules:{edithidden:false} }
+						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
+						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: false }
+						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: false}
+						,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: false}
 			    		
 			    	],	
 			    	data: function(){
@@ -1242,7 +747,6 @@
 			    				    		
 			    		return [];
 			    	},	
-			    	
 			    	// target Grid option			
 			    	gridOpt:{
 			    		datatype:'local',
@@ -1256,7 +760,7 @@
 			    		multiSort:true,
 			    		multiselect: true,
 			    		multiboxonly:true, 
-			    		sortname: 'CATEGORY,SCRIPT_NAME',
+			    		sortname: 'CATEGORY, SCRIPT_NAME',
 			    		rowNum: 1000000,
 			    		//forceFit : false ,
 			    		emptyrecords: "No records to view",
@@ -1266,8 +770,7 @@
 			    		groupingView: {
 							groupField: ["CATEGORY","ROWNUM_GRP"],
 							groupColumnShow: [false,false],
-							//groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0}  </b>'],
-							groupText: ['<b>  {0} - {1} Item(s)  </b>'],
+							groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0} - {1} Item(s)  </b>'],
 							groupOrder: ["asc"],
 							//groupSummary: [true],
 							//groupSummaryPos: ["header"],
@@ -1278,7 +781,6 @@
 			    		//subgrid start
 			    		subGrid: true,
 			    		subgridtype:'json',
-			    		
 			    		subGridRowExpanded: function(parentRowID, parentRowKey){
 			    			var test = "";
 					    	var theGrid = $(this).jqGrid();
@@ -1297,10 +799,10 @@
 				    			type: "POST",
 				    			url: "/dashboard/genericlListJson.html",
 				    			data: {
-				    				scriptset: row.SCRIPTSET
+				    				sample: row.SAMPLE
+				    				, firmware: row.FIRMWARE
 				    				, script_name: row.SCRIPT_NAME
-				    				, sqlid: 'dashboard.corona.emmc.manage.script.scriptset.mapping.one'
-				    			}, 
+				    				, sqlid: 'dashboard.corona.emmc.manage.script.firmware.mapping.one'}, 
 				    			//data: $("#form").serialize(), 
 				    			async: false,
 				    			success:  function(response){
@@ -1316,19 +818,20 @@
 			    					label: '',
 			    					elements: [
 			    					    {
-			    					    	label: "Details",
+			    					    	label: "",
 			    					    	type: 'Group',
 			    					    	elements: [
 												{
-													type: "inline",
+													type: "inline_edit",
 													cols: 1,
 													data: function(){ 
 														return detailList[0];
 													},
 													options : {
-														keys : ['SCRIPTSET','SCRIPT_NAME'],
+														keys : ['FIRMWARE','SAMPLE','SCRIPT_NAME'],
 														fn_submit: function(){
 															//alert("submit function defined");
+															var state = true;
 															var paramObj = {
 																origindatas: this.props.options.keys
 															};
@@ -1340,12 +843,13 @@
 									                    			searchJson: JSON.stringify(paramObj),
 									                    			fieldName: this.state.name,
 									                    			fieldValue: this.state.value,
-									                    			sqlid: "dashboard.corona.emmc.scriptset_script_map.update"
+									                    			sqlid: "dashboard.corona.emmc.firmware_script_map.update"
 									                    		}, 
 									                    		async: false,			                    		
 									                    		success:  function(data){
 									                    			response1 = data;
 									                    			if(response1.result != 'success'){
+									                    				state = false;
 									                    				msg = "Save Success!";
 										                    			$("#dialog-confirm").html(response1.message);
 										                    			$("#dialog-confirm").dialog({
@@ -1371,47 +875,35 @@
 									                    			}						                    			
 									                    		}
 									                    	});
-									                    	
+									                    	return state;
 									                   
-														}
+														},
+														progressObject: parent.$("#loader")
 													},
 													items: [
 														{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
 														{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
 														{label:'Category', col: 'CATEGORY', editable: false},
 														{label:'Test Item', col: 'TEST_ITEM', editable: false},
-														{label:'Single Multi', col: 'SINGLE_MULTI'},
-														{label:'Power Mode Speed', col: 'POWER_MODE_SPEED'},
-														{label:'Test Time', col: 'TEST_TIME'},
+														{label:'TIME', col: 'TIME'},
+														{label:'Customer Item', col: 'CUSTOMER_ITEM'},
 														{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-														{label:'Luconfig 유무', col: 'LUCONFIG_YN'},
-														{label:'UFS Ver', col: 'UFS_VER'},
-														{label:'Precondition', col: 'PRECONDITION'},
-														{label:'POR', col: 'POR'},
-														{label:'HW Reset', col: 'HW_RESET'},
-														{label:'EP Reset', col: 'EP_RESET'},
-														{label:'H8', col: 'H8'},
-														{label:'SSU', col: 'SSU'},
-														{label:'Target LU', col: 'TARGET_LU'},
-														{label:'Power Control', col: 'POWER_CONTROL'},
-														{label:'Item Name', col: 'ITEM_NAME'},
-														{label:'Script TAT LVL', col: 'SCRIPT_TAT_LVL'},
-														{label:'Script Version', col: 'SCRIPT_VERSION'},
-														{label:'PF110', col: 'PF110'},
-														{label:'EXYNOS 7420', col: 'EXYNOS_7420'},
-														{label:'P4 Rev', col: 'P4_REV'},
-														{label:'Priority', col: 'PRIORITY'},
-														{label:'TG645', col: 'TG645'},
-														{label:'Need Power Cycle', col: 'NEED_POWER_CYCLE'},
-														{label:'Reset YN', col: 'RESET_YN'},
-														{label:'Script LVL', col: 'SCRIPT_LVL'},
-														{label:'Refactoring', col: 'REFACTORING'},
-														{label:'Reset Type', col: 'RESET_TYPE'},
+														{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
+														{label:'EMMC Ver', col: 'EMMC_VER'},
+														{label:'Target Device', col: 'TARGET_DEVICE'},
+														{label:'Target Partition', col: 'TARGET_PARTITION'},
+														{label:'Category1', col: 'CATEGORY1'},
+														{label:'Category2', col: 'CATEGORY2'},
+														{label:'Category3', col: 'CATEGORY3'},
+														{label:'Category4', col: 'CATEGORY4'},
+														{label:'Category5', col: 'CATEGORY5'},
+														{label:'Write Mode', col: 'WRITE_MODE'},
+														{label:'Read Mode', col: 'READ_MODE'},
+														{label:'Platform', col: 'PLATFORM'},
+														{label:'Function Name', col: 'FUNCTION_NAME'},
 														
-														{label:'Item Purpose', col: 'ITEM_PURPOSE', edit_tag: 'textarea'},
-														{label:'Item Description', col: 'ITEM_DESCRIPTION' , edit_tag: 'textarea'},
-														{label:'Input Parameter', col: 'INPUT_PARAMETER' , edit_tag: 'textarea'},
-														{label:'Comment', col: 'USER_COMMENT' , edit_tag: 'textarea'}
+														{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+														{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
 													]
 												}
 			    					    	
@@ -1421,7 +913,6 @@
 			    					
 			    					]
 			    			};
-			    			
 			    			fn_makeHtml(childDiv,schema1);
 			    			
 			    		} ,
@@ -1434,7 +925,7 @@
 			    			var v_grid = $(this).jqGrid();
 			    			v_grid.jqGrid('filterToolbar',
 		    					{
-		    						defaultSearch:"cn"
+		    						defaultSearch:'cn'
 		    		                // JSON stringify all data from search, including search toolbar operators
 		    		                ,stringResult: true
 		    		                // instuct the grid toolbar to show the search options
@@ -1443,7 +934,7 @@
 		    				);
 		    				
 		    				$("#grid_firmware tbody input[type=checkbox].groupHeader").change(function (e) {		
-    							if("${param.scriptset}" == ""){ 
+		    					if("${param.search_sample}" == ""){ 
     								parent.$("#loader").show(); 
     							}else{
     								$("#loader").show();
@@ -1461,7 +952,7 @@
 								            grid.setSelection($(this).closest('tr').attr('id'), isChecked);
 										});		
 									}
-									if("${param.scriptset}" == ""){ 
+									if("${param.search_sample}" == ""){ 
 	    								parent.$("#loader").hide(); 
 	    							}else{
 	    								$("#loader").hide();
@@ -1471,8 +962,154 @@
 							});	
 			    			
 			    			// Firmware Script master Edit
-							$("#grid_firmwareContainer input.cbox").hide();
-							$('#grid_firmwarePager .ui-paging-pager').hide();
+			    			v_grid.navGrid('#grid_firmwarePager' ,
+			    			// the buttons to appear on the toolbar of the grid
+			    			{ edit: false, add: false, del: true, search: false, refresh: true, view: false, position: "left", cloneToTop: false  },
+			    			// options for the Firmware Script Mapping Edit Dialog
+			    			{  } ,
+			    			// options for the Firmware Script Mapping Add Dialog
+			    			{
+			    				addCaption: "Add Firmware Script Mapping",
+			    				modal:true,
+			                    recreateForm: true,
+			                    closeAfterAdd: true,
+			                    reloadAfterSubmit: false,
+								//template: template,
+			                    errorTextFormat: function (data) {
+			                        return 'Error: ' + data.responseText
+			                    },
+			                    onInitializeForm : function(formid){
+			                        $(formid).attr('method','POST');
+			                        $(formid).attr('action','');
+			                        $(formid).attr('enctype','multipart/form-data');
+			                        $(formid).css("font-size","14px");
+			                        $(formid).find("#SAMPLE").val($("#to_sample").val());
+			                        $(formid).find("#FIRMWARE").val($("#to_firmware").val());
+			                         
+			                        $(formid).find("#tr_SAMPLE").show();
+			                        $(formid).find("#tr_FIRMWARE").show();
+			                        $(formid).find("#tr_CATEGORY").show();
+			                    },
+							    afterSubmit: function(response, postdata) 
+							    { 
+							    	var aaa = "a";
+							    	var formdata = this.ownerDocument.FormPost;
+			                    	var fd = new FormData(formdata);  	
+			                    	var response1 = {};
+			                    	$.ajax({
+			                    		url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.emmc.firmware_script_map.insert",
+			                    		type: "POST",
+			                    		data: fd, 
+			                    		async: false,
+			                    		cache: false,
+			                    		contentType: false,
+			                    		processData: false,
+			                    		success:  function(data){
+			                    			response1 = data;
+			                    			if(response1.result == 'success'){
+			                    				msg = "Add Success!";
+				                    			$("#dialog-confirm").html(msg);
+				                    			$("#dialog-confirm").dialog({
+				                    			    resizable: false,
+				                    			    modal: true,
+				                    			    title: "Success",
+				                    			    //height: 200,
+				                    			    width: 200,
+				                    			    dialogClass: 'no-close',
+				                    			    closeOnEscape: false,
+				                    			    buttons: [
+			                    			              {
+			                    			                text: "OK",
+			                    			                click: function() {
+			                    			                  $( this ).dialog( "close" );		
+			                    			                  fn_search_firmware();									                    			                  
+			                    			                }
+			                    			              }
+		                    			            ]
+				                    			});
+			                    			}
+			                    			
+			                    		}
+			                    	});
+			                    	
+			                    	//return [success,message,new_id] ;
+							    	if(response1.result == 'success'){
+							    		//$(this).trigger('reloadGrid'); 
+							    		return [true, response1.result, ''];
+							    	}
+							    	else
+							    		return [false, response1.result + ":<br/>" + response1.message , ''];
+							    		
+							    }
+			    			},
+			    			// options for the Script Master Del Dialog 
+			    			{
+			    				
+			    				afterSubmit: function(response, postdata) 
+							    { 
+							    	//$("#refresh_grid_firmware").hide();
+							    	var grid = $(this);
+							    	var paramObj = {
+							    		delRows : []
+							    	};
+							    	$.each(postdata.id.split(","),function(i,rowid){
+							    		var row = grid.getRowData(rowid);
+							    		paramObj.delRows.push(row);
+							    	});
+						    		
+						    		
+						    		//
+						    		paramObj.loop_id = "delRows";
+			                    	$.ajax({
+			                    		url: "/dashboard/genericSaveJson.html",
+			                    		type: "POST",
+			                    		data: {
+			                    			searchJson: JSON.stringify(paramObj),
+			                    			sqlid: "dashboard.corona.emmc.firmware_script_map.delete"
+			                    		}  , 
+			                    		async: false,
+			                    		success:  function(data){
+			                    			response1 = data;
+			                    			if(response1.result == 'success'){
+										    	
+			                    				msg = "Del Success!";
+				                    			$("#dialog-confirm").html(msg);
+				                    			$("#dialog-confirm").dialog({
+				                    			    resizable: false,
+				                    			    modal: true,
+				                    			    title: "Success",
+				                    			    //height: 200,
+				                    			    width: 200,
+				                    			    dialogClass: 'no-close',
+				                    			    closeOnEscape: false,
+				                    			    buttons: [
+			                    			              {
+			                    			                text: "OK",
+			                    			                click: function() {			                    			                	
+			                    			                  	$( this ).dialog( "close" );	
+			                    			                  	fn_search_firmware();										                    			                  
+			                    			                }
+			                    			              }
+		                    			            ]
+				                    			});
+			                    			}
+			                    			
+			                    		}
+			                    	});
+			                    	
+			                    	//return [success,message,new_id] ;
+							    	if(response1.result == 'success'){
+							    		//$(this).trigger('reloadGrid'); 
+							    		return [true, response1.result, ''];
+							    	}
+							    	else
+							    		return [false, response1.result + ":<br/>" + response1.message , ''];
+							    		
+							    }
+			    			}
+		    			);
+		    			
+		    			$('#grid_firmwarePager .ui-paging-pager').hide();
 			    		}
 				    	
 				    	
@@ -1483,56 +1120,10 @@
 				
 			]								
 	};
-		
-	// 테스트 중. 그룹별로 상세리스트 만들기
-	function groupbyList(json,pkeys){
-		var abcArr = json;
-		var items = {}, base, key,val ;
-		for (var i = 0; i < abcArr.length; i++) {
-		    base = abcArr[i];
-		    
-		    var pkey = '';
-		    var key = '';
-		    for(var j=0; j < pkeys.length; j++){
-		    	pkey = pkeys[j];
-		    	
-		    	if(j>0)
-		    		key += ";;;";
-		    	// if not already present in the map, add a zeroed item in the map
-			    if(!items[key]){
-			    	items[key] = {
-			    		count: 0,
-			    		list:[]
-			    	};
-			    }
-			    
-		    	key += base[pkey];
-		    }
-		}
-
-		// Now, generate new array
-		var outputArr = [], temp;
-		for (key in items) {
-		    // create array entry for the map value
-		    //temp = [key, items[key]];
-			temp = {};
-			temp.count =  items[key].count;
-			//temp.key =  items[key];
-		    for(var j=0; j < pkeys.length; j++){
-		    	var pkey = pkeys[j];
-		    	//if(temp[pkey])
-		    		temp[pkey] = key.split(';;;')[j];
-		    }
-		    // put array entry into the output array
-		    outputArr.push(temp);
-		}
-		
-		return outputArr;
-	}
 	
 	//target search condition change
 	function fn_search_firmware(){
-		if("${param.scriptset}" == ""){ 
+		if("${param.search_sample}" == ""){ 
 			parent.$("#loader").show(); 
 		}else{
 			$("#loader").show();
@@ -1540,13 +1131,14 @@
 		setTimeout( function(){
 			var rtnList = [];
 			var paramObj = {
-				scriptset : $("#to_scriptset").val(),
-				sqlid: "dashboard.corona.emmc.manage.script.scriptset.mapping"
+				sample : $("#to_sample").val(),
+				firmware : $("#to_firmware").val(),
+				sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"
 			};
 			$.ajax({
 				type: "POST",
 				url: "/dashboard/genericlListJson.html",
-				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.scriptset.mapping"}, 
+				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
 				//data: $("#form").serialize(), 
 				data: paramObj,
 				async: false,
@@ -1557,8 +1149,7 @@
 					theGrid.jqGrid('clearGridData');
 					theGrid.jqGrid('setGridParam', { data: rtnList});
 					theGrid.trigger('reloadGrid');	
-					
-					if("${param.scriptset}" == ""){ 
+					if("${param.search_sample}" == ""){ 
 						parent.$("#loader").hide(); 
 					}else{
 						$("#loader").hide();
@@ -1573,7 +1164,7 @@
 	
 	//target search condition change
 	function fn_search_script(){
-		if("${param.scriptset}" == ""){ 
+		if("${param.search_sample}" == ""){ 
 			parent.$("#loader").show(); 
 		}else{
 			$("#loader").show();
@@ -1588,7 +1179,7 @@
 			$.ajax({
 				type: "POST",
 				url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
-				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
+				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
 				data: $("#form").serialize(), 
 				//data: paramObj,
 				async: false,
@@ -1599,7 +1190,7 @@
 					theGrid.jqGrid('clearGridData');
 					theGrid.jqGrid('setGridParam', { data: rtnList});
 					theGrid.trigger('reloadGrid');	
-					if("${param.scriptset}" == ""){ 
+					if("${param.search_sample}" == ""){ 
 						parent.$("#loader").hide(); 
 					}else{
 						$("#loader").hide();
@@ -1612,201 +1203,30 @@
 			
 	}
 	
-	function fn_copy(){
-		var paramObj = {
-			
-			selectedlist : [],
-			src : {
-				
-			},
-			target : {
-				scriptset : $("#to_scriptset").val()
-			}
-		}
-		
-		var gridScript = $("#grid_script").jqGrid();
-    	var selIds = gridScript.jqGrid('getGridParam','selarrrow');
-    	$.each(selIds,function(i,rowid){
-    		var row = gridScript.getRowData(rowid);
-    		paramObj.selectedlist.push(row);
-    	});
-		
-		// 01. hystory no 
-		var v_hystoryno = "";
-		$.ajax({
-			url: "/dashboard/genericlListJson.html",
-			type: "POST",
-			timeout: 200000,
-			data: {
-				sqlid: "dashboard.corona.historyno"
-			}, 
-			async: false,			                    		
-			success:  function(data){
-				v_hystoryno =  data.dataList[0].HISTORY_NO;            			
-			}
-		});
-		
-		// 02. hystory no insert
-		var update_ok = false;
-		$.ajax({
-			url: "/dashboard/genericSaveJson.html",
-			type: "POST",
-			timeout: 200000,
-			data: {
-				searchJson: JSON.stringify(paramObj),
-				history_no : v_hystoryno ,
-				sqlid: "dashboard.corona.emmc.manage.insert.historyno.copy_template_scriptset"
-			}, 
-			async: false,			                    		
-			success:  function(data){
-				response1 = data;
-				if(response1.result == 'success'){
-					update_ok = true;
-				}else {
-					update_ok = false;
-	    			$("#dialog-confirm").html(response1.message);
-	    			$("#dialog-confirm").dialog({
-	    			    resizable: false,
-	    			    modal: true,
-	    			    title: "Success",
-	    			    //height: 200,
-	    			    width: 300,
-	    			    dialogClass: 'no-close',
-	    			    closeOnEscape: false,
-	    			    buttons: [
-				              {
-				                text: "OK",
-				                click: function() {
-				                  $( this ).dialog( "close" );											                    			                  
-				                }
-				              }
-			            ]
-	    			});
-				}						                    			
-			}
-		});
-		
-		if( !update_ok)
-			return;
-		
-		paramObj.loop_id = "selectedlist";
-		// 03. last process data
-		$.ajax({
-			url: "/dashboard/genericSaveJson.html",
-			type: "POST",
-			data: {
-				searchJson: JSON.stringify(paramObj),
-				history_no : v_hystoryno ,
-				sqlid: "dashboard.corona.emmc.manage.script_copy_scriptset.update"
-			}, 
-			async: false,			                    		
-			success:  function(data){
-				response1 = data;
-				if(response1.result == 'success'){
-					update_ok = true;
-					
-				}else {
-					update_ok = false;
-	    			$("#dialog-confirm").html(response1.message);
-	    			$("#dialog-confirm").dialog({
-	    			    resizable: false,
-	    			    modal: true,
-	    			    title: "Success",
-	    			    //height: 200,
-	    			    width: 400,
-	    			    dialogClass: 'no-close',
-	    			    closeOnEscape: false,
-	    			    buttons: [
-				              {
-				                text: "OK",
-				                click: function() {
-				                  $( this ).dialog( "close" );											                    			                  
-				                }
-				              }
-			            ]
-	    			});
-				}						                    			
-			}
-		});
-		
-		
-		if( !update_ok)
-			return;
-		// 04. stauts update
-	}
-	
-	function fn_validation(onSuccess){
-		
-		var gridScript = $("#grid_script").jqGrid();
-    	var selIds = gridScript.jqGrid('getGridParam','selarrrow');
-    	if(selIds.length == 0){
-			alert("select more than one item!");
-			return false;
-		}else{
-			var message = "Do you copy to \"" + $("#to_scriptset").val() + "\" ?";
-			$("#dialog-confirm").html(message);
-			var rtn = $("#dialog-confirm").dialog({
-			    resizable: false,
-			    modal: true,
-			    title: "Confirm",
-			    //height: 200,
-			    width: 350,
-			    dialogClass: 'no-close',
-			    closeOnEscape: false,
-			    buttons: [
-		              {
-		                text: "OK",
-		                click: function() {		
-		                	$( this ).dialog( "close" );	
-		                	onSuccess();
-		                  	
-		                  											                    			                  
-		                }
-		              },
-		              {
-		                text: "No",
-		                click: function() {		
-		                  	$( this ).dialog( "close" );	
-		                  											                    			                  
-		                }
-		              }
-	            ]
-			});
-			
-			
-		}
-	}
 	
 	</script>
 	<script  id="script_main">
 	
 	
 	$(function () {
-		if("${param.scriptset}" == ""){ 
+		if("${param.search_sample}" == ""){ 
 			parent.$("#loader").show(); 
 		}else{
 			$("#loader").show();
 		}
 		setTimeout( function(){
-			fn_makeHtml('searchCondition',schemaSearch);
 			fn_makeHtml('contentMain',schemaContent);
 			
 			$( window ).resize(function() {
 				//console.log("aaaaa");
 			});
-			if("${param.scriptset}" == ""){ 
+			if("${param.search_sample}" == ""){ 
 				parent.$("#loader").hide(); 
 			}else{
 				$("#loader").hide();
 			}
-			fn_search_firmware();
 		},50);
-		
-//		parent.$("body").css("overflow","");
-//		parent.$("body .box_gray").css("height","1500px");
-//		$( window ).resize(function() {
-//			parent.$("body .box_gray").css("height","1500px");
-//		});
+		fn_search_firmware();
 		
 	});
 	
@@ -1916,8 +1336,8 @@
 	    }
 	    
 	    dblclick(){
-	    	if(this.state.editable == true)
-	    		this.setState({mode: "edit"});
+	    	//if(this.state.editable == true)
+	    	//	this.setState({mode: "edit"});
 	    }
 	    
 	    confirm(){
@@ -1950,43 +1370,12 @@
 	    			return (
 			    		<div>
 							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
-							<div className="right_section"  >
-								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Cancel</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
-							<div className="right_section" style={{marginRight:"3px"}} >
-								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Confirm</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
 						</div>
 					);
 	    		}else {
 	    			return (
 			    		<div>
 							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
-							<div className="right_section"  >
-								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Cancel</span>
-		                          </span>
-		                      	</a>
-							</div>
-							<div className="right_section" style={{marginRight:"3px"}}>
-								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
-		                          <span className="name">
-		                              <span className="txt">Confirm</span>
-		                          </span>
-		                      	</a>
-							</div>
-							
 						</div>
 					);
 	    		}		

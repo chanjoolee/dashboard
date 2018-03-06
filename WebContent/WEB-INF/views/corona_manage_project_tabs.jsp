@@ -565,7 +565,7 @@
 							"id" : "firmware_script_edit",
 							"label" : "Project TS Mgmt.",							
 							"connected_content" :  {
-								"viewName": "corona_manage_firmware_edit",
+								"viewName": "corona_manage_firmware_edit_paging",
 								"form_id" : "form"
 							},
 							"events" : {

@@ -6,108 +6,108 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Corona manage copy template to scriptset</title>
-    <%-- 1. jquery --%>
-    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
-    <!-- <script src="js/jquery.csv-0.71.js"></script> -->
-    
-    <%-- jqgrid --%>
-    <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2017.10.18"></script>    
-    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+    <title>SSD manage copy template to scriptset</title>
+		<%-- 1. jquery --%>
+		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+		<!-- <script src="js/jquery.csv-0.71.js"></script> -->
+		
+		<%-- jqgrid --%>
+		<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
+		
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		
+		<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+		
+		
 	
-	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
-	 
-    
-  
-   <!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-    <link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-    <!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
-    
-    
-    
-    <%-- 2. high charts --%>
-	<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
-	
-	<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
-	
-	<%-- x축 그룹라벨 --%>
-	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
-	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
-	
-	<%-- 3. Additional files for the Highslide popup effect --%>
-	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
-	
-	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2018.01.10.01"></script>
-	
-	<%-- 5. local --%>
-	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
-	
-	<%-- multi select --%>
-	<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
-	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
-	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
-	
-	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
-	<script src="/common/js/module.js"></script>
-	
-	<%-- File Saver --%>
-	<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
-	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
-	
-	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
-	
-	<%-- jqueryMohthPicker --%>
-    <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
-   	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
-   	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
-   	
-   	<%-- recat --%>
-   	<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
-   	
-   	<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
-   	<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
+		<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+		<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+		<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+		
+		
+		
+		<%-- 2. high charts --%>
+		<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
+		
+		<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
+		
+		<%-- x축 그룹라벨 --%>
+		<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+		<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
+		
+		<%-- 3. Additional files for the Highslide popup effect --%>
+		<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
+		
+		<%-- 4. local common --%>
+		<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
+		
+		<%-- 5. local --%>
+		<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
+		
+		<%-- multi select --%>
+		<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" /> -->
+		<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+		<script src="/common/js/module.js"></script>
+		
+		<%-- File Saver --%>
+		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+		
+		<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+		<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+		
+		<%-- jqueryMohthPicker --%>
+		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
+		<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+		
+		<%-- recat --%>
+		<!--<script src="https://facebook.github.io/react/js/jsfiddle-integration-babel.js"></script>-->
+		
+		<script  src="/dashboard/js/react-0.14.3/build/react.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/build/react-dom.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/build/react-with-addons.js"></script>
+		<script  src="/dashboard/js/react-0.14.3/browser.js" ></script>
    	
    	
 	<style type="text/css" title="main">
@@ -434,6 +434,8 @@
 	
 	<script  id="script_common" >
 	var dataList = [];
+	var scriptGroupList = [];
+	var scriptGroupListStr = "";
 	function mergeRow(rowId, val, rowObj, cm, rowData, isCustom) {
 		var result = "";
 		var grid = $(this).jqGrid();
@@ -553,238 +555,400 @@
 	var EfContextPath = "";
 	
 	var schemaSearch = {
-			containerId:'searchCondition',
-			type:'Vertical',
-			label:'',
-			
-			elements:[
-				{
-					containerCss:[
-						{code: 'margin-top', value:'10px'},
-					],		
-					type:"title",
-					id: "title_script",
-					label: "Source: Master TS"
-				},
-				{
-					label:'',
-					type: 'HorizontalLayout',
-					cls: 'srch_box2',
-					containerCss:[
-						{code: 'margin-top', value:'3px'},
-						{code: 'margin-left', value:'20px'},
-						{code: 'margin-right', value:'20px'}
-					],		
-					elements:[
-					 	{
-					 		containerCss:[
-								
-							],
-							label:'',
-							type:'Vertical',
-							elements:[
-								{
-									label:'',
-									type: 'HorizontalLayout',
-									containerCss:[
-							    		{code:'height',value:'30px'}
-							    	],
-									elements:[
-										
-										{
-											type:'SearchHeader',
-											id: 'categoryHead',
-											name: 'categoryHead',
-											label:'',
-											text:'Category',
-											width: '50px'
-										},
-										
-										{
-											type:'multiCombo',
-											id: 'category',
-											name: 'category',
-											label:'',
-											text:'Category',
-											width: '300px',
-											data: function(){
-												var rtnList = [];
-												$.ajax({
-													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
-													async: false,
-													success:  function(response){
-														rtnList = response.dataList;
-													}
-												});
-												return rtnList;
-											},
-											//value :'CSSD',
-											options: {
-												cd:'CATEGORY',
-												name:'CATEGORY',
-												childrens : [
-													{
-														id: "testItem" ,
-														topElement: "schemaSearch.elements"
-													}
-												]
-											},
-											multiselectOpt:{
-												//selectedList: 1 ,
-												multiple: true,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var rtn = "";
-													 var sb = [];
-													 $.each(checkedItems,function(i,d){
-													 	 if(i < 2)
-														 	sb.push($(this).val());
-													 });
-													 rtn = sb.join(",");
-													 if((checkedItems.length-2) > 0){
-													 	rtn += " ..." + (checkedItems.length-2)+" more"
-													 }
-													 return rtn;
-												}
-											},
-											events:{
-												
-											}
-										} ,
-										
-										
-										{
-											type:'SearchHeader',
-											id: 'testItemHead',
-											name: 'testItemHead',
-											label:'',
-											text:'Test Item',
-											width: '60px'
-										},
-										
-										
-										{
-											type:'multiCombo',
-											id: 'testItem',
-											name: 'testItem',
-											label:'',
-											text:'Test Item',
-											width: '300px',
-											data: function(){
-												var rtnList = [];
-												$.ajax({
-													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.emmc.script.test_item.distinct", sample: $("#category").val() }, 
-													async: false,
-													success:  function(response){
-														rtnList = response.dataList;
-														tempList = rtnList;
-													}
-												});
-												return rtnList;
-											},
-											//value :'CSSD',
-											options: {
-												cd:'TEST_ITEM' ,
-												name:'TEST_ITEM',
-												group: {
-													cd:'CATEGORY',
-													name: 'CATEGORY'
-												}
-												
-											},
-											multiselectOpt:{
-												//selectedList: 1 ,
-												multiple: true,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var rtn = "";
-													 var sb = [];
-													 $.each(checkedItems,function(i,d){
-													 	 if(i < 2)
-														 	sb.push($(this).val());
-													 });
-													 rtn = sb.join(",");
-													 if((checkedItems.length-2) > 0){
-													 	rtn += " ..." + (checkedItems.length-2)+" more"
-													 }
-													 return rtn;
-												}
-											},
-											events:{
-												change : function(){
-													// parent.$("#loader").show();
-													// setTimeout( function(){
-													// 	$("#contentMain").html("");
-													// 	makeHtml("contentMain",schemaContent);
-													// 	parent.$("#loader").hide();
-													// },50); 
-												}
-											}
-										}
-										
-										
-									]
-								}
-								//2line
-								
-								
-							]
-					 	},
-					 	//검색버튼
-					 	{
-					 		label:'',
-					 		type: 'VerticalLayout',
-							cls: 'btn_txt',
-							containerCss:[
-								{code: 'margin-left', value:'10px'}
-								, {code: 'float', value:'right'}
-							]
-					 		, elements:[
-					 			{
-					 				label:'',
-							 		type: 'HorizontalLayout',
-									cls: 'btn_txt',
-									containerCss:[
-										{code: 'margin-left', value:'10px'}
-									],
-									elements:[
-										{
-											type:'Button',
-											id: 'btnSearch',
-											name: 'btnSearch',
-											label:'SEARCH',
-											//width: '50px',
-											cls: 'btn_txt btn_type_e btn_color_a',
-											containerCss:[
-												{code: 'margin-right', value:'3px'}
-											],
-											events:{
-												click : function(){
-													//parent.$("#loader").show();
-													//setTimeout( function(){
-													//	$("#contentMain").html("");
-													//	makeHtml("contentMain",schemaContent);
-													//	parent.$("#loader").hide();
-													//},50);
-													fn_search_script();
-												}
-											}
-										}
-									
-									 ]
-					 			}
-					 		            
-					 		]
+		containerId:'searchCondition',
+		type:'Vertical',
+		label:'',
+		
+		elements:[
+			// {
+			// 	containerCss:[
+			// 		{code: 'margin-top', value:'10px'},
+			// 	],		
+			// 	type:"title",
+			// 	id: "title_script",
+			// 	label: "Script Template"
+			// },
+			{
+				label:'',
+				type: 'HorizontalLayout',
+				cls: 'srch_box2',
+				containerCss:[
+					{code: 'margin-top', value:'3px'},
+					{code: 'margin-left', value:'20px'},
+					{code: 'margin-right', value:'20px'}
+				],		
+				elements:[
+					{
+						containerCss:[
 							
-					 	}
-					]
-				}
+						],
+						label:'',
+						type:'Vertical',
+						elements:[
+							// Stage
+							{
+								label:'',
+								type: 'HorizontalLayout',
+								containerCss:[
+									{code:'height',value:'30px'}
+								],
+								elements:[
+									// Stage
+									{
+										type:'SearchHeader',
+										id: 'stageHead',
+										name: 'stageHead',
+										label:'',
+										text:'Stage',
+										width: '50px'
+									},
+									{
+										type:'multiCombo',
+										id: 'stage',
+										name: 'stage',
+										label:'',
+										text:'Stage',
+										width: '200px',
+										data: function(){
+											var rtnList = [
+												{STAGE:"WS1", selected: "selected"},
+												{STAGE:"WS2", selected: "selected"},
+												{STAGE:"ES1", selected: "selected"},
+												{STAGE:"ES2", selected: "selected"},
+												{STAGE:"CUS", selected: "selected"}
+											];
+											// $.ajax({
+											// 	url: "/dashboard/genericlListJson.html",
+											// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
+											// 	async: false,
+											// 	success:  function(response){
+											// 		rtnList = response.dataList;
+											// 	}
+											// });
+											return rtnList;
+										},
+										//value :'CSSD',
+										options: {
+											cd:'STAGE',
+											name:'STAGE'
+											
+										},
+										multiselectOpt:{
+											//selectedList: 1 ,
+											multiple: true,
+											selectedText: function(numChecked, numTotal, checkedItems){
+												//return numChecked + ' of ' + numTotal + ' checked';
+												var rtn = "";
+												var sb = [];
+												$.each(checkedItems,function(i,d){
+													if(i < 2)
+														sb.push($(this).val());
+												});
+												rtn = sb.join(",");
+												if((checkedItems.length-2) > 0){
+													rtn += " ..." + (checkedItems.length-2)+" more"
+												}
+												return rtn;
+											}
+										},
+										events:{
+											
+										}
+									} 
+									
+								]
+							}
+							// Group
+							,{
+								label:'',
+								type: 'HorizontalLayout',
+								containerCss:[
+									{code:'height',value:'30px'}
+								],
+								elements:[
+									{
+										type:'SearchHeader',
+										id: 'scriptGroupHead',
+										name: 'scriptGroupHead',
+										label:'',
+										text:'Group',
+										width: '50px'
+									},
+									{
+										type:'multiCombo',
+										id: 'scriptGroup',
+										name: 'scriptGroup',
+										label:'',
+										text:'Group',
+										width: '300px',
+										data: function(){
+											return scriptGroupList;
+										},
+										//value :'CSSD',
+										options: {
+											cd:'SCRIPT_GROUP',
+											name:'GROUP_NAME'
+										},
+										multiselectOpt:{
+											//selectedList: 1 ,
+											multiple: true,
+											selectedText: function(numChecked, numTotal, checkedItems){
+												//return numChecked + ' of ' + numTotal + ' checked';
+												var rtn = "";
+												var sb = [];
+												$.each(checkedItems,function(i,d){
+													if(i < 2)
+														sb.push($(this).attr("title"));
+												});
+												rtn = sb.join(",");
+												if((checkedItems.length-2) > 0){
+													rtn += " ..." + (checkedItems.length-2)+" more"
+												}
+												return rtn;
+											}
+										},
+										events:{
+											change : function(){
+												fn_search_script();
+											}
+										}
+									} 
+									
+								]
+							}
+							
+							// Category, Sub Category
+							,{
+								label:'',
+								type: 'HorizontalLayout',
+								containerCss:[
+									{code:'height',value:'30px'}
+								],
+								elements:[
+									//categoryHead
+									{
+										type:'SearchHeader',
+										id: 'categoryHead',
+										name: 'categoryHead',
+										label:'',
+										text:'Category',
+										width: '50px'
+									},
+									//Category
+									{
+										type:'multiCombo',
+										id: 'category',
+										name: 'category',
+										label:'',
+										text:'Category',
+										width: '300px',
+										data: function(){
+											var rtnList = [];
+											$.ajax({
+												url: "/dashboard/genericlListJson.html",
+												data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
+												async: false,
+												success:  function(response){
+													rtnList = response.dataList;
+												}
+											});
+											return rtnList;
+										},
+										//value :'CSSD',
+										options: {
+											cd:'CATEGORY',
+											name:'CATEGORY',
+											childrens : [
+												{
+													id: "subCategory" ,
+													topElement: "schemaSearch.elements"
+												}
+											]
+										},
+										multiselectOpt:{
+											//selectedList: 1 ,
+											multiple: true,
+											selectedText: function(numChecked, numTotal, checkedItems){
+												//return numChecked + ' of ' + numTotal + ' checked';
+												var rtn = "";
+												var sb = [];
+												$.each(checkedItems,function(i,d){
+													if(i < 2)
+														sb.push($(this).val());
+												});
+												rtn = sb.join(",");
+												if((checkedItems.length-2) > 0){
+													rtn += " ..." + (checkedItems.length-2)+" more"
+												}
+												return rtn;
+											}
+										},
+										events:{
+											
+										}
+									} ,
+									// SubCategory mHead
+									{
+										type:'SearchHeader',
+										id: 'SubCategoryead',
+										name: 'SubCategoryead',
+										label:'',
+										text:'Sub Category',
+										width: '90px'
+									},
+									// SubCategory
+									{
+										type:'multiCombo',
+										id: 'subCategory',
+										name: 'subCategory',
+										label:'',
+										text:'Sub Category',
+										width: '300px',
+										data: function(){
+											var rtnList = [];
+											$.ajax({
+												url: "/dashboard/genericlListJson.html",
+												data: {sqlid: "dashboard.ssd_sm.script.sub_category.distinct", sample: $("#category").val() }, 
+												async: false,
+												success:  function(response){
+													rtnList = response.dataList;
+													tempList = rtnList;
+												}
+											});
+											return rtnList;
+										},
+										//value :'CSSD',
+										options: {
+											cd:'SUB_CATEGORY' ,
+											name:'SUB_CATEGORY',
+											group: {
+												cd:'CATEGORY',
+												name: 'CATEGORY'
+											}
+											
+										},
+										multiselectOpt:{
+											//selectedList: 1 ,
+											multiple: true,
+											selectedText: function(numChecked, numTotal, checkedItems){
+												//return numChecked + ' of ' + numTotal + ' checked';
+												var rtn = "";
+												var sb = [];
+												$.each(checkedItems,function(i,d){
+													if(i < 2)
+														sb.push($(this).val());
+												});
+												rtn = sb.join(",");
+												if((checkedItems.length-2) > 0){
+													rtn += " ..." + (checkedItems.length-2)+" more"
+												}
+												return rtn;
+											}
+										},
+										events:{
+											change : function(){
+												fn_search_script();
+												// parent.$("#loader").show();
+												// setTimeout( function(){
+												// 	$("#contentMain").html("");
+												// 	makeHtml("contentMain",schemaContent);
+												// 	parent.$("#loader").hide();
+												// },50); 
+											}
+										}
+									}
+									
+									
+								]
+							}
+							
+						]
+					},
+					//검색버튼
+					{
+						label:'',
+						type: 'VerticalLayout',
+						cls: 'btn_txt',
+						containerCss:[
+							{code: 'margin-left', value:'10px'}
+							, {code: 'float', value:'right'}
+						]
+						, elements:[
+							{
+								label:'',
+								type: 'HorizontalLayout',
+								cls: 'btn_txt',
+								containerCss:[
+									{code: 'margin-left', value:'10px'}
+								],
+								elements:[
+									{
+										type:'Button',
+										id: 'btnSearch',
+										name: 'btnSearch',
+										label:'SEARCH',
+										//width: '50px',
+										cls: 'btn_txt btn_type_e btn_color_a',
+										containerCss:[
+											{code: 'margin-right', value:'3px'}
+										],
+										events:{
+											click : function(){
+												//parent.$("#loader").show();
+												//setTimeout( function(){
+												//	$("#contentMain").html("");
+												//	makeHtml("contentMain",schemaContent);
+												//	parent.$("#loader").hide();
+												//},50);
+												fn_search_script();
+											}
+										}
+									}
+									// {
+									// 	type:'Button',
+									// 	id: 'btnUpload',
+									// 	name: 'btnUpload',
+									// 	label:'UPLOAD',
+									// 	//width: '50px',
+									// 	cls: 'btn_txt btn_type_e btn_color_a',
+									// 	containerCss:[
+									// 		{code: 'margin-right', value:'3px'}
+									// 	],
+									// 	events:{
+									// 		click : function(){
+									// 			$('#fileInput').click();
+									// 		}
+									// 	}
+									// },
+									// {
+									// 	type:'Button',
+									// 	id: 'btnDownload',
+									// 	name: 'btndownload',
+									// 	label:'DOWNLOAD',
+									// 	//width: '50px',
+									// 	cls: 'btn_txt btn_type_e btn_color_a',
+									// 	containerCss:[
+									// 		{code: 'margin-right', value:'3px'}
+									// 	],
+									// 	events:{
+									// 		click : function(){
+									// 			fn_FileDownloadAjax();
+									// 		}
+									// 	}
+									// }
+								
+								]
+							}
+									
+						]
+						
+					}
+				]
+			}
+		
 			
-				
-			
-			]
+		
+		]
 			
 	};
 	
@@ -815,25 +979,31 @@
 					    	type:'grid',
 					    	id: 'grid_script',
 					    	label:' ',
-					    	items:[						
-								{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false , editable: true, editrules:{edithidden:false}}
-								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
-								,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
-								,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
+					    	items:[				
+								{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'left', sortable:false , editable: false , search: false, hidden: true}
+								,{label:'Group', name:'GROUP_NAME', id:'GROUP_NAME', width:110, align:'left'
+									, sortable:false 
+									, search: false
+								}
+								,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false , search: false, hidden: true}
+								,{label:'Stage', name:'STAGE', id:'STAGE', width:70, align:'center', sortable:false,editable: false, editrules:{edithidden:false}, search: false }		
+								,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:150, align:'left', sortable:false,editable: false, editrules:{edithidden:false}, search: false }
+								,{label:'Sub Category', name:'SUB_CATEGORY', id:'SUB_CATEGORY', width:150, align:'left', sortable:false,editable: false, editrules:{edithidden:false}, search: false}
+								,{label:'Item', name:'ITEM', id:'ITEM', width:150, align:'left', sortable:false , editable: false }
+								,{label:'Sub Item', name:'SUB_ITEM', id:'SUB_ITEM', width:150, align:'left', sortable:false , editable: false }
+								,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: false}
 					    		
 					    	],	
 					    	data: function(){
 					    		var rtnList = [];
 					    		$.ajax({
 					    			type: "POST",
-					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
+					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.manage.script.search",
 					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 					    			data: $("#form").serialize(), 
 					    			async: false,
 					    			success:  function(response){
 					    				rtnList  = response.dataList;
-					    				
 					    			}
 					    		});
 					    		
@@ -855,7 +1025,7 @@
 					    		multiSort:true,
 					    		multiselect: true,
 					    		multiboxonly:true, 
-					    		sortname: 'CATEGORY, SCRIPT_NAME',
+					    		sortname: 'SEQ, CATEGORY,SCRIPT_NAME',
 					    		rowNum: 1000000,
 					    		//forceFit : false ,
 					    		emptyrecords: "No records to view",
@@ -863,9 +1033,9 @@
 					    		
 					    		grouping: true,
 					    		groupingView: {
-									groupField: ["CATEGORY","ROWNUM_GRP"],
+									groupField: ["GROUP_NAME","CATEGORY"],
 									groupColumnShow: [false,false],
-									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0} - {1} Item(s)  </b>'],
+									groupText: ['<input type="checkbox" class="groupHeader"/><b>  {0} - {1} Item(s)  </b>','{0} - {1} Item(s)'],
 									groupOrder: ["asc"],
 									//groupSummary: [true],
 									//groupSummaryPos: ["header"],
@@ -897,7 +1067,7 @@
 						    			url: "/dashboard/genericlListJson.html",
 						    			data: {
 						    				script_name: row.SCRIPT_NAME
-						    				, sqlid: 'dashboard.corona.emmc.manage.script.search.one'}, 
+						    				, sqlid: 'dashboard.ssd_sm.manage.script.search.one'}, 
 						    			//data: $("#form").serialize(), 
 						    			async: false,
 						    			success:  function(response){
@@ -908,105 +1078,136 @@
 						    		
 						    		// script grid detail
 					    			var schema1 = {
-					    					containerId: childDivId,
-					    					type:'Vertical',
-					    					label: '',
-					    					elements: [
-					    					    {
-					    					    	label: "Details",
-					    					    	type: 'Group',
-					    					    	elements: [
-														{
-															type: "inline",
-															cols: 1,
-															data: function(){ 
-																return detailList[0];
-															},
-															options : {
-																keys : ['SCRIPT_NAME'],
-																fn_submit: function(){
-																	//alert("submit function defined");
-																	var paramObj = {
-																		origindatas: this.props.options.keys
-																	};
+										containerId: childDivId,
+										type:'Vertical',
+										label: '',
+										elements: [
+											{
+												label: "",
+												type: 'Group',
+												elements: [
+													{
+														type: "inline",
+														cols: 1,
+														data: function(){ 
+															return detailList[0];
+														},
+														options : {
+															keys : ['SCRIPT_NAME'],
+															fn_change: function( input ){
+																//
+																// if(this.props.options.name == 'SCRIPT_NAME'){
+																// 	var convert = this.reactObjects.find(function(td){
+																// 		return td.props.options.name == 'CONVERT_SCRIPT';
+																// 	});	
+																// 	//convert digit
+																// 	//var v_hax = this.state.value;
+																// 	var v_hax = input;
+																// 	var v_digit = [];
+																// 	$.each(v_hax.split(" "), function(i,str){
+																// 		var d = "";
+																// 		if(str.startsWith("0x")){
+																// 			v_digit.push(parseInt(str,16));
+																// 		}else{
+																// 			v_digit.push(str);
+																// 		}
+																// 	});																		
+																// 	convert.setState({value : v_digit.join(" ")});
 																	
-																	$.ajax({
-											                    		url: "/dashboard/genericSaveJson.html",
-											                    		type: "POST",
-											                    		data: {
-											                    			searchJson: JSON.stringify(paramObj),
-											                    			fieldName: this.state.name,
-											                    			fieldValue: this.state.value,
-											                    			sqlid: "dashboard.corona.emmc.script_master.update"
-											                    		}, 
-											                    		async: false,			                    		
-											                    		success:  function(data){
-											                    			response1 = data;
-											                    			if(response1.result != 'success'){
-											                    				msg = "Save Success!";
-												                    			$("#dialog-confirm").html(response1.message);
-												                    			$("#dialog-confirm").dialog({
-												                    			    resizable: false,
-												                    			    modal: true,
-												                    			    title: "Success",
-												                    			    //height: 200,
-												                    			    width: 300,
-												                    			    dialogClass: 'no-close',
-												                    			    closeOnEscape: false,
-												                    			    buttons: [
-											                    			              {
-											                    			                text: "OK",
-											                    			                click: function() {
-											                    			                  $( this ).dialog( "close" );											                    			                  
-											                    			                }
-											                    			              }
-										                    			            ]
-												                    			});
-												                    			
-												                    			
-												                    			  
-											                    			}						                    			
-											                    		}
-											                    	});
-											                    	
-											                   
-																}
-															},
-															items: [
-																{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
-																{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
-																{label:'Category', col: 'CATEGORY', editable: true},
-																{label:'Test Item', col: 'TEST_ITEM', editable: false},
-																{label:'TIME', col: 'TIME'},
-																{label:'Customer Item', col: 'CUSTOMER_ITEM'},
-																{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-																{label:'Need Vendor Cycle', col: 'NEED_POWER_CYCLE'},
-																{label:'EMMC Ver', col: 'EMMC_VER'},
-																{label:'Target Device', col: 'TARGET_DEVICE'},
-																{label:'Target Partition', col: 'TARGET_PARTITION'},
-																{label:'Category1', col: 'CATEGORY1'},
-																{label:'Category2', col: 'CATEGORY2'},
-																{label:'Category3', col: 'CATEGORY3'},
-																{label:'Category4', col: 'CATEGORY4'},
-																{label:'Category5', col: 'CATEGORY5'},
-																{label:'Write Mode', col: 'WRITE_MODE'},
-																{label:'Read Mode', col: 'READ_MODE'},
-																{label:'Platform', col: 'PLATFORM'},
-																{label:'Function Name', col: 'FUNCTION_NAME'},
+																// }
 																
-																{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
-																{label:'Argument', col: 'ARGUMENT' , edit_tag: 'textarea'}
-															]
-															
-														}
+															},
+															fn_submit: function(){
+																//alert("submit function defined");
+																var state = true;
+																var paramObj = {
+																	//origindatas: this.props.options.keys
+																	origindatas: this.state.keys
+																};
+																
+																if(this.props.options.value == this.state.value)
+																	return state;
+																$.ajax({
+																	url: "/dashboard/genericSaveJson.html",
+																	type: "POST",
+																	data: {
+																		searchJson: JSON.stringify(paramObj),
+																		fieldName: this.state.name,
+																		fieldValue: this.state.value,
+																		fieldValueOrigin: this.state.value_origin,
+																		userId: $("#userId").val(),
+																		sqlid: "dashboard.ssd_sm.script_master.update"
+																	}, 
+																	async: false,			                    		
+																	success:  function(data){
+																		response1 = data;
+																		if(response1.result != 'success'){
+																			state = false;
+																			msg = "Save Success!";
+																			$("#dialog-confirm").html(response1.message);
+																			$("#dialog-confirm").dialog({
+																				resizable: false,
+																				modal: true,
+																				title: "Error",
+																				//height: 200,
+																				width: 300,
+																				dialogClass: 'no-close',
+																				closeOnEscape: false,
+																				buttons: [
+																					{
+																						text: "OK",
+																						click: function() {
+																						$( this ).dialog( "close" );											                    			                  
+																						}
+																					}
+																				]
+																			});
+																			
+																			
+																			
+																		}						                    			
+																	}
+																});
+																
+																return state;
+															},
+															fn_afterSubmit: function(keyUpdatedObjects){
+																
+																$.each(this,function(i,react){
+																	if(_.find(cms,function(cm){return cm.name == react.state.name})){
+																		var vobject = {};
+																		vobject[react.state.name] = react.state.value;
+																		theGrid.setRowData(parentRowKey,vobject);
+																	}
+																	
+																});
+																
+															},
+															progressObject: parent.$("#loader")
+														},
+														items: [
+															{label:'Script Name(key)', col: 'SCRIPT_NAME', editable: true},
+															{label:'Stage', col: 'STAGE', editable: true
+																, edit_tag : 'select'
+																// , selectOptions : stageList
+															},
+															{label:'Group', col: 'GROUP_NAME', editable: true},
+															{label:'CATEGORY', col: 'CATEGORY', editable: true},
+															{label:'Sub Category', col: 'SUB_CATEGORY', editable: true},
+															{label:'Item', col: 'ITEM', editable: true},
+															{label:'Sub Item', col: 'SUB_ITEM', editable: true},
+															{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+															{label:'Tester', col: 'TESTER' }
+
+														]
 														
-					    					    	
-					    					    	]
-					    					    }
-					    						
-					    					
-					    					]
-					    			};
+													}
+													
+												
+												]
+											}
+										]
+									};
 					    			fn_makeHtml(childDiv,schema1);
 					    			
 					    		} ,
@@ -1088,14 +1289,14 @@
 					],
 					events:{
 						click : function(){
-//									if(fn_validation()){
-//										parent.$("#loader").show();
-//										setTimeout( function(){
-//											fn_copy();
-//											fn_search_firmware();
-//											//parent.$("#loader").show();
-//										},50);	
-//									}
+									// if(fn_validation()){
+									// 	parent.$("#loader").show();
+									// 	setTimeout( function(){
+									// 		fn_copy();
+									// 		fn_search_firmware();
+									// 		//parent.$("#loader").show();
+									// 	},50);	
+									// }
 							
 							fn_validation(function(){
 								if("${param.scriptset}" == ""){ 
@@ -1104,8 +1305,17 @@
     								$("#loader").show();
     							}
 								setTimeout( function(){
-									fn_copy();
-									fn_search_firmware();
+									var v_ok = fn_copy();
+									if(v_ok == true)
+										fn_search_firmware();
+									else {
+										if("${param.scriptset}" == ""){ 
+											parent.$("#loader").hide(); 
+										}else{
+											$("#loader").hide();
+										}
+									}
+
 									//parent.$("#loader").show();
 								},50);	
 							});
@@ -1154,7 +1364,7 @@
 								var rtnList = [];
 								$.ajax({
 									url: "/dashboard/genericlListJson.html",
-									data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.search"}, 
+									data: {sqlid: "dashboard.ssd_sm.manage.scriptsets.search"}, 
 									async: false,
 									success:  function(response){
 										rtnList = response.dataList;
@@ -1229,17 +1439,23 @@
 			    	id: 'grid_firmware',
 			    	label:' ',
 			    	items:[	
-			    		{label:'ScriptSet', name:'SCRIPTSET', id:'SCRIPTSET', width:100, align:'left', sortable:false,hidden: true,editable: true, editrules: {edithidden:false }, editoptions:{readonly: "readonly"} }
-						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:100, align:'left', sortable:false,editable: true, editrules:{edithidden:false} }
-						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false}
-						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'left', sortable:false , editable: true }
-						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: true}
-						,{label:'Script Digit', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:350, align:'left', sortable:false , editable: true}
+						{label:'Seq', name:'SEQ', id:'SEQ', width:100, align:'left', sortable:false , editable: false , search: false, hidden: true}
+						,{label:'Group', name:'GROUP_NAME', id:'GROUP_NAME', width:110, align:'left'
+							, sortable:false 
+							, search: false
+						}
+						,{label:'Count', name:'ROWNUM_GRP', id:'ROWNUM_GRP', width:100, align:'left', sortable:false , editable: false , search: false, hidden: true}
+						
+						,{label:'Stage', name:'STAGE', id:'STAGE', width:70, align:'center', sortable:false,editable: false, editrules:{edithidden:false}, search: false }		
+						,{label:'Category', name:'CATEGORY', id:'CATEGORY', width:150, align:'left', sortable:false,editable: false, editrules:{edithidden:false}, search: false }
+						,{label:'Sub Category', name:'SUB_CATEGORY', id:'SUB_CATEGORY', width:150, align:'left', sortable:false,editable: false, editrules:{edithidden:false}, search: false}
+						,{label:'Item', name:'ITEM', id:'ITEM', width:150, align:'left', sortable:false , editable: false }
+						,{label:'Sub Item', name:'SUB_ITEM', id:'SUB_ITEM', width:150, align:'left', sortable:false , editable: false }
+						,{label:'Script', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:350, align:'left', sortable:false , editable: false}
 			    		
 			    	],	
 			    	data: function(){
 			    		//var rtnList = [];
-			    				    		
 			    		return [];
 			    	},	
 			    	
@@ -1256,7 +1472,7 @@
 			    		multiSort:true,
 			    		multiselect: true,
 			    		multiboxonly:true, 
-			    		sortname: 'CATEGORY,SCRIPT_NAME',
+			    		sortname: 'SEQ, CATEGORY,SCRIPT_NAME',
 			    		rowNum: 1000000,
 			    		//forceFit : false ,
 			    		emptyrecords: "No records to view",
@@ -1264,10 +1480,10 @@
 			    		
 			    		grouping: true,
 			    		groupingView: {
-							groupField: ["CATEGORY","ROWNUM_GRP"],
+							groupField: ["GROUP_NAME","CATEGORY"],
 							groupColumnShow: [false,false],
 							//groupText: ['<input type="checkbox" class="groupHeader"/> <b>  {0}  </b>'],
-							groupText: ['<b>  {0} - {1} Item(s)  </b>'],
+							groupText: ['   {0} - {1} Item(s)','{0} - {1} Item(s)'],
 							groupOrder: ["asc"],
 							//groupSummary: [true],
 							//groupSummaryPos: ["header"],
@@ -1299,7 +1515,7 @@
 				    			data: {
 				    				scriptset: row.SCRIPTSET
 				    				, script_name: row.SCRIPT_NAME
-				    				, sqlid: 'dashboard.corona.emmc.manage.script.scriptset.mapping.one'
+				    				, sqlid: 'dashboard.ssd_sm.manage.script.search.one'
 				    			}, 
 				    			//data: $("#form").serialize(), 
 				    			async: false,
@@ -1311,116 +1527,136 @@
 				    		
 				    		// target grid detail
 			    			var schema1 = {
-			    					containerId: childDivId,
-			    					type:'Vertical',
-			    					label: '',
-			    					elements: [
-			    					    {
-			    					    	label: "Details",
-			    					    	type: 'Group',
-			    					    	elements: [
-												{
-													type: "inline",
-													cols: 1,
-													data: function(){ 
-														return detailList[0];
-													},
-													options : {
-														keys : ['SCRIPTSET','SCRIPT_NAME'],
-														fn_submit: function(){
-															//alert("submit function defined");
-															var paramObj = {
-																origindatas: this.props.options.keys
-															};
+								containerId: childDivId,
+								type:'Vertical',
+								label: '',
+								elements: [
+									{
+										label: "",
+										type: 'Group',
+										elements: [
+											{
+												type: "inline",
+												cols: 1,
+												data: function(){ 
+													return detailList[0];
+												},
+												options : {
+													keys : ['SCRIPT_NAME'],
+													fn_change: function( input ){
+														//
+														// if(this.props.options.name == 'SCRIPT_NAME'){
+														// 	var convert = this.reactObjects.find(function(td){
+														// 		return td.props.options.name == 'CONVERT_SCRIPT';
+														// 	});	
+														// 	//convert digit
+														// 	//var v_hax = this.state.value;
+														// 	var v_hax = input;
+														// 	var v_digit = [];
+														// 	$.each(v_hax.split(" "), function(i,str){
+														// 		var d = "";
+														// 		if(str.startsWith("0x")){
+														// 			v_digit.push(parseInt(str,16));
+														// 		}else{
+														// 			v_digit.push(str);
+														// 		}
+														// 	});																		
+														// 	convert.setState({value : v_digit.join(" ")});
 															
-															$.ajax({
-									                    		url: "/dashboard/genericSaveJson.html",
-									                    		type: "POST",
-									                    		data: {
-									                    			searchJson: JSON.stringify(paramObj),
-									                    			fieldName: this.state.name,
-									                    			fieldValue: this.state.value,
-									                    			sqlid: "dashboard.corona.emmc.scriptset_script_map.update"
-									                    		}, 
-									                    		async: false,			                    		
-									                    		success:  function(data){
-									                    			response1 = data;
-									                    			if(response1.result != 'success'){
-									                    				msg = "Save Success!";
-										                    			$("#dialog-confirm").html(response1.message);
-										                    			$("#dialog-confirm").dialog({
-										                    			    resizable: false,
-										                    			    modal: true,
-										                    			    title: "Success",
-										                    			    //height: 200,
-										                    			    width: 300,
-										                    			    dialogClass: 'no-close',
-										                    			    closeOnEscape: false,
-										                    			    buttons: [
-									                    			              {
-									                    			                text: "OK",
-									                    			                click: function() {
-									                    			                  $( this ).dialog( "close" );											                    			                  
-									                    			                }
-									                    			              }
-								                    			            ]
-										                    			});
-										                    			
-										                    			
-										                    			  
-									                    			}						                    			
-									                    		}
-									                    	});
-									                    	
-									                   
-														}
-													},
-													items: [
-														{label:'Script Hax(key)', col: 'SCRIPT_NAME', editable: false},
-														{label:'Script Digit', col: 'CONVERT_SCRIPT', editable: false},
-														{label:'Category', col: 'CATEGORY', editable: false},
-														{label:'Test Item', col: 'TEST_ITEM', editable: false},
-														{label:'Single Multi', col: 'SINGLE_MULTI'},
-														{label:'Power Mode Speed', col: 'POWER_MODE_SPEED'},
-														{label:'Test Time', col: 'TEST_TIME'},
-														{label:'Need Vendor CMD', col: 'NEED_VENDOR_CMD'},
-														{label:'Luconfig 유무', col: 'LUCONFIG_YN'},
-														{label:'UFS Ver', col: 'UFS_VER'},
-														{label:'Precondition', col: 'PRECONDITION'},
-														{label:'POR', col: 'POR'},
-														{label:'HW Reset', col: 'HW_RESET'},
-														{label:'EP Reset', col: 'EP_RESET'},
-														{label:'H8', col: 'H8'},
-														{label:'SSU', col: 'SSU'},
-														{label:'Target LU', col: 'TARGET_LU'},
-														{label:'Power Control', col: 'POWER_CONTROL'},
-														{label:'Item Name', col: 'ITEM_NAME'},
-														{label:'Script TAT LVL', col: 'SCRIPT_TAT_LVL'},
-														{label:'Script Version', col: 'SCRIPT_VERSION'},
-														{label:'PF110', col: 'PF110'},
-														{label:'EXYNOS 7420', col: 'EXYNOS_7420'},
-														{label:'P4 Rev', col: 'P4_REV'},
-														{label:'Priority', col: 'PRIORITY'},
-														{label:'TG645', col: 'TG645'},
-														{label:'Need Power Cycle', col: 'NEED_POWER_CYCLE'},
-														{label:'Reset YN', col: 'RESET_YN'},
-														{label:'Script LVL', col: 'SCRIPT_LVL'},
-														{label:'Refactoring', col: 'REFACTORING'},
-														{label:'Reset Type', col: 'RESET_TYPE'},
+														// }
 														
-														{label:'Item Purpose', col: 'ITEM_PURPOSE', edit_tag: 'textarea'},
-														{label:'Item Description', col: 'ITEM_DESCRIPTION' , edit_tag: 'textarea'},
-														{label:'Input Parameter', col: 'INPUT_PARAMETER' , edit_tag: 'textarea'},
-														{label:'Comment', col: 'USER_COMMENT' , edit_tag: 'textarea'}
-													]
-												}
-			    					    	
-			    					    	]
-			    					    }
-			    						
-			    					
-			    					]
-			    			};
+													},
+													fn_submit: function(){
+														//alert("submit function defined");
+														var state = true;
+														var paramObj = {
+															//origindatas: this.props.options.keys
+															origindatas: this.state.keys
+														};
+														
+														if(this.props.options.value == this.state.value)
+															return state;
+														$.ajax({
+															url: "/dashboard/genericSaveJson.html",
+															type: "POST",
+															data: {
+																searchJson: JSON.stringify(paramObj),
+																fieldName: this.state.name,
+																fieldValue: this.state.value,
+																fieldValueOrigin: this.state.value_origin,
+																userId: $("#userId").val(),
+																sqlid: "dashboard.ssd_sm.script_master.update"
+															}, 
+															async: false,			                    		
+															success:  function(data){
+																response1 = data;
+																if(response1.result != 'success'){
+																	state = false;
+																	msg = "Save Success!";
+																	$("#dialog-confirm").html(response1.message);
+																	$("#dialog-confirm").dialog({
+																		resizable: false,
+																		modal: true,
+																		title: "Error",
+																		//height: 200,
+																		width: 300,
+																		dialogClass: 'no-close',
+																		closeOnEscape: false,
+																		buttons: [
+																			{
+																				text: "OK",
+																				click: function() {
+																				$( this ).dialog( "close" );											                    			                  
+																				}
+																			}
+																		]
+																	});
+																	
+																	
+																	
+																}						                    			
+															}
+														});
+														
+														return state;
+													},
+													fn_afterSubmit: function(keyUpdatedObjects){
+														
+														$.each(this,function(i,react){
+															if(_.find(cms,function(cm){return cm.name == react.state.name})){
+																var vobject = {};
+																vobject[react.state.name] = react.state.value;
+																theGrid.setRowData(parentRowKey,vobject);
+															}
+															
+														});
+														
+													},
+													progressObject: parent.$("#loader")
+												},
+												items: [
+													{label:'Script Name(key)', col: 'SCRIPT_NAME', editable: true},
+													{label:'Stage', col: 'STAGE', editable: true
+														, edit_tag : 'select'
+														// , selectOptions : stageList
+													},
+													{label:'Group', col: 'GROUP_NAME', editable: true},
+													{label:'CATEGORY', col: 'CATEGORY', editable: true},
+													{label:'Sub Category', col: 'SUB_CATEGORY', editable: true},
+													{label:'Item', col: 'ITEM', editable: true},
+													{label:'Sub Item', col: 'SUB_ITEM', editable: true},
+													{label:'Description', col: 'DESCRIPTION' , edit_tag: 'textarea'},
+													{label:'Tester', col: 'TESTER' }
+
+												]
+												
+											}
+											
+										
+										]
+									}
+								]
+							};
 			    			
 			    			fn_makeHtml(childDiv,schema1);
 			    			
@@ -1442,34 +1678,6 @@
 		    		            }
 		    				);
 		    				
-		    				$("#grid_firmware tbody input[type=checkbox].groupHeader").change(function (e) {		
-    							if("${param.scriptset}" == ""){ 
-    								parent.$("#loader").show(); 
-    							}else{
-    								$("#loader").show();
-    							}
-    							var currentCB = $(this);
-    							setTimeout( function(){
-								    var grid = jQuery('#grid_firmware');
-									var isChecked = this.checked;
-									if (currentCB.is(".groupHeader")) {	//if group header is checked, to check all child checkboxes						
-										var checkboxes = currentCB.closest('tr').
-								          nextUntil('tr.grid_firmwareghead_0').find('.cbox[type="checkbox"]');
-										checkboxes.each(function(){
-										    //if (!this.checked || !isChecked)                   
-								            //    grid.setSelection($(this).closest('tr').attr('id'), true); 
-								            grid.setSelection($(this).closest('tr').attr('id'), isChecked);
-										});		
-									}
-									if("${param.scriptset}" == ""){ 
-	    								parent.$("#loader").hide(); 
-	    							}else{
-	    								$("#loader").hide();
-	    							}
-    							},50);
-							    
-							});	
-			    			
 			    			// Firmware Script master Edit
 							$("#grid_firmwareContainer input.cbox").hide();
 							$('#grid_firmwarePager .ui-paging-pager').hide();
@@ -1540,8 +1748,8 @@
 		setTimeout( function(){
 			var rtnList = [];
 			var paramObj = {
-				scriptset : $("#to_scriptset").val(),
-				sqlid: "dashboard.corona.emmc.manage.script.scriptset.mapping"
+				search_scriptset : $("#to_scriptset").val(),
+				sqlid: "dashboard.ssd_sm.manage.scriptset_script_map.search"
 			};
 			$.ajax({
 				type: "POST",
@@ -1583,11 +1791,11 @@
 			var paramObj = {
 				sample : $("#category").val(),
 				firmware : $("#testItem").val(),
-				sqlid: "dashboard.corona.emmc.manage.script.search"
+				sqlid: "dashboard.ssd_sm.manage.script.search"
 			};
 			$.ajax({
 				type: "POST",
-				url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
+				url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.manage.script.search",
 				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
 				data: $("#form").serialize(), 
 				//data: paramObj,
@@ -1638,7 +1846,7 @@
 			type: "POST",
 			timeout: 200000,
 			data: {
-				sqlid: "dashboard.corona.historyno"
+				sqlid: "dashboard.ssd_sm.historyno"
 			}, 
 			async: false,			                    		
 			success:  function(data){
@@ -1655,7 +1863,8 @@
 			data: {
 				searchJson: JSON.stringify(paramObj),
 				history_no : v_hystoryno ,
-				sqlid: "dashboard.corona.emmc.manage.insert.historyno.copy_template_scriptset"
+				// sqlid: "dashboard.corona.emmc.manage.insert.historyno.copy_template_scriptset"
+				sqlid: "dashboard.ssd_sm.manage.insert.historyno.copy_template_scriptset"
 			}, 
 			async: false,			                    		
 			success:  function(data){
@@ -1687,7 +1896,7 @@
 		});
 		
 		if( !update_ok)
-			return;
+			return update_ok;
 		
 		paramObj.loop_id = "selectedlist";
 		// 03. last process data
@@ -1697,7 +1906,8 @@
 			data: {
 				searchJson: JSON.stringify(paramObj),
 				history_no : v_hystoryno ,
-				sqlid: "dashboard.corona.emmc.manage.script_copy_scriptset.update"
+				// sqlid: "dashboard.corona.emmc.manage.script_copy_scriptset.update"
+				sqlid: "dashboard.ssd_smc.manage.script_copy_scriptset.update"
 			}, 
 			async: false,			                    		
 			success:  function(data){
@@ -1731,7 +1941,9 @@
 		
 		
 		if( !update_ok)
-			return;
+			return update_ok;
+		
+		return true;
 		// 04. stauts update
 	}
 	
@@ -1777,6 +1989,37 @@
 		}
 	}
 	
+	function fn_load_scriptGroups() {
+		$.ajax({
+			url: "/dashboard/genericlListJson.html",
+			data: {sqlid: "dashboard.ssd_sm.script.group.list"}, 
+			async: false,
+			success:  function(response){
+				// for grid list
+				scriptGroupList = response.dataList;
+				$.each(scriptGroupList,function(){
+					this.value = this.SCRIPT_GROUP;
+					this.label = this.GROUP_NAME;
+				});
+				scriptGroupListStr = "{";
+				scriptGroupListStr += "\"" + "" + "\":\"" + "Select" + "\"";
+				$.each(scriptGroupList,function(i,d){
+					// if(i> 0)
+					scriptGroupListStr += ",";
+					scriptGroupListStr += "\"" + d.SCRIPT_GROUP + "\":\"" + d.GROUP_NAME + "\"";
+				});
+				scriptGroupListStr += "}";
+
+				// var grid = findAll("grid_firmware",schemaContent.elements)[0];
+				// if(grid != undefined){
+				// 	var col = _.find(grid.items,{name:'SCRIPT_GROUP'});
+				// 	if( col != undefined)
+				// 		col.editoptions.value = JSON.parse(scriptGroupListStr);
+				// }
+				// rtn = JSON.parse(tmp);
+			}
+		});
+	}
 	</script>
 	<script  id="script_main">
 	
@@ -1788,6 +2031,7 @@
 			$("#loader").show();
 		}
 		setTimeout( function(){
+			fn_load_scriptGroups();
 			fn_makeHtml('searchCondition',schemaSearch);
 			fn_makeHtml('contentMain',schemaContent);
 			

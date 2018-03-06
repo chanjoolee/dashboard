@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>Corona Emmc Detail</title>
+	<title>Corona Emmc Detail Script</title>
 	<!-- <link rel="stylesheet" type="text/css" href="/nspim/css/style_master_pop.css" /> -->
 	
 	
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
 	<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
 	<%-- datetimepicker --%>
@@ -68,7 +68,7 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.11.17.01"></script>
+	<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
 	
 	<%-- 5. local --%>
 	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
@@ -372,20 +372,12 @@
 		                	
 						}
 						,{label:'Test Board', name:'TEST_BOARD', id:'TEST_BOARD', width:70, align:'center', sortable:false, hidden: true, editable: false }
-						,{label:'sample', name:'SAMPLE', id:'SAMPLE', width:70, align:'center', sortable:false, hidden: true, editable: false }
-						,{label:'firmware', name:'FIRMWARE', id:'FIRMWARE', width:70, align:'center', sortable:false, hidden: true, editable: false }
+						,{label:'Project', name:'SAMPLE', id:'SAMPLE', width:200, align:'left', sortable:false, hidden: false, editable: false }
+						,{label:'Firmware', name:'FIRMWARE', id:'FIRMWARE', width:120, align:'left', sortable:false, hidden: false, editable: false }
 						
 						,{label:'YYYYMM', name:'YYYYMM', id:'YYYYMM', width:70, align:'center', sortable:false ,hidden: true, editable: false}  
 						,{label:'Test Item', name:'TEST_ITEM', id:'TEST_ITEM', width:100, align:'center', sortable:false, editable: false }
-						,{label:'SCRIPT_NAME_META', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:70, align:'center', sortable:false, hidden: true, editable: false }
-						,{label:'Script', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:400, align:'left', sortable:false, editable: false 
-							, cellattr: function (rowId, val, rowObj, cm, rowData, isCustom){
-								result = " style=\"vertical-align: middle;";
-								result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;"
-								result += "\" ";
-								return result;
-							}						
-						}
+						,{label:'Script', name:'SCRIPT_NAME_META', id:'SCRIPT_NAME_META', width:400, align:'left', sortable:false, editable: false, hidden: true }
 						,{label:'Jira No', name:'JIRA', id:'JIRA', width:80, align:'center', sortable:false, editable: true
 							, edittype: "text"							
 							,cellattr: function(rowId, val, rowObj, cm, rowData) {
@@ -394,7 +386,9 @@
 									result = ' style="cursor:pointer;';
 									result += 'color: blue;font-weight: bolder;"';
 								}
+									
 								return result;
+								
 							}
 						}
 						,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false ,hidden: true, editable: false }
@@ -602,6 +596,11 @@
 																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
 																}
 															});
+// 															$.each(keyUpdatedObjects,function(i,react){
+// 																if(react.state.name == "JIRA"){
+// 																	theGrid.setRowData(parentRowKey,{JIRA: react.state.value});
+// 																}
+// 															});
 															
 														},
 														progressObject: $("#loader")
@@ -737,7 +736,7 @@
 										}
 									}
 									,{label:'Script Name', name:'SCRIPT_NAME', id:'SCRIPT_NAME', width:170, align:'center', sortable:false, editable: false }
-									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false, hidden: true }
+									,{label:'Script', name:'SCRIPT', id:'SCRIPT', width:250, align:'left', sortable:false, editable: false , hidden: true}
 									,{label:'Script', name:'CONVERT_SCRIPT', id:'CONVERT_SCRIPT', width:250, align:'left', sortable:false, editable: false , hidden: true}
 									,{label:'Status', name:'STATUS', id:'STATUS', width:100, align:'center', sortable:false 
 										, editable: true
@@ -868,23 +867,6 @@
 																			
 							}
 							
-							if(cm.name  == 'SCRIPT_NAME_META' || cm.name  == 'CONVERT_SCRIPT' ){
-								if(row[cm.name] == undefined || row[cm.name] == "")
-									return;
-								
-								var colname = 'SCRIPT_NAME_META';
-								var newWin1 = window.open("", "coronaDetailScript_emmc:" + row[colname], "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
-								var oFrm = document.getElementById("form1");
-								oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/coronaDetailScript';
-								oFrm.method = "post";
-								oFrm.target = "coronaDetailScript_emmc:" + row[colname]; 
-							    $("#script_name").val(row.SCRIPT_NAME_META);
-							    $("#convert_script").val(row.CONVERT_SCRIPT);
-								oFrm.submit();		
-							    newWin1.focus();	
-																			
-							}
-							
 					
 			    		},
 			    		//subgrid end
@@ -987,19 +969,11 @@
 <input type="hidden" id="testId" name="testId" value="${param.testId}"/>
 <input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 <input type="hidden" id="sample" name="sample" value="${param.sample}"/>
-<input type="hidden" id="firmware" name="firmware" value="${param.firmware}"/>
-<input type="hidden" id="category" name="category" value="${param.category}"/>
-<input type="hidden" id="testItem" name="testItem" value="${param.testItem}"/>
-<input type="hidden" id="countGubun" name="countGubun" value="${param.countGubun}"/>
+<input type="hidden" id="script_name" name="script_name" value="${param.script_name}"/>
 	<div class="pop_window">
 		<div class="pop_tit_wrap">
 			<!-- <span class="baseline"></span> -->
-			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.firmware} / ${param.category}
-			<c:if test="${param.testItem != null and param.testItem != ''}"> / ${param.testItem}</c:if>
-			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'pass'}"> (PASS)</c:if>
-			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'fail'}"> (FAIL)</c:if>
-			<c:if test="${param.countGubun != null and param.countGubun != '' and param.countGubun == 'notyet'}"> (Not Yet)</c:if>
-			</h2>
+			<h2 class="pop_tit" style="margin-top:10px;">Detailed Information: ${param.sample} / ${param.convert_script}</h2>
 		</div>
 		
        <div class="pop_con_area" style="padding-top: 3px;"> 
@@ -1023,14 +997,6 @@
     <div id="loader"></div>
     <div id="dialog-confirm"></div>
     <!-- ## //PAGE CONTENTS ## -->	
-</form>
-<form name="form1" id="form1" method="post" >
-	<input type="hidden" name ="sender" value="${param.sender}"/>
-	<input type="hidden" name="cookieName" value="${param.cookieName}"/>
-	<input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
-	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
-	<input type="hidden" id="script_name" name="script_name" value=""/>
-	<input type="hidden" id="convert_script" name="convert_script" value=""/>
 </form>
 </body>
 <script type="text/babel">

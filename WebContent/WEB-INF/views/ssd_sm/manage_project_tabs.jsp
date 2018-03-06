@@ -6,10 +6,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>mapping firmware and scriptset</title>
+    <title>Corona UFS manage script</title>
     <%-- 1. jquery --%>
-    <!--<script src="js/jquery/jquery-1.11.2.js"></script>-->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.src.js"></script>
+    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
     <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
     <!-- <script src="js/jquery.csv-0.71.js"></script> -->
@@ -17,13 +17,12 @@
     <%-- jqgrid --%>
     <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2017.10.18"></script>    
+    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>    
     
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>	
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-	<script src="/dashboard/js/bootstrap/bootstrap3-typeahead.js"></script>
 	
 	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
 	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
@@ -70,10 +69,10 @@
 	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
 	
 	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.09.13.01"></script>
+	<script src="/dashboard/js/dashboard.js?version=2018.02.23.01"></script>
 	
 	<%-- 5. local --%>
-	<link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
 	
@@ -181,7 +180,7 @@
 		
 		
 		#loader {
-		  position: absolute;
+		  position: fixed;
 		  left: 50%;
 		  top: 50%;
 		  z-index: 1;
@@ -226,7 +225,19 @@
 		  to{ bottom:0; opacity:1 }
 		}
 		
+		.btn_n2 {
+		 	width: 100px;		 	
+		}
 		
+		.btn_n2:hover {
+			width: 100px;
+			cursor: pointer;
+			text-decoration: none;
+		}
+		
+		.btn_n2:active {
+		  width: 100px;
+		}
 		
 		<%-- 탭뷰--%>
 		a:hover,a:focus{
@@ -414,11 +425,6 @@
 		    padding-bottom: 3px;
 		}
 		
-		<%--  jqGrid에서 add popup에서 scroll--%>
-		.ui-jqdialog-content .FormGrid {
-		    overflow: hidden;
-		}
-		
 	</style>
 	
 	<script  id="script_common" >
@@ -538,183 +544,8 @@
 	//그리드 편집전 데이타
 	var tempList = [];
 	var beforEditRow = {};
-	var edit_option_scriptset = {};
 	
 	var EfContextPath = "";
-	
-	
-	var schemaSearch = {
-			containerId:'searchCondition',
-			type:'Vertical',
-			label:'',
-			
-			elements:[
-//				{
-//					containerCss:[
-//						{code: 'margin-top', value:'10px'},
-//					],		
-//					type:"title",
-//					id: "title_script",
-//					label: "Script Template"
-//				},
-				{
-					label:'',
-					type: 'HorizontalLayout',
-					cls: 'srch_box2',
-					containerCss:[
-						{code: 'margin-top', value:'3px'},
-						{code: 'margin-left', value:'20px'},
-						{code: 'margin-right', value:'20px'}
-					],		
-					elements:[
-					 	{
-					 		containerCss:[
-								
-							],
-							label:'',
-							type:'Vertical',
-							elements:[
-								{
-									label:'',
-									type: 'HorizontalLayout',
-									containerCss:[
-							    		{code:'height',value:'30px'}
-							    	],
-									elements:[
-										
-										{
-											type:'SearchHeader',
-											id: 'projectHead',
-											name: 'projectHead',
-											label:'',
-											text:'Project',
-											width: '50px'
-										},
-										
-										{
-											type:'multiCombo',
-											id: 'search_sample',
-											name: 'search_sample',
-											label:'',
-											text:'Project',
-											width: '230px',
-											data: function(){
-												var rtnList = [];
-												$.ajax({
-													url: "/dashboard/genericlListJson.html",
-													data: {sqlid: "dashboard.corona.search.sample"}, 
-													async: false,
-													success:  function(response){
-														rtnList = response.dataList;
-													}
-												});
-												return rtnList;
-											},
-											//value :'CSSD',
-											options: {
-												cd:'SAMPLE',
-												name:'SAMPLE'
-											},
-											multiselectOpt:{
-												selectedList: 1 ,
-												multiple: false,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var sb = [];
-													 $.each(checkedItems,function(){
-														 sb.push($(this).val());
-													 });
-													 return sb.join(",");
-												}
-											},
-											events:{
-												change : function(){													
-													
-													fn_search_script();
-												}
-											}
-										} ,
-										{
-											type:'SearchHeader',
-											id: 'testCaseHead',
-											name: 'testCaseHead',
-											label:'',
-											text:'TestCase Set',
-											width: '75px'
-										},
-										{
-											type:'SearchHeader',
-											id: 'testCaseValueHead',
-											name: 'testCaseValueHead',
-											label:'',
-											text:' ',
-											width: '80px',
-											controlCss: [
-												{code: 'text-align', value:'left'}
-											]
-										}
-									]
-								}
-								//2line
-								
-								
-							]
-					 	},
-					 	//검색버튼
-					 	{
-					 		label:'',
-					 		type: 'VerticalLayout',
-							cls: 'btn_txt',
-							containerCss:[
-								{code: 'margin-left', value:'10px'}
-								, {code: 'float', value:'right'}
-							]
-					 		, elements:[
-					 			{
-					 				label:'',
-							 		type: 'HorizontalLayout',
-									cls: 'btn_txt',
-									containerCss:[
-										{code: 'margin-left', value:'10px'}
-									],
-									elements:[
-										{
-											type:'Button',
-											id: 'btnSearch',
-											name: 'btnSearch',
-											label:'SEARCH',
-											//width: '50px',
-											cls: 'btn_txt btn_type_e btn_color_a',
-											containerCss:[
-												{code: 'margin-right', value:'3px'}
-											],
-											events:{
-												click : function(){
-													//parent.$("#loader").show();
-													//setTimeout( function(){
-													//	$("#contentMain").html("");
-													//	makeHtml("contentMain",schemaContent);
-													//	parent.$("#loader").hide();
-													//},50);
-													fn_search_script();
-												}
-											}
-										}
-									
-									 ]
-					 			}
-					 		            
-					 		]
-							
-					 	}
-					]
-				}
-			
-				
-			
-			]
-			
-	};
 	
 	var schemaContent = {
 			containerId:'contentCoronaDetail',
@@ -722,455 +553,101 @@
 			label:'',
 			elements:[ 
 				
-				//script master grid
+				//tab list
 				{
-					label: '',
-					type: 'HorizontalLayout',
-					containerCss:[
-						{code: 'display', value:'inline-block'},
-						{code: 'width', value:'100%'},
-						{code: 'padding-left', value:'20px'},
-						{code: 'padding-right', value:'20px'}
-					],			
-					elements: [
+					"type": "tab_list",
+					"id" : "tab_list",
+					"label" : "",
+					//
+					"elements" : [
 						{
-							containerCss:[
-								{code: 'width', value:'100%'}
-								//,{code: 'float', value:'left'}
-							],			
-					    	type:'grid',
-					    	id: 'grid_script',
-					    	label:' ',
-					    	items:[
-								{
-									label:'FW Version', name:'FIRMWARE', id:'FIRMWARE', width:200, align:'left', sortable:false , editable: false
-									,cellattr: function(){
-										var result = " style=\"background:white;vertical-align: middle;";
-										result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;";
-										return result;
-									}
-								}
-								,{
-									label:'Test Start Date', name:'START_DT', id:'START_DT', width:200, align:'center', sortable:false , editable: false
-								}
-								,{
-									label:'TestScript Set', name:'SCRIPTSET', id:'SCRIPTSET', width:200, align:'left', sortable:false
-									,editable: true	
-									,edittype: 'select'
-									//,formatter: 'select'
-									, editoptions: {
-										//value: edit_option_scriptset
-										value: function(){
-											var rtn = {};
-											$.ajax({
-								    			type: "POST",
-								    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.search",
-								    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-								    			data: $("#form").serialize(), 
-								    			async: false,
-								    			success:  function(response){
-								    				var tmp = "{";
-								    				//tmp += "\"\":\"Select\"";
-													$.each(response.dataList,function(i,d){
-														if(i> 0)
-															tmp += ",";
-														tmp += "\"" + d.SCRIPTSET + "\":\"" + d.SCRIPTSET + "\"";
-														
-													});
-													tmp += "}";
-													rtn = JSON.parse(tmp);
-								    				
-								    			}
-								    		});
-								    		return rtn;
-								    		
-										}
-									}
-									,cellattr: function(){
-										var result = " style=\"background:white;vertical-align: middle;";
-										result += "color: rgba(6, 89, 203, 0.93);font-weight: bolder;cursor:pointer;";
-										return result;
-									}							
-									
-								}
-								,{
-									label: " ",
-									search: false,
-									name: "actions",
-									align:'center',
-									width: 90,
-									formatter: "actions",	
-									formatoptions: {
-				                        keys: true
-				                        ,delbutton:false
-				                        ,editformbutton: false
-				                        ,editOptions: {} // editformbutton 가 true 인경우
-				                        ,addOptions: {}
-				                        ,delOptions: {}
-				                        ,beforeSaveRow : function(options,rowid){
-				                        	//alert("beforeSaveRow")	;
-				                        	return true;
-				                        }
-				                        ,reloadAfterSubmit: false
-				                        ,afterSave : function(rowid,res) {
-				                        	var grid = $(this).jqGrid();
-				                        	var row = grid.jqGrid('getRowData',rowid);
-				                        	row.project = $("#search_sample").val();
-				                        	row.sqlid = "dashboard.corona.scriptset.map.update";
-				                        	row.origindata = JSON.stringify(beforEditRow);
-				                        	
-				                        	
-				                        	var response1 = {};
-				                        	$.ajax({
-					                    		url: "/dashboard/genericSaveJson.html",
-					                    		type: "POST",
-					                    		data: row, 
-					                    		async: false,			                    		
-					                    		success:  function(data){
-					                    			response1 = data;
-					                    			if(response1.result != 'success'){
-						                    			$("#dialog-confirm").html(response1.message);
-						                    			$("#dialog-confirm").dialog({
-						                    			    resizable: false,
-						                    			    modal: true,
-						                    			    title: "Error",
-						                    			    //height: 200,
-						                    			    width: 500,
-						                    			    dialogClass: 'no-close',
-						                    			    closeOnEscape: false,
-						                    			    buttons: [
-					                    			              {
-					                    			                text: "OK",
-					                    			                click: function() {
-					                    			                  $( this ).dialog( "close" );											                    			                  
-					                    			                }
-					                    			              }
-				                    			            ]
-						                    			});
-						                    			
-						                    			
-						                    			  
-					                    			}							                    			
-					                    		}
-					                    	});
-				                        	
-				                        }
-				                        
-				                        ,afterRestore : function(rowid) {
-				                        	
-				                        }
-				                        ,onEdit :function(rowid,actop){
-				                        	var grid = $(this).jqGrid();
-				                        	beforEditRow = grid.jqGrid('getRowData',rowid);
-				                        	
-											
-				    					}
-				    					
-				    					
-				                        
-				                    } 
-				                    
-				                	
-								}
-					    		
-					    	],	
-//					    	data: function(){
-//					    		var rtnList = [];
-//					    		$.ajax({
-//					    			type: "POST",
-//					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.search",
-//					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
-//					    			data: $("#form").serialize(), 
-//					    			async: false,
-//					    			success:  function(response){
-//					    				rtnList  = response.dataList;
-//					    				
-//					    			}
-//					    		});
-//					    		
-//					    		return rtnList;
-//					    	},		
-					    	
-					    	// script grid option		
-					    	gridOpt:{
-					    		datatype:'json',
-					    		pager: "#grid_scriptPager"
-					    		
-					    		,url: function(){
-					    			return '/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.map.search&project='+$("#search_sample").val();
-					    		}
-					    		//url: '/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.map.search&project='+$("#search_sample").val()
-					    		,jsonReader: {
-								      root: function(data){
-									    return data.dataList;
-								      }
-								     ,repeatitems:false
-								},
-								editurl: '/dashboard/ssdCusDummySaveJson.html',
-					    		viewrecords: true,	
-					    		emptyrecords: "No records to view",		    		
-					    		width: '100%',
-					    		height: '500',
-					    		sortable: false,
-					    		multiSort:false,
-					    		//sortname: 'CATEGORY, TEST_ITEM ',
-					    		rowNum: 30,
-								rowList:[10,20,30],
-					    		//forceFit : false ,
-					    		gridComplete: function () {
-					    			var v_grid = $(this).jqGrid();
-					    			v_grid.jqGrid('filterToolbar',
-				    					{
-				    						defaultSearch:'cn'
-				    		                // JSON stringify all data from search, including search toolbar operators
-				    		                ,stringResult: true
-				    		                // instuct the grid toolbar to show the search options
-				    		                //,searchOperators: true
-				    		            }
-				    				);
-					    			// script master add
-					    			
-					    			$('#grid_scriptPager .ui-paging-pager').hide();
-					    			
-					    			var default_scriptset = $("#search_sample").find("option:selected").attr("default_scriptset");
-					    			$("#testCaseValueHeadContainer").find('h3').html(": " + default_scriptset);
-
-					    		}
-						    	
-						    	, onCellSelect: function (rowId, iCol, content, event) {
-							    	
-						    		var e = event;
-							    	var test = "";
-							    	var theGrid = $(this).jqGrid();
-							    	var row = theGrid.jqGrid('getRowData',rowId);
-							    	var cms = theGrid.jqGrid("getGridParam", "colModel");
-									var cm = cms[iCol];
-									
-									//beforEditRow = theGrid.jqGrid('getRowData',rowId);
-									if(cm.name == "FIRMWARE"){
-										fn_pop_mgmt_fimware(row.FIRMWARE);
-										
-									}
-									
-									if(cm.name == "SCRIPTSET" && row[cm.name] != ""){
-										
-										// hs.Expand 두번뜨는것 방지
-										for(var i=0 ;i<hs.expanders.length;i++){
-											if(hs.expanders[i] == null)
-												continue;
-											else
-												hs.expanders[i].close();
-											//if(hs.expanders[i].maincontentText ==  linkUrl)
-											//	hs.expanders[i].close(); //return;
-										}
-										
-										var linkUrl = "";
-										// 1
-										linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_mgmt('"+ row.SCRIPTSET +"',this);\">";
-										linkUrl +="Edit/Remove Current TestScript Set.";
-										linkUrl +="</span>";
-										linkUrl +="<br/><br/>";
-										// 2
-										linkUrl +="<span style=\"cursor: pointer;\" onclick=\"fn_pop_copy('"+ row.SCRIPTSET +"',this);\">";
-										linkUrl +="Copy from Master TestScript.";
-										linkUrl +="</span>";	
-										
-										hs.htmlExpand(null, {
-									        pageOrigin: {
-									            x: e.pageX || e.clientX ,
-									            y: (e.pageY || e.clientY)  + 62 //$(e.target).height() + 30//+ e.currentTarget.offsetHeight + 30
-									        },
-									        headingText: 'Select Job',
-									        maincontentText: linkUrl,
-									        width: 300
-									    });
-										
-									}
-									
-									
-							    }
-					    	}
-						}
-					
-
-					
+							"type": "tab_iframe",
+							"id" : "firmware_script_edit",
+							"label" : "Project TS Mgmt.",							
+							"connected_content" :  {
+								"viewName": "corona_emmc/corona_manage_firmware_edit_paging",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							},
+							"iframe_css" : [
+								{ "code": "height", "value": "720px" }
+							]
+						},
+						// {
+						// 	"type": "tab_iframe",
+						// 	"id" : "copy_template_to_project",
+						// 	"label" : "Copy Template To Project",							
+						// 	"connected_content" :  {
+						// 		"viewName": "corona_manage_copy_template_project",
+						// 		"form_id" : "form"
+						// 	},
+						// 	"events" : {
+						// 		//"click" : tab_click
+						// 	}
+						// },
+						{
+							"type": "tab_iframe",
+							"id" : "copy_template_to_firmware",
+							"label" : "Copy : Master TS -> Project TS",							
+							"connected_content" :  {
+								"viewName": "corona_emmc/corona_manage_copy_template_firmware",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							}
+						},
+						{
+							"type": "tab_iframe",
+							"id" : "copy_firmware_to_firmware",
+							"label" : "Copy : Project TS -> Project TS",							
+							"connected_content" :  {
+								"viewName": "corona_emmc/corona_manage_copy_firmware_firmware",
+								"form_id" : "form"
+							},
+							"events" : {
+								//"click" : tab_click
+							}
+						}				
+						
 					]
-				}
+				},
+						
 				
-
 			]								
 	};
-	
-	
-	// 테스트 중. 그룹별로 상세리스트 만들기
-	function groupbyList(json,pkeys){
-		var abcArr = json;
-		var items = {}, base, key,val ;
-		for (var i = 0; i < abcArr.length; i++) {
-		    base = abcArr[i];
-		    
-		    var pkey = '';
-		    var key = '';
-		    for(var j=0; j < pkeys.length; j++){
-		    	pkey = pkeys[j];
-		    	
-		    	if(j>0)
-		    		key += ";;;";
-		    	// if not already present in the map, add a zeroed item in the map
-			    if(!items[key]){
-			    	items[key] = {
-			    		count: 0,
-			    		list:[]
-			    	};
-			    }
-			    
-		    	key += base[pkey];
-		    }
-		}
-
-		// Now, generate new array
-		var outputArr = [], temp;
-		for (key in items) {
-		    // create array entry for the map value
-		    //temp = [key, items[key]];
-			temp = {};
-			temp.count =  items[key].count;
-			//temp.key =  items[key];
-		    for(var j=0; j < pkeys.length; j++){
-		    	var pkey = pkeys[j];
-		    	//if(temp[pkey])
-		    		temp[pkey] = key.split(';;;')[j];
-		    }
-		    // put array entry into the output array
-		    outputArr.push(temp);
-		}
-		
-		return outputArr;
-	}
-	
-	
-	//target search condition change
-	function fn_search_script(){
-//		parent.$("#loader").show();
-//		
-//		setTimeout( function(){
-//			$("#contentMain").html("");
-//			fn_makeHtml('contentMain',schemaContent);
-//			parent.$("#loader").hide();
-//			
-//		},50);
-
-		//var default_scriptset = $("#search_sample").find("option:selected").attr("default_scriptset");
-		//$("#testCaseValueHeadContainer").find('h3').html(": " + default_scriptset);
-
-		var grid = $("#grid_script").jqGrid();
-		grid.jqGrid('clearGridData');
-		grid.trigger('reloadGrid');	
-			
-	}
-	
-	
-	function fn_validation(){
-		var gridScript = $("#grid_script").jqGrid();
-    	var selIds = gridScript.jqGrid('getGridParam','selarrrow');
-    	if(selIds.length == 0){
-			alert("select more than one item!");
-			return false;
-		}else{
-			return true;
-		}
-	}
-	
-	function fn_search_scriptsets(){
-		$.ajax({
-			type: "POST",
-			url: "/dashboard/genericlListJson.html",
-			data: {sqlid: "dashboard.corona.manage.scriptsets.search"}, 
-			async: false,
-			success:  function(response){
-				var tmp = "{";
-				$.each(response.dataList,function(i,d){
-					if( i > 0 )
-					tmp += ",";
-					tmp += "\"" + d.SCRIPTSET + "\":\"" + d.SCRIPTSET + "\"";
-					
-				});
-				tmp += "}";
-				edit_option_scriptset = JSON.parse(tmp);
-				var schema_grid = findAll("grid_script",schemaContent.elements);
-				schema_grid[0].items[2].editoptions.value = edit_option_scriptset;
-				//schema_grid[0].gridOpt.url = function(){
-	    		//	return '/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.scriptsets.map.search&project='+$("#search_sample").val();
-	    		//};
-				
-			}
-		});
-		
-	}
-	
-	function fn_pop_mgmt_fimware(v_fimware){
-		$("#search_firmware").val(v_fimware);		
-		var newwin = window.open("", "FimwareScriptMgmt_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_firmware_edit_paging';
-		oFrm.method = "post";
-		oFrm.target = 'FimwareScriptMgmt_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
-	}
-	
-	function fn_pop_copy(v_scriptset){
-		$("#scriptset").val(v_scriptset);
-		var newwin = window.open("", "ScriptSetCopy_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_copy_template_scriptset';
-		oFrm.method = "post";
-		oFrm.target = 'ScriptSetCopy_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
-	}
-	
-	function fn_pop_mgmt(v_scriptset){
-		$("#scriptset").val(v_scriptset);
-		var newwin = window.open("", "ScriptSetMgmt_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
-		var oFrm = document.getElementById("form");
-		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_scriptset_script_edit_paging';
-		oFrm.method = "post";
-		oFrm.target = 'ScriptSetMgmt_UFS'; 
-	    oFrm.submit();
-		newwin.focus();
-	}
 	
 	</script>
 	<script  id="script_main">
 	
 	
 	$(function () {
-		parent.$("#loader").show();
+		//$("#loader").show();
 		setTimeout( function(){
-			//fn_search_scriptsets();
-			fn_makeHtml('searchCondition',schemaSearch);
 			fn_makeHtml('contentMain',schemaContent);
 			
 			$( window ).resize(function() {
 				//console.log("aaaaa");
 			});
-			parent.$("#loader").hide();
+			$("#loader").hide();
 		},50);
-		//fn_search_firmware();
-		parent.$("body").css("overflow","");
-		parent.$("body .box_gray").css("height","1500px");
-		$( window ).resize(function() {
-			parent.$("body .box_gray").css("height","1500px");
-		});
+		
+		// nspim 안에서 호출하는 경우
+//		parent.$("body").css("overflow","");
+//		parent.$("body .box_gray").css("height","1500px");
+//		$( window ).resize(function() {
+//			parent.$("body .box_gray").css("height","1500px");
+//		});
 		
 	});
+	
+	
+	function fn_refresh(){
+		$("#contentMain").html("");
+		fn_makeHtml('contentMain',schemaContent);
+	}
 	
 	</script>
 	
@@ -1184,15 +661,13 @@
 	<input type="hidden" name="cookieToken" value="${param.cookieToken}"/>
 	<input type="hidden" id="userId" name="userId" value="${param.userId}"/>
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
-	<input type="hidden" id="search_firmware" name="search_firmware" value=""/>
-	<input type="hidden" id="scriptset" name="scriptset" value=""/>
 	
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
 
 	<div id="div1"></div>
 	<div id="div2"></div>
-	
+	<div id="loader"></div>
 	<div id="dialog-confirm"></div>
 </form>
 
@@ -1280,8 +755,8 @@
 	    }
 	    
 	    dblclick(){
-	    	//if(this.state.editable == true)
-	    	//	this.setState({mode: "edit"});
+	    	if(this.state.editable == true)
+	    		this.setState({mode: "edit"});
 	    }
 	    
 	    confirm(){
@@ -1314,12 +789,43 @@
 	    			return (
 			    		<div>
 							<textarea style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }/>;
+							<div className="right_section"  >
+								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
+		                          <span className="name">
+		                              <span className="txt">Cancel</span>
+		                          </span>
+		                      	</a>
+							</div>
+							
+							<div className="right_section" style={{marginRight:"3px"}} >
+								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
+		                          <span className="name">
+		                              <span className="txt">Confirm</span>
+		                          </span>
+		                      	</a>
+							</div>
+							
 						</div>
 					);
 	    		}else {
 	    			return (
 			    		<div>
 							<input style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value}></input>
+							<div className="right_section"  >
+								<a href="#" className="btn_txt btn_type_e btn_color_a" onClick={this.cancel.bind(this)}>
+		                          <span className="name">
+		                              <span className="txt">Cancel</span>
+		                          </span>
+		                      	</a>
+							</div>
+							<div className="right_section" style={{marginRight:"3px"}}>
+								<a href="#" className="btn_txt btn_type_e btn_color_c" onClick={this.confirm.bind(this)}>
+		                          <span className="name">
+		                              <span className="txt">Confirm</span>
+		                          </span>
+		                      	</a>
+							</div>
+							
 						</div>
 					);
 	    		}		
