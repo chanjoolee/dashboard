@@ -3881,7 +3881,7 @@
 			a.pjt_code ,
 			b.pjt_name
 		from tbl_pjt a
-		left outer join solutionpms.PJT_INFO b
+		left outer join solutionpms.PJT_INFO@Pms_dsbd_inf b
 			on a.pjt_code = b.pjt_id
 			
 		order by b.pjt_name
@@ -3904,7 +3904,7 @@
 			a.FIRMWARE
 			
 		from tbl_pjt a
-		left outer join solutionpms.PJT_INFO b
+		left outer join solutionpms.PJT_INFO@Pms_dsbd_inf b
 			on a.pjt_code = b.pjt_id		
 		order by b.pjt_name,a.FIRMWARE
 	</select>

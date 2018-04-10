@@ -53,7 +53,8 @@
     <select id="license.selectLicenseUsageList.smonth.table" resultType="hashmap">
 		SELECT DISTINCT SYEAR || '-' || SMONTH  TMONTH
      	FROM PDF_DATA_LIST
-     	WHERE  SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}        
+     	WHERE  SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}   
+     	ORDER BY TMONTH
     </select>
     
     <select id="license.selectLicenseUsageList.smonth.all" resultType="hashmap">
@@ -271,7 +272,7 @@
     
     <select id="dashboard.license.selectUseMonthTable" resultType="hashmap">
 		SELECT DISTINCT SYEAR || '-' || SMONTH  TMONTH
-     	FROM SOLUTIONPMS.PDF_DATA_LIST
+     	FROM SOLUTIONPMS.PDF_DATA_LIST@Pms_dsbd_inf
      	WHERE  1=1
      	AND LICENSE_NM 	= #{licenseNm}   
         <if test="siteNmArr != null and siteNmArr != '' ">
@@ -292,7 +293,7 @@
             MAX(PEAK) PEAK,
             MAX(USED) USED,
             MAX(AVAIL) AVAIL
-            FROM SOLUTIONPMS.PDF_DATA_LIST
+            FROM SOLUTIONPMS.PDF_DATA_LIST@Pms_dsbd_inf
             WHERE 1=1
             AND LICENSE_NM 	= #{licenseNm}           
             <if test="siteNmArr != null and siteNmArr != '' ">
@@ -303,6 +304,7 @@
 	         </if>
             AND SYEAR || SMONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}            
             GROUP BY VENDER,SITE_NM,SYEAR,SMONTH 
+            order by VENDER,SITE_NM,SYEAR,SMONTH 
     </select>
      
 </mapper>

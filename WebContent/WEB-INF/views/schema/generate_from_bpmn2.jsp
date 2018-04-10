@@ -3,7 +3,7 @@
 <head>
   	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Entity Create from table</title>
+    <title>Generate Source By BPMN2</title>
 		<%-- 1. jquery --%>
 		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
 		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
@@ -62,8 +62,8 @@
 		<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
 		
 		<%-- 3. Additional files for the Highslide popup effect --%>
-		<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
+		<!-- <script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
 		
 		<%-- 4. local common --%>
 		<script src="js/dashboard.js?version=2017.10.31.01"></script>
@@ -97,6 +97,9 @@
 		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
 		<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
 		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+
+		<!-- xml to js -->
+		<script type="text/javascript" src="/dashboard/js/convertjson/x2js.js"></script>
 	
   
   	<style type="text/css" title="main">
@@ -402,166 +405,196 @@
 
 
   	<script type="text/javascript" title="schemaSearchCondition">
-  	var schemaSearch = {
-			containerId:'searchCondition',
-			type:'Vertical',
-			label:'',
-			
-			elements:[
-				{
-					label:'',
-					type: 'HorizontalLayout',
-					cls: 'srch_box2',
-					containerCss:[
-						{code: 'margin-top', value:'3px'},
-						{code: 'margin-left', value:'20px'},
-						{code: 'margin-right', value:'20px'}
-					],		
-					elements:[
-					 	{
-					 		containerCss:[
-								
-							],
-							label:'',
-							type:'Vertical',
-							elements:[
-								{
-									label:'',
-									type: 'HorizontalLayout',
-									containerCss:[
-							    		{code:'height',value:'30px'}
-							    	],
-									elements:[
-										{
-											type:'SearchHeader',
-											id: 'ownerHead',
-											name: 'ownerHead',
-											label:'',
-											text:'Table Owner',
-											width: '100px'
-										},
-										
-										{
-											type:'multiCombo',
-											id: 'owner',
-											name: 'owner',
-											label:'',
-											text:'Owner',
-											width: '300px',
-											data: function(){
-												var rtnList = [];
-												rtnList.push({USERNAME: "SWDASHBOARD"});
-												rtnList.push({USERNAME: "SOLUTIONPMS"});
-												return rtnList;
+		var schemaSearch = {
+				containerId:'searchCondition',
+				type:'Vertical',
+				label:'',
+				
+				elements:[
+					{
+						label:'',
+						type: 'HorizontalLayout',
+						cls: 'srch_box2',
+						containerCss:[
+							{code: 'margin-top', value:'3px'},
+							{code: 'margin-left', value:'20px'},
+							{code: 'margin-right', value:'20px'}
+						],		
+						elements:[
+							{
+								containerCss:[
+									
+								],
+								label:'',
+								type:'Vertical',
+								elements:[
+									{
+										label:'',
+										type: 'HorizontalLayout',
+										containerCss:[
+											{code:'height',value:'30px'}
+										],
+										elements:[
+											{
+												type:'SearchHeader',
+												id: 'schemaUrlHead',
+												name: 'schemaUrlHead',
+												label:'',
+												text:'BPMN SchemaUrl',
+												width: '120px',
+												containerCss :[
+													{code:'padding-right',value:'10px'}
+												]
+												
 											},
-											options: {
-												cd:'USERNAME',
-												name:'USERNAME'
-											},
-											multiselectOpt:{
-												selectedList: 1 ,
-												multiple: false,
-												selectedText: function(numChecked, numTotal, checkedItems){
-													 //return numChecked + ' of ' + numTotal + ' checked';
-													 var sb = [];
-													 $.each(checkedItems,function(){
-														 sb.push($(this).val());
-													 });
-													 return sb.join(",");
-												}
-											},
-											events:{
+											{
+												type:'input',
+												id: 'schemaUrl',
+												name: 'schemaUrl',
+												label:'SchemaUrl',
+												text:' ',
+												width: '700px',
+												controlCss :[
+													{code:'width',value:'100%'}
+												]
 												
 											}
-										}
-									]
-								}
-								//2line
-								
-								
-							]
-					 	},
-					 	//검색버튼
-					 	{
-					 		label:'',
-					 		type: 'VerticalLayout',
-							cls: 'btn_txt',
-							containerCss:[
-								{code: 'margin-left', value:'10px'}
-								, {code: 'float', value:'right'}
-							]
-					 		, elements:[
-					 			{
-					 				label:'',
-							 		type: 'HorizontalLayout',
-									cls: 'btn_txt',
-									containerCss:[
-										{code: 'margin-left', value:'10px'}
-									],
-									elements:[
-										{
-											type:'Button',
-											id: 'btnCreate',
-											name: 'btnCreate',
-											label:'Create Entity Schema',
-											//width: '50px',
-											cls: 'btn_txt btn_type_e btn_color_a',
-											containerCss:[
-												{code: 'margin-right', value:'3px'}
-											],
-											events:{
-												click : function(){
-													$("#loader").show();
-													setTimeout(function(){ 
-														fn_create_entity();
-														$("#loader").hide();
-													}, 50);
+											
+											
+										]
+									}
+									
+								]
+							},
+							// 검색버튼
+							{
+								label:'',
+								type: 'VerticalLayout',
+								cls: 'btn_txt',
+								containerCss:[
+									{code: 'margin-left', value:'10px'}
+									, {code: 'float', value:'right'}
+								]
+								, elements:[
+									{
+										label:'',
+										type: 'HorizontalLayout',
+										cls: 'btn_txt',
+										containerCss:[
+											{code: 'margin-left', value:'10px'}
+										],
+										elements:[
+											{
+												type:'Button',
+												id: 'btnCreate',
+												name: 'btnCreate',
+												label:'Create Source From BPMN2',
+												//width: '50px',
+												cls: 'btn_txt btn_type_e btn_color_a',
+												containerCss:[
+													{code: 'margin-right', value:'3px'}
+												],
+												events:{
+													click : function(){
+														fn_load_schema();
+													}
 												}
 											}
-										}
-									
-									 ]
-					 			}
-					 		            
-					 		]
-							
-					 	}
-					]
-				}
-			
+										
+										]
+									}
+											
+								]
+								
+							}
+						]
+					}
 				
-			
-			]
-			
-	};
-	var tables = [];
-	var columns = [];
-	var primarykeys = [];
-	var entityInfo = {};
+					
+				
+				]
+				
+		};
 		
+
+		var enityStr = "";
+		var enity = {};
+		var workFlowStr = "";
+		var workFlow = {};
+
+		var config = {};
+		config.skipEmptyTextNodesForObj = true;
+		//config.arrayAccessForm = "property";
+		config.stripWhitespaces = true;
+		config.enableToStringFunc = false;
+		var x2js = new X2JS(config);
+		var genmyModelxmi = "";
+		var schema_bpmn = {};
+		var schema_jpa = {};
+		var v_files = {};
+
   	
   	</script>
 	<script type="text/javascript">
 		$(function () {
+			$("#btn_file_open").change(function(){
+				var file = this.files[0];
+				
+				enityStr = "";
+				var reader = new FileReader();
+				reader.onload = function(progressEvent){
+				  // Entire file
+				  //console.log(this.result);
+
+				  // By lines
+				  var lines = this.result.split('\n');
+				  for(var line = 0; line < lines.length; line++){
+				    //console.log(lines[line]);
+				    enityStr += lines[line];
+				  }
+				  enity = JSON.parse(enityStr);
+				  fn_create_workflow();
+				};
+				reader.readAsText(file);
+			});
+			
 			fn_makeHtml('searchCondition',schemaSearch);
+			$("#schemaUrl").val("https://api.genmymodel.com/projects/_OlwJkAbzEeipbtix-oa2Dg/xmi");
 			$("#loader").hide();
 		});
 		
-		function fn_create_entity(){
-			fn_tables();
-			fn_columns();
-			fn_constraints();
-			fn_make_enity();
+		
+		function fn_file_open(){
+			$("input#btn_file_open").trigger("click");
+		}
+		function fn_create_workflow(){
 			
-			var schema = {
-				tables : tables,
-				columns : columns,
-				primarykeys : primarykeys,
-				entityInfo : entityInfo
-			};
-			var filename= 'entity_'+ $("#owner").val();
-			var blob = new Blob([JSON.stringify(schema)], {type: "text/plain;charset=utf-8"});
-			saveAs(blob, filename+".json");
+			// select workflow file.json
+			// generate webpages in files ?
+			// ... 
+			// or diynamic load webpage
+			// ... param2: wokflow Object
+			// ... param1: workflow_id
+			// ... param3: type
+			
+			
+			
+			
+			
+			// 01. table list
+			// 02. find connections
+			// 02.1. parents
+			// 02.2. childs
+			// 03. make search condition
+			// 04. make grid
+			
+			
+			
+			
+			
+			// var filename= 'entity_'+ $("#owner").val();
+			// var blob = new Blob([JSON.stringify(schema)], {type: "text/plain;charset=utf-8"});
+			// saveAs(blob, filename+".json");
 
 
 			// var newWin1 = window.open("", "MS_WordReport", "width=1200,height=800, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
@@ -575,65 +608,183 @@
 		    // oFrm.submit();		    
 		    // newWin1.focus();	
 		}
-		
-		function fn_tables(){
+
+		function fn_load_schema(){
+			var url = $("#schemaUrl").val();
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
-				data: {sqlid: "codegen.tables",owner: $("#owner").val()}, 
+				url: url ,
+				// data: {sqlid: "codegen.tables",owner: $("#owner").val()}, 
 				async: false,
-				success:  function(response){
-					tables = response.dataList;
+				success:  function(doc,result,response){
+					// console.log(response.responseText);
+					genmyModelxmi = response.responseText;
+					schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
+					fn_create_source();
 				}
 			});
 		}
-		function fn_columns(){
-			$.ajax({
-				url: "/dashboard/genericlListJson.html",
-				data: {sqlid: "codegen.columns",owner: $("#owner").val()}, 
-				async: false,
-				success:  function(response){
-					columns = response.dataList;
-				}
-			});
+
+
+		function fn_create_source(){
+			// find process
+			var processes = _.filter(schema_bpmn.Definitions.rootElements,{"_xsi:type": "bpmn2:Process"});			
+			$.each(processes,function(i,process){
+				fn_start(process);
+			});			
 		}
-		function fn_constraints(){
-			$.ajax({
-				url: "/dashboard/genericlListJson.html",
-				data: {sqlid: "codegen.constraint.primary_key",owner: $("#owner").val()}, 
-				async: false,
-				success:  function(response){
-					primarykeys = response.dataList;
-				}
-			});
+
+		// return start in process flowElements 
+		function fn_start(process){
+			var start = _.find(process.flowElements,{"_xsi:type": "bpmn2:StartEvent"});
+			var sequence = _.find(process.flowElements,{"_xmi:id": start["_outgoing"]});
+			var target_task = _.find(process.flowElements,{"_xmi:id": sequence["_targetRef"]});
+			if(process.depth != undefined)
+				target_task.depth = process.depth + 1;
+			fn_task(process,target_task);
 		}
-		
-		function fn_make_enity(){
-			entityInfo.entities = [];
-			$.each(tables,function(i,table){
-				var entity = {
-						table_name : table.TABLE_NAME,
-						constraints: { 
-							primary_key:[],
-							foreign_key:[]
-						}
-				};
-				entity.columns = [];
-				var vColumns = dataFilter(columns,[{col:'TABLE_NAME',val: table.TABLE_NAME}]);
-				vColumns = $.map(vColumns,function(col){
-					return {
-						column_name: col.COLUMN_NAME,
-						data_type: col.DATA_TYPE,
-						data_length : col.DATA_LENGTH,
-						nullable: col.NULLABLE
+
+		function fn_depth(task){
+			if (task.depth == undefined)
+				return "";
+			else if(task.depth != undefined && task.depth == 0){
+				return "";
+			}else
+				return "_" + task.depth;
+		}
+		function fn_task(process, task){
+
+			// subprocess . file create
+				if( _.isArray(task.eAnnotations.details) 
+					&& _.find(task.eAnnotations.details,{"_key":"file_type"}) != undefined
+					&& process["file_name"] == undefined
+				){
+
+					var file_name = _.find(task.eAnnotations.details,{"_key":"file_name"})._value;
+					var file_path = _.find(task.eAnnotations.details,{"_key":"file_path"})._value;
+					var file_path_type = _.find(task.eAnnotations.details,{"_key":"file_path_type"})._value;
+					task.file_name = file_name;
+					v_files[file_name] = {};
+					v_files[file_name].file_path = file_path;
+					v_files[file_name].file_path_type = file_path_type;
+					v_files[file_name].contents = [];
+					task.depth = -1;
+					
+
+				}
+			
+			// detail properties
+				if( _.isArray(task.eAnnotations.details) 
+					&& _.find(task.eAnnotations.details,{"_key":"file_type"}) == undefined
+					&& process["file_name"] != undefined
+				){
+					
+					$.each(task.eAnnotations.details,function(i,detail){
+						if ( detail["_key"] == "uuid")
+							return true;
+						
+						var content = {
+							"depth": task.depth
+							//"variable": detail["_key"],
+							//"value": detail["_value"]
+						};
+						content.variable = detail["_key"] + fn_depth(task);
+						content.value = fn_keyward_variable(process, detail);
+
+						v_files[process["file_name"]].contents.push(content);
+					});
+
+				}
+			
+			// file name
+				if(process["file_name"] != undefined){
+					task.file_name = process["file_name"];
+				} 
+			
+			// loop start
+				if(_.isArray(task.eAnnotations.details)
+					&& _.find(task.eAnnotations.details,{"_key":"loop_condition"}) != undefined
+				){
+					var content = {
+						"depth": task.depth,
+						is_loop: true,
+						loop_start : true,
+						loop_end : false,
+						"variable": "v_loop" + fn_depth(task),
+						"value": _.find(task.eAnnotations.details,{"_key":"loop_condition"})._value
 					};
-				});
-				entity.columns = vColumns;
-				//===primary_key===
-				var vPrimary = primarykeys.filter()
-				
-				entityInfo.entities.push(entity);				
-			});
+					v_files[process["file_name"]].contents.push(content);
+				}
+			// subProces
+				if(task.flowElements != undefined){
+					task.parent = process;
+					fn_start(task);
+				}
+
+			// loop end
+				if(_.isArray(task.eAnnotations.details)
+					&& _.find(task.eAnnotations.details,{"_key":"loop_condition"}) != undefined
+				){
+					var content = {
+						"depth": task.depth,
+						is_loop: true,
+						loop_start : false,
+						loop_end : true,
+						"variable": "v_loop" + fn_depth(task),
+						"value": _.find(task.eAnnotations.details,{"_key":"loop_condition"})._value
+					};
+					v_files[process["file_name"]].contents.push(content);
+				}
+			
+			// end Process
+				if(task["_outgoing"] == undefined)
+					return;
+
+			// next task
+				var sequence = _.find(process.flowElements,{"_xmi:id": task["_outgoing"]});
+				var target_task = _.find(process.flowElements,{"_xmi:id": sequence["_targetRef"]});
+				if(process.depth != undefined)
+					target_task.depth = process.depth + 1;
+				fn_task(process,target_task);
 		}
+
+		function fn_create_file(){
+
+		}
+
+
+		function fn_create_file_python(){
+
+		}
+
+		function fn_keyward_variable(process, detail){
+			if(detail._key == "path"){ 
+				// defined process 
+				if( _.isArray(process.eAnnotations.details)
+					&& _.find(process.eAnnotations.details,{"_key":"path"}) != undefined
+				){
+					return _.find(process.eAnnotations.details,{"_key":"path"})._key + fn_depth(process) + "+\"/\"+ \"" + detail._value  + "\"";
+				}
+				// find parent
+				else if( process.parent != undefined){
+					return fn_keyward_variable(process.parent,detail);
+				}else{
+					return detail._value;
+				}
+				
+			}else{
+				return detail._value;
+			}
+
+			
+		}
+
+		function fn_get_parent_var(task){
+
+		}
+
+
+
+		
 	</script>
 </head>
 <body  style="min-width:920px" >
@@ -645,7 +796,7 @@
 	
 	<input type="hidden" id="pjtId" name="pjtId" value="${param.pjtId}"/>
 	<input type="hidden" id="category" name="category" value=""/>
-
+	<input type="file" id="btn_file_open" name="btn_file_open" style="display: none" />
 	<div id="searchCondition"></div>
 	<div id="contentMain" style="margin-top: 10px;width: 100%;"></div>
 

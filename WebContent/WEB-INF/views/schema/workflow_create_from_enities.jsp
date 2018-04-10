@@ -4,99 +4,99 @@
   	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Entity Create from table</title>
-    <%-- 1. jquery --%>
-    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
-    <!-- <script src="js/jquery.csv-0.71.js"></script> -->
-    
-    <%-- jqgrid --%>
-    <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
-    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<%-- 1. jquery --%>
+		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
+		<!-- <script src="js/jquery.csv-0.71.js"></script> -->
+		
+		<%-- jqgrid --%>
+		<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
+		
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		
+		<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+		
+		
 	
-	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
-	 
-    
-  
-   <!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-    <link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-    <!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
-    
-    
-    
-    <%-- 2. high charts --%>
-	<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
-	
-	<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
-	
-	<%-- x축 그룹라벨 --%>
-	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
-	<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
-	
-	<%-- 3. Additional files for the Highslide popup effect --%>
-	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
-	
-	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.10.31.01"></script>
-	
-	<%-- 5. local --%>
-	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
-	
-	<%-- multi select --%>
-	<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
-	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
-	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
-	
-	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
-	<script src="/common/js/module.js"></script>
-	
-	<%-- File Saver --%>
-	<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
-	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
-	
-	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
-	
-	<%-- jqueryMohthPicker --%>
-    <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
-   	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
-   	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+		<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+		<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+		<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+		
+		
+		
+		<%-- 2. high charts --%>
+		<!--<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
+		
+		<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+		<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
+		
+		<%-- x축 그룹라벨 --%>
+		<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+		<!-- <script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script> -->
+		
+		<%-- 3. Additional files for the Highslide popup effect --%>
+		<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
+		
+		<%-- 4. local common --%>
+		<script src="js/dashboard.js?version=2017.10.31.01"></script>
+		
+		<%-- 5. local --%>
+		<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
+		
+		<%-- multi select --%>
+		<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
+		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
+		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+		<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+		<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+		<script src="/common/js/module.js"></script>
+		
+		<%-- File Saver --%>
+		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+		
+		<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+		<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+		
+		<%-- jqueryMohthPicker --%>
+		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
+		<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
 	
   
   	<style type="text/css" title="main">
@@ -402,112 +402,111 @@
 
 
   	<script type="text/javascript" title="schemaSearchCondition">
-  	var schemaSearch = {
-			containerId:'searchCondition',
-			type:'Vertical',
-			label:'',
-			
-			elements:[
-				{
-					label:'',
-					type: 'HorizontalLayout',
-					cls: 'srch_box2',
-					containerCss:[
-						{code: 'margin-top', value:'3px'},
-						{code: 'margin-left', value:'20px'},
-						{code: 'margin-right', value:'20px'}
-					],		
-					elements:[
-					 	{
-					 		containerCss:[
-								
-							],
-							label:'',
-							type:'Vertical',
-							elements:[
-								{
-									label:'',
-									type: 'HorizontalLayout',
-									containerCss:[
-							    		{code:'height',value:'30px'}
-							    	],
-									elements:[
-										{
-											type:'SearchHeader',
-											id: 'ownerHead',
-											name: 'ownerHead',
-											label:'',
-											text:' ',
-											width: '100px'
+		var schemaSearch = {
+				containerId:'searchCondition',
+				type:'Vertical',
+				label:'',
+				
+				elements:[
+					{
+						label:'',
+						type: 'HorizontalLayout',
+						cls: 'srch_box2',
+						containerCss:[
+							{code: 'margin-top', value:'3px'},
+							{code: 'margin-left', value:'20px'},
+							{code: 'margin-right', value:'20px'}
+						],		
+						elements:[
+							{
+								containerCss:[
+									
+								],
+								label:'',
+								type:'Vertical',
+								elements:[
+									{
+										label:'',
+										type: 'HorizontalLayout',
+										containerCss:[
+											{code:'height',value:'30px'}
+										],
+										elements:[
+											{
+												type:'SearchHeader',
+												id: 'ownerHead',
+												name: 'ownerHead',
+												label:'',
+												text:' ',
+												width: '100px'
+												
+											}
 											
-										}
-										
-										
-									]
-								}
-								
-							]
-					 	},
-					 	//검색버튼
-					 	{
-					 		label:'',
-					 		type: 'VerticalLayout',
-							cls: 'btn_txt',
-							containerCss:[
-								{code: 'margin-left', value:'10px'}
-								, {code: 'float', value:'right'}
-							]
-					 		, elements:[
-					 			{
-					 				label:'',
-							 		type: 'HorizontalLayout',
-									cls: 'btn_txt',
-									containerCss:[
-										{code: 'margin-left', value:'10px'}
-									],
-									elements:[
-										{
-											type:'Button',
-											id: 'btnCreate',
-											name: 'btnCreate',
-											label:'Create Work Flow From enity',
-											//width: '50px',
-											cls: 'btn_txt btn_type_e btn_color_a',
-											containerCss:[
-												{code: 'margin-right', value:'3px'}
-											],
-											events:{
-												click : function(){
-													fn_file_open();
-//													$("#loader").show();
-//													setTimeout(function(){ 
-//														fn_create_workflow();
-//														$("#loader").hide();
-//													}, 50);
+											
+										]
+									}
+									
+								]
+							},
+							//검색버튼
+							{
+								label:'',
+								type: 'VerticalLayout',
+								cls: 'btn_txt',
+								containerCss:[
+									{code: 'margin-left', value:'10px'}
+									, {code: 'float', value:'right'}
+								]
+								, elements:[
+									{
+										label:'',
+										type: 'HorizontalLayout',
+										cls: 'btn_txt',
+										containerCss:[
+											{code: 'margin-left', value:'10px'}
+										],
+										elements:[
+											{
+												type:'Button',
+												id: 'btnCreate',
+												name: 'btnCreate',
+												label:'Create Work Flow From enity',
+												//width: '50px',
+												cls: 'btn_txt btn_type_e btn_color_a',
+												containerCss:[
+													{code: 'margin-right', value:'3px'}
+												],
+												events:{
+													click : function(){
+														fn_file_open();
+														// $("#loader").show();
+														// setTimeout(function(){ 
+														// 	fn_create_workflow();
+														// 	$("#loader").hide();
+														// }, 50);
+													}
 												}
 											}
-										}
-									
-									 ]
-					 			}
-					 		            
-					 		]
-							
-					 	}
-					]
-				}
-			
+										
+										]
+									}
+											
+								]
+								
+							}
+						]
+					}
 				
-			
-			]
-			
-	};
-	
-	var enityStr = "";
-	var enity = {};
-	var workFlowStr = "";
-	var workFlow = {};
+					
+				
+				]
+				
+		};
 		
+		var enityStr = "";
+		var enity = {};
+		var workFlowStr = "";
+		var workFlow = {};
   	
   	</script>
 	<script type="text/javascript">
@@ -566,21 +565,21 @@
 			
 			
 			
-//			var filename= 'entity_'+ $("#owner").val();
-//			var blob = new Blob([JSON.stringify(schema)], {type: "text/plain;charset=utf-8"});
-//			saveAs(blob, filename+".json");
+			// var filename= 'entity_'+ $("#owner").val();
+			// var blob = new Blob([JSON.stringify(schema)], {type: "text/plain;charset=utf-8"});
+			// saveAs(blob, filename+".json");
 
 
-//			var newWin1 = window.open("", "MS_WordReport", "width=1200,height=800, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
-//			
-//			var oFrm = document.getElementById("formReport");
-//			oFrm.searchJson.value = JSON.stringify(schema);
-//			
-//			oFrm.action =  '/dashboard/performanceReportJson.html';
-//			oFrm.method = "post";
-//			oFrm.target = 'MS_WordReport';
-//		    oFrm.submit();		    
-//		    newWin1.focus();	
+			// var newWin1 = window.open("", "MS_WordReport", "width=1200,height=800, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+			
+			// var oFrm = document.getElementById("formReport");
+			// oFrm.searchJson.value = JSON.stringify(schema);
+			
+			// oFrm.action =  '/dashboard/performanceReportJson.html';
+			// oFrm.method = "post";
+			// oFrm.target = 'MS_WordReport';
+		    // oFrm.submit();		    
+		    // newWin1.focus();	
 		}
 		
 	</script>

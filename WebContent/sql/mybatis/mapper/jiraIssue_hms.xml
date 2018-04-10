@@ -573,7 +573,7 @@
 			jira.PROJECT_KEY,
 			jira.issue_num,
 			jira.PROJECT_KEY || '-' || jira.issue_num as key_issuenum,
-			solutionpms.fn_user_name(jira.ASSIGNEE_ACCOUNT)  ASSIGNEE_ACCOUNT,
+			solutionpms.fn_user_name@Pms_dsbd_inf(jira.ASSIGNEE_ACCOUNT)  ASSIGNEE_ACCOUNT,
 			nvl(cg.category,'Others') as category,
 			jira.component,
 			jira.ISSUESTATUS,
