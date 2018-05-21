@@ -37,7 +37,8 @@
     <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/dialog.css" rel="stylesheet"/>
     <link href="/dashboard/js/jointjs/demos/rappid/apps/QAD/css/index.css" rel="stylesheet"/>
 
-	<script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script>
+	<!-- <script src="http://resources.jointjs.com/tutorials/joint/node_modules/lodash/index.js"></script> -->
+	<script src="/dashboard/js/jointjs/lodash.4.17.5.js"></script>
 	<script src="http://resources.jointjs.com/tutorials/joint/node_modules/backbone/backbone.js"></script>
 	<!--<script src="http://resources.jointjs.com/tutorials/joint/build/joint.min.js"></script>-->
 	<!-- <script src="/dashboard/js/jointjs/joint.src.js"></script> -->
@@ -114,13 +115,13 @@
 	}
 	.html-element {
 	    position: absolute;
-	    background: #3498DB;
+	    /* background: #3498DB; */
 	    /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
 	    pointer-events: none;
 	    -webkit-user-select: none;
 	    border-radius: 4px;
 	    border: 2px solid #2980B9;
-	    box-shadow: inset 0 0 5px black, 2px 2px 1px gray;
+	    /* box-shadow: inset 0 0 5px black, 2px 2px 1px gray; */
 	    /*padding: 5px;*/
 	    padding: 0;
 	    
@@ -195,6 +196,24 @@
 	    height: 16px;
 	    width: 100%;
 	}
+	.html-element .entity-title {
+		height: 30px;
+		padding: 6px 8px;
+		color: #2D2D2D;
+		text-align: center;
+		border-bottom: 1px solid #8AA0AA;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+		background: #CBE6FD linear-gradient(to bottom, #F4FAFF 0%, #CBE6FD 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#F4FAFF, endColorstr=#CBE6FD);
+		-moz-transition: border-color linear 200ms;
+		-o-transition: border-color linear 200ms;
+		-webkit-transition: border-color linear 200ms;
+		transition: border-color linear 200ms;
+	}
 	.html-element label {
 	    color: #333;
 	    text-shadow: 1px 0 0 lightgray;
@@ -204,14 +223,16 @@
 	    /* position: absolute; */
 	    /* top: 2px; */
 	    /* right: 9px; */
-	    color: white;
+	    color: rgb(20, 130, 233);
 	    font-size: 10px;
 	}
 	.joint-paper.joint-theme-default {
 	    background-color: transparent;
 	}
   </style>
-  
+  <style title="custom">
+	
+  </style>
   <script type="text/javascript">
   		_.templateSettings = {
 		    interpolate: /\<\@\=(.+?)\@\>/gim,
@@ -222,7 +243,7 @@
 	 	joint.shapes.html = {};
 	    joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
 			// markup: '<rect class="body"/><text class="question-text"/><g class="options"></g><path class="btn-add-option" d="M5,0 10,0 10,5 15,5 15,10 10,10 10,15 5,15 5,10 0,10 0,5 5,5z"/>',
-    		markupMinus: '<g class="option"><rect class="option-rect"/><path class="btn-remove-option" d="M0,0 15,0 15,5 0,5z"/><text class="option-text"/></g>',
+    		// markupMinus: '<g class="option"><rect class="option-rect"/><path class="btn-remove-option" d="M0,0 15,0 15,5 0,5z"/><text class="option-text"/></g>',
 	        defaults: joint.util.deepSupplement({
 	            type: 'html.Element',
 	            attrs: {
@@ -232,16 +253,19 @@
 	    });
 	  
 	    joint.shapes.html.ElementView = joint.dia.ElementView.extend({
-	        template: [
+			template: [
 	            '<div class="html-element">',
 	            '<button class="delete">x</button>',
 	            '<button class="add">+</button>',
-	            '<input class="title" type="text" value="" />',
+				// '<input class="title" type="text" value="" />',
+				'<div class="entity-title" style="overflow:hidden">',
+				// '<span>Table Name</span>',
+				'</div>',	
 	            '<div class="entity-container" style="overflow:hidden">',	            
 	            '</div>',
 	            '</div>'
 	        ].join(''),
-	        initialize: function() {
+			initialize: function() {
 	            _.bindAll(this, 'updateBox');
 	            joint.dia.ElementView.prototype.initialize.apply(this, arguments);
 	            
@@ -250,6 +274,22 @@
 				this.expand = false;
 				this.expandPosition = null;
 				this.$box = $(_.template(this.template)());
+				var model = this.model;
+				this.$box.find(".entity-container").sortable(
+					{
+						revert: true
+						, update: function( event, ui ) {
+							var column_names = $(this).find(".column-contents");
+							var cols = model.get("column_names");
+							var cols1 = [];
+							$.each(column_names,function(i,col){
+								var col_model = _.find(cols, {col_index: $(col).attr("id")} );
+								cols1.push(col_model);
+							});
+							model.set("column_names",cols1);
+						}
+					}
+				);
 	            //// Prevent paper from handling pointerdown.
 	            //this.$box.find('input,select').on('mousedown click', function(evt) {
 	            //    evt.stopPropagation();
@@ -257,10 +297,31 @@
 	            this.$box.find('div[name=div_column_name]').on('mousedown click dblclick', function(evt) {
 	                evt.stopPropagation();
 	            });
-	            //// This is an example of reacting on the input change and storing the input data in the cell model.
-	            this.$box.find('input').on('change', _.bind(function(evt) {
-	                this.model.set('table_name', $(evt.target).val());
-	            }, this));
+
+				// table_name Start
+				// var elHeader = $(document.createElement("div"));
+				var elHeader = this.$box.find("div.entity-title");
+				var reactHeaderOption = {
+					// markupMinus : this.model.markupMinus,
+					table_name : 'TableName',
+					editable: true,
+					mode: "read",
+					edit_style: {
+						width: "100%",
+						height: "20px"
+					},
+					fn_submit: function(){
+						model.set("table_name" , this.state.table_name );
+					}
+				};
+				var reactHeader = window.fn_tableHeader(elHeader[0], reactHeaderOption );
+				reactHeaderOption.react = reactHeader;
+				reactHeaderOption.el = elHeader[0];
+				//this.$box.find("div.entity-title").append(elHeader);
+				this.model.set('table_name', reactHeaderOption.table_name);
+				// table_name End
+
+
 	            //this.$box.find('select').on('change', _.bind(function(evt) {
 	            //    this.model.set('select', $(evt.target).val());
 	            //}, this));
@@ -269,10 +330,19 @@
 	            this.$box.find('.add').on('click', _.bind(function(evt) {
 	                var el = $(document.createElement("div"));	                
 	                el.attr("name","div_column_name");
-	                
+					var col_index_max = _.maxBy(this.model.get("column_names"),function(o){
+						// return o.col_index;
+						return parseInt(o.col_index.match(/_([\d]+)\b/)[1])
+					});
+					var col_index1 = 0;
+					if(col_index_max == undefined)
+						col_index1 = 1;
+					else
+						col_index1 = parseInt(col_index_max.col_index.match(/_([\d]+)\b/)[1]) +1;
+
 	                // index
-	                var col_index = this.$box.find("[name=div_column_name]").length + 1;
-	                col_index = "column_" + col_index;
+					// var col_index = this.$box.find("[name=div_column_name]").length + 1;
+	                var col_index = "column_" + col_index1;
 	                el.attr("id",col_index);
 	                //el.css("cursor","pointer");
 	                
@@ -294,7 +364,7 @@
 					// start. react
 					var v_model = this.model;
 	                var colOption = {
-						markupMinus : this.model.markupMinus,
+						// markupMinus : this.model.markupMinus,
 						column_name : col_index,
 	                	col_index : col_index,
 	                	editable: true,
@@ -317,12 +387,17 @@
 							v_model.set("column_names" , v_cols );
 							var node = ReactDOM.findDOMNode(this);
 							ReactDOM.unmountComponentAtNode(el[0]);
+							el.remove();
 						}
 	                	
 					};
 					
 					
-					var reactel = window.fn_column(el[0], colOption );
+					var react = window.fn_column(el[0], colOption );
+					colOption.react = react;
+					colOption.el = el[0];
+					
+
 					var cols = this.model.get("column_names");
 					cols.push(colOption);
 	                this.model.set("column_names",cols);
@@ -343,8 +418,10 @@
 	                //this.model.set({"size":{width:boxW,  height:Math.max(newH, boxH )}});	                
 	                //this.updateBox();
 	                
-	                var h = parseInt(this.$box.css("height").match(/[\d]+/g)[0])-20;
-	                this.$box.find("div.entity-container").css("height",h + "px");
+					// var h = parseInt(this.$box.css("height").match(/[\d]+/g)[0])-20;
+					var h_title = this.$box.find("div.entity-title").outerHeight();
+					var h = this.$box.outerHeight() -  h_title -5 ;
+	                this.$box.find("div.entity-container").css("height", h + "px");
 	                
 	                
 	                el.on('focusin', _.bind(function(evt) {
@@ -368,12 +445,14 @@
 		            
 	               
 	            }, this));
-	            
 	            //// Update the box position whenever the underlying model changes.
 	            this.model.on('change', this.updateBox, this);
 	            //// Remove the box when the model gets removed from the graph.
 	            this.model.on('remove', this.removeBox, this);
-	            this.model.on('add', this.addInput, this);
+				this.model.on('add', this.addInput, this);
+				
+
+
 	            this.updateBox();
 	        },
 	        render: function() {
@@ -397,7 +476,12 @@
 	            });
 	        },
 	        removeBox: function(evt) {
-	            this.$box.remove();
+				$.each(this.model.get("column_names"),function(i,col){
+					ReactDOM.unmountComponentAtNode(col.el);
+				});
+				ReactDOM.unmountComponentAtNode(this.$box.find("div.entity-title")[0]);
+				this.$box.remove();
+				
 	        },
 	        addInput: function(evt) {
 	            var a = "aaa";
@@ -438,7 +522,8 @@
 				var mod_w = origin_w + diff_x;
 				if(this.expand && this.expandPosition == 2){
 					this.model.set({size:{width: mod_w ,height: mod_h }}) ;		
-					this.$box.find("div.entity-container").css("height", ( (mod_h -20)  + "px"));	
+					var h_title = this.$box.find("div.entity-title").outerHeight();
+					this.$box.find("div.entity-container").css("height", ( (mod_h - h_title - 3 )  + "px"));	
 						
 				}else {
 					joint.dia.ElementView.prototype.pointermove.apply(this, [evt, x, y]);
@@ -459,6 +544,7 @@
   		var paper;
   
 		$(function() {
+			
 			initShapeMenu();
 			initPaper();
 			initDragible();
@@ -492,7 +578,13 @@
 	  	        height: '100%',
 	  	        model: graph,
 	  	        gridSize: 1
-	  	    });
+			  });
+			
+			$("#canvas").keydown(function(e){
+				if(paper.currentBox != undefined){
+					// shot-cut key ==> add column
+				}
+			});
 			
 			// paper = new joint.dia.Paper({graph.on('all', function(eventName, cell) {
 		 	    // console.log(arguments);
@@ -504,33 +596,33 @@
 					//evt.stopPropagation();
 				}
 			);
-			// paper.on('cell:pointerdown', function(cellView, evt, x, y) {
-			    // var bbox = cellView.getBBox();
-			    // var strokeWidth = cellView.model.attr('rect/stroke-width') || 1;
-			    // // console.log(isBorderClicked(bbox, x, y, strokeWidth))
-				// // console.log(strokeWidth);
+			paper.on('cell:pointerdown', function(cellView, evt, x, y) {
+			    var bbox = cellView.getBBox();
+				var strokeWidth = cellView.model.attr('rect/stroke-width') || 1;
+				
+				paper.currentBox = cellView.$box;
+				// console.log(isBorderClicked(bbox, x, y, strokeWidth))
+				// console.log(strokeWidth);
 			    
 			
-			    // /* cellView.highlight(
+			    // cellView.highlight(
 		   		// null ,//defaults to cellView.el  
 		   		// {
 		        // highlighter: {
-		            // name: 'stroke',
-		            // options: {
-		                // //padding: 10,
-		                // //rx: 5,
-		                // //ry: 5,
-		                // attrs: {
-		                    // 'stroke-width': 3,
-		                    // stroke: '#FF0000'
-		                // }
-		            // }
-		        // }
-		    // }); */
+		        //     name: 'stroke',
+		        //     options: {
+		        //         //padding: 10,
+		        //         //rx: 5,
+		        //         //ry: 5,
+		        //         attrs: {
+		        //             'stroke-width': 3,
+		        //             stroke: '#FF0000'
+		        //         }
+		        //     }
+				// }
+				
+			}); 
 			    
-			    
-			    
-			// });
 		}
 		
 		function initShapeMenu(){
@@ -820,7 +912,7 @@
 	    	this.setState({value: e.target.value });	    	
 	    }
 	    
-	    
+	   
 	    
 	    render(){
 	    	
@@ -915,7 +1007,7 @@
 	    	if(this.props.options.editable == false || this.state.mode == "read"){
 	    		return(
 						
-						<div className="widget-contents" style={{width:"100%",height:"100%", cursor:"pointer", pointerEvents:"auto"}} onDoubleClick={this.dblclick.bind(this)} >
+						<div className="widget-contents" style={{width:"fit-content",height:"100%", cursor:"pointer", pointerEvents:"auto"}} onDoubleClick={this.dblclick.bind(this)} >
 							<span className="glyphicon glyphicon-minus" 
 								onClick={this.fn_delete.bind(this)} 
 							></span>
@@ -990,7 +1082,96 @@
 		return ReactDOM.render(<Column options={options}/>, cell);
 	}
 	
-	
+
+	class TableHeader extends React.Component {
+		
+		constructor(props,container) {
+	        super(props);
+	        // Configure default state
+			this.state = this.props.options;
+			//this.dblclick.bind(this);
+			this.changeHandler = this.changeHandler.bind(this);
+			this.container = container;
+	    }
+	    
+	    dblclick(){
+	    	// alert('aaaaa');
+	    	if(this.state.editable == true){
+	    		this.setState({mode: "edit"});
+	    	}
+	    }
+		
+		handleKeyPress(event){
+			if(event.key == 'Enter'){
+				//this.setState({mode: "read"});
+				this.confirm();
+			}
+		}
+		blurHandler(event){
+			this.confirm();
+			// console.log('blur');
+		}
+
+	    confirm(){
+	    	this.props.options.fn_submit.call(this);
+	    	this.setState({mode: "read"});
+		}		
+	    
+	    cancel(){
+	    	this.setState({table_name: this.props.options.table_name});
+	    	this.setState({mode: "read"});
+	    }
+	    
+	    changeHandler(e){
+	    	//alert("changeHandler");
+	    	this.setState({table_name: e.target.value });	    	
+	    }    
+	    
+		componentDidMount(){
+			//this.nameInput.focus(); 
+			var aaa = "aaaa";
+		}
+		componentDidUpdate(prevProps, prevState){
+			//var aaa = "aaaa";
+			//console.log("componentDidUpdate");
+			if(this.nameInput != null && prevState.mode == "read"){
+				this.nameInput.focus();
+				this.nameInput.select();
+			}
+				
+		}
+	    
+	    render(){
+	    	
+	    	if(this.props.options.editable == false || this.state.mode == "read"){
+	    		return(
+					<div className="widget-contents" style={{width:"",height:"100%", cursor:"pointer", pointerEvents:"auto"}} onDoubleClick={this.dblclick.bind(this)} >
+					<div className="gwt-Label">{this.state.table_name}</div>
+					</div>
+	        	);					
+
+	    	}else if(this.state.mode == "edit") {	  
+	    		return(
+					<div style={{width:"100%"}} >
+						<input style={this.props.options.edit_style} 
+							onChange={this.changeHandler.bind(this)} 
+							value={this.state.table_name}
+							onKeyPress={this.handleKeyPress.bind(this)} 
+							onBlur={this.blurHandler.bind(this)} 
+							ref={(input) => { this.nameInput = input; }} 
+						></input>
+					</div>
+	        	);
+				
+	    	}
+	        
+	            
+	    }
+	    
+	}
+	window.fn_tableHeader = function(cell, options){
+		return ReactDOM.render(<TableHeader options={options}/>, cell);
+	}
 	
 </script>
 </html>
