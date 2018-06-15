@@ -54,7 +54,10 @@ function fn_load_schema(){
             // console.log(response.responseText);
             genmyModelxmi = response.responseText;
             schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
-            fn_create_source();
+            // fn_create_source();
+            var generator = new Generator(schema_bpmn);
+            generator.fn_source();
+            // generator.fn_fileSave();
         }
     });
 }

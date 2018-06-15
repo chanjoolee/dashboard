@@ -102,6 +102,9 @@
 		<script type="text/javascript" src="/dashboard/js/convertjson/x2js.js"></script>
 		<script type="text/javascript" src="/dashboard/js/bpmn/python.js"></script>
 		<script type="text/javascript" src="/dashboard/js/bpmn/common.js"></script>
+		<script type="text/javascript" src="/dashboard/js/bpmn/class_common.js"></script>
+		<script type="text/javascript" src="/dashboard/js/bpmn/class_python.js"></script>
+		<script type="text/javascript" src="/dashboard/js/bpmn/class_python_txt.js"></script>
 		
   
   	<style type="text/css" title="main">
@@ -545,7 +548,7 @@
 		var schema_bpmn = {};
 		var schema_jpa = {};
 		var v_files = {};
-		var v_src = {};
+		var v_src = {};		
   	
   	</script>
 	<script type="text/javascript">
@@ -574,6 +577,7 @@
 			fn_makeHtml('searchCondition',schemaSearch);
 			$("#schemaUrl").val("https://api.genmymodel.com/projects/_OlwJkAbzEeipbtix-oa2Dg/xmi");
 			$("#loader").hide();
+			
 		});
 		
 		
