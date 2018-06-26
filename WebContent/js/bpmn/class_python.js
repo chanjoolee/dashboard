@@ -354,7 +354,7 @@ PythonGenerator.prototype.fn_data_output = function(task, _indent){
 
             
                 // excuete
-                src = _this.fn_indent_write(indent) + "cur.execute(v_query ,v_binding)"; _this.sources.push(src);
+                src = _this.fn_indent_write(indent) + "v_cur.execute(v_query ,v_binding)"; _this.sources.push(src);
                 // db connection end
 
                 // // test code
@@ -441,15 +441,15 @@ PythonGenerator.prototype.fn_data_output = function(task, _indent){
                 }
             }
             // excuete
-            src = _this.fn_indent_write(indent) + "cur.execute(v_query ,v_binding)"; _this.sources.push(src);
+            src = _this.fn_indent_write(indent) + "v_cur.execute(v_query ,v_binding)"; _this.sources.push(src);
 
             // query commit
-            src = _this.fn_indent_write(indent);	src += "con.commit()"; _this.sources.push(src);
+            src = _this.fn_indent_write(indent);	src += "v_con.commit()"; _this.sources.push(src);
             // close 
-            src = _this.fn_indent_write(indent);	src += "if cur:"; _this.sources.push(src);
-            src = _this.fn_indent_write(indent);	src += "\tcur.close()"; _this.sources.push(src);
-            src = _this.fn_indent_write(indent);	src += "if con:"; _this.sources.push(src);
-            src = _this.fn_indent_write(indent);	src += "\tcon.close()"; _this.sources.push(src);
+            src = _this.fn_indent_write(indent);	src += "if v_cur:"; _this.sources.push(src);
+            src = _this.fn_indent_write(indent);	src += "\tv_cur.close()"; _this.sources.push(src);
+            src = _this.fn_indent_write(indent);	src += "if v_con:"; _this.sources.push(src);
+            src = _this.fn_indent_write(indent);	src += "\tv_con.close()"; _this.sources.push(src);
 
         }
     }

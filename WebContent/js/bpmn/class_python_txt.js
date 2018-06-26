@@ -13,13 +13,13 @@ PythonGenerator.prototype.fn_txt_file_parsing = function(task){
             if ( task.parent.keyword_use_expression == true){
                     
                 var detail_key  = _.find(task.eAnnotations.details,{"_key":"name"});
+                var detail_regex  = _.find(task.eAnnotations.details,{"_key":"regex"});
                 if ( detail_key != null ){
                     src = _this.fn_indent_write(indent); src += "v_pattern_str  += '(?P<" + detail_key._value +  ">'" ;  _this.sources.push(src);
+                    src = _this.fn_indent_write(indent); src += "v_pattern_str  += '" + detail_regex._value + ")'" ;
+                }else{
+                    src = _this.fn_indent_write(indent); src += "v_pattern_str  += '" + detail_regex._value + "'" ;
                 }
-                var detail_regex  = _.find(task.eAnnotations.details,{"_key":"regex"});
-                src = _this.fn_indent_write(indent); src += "v_pattern_str  += '" + detail_regex._value + "'" ;
-                if ( detail_key != null )
-                    src += ")" ; 
                 _this.sources.push(src);				
             }
         };
