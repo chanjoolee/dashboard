@@ -105,6 +105,8 @@
 		<script type="text/javascript" src="/dashboard/js/bpmn/class_common.js"></script>
 		<script type="text/javascript" src="/dashboard/js/bpmn/class_python.js"></script>
 		<script type="text/javascript" src="/dashboard/js/bpmn/class_python_txt.js"></script>
+		<script type="text/javascript" src="/dashboard/js/bpmn/class_python_txt.js"></script>
+		<script type="text/javascript" src="/dashboard/js/bpmn/java_jsp/class_javaJsp.js"></script>
 		
   
   	<style type="text/css" title="main">

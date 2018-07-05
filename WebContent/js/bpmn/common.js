@@ -44,6 +44,7 @@ function fn_create_workflow(){
     // newWin1.focus();	
 }
 
+var generator
 function fn_load_schema(){
     var url = $("#schemaUrl").val();
     $.ajax({
@@ -55,7 +56,7 @@ function fn_load_schema(){
             genmyModelxmi = response.responseText;
             schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
             // fn_create_source();
-            var generator = new Generator(schema_bpmn);
+            generator = new Generator(schema_bpmn);
             generator.fn_source();
             // generator.fn_fileSave();
         }
