@@ -336,7 +336,7 @@
 	}
 	
 	function controllerInfo(){
-		var data = dataFilter(spec,[{col:'CODE_NAME',val:'PRODUCT_CONTROLLER'},{col:'REP_YN',val:'N'}]);
+		var data = dataFilter(spec,[{col:'CODE_NAME',val:'Controller_Name'},{col:'REP_YN',val:'N'}]);
 		if(data.length>0){
 			$("#controllerMapName").text(data[0].CODE_VALUE_NAME);
 		}
