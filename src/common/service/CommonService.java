@@ -17,22 +17,25 @@ import java.util.Map.Entry;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sun.jersey.core.header.ContentDisposition;
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 
 import common.dao.CommonDao;
 import common.dao.PmsDao;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service
@@ -44,6 +47,9 @@ public class CommonService {
     
     @Autowired
     private PmsDao pmsDao;
+    
+    @Autowired
+	DataSourceTransactionManager transactionManager;
     
     @SuppressWarnings("rawtypes")
 	public Map selectOne(String statement,Object parameter) {
@@ -78,6 +84,42 @@ public class CommonService {
 			dao.update(statement, parameter);
 		}
         
+    }
+	
+	@SuppressWarnings("rawtypes")
+    public void updateAutoSave(String statement,Object parameter) {
+		Map<Object,Object> param = (Map<Object,Object>)parameter;	 
+		net.sf.json.JSONArray autoJson = (net.sf.json.JSONArray)param.get("autoJson");
+		if(autoJson != null){
+				
+				for( int i = 0; i < autoJson.size(); i++){
+					net.sf.json.JSONObject update = (net.sf.json.JSONObject)autoJson.get(i);
+					param.put("detail",update);
+					System.out.println("update 11111111 : " + update.toString());
+					dao.update(statement, param);
+				}
+		}
+    }
+	
+	@SuppressWarnings("rawtypes")
+    public int updateAllSave(String statement,Object parameter) {
+		int result = 0;
+		Map<Object,Object> param = (Map<Object,Object>)parameter;
+		net.sf.json.JSONArray autoJson = (net.sf.json.JSONArray)param.get("autoJson");
+		if(autoJson != null){
+				for( int i = 0; i < autoJson.size(); i++){
+					net.sf.json.JSONObject update = (net.sf.json.JSONObject)autoJson.get(i);
+					param.put("detail",update);
+					
+					if( "U".equals( update.get("status") ) ) {
+						result += dao.insert(statement, param);
+					}else {
+						result += dao.insert(statement, param);
+					}
+					
+				}
+		}
+		return Math.abs(result);
     }
 	
 	@SuppressWarnings("rawtypes")
@@ -421,6 +463,17 @@ public class CommonService {
 		    		vo.put("origindata", origindataJson);
 		    	}
 			}
+			/**
+			 * 201804. kimdoyoun 추가
+			 * */
+			if(keyStr.equals("autoJson")){
+				Object autoJsonStr = vo.get("autoJson");
+		    	if(autoJsonStr != null){
+		    		JSONArray autoJson = JSONArray.fromObject(autoJsonStr.toString());
+		    		vo.put("autoJsonOrigin", autoJsonStr.toString());
+		    		vo.put("autoJson", autoJson);
+		    	}
+			}
 			
 		   
 		}
@@ -429,6 +482,37 @@ public class CommonService {
 	}
 
 	
-
+	public void updateAllSaveBeforeDel(String statement,Object parameter) {
+		int result = 0;
+		Map<Object,Object> param = (Map<Object,Object>)parameter;
+		net.sf.json.JSONArray autoJson = (net.sf.json.JSONArray)param.get("autoJson");
+		if(autoJson != null){
+			net.sf.json.JSONObject delete = (net.sf.json.JSONObject)autoJson.get(0);
+			param.put("detail",delete);
+			result += dao.delete("dashboard.ssd_sm.testSetDtlGridSave.beforeDel", param);
+		}
+	}
+	
+	
+	public void transactionTest(Map<Object,Object> searchVO) {
+		DefaultTransactionDefinition def = null ;
+		TransactionStatus status = null ;
+		try{
+			def = new DefaultTransactionDefinition();
+			def.setName("transactionTest");
+			def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+			status = transactionManager.getTransaction(def);
+			
+			dao.update("dashbaord.test.transaction.1", searchVO);
+			dao.update("dashbaord.test.transaction.2", searchVO);
+			
+			transactionManager.commit(status);
+			searchVO.put("result", "success");
+		}catch (Exception ex){
+			transactionManager.rollback(status);
+			searchVO.put("result", "fail: " + ex.getMessage());
+		}
+	}
+	
 	
 }

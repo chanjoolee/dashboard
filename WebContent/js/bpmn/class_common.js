@@ -19,25 +19,45 @@ Generator.prototype.init = function(){
 // return start in process flowElements 
 Generator.prototype.fn_start = function(process){
     var _this = this;
+    var target_task ;
     var start = _.find(process.flowElements,{"_xsi:type": "bpmn2:StartEvent"});
-    if ( start == undefined)
+    if ( start == undefined){
+        if(_.isArray(process.flowElements)){
+            target_task = _.find(process.flowElements, function(flow){
+                if ( flow.eAnnotations == undefined )
+                    return false;
+                var isStart = _.find(flow.eAnnotations.details,{_key: "keyword_is_start"});
+                if (isStart != undefined)
+                    return true;
+            });
+            if(target_task == undefined)
+                return;
+        }else{
+            target_task = process.flowElements;
+        }
+        
+        this.fn_task(process,target_task);
         return;
-    // var sequence = _.find(process.flowElements,{"_xmi:id": start["_outgoing"]});
-    var sequence = this.findAll(start["_outgoing"], this.processes);
-    var target_task = _.find(process.flowElements,{"_xmi:id": sequence["_targetRef"]});
-    if(process.depth != undefined)
-        target_task.depth = process.depth + 1;
-    
-    if(process["file_name"] != undefined){
-        var content = {						
-            "task": target_task,
-            "depth": target_task.depth,
-            // "detail": detail,
-            "is_start": true
-        };
     }
-    target_task.is_start = true;
-    _this.fn_task(process,target_task);
+    else{
+        // var sequence = _.find(process.flowElements,{"_xmi:id": start["_outgoing"]});
+        var sequence = this.findAll(start["_outgoing"], this.processes);
+        var target_task = _.find(process.flowElements,{"_xmi:id": sequence["_targetRef"]});
+        if(process.depth != undefined)
+            target_task.depth = process.depth + 1;
+        
+        if(process["file_name"] != undefined){
+            var content = {						
+                "task": target_task,
+                "depth": target_task.depth,
+                // "detail": detail,
+                "is_start": true
+            };
+        }
+        target_task.is_start = true;
+        _this.fn_task(process,target_task);
+    }
+    
 }
 
 Generator.prototype.fn_task = function(process, task){

@@ -61,13 +61,33 @@ JspGenerator.prototype.fn_indent_write = Generator.prototype.fn_indent_write;
 
 JspGenerator.prototype.fn_start = function(process){
     var _this = this;
+    var target_task
     var start = _.find(process.flowElements,{"_xsi:type": "bpmn2:StartEvent"});
-    if ( start == undefined)
+    if ( start == undefined){
+        if(_.isArray(process.flowElements)){
+            target_task = _.find(process.flowElements, function(flow){
+                if ( flow.eAnnotations == undefined )
+                    return false;
+                var isStart = _.find(flow.eAnnotations.details,{_key: "keyword_is_start"});
+                if (isStart != undefined)
+                    return true;
+            });
+            if(target_task == undefined)
+                return;
+        }else{
+            target_task = process.flowElements;
+        }
+        
+        this.fn_task(process,target_task);
         return;
-    // var sequence = _.find(process.flowElements,{"_xmi:id": start["_outgoing"]});
-    var sequence = this.findAll(start["_outgoing"], _this.process.flowElements);
-    var target_task = _.find(process.flowElements,{"_xmi:id": sequence["_targetRef"]});
-    this.fn_task(process,target_task);
+    }else {
+        // var sequence = _.find(process.flowElements,{"_xmi:id": start["_outgoing"]});
+        var sequence = this.findAll(start["_outgoing"], _this.process.flowElements);
+        var target_task = _.find(process.flowElements,{"_xmi:id": sequence["_targetRef"]});
+        this.fn_task(process,target_task);
+    }
+        
+    
 }
 
 JspGenerator.prototype.fn_process_sequence = function(process,task,sequence, _indent){
@@ -421,34 +441,79 @@ JspGenerator.prototype.fn_schema = function(task){
     var detail_schema_type = _.find(task.eAnnotations.details, {"_key":"schema_type"});
     var detail_schema_var = _this.fn_find_schema_var(task);    
     if( detail_schema_type != undefined){
-        var top_obj_schema = _.find( _this.src_schemas, {"name": detail_schema_var.detail._value});
-        var taskId = task["_xmi:id"]
-        var obj_schema = {
-            id : taskId ,
-            type : detail_schema_type._value
-        };
-
-        if (top_obj_schema == undefined){
-            top_obj_schema = {
-                name : detail_schema_var.detail._value ,
-                schema : obj_schema
-            };
-            _this.src_schemas.push(top_obj_schema);
-        }
-
-        var parent_schema_task = _this.fn_parent_schema(task);
-        if( parent_schema_task != null){
-            // var parent_schema =  findAll( parent_schema_task.id, top_obj_schema.schema );
-            var parent_schema = _this.generator.findAllFromObject(parent_schema_task.id, top_obj_schema.schema );
-            if (parent_schema.elements == undefined)
-                parent_schema.elements = [];
-            
-            parent_schema.elements.push(obj_schema);            
-        }
+        // head schema : Header
+        // _this.fn_schema_head(_this, detail_schema_var, task, detail_schema_type);
+        // default schema
+        _this.fn_schema_default(detail_schema_var, task, detail_schema_type);
+        // detail schema
+        _this.fn_schema_custom(task);
+        // width , css
         _this.fn_set_schema_properties(task);
-        _this.fn_set_schema_custom_script(task);
-
+        _this.fn_set_schema_custom_script(task);        
     }
+}
+
+JspGenerator.prototype.fn_schema_default = function(detail_schema_var, task, detail_schema_type) {
+    var _this = this;
+    var top_obj_schema = _.find(_this.src_schemas, { "name": detail_schema_var.detail._value });
+    var taskId = task["_xmi:id"];
+    var obj_schema = {
+        type: detail_schema_type._value,
+        id: taskId,
+        name: _.camelCase(task._name + ' ' + detail_schema_type._value),
+        label: '',
+        text : task._name 
+        
+    };
+    if (top_obj_schema == undefined) {
+        top_obj_schema = {
+            name: detail_schema_var.detail._value,
+            containerId : detail_schema_var.container._value,
+            schema: obj_schema
+        };
+        
+        _this.src_schemas.push(top_obj_schema);
+    }
+    var parent_schema_task = _this.fn_parent_schema(task);
+    if (parent_schema_task != null) {
+        // var parent_schema =  findAll( parent_schema_task.id, top_obj_schema.schema );
+        var parent_schema = _this.generator.findAllFromObject(parent_schema_task.id, top_obj_schema.schema);
+        if (parent_schema.elements == undefined)
+            parent_schema.elements = [];
+        parent_schema.elements.push(obj_schema);
+    }
+    
+}
+
+JspGenerator.prototype.fn_schema_custom = function( task) {
+    var _this = this;
+
+    if ( !_.isArray(task.eAnnotations.details))
+        return;
+    
+    // find schema
+    var detail_schema_var = _this.fn_find_schema_var(task); 
+    var top_obj_schema = _.find( _this.src_schemas, {"name": detail_schema_var.detail._value});
+    var obj_schema = _this.generator.findAllFromObject(task["_xmi:id"] , top_obj_schema.schema );
+    if (obj_schema == undefined)
+        return;
+
+    if(obj_schema.type == 'multiCombo'){
+        // multiselectOpt
+        obj_schema.multiselectOpt = {
+            selectedList: 1 ,
+            multiple: false,
+            selectedText: function(numChecked, numTotal, checkedItems){
+                //return numChecked + ' of ' + numTotal + ' checked';
+                var sb = [];
+                $.each(checkedItems,function(){
+                    sb.push($(this).val());
+                });
+                return sb.join(",");
+            }
+        };
+    }
+    
 }
 
 JspGenerator.prototype.fn_set_schema_properties = function(task){
@@ -470,18 +535,33 @@ JspGenerator.prototype.fn_set_schema_properties = function(task){
             return true;
         if( detail._key == "schema_variable")
             return true;
+        if (detail._key.match(/^keyword/i) != null)
+            return true;
+        
         
         obj_schema[detail._key] = detail._value;
     });
 }
 
+/**
+ * 해당 schema 의 variable을 찾는다.
+ * @param {*} task 
+ */
 JspGenerator.prototype.fn_find_schema_var = function(task){
     var _this = this;
     if(task == undefined)
         return undefined
-    var detail_schema = _.find(task.eAnnotations.details, {"_key":"schema_variable"});
-    if ( detail_schema != undefined)
-        return {"detail" : detail_schema , "task" : task };
+    var detail_var = _.find(task.eAnnotations.details, {"_key":"schema_variable"});
+    if ( detail_var != undefined){
+        var obj = {
+            "detail" : detail_var , 
+            "task" : task
+        };
+        var detail_container = _.find(task.eAnnotations.details, {"_key":"keyword_container"});
+        if ( detail_container != undefined )
+            obj.container = detail_container;
+        return obj;    
+    }
     else 
         return _this.fn_find_schema_var(task.parent);
 }
@@ -508,7 +588,10 @@ JspGenerator.prototype.fn_parent_schema = function(task){
 }
 
 
-
+/**
+ * json 형식으로 정의함.
+ * @param {*} task 
+ */
 JspGenerator.prototype.fn_set_schema_custom_script = function(task){
     var _this = this;
     if(task.documentation == undefined)
@@ -525,7 +608,8 @@ JspGenerator.prototype.fn_set_schema_custom_script = function(task){
         $.each(matches,function(i,m){
             var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+\.\\\/,"'\=:;\r\n\[\]{}]+)<\/code>/);
             var content = match.groups.content;
-            var custom_obj = JSON.parse(content);
+            // var custom_obj = JSON.parse(content);            
+            eval("var custom_obj = " + content)
             _.merge(obj_schema,custom_obj);
             var codes = content.split('\n');
             
@@ -594,6 +678,10 @@ JspGenerator.prototype.fn_generate = function(){
     src = '\t\t\tsetTimeout( function(){'; this.sources.push(src);
     // todo
     src = '\t\t\t\t'; this.sources.push(src);
+
+    _this.fn_generate_make_html();
+    
+
     src = '\t\t\t\t$("#loader").hide();'; this.sources.push(src);
     src = '\t\t\t},50);'; this.sources.push(src);
     src = '\t\t});'; this.sources.push(src);
@@ -604,6 +692,7 @@ JspGenerator.prototype.fn_generate = function(){
     // body
     src = '<body  style="min-width:920px">'; this.sources.push(src);
     src = '<form name="form" id="form" class="">'; this.sources.push(src);
+    _this.fn_generate_container();
     //  to do
     src = '</form>'; this.sources.push(src);
     src = '</body>'; this.sources.push(src);
@@ -636,17 +725,75 @@ JspGenerator.prototype.fn_generate_import = function(){
 JspGenerator.prototype.fn_generate_script_schema = function(){
     var _this = this;
     $.each(_this.src_schemas, function(i,schema){
+        
         _this.generator.fuctionToString( schema.schema );
         var schema_str = JSON.stringify(schema.schema, null, '\t');
         var codes = schema_str.split('\n');
         var src = "\t\tvar " + schema.name + " = ";
         for(var i=0;i<codes.length;i++){
+            
             if ( i == 0 )
                 src += codes[i];
-            else 
-                src = "\t\t\t" + codes[i];
+            else
+                src = "\t\t" + codes[i];
+            // function 
+            if(src.match(/"function/)){
+                var src1 = src1 = src.replace(/"function/,"function");
+                var src2 = src1.substr(0, src1.length -1 );
+                // var src3 = src2.replace(/\\r\\n/g,"\r\n");
+                // var src3 = src3.replace(/\\n/g,"\r\n");
+                //var src3 = src2.replace(/\\([\w])/g,"\$1");
+                var src3 = src2.replace(/\\([\w"])/g,function(match, p1, p2, p3, offset, string){
+                    if(match == "\\r")
+                        return "\r";
+                    if(match == "\\n")
+                        return "\n";
+                    if(match == "\\t")
+                        return "\t";
+                    if(match == "\\\"")
+                        return "\"";
+                });
+                if(src.match(/^\t+/)){
+                    var indent = src.match(/^\t+/)[0];
+                    var src4 = "";
+                    $.each(src3.split("\n"),function(i,str){
+                        var str1 = "";
+                        if( i > 0){
+                            str1 = indent + str;
+                        }else{
+                            str1 = str;
+                        }
+                        src4 += str1 + "\n";
+
+                    });
+                    src = src4;
+                }
+                else {
+                    src = src3;
+                }
+            }
+            
+            if ( i == (codes.length -1 ) ) 
+                src += ';';
             _this.sources.push(src);
         }
     }) ;
 
 }
+
+JspGenerator.prototype.fn_generate_make_html = function(){
+    var _this = this;
+    $.each(_this.src_schemas, function(i,schema){
+        var src = "\t\t\t\tfn_makeHtml('" + schema.containerId + "'," + schema.name+ ");"; _this.sources.push(src);
+    }) ;
+
+}
+
+JspGenerator.prototype.fn_generate_container = function(){
+    var _this = this;
+    $.each(_this.src_schemas, function(i,schema){
+        var src = '\t<div id="' + schema.containerId + '" style="margin-top: 10px;width: 100%;"></div>'; _this.sources.push(src);
+    }) ;
+
+}
+

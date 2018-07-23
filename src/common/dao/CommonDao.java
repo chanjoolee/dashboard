@@ -1,21 +1,14 @@
 package common.dao;
 
-import java.util.*;
-
-import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-
-import dashboard.controller.ProjectListByJsonController;
 
 
 @Repository
@@ -56,6 +49,18 @@ public class CommonDao {
     	
     	logger.info(statement);
         return sqlSession.update(statement, parameter);
+    }
+    
+    @SuppressWarnings("rawtypes")
+	public int insert(String statement,Object parameter) {
+    	
+    	logger.info(statement);
+        return sqlSession.insert(statement, parameter);
+    }
+    
+    public int delete(String statement,Object parameter) {
+    	logger.info(statement);
+        return sqlSession.delete(statement, parameter);
     }
     
 //    @Bean

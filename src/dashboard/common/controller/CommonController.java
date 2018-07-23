@@ -9,16 +9,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,8 +21,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import common.service.CommonService;
-import dashboard.bean.SearchVO;
 import dashboard.service.ComplexService;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * 
@@ -132,7 +128,7 @@ public class CommonController {
     	}
     	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
         mav.addObject("dataList", dataList);       
-        mav.setViewName("jsonView");        
+        mav.setViewName("jsonView");      
         
 
         return mav;
@@ -165,13 +161,77 @@ public class CommonController {
     
     @RequestMapping(value = "/genericSaveJson" ,method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView genericlSaveJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
     	ModelAndView mav = new ModelAndView(); 
     	commonService.requestToVo(request, searchVO);
     	try{
     		commonService.update(searchVO.get("sqlid").toString(), searchVO); 
     		//searchVO.put("result","success");
+    		mav.addObject("result", "success");
+    	}catch(Exception ex){
+    		//searchVO.put("result","fail");
+    		//searchVO.put("message",ex.getMessage());
+    		mav.addObject("result", "fail");       
+    		mav.addObject("message", ex.getMessage());       
+    		
+    	}
+    	
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    /**
+	 * 201804. kimdoyoun 추가
+	 * */
+    @RequestMapping(value = "/genericAutoSaveJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView genericAutoSaveJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView();
+    	commonService.requestToVo(request, searchVO);
+    	
+    	try{
+    		commonService.updateAutoSave(searchVO.get("sqlid").toString(), searchVO); 
+    		//searchVO.put("result","success");
     		mav.addObject("result", "success");       
+    	}catch(Exception ex){
+    		//searchVO.put("result","fail");
+    		//searchVO.put("message",ex.getMessage());
+    		mav.addObject("result", "fail");       
+    		mav.addObject("message", ex.getMessage()); 
+    		
+    	}
+    	
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
+    
+    /**
+	 * 201804. kimdoyoun 추가
+	 * */
+    @RequestMapping(value = "/genericAllSaveJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView genericAllSaveJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	
+    	ModelAndView mav = new ModelAndView();
+    	commonService.requestToVo(request, searchVO);
+    	
+    	try{
+    		/**
+    		 * Test Set mgmt. Popup 입력시 기존 있던 항목을 지우고 새로운 Test Set 을 입력(rev, seq 전부 비교해서 넣으려면 비교 시간이 매우 길어짐.)
+    		 * */
+    		//System.out.println("searchVO.get(\"allSaveFlag\").toString()) 1111111111111111 : " + searchVO.get("allSaveFlag").toString());
+    		if( "dashboard.ssd_sm.testSetDtlGridSave".equals(searchVO.get("sqlid").toString())) {
+    			if( "Copy".equals(searchVO.get("allSaveFlag").toString())) {
+    				commonService.updateAllSaveBeforeDel(searchVO.get("sqlid").toString(), searchVO);
+    			}
+    		}
+    		/*if( ){
+    			
+    		}*/
+    		int resultCnt = commonService.updateAllSave(searchVO.get("sqlid").toString(), searchVO);
+    		//searchVO.put("result","success");
+    		mav.addObject("result", "success");
+    		mav.addObject("resultCnt", resultCnt);
     	}catch(Exception ex){
     		//searchVO.put("result","fail");
     		//searchVO.put("message",ex.getMessage());
@@ -243,6 +303,26 @@ public class CommonController {
         return mav;
     }
     
-    
+    @RequestMapping(value = "/transactionTestJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView transactionTestJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.requestToVo(request, searchVO);
+    	mav.addObject("vo", searchVO); 
+    	try{
+    		commonService.transactionTest(searchVO); 
+    		//searchVO.put("result","success");
+    		mav.addObject("result", "success");
+    	}catch(Exception ex){
+    		//searchVO.put("result","fail");
+    		//searchVO.put("message",ex.getMessage());
+    		mav.addObject("result", "fail");       
+    		mav.addObject("message", ex.getMessage());       
+    		
+    	}
+    	
+        mav.setViewName("jsonView");        
+
+        return mav;
+    }
     
 }

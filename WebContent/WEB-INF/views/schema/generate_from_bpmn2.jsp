@@ -91,7 +91,7 @@
 		<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
 		
 		<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-		<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+		<script src="/dashboard/js/jointjs/lodash.4.17.10.js"></script>
 		
 		<%-- jqueryMohthPicker --%>
 		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
@@ -577,7 +577,8 @@
 			});
 			
 			fn_makeHtml('searchCondition',schemaSearch);
-			$("#schemaUrl").val("https://api.genmymodel.com/projects/_OlwJkAbzEeipbtix-oa2Dg/xmi");
+			// $("#schemaUrl").val("https://api.genmymodel.com/projects/_OlwJkAbzEeipbtix-oa2Dg/xmi");
+			$("#schemaUrl").val("https://api.genmymodel.com/projects/_VRLEQHmoEeiF6cTK02sxJA/xmi");
 			$("#loader").hide();
 			
 		});
