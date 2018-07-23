@@ -202,10 +202,10 @@
 	<c:if test="${searchVO.systemId eq 'SolutionPMS'}">
 		<c:set var="chartHeight" value="1500px" />
 	</c:if>
-	<c:if test="${searchVO.systemId eq 'JIRA'}">
+	<c:if test="${searchVO.systemId eq 'JIRA' or searchVO.systemId eq 'JIRA2'}">
 		<c:set var="chartHeight" value="4500px" />
 	</c:if>
-	<c:if test="${searchVO.systemId eq 'Confluence'}">
+	<c:if test="${searchVO.systemId eq 'Confluence' or searchVO.systemId eq 'Confluence2'}">
 		<c:set var="chartHeight" value="7000px" />
 	</c:if>
 	<%-- <div id="container" class="container"/> --%>
