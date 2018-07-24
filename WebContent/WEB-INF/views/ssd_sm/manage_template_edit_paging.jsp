@@ -557,401 +557,401 @@
 		var EfContextPath = "";
 		
 		var schemaSearch = {
-				containerId:'searchCondition',
-				type:'Vertical',
-				label:'',
-				
-				elements:[
-					// {
-					// 	containerCss:[
-					// 		{code: 'margin-top', value:'10px'},
-					// 	],		
-					// 	type:"title",
-					// 	id: "title_script",
-					// 	label: "Script Template"
-					// },
-					{
-						label:'',
-						type: 'HorizontalLayout',
-						cls: 'srch_box2',
-						containerCss:[
-							{code: 'margin-top', value:'3px'},
-							{code: 'margin-left', value:'20px'},
-							{code: 'margin-right', value:'20px'}
-						],		
-						elements:[
-							{
-								containerCss:[
-									
-								],
-								label:'',
-								type:'Vertical',
-								elements:[
-									// Stage
-									{
-										label:'',
-										type: 'HorizontalLayout',
-										containerCss:[
-											{code:'height',value:'30px'}
-										],
-										elements:[
-											// Stage
-											{
-												type:'SearchHeader',
-												id: 'stageHead',
-												name: 'stageHead',
-												label:'',
-												text:'Stage',
-												width: '50px'
-											},
-											{
-												type:'multiCombo',
-												id: 'stage',
-												name: 'stage',
-												label:'',
-												text:'Stage',
-												width: '300px',
-												data: function(){
-													var rtnList = [
-														{STAGE:"WS1", selected: "selected"},
-														{STAGE:"WS2", selected: "selected"},
-														{STAGE:"ES1", selected: "selected"},
-														{STAGE:"ES2", selected: "selected"},
-														{STAGE:"CUS", selected: "selected"}
-													];
-													// $.ajax({
-													// 	url: "/dashboard/genericlListJson.html",
-													// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
-													// 	async: false,
-													// 	success:  function(response){
-													// 		rtnList = response.dataList;
-													// 	}
-													// });
-													return rtnList;
-												},
-												//value :'CSSD',
-												options: {
-													cd:'STAGE',
-													name:'STAGE'
-													
-												},
-												multiselectOpt:{
-													//selectedList: 1 ,
-													multiple: true,
-													selectedText: function(numChecked, numTotal, checkedItems){
-														//return numChecked + ' of ' + numTotal + ' checked';
-														var rtn = "";
-														var sb = [];
-														$.each(checkedItems,function(i,d){
-															if(i < 2)
-																sb.push($(this).val());
-														});
-														rtn = sb.join(",");
-														if((checkedItems.length-2) > 0){
-															rtn += " ..." + (checkedItems.length-2)+" more"
-														}
-														return rtn;
-													}
-												},
-												events:{
-													change : function(){
-														fn_search_script();
-													}
-												}
-											} 
-											
-										]
-									}
-									// Group
-									,{
-										label:'',
-										type: 'HorizontalLayout',
-										containerCss:[
-											{code:'height',value:'30px'}
-										],
-										elements:[
-											{
-												type:'SearchHeader',
-												id: 'scriptGroupHead',
-												name: 'scriptGroupHead',
-												label:'',
-												text:'Group',
-												width: '50px'
-											},
-											{
-												type:'multiCombo',
-												id: 'scriptGroup',
-												name: 'scriptGroup',
-												label:'',
-												text:'Group',
-												width: '300px',
-												data: function(){
-													return scriptGroupList;
-												},
-												//value :'CSSD',
-												options: {
-													cd:'SCRIPT_GROUP',
-													name:'GROUP_NAME'
-												},
-												multiselectOpt:{
-													//selectedList: 1 ,
-													multiple: true,
-													selectedText: function(numChecked, numTotal, checkedItems){
-														//return numChecked + ' of ' + numTotal + ' checked';
-														var rtn = "";
-														var sb = [];
-														$.each(checkedItems,function(i,d){
-															if(i < 2)
-																sb.push($(this).attr("title"));
-														});
-														rtn = sb.join(",");
-														if((checkedItems.length-2) > 0){
-															rtn += " ..." + (checkedItems.length-2)+" more"
-														}
-														return rtn;
-													}
-												},
-												events:{
-													change : function(){
-														fn_search_script();
-													}
-												}
-											} 
-											
-										]
-									}
-									//Category , SubCategory
-									,{
-										label:'',
-										type: 'HorizontalLayout',
-										containerCss:[
-											{code:'height',value:'30px'}
-										],
-										elements:[
-											//categoryHead
-											{
-												type:'SearchHeader',
-												id: 'categoryHead',
-												name: 'categoryHead',
-												label:'',
-												text:'Category',
-												width: '50px'
-											},
-											//Category
-											{
-												type:'multiCombo',
-												id: 'category',
-												name: 'category',
-												label:'',
-												text:'Category',
-												width: '300px',
-												data: function(){
-													var rtnList = [];
-													$.ajax({
-														url: "/dashboard/genericlListJson.html",
-														data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
-														async: false,
-														success:  function(response){
-															rtnList = response.dataList;
-														}
-													});
-													return rtnList;
-												},
-												//value :'CSSD',
-												options: {
-													cd:'CATEGORY',
-													name:'CATEGORY',
-													childrens : [
-														{
-															id: "subCategory" ,
-															topElement: "schemaSearch.elements"
-														}
-													]
-												},
-												multiselectOpt:{
-													//selectedList: 1 ,
-													multiple: true,
-													selectedText: function(numChecked, numTotal, checkedItems){
-														//return numChecked + ' of ' + numTotal + ' checked';
-														var rtn = "";
-														var sb = [];
-														$.each(checkedItems,function(i,d){
-															if(i < 2)
-																sb.push($(this).val());
-														});
-														rtn = sb.join(",");
-														if((checkedItems.length-2) > 0){
-															rtn += " ..." + (checkedItems.length-2)+" more"
-														}
-														return rtn;
-													}
-												},
-												events:{
-													
-												}
-											} ,
-											// SubCategory mHead
-											{
-												type:'SearchHeader',
-												id: 'SubCategoryead',
-												name: 'SubCategoryead',
-												label:'',
-												text:'Sub Category',
-												width: '90px'
-											},
-											// SubCategory
-											{
-												type:'multiCombo',
-												id: 'subCategory',
-												name: 'subCategory',
-												label:'',
-												text:'Sub Category',
-												width: '300px',
-												data: function(){
-													var rtnList = [];
-													$.ajax({
-														url: "/dashboard/genericlListJson.html",
-														data: {sqlid: "dashboard.ssd_sm.script.sub_category.distinct", sample: $("#category").val() }, 
-														async: false,
-														success:  function(response){
-															rtnList = response.dataList;
-															tempList = rtnList;
-														}
-													});
-													return rtnList;
-												},
-												//value :'CSSD',
-												options: {
-													cd:'SUB_CATEGORY' ,
-													name:'SUB_CATEGORY',
-													group: {
-														cd:'CATEGORY',
-														name: 'CATEGORY'
-													}
-													
-												},
-												multiselectOpt:{
-													//selectedList: 1 ,
-													multiple: true,
-													selectedText: function(numChecked, numTotal, checkedItems){
-														//return numChecked + ' of ' + numTotal + ' checked';
-														var rtn = "";
-														var sb = [];
-														$.each(checkedItems,function(i,d){
-															if(i < 2)
-																sb.push($(this).val());
-														});
-														rtn = sb.join(",");
-														if((checkedItems.length-2) > 0){
-															rtn += " ..." + (checkedItems.length-2)+" more"
-														}
-														return rtn;
-													}
-												},
-												events:{
-													change : function(){
-														fn_search_script();
-														// parent.$("#loader").show();
-														// setTimeout( function(){
-														// 	$("#contentMain").html("");
-														// 	makeHtml("contentMain",schemaContent);
-														// 	parent.$("#loader").hide();
-														// },50); 
-													}
-												}
-											}
-											
-											
-										]
-									}
-									
-								]
-							},
-							//검색버튼
-							{
-								label:'',
-								type: 'VerticalLayout',
-								cls: 'btn_txt',
-								containerCss:[
-									{code: 'margin-left', value:'10px'}
-									, {code: 'float', value:'right'}
-								]
-								, elements:[
-									{
-										label:'',
-										type: 'HorizontalLayout',
-										cls: 'btn_txt',
-										containerCss:[
-											{code: 'margin-left', value:'10px'}
-										],
-										elements:[
-											{
-												type:'Button',
-												id: 'btnSearch',
-												name: 'btnSearch',
-												label:'SEARCH',
-												//width: '50px',
-												cls: 'btn_txt btn_type_e btn_color_a',
-												containerCss:[
-													{code: 'margin-right', value:'3px'}
-												],
-												events:{
-													click : function(){
-														//parent.$("#loader").show();
-														//setTimeout( function(){
-														//	$("#contentMain").html("");
-														//	makeHtml("contentMain",schemaContent);
-														//	parent.$("#loader").hide();
-														//},50);
-														fn_search_script();
-													}
-												}
-											}
-											// {
-											// 	type:'Button',
-											// 	id: 'btnUpload',
-											// 	name: 'btnUpload',
-											// 	label:'UPLOAD',
-											// 	//width: '50px',
-											// 	cls: 'btn_txt btn_type_e btn_color_a',
-											// 	containerCss:[
-											// 		{code: 'margin-right', value:'3px'}
-											// 	],
-											// 	events:{
-											// 		click : function(){
-											// 			$('#fileInput').click();
-											// 		}
-											// 	}
-											// },
-											// {
-											// 	type:'Button',
-											// 	id: 'btnDownload',
-											// 	name: 'btndownload',
-											// 	label:'DOWNLOAD',
-											// 	//width: '50px',
-											// 	cls: 'btn_txt btn_type_e btn_color_a',
-											// 	containerCss:[
-											// 		{code: 'margin-right', value:'3px'}
-											// 	],
-											// 	events:{
-											// 		click : function(){
-											// 			fn_FileDownloadAjax();
-											// 		}
-											// 	}
-											// }
-										
-										]
-									}
-											
-								]
+			containerId:'searchCondition',
+			type:'Vertical',
+			label:'',
+			
+			elements:[
+				// {
+				// 	containerCss:[
+				// 		{code: 'margin-top', value:'10px'},
+				// 	],		
+				// 	type:"title",
+				// 	id: "title_script",
+				// 	label: "Script Template"
+				// },
+				{
+					label:'',
+					type: 'HorizontalLayout',
+					cls: 'srch_box2',
+					containerCss:[
+						{code: 'margin-top', value:'3px'},
+						{code: 'margin-left', value:'20px'},
+						{code: 'margin-right', value:'20px'}
+					],		
+					elements:[
+						{
+							containerCss:[
 								
-							}
-						]
-					}
+							],
+							label:'',
+							type:'Vertical',
+							elements:[
+								// Stage
+								{
+									label:'',
+									type: 'HorizontalLayout',
+									containerCss:[
+										{code:'height',value:'30px'}
+									],
+									elements:[
+										// Stage
+										{
+											type:'SearchHeader',
+											id: 'stageHead',
+											name: 'stageHead',
+											label:'',
+											text:'Stage',
+											width: '50px'
+										},
+										{
+											type:'multiCombo',
+											id: 'stage',
+											name: 'stage',
+											label:'',
+											text:'Stage',
+											width: '300px',
+											data: function(){
+												var rtnList = [
+													{STAGE:"WS1", selected: "selected"},
+													{STAGE:"WS2", selected: "selected"},
+													{STAGE:"ES1", selected: "selected"},
+													{STAGE:"ES2", selected: "selected"},
+													{STAGE:"CUS", selected: "selected"}
+												];
+												// $.ajax({
+												// 	url: "/dashboard/genericlListJson.html",
+												// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
+												// 	async: false,
+												// 	success:  function(response){
+												// 		rtnList = response.dataList;
+												// 	}
+												// });
+												return rtnList;
+											},
+											//value :'CSSD',
+											options: {
+												cd:'STAGE',
+												name:'STAGE'
+												
+											},
+											multiselectOpt:{
+												//selectedList: 1 ,
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													//return numChecked + ' of ' + numTotal + ' checked';
+													var rtn = "";
+													var sb = [];
+													$.each(checkedItems,function(i,d){
+														if(i < 2)
+															sb.push($(this).val());
+													});
+													rtn = sb.join(",");
+													if((checkedItems.length-2) > 0){
+														rtn += " ..." + (checkedItems.length-2)+" more"
+													}
+													return rtn;
+												}
+											},
+											events:{
+												change : function(){
+													fn_search_script();
+												}
+											}
+										} 
+										
+									]
+								}
+								// Group
+								,{
+									label:'',
+									type: 'HorizontalLayout',
+									containerCss:[
+										{code:'height',value:'30px'}
+									],
+									elements:[
+										{
+											type:'SearchHeader',
+											id: 'scriptGroupHead',
+											name: 'scriptGroupHead',
+											label:'',
+											text:'Group',
+											width: '50px'
+										},
+										{
+											type:'multiCombo',
+											id: 'scriptGroup',
+											name: 'scriptGroup',
+											label:'',
+											text:'Group',
+											width: '300px',
+											data: function(){
+												return scriptGroupList;
+											},
+											//value :'CSSD',
+											options: {
+												cd:'SCRIPT_GROUP',
+												name:'GROUP_NAME'
+											},
+											multiselectOpt:{
+												//selectedList: 1 ,
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													//return numChecked + ' of ' + numTotal + ' checked';
+													var rtn = "";
+													var sb = [];
+													$.each(checkedItems,function(i,d){
+														if(i < 2)
+															sb.push($(this).attr("title"));
+													});
+													rtn = sb.join(",");
+													if((checkedItems.length-2) > 0){
+														rtn += " ..." + (checkedItems.length-2)+" more"
+													}
+													return rtn;
+												}
+											},
+											events:{
+												change : function(){
+													fn_search_script();
+												}
+											}
+										} 
+										
+									]
+								}
+								//Category , SubCategory
+								,{
+									label:'',
+									type: 'HorizontalLayout',
+									containerCss:[
+										{code:'height',value:'30px'}
+									],
+									elements:[
+										//categoryHead
+										{
+											type:'SearchHeader',
+											id: 'categoryHead',
+											name: 'categoryHead',
+											label:'',
+											text:'Category',
+											width: '50px'
+										},
+										//Category
+										{
+											type:'multiCombo',
+											id: 'category',
+											name: 'category',
+											label:'',
+											text:'Category',
+											width: '300px',
+											data: function(){
+												var rtnList = [];
+												$.ajax({
+													url: "/dashboard/genericlListJson.html",
+													data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
+													async: false,
+													success:  function(response){
+														rtnList = response.dataList;
+													}
+												});
+												return rtnList;
+											},
+											//value :'CSSD',
+											options: {
+												cd:'CATEGORY',
+												name:'CATEGORY',
+												childrens : [
+													{
+														id: "subCategory" ,
+														topElement: "schemaSearch.elements"
+													}
+												]
+											},
+											multiselectOpt:{
+												//selectedList: 1 ,
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													//return numChecked + ' of ' + numTotal + ' checked';
+													var rtn = "";
+													var sb = [];
+													$.each(checkedItems,function(i,d){
+														if(i < 2)
+															sb.push($(this).val());
+													});
+													rtn = sb.join(",");
+													if((checkedItems.length-2) > 0){
+														rtn += " ..." + (checkedItems.length-2)+" more"
+													}
+													return rtn;
+												}
+											},
+											events:{
+												
+											}
+										} ,
+										// SubCategory mHead
+										{
+											type:'SearchHeader',
+											id: 'SubCategoryead',
+											name: 'SubCategoryead',
+											label:'',
+											text:'Sub Category',
+											width: '90px'
+										},
+										// SubCategory
+										{
+											type:'multiCombo',
+											id: 'subCategory',
+											name: 'subCategory',
+											label:'',
+											text:'Sub Category',
+											width: '300px',
+											data: function(){
+												var rtnList = [];
+												$.ajax({
+													url: "/dashboard/genericlListJson.html",
+													data: {sqlid: "dashboard.ssd_sm.script.sub_category.distinct", sample: $("#category").val() }, 
+													async: false,
+													success:  function(response){
+														rtnList = response.dataList;
+														tempList = rtnList;
+													}
+												});
+												return rtnList;
+											},
+											//value :'CSSD',
+											options: {
+												cd:'SUB_CATEGORY' ,
+												name:'SUB_CATEGORY',
+												group: {
+													cd:'CATEGORY',
+													name: 'CATEGORY'
+												}
+												
+											},
+											multiselectOpt:{
+												//selectedList: 1 ,
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
+													//return numChecked + ' of ' + numTotal + ' checked';
+													var rtn = "";
+													var sb = [];
+													$.each(checkedItems,function(i,d){
+														if(i < 2)
+															sb.push($(this).val());
+													});
+													rtn = sb.join(",");
+													if((checkedItems.length-2) > 0){
+														rtn += " ..." + (checkedItems.length-2)+" more"
+													}
+													return rtn;
+												}
+											},
+											events:{
+												change : function(){
+													fn_search_script();
+													// parent.$("#loader").show();
+													// setTimeout( function(){
+													// 	$("#contentMain").html("");
+													// 	makeHtml("contentMain",schemaContent);
+													// 	parent.$("#loader").hide();
+													// },50); 
+												}
+											}
+										}
+										
+										
+									]
+								}
+								
+							]
+						},
+						//검색버튼
+						{
+							label:'',
+							type: 'VerticalLayout',
+							cls: 'btn_txt',
+							containerCss:[
+								{code: 'margin-left', value:'10px'}
+								, {code: 'float', value:'right'}
+							]
+							, elements:[
+								{
+									label:'',
+									type: 'HorizontalLayout',
+									cls: 'btn_txt',
+									containerCss:[
+										{code: 'margin-left', value:'10px'}
+									],
+									elements:[
+										{
+											type:'Button',
+											id: 'btnSearch',
+											name: 'btnSearch',
+											label:'SEARCH',
+											//width: '50px',
+											cls: 'btn_txt btn_type_e btn_color_a',
+											containerCss:[
+												{code: 'margin-right', value:'3px'}
+											],
+											events:{
+												click : function(){
+													//parent.$("#loader").show();
+													//setTimeout( function(){
+													//	$("#contentMain").html("");
+													//	makeHtml("contentMain",schemaContent);
+													//	parent.$("#loader").hide();
+													//},50);
+													fn_search_script();
+												}
+											}
+										}
+										// {
+										// 	type:'Button',
+										// 	id: 'btnUpload',
+										// 	name: 'btnUpload',
+										// 	label:'UPLOAD',
+										// 	//width: '50px',
+										// 	cls: 'btn_txt btn_type_e btn_color_a',
+										// 	containerCss:[
+										// 		{code: 'margin-right', value:'3px'}
+										// 	],
+										// 	events:{
+										// 		click : function(){
+										// 			$('#fileInput').click();
+										// 		}
+										// 	}
+										// },
+										// {
+										// 	type:'Button',
+										// 	id: 'btnDownload',
+										// 	name: 'btndownload',
+										// 	label:'DOWNLOAD',
+										// 	//width: '50px',
+										// 	cls: 'btn_txt btn_type_e btn_color_a',
+										// 	containerCss:[
+										// 		{code: 'margin-right', value:'3px'}
+										// 	],
+										// 	events:{
+										// 		click : function(){
+										// 			fn_FileDownloadAjax();
+										// 		}
+										// 	}
+										// }
+									
+									]
+								}
+										
+							]
+							
+						}
+					]
+				}
+			
 				
-					
-				
-				]
+			
+			]
 				
 		};
 		
@@ -1820,7 +1820,7 @@
 	
 	</script>
 	
-	</head>
+</head>
 
 
 <body  style="min-width:920px" >

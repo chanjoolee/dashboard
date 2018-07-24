@@ -721,6 +721,76 @@
 					
 				]								
 		};
+
+		// var schemaContent = {
+		// 	containerId:'contentCoronaDetail',
+		// 	"type": "tab_list",
+		// 	"id" : "tab_list",
+		// 	"label" : "",
+		// 	//
+		// 	"elements" : [
+		// 		{
+		// 			"type": "tab_iframe",
+		// 			"id" : "template_script_edit_paging",
+		// 			"label" : "Master TS Mgmt. Paging.",							
+		// 			"connected_content" :  {
+		// 				"viewName": v_path + "/manage_template_edit_paging",
+		// 				"form_id" : "form"
+		// 			},
+		// 			"iframe_css" : [
+		// 				{ "code": "height", "value": "800px" }
+		// 			]
+		// 		},
+		// 		{
+		// 			"type": "tab_iframe",
+		// 			"id" : "scriptset_management",
+		// 			"label" : "TestScript Set Mgmt.",							
+		// 			"connected_content" :  {
+		// 				"viewName": v_path + "/manage_scriptset_edit",
+		// 				"form_id" : "form"
+		// 			},
+		// 			"events" : {
+		// 				//"click" : tab_click
+		// 			},
+		// 			"iframe_css" : [
+		// 				{ "code": "height", "value": "770px" }
+		// 			]
+		// 		},
+		// 		{
+		// 			"type": "tab_iframe",
+		// 			"id" : "project_config",
+		// 			"label" : "Project Config",							
+		// 			"connected_content" :  {
+		// 				"viewName": v_path + "/manage_project_showview",
+		// 				"form_id" : "form"
+		// 			},
+		// 			"events" : {
+		// 				//"click" : tab_click
+		// 			},
+		// 			"iframe_css" : [
+		// 				{ "code": "height", "value": "770px" }
+		// 			]
+		// 		},
+		// 		{
+		// 			"type": "tab_iframe",
+		// 			"id" : "firmware_version_edig",
+		// 			"label" : "FW Version",							
+		// 			"connected_content" :  {
+		// 				"viewName": v_path + "/manage_map_firmware_scriptset",
+		// 				"form_id" : "form"
+		// 			},
+		// 			"iframe_css" : [
+		// 				{ "code": "height", "value": "770px" }
+		// 			]
+		// 		}
+				
+				
+		// 	]
+					
+							
+					
+								
+		// };
 		
 		</script>
 		<script  id="script_main">

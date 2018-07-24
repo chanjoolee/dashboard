@@ -119,7 +119,8 @@
 								{label:'History Cnt', name:'HISTORY_CNT',width:100, sortable: false, editable: false, search: false, align:'right'}
 					    	],
 					    	gridOpt:{
-					    		url: '/dashboard/jiraUsageJson.html?'+ $("#form").serialize(),
+					    		// url: '/dashboard/jiraUsageJson.html?'+ $("#form").serialize(),
+					    		url: '/dashboard/genericlListPageJson.html?'+ $("#form").serialize() + "&sqlid=dashboard.jira.usage.list" + "&paging_sqlid=dashboard.jira.usage.list.page" ,		
 				                //mtype: "GET",
 				                datatype: 'json',
 				                userdata: "dataList",
@@ -215,7 +216,8 @@
 								{label:'User Name', name:'USERNAME',width:150, sortable: false, editable: false, search: true, align:'left'}
 					    	],
 					    	gridOpt:{
-					    		url: '/dashboard/confluenceUsageJson.html?'+ $("#form").serialize(),
+					    		//url: '/dashboard/confluenceUsageJson.html?'+ $("#form").serialize(),
+					    				url: '/dashboard/genericlListPageJson.html?'+ $("#form").serialize() + "&sqlid=dashboard.confluence.usage.list" + "&paging_sqlid=dashboard.confluence.usage.list.page" ,
 				                //mtype: "GET",
 				                datatype: 'json',
 				                userdata: "dataList",

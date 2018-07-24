@@ -15,18 +15,18 @@ public class SystemUsageService {
     //private CommonDao dao;
     private PmsDao pmsDao;
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<?> selectSystemUsageSummaryList(Map<Object, Object> parameter) {
+    @SuppressWarnings({ "unchecked" })
+	public List<Map<String, Object>> selectSystemUsageSummaryList(Map<Object, Object> parameter) {
     	
-    	Map useMonthMap = (Map)pmsDao.selectOne("systemUsage.selectSystemUsageDefaultMonth", parameter);
+    	Map<String, Object> useMonthMap = (Map<String, Object>)pmsDao.selectOne("systemUsage.selectSystemUsageDefaultMonth", parameter);
     	parameter.put("fromUseMonth", useMonthMap.get("FROM_USE_MONTH"));
     	parameter.put("toUseMonth", useMonthMap.get("TO_USE_MONTH"));
     	
-		return (List)pmsDao.selectList("systemUsage.selectSystemUsageSummaryList", parameter);
+		return (List<Map<String, Object>>)pmsDao.selectList("systemUsage.selectSystemUsageSummaryList", parameter);
 	}
-   
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<?> selectSystemUsageList(Map<Object, Object> parameter) {
-		return (List)pmsDao.selectList("systemUsage.selectSystemUsageList", parameter);
+    
+	@SuppressWarnings({"unchecked" })
+	public List<Map<String, Object>> selectSystemUsageList(Map<Object, Object> parameter) {
+		return (List<Map<String, Object>>)pmsDao.selectList("systemUsage.selectSystemUsageList", parameter);
 	}	
 }

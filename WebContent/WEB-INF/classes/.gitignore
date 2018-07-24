@@ -4,6 +4,7 @@
 /config.properties
 /dashboard/
 /jointjs/
+/stringtemplate/
+/util/
 /log4j.xml
 /main/
-/util/

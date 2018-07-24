@@ -1,13 +1,13 @@
 package dashboard.systemUsage.controller;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,22 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import common.service.CommonService;
-
-import dashboard.service.ComplexService;
 import dashboard.systemUsage.service.SystemUsageService;
 
 @Controller
 public class SystemUsageController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SystemUsageController.class);
+//    private static final Logger logger = LoggerFactory.getLogger(SystemUsageController.class);
 
-    @Autowired
-    private CommonService commonService;
-    
-    @Autowired
-    private ComplexService complexService;
-    
     @Autowired
     private SystemUsageService service;
     
@@ -52,9 +43,22 @@ public class SystemUsageController {
     	
     	ModelAndView mav = new ModelAndView(); 
     	
-    	List<?> dataList = service.selectSystemUsageSummaryList(searchVO);
+    	List<Map<String, Object>> dataList = service.selectSystemUsageSummaryList(searchVO);
     	
-        mav.addObject("dataList", dataList);
+    	List<Map<String, Object>> resutlList = new ArrayList<Map<String, Object>>();
+    	for(Map<String, Object> dataMap : dataList){
+    		resutlList.add(dataMap);
+    	}
+    	Map<String, Object> map = null;
+    	for(Map<String, Object> dataMap : dataList){
+    		map = new LinkedHashMap<String, Object>();
+    		map.putAll(dataMap);
+    		map.put("SERIES_TYPE", "02");
+    		map.put("COUNT_VAL", map.get("USE_COUNT_VAL"));
+    		resutlList.add(map);
+    	}
+    	
+        mav.addObject("dataList", resutlList);
        
         mav.setViewName("jsonView");        
 
@@ -78,9 +82,22 @@ public class SystemUsageController {
     	
     	ModelAndView mav = new ModelAndView(); 
     	
-    	List<?> dataList = service.selectSystemUsageList(searchVO);
+    	List<Map<String, Object>> dataList = service.selectSystemUsageList(searchVO);
     	
-        mav.addObject("dataList", dataList);
+    	List<Map<String, Object>> resutlList = new ArrayList<Map<String, Object>>();
+    	for(Map<String, Object> dataMap : dataList){
+    		resutlList.add(dataMap);
+    	}
+    	Map<String, Object> map = null;
+    	for(Map<String, Object> dataMap : dataList){
+    		map = new LinkedHashMap<String, Object>();
+    		map.putAll(dataMap);
+    		map.put("SERIES_TYPE", "02");
+    		map.put("COUNT_VAL", map.get("USE_COUNT_VAL"));
+    		resutlList.add(map);
+    	}
+    	
+        mav.addObject("dataList", resutlList);
        
         mav.setViewName("jsonView");        
 

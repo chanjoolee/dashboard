@@ -286,7 +286,7 @@
 			m.WRITE_MODE, 
 			m.READ_MODE, 
 			substr(m.DESCRIPTION,1,20) || ' ...'  as  DESCRIPTION_SIMPLE, 
-			DESCRIPTION,
+			m.DESCRIPTION,
 			substr(m.ARGUMENT,1,20) || ' ...'  as  ARGUMENT_SIMPLE, 
 			m.ARGUMENT, 
 			m.PLATFORM, 
@@ -3049,8 +3049,9 @@
 			from tbl_list a
 		) 
 
-		select 
-			a.project
+		select
+			   COUNT(*) OVER() AS totcnt
+			, a.project
 			, a.FIRMWARE
 			, f.NAND_TYPE
 			, f.REMARK
@@ -3197,7 +3198,7 @@
 		left outer join SSD_SM_MASTER_GROUP mg
 			on mg.SCRIPT_GROUP = a.SCRIPT_GROUP
 		order by mg.seq
-    </select>
+    </select>    
     <select id="dashboard.ssd_sm.detail.paging" resultType="hashmap">
     	Select 
 			*		
@@ -3497,4 +3498,1500 @@
        	 
 	    end;
     </update>
+    
+    
+    <select id="dashboard.ssd_sm.master.all" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	SELECT
+		    		count(*) over() AS tot_cnt,
+		    		<choose>
+						<when test="filters != null and filters !='' and filters.copyList.size() > 0 ">
+							'I' AS row_status,
+						</when>
+						<otherwise>
+							'' AS row_status,
+						</otherwise>
+					</choose>
+				    aa.item_code,
+				    FN_SSD_TEST_GET_COMM_CD(category1,'01',4) as category1,
+				    FN_SSD_TEST_GET_COMM_CD(category2,'02',4) as category2,
+				    test_name,
+				    test_case_id,
+				    seq,
+				    decode((select max(to_number(rev)) from ssd_test_master b where aa.item_code = b.item_code), rev, rev||'*',rev) as rev,
+				    decode((select max(to_number(rev)) from ssd_test_master b where aa.item_code = b.item_code), rev, 'Y','N') as color_check,
+				    (select LISTAGG(rev, ',') WITHIN GROUP (ORDER BY rev) from ssd_test_master b where aa.item_code = b.item_code) AS rev_all,
+				    FN_SSD_TEST_GET_COMM_CD(test_type,'00',4) as test_type,
+				    FN_SSD_TEST_GET_COMM_CD(tool,'03',4) as tool,
+				    FN_SSD_TEST_GET_COMM_CD(protocol,'05',4) as protocol,
+				    sub_category1,
+				    sub_category2,
+				    command_line,
+				    arg_00,
+				    arg_02,
+				    arg_03,
+				    arg_04,
+				    arg_05,
+				    arg_06,
+				    arg_07,
+				    arg_08,
+				    arg_09,
+				    delete_yn,
+				    description,
+				    status,
+				    to_char(crt_dt,'YYYY-MM-DD') as crt_dt,
+				    crt_by,
+				    to_char(mod_dt,'YYYY-MM-DD') as mod_dt,
+				    mod_by,
+				    variation
+				FROM
+				    ssd_test_master aa,
+				(
+					SELECT
+				        distinct
+				        item_code
+				        FROM
+				            ssd_test_master a
+				        <where>
+				        	<if test="filters != null and filters !='' and filters.searchTool.size() > 0 ">
+								and a.tool in 
+								<foreach collection="filters.searchTool" item="type" index="index" open="(" separator="," close=")" >
+					       			#{type}
+					       		</foreach>
+							</if>
+							<if test="filters != null and filters !='' and filters.searchProtocol.size() > 0 ">
+								and a.protocol in 
+								<foreach collection="filters.searchProtocol" item="type" index="index" open="(" separator="," close=")" >
+					       			#{type}
+					       		</foreach>
+							</if>
+							<if test="filters != null and filters !='' and filters.searchCate1.size() > 0 ">
+								and a.category1 in 
+								<foreach collection="filters.searchCate1" item="type" index="index" open="(" separator="," close=")" >
+					       			#{type}
+					       		</foreach>
+							</if>
+							<if test="filters != null and filters !='' and filters.searchCate2.size() > 0 ">
+								and a.category2 in 
+								<foreach collection="filters.searchCate2" item="type" index="index" open="(" separator="," close=")" >
+					       			#{type}
+					       		</foreach>
+							</if>
+					        <if test="filters != null and filters !='' and filters.copyList.size() > 0 ">
+								and a.item_code in 
+								<foreach collection="filters.copyList" item="type" index="index" open="(" separator="," close=")" >
+					       			#{type}
+					       		</foreach>
+							</if>
+						</where>
+				) bb
+				where aa.item_code = bb.item_code
+				<choose>
+					<when test='listType eq "history" '>
+						
+					</when>
+					<otherwise>
+						
+						and rev = (select max( to_number( cc.rev ) ) from ssd_test_master cc where aa.item_code = cc.item_code )
+						
+					</otherwise>
+				</choose>
+				ORDER BY aa.item_code ASC, to_number(aa.rev) desc
+			) A
+		)A
+		where
+	   	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+	   	]]>				    
+    </select>
+
+    <select id="dashboard.ssd_sm.commonComboSearch" resultType="hashmap">
+    	SELECT
+    			A.COMM_SYMBOL,
+    			B.COMM_IDX,
+    			A.COMM_TYPE,
+    			A.COMM_VALUE
+		FROM
+		    SSD_TEST_COMM_CD A,
+		    SSD_TEST_COMM_CD_MAP B
+		WHERE 
+			A.COMM_CODE = B.COMM_CODE
+		<if test="filters != null and filters !='' and filters.commCdType.size() > 0 ">
+			and A.COMM_TYPE in 
+			<foreach collection="filters.commCdType" item="item" index="i" open="(" separator="," close=")" >
+       			#{item}
+       		</foreach>
+		</if>
+		<if test="testSetSearch != null and testSetSearch !='' ">
+			union all
+			select 
+			    model_name,
+			    '',
+			    '20',
+			    model_name
+			from SSD_TEST_SET
+			group by model_name
+			union all
+			select 
+			    FN_SSD_TEST_GET_COMM_CD(test_type,'00',4),
+			    '',
+			    '21',
+			    FN_SSD_TEST_GET_COMM_CD(test_type,'00',4)
+			from SSD_TEST_SET
+			group by test_type
+			union all
+			select 
+			    test_set,
+			    '',
+			    '22',
+			    test_set
+			from SSD_TEST_SET
+			group by test_set
+		</if>
+    </select>
+    
+    <select id="dashboard.ssd_sm.commonCodeSearch" resultType="hashmap">
+    	SELECT
+    			DISTINCT
+    			A.COMM_TYPE,
+    			A.COMM_TYPE_VALUE
+		FROM
+		    SSD_TEST_COMM_CD A,
+		    SSD_TEST_COMM_CD_MAP B
+		WHERE 
+			A.COMM_CODE = B.COMM_CODE
+		ORDER BY COMM_TYPE ASC
+    </select>
+    
+    <select id="dashboard.ssd_sm.commonCodeList" resultType="hashmap">
+    	SELECT
+    			'' AS ROW_STATUS,
+    			A.COMM_SYMBOL,
+    			A.COMM_CODE,
+    			B.COMM_IDX,
+    			A.COMM_TYPE,
+    			A.COMM_VALUE
+		FROM
+		    SSD_TEST_COMM_CD A,
+		    SSD_TEST_COMM_CD_MAP B
+		WHERE 
+			A.COMM_CODE = B.COMM_CODE
+		<if test="filters != null and filters !='' and filters.searchCode.size() > 0 ">
+			and A.COMM_TYPE in 
+			<foreach collection="filters.searchCode" item="type" index="index" open="(" separator="," close=")" >
+       			#{type}
+       		</foreach>
+		</if>
+		ORDER BY to_number(A.COMM_CODE) ASC
+    </select>
+    
+    <select id="dashboard.ssd_sm.testSetComboSearch" resultType="hashmap">
+    	SELECT
+    			DISTINCT
+    			A.COMM_TYPE,
+    			A.COMM_TYPE_VALUE
+		FROM
+		    SSD_TEST_COMM_CD A,
+		    SSD_TEST_COMM_CD_MAP B
+		WHERE 
+			A.COMM_CODE = B.COMM_CODE
+		ORDER BY COMM_TYPE ASC
+    </select>
+    
+
+    <insert id="dashboard.ssd_sm.commCdGridSave" parameterType="hashmap" >
+    	<selectKey  keyProperty="newCommCode" resultType="String" order="BEFORE">
+    		select max(to_number(COMM_CODE))+1 from SSD_TEST_COMM_CD
+    	</selectKey>
+    	declare
+	    	cnt number;
+	    begin
+	    		select count(*) into cnt from SSD_TEST_COMM_CD
+	    		where 1=1
+	    		<choose>
+					<when test="detail != null and detail != '' and detail.size() > 0 " >
+			       			and COMM_CODE = #{detail.commCode}
+			   		</when>
+			   		<otherwise>
+			   			and 1=2
+			   		</otherwise>
+		   		</choose>
+	    		;
+	    		
+	    		if cnt = 1 then
+	              	update SSD_TEST_COMM_CD set
+	              	COMM_VALUE = #{detail.commValue},
+	              	COMM_SYMBOL = #{detail.commSymbol},	  
+	              	MOD_DT = SYSDATE,
+	              	<choose>
+						<when test='detail.mod_by != null and detail.mod_by != ""  '>
+							MOD_BY = #{detail.mod_by}
+						</when>
+						<otherwise>
+							MOD_BY = 	'SYSTEM'
+						</otherwise>
+					</choose>
+	              	where 1=1
+		    		<choose>
+						<when test="detail != null and detail != '' and detail.size() > 0 " >
+				       			and COMM_CODE = #{detail.commCode}
+				   		</when>
+				   		<otherwise>
+				   			and 1=2
+				   		</otherwise>
+			   		</choose>
+			   		;
+	          	else
+	          		insert into SSD_TEST_COMM_CD
+	          		(
+		          		COMM_CODE,
+					    COMM_TYPE,
+					    COMM_VALUE,
+					    COMM_SYMBOL,
+					    COMM_TYPE_VALUE,
+					    DESCRIPTION,
+					    CRT_BY,
+					    MOD_DT,
+					    MOD_BY,
+					    CRT_DT
+				    )values(
+				    	#{newCommCode},
+				    	#{detail.commType},
+				    	#{detail.commValue},
+				    	#{detail.commSymbol},
+				    	(select DECODE(#{detail.commType}, '00', 'TEST_TYPE',
+				    														'01', 'CATEGORY1',
+				    														'02', 'CATEGORY2',
+				    														'03', 'TOOL',
+				    														'04', 'AUTOMATON',
+				    														'05', 'PROTOCOL',
+				    														'') from dual), 
+				    	'',
+				    	<choose>
+							<when test='detail.crt_by != null and detail.crt_by != ""  '>
+								#{detail.crt_by},
+							</when>
+							<otherwise>
+								'SYSTEM',
+							</otherwise>
+						</choose>
+				    	<choose>
+							<when test='detail.crt_dt != null and detail.crt_dt != ""  '>
+								TO_DATE(SYSDATE, 'YYYY-MM-DD'),
+							</when>
+							<otherwise>
+								SYSDATE,
+							</otherwise>
+						</choose>
+						<choose>
+							<when test='detail.mod_by != null and detail.mod_by != ""  '>
+								#{detail.mod_by},
+							</when>
+							<otherwise>
+								'SYSTEM',
+							</otherwise>
+						</choose>
+						<choose>
+							<when test='detail.mod_dt != null and detail.mod_dt != ""  '>
+								TO_DATE(#{detail.mod_dt}, 'YYYY-MM-DD')
+							</when>
+							<otherwise>
+								SYSDATE
+							</otherwise>
+						</choose>
+				    	) ;
+				    	
+				    	insert into SSD_TEST_COMM_CD_MAP
+				    	(
+				    		COMM_IDX,
+						    COMM_CODE,
+						    COMM_TYPE
+				    	)values(
+				    		(select max(to_number(COMM_IDX))+1 from SSD_TEST_COMM_CD_MAP),
+				    		#{newCommCode},
+				    		#{detail.commType}
+				    	);
+	        end if;
+	    end;
+    </insert>
+    
+    <!-- Master Mgmt. 일괄 저장 -->
+    <insert id="dashboard.ssd_sm.masterGridSave" parameterType="hashmap" >
+    		insert into SSD_TEST_MASTER
+                (
+	                item_code,
+				    category1,
+				    category2,
+				    test_name,
+				    rev,
+				    tool,
+				    protocol,
+				    sub_category1,
+				    sub_category2,
+				    command_line,
+				    arg_00,
+				    arg_01,
+				    arg_02,
+				    arg_03,
+				    arg_04,
+				    arg_05,
+				    arg_06,
+				    arg_07,
+				    arg_08,
+				    arg_09,
+				    delete_yn,
+				    description,
+				    status,
+				    crt_dt,
+				    crt_by,
+				    mod_dt,
+				    mod_by,
+				    variation,
+				    test_type
+                )values(
+                   	<choose>
+						<when test='detail.status == "U" '>
+							#{detail.item_code},
+						</when>
+						<otherwise>
+							(select lpad(max(ITEM_CODE)+1,16,'0') from SSD_TEST_MASTER),
+						</otherwise>
+					</choose>
+					(select FN_SSD_TEST_GET_COMM_CD(#{detail.category1},'01',2) from dual),
+					(select FN_SSD_TEST_GET_COMM_CD(#{detail.category2},'02',2) from dual),
+					#{detail.test_name},
+					<choose>
+						<when test='detail.status == "U" '>
+							(select max( to_number(rev) )+1 from SSD_TEST_MASTER where ITEM_CODE = #{detail.item_code}),
+						</when>
+						<otherwise>
+							'1',
+						</otherwise>
+					</choose>
+					(select FN_SSD_TEST_GET_COMM_CD(#{detail.tool},'03',2) from dual),
+					(select FN_SSD_TEST_GET_COMM_CD(#{detail.protocol},'05',2)  from dual),
+					#{detail.sub_category1},
+					#{detail.sub_category2},
+					#{detail.command_line},
+					#{detail.arg00},
+					#{detail.arg01},
+					#{detail.arg02},
+					#{detail.arg03},
+					#{detail.arg04},
+					#{detail.arg05},
+					#{detail.arg06},
+					#{detail.arg07},
+					#{detail.arg08},
+					#{detail.arg09},
+					<choose>
+						<when test='detail.delete_yn != null and detail.delete_yn != ""  '>
+							#{detail.delete_yn},
+						</when>
+						<otherwise>
+							'N',
+						</otherwise>
+					</choose>
+					'',
+					'',
+					<choose>
+						<when test='detail.crt_dt != null and detail.crt_dt != ""  '>
+							TO_DATE(#{detail.crt_dt}, 'YYYY-MM-DD'),
+						</when>
+						<otherwise>
+							SYSDATE,
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.crt_by != null and detail.crt_by != ""  '>
+							#{detail.crt_by},
+						</when>
+						<otherwise>
+							'SYSTEM',
+						</otherwise>
+					</choose>
+					SYSDATE,
+					<choose>
+						<when test='detail.mod_by != null and detail.mod_by != ""  '>
+							#{detail.mod_by},
+						</when>
+						<otherwise>
+							'SYSTEM',
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.variation != null and detail.variation != ""  '>
+							#{detail.variation},
+						</when>
+						<otherwise>
+							'public',
+						</otherwise>
+					</choose>
+					FN_SSD_TEST_GET_COMM_CD(#{detail.test_type},'00',2)
+            	)
+    </insert>
+    
+    <!-- Test Set List 호출 -->
+    <select id="dashboard.ssd_sm.testSet.all" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	SELECT
+		    		count(*) over() AS tot_cnt
+		    		,'' AS row_status
+		    		,test_set_idx
+				    ,model_name
+				    ,FN_SSD_TEST_GET_COMM_CD(test_type,'00',4) AS test_type
+				    ,set_default
+				    ,test_set
+				    ,(select count(*) from ssd_test_set_dtl b where b.test_set_idx = a.test_set_idx) AS total_test_count
+				    ,status
+				    ,owner
+				    ,to_char(crt_dt, 'YYYY-MM-DD') as crt_dt
+				    ,crt_by
+				    ,to_char(mod_dt, 'YYYY-MM-DD') as mod_dt
+				    ,mod_by
+				FROM
+				    ssd_test_set a
+				<where>
+					<if test="filters != null and filters !='' and filters.searchModelName.size() > 0 ">
+						and a.model_name in 
+						<foreach collection="filters.searchModelName" item="type" index="index" open="(" separator="," close=")" >
+			       			#{type}
+			       		</foreach>
+					</if>
+					<if test="filters != null and filters !='' and filters.searchTestType.size() > 0 ">
+						and a.test_type in 
+						<foreach collection="filters.searchTestType" item="type" index="index" open="(" separator="," close=")" >
+			       			FN_SSD_TEST_GET_COMM_CD(#{type}, '00', 2)
+			       		</foreach>
+					</if>
+					<if test="filters != null and filters !='' and filters.searchTestSet.size() > 0 ">
+						and a.test_set in 
+						<foreach collection="filters.searchTestSet" item="type" index="index" open="(" separator="," close=")" >
+			       			#{type}
+			       		</foreach>
+					</if>
+				</where>
+				ORDER BY crt_dt DESC, mod_dt DESC
+			) A
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>				    
+    </select>
+    
+    <!-- Test Set 일괄 저장 -->
+    <insert id="dashboard.ssd_sm.testSetGridSave" parameterType="hashmap" >
+    		merge into SSD_TEST_SET T 
+    		USING DUAL
+    			ON (T.TEST_SET_IDX = #{detail.testSetIdx}
+    					AND T.MODEL_NAME = #{detail.modelName}
+    					AND T.TEST_TYPE = FN_SSD_TEST_GET_COMM_CD(#{detail.testType}, '00', 2)
+    					AND T.TEST_SET = #{detail.testSet}
+    			)
+    		WHEN MATCHED THEN
+    			update set
+   						SET_DEFAULT = #{detail.setDefault}
+   						,STATUS = 'Released'
+   						,MOD_DT = SYSDATE
+						<choose>
+							<when test='detail.mod_by != null and detail.mod_by != ""  '>
+								, MOD_BY = #{detail.mod_by}
+							</when>
+							<otherwise>
+								, MOD_BY = 'ADMIN'
+							</otherwise>
+						</choose>
+    				
+    		WHEN NOT MATCHED THEN
+    			insert
+    			(
+    				test_set_idx,
+				    model_name,
+				    test_type,
+				    test_set,
+				    set_default,
+				    status,
+				    owner,
+				    crt_dt,
+				    crt_by,
+				    mod_dt,
+				    mod_by
+                )values(
+                   	(select nvl(max(TEST_SET_IDX), 0)+1 from SSD_TEST_SET),
+                   	#{detail.modelName},
+					(select FN_SSD_TEST_GET_COMM_CD(#{detail.testType},'00',2) from dual),
+					#{detail.testSet},
+					<choose>
+						<when test='detail.setDefault != null and detail.setDefault != ""  '>
+							#{detail.setDefault},
+						</when>
+						<otherwise>
+							'N',
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.status != null and detail.status != ""  '>
+							#{detail.status},
+						</when>
+						<otherwise>
+							'Released',
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.owner != null and detail.owner != ""  '>
+							#{detail.owner},
+						</when>
+						<otherwise>
+							'',
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.crt_dt != null and detail.crt_dt != ""  '>
+							TO_DATE(#{detail.crt_dt}, 'YYYY-MM-DD'),
+						</when>
+						<otherwise>
+							SYSDATE,
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.crt_by != null and detail.crt_by != ""  '>
+							#{detail.crt_by},
+						</when>
+						<otherwise>
+							'ADMIN',
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.mod_dt != null and detail.mod_dt != ""  '>
+							TO_DATE(#{detail.mod_dt}, 'YYYY-MM-DD'),
+						</when>
+						<otherwise>
+							SYSDATE,
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.mod_by != null and detail.mod_by != ""  '>
+							#{detail.mod_by}
+						</when>
+						<otherwise>
+							'ADMIN'
+						</otherwise>
+					</choose>
+            	)
+    </insert>
+    
+    
+    <select id="dashboard.ssd_sm.testSet.dtl" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	SELECT
+		    		count(*) over() AS tot_cnt,
+		    		<choose>
+						<when test="filters != null and filters !='' and filters.copyList.size() > 0 ">
+							'I' AS row_status,
+						</when>
+						<otherwise>
+							'' AS row_status,
+						</otherwise>
+					</choose>
+		    		item_code,
+				    FN_SSD_TEST_GET_COMM_CD(category1, '01', 4) AS category1,
+				    FN_SSD_TEST_GET_COMM_CD(category2, '02', 4) AS category2,
+				    test_name,
+				    test_case_id||'-'||lpad(seq, 3, '0') AS test_case_id,
+				    test_case_id AS test_case_id_org,
+				    seq,
+				    <choose>
+						<when test="filters != null and filters !='' and filters.copyList.size() > 0 ">
+							'' AS max_seq,
+						</when>
+						<otherwise>
+							(select max(to_number(seq)) from ssd_test_set_dtl D where D.test_case_id = A.test_case_id and D.TEST_SET_IDX = #{testSetIdx}) AS max_seq,
+						</otherwise>
+					</choose>
+				    decode((select max(to_number(rev)) from ssd_test_master b where a.item_code = b.item_code), rev, rev||'*',rev) as rev,
+				    (select LISTAGG(rev, ',') WITHIN GROUP (ORDER BY rev) from ssd_test_master b where A.item_code = b.item_code) AS rev_all,
+				    FN_SSD_TEST_GET_COMM_CD(test_type, '00', 4) AS test_type,
+				    FN_SSD_TEST_GET_COMM_CD(tool, '03', 4) AS tool,
+				    FN_SSD_TEST_GET_COMM_CD(protocol, '05', 4) AS protocol,
+				    sub_category1,
+				    sub_category2,
+				    command_line,
+				    arg_00,
+				    arg_01,
+				    arg_02,
+				    arg_03,
+				    arg_04,
+				    arg_05,
+				    arg_06,
+				    arg_07,
+				    arg_08,
+				    arg_09,
+				    delete_yn,
+				    description,
+				    status,
+				    to_char(crt_dt,'YYYY-MM-DD') as crt_dt,
+				    crt_by,
+				    to_char(mod_dt,'YYYY-MM-DD') as mod_dt,
+				    mod_by,
+				    variation,
+				    test_set_idx
+				FROM
+				    ssd_test_set_dtl A
+				<where>
+					<if test="testSetIdx != null and testSetIdx !='' ">
+						A.TEST_SET_IDX = #{testSetIdx} 
+					</if>
+					<if test="filters != null and filters !='' and filters.copyList.size() > 0 ">
+						and a.test_set_idx in 
+						<foreach collection="filters.copyList" item="type" index="index" open="(" separator="," close=")" >
+			       			#{type}
+			       		</foreach>
+					</if>
+				</where>
+			) A
+			ORDER BY test_case_id_org ASC, to_number(seq) ASC, item_code asc
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>				    
+    </select>
+    
+    <!-- Test Set Pop 에서 public 일때 해당 master의 revision 의 리스트를 선택할수 있는 목록 -->
+    <select id="dashboard.ssd_sm.testSet.revList" resultType="hashmap">
+    	select 
+    		AA.rev
+    	from
+    		(
+	    	select 
+	    		to_number(B.rev) as rev
+	    	from ssd_test_set_dtl A,
+	    			ssd_test_master B
+	    	where A.item_code = B.item_code
+			<if test="testSetIdx != null and testSetIdx !='' ">
+				AND A.TEST_SET_IDX = #{testSetIdx} 
+			</if>
+			<if test="itemCode != null and itemCode !='' ">
+				AND B.ITEM_CODE = #{itemCode} 
+			</if>
+			) AA
+			ORDER BY to_number(rev) ASC
+    </select>
+    
+    <!-- Test Set Pop 에서 public 일때 해당 master의 revision 선택, 세부내용 -->
+    <select id="dashboard.ssd_sm.testSet.revDtl" resultType="hashmap">
+	  		select 
+	    				item_code,
+					    FN_SSD_TEST_GET_COMM_CD(category1, '01', 4) AS category1,
+					    FN_SSD_TEST_GET_COMM_CD(category2, '02', 4) AS category2,
+					    test_name,
+					    decode((select max(to_number(rev)) from ssd_test_master b where a.item_code = b.item_code), rev, rev||'*',rev) as rev,
+					    FN_SSD_TEST_GET_COMM_CD(test_type, '00', 4) AS test_type,
+					    FN_SSD_TEST_GET_COMM_CD(tool, '03', 4) AS tool,
+					    FN_SSD_TEST_GET_COMM_CD(protocol, '05', 4) AS protocol,
+					    sub_category1,
+					    sub_category2,
+					    command_line,
+					    arg_00,
+					    arg_01,
+					    arg_02,
+					    arg_03,
+					    arg_04,
+					    arg_05,
+					    arg_06,
+					    arg_07,
+					    arg_08,
+					    arg_09,
+					    delete_yn,
+					    description,
+					    status,
+					    to_char(crt_dt,'YYYY-MM-DD') as crt_dt,
+					    crt_by,
+					    to_char(mod_dt,'YYYY-MM-DD') as mod_dt,
+					    mod_by,
+					    variation
+			from SSD_TEST_MASTER A
+			<where>
+				<if test="itemCode != null and itemCode !='' ">
+					AND A.ITEM_CODE = #{itemCode} 
+				</if>
+				<if test="rev != null and rev !='' ">
+					AND A.REV = #{rev}
+				</if>
+			</where>
+    </select>
+    
+    
+    
+    <!-- test Set 의 상태를 update  -->
+    <update id="dashboard.ssd_sm.testSet.statusUpdate" parameterType="hashmap" >
+    	update SSD_TEST_SET set
+    		status = #{status},
+    		owner = #{loginUserId},
+    		mod_by = #{loginUserId},
+    		mod_dt = SYSDATE
+    	where TEST_SET_IDX = #{testSetIdx}
+    </update>
+    
+    <!-- TestSet Copy에서 자신 이외의 TestSet List -->
+    <select id="dashboard.ssd_sm.testSet.others" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	SELECT
+		    		count(*) over() AS tot_cnt,
+		    		'' AS row_status,
+		    		test_set_idx,
+				    model_name,
+				    FN_SSD_TEST_GET_COMM_CD(test_type,'00',4) AS test_type,
+				    set_default,
+				    test_set,
+				    (select count(*) from ssd_test_set_dtl b where b.test_set_idx = a.test_set_idx) AS total_test_count,
+				    status,
+				    owner,
+				    to_char(crt_dt,'YYYY-MM-DD') as crt_dt,
+				    crt_by,
+				    to_char(mod_dt,'YYYY-MM-DD') as mod_dt,
+				    mod_by
+				FROM
+				    ssd_test_set a
+				<where>
+					<if test="testSetIdx != null and testSetIdx !='' ">
+						A.TEST_SET_IDX != #{testSetIdx} 
+					</if>
+				</where>
+				<![CDATA[ 
+				AND 0 < (SELECT COUNT(*) FROM ssd_test_set_dtl b
+				]]>
+							 where a.test_set_idx = b.test_set_idx 
+							)
+				
+				ORDER BY crt_dt DESC, mod_dt DESC
+			) A
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>				    
+    </select>
+    
+    <!-- Test Set Dtl 일괄 저장시 먼저 해당 Test Set 들 모두 삭제 -->
+    <delete id="dashboard.ssd_sm.testSetDtlGridSave.beforeDel">
+    	DELETE FROM SSD_TEST_SET_DTL
+    	WHERE TEST_SET_IDX = #{detail.testSetIdx}
+    </delete>
+    
+    <!-- Test Set Dtl 일괄 저장 -->
+    <insert id="dashboard.ssd_sm.testSetDtlGridSave" parameterType="hashmap" >
+		<selectKey  keyProperty="new_item_code" resultType="String" order="BEFORE">
+    		select distinct 'P'||lpad(to_number(#{detail.testSetIdx}), 5, '0')||
+    				decode((select lpad(max(substr(ITEM_CODE, 7))+1, 10,'0') from SSD_TEST_SET_DTL where TEST_SET_IDX = #{detail.testSetIdx}),'','0000000001',
+    				(select lpad(max(substr(ITEM_CODE, 7))+1, 10,'0') from SSD_TEST_SET_DTL where TEST_SET_IDX = #{detail.testSetIdx})) AS new_item_code
+    		from dual
+    	</selectKey>
+    	
+    		merge into SSD_TEST_SET_DTL T 
+    		USING DUAL
+    			ON (T.ITEM_CODE = #{detail.item_code}
+    					AND T.TEST_SET_IDX = #{detail.testSetIdx}
+    			)
+    		WHEN MATCHED THEN
+    			update set
+   						category1 = FN_SSD_TEST_GET_COMM_CD(#{detail.category1},'01', 2),
+						category2 = FN_SSD_TEST_GET_COMM_CD(#{detail.category2},'02', 2),
+						test_name = #{detail.test_name},
+						test_case_id = #{detail.test_case_id},
+						<!-- seq = (select decode((select max(nvl(seq, 0))+1 from SSD_TEST_SET_DTL D where D.TEST_SET_IDX = #{detail.testSetIdx} AND D.TEST_CASE_ID = #{detail.test_case_id}), '', 1, 
+                                (select max(nvl(seq, 0))+1 from SSD_TEST_SET_DTL D where D.TEST_SET_IDX = #{detail.testSetIdx} AND D.TEST_CASE_ID = #{detail.test_case_id})) as tt from dual),		 -->
+                        seq = #{detail.seq},
+						rev = replace(#{detail.rev}, '*', ''),
+						test_type = FN_SSD_TEST_GET_COMM_CD(#{detail.test_type},'00', 2),
+						tool = FN_SSD_TEST_GET_COMM_CD(#{detail.tool},'03', 2),
+						protocol = FN_SSD_TEST_GET_COMM_CD(#{detail.protocol},'05', 2),
+						sub_category1 = #{detail.sub_category1},
+						sub_category2 = #{detail.sub_category2},
+						command_line = #{detail.command_line},
+						arg_00 = #{detail.arg00},
+						arg_01 = #{detail.arg01},
+						arg_02 = #{detail.arg02},
+						arg_03 = #{detail.arg03},
+						arg_04 = #{detail.arg04},
+						arg_05 = #{detail.arg05},
+						arg_06 = #{detail.arg06},
+						arg_07 = #{detail.arg07},
+						arg_08 = #{detail.arg08},
+						arg_09 = #{detail.arg09},
+						<choose>
+						<when test='detail.delete_yn != null and detail.delete_yn != ""  '>
+							delete_yn = #{detail.delete_yn},
+						</when>
+						<otherwise>
+							delete_yn = 'N',
+						</otherwise>
+					</choose>
+						variation = #{detail.variation},
+   						mod_dt = SYSDATE
+						<choose>
+							<when test='detail.mod_by != null and detail.mod_by != ""  '>
+								, MOD_BY = #{detail.mod_by}
+							</when>
+							<otherwise>
+								, MOD_BY = 'SYSTEM'
+							</otherwise>
+						</choose>
+    				
+    		WHEN NOT MATCHED THEN
+    			insert
+    			(
+    				item_code,
+				    category1,
+				    category2,
+				    test_name,
+				    test_case_id,
+				    seq,
+				    rev,
+				    test_type,
+				    tool,
+				    protocol,
+				    sub_category1,
+				    sub_category2,
+				    command_line,
+				    arg_00,
+				    arg_01,
+				    arg_02,
+				    arg_03,
+				    arg_04,
+				    arg_05,
+				    arg_06,
+				    arg_07,
+				    arg_08,
+				    arg_09,
+				    delete_yn,
+				    description,
+				    status,
+				    crt_dt,
+				    crt_by,
+				    mod_dt,
+				    mod_by,
+				    variation,
+				    test_set_idx
+                )values(
+                	<choose>
+						<when test='detail.item_code != null and detail.item_code != ""  '>
+							#{detail.item_code},
+						</when>
+						<otherwise>
+							#{new_item_code},
+						</otherwise>
+					</choose>	
+					FN_SSD_TEST_GET_COMM_CD(#{detail.category1},'01', 2),
+					FN_SSD_TEST_GET_COMM_CD(#{detail.category2},'02', 2),
+					#{detail.test_name},
+					#{detail.test_case_id},
+					(select decode((select max(nvl(to_number(seq), 0))+1 from SSD_TEST_SET_DTL D where D.TEST_SET_IDX = #{detail.testSetIdx} AND D.TEST_CASE_ID = #{detail.test_case_id}), '', 1, 
+                                (select max(nvl(to_number(seq), 0))+1 from SSD_TEST_SET_DTL D where D.TEST_SET_IDX = #{detail.testSetIdx} AND D.TEST_CASE_ID = #{detail.test_case_id})) as tt from dual),
+					replace(#{detail.rev}, '*', ''),
+					FN_SSD_TEST_GET_COMM_CD(#{detail.test_type},'00', 2),
+					FN_SSD_TEST_GET_COMM_CD(#{detail.tool},'03', 2),
+					FN_SSD_TEST_GET_COMM_CD(#{detail.protocol},'05', 2),
+					#{detail.sub_category1},
+					#{detail.sub_category2},
+					#{detail.command_line},
+					#{detail.arg00},
+					#{detail.arg01},
+					#{detail.arg02},
+					#{detail.arg03},
+					#{detail.arg04},
+					#{detail.arg05},
+					#{detail.arg06},
+					#{detail.arg07},
+					#{detail.arg08},
+					#{detail.arg09},
+					<choose>
+						<when test='detail.delete_yn != null and detail.delete_yn != ""  '>
+							#{detail.delete_yn},
+						</when>
+						<otherwise>
+							'N',
+						</otherwise>
+					</choose>
+					'',
+					'',
+					<choose>
+						<when test='detail.crt_dt != null and detail.crt_dt != ""  '>
+							TO_DATE(#{detail.crt_dt}, 'YYYY-MM-DD'),
+						</when>
+						<otherwise>
+							SYSDATE,
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.crt_by != null and detail.crt_by != ""  '>
+							#{detail.crt_by},
+						</when>
+						<otherwise>
+							'SYSTEM',
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.mod_dt != null and detail.mod_dt != ""  '>
+							TO_DATE(#{detail.mod_dt}, 'YYYY-MM-DD'),
+						</when>
+						<otherwise>
+							SYSDATE,
+						</otherwise>
+					</choose>
+					<choose>
+						<when test='detail.mod_by != null and detail.mod_by != ""  '>
+							#{detail.mod_by},
+						</when>
+						<otherwise>
+							'SYSTEM',
+						</otherwise>
+					</choose>
+					#{detail.variation},
+					#{detail.testSetIdx}
+            	)
+    </insert>
+    
+    <!-- Test Map Project List 호출 -->
+    <select id="dashboard.ssd_sm.mapProject.all" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	SELECT
+			    		count(*) over() AS tot_cnt
+			    		,'' AS row_status
+			    		,b.id AS project_id
+				        ,b.pjt_code
+				        ,b.project_name AS project_name
+				        ,FN_SSD_TEST_GET_COMM_CD(a.test_type,'00',4) AS test_type
+				        ,(select c.test_set from ssd_test_set c where c.test_set_idx = a.test_set) AS test_set
+				        ,to_char(a.crt_dt, 'YYYY-MM-DD') as crt_dt
+				        ,a.crt_by
+				        ,to_char(a.mod_dt, 'YYYY-MM-DD') as mod_dt
+				        ,mod_by
+				from SSD_TEST_MAP_PROJECT a,
+				    REGRESSION_STAT_META b
+				where a.project_id(+) = b.id
+				ORDER BY b.id ASC, mod_dt DESC
+			) A
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>				    
+    </select>
+    
+    <insert id="dashboard.ssd_sm.mapProjectGridSave" parameterType="hashmap">
+    	merge into SSD_TEST_MAP_PROJECT T 
+    		USING DUAL
+    			ON (
+    					T.PROJECT_ID = #{detail.projectId}
+    			)
+    		WHEN MATCHED THEN
+    			update set
+    					TEST_TYPE = FN_SSD_TEST_GET_COMM_CD(#{detail.testType},'00', 2)
+    					, TEST_SET = (select test_set_idx from ssd_test_set where test_set = #{detail.testSet})
+    					, MOD_DT = SYSDATE
+						<choose>
+							<when test='detail.modBy != null and detail.modBy != ""  '>
+								, MOD_BY = #{detail.modBy}
+							</when>
+							<otherwise>
+								, MOD_BY = 'SYSTEM'
+							</otherwise>
+						</choose>
+			WHEN NOT MATCHED THEN
+    			insert
+    			(
+    				project_id,
+				    test_type,
+				    test_set,
+				    crt_by,
+				    crt_dt,
+				    mod_by,
+				    mod_dt
+    			)values(
+    				#{detail.projectId}
+    				,FN_SSD_TEST_GET_COMM_CD(#{detail.testType},'00', 2)
+    				,(select test_set_idx from ssd_test_set where test_set = #{detail.testSet})
+					<choose>
+						<when test='detail.crtBy != null and detail.crtBy != ""  '>
+							,#{detail.crtBy}
+						</when>
+						<otherwise>
+							,'SYSTEM'
+						</otherwise>
+					</choose>
+					,SYSDATE
+					<choose>
+						<when test='detail.modBy != null and detail.modBy != ""  '>
+							,#{detail.modBy}
+						</when>
+						<otherwise>
+							,'SYSTEM'
+						</otherwise>
+					</choose>
+					,SYSDATE
+    			)
+    </insert>
+    <select id="dashboard.ssd_test.summary.all" resultType="hashmap">
+		with tbl_list as (
+   			select 
+				sum(count(sm.item_code)) over() tot, 
+				project.id as project ,			
+				count(sm.item_code) project_tot,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status is null				
+				) as "N/A", 
+	      		(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Stopped'	
+				) as Stopped ,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Abort'	
+				) as Abort,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Fail'	
+				) as Fail,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Breakdown'	
+				) as Breakdown,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Running'	
+				) as Running ,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Success'	
+				) as Success ,
+				(
+					select count(*) cnt 
+					from regression_stat_meta_detail rt				
+	        		where rt.meta_id = project.id
+					and rt.status = 'Skipped'	
+				) as Skipped
+			
+			from regression_stat_meta_detail r 
+			left outer join regression_stat_meta project
+				on r.meta_id = project.id		
+			left outer join ssd_test_map_project psm
+				on psm.project_id = project.id
+			left outer join ssd_test_set ts
+				on ts.TEST_SET_IDX = psm.TEST_SET			
+			left outer join SSD_TEST_SET_DTL sm
+				on sm.TEST_SET_IDX = ts.TEST_SET_IDX
+				and r.item_code = sm.item_code
+			left outer join (select distinct item_code  from ssd_test_master )  m
+				on m.item_code = sm.item_code			 
+			where  1=1
+			and project.id is not null
+			--and project.ID in ('PJT_00064243_xxxxx.20180529_119','PJT_00064243_xxxxx.20180529_123')
+			group by project.id
+		) 
+
+		select
+			   COUNT(*) OVER() AS tot_cnt
+			, f.PJT_CODE 
+			, a.project
+			, f.PROJECT_NAME
+			, psm.TEST_SET 
+			, f.GENERATED
+			, f.STARTED
+			, f.FINISHED
+			, FW_MATURITY
+			, PROJECT_TYPE
+			, CATEGORY
+			, PRODUCT
+			, NAND_TECH
+			, NAND_REVISION
+			, CONTROLLER_REVISION
+			, FORM_FACTOR
+			, DENSITY
+			, CUSTOMER
+			, DEPOT
+			, FW_REVISION
+			, FW_BINARY
+			, LINK
+			, DESCRIPTION
+			
+			
+			
+			, a.project_tot		
+			, a.Success
+			, case a.project_tot when 0 then 0 else a.Success/a.project_tot end as Success_RATIO	
+			, a.Fail
+			, case a.project_tot when 0 then 0 else a.Fail/a.project_tot end as Fail_RATIO
+			, a."N/A" as NA
+			, case a.project_tot when 0 then 0 else a."N/A"/a.project_tot end as NA_RATIO
+			, a.Stopped
+			, case a.project_tot when 0 then 0 else a.Stopped/a.project_tot end as Stopped_RATIO
+			, a.Abort
+			, case a.project_tot when 0 then 0 else a.Abort/a.project_tot end as Abort_RATIO			
+			, a.Breakdown
+			, case a.project_tot when 0 then 0 else a.Breakdown/a.project_tot end as Breakdown_RATIO
+			, a.Running
+			, case a.project_tot when 0 then 0 else a.Running/a.project_tot end as Running_RATIO
+			
+			, a.Skipped
+			, case a.project_tot when 0 then 0 else a.Skipped/a.project_tot end as Skipped_RATIO
+			
+		from tbl_list a
+		left outer join REGRESSION_STAT_META f
+			on f.id = a.project
+		left outer join ssd_test_map_project psm
+				on psm.project_id = f.id
+		order by a.project
+    </select>
+    <select id="dashboard.ssd_test.summary.all.1" resultType="hashmap">
+		with tbl_list as (
+   			select 
+				sum(count(sm.ITEM_CODE)) over() tot, 
+				project.id as project ,			
+				count(*) project_tot,
+				count(case 
+					when r.item_code is null then 1 else null end
+				) as BLANK, 
+				count(case 
+						when r.item_code is not null and r.status is null then 1 else null 
+					end
+				) as "NULL", 
+	      		count(case 
+						when r.status = 'Stopped' then 1 else null 
+					end
+				) as Stopped ,
+				count(case 
+						when r.status = 'Abort' then 1 else null 
+					end
+				)  as Abort,
+				count(case 
+						when r.status = 'Fail' then 1 else null 
+					end
+				) as Fail,
+				count(case 
+						when r.status = 'Breakdown' then 1 else null 
+					end
+				) as Breakdown,
+				count(case 
+						when r.status = 'Running' then 1 else null 
+					end
+				)  as Running ,
+				count(case 
+						when r.status = 'Success' then 1 else null 
+					end
+				) as Success ,
+				count(case 
+						when r.status = 'Skipped' then 1 else null 
+					end
+				) as Skipped
+			
+			from regression_stat_meta project  
+			left outer join ssd_test_map_project psm
+				on psm.project_id = project.id
+			left outer join ssd_test_set ts
+				on ts.TEST_SET_IDX = psm.TEST_SET			
+			left outer join SSD_TEST_SET_DTL sm
+				on sm.TEST_SET_IDX = ts.TEST_SET_IDX
+			left outer join  regression_stat_meta_detail r
+				on r.meta_id = project.id		
+				and r.item_code = sm.item_code			 
+			where  1=1
+			and project.id is not null
+			--and project.ID in ('PJT_00064243_xxxxx.20180529_119','PJT_00064243_xxxxx.20180529_123')
+			group by project.id
+		) 
+
+		select
+			   COUNT(*) OVER() AS tot_cnt
+			, f.PJT_CODE 
+			, a.project
+			, f.PROJECT_NAME
+			, ts.TEST_SET_IDX 
+			, ts.TEST_SET
+			, f.GENERATED
+			, f.STARTED
+			, f.FINISHED
+			, FW_MATURITY
+			, PROJECT_TYPE
+			, CATEGORY
+			, PRODUCT
+			, NAND_TECH
+			, NAND_REVISION
+			, CONTROLLER_REVISION
+			, FORM_FACTOR
+			, DENSITY
+			, CUSTOMER
+			, DEPOT
+			, FW_REVISION
+			, FW_BINARY
+			, LINK
+			, DESCRIPTION
+			
+			
+			
+			, a.project_tot		
+			, a.Success
+			, case a.project_tot when 0 then 0 else a.Success/a.project_tot end as Success_RATIO	
+			, a.Fail
+			, case a.project_tot when 0 then 0 else a.Fail/a.project_tot end as Fail_RATIO
+			, a."NULL"
+			, case a.project_tot when 0 then 0 else a."NULL"/a.project_tot end as Null_RATIO
+			, a.Stopped
+			, case a.project_tot when 0 then 0 else a.Stopped/a.project_tot end as Stopped_RATIO
+			, a.Abort
+			, case a.project_tot when 0 then 0 else a.Abort/a.project_tot end as Abort_RATIO			
+			, a.Breakdown
+			, case a.project_tot when 0 then 0 else a.Breakdown/a.project_tot end as Breakdown_RATIO
+			, a.Running
+			, case a.project_tot when 0 then 0 else a.Running/a.project_tot end as Running_RATIO
+			
+			, a.Skipped
+			, case a.project_tot when 0 then 0 else a.Skipped/a.project_tot end as Skipped_RATIO
+			, a.Blank
+			, case a.project_tot when 0 then 0 else a.Blank/a.project_tot end as Blank_RATIO
+			
+		from tbl_list a
+		left outer join REGRESSION_STAT_META f
+			on f.id = a.project
+		left outer join ssd_test_map_project psm
+				on psm.project_id = f.id
+		left outer join ssd_test_set ts
+			on ts.TEST_SET_IDX = psm.TEST_SET
+		order by a.project
+    </select>
+    <update id="dashbaord.ssd_test.regression_stat.temp.item_code" parameterType="hashmap">
+	    declare
+			v_cnt number;
+			v_item_code varchar2(100);
+			
+		begin
+			for rec in (
+				select * from REGRESSION_STAT_META_DETAIL
+			) loop 
+				if rec.item_code is null then
+					
+					SELECT  item_code 
+						into v_item_code
+					FROM   (
+		    			SELECT * FROM   (
+		    				select rownum as rnum, a.* 
+		 					from (
+		  						select sm.ITEM_CODE , max(sm.REV) rev from SSD_TEST_MASTER sm group by sm.item_code
+		 					) a  
+		    			)
+		    			ORDER BY DBMS_RANDOM.VALUE
+		    		)
+					WHERE  rownum = 1;
+					
+					select count(*) into v_cnt from REGRESSION_STAT_META_DETAIL
+					where META_ID = rec.META_ID
+					and item_code = v_item_code ;
+					
+					if v_cnt = 0 then					
+						update REGRESSION_STAT_META_DETAIL set
+							item_code = v_item_code ,
+							mod_dt = sysdate
+						where META_ID = rec.META_ID
+						and TC_ID = rec.TC_ID;
+					end if;
+				
+				end if;
+			
+			end loop;
+		
+		end;
+    </update>
+    
+    <select id="dashboard.ssd_test.detail.paging" resultType="hashmap">
+    	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+		    	select 
+		    		r.meta_id,
+		    		r.tc_id,
+					project.PJT_CODE ,
+					project.PROJECT_ID ,
+					project.PROJECT_NAME ,
+					sm.item_code ,
+					r.CATEGORY1, 
+					r.CATEGORY2,
+					r.START_TIME , 
+					r.DURATION,
+					nvl(r.STATUS,'Blank') as status, 
+					r.COMMENTARY, 
+					r.ERROR_MESSAGE,
+					r.PARAMETERS				
+				
+				
+				from regression_stat_meta project  
+				left outer join ssd_test_map_project psm
+					on psm.project_id = project.id
+				left outer join ssd_test_set ts
+					on ts.TEST_SET_IDX = psm.TEST_SET			
+				left outer join SSD_TEST_SET_DTL sm
+					on sm.TEST_SET_IDX = ts.TEST_SET_IDX
+				left outer join  regression_stat_meta_detail r
+					on r.meta_id = project.id		
+					and r.item_code = sm.item_code			 
+				
+				where  1=1
+				and project.id = #{search_project}
+				<if test="search_prop != null and search_prop != '' " >
+					<choose>
+						<when test="search_prop == 'Project_tot'  "></when>
+						<when test="search_prop == 'Null'  ">and r.item_code is not null and r.STATUS is null</when>
+						<when test="search_prop == 'Blank'  ">and r.item_code is null </when>
+						<otherwise> and r.STATUS = #{search_prop} </otherwise>
+					</choose>					
+					
+				</if>	
+				order by sm.item_code
+			) A
+			where 1=1 
+	   		
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(#{rows}) * (to_number(#{page}) -1) 
+	    	and A.row_num <= to_number(#{rows}) * to_number(#{page})
+    	]]>	
+		
+    </select>
+    <select id="dashboard.ssd_test.detail.paging.page" resultType="hashmap">
+    	select 
+				ceil(count(*)/ #{rows} ) as total,
+				#{page} as page ,
+				count(*) records 
+			from 
+			(
+				select a.* from (
+		    		select 
+					project.PJT_CODE ,
+					project.PROJECT_ID ,
+					project.PROJECT_NAME ,
+					sm.item_code ,
+					r.CATEGORY1, 
+					r.CATEGORY2,
+					r.START_TIME , 
+					r.DURATION,
+					r.STATUS, 
+					r.COMMENTARY, 
+					r.ERROR_MESSAGE,
+					r.PARAMETERS				
+				
+				
+				from regression_stat_meta project  
+				left outer join ssd_test_map_project psm
+					on psm.project_id = project.id
+				left outer join ssd_test_set ts
+					on ts.TEST_SET_IDX = psm.TEST_SET			
+				left outer join SSD_TEST_SET_DTL sm
+					on sm.TEST_SET_IDX = ts.TEST_SET_IDX
+				left outer join  regression_stat_meta_detail r
+					on r.meta_id = project.id		
+					and r.item_code = sm.item_code			 
+				
+				where  1=1
+				and project.id = #{search_project}
+				<if test="search_prop != null and search_prop != '' " >
+					<choose>
+						<when test="search_prop == 'Project_tot'  "></when>
+						<when test="search_prop == 'Null'  ">and r.item_code is not null and r.STATUS is null</when>
+						<when test="search_prop == 'Blank'  ">and r.item_code is null </when>
+						<otherwise> and r.STATUS = #{search_prop} </otherwise>
+					</choose>					
+					
+				</if>
+					
+			) A
+			where 1=1 
+			
+		)
+		
+		
+    </select>
+    <update id="dashboard.ssd_test.regression.detail.status.update" parameterType="hashmap">
+    	declare
+	    	cnt number;
+	    	
+	    begin
+	    		
+	    		select count(*) into cnt from REGRESSION_STAT_META_DETAIL
+	    		where META_ID = #{detail.META_ID}
+                and  TC_ID = #{detail.TC_ID};
+	    		
+	    		update REGRESSION_STAT_META_DETAIL set
+	    			status = #{detail.STATUS},
+	    			mod_dt = sysdate
+	    		where META_ID = #{detail.META_ID}
+                and  TC_ID = #{detail.TC_ID}; 
+	    		
+	    		
+                
+       	 
+	    end;
+    
+    </update>
+    
+    
 </mapper>    

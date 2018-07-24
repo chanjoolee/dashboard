@@ -2723,6 +2723,7 @@
    			},
    		]
    	
+   		
    		, "project_build" : [
    			"schema": {
    				"entities": [
@@ -2745,50 +2746,140 @@
    					}
    				],
    				"work_flows" : {
-   					"task": {
+   					{
    						"id": "",
+   						"task_type": "task",
    						"task_name": "",
-   						"task_type": ["main","return"]
-   						"search_condition": {
-   							"elements" : [
-   								{
-   									"type": ["multiCombo","text_input","date_input"]
-   								}
-   							]	
-   						}
-   						,
-   						"entities" : [
+   						"file_type": ["jsp","batch"]   	,	
+   						"return_value": {},
+   						"repository" : [
    							{
-   								"table_name": ""
+   								"repository_id": ""
+   								// "type": ["entity","etc"]  ,
+   								// "name": ""
+   							}
+   						],
+   						"display" : ["list","inline","none"] ,
+   						"is_loop": false,
+   						"loop_condition" {
+   							"start_condition": "",
+   							"end_condition": ""
+   						},
+   						"sub_tasks" : [
+   							"sub_task_id"
+   						]
+   						
+   					},
+   					// grid task
+   					{
+   						"id": "",
+   						"task_type": "task",
+   						"task_name": "",
+   						"file_type": ["jsp","batch"]   	,	
+   						"return_value": {},
+   						
+   						// 
+   						"repository" : [
+   							{
+   								"repository_id": ""
+   								// "type": ["entity","etc"]  ,
+   								// "name": ""
+   							}
+   						],
+   						"display" : "list" ,
+   						"columns": [
+   							{
+   								"name":"",
+   								"label": "",
+   								"width": 150,
+   								"align": "left",
+   								"sortable": false,
+   								"editable": true
+   							}
+   						],
+   						"events": [
+   							{
+   								"id": "",
+   								"event_type": ["cell_click","extension","selectForSave"],
+   								"button": {
+   									"label":""
+   								}
+   							}
+   						],
+   						// actually this is expressed by connection. this is only for description.
+   						"sub_tasks" : [
+   							// contextmenu
+   							// expansion
+   							{
+   								"id":"",
+   								"type": "imbedded_expantion",
+   								"display": "inline"
    							},
    							{
-   								"table_name": ""
+   								"id":"",
+   								"type": "imbedded_expantion",
+   								"display": "list"
    							}
-   							
-   						], 
-   						"contents": {
-   							"elements": [
-   								{
-   									"type": ["..."]
-   								}
-   							]
-   						}
+   							// select
+   						]
+   						
    					},
+   					{
+   						"id": "",
+   						"task_type": "sub_task",
+   						"task_name": "",
+   						"file_type": ["jsp","batch"]   	,
+   					}
    					"connections": [
    						{
    							"id": "",
    							"source": {
-   								"id": ""
+   								"id": "",
+   								"parameters": [
+   									{
+   										"repository_name": "",
+   										"column_name": ""
+   									}
+   								]
    							},
    							"target" : {
    								"id": ""
    							}
    						}
    					]
+   				} ,
+   				"program": {
+   					"page_name": "",
+   					"dictionary" : [
+   						{
+   							"repositry_id": "",
+   							"column_name": "",
+   							"name": "" ,
+   							"description": ""
+   						}
+   					],
+   					"search_condition":[
+   						{
+   							"name": "",
+   							"repository_id": "",
+   							"column_name": "" ,   							
+   							"type": "input, multiselect" ,
+   							"value" : { }
+   						}
+   					],
+   					"search_content": [
+   						{
+   							"repositry_id": "",
+   							"column_name": ""
+   						}
+   					]
    				}
    					
    				
    			}
+   			// genmymodel error  xmi to json error:    search :  "\s?\n(\s+)?([\w\.\s=]+)(\s+)?"      replace : "\2"
+   			// https://api.genmymodel.com/projects/_YYotADLyEei8i88GzKaw4w/json
+   			// https://api.genmymodel.com/projects/_YYotADLyEei8i88GzKaw4w/xmi
    		
    		]
    	}	

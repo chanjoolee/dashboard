@@ -5,175 +5,74 @@
 <mapper namespace="">
 
 	<select id="systemUsage.selectSystemUsageDefaultMonth" resultType="hashmap">
-		SELECT TO_CHAR(ADD_MONTHS(TO_DATE(MAX(USE_MONTH), 'YYYYMM'), -11), 'YYYYMM') FROM_USE_MONTH
-		     , MAX(USE_MONTH) TO_USE_MONTH 
-		FROM IT_SYSTEM_USAGE_MONTH
+		SELECT TO_CHAR(ADD_MONTHS(SYSDATE-1, -11), 'YYYYMM') AS FROM_USE_MONTH , TO_CHAR(SYSDATE-1, 'YYYYMM') AS TO_USE_MONTH FROM DUAL
 	</select>
 	
 	<select id="systemUsage.selectSystemUsageSummaryList" resultType="hashmap">
-		SELECT '01' SERIES_TYPE
-		     , USE_MONTH
-		     , EMPLOYEE_COUNT COUNT_VAL
-		     , TO_CHAR(EMPLOYEE_COUNT, 'FM999,999,999,999,999') EMPLOYEE_COUNT
-		     , TO_CHAR(USE_COUNT, 'FM999,999,999,999,999') USE_COUNT
-		     , CASE WHEN EMPLOYEE_COUNT = 0 THEN 0 ELSE ROUND(USE_COUNT / EMPLOYEE_COUNT, 1) END USE_AVERAGE
-		     , ROW_NUMBER() OVER(ORDER BY USE_MONTH) ROW_SEQ
-		FROM (
-		        SELECT B.USE_MONTH
-		             , NVL(A.EMPLOYEE_COUNT, 0) EMPLOYEE_COUNT
-		             , NVL(A.USE_COUNT, 0) USE_COUNT
-		        FROM (
-		                SELECT A.USE_MONTH
-		                     <!-- , SUM(EMPLOYEE_COUNT) EMPLOYEE_COUNT -->
-		                     , MAX((    SELECT COUNT(DISTINCT EMPLOYEE_ID)
-                                    	FROM IT_SYSTEM_USAGE_USER
-                                    	WHERE SYSTEM_ID = A.SYSTEM_ID
-                                      	  AND USE_MONTH = A.USE_MONTH 
-                               )) EMPLOYEE_COUNT
-		                     , SUM(USE_COUNT) USE_COUNT
-		                FROM IT_SYSTEM_USAGE_MONTH A
-		                   , IT_SYSTEM_MENU_HIERARCHY B
-		                WHERE 1 = 1
-		                  AND A.SYSTEM_ID = #{systemId}
-		                  AND A.USE_MONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
-		                  AND A.SYSTEM_ID = B.SYSTEM_ID
-		                  AND A.FUNCTION_ID = B.FUNCTION_ID
-		                GROUP BY A.USE_MONTH
-		             ) A
-		           , (  SELECT DISTINCT TO_CHAR(USE_MONTH, 'YYYYMM') USE_MONTH 
-		                FROM ( 
-		                        SELECT TO_DATE(#{fromUseMonth}, 'YYYYMM') + LEVEL - 1 USE_MONTH
-		                        FROM   DUAL CONNECT BY LEVEL <![CDATA[ <= ]]> TO_DATE(#{toUseMonth}, 'YYYYMM') - TO_DATE(#{fromUseMonth}, 'YYYYMM') + 1
-		                     )
-		             ) B
-		        WHERE A.USE_MONTH(+) = B.USE_MONTH
-		      )
-		UNION ALL
-		SELECT '02' SERIES_TYPE
-		     , USE_MONTH
-		     , USE_COUNT COUNT_VAL
-		     , TO_CHAR(EMPLOYEE_COUNT, 'FM999,999,999,999,999') EMPLOYEE_COUNT
-		     , TO_CHAR(USE_COUNT, 'FM999,999,999,999,999') USE_COUNT
-		     , CASE WHEN EMPLOYEE_COUNT = 0 THEN 0 ELSE ROUND(USE_COUNT / EMPLOYEE_COUNT, 1) END USE_AVERAGE
-		     , ROW_NUMBER() OVER(ORDER BY USE_MONTH) ROW_SEQ
-		FROM (
-		        SELECT B.USE_MONTH
-		             , NVL(A.EMPLOYEE_COUNT, 0) EMPLOYEE_COUNT
-		             , NVL(A.USE_COUNT, 0) USE_COUNT
-		        FROM (
-		                SELECT A.USE_MONTH
-		                     <!-- , SUM(EMPLOYEE_COUNT) EMPLOYEE_COUNT -->
-		                     , MAX((    SELECT COUNT(DISTINCT EMPLOYEE_ID)
-                                    	FROM IT_SYSTEM_USAGE_USER
-                                    	WHERE SYSTEM_ID = A.SYSTEM_ID
-                                      	  AND USE_MONTH = A.USE_MONTH 
-                               )) EMPLOYEE_COUNT
-		                     , SUM(USE_COUNT) USE_COUNT
-		                FROM IT_SYSTEM_USAGE_MONTH A
-		                   , IT_SYSTEM_MENU_HIERARCHY B
-		                WHERE 1 = 1
-		                  AND A.SYSTEM_ID = #{systemId}
-		                  AND A.USE_MONTH BETWEEN #{fromUseMonth} AND #{toUseMonth}
-		                  AND A.SYSTEM_ID = B.SYSTEM_ID
-		                  AND A.FUNCTION_ID = B.FUNCTION_ID
-		                GROUP BY A.USE_MONTH
-		             ) A
-		           , (  SELECT DISTINCT TO_CHAR(USE_MONTH, 'YYYYMM') USE_MONTH 
-		                FROM ( 
-		                        SELECT TO_DATE(#{fromUseMonth}, 'YYYYMM') + LEVEL - 1 USE_MONTH
-		                        FROM   DUAL CONNECT BY LEVEL <![CDATA[ <= ]]> TO_DATE(#{toUseMonth}, 'YYYYMM') - TO_DATE(#{fromUseMonth}, 'YYYYMM') + 1
-		                     )
-		             ) B
-		        WHERE A.USE_MONTH(+) = B.USE_MONTH
-		      )
+        SELECT	/* selectSystemUsageSummaryList */
+            '01' AS SERIES_TYPE
+            , B.USE_MONTH
+            , NVL(COUNT_VAL, 0) AS COUNT_VAL
+            , TO_CHAR(NVL(COUNT_VAL, 0), 'FM999,999,999,999,999') AS EMPLOYEE_COUNT
+            , TO_CHAR(NVL(USE_COUNT, 0), 'FM999,999,999,999,999') AS USE_COUNT
+            , NVL(USE_COUNT, 0) AS USE_COUNT_VAL
+            , CASE WHEN NVL(COUNT_VAL, 0) = 0 THEN 0 ELSE ROUND(USE_COUNT / COUNT_VAL, 1) END AS USE_AVERAGE
+            , ROW_NUMBER() OVER(ORDER BY B.USE_MONTH) AS ROW_SEQ
+        FROM (
+                SELECT
+                    USE_MONTH
+                    , COUNT(DISTINCT EMPLOYEE_ID) AS COUNT_VAL
+                    , SUM(USE_COUNT) AS USE_COUNT
+                FROM 
+                    IT_SYSTEM_LOG_USER
+                WHERE SYSTEM_ID = #{systemId}
+                GROUP BY USE_MONTH
+            ) A , (
+                SELECT DISTINCT TO_CHAR(TO_DATE(#{fromUseMonth}, 'YYYYMM') + LEVEL - 1, 'YYYYMM') AS USE_MONTH FROM DUAL CONNECT BY LEVEL <![CDATA[ <= ]]> TO_DATE(#{toUseMonth}, 'YYYYMM') - TO_DATE(#{fromUseMonth}, 'YYYYMM') + 1
+            ) B
+        WHERE A.USE_MONTH(+) = B.USE_MONTH
 	</select>
 
     <select id="systemUsage.selectSystemUsageList" resultType="hashmap">
-    	SELECT '01' SERIES_TYPE
-             , FUNCTION_ID
-             , FUNCTION_NAME
-             , EMPLOYEE_COUNT COUNT_VAL
-             , TO_CHAR(EMPLOYEE_COUNT, 'FM999,999,999,999,999') EMPLOYEE_COUNT
-             , TO_CHAR(USE_COUNT, 'FM999,999,999,999,999') USE_COUNT
-             , CASE WHEN EMPLOYEE_COUNT = 0 THEN 0 ELSE ROUND(USE_COUNT / EMPLOYEE_COUNT, 1) END USE_AVERAGE
-             , ROW_NUMBER() OVER(ORDER BY A.EMPLOYEE_COUNT DESC, A.USE_COUNT DESC, A.FUNCTION_ID) ROW_SEQ
-        FROM (
-                SELECT B.SYSTEM_ID
-                     , B.FUNCTION_ID
-                     , CASE WHEN B.SYSTEM_ID = 'SolutionPMS' THEN CASE WHEN B.MENU_LEVEL_4 IS NULL THEN B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.FUNCTION_NAME 
-                                                                                                   ELSE B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.MENU_LEVEL_3 || ' > ' || B.FUNCTION_NAME 
-                                                                  END
-                       ELSE '[' || B.MENU_LEVEL_1 || '] ' || B.FUNCTION_NAME END FUNCTION_NAME
-                     , NVL(A.EMPLOYEE_COUNT, 0) EMPLOYEE_COUNT
-                     , NVL(A.USE_COUNT, 0) USE_COUNT
-                FROM (  
-                        SELECT SYSTEM_ID
-                             , FUNCTION_ID
-                             , USE_MONTH
-                             , EMPLOYEE_COUNT
-                             , USE_COUNT
-                        FROM IT_SYSTEM_USAGE_MONTH
-                        WHERE 1 = 1
-                          AND SYSTEM_ID = #{systemId}
-                          AND USE_MONTH = #{useMonth}
-                      ) A,
-                      (
-                        SELECT SYSTEM_ID
-                             , FUNCTION_ID
-                             , FUNCTION_NAME
-                             , MENU_LEVEL_1
-                             , MENU_LEVEL_2
-                             , MENU_LEVEL_3
-                             , MENU_LEVEL_4
-                        FROM IT_SYSTEM_MENU_HIERARCHY
-                        WHERE SYSTEM_ID = #{systemId}
-                      ) B
-                WHERE A.SYSTEM_ID(+) = B.SYSTEM_ID
-                  AND A.FUNCTION_ID(+) = B.FUNCTION_ID
-             ) A
-        UNION ALL
-        SELECT '02' SERIES_TYPE
-             , FUNCTION_ID
-             , FUNCTION_NAME
-             , USE_COUNT COUNT_VAL
-             , TO_CHAR(EMPLOYEE_COUNT, 'FM999,999,999,999,999') EMPLOYEE_COUNT
-             , TO_CHAR(USE_COUNT, 'FM999,999,999,999,999') USE_COUNT
-             , CASE WHEN EMPLOYEE_COUNT = 0 THEN 0 ELSE ROUND(USE_COUNT / EMPLOYEE_COUNT, 1) END USE_AVERAGE
-             , ROW_NUMBER() OVER(ORDER BY A.EMPLOYEE_COUNT DESC, A.USE_COUNT DESC, A.FUNCTION_ID) ROW_SEQ
-        FROM (
-                SELECT B.SYSTEM_ID
-                     , B.FUNCTION_ID
-                     , CASE WHEN B.SYSTEM_ID = 'SolutionPMS' THEN CASE WHEN B.MENU_LEVEL_4 IS NULL THEN B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.FUNCTION_NAME 
-                                                                                                   ELSE B.MENU_LEVEL_1 || ' > ' || B.MENU_LEVEL_2 || ' > ' || B.MENU_LEVEL_3 || ' > ' || B.FUNCTION_NAME 
-                                                                  END
-                       ELSE '[' || B.MENU_LEVEL_1 || '] ' || B.FUNCTION_NAME END FUNCTION_NAME
-                     , NVL(A.EMPLOYEE_COUNT, 0) EMPLOYEE_COUNT
-                     , NVL(A.USE_COUNT, 0) USE_COUNT
-                FROM (  
-                        SELECT SYSTEM_ID
-                             , FUNCTION_ID
-                             , USE_MONTH
-                             , EMPLOYEE_COUNT
-                             , USE_COUNT
-                        FROM IT_SYSTEM_USAGE_MONTH
-                        WHERE 1 = 1
-                          AND SYSTEM_ID = #{systemId}
-                          AND USE_MONTH = #{useMonth}
-                      ) A,
-                      (
-                        SELECT SYSTEM_ID
-                             , FUNCTION_ID
-                             , FUNCTION_NAME
-                             , MENU_LEVEL_1
-                             , MENU_LEVEL_2
-                             , MENU_LEVEL_3
-                             , MENU_LEVEL_4
-                        FROM IT_SYSTEM_MENU_HIERARCHY
-                        WHERE SYSTEM_ID = #{systemId}
-                      ) B
-                WHERE A.SYSTEM_ID(+) = B.SYSTEM_ID
-                  AND A.FUNCTION_ID(+) = B.FUNCTION_ID
-             ) A
+            SELECT		/* selectSystemUsageList */
+                '01' AS SERIES_TYPE
+                , FUNCTION_ID
+                , FUNCTION_NAME
+                , COUNT_VAL
+                , TO_CHAR(COUNT_VAL, 'FM999,999,999,999,999') AS EMPLOYEE_COUNT
+                , TO_CHAR(USE_COUNT, 'FM999,999,999,999,999') AS USE_COUNT
+                , USE_COUNT AS USE_COUNT_VAL
+                , CASE WHEN COUNT_VAL = 0 THEN 0 ELSE ROUND(USE_COUNT / COUNT_VAL, 1) END AS USE_AVERAGE
+                , ROW_NUMBER() OVER(ORDER BY COUNT_VAL DESC, USE_COUNT DESC) AS ROW_SEQ
+            FROM (
+                SELECT
+                    FUNCTION_ID
+                    , FUNCTION_NAME
+                    , USE_MONTH
+                    , SUM(COUNT_VAL) AS COUNT_VAL
+                    , SUM(USE_COUNT) AS USE_COUNT
+                FROM (
+                    SELECT
+                        DECODE((CASE WHEN A.SYSTEM_ID IN ('JIRA', 'Confluence') THEN B.MENU_NM ELSE C.MENU_NM END), '', 'ETC', FUNCTION_ID) AS FUNCTION_ID
+                        , NVL(DECODE(A.SYSTEM_ID, 'SolutionPMS', FN_MENU_NAVI(A.FUNCTION_ID) , DECODE((CASE WHEN A.SYSTEM_ID IN ('JIRA', 'Confluence') THEN B.MENU_NM ELSE C.MENU_NM END), '', '[ETC] Unidentified', '[' || A.FUNCTION_ID || '] ' || (CASE WHEN A.SYSTEM_ID IN ('JIRA', 'Confluence') THEN B.MENU_NM ELSE C.MENU_NM END))), 'Unidentified') AS FUNCTION_NAME
+                        , A.USE_MONTH
+                        , COUNT(DISTINCT EMPLOYEE_ID) AS COUNT_VAL
+                        , SUM(A.USE_COUNT) AS USE_COUNT
+                    FROM 
+                        IT_SYSTEM_LOG_USER A
+                        , IT_SYSTEM_MENU_INF B
+                        , IT_SYSTEM_MENU C
+                    WHERE A.SYSTEM_ID = #{systemId}
+                        AND A.USE_MONTH = #{useMonth}
+                        AND A.SYSTEM_ID = B.SYSTEM_ID(+)
+                        AND A.FUNCTION_ID = B.MENU_ID(+)
+                        AND A.SYSTEM_ID = C.SYSTEM_ID(+)
+                        AND A.FUNCTION_ID = C.MENU_ID(+)
+                    GROUP BY A.SYSTEM_ID, A.FUNCTION_ID, B.MENU_NM, A.USE_MONTH, C.MENU_NM
+                )
+                GROUP BY FUNCTION_ID, FUNCTION_NAME, USE_MONTH
+            )
+            ORDER BY ROW_SEQ
     </select>
         
 </mapper>

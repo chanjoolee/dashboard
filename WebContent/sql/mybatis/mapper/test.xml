@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+    
+    
+    <update id="dashbaord.test.transaction.1">
+    	declare
+    	begin
+	    	insert into TEMP_TEST (COL1, COL2, COL3, INS_DT)
+	    	values ('a1','b1','c1', sysdate);
+	    end;
+    
+    </update>
+    <update id="dashbaord.test.transaction.2">
+    	declare
+    	begin
+	    	insert into TEMP_TEST (COL1, COL2,COL3, INS_DT)
+	    	values ('a2','b2','c2', sysdate);
+	    end;
+    
+    </update>
+    
+    
+    
+    
+    
+</mapper>

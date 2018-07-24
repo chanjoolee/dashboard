@@ -6,96 +6,101 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>performance</title>
-    <%-- 1. jquery --%>
-    <!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-    <!-- <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script> -->
-     <!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-    <!-- <script src="js/jquery.csv-0.71.js"></script> -->
+	<title>performance</title>
+	<!-- Scripts  -->
+		<%-- 1. jquery --%>
+			<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
+			<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+			<!-- <script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script> -->
+			<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+			<!-- <script src="js/jquery.csv-0.71.js"></script> -->
     
-    <%-- jqgrid --%>
-    <!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
-    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-	
-	<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-	 <link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+		<%-- jqgrid --%>
+			<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
+			<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+			<script type="text/javascript" src="js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js"></script>    
+			
+			<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+			<!-- link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  -->
+			<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+			<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		
+		<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
+			<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
 	 
     
   
-   <!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
-    <link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
-    <!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
+			<!--  <link rel="stylesheet" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid.css" type="text/css" /> --> 
+			<link rel="stylesheet" media="screen" href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap.css" type="text/css" />
+			<!-- <link rel="stylesheet" media="screen"  href="js/jqGrid_JS_5.1.0/css/ui.jqgrid-bootstrap-ui.css" type="text/css" /> -->
     
     
     
-    <%-- 2. high charts --%>
-    
-<!-- 	<script src="js/highcharts/src/highcharts.src.js"></script> 
-	<script src="js/Highstock-2.1.7/js/highstock.src.js"></script>
-	<script src="js/highcharts/modules/drilldown.src.js"></script>
-	<script src="js/Highstock-2.1.7/js/highcharts-more.js"></script>
-	<script src="js/highcharts/modules/no-data-to-display.src.js"></script> -->
-	
-	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
-	<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script>
-	
-	<%-- x축 그룹라벨 --%>
-	<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
-	<script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script>
-	
-	<%-- 3. Additional files for the Highslide popup effect --%>
-	<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
-	<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
-	
-	<%-- 4. local common --%>
-	<script src="js/dashboard.js?version=2017.11.17.01"></script>
-	<script src="/dashboard/js/performance/category_new.20171220.js"></script>
-	<script src="/dashboard/js/performance/category_sustain.1.001.js"></script>
-	
-	<%-- 5. local --%>
-	<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
-	<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
-	
-	<%-- multi select --%>
-	<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
-	<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
-	<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
-	<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
-	
-	<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-	<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
-	<script src="/common/js/module.js"></script>
-	
-	<%-- File Saver --%>
-	<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
-	<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
-	
-	<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
+		<%-- 2. high charts --%>
+		
+			<!-- <script src="js/highcharts/src/highcharts.src.js"></script> 
+			<script src="js/Highstock-2.1.7/js/highstock.src.js"></script>
+			<script src="js/highcharts/modules/drilldown.src.js"></script>
+			<script src="js/Highstock-2.1.7/js/highcharts-more.js"></script>
+			<script src="js/highcharts/modules/no-data-to-display.src.js"></script> -->
+			
+			<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts.src.js"></script>
+			<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+			<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script>
+			
+			<%-- x축 그룹라벨 --%>
+			<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
+			<script src="http://blacklabel.github.io/grouped_categories/grouped-categories.js"></script>
+		
+		<%-- 3. Additional files for the Highslide popup effect --%>
+			<script type="text/javascript" src="js/highslide/highslide-full.js"></script>
+			<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script>
+		
+		<%-- 4. local common js--%>
+			<script src="/dashboard/js/dashboard.js?version=2018.04.11"></script>
+			<script src="/dashboard/js/performance/category_new.20171220.js"></script>
+			<script src="/dashboard/js/performance/category_sit.20180411.js"></script>
+			<script src="/dashboard/js/performance/category_sustain.1.001.js"></script>
+			<script src="/dashboard/js/performance/category_CDM.20180509.js"></script>
+		
+		<%-- 5. local --%>
+			<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
+			<!-- <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" /> -->
+			<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
+		
+		<%-- multi select --%>
+			<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
+			<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+			<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
+			<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
+			<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+			<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
+		
+		<!-- Common Css -->
+			<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
+			<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
+			<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
+			<script src="/common/js/module.js"></script>
+		
+		<%-- File Saver --%>
+			<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+			<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+		
+		<!-- JS util -->
+			<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
+			<script src="/dashboard/js/jointjs/lodash.min.js"></script>
 	
 	<script type="text/javascript" title="schemaSearchCondition">
 	var EfContextPath = "";
@@ -151,8 +156,9 @@
 												name:'CATEGORY'
 											},
 											multiselectOpt:{
-												selectedList: 1
-												,selectedText: function(numChecked, numTotal, checkedItems){
+												// selectedList: 1
+												multiple: true,
+												selectedText: function(numChecked, numTotal, checkedItems){
 												     //return numChecked + ' of ' + numTotal + ' checked';
 												     var sb = [];
 												     $.each(checkedItems,function(){
@@ -258,6 +264,10 @@
 												cd:'VENDOR',
 												name:'VENDOR'
 											},
+											multiselectOpt:{
+												// selectedList: 1
+												multiple: true
+											},
 											events:{
 												change : function(){
 													// start change events
@@ -347,6 +357,10 @@
 												name:'PRODUCT_NAME'
 													
 											},
+											multiselectOpt:{
+												// selectedList: 1
+												multiple: true
+											},
 											events: {
 												change: function(){
 													getGridData();
@@ -384,6 +398,10 @@
 												cd:'FIRMWARE',
 												name:'FIRMWARE'
 													
+											},
+											multiselectOpt:{
+												// selectedList: 1
+												multiple: true
 											},
 											events: {
 												change: function(){
@@ -431,6 +449,10 @@
 												cd:'NAND_TECH',
 												name:'NAND_TECH'
 													
+											},
+											multiselectOpt:{
+												// selectedList: 1
+												multiple: true
 											},
 											events:{
 												change : function(){
@@ -523,6 +545,10 @@
 												name:'CELL_TYPE'
 													
 											},
+											multiselectOpt:{
+												// selectedList: 1
+												multiple: true
+											},
 											events: {
 												change: function(){
 													getGridData();
@@ -561,6 +587,10 @@
 												name:'CAPACITY'
 													
 											},
+											multiselectOpt:{
+												// selectedList: 1
+												multiple: true
+											},
 											events: {
 												change: function(){
 													getGridData();
@@ -592,7 +622,7 @@
 											label:'All',
 											value:'all',
 											width:'40px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'}
 											],
@@ -610,7 +640,7 @@
 											label:'Between',
 											value:'between',
 											width:'70px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'}
 											],
@@ -628,7 +658,7 @@
 											label:'',
 											value:'',
 											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												
 											],
@@ -683,7 +713,7 @@
 											label:'',
 											value:'',
 											//width:'100px',
-// 											cls: 'btn_txt btn_type_d btn_color_b',
+											// cls: 'btn_txt btn_type_d btn_color_b',
 											containerCss:[
 												{code: 'margin-left', value:'10px'},
 											],
@@ -809,527 +839,528 @@
 			
 	};
 	
-	function makeHtml(container, _schema){
-		var containerSub = null;
-		if(container == null)
-			container = _schema.containerId;
-		if(typeof container == 'string')
-			container = $("#" + container);
-		
-		if(_schema.parentSchema != undefined && _schema.parentSchema.cls != undefined)
-			container.addClass(_schema.parentSchema.cls);
-		if(_schema.parentSchema != undefined &&  _schema.parentSchema.containerCss != undefined){
-			$.each(_schema.parentSchema.containerCss,function(i,v){
-				container.css(v.code,v.value);
-			});
-		}
-			
-		var mainContainer = null;
-		var mainControl = null;
-		if(_schema.type == 'inline'){
-			var cols = 3;
-			if(_schema.cols != undefined)
-				cols = _schema.cols;
-			
-			//tableCreate
-			mainContainer = $(document.createElement("table"));
-			//table.addClass("table_hori m_bottom_20");
-			mainContainer.addClass("table_hori");
-			container.append(mainContainer);
-			
-			// colgroup
-			var colgroup = $(document.createElement("colgroup"));
-			mainContainer.append(colgroup);
-			
-			for(var i=0; i< cols;i++){
-				if(i == (cols - 1) ){
-					colgroup.append("<col width=\"150\"/><col width=\"\"/>");
-				}else{
-					colgroup.append("<col width=\"150\"/><col width=\"180\"/>");
-				}
-			}
-			// -- colgroup
-			
-			// tbody
-			var tbody = $(document.createElement("tbody"));
-			mainContainer.append(tbody); 
-			var tr = null;
-			$.each(_schema.items,function(i,item){
-				if(i%cols == 0 ){
-					tr =$(document.createElement("tr"));
-					tbody.append(tr);
-				}
-				//header
-				var th = $(document.createElement("th"));
-				th.addClass("txt_right");
-				th.text(item.label);
-				//td value
-				var td = $(document.createElement("td"));
-				td.addClass("hori_t_data");
-				td.text(_schema.data()[item.col]);
-				
-				tr.append(th);
-				tr.append(td);
-				
-			});
-			// --tbody
-		}else if(_schema.type == 'grid'){
-			//==grid create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","10px");
-			}
-				
-			container.append(mainContainer);
-			//mainContainer.css("width","100%");
-			//grid.addClass("chartContainerSub");
-			
-			
-			//==table create
-			mainControl = $(document.createElement( "table" ));
-			mainControl.attr("id",_schema.id);
-			//table.css("width","100%");
-			mainContainer.append(mainControl);
-			
-			//== page create
-			var pager = $(document.createElement( "div" ));
-			pager.attr("id",_schema.id + 'Pager');
-			mainContainer.append(pager);
-			
-			//== common option
-			var opt = {
-					datatype: 'local',
-					styleUI : 'Bootstrap',
-					colModel: _schema.items,
-					//rowNum:10,
-					rownumbers: true, // show row numbers
-					caption: _schema.label,
-					//width: '100%',
-					//height: '100%',
-					iconSet: "fontAwesome",
-					sortable: false,
-					//viewrecords: true,
-					//pager : pager, 
-					//data : _schema.data() 
-			};
-			if(_schema.data != undefined && typeof _schema.data == 'function')
-				opt.data = _schema.data();
-			
-			if(_schema.gridOpt != undefined){
-				$.extend(opt, _schema.gridOpt);
-			}
-			
-			mainControl.jqGrid(opt);
-			
-			// width가 100%인 경우
-			if(opt.width != undefined && opt.width == '100%'){
-				mainContainer.find(".ui-jqgrid").css("width","100%");
-				mainContainer.find(".ui-jqgrid-view").css("width","100%");
-				mainContainer.find(".ui-jqgrid-hdiv").css("width","100%");
-				mainContainer.find(".ui-jqgrid-bdiv").css("width","100%");
-				mainContainer.find(".ui-jqgrid-sdiv").css("width","100%");
-			}
-			
-			
-		}else if(_schema.type == 'chart'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","10px");
-			}
-			if(_schema.width != undefined)
-				mainContainer.css("width",_schema.width);
-				
-			if(_schema.label != ""){
-				var h3 = $(document.createElement("h3"));
-				h3.addClass("cont_tit");
-				h3.text(_schema.label);
-				container.append(h3);
-			}
-			
-			container.append(mainContainer);
-			
-			
-			
-			
-			
-			if($(mainContainer).highcharts() != undefined) $(mainContainer).highcharts().destroy();
-			var defaultOption =  {
-					credits: {//gets rid of the highcharts logo in bottom right
-               			enabled: false
-					}
-            };
-			var series = {};
-			var options = $.extend( defaultOption, _schema.options());
-			if(_schema.data != undefined && typeof _schema.data == 'function'){
-				var vData = _schema.data();
-				series = vData.series;
-				options.series = vData.series.series;
-				if(vData.xAxis != undefined)
-					options.xAxis = vData.xAxis;
-				if(vData.yAxis != undefined)
-					options.yAxis = vData.yAxis;
-			}
-// 			var chartUser = Highcharts.stockChart($(mainContainer).attr('id') ,options,function(chart){
-		    	
-// 	 		});
-			
-			$(mainContainer).highcharts(options,function(chart){
-		    	
-			 });
-			 
-			//var chart = mainContainer.highcharts();
-			//chart.reflow();
-			
-// 			$(mainContainer).highcharts(options,function(chart){
-		    	
-// 			 });
-			
-		}else if(_schema.type == 'SearchHeader'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","1px");
-			}
-				
-			mainControl = $(document.createElement("h3"));
-			//h3.addClass("cont_tit");
-			mainContainer.append(mainControl);
-			mainControl.text(_schema.text);
-			mainControl.css("font-weight","bold");
-			mainControl.css("text-align","right");
-			mainControl.css("color","#000");
-			
-			container.append(mainContainer);
-		}else if (_schema.type == 'multiCombo'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","10px");
-			}
-			container.append(mainContainer);
-			
-			var vData = _schema.data();
-			var sb = [];
-			//sb.push("<option value='' multiple='multiple' ></option>");
-			mainControl = $(document.createElement( "select" ));
-			mainControl.css("width",_schema.width);
-			mainControl.attr("multiple","multiple");
-			if(_schema.name != undefined)
-				mainControl.attr("name",_schema.name)
-			if(_schema.id != undefined)
-				mainControl.attr("id",_schema.id)
-			mainContainer.append(mainControl);
-			
-			/* var option1 = $(document.createElement( "option" ));
-			option1.val('xxx');
-			option1.text('xxx');
-			option1.css("display","none");
-			mainControl.append(option1); */
-			
-			$.each(vData,function(){
-				var option = $(document.createElement( "option" ));
-				option.val(this[_schema.options.cd]);
-				option.text(this[_schema.options.name]);
-				//모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
-				$.each(this,function(k,v){
-					option.attr(k.toLowerCase(),v);
-				});
-				//sb.push("<option value='"+ this[_schema.options.cd] +"' "+''+">" + this[_schema.options.name] +"</option>");
-				mainControl.append(option);
-			});
-			//$(vSelect).append(sb.join(""));
-			var options = {};
-			if(_schema.options.isSingle != undefined && _schema.options.isSingle == true){
-				var options = {
-					selectedList: 1,
-					multiple: false,
-					height:300,
-					minWidth: 100,
-					//selectedText: _schema.text + ' # selected',
-					noneSelectedText: 'Select ' + _schema.text
-				};
-			}else{
-				var options = {
-					//selectedList: 1,
-					height:300,
-					minWidth: 100,
-					//selectedText: _schema.text + ' # selected',
-					selectedText: function(numChecked, numTotal, checkedItems){
-					     return numChecked + ' of ' + numTotal + ' checked';
-					},
-					noneSelectedText: 'Select ' + _schema.text
-				};
-			}
-			
-			if(_schema.options != undefined){
-				$.extend(options, _schema.options);
-			}
 
+	// function makeHtml(container, _schema){
+		// 	var containerSub = null;
+		// 	if(container == null)
+		// 		container = _schema.containerId;
+		// 	if(typeof container == 'string')
+		// 		container = $("#" + container);
 			
-			var vMultiSelect = $(mainControl).multiselect(options).multiselectfilter();
-			
+		// 	if(_schema.parentSchema != undefined && _schema.parentSchema.cls != undefined)
+		// 		container.addClass(_schema.parentSchema.cls);
+		// 	if(_schema.parentSchema != undefined &&  _schema.parentSchema.containerCss != undefined){
+		// 		$.each(_schema.parentSchema.containerCss,function(i,v){
+		// 			container.css(v.code,v.value);
+		// 		});
+		// 	}
 				
-			
-			
-			
-			
-		}else if(_schema.type == 'Button'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
+		// 	var mainContainer = null;
+		// 	var mainControl = null;
+		// 	if(_schema.type == 'inline'){
+		// 		var cols = 3;
+		// 		if(_schema.cols != undefined)
+		// 			cols = _schema.cols;
 				
-			}
-			
-			mainControl = $(document.createElement("a"));
-			mainContainer.append(mainControl);
-			
-			
-			var span = $(document.createElement("span"));
-			span.addClass("name");
-			var span1 = $(document.createElement("span"));
-			span1.addClass("txt");
-			span1.text(_schema.label);
-			span.append(span1);
-			mainControl.append(span);
-			
-			container.append(mainContainer);
-		}else if(_schema.type == 'radioButton'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
+		// 		//tableCreate
+		// 		mainContainer = $(document.createElement("table"));
+		// 		//table.addClass("table_hori m_bottom_20");
+		// 		mainContainer.addClass("table_hori");
+		// 		container.append(mainContainer);
 				
-			}
-			
-			mainControl = $(document.createElement("input"));
-			mainControl.attr("type","radio");
-			mainControl.attr("name",_schema.name);
-			mainControl.attr("id",_schema.id);
-			
-			if(_schema.checked != undefined)
-				mainControl.prop("checked",_schema.checked);
-			
-			mainContainer.append(mainControl);
-			
-			var label = $(document.createElement("label"));
-			label.text(_schema.label);
-			mainContainer.append(label);
-			
-			container.append(mainContainer);
-		}else if(_schema.type == 'dateInput'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
+		// 		// colgroup
+		// 		var colgroup = $(document.createElement("colgroup"));
+		// 		mainContainer.append(colgroup);
 				
-			}
-			
-			// text
-			mainControl = $(document.createElement("input"));
-			mainControl.attr("type","text");
-			mainControl.attr("name",_schema.name);
-			mainControl.attr("id",_schema.id);
-			mainControl.attr("readonly", "readonly");
-			mainContainer.append(mainControl);			
-			
-			container.append(mainContainer);
-			
-		}else if(_schema.type == 'dateButton'){
-			//==chart container create
-			//mainContainer = $(document.createElement( "div" ));
-			//mainContainer.attr("id",_schema.id + 'Container');
-			if(_schema.parentContainerId != undefined){
-				mainContainer = $("#"  + _schema.parentContainerId);
+		// 		for(var i=0; i< cols;i++){
+		// 			if(i == (cols - 1) ){
+		// 				colgroup.append("<col width=\"150\"/><col width=\"\"/>");
+		// 			}else{
+		// 				colgroup.append("<col width=\"150\"/><col width=\"180\"/>");
+		// 			}
+		// 		}
+		// 		// -- colgroup
 				
-				// btn
-				mainControl = $(document.createElement("a"));
-				mainContainer.append(mainControl);
+		// 		// tbody
+		// 		var tbody = $(document.createElement("tbody"));
+		// 		mainContainer.append(tbody); 
+		// 		var tr = null;
+		// 		$.each(_schema.items,function(i,item){
+		// 			if(i%cols == 0 ){
+		// 				tr =$(document.createElement("tr"));
+		// 				tbody.append(tr);
+		// 			}
+		// 			//header
+		// 			var th = $(document.createElement("th"));
+		// 			th.addClass("txt_right");
+		// 			th.text(item.label);
+		// 			//td value
+		// 			var td = $(document.createElement("td"));
+		// 			td.addClass("hori_t_data");
+		// 			td.text(_schema.data()[item.col]);
+					
+		// 			tr.append(th);
+		// 			tr.append(td);
+					
+		// 		});
+		// 		// --tbody
+		// 	}else if(_schema.type == 'grid'){
+		// 		//==grid create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(container.children().length > 0)
+		// 				mainContainer.css("margin-left","10px");
+		// 		}
+					
+		// 		container.append(mainContainer);
+		// 		//mainContainer.css("width","100%");
+		// 		//grid.addClass("chartContainerSub");
+				
+				
+		// 		//==table create
+		// 		mainControl = $(document.createElement( "table" ));
+		// 		mainControl.attr("id",_schema.id);
+		// 		//table.css("width","100%");
+		// 		mainContainer.append(mainControl);
+				
+		// 		//== page create
+		// 		var pager = $(document.createElement( "div" ));
+		// 		pager.attr("id",_schema.id + 'Pager');
+		// 		mainContainer.append(pager);
+				
+		// 		//== common option
+		// 		var opt = {
+		// 				datatype: 'local',
+		// 				styleUI : 'Bootstrap',
+		// 				colModel: _schema.items,
+		// 				//rowNum:10,
+		// 				rownumbers: true, // show row numbers
+		// 				caption: _schema.label,
+		// 				//width: '100%',
+		// 				//height: '100%',
+		// 				iconSet: "fontAwesome",
+		// 				sortable: false,
+		// 				//viewrecords: true,
+		// 				//pager : pager, 
+		// 				//data : _schema.data() 
+		// 		};
+		// 		if(_schema.data != undefined && typeof _schema.data == 'function')
+		// 			opt.data = _schema.data();
+				
+		// 		if(_schema.gridOpt != undefined){
+		// 			$.extend(opt, _schema.gridOpt);
+		// 		}
+				
+		// 		mainControl.jqGrid(opt);
+				
+		// 		// width가 100%인 경우
+		// 		if(opt.width != undefined && opt.width == '100%'){
+		// 			mainContainer.find(".ui-jqgrid").css("width","100%");
+		// 			mainContainer.find(".ui-jqgrid-view").css("width","100%");
+		// 			mainContainer.find(".ui-jqgrid-hdiv").css("width","100%");
+		// 			mainContainer.find(".ui-jqgrid-bdiv").css("width","100%");
+		// 			mainContainer.find(".ui-jqgrid-sdiv").css("width","100%");
+		// 		}
+				
+				
+		// 	}else if(_schema.type == 'chart'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(container.children().length > 0)
+		// 				mainContainer.css("margin-left","10px");
+		// 		}
+		// 		if(_schema.width != undefined)
+		// 			mainContainer.css("width",_schema.width);
+					
+		// 		if(_schema.label != ""){
+		// 			var h3 = $(document.createElement("h3"));
+		// 			h3.addClass("cont_tit");
+		// 			h3.text(_schema.label);
+		// 			container.append(h3);
+		// 		}
+				
+		// 		container.append(mainContainer);
+				
+				
+				
+				
+				
+		// 		if($(mainContainer).highcharts() != undefined) $(mainContainer).highcharts().destroy();
+		// 		var defaultOption =  {
+		// 				credits: {//gets rid of the highcharts logo in bottom right
+		//            			enabled: false
+		// 				}
+		//         };
+		// 		var series = {};
+		// 		var options = $.extend( defaultOption, _schema.options());
+		// 		if(_schema.data != undefined && typeof _schema.data == 'function'){
+		// 			var vData = _schema.data();
+		// 			series = vData.series;
+		// 			options.series = vData.series.series;
+		// 			if(vData.xAxis != undefined)
+		// 				options.xAxis = vData.xAxis;
+		// 			if(vData.yAxis != undefined)
+		// 				options.yAxis = vData.yAxis;
+		// 		}
+		// 		// var chartUser = Highcharts.stockChart($(mainContainer).attr('id') ,options,function(chart){
+					
+		//  		// });
+				
+		// 		$(mainContainer).highcharts(options,function(chart){
+					
+		// 		 });
+				
+		// 		//var chart = mainContainer.highcharts();
+		// 		//chart.reflow();
+				
+		// 		// $(mainContainer).highcharts(options,function(chart){
+					
+		// 		//  });
+				
+		// 	}else if(_schema.type == 'SearchHeader'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				mainContainer.css("width",_schema.width);
+		// 			if(container.children().length > 0)
+		// 				mainContainer.css("margin-left","1px");
+		// 		}
+					
+		// 		mainControl = $(document.createElement("h3"));
+		// 		//h3.addClass("cont_tit");
+		// 		mainContainer.append(mainControl);
+		// 		mainControl.text(_schema.text);
+		// 		mainControl.css("font-weight","bold");
+		// 		mainControl.css("text-align","right");
+		// 		mainControl.css("color","#000");
+				
+		// 		container.append(mainContainer);
+		// 	}else if (_schema.type == 'multiCombo'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				mainContainer.css("width",_schema.width);
+		// 			if(container.children().length > 0)
+		// 				mainContainer.css("margin-left","10px");
+		// 		}
+		// 		container.append(mainContainer);
+				
+		// 		var vData = _schema.data();
+		// 		var sb = [];
+		// 		//sb.push("<option value='' multiple='multiple' ></option>");
+		// 		mainControl = $(document.createElement( "select" ));
+		// 		mainControl.css("width",_schema.width);
+		// 		mainControl.attr("multiple","multiple");
+		// 		if(_schema.name != undefined)
+		// 			mainControl.attr("name",_schema.name)
+		// 		if(_schema.id != undefined)
+		// 			mainControl.attr("id",_schema.id)
+		// 		mainContainer.append(mainControl);
+				
+		// 		/* var option1 = $(document.createElement( "option" ));
+		// 		option1.val('xxx');
+		// 		option1.text('xxx');
+		// 		option1.css("display","none");
+		// 		mainControl.append(option1); */
+				
+		// 		$.each(vData,function(){
+		// 			var option = $(document.createElement( "option" ));
+		// 			option.val(this[_schema.options.cd]);
+		// 			option.text(this[_schema.options.name]);
+		// 			//모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
+		// 			$.each(this,function(k,v){
+		// 				option.attr(k.toLowerCase(),v);
+		// 			});
+		// 			//sb.push("<option value='"+ this[_schema.options.cd] +"' "+''+">" + this[_schema.options.name] +"</option>");
+		// 			mainControl.append(option);
+		// 		});
+		// 		//$(vSelect).append(sb.join(""));
+		// 		var options = {};
+		// 		if(_schema.options.isSingle != undefined && _schema.options.isSingle == true){
+		// 			var options = {
+		// 				selectedList: 1,
+		// 				multiple: false,
+		// 				height:300,
+		// 				minWidth: 100,
+		// 				//selectedText: _schema.text + ' # selected',
+		// 				noneSelectedText: 'Select ' + _schema.text
+		// 			};
+		// 		}else{
+		// 			var options = {
+		// 				//selectedList: 1,
+		// 				height:300,
+		// 				minWidth: 100,
+		// 				//selectedText: _schema.text + ' # selected',
+		// 				selectedText: function(numChecked, numTotal, checkedItems){
+		// 				     return numChecked + ' of ' + numTotal + ' checked';
+		// 				},
+		// 				noneSelectedText: 'Select ' + _schema.text
+		// 			};
+		// 		}
+				
+		// 		if(_schema.options != undefined){
+		// 			$.extend(options, _schema.options);
+		// 		}
 
-				var span = $(document.createElement("span"));
-				span.addClass("blind");
 				
-				mainControl.append(span);
-			}
-			else{
-				mainContainer = $(document.createElement( "div" ));	
+		// 		var vMultiSelect = $(mainControl).multiselect(options).multiselectfilter();
 				
-				var containerType = container.attr("type");
-				if(_schema.parentSchema.type == 'HorizontalLayout'){
-					mainContainer.css("display","inline-block");
-					if(_schema.width != undefined)
-						mainContainer.css("width",_schema.width);
-				}
+					
 				
-				// btn
-				mainControl = $(document.createElement("a"));
-				mainContainer.append(mainControl);
+				
+				
+				
+		// 	}else if(_schema.type == 'Button'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				mainContainer.css("width",_schema.width);
+					
+		// 		}
+				
+		// 		mainControl = $(document.createElement("a"));
+		// 		mainContainer.append(mainControl);
+				
+				
+		// 		var span = $(document.createElement("span"));
+		// 		span.addClass("name");
+		// 		var span1 = $(document.createElement("span"));
+		// 		span1.addClass("txt");
+		// 		span1.text(_schema.label);
+		// 		span.append(span1);
+		// 		mainControl.append(span);
+				
+		// 		container.append(mainContainer);
+		// 	}else if(_schema.type == 'radioButton'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				mainContainer.css("width",_schema.width);
+					
+		// 		}
+				
+		// 		mainControl = $(document.createElement("input"));
+		// 		mainControl.attr("type","radio");
+		// 		mainControl.attr("name",_schema.name);
+		// 		mainControl.attr("id",_schema.id);
+				
+		// 		if(_schema.checked != undefined)
+		// 			mainControl.prop("checked",_schema.checked);
+				
+		// 		mainContainer.append(mainControl);
+				
+		// 		var label = $(document.createElement("label"));
+		// 		label.text(_schema.label);
+		// 		mainContainer.append(label);
+				
+		// 		container.append(mainContainer);
+		// 	}else if(_schema.type == 'dateInput'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
+				
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				mainContainer.css("width",_schema.width);
+					
+		// 		}
+				
+		// 		// text
+		// 		mainControl = $(document.createElement("input"));
+		// 		mainControl.attr("type","text");
+		// 		mainControl.attr("name",_schema.name);
+		// 		mainControl.attr("id",_schema.id);
+		// 		mainControl.attr("readonly", "readonly");
+		// 		mainContainer.append(mainControl);			
+				
+		// 		container.append(mainContainer);
+				
+		// 	}else if(_schema.type == 'dateButton'){
+		// 		//==chart container create
+		// 		//mainContainer = $(document.createElement( "div" ));
+		// 		//mainContainer.attr("id",_schema.id + 'Container');
+		// 		if(_schema.parentContainerId != undefined){
+		// 			mainContainer = $("#"  + _schema.parentContainerId);
+					
+		// 			// btn
+		// 			mainControl = $(document.createElement("a"));
+		// 			mainContainer.append(mainControl);
 
-				var span = $(document.createElement("span"));
-				span.addClass("blind");
+		// 			var span = $(document.createElement("span"));
+		// 			span.addClass("blind");
+					
+		// 			mainControl.append(span);
+		// 		}
+		// 		else{
+		// 			mainContainer = $(document.createElement( "div" ));	
+					
+		// 			var containerType = container.attr("type");
+		// 			if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 				mainContainer.css("display","inline-block");
+		// 				if(_schema.width != undefined)
+		// 					mainContainer.css("width",_schema.width);
+		// 			}
+					
+		// 			// btn
+		// 			mainControl = $(document.createElement("a"));
+		// 			mainContainer.append(mainControl);
+
+		// 			var span = $(document.createElement("span"));
+		// 			span.addClass("blind");
+					
+		// 			mainControl.append(span);
+		// 			container.append(mainContainer);
+		// 		}
 				
-				mainControl.append(span);
-				container.append(mainContainer);
-			}
-			
-		}else if(_schema.type == 'dummy'){
-			//==chart container create
-			mainContainer = $(document.createElement( "div" ));
-			mainContainer.attr("id",_schema.id + 'Container');
-			
-			var containerType = container.attr("type");
-			if(_schema.parentSchema.type == 'HorizontalLayout'){
-				mainContainer.css("display","inline-block");
-				if(_schema.width != undefined)
-					mainContainer.css("width",_schema.width);
-				if(container.children().length > 0)
-					mainContainer.css("margin-left","1px");
-			}
+		// 	}else if(_schema.type == 'dummy'){
+		// 		//==chart container create
+		// 		mainContainer = $(document.createElement( "div" ));
+		// 		mainContainer.attr("id",_schema.id + 'Container');
 				
-			container.append(mainContainer);
-		}
-		
-		//******* common properties *******//
-		
-		//*** default value ***//
-		if(mainControl != null  && _schema.value != undefined){
-			if(typeof _schema.value == 'string')
-				mainControl.val(_schema.value);
-			else if(typeof _schema.value == 'function')
-				mainControl.val(_schema.value());
-		}
-		
-		//***  class ***//
-		if(mainControl != null  && _schema.cls != undefined)
-			mainControl.addClass(_schema.cls);
-		
-		//***  events ***//
-		//if(_schema.events != undefined && _schema.events.click != undefined)
-		//	vInput.click(_schema.events.click);
-		if(mainControl != null  && _schema.events != undefined ){
-			$.each(_schema.events,function(ikey,event){
-				mainControl.on( ikey, event);
-				
-			});
-		}
-		
-		//***  css ***//
-		var containerType = container.attr("type");
-		if(mainContainer != null && _schema.parentSchema != undefined && _schema.parentSchema.type == 'HorizontalLayout'){
-			mainContainer.css("display","inline-block");
-			if(_schema.width != undefined)
-				mainContainer.css("width",_schema.width);
-		}
-		//- control
-		if(mainControl != null && _schema.controlCss != null){
-			$.each(_schema.controlCss,function(i,v){
-				mainControl.css(v.code,v.value);
-			});
-		}
-		//- container
-		if(mainContainer != null && _schema.containerCss != null){
-			$.each(_schema.containerCss,function(i,v){
-				mainContainer.css(v.code,v.value);
-			});
-		}
-		
-		
-		//******* End common properties *******//
-		
-		
-		// data process
-		if(_schema.elements != undefined &&  _schema.label != undefined){
+		// 		var containerType = container.attr("type");
+		// 		if(_schema.parentSchema.type == 'HorizontalLayout'){
+		// 			mainContainer.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				mainContainer.css("width",_schema.width);
+		// 			if(container.children().length > 0)
+		// 				mainContainer.css("margin-left","1px");
+		// 		}
+					
+		// 		container.append(mainContainer);
+		// 	}
 			
-			if(_schema.label != ""){
-				var h3 = $(document.createElement("h3"));
-				h3.addClass("cont_tit");
-				h3.text(_schema.label);
-				container.append(h3);
-			}
+		// 	//******* common properties *******//
 			
-			containerSub = $(document.createElement("div"));
-			//상위 container type을 줘서 알아서 판단 할 수 있도록 한다.
-			containerSub.attr("type", _schema.type);
-			if(_schema.parentSchema != undefined 
-					&& _schema.parentSchema.type == 'HorizontalLayout'){
-				
-				containerSub.css("display","inline-block");
-				if(_schema.width != undefined)
-					containerSub.css("width",_schema.width);
-				//if(container.children().length > 0)
-				//	containerSub.css("margin-left","10px");
-			}
-			container.append(containerSub);
+		// 	//*** default value ***//
+		// 	if(mainControl != null  && _schema.value != undefined){
+		// 		if(typeof _schema.value == 'string')
+		// 			mainControl.val(_schema.value);
+		// 		else if(typeof _schema.value == 'function')
+		// 			mainControl.val(_schema.value());
+		// 	}
 			
-		}
-		
-		if(_schema.elements != undefined){
-			$.each(_schema.elements, function(i,el){
+		// 	//***  class ***//
+		// 	if(mainControl != null  && _schema.cls != undefined)
+		// 		mainControl.addClass(_schema.cls);
+			
+		// 	//***  events ***//
+		// 	//if(_schema.events != undefined && _schema.events.click != undefined)
+		// 	//	vInput.click(_schema.events.click);
+		// 	if(mainControl != null  && _schema.events != undefined ){
+		// 		$.each(_schema.events,function(ikey,event){
+		// 			mainControl.on( ikey, event);
+					
+		// 		});
+		// 	}
+			
+		// 	//***  css ***//
+		// 	var containerType = container.attr("type");
+		// 	if(mainContainer != null && _schema.parentSchema != undefined && _schema.parentSchema.type == 'HorizontalLayout'){
+		// 		mainContainer.css("display","inline-block");
+		// 		if(_schema.width != undefined)
+		// 			mainContainer.css("width",_schema.width);
+		// 	}
+		// 	//- control
+		// 	if(mainControl != null && _schema.controlCss != null){
+		// 		$.each(_schema.controlCss,function(i,v){
+		// 			mainControl.css(v.code,v.value);
+		// 		});
+		// 	}
+		// 	//- container
+		// 	if(mainContainer != null && _schema.containerCss != null){
+		// 		$.each(_schema.containerCss,function(i,v){
+		// 			mainContainer.css(v.code,v.value);
+		// 		});
+		// 	}
+			
+			
+		// 	//******* End common properties *******//
+			
+			
+		// 	// data process
+		// 	if(_schema.elements != undefined &&  _schema.label != undefined){
 				
-				el.parentSchema = _schema;
-				el.parentContainer = container;
-				makeHtml(containerSub,el);
-				/* if(el.type == 'inline'){
-					makeInline(containerSub, el);
-				}else if(el.type == 'grid'){
-					makeGrid(containerSub , el );
-				}else if(el.type == 'chart'){
-					makeChart(containerSub , el );
-				}else if(el.type == 'SearchHeader'){
-					makeSearchHeader(containerSub , el );
-				}else if(el.type == 'multiCombo'){
-					makeMultiCombo(containerSub , el );
-				}else if(el.elements != undefined){
-					makeHtml(container, el);
-				} */
-			});
-		}
-		
-		
-		
-		$("div.ui-multiselect-menu").css("width","400px");
-		$(".ui-multiselect-filter input").css("width","150px");
-	}
+		// 		if(_schema.label != ""){
+		// 			var h3 = $(document.createElement("h3"));
+		// 			h3.addClass("cont_tit");
+		// 			h3.text(_schema.label);
+		// 			container.append(h3);
+		// 		}
+				
+		// 		containerSub = $(document.createElement("div"));
+		// 		//상위 container type을 줘서 알아서 판단 할 수 있도록 한다.
+		// 		containerSub.attr("type", _schema.type);
+		// 		if(_schema.parentSchema != undefined 
+		// 				&& _schema.parentSchema.type == 'HorizontalLayout'){
+					
+		// 			containerSub.css("display","inline-block");
+		// 			if(_schema.width != undefined)
+		// 				containerSub.css("width",_schema.width);
+		// 			//if(container.children().length > 0)
+		// 			//	containerSub.css("margin-left","10px");
+		// 		}
+		// 		container.append(containerSub);
+				
+		// 	}
+			
+		// 	if(_schema.elements != undefined){
+		// 		$.each(_schema.elements, function(i,el){
+					
+		// 			el.parentSchema = _schema;
+		// 			el.parentContainer = container;
+		// 			makeHtml(containerSub,el);
+		// 			/* if(el.type == 'inline'){
+		// 				makeInline(containerSub, el);
+		// 			}else if(el.type == 'grid'){
+		// 				makeGrid(containerSub , el );
+		// 			}else if(el.type == 'chart'){
+		// 				makeChart(containerSub , el );
+		// 			}else if(el.type == 'SearchHeader'){
+		// 				makeSearchHeader(containerSub , el );
+		// 			}else if(el.type == 'multiCombo'){
+		// 				makeMultiCombo(containerSub , el );
+		// 			}else if(el.elements != undefined){
+		// 				makeHtml(container, el);
+		// 			} */
+		// 		});
+		// 	}
+			
+			
+			
+		// 	$("div.ui-multiselect-menu").css("width","400px");
+		// 	$(".ui-multiselect-filter input").css("width","150px");
+		// }
 	
 	
 	</script>
@@ -1374,7 +1405,7 @@
 					//dataList = responseData.dataList;
 					folderList = responseData.folderList;
 					//tabList = responseData.tabList;
-					makeHtml('searchCondition', schema);
+					fn_makeHtml('searchCondition', schema);
 					makeMultiSearchObj();
 					//makeTabList();
 					document.getElementById("loader").style.display = "none";
@@ -1578,9 +1609,9 @@
 			$("#loader").show();
 			//$(".tab-content").hide();
 	        
-// 	        $.each($("[id^='chart_']"),function(){
-// 				$(this).remove();
-// 			});			
+	        // $.each($("[id^='chart_']"),function(){
+			// 	$(this).remove();
+			// });			
 	        
 	        //$(".chartContainer").removeClass("in active");
 	        //$("[id='"+$(this).attr("target").replace("#","")+"']" ).addClass("in active");
@@ -1626,8 +1657,8 @@
 		        	$("[id^='chart_"+dataSrc+"'][id$='_highChart']").each(function () { // for only visible charts container in the curent context
 		                var $chart = $(this).highcharts(); // cast from JQuery to highcharts obj
 		                // 쓸데없는 짓이므로 원복한다.
-// 		                if($chart != undefined)
-// 		                	$chart.setSize($(this).width(), $chart.chartHeight, doAnimation = true); // adjust chart size with animation transition
+		                // if($chart != undefined)
+		                // 	$chart.setSize($(this).width(), $chart.chartHeight, doAnimation = true); // adjust chart size with animation transition
 		                	
 			        });
 		        	//$(".tab-content").show();
@@ -1884,32 +1915,32 @@
 			        //height: '220px',
 			     	// EI-1057 No. 9. 선택화면을 크게 확장
 			     	 height: '100%',
-// 			        onSelectRow: function(id){
-// 						if(id && id!==lastsel2){
-// 							theGrid.jqGrid('restoreRow',lastsel2);
-// 							theGrid.jqGrid('editRow',id,true);
-// 							lastsel2=id;
-// 						}
-// 					}
-// 	        	  	onSelectRow : function (rowid, status) {
-// 		        	      return false;
-// 		        	      //theGrid.setSelection(rowid, false);
-// 	        	    }
+			        // onSelectRow: function(id){
+					// 	if(id && id!==lastsel2){
+					// 		theGrid.jqGrid('restoreRow',lastsel2);
+					// 		theGrid.jqGrid('editRow',id,true);
+					// 		lastsel2=id;
+					// 	}
+					// }
+	        	  	// onSelectRow : function (rowid, status) {
+		        	//       return false;
+		        	//       //theGrid.setSelection(rowid, false);
+	        	    // }
 					//,editurl:"/dashboard/performanceJson.html"
 					editurl:'clientArray'
 					//, cellEdit: true
 					//, forceFit : true
 					,cellsubmit: 'clientArray'
 					//,cellsubmit: '/dashboard/performanceJson.html'
-// 					,afterEditCell: function (id,name,val,iRow,iCol){
+					// ,afterEditCell: function (id,name,val,iRow,iCol){
 					
-// 					}
-//  					, afterSaveCell : function(rowid,name,val,iRow,iCol) {
-// 						if(name == 'IS_GOOD_DATA') {
-// 							theGrid.jqGrid('setRowData',rowid,{EDIT_MODE:'U'});
-// 						}
+					// }
+ 					// , afterSaveCell : function(rowid,name,val,iRow,iCol) {
+					// 	if(name == 'IS_GOOD_DATA') {
+					// 		theGrid.jqGrid('setRowData',rowid,{EDIT_MODE:'U'});
+					// 	}
 						
-// 					}
+					// }
 					//,altRows: true
 					,onInitGrid: function () {
 				        var p = $(this).jqGrid("getGridParam");
@@ -1922,49 +1953,49 @@
 				    },
 				    gridComplete: function () {
 				    	//$(this).jqGrid('setGridState','hidden');
-// 				    	$('#container').append('<span id="widthTest" />');
+				    	// $('#container').append('<span id="widthTest" />');
 
-// 		                gridName = this.id;
+		                // gridName = this.id;
 
-// //			                $('#gbox_' + gridName + ' .ui-jqgrid-htable,#' + gridName).css('width', 'inherit');
-// 		                $('#' + gridName).parent().css('width', 'inherit');
+			        	// //        $('#gbox_' + gridName + ' .ui-jqgrid-htable,#' + gridName).css('width', 'inherit');
+		                // $('#' + gridName).parent().css('width', 'inherit');
 
-// 		                var columnNames = $("#" + gridName).jqGrid('getGridParam', 'colModel');
-// 		                var thisWidth;
+		                // var columnNames = $("#" + gridName).jqGrid('getGridParam', 'colModel');
+		                // var thisWidth;
 
-// 		                // Loop through Cols
-// 		                for (var itm = 0, itmCount = columnNames.length; itm < itmCount; itm++) {
+		                // // Loop through Cols
+		                // for (var itm = 0, itmCount = columnNames.length; itm < itmCount; itm++) {
 
-// 		                    var curObj = $('[aria-describedby=' + gridName + '_' + columnNames[itm].name + ']');
+		                //     var curObj = $('[aria-describedby=' + gridName + '_' + columnNames[itm].name + ']');
 		                    
-// 		                    var thisCell = $('#' + gridName + '_' + columnNames[itm].name + ' div');
-// 		                    $('#widthTest').html(thisCell.text()).css({
-// 		                            'font-family': thisCell.css('font-family'),
-// 		                            'font-size': thisCell.css('font-size'),
-// 		                            'font-weight': thisCell.css('font-weight')
-// 		                        });
-// 		                    var maxWidth = Width = $('#widthTest').width() + 24;                    
-// 		                    //var maxWidth = 0;                      
+		                //     var thisCell = $('#' + gridName + '_' + columnNames[itm].name + ' div');
+		                //     $('#widthTest').html(thisCell.text()).css({
+		                //             'font-family': thisCell.css('font-family'),
+		                //             'font-size': thisCell.css('font-size'),
+		                //             'font-weight': thisCell.css('font-weight')
+		                //         });
+		                //     var maxWidth = Width = $('#widthTest').width() + 24;                    
+		                //     //var maxWidth = 0;                      
 
-// 		                    // Loop through Rows
-// //			                    for (var itm2 = 0, itm2Count = curObj.length; itm2 < itm2Count; itm2++) {
-// //			                        var thisCell = $(curObj[itm2]);
+		                //     // Loop through Rows
+			            //     //    for (var itm2 = 0, itm2Count = curObj.length; itm2 < itm2Count; itm2++) {
+			            //     //        var thisCell = $(curObj[itm2]);
 
-// //			                        $('#widthTest').html(thisCell.html()).css({
-// //			                            'font-family': thisCell.css('font-family'),
-// //			                            'font-size': thisCell.css('font-size'),
-// //			                            'font-weight': thisCell.css('font-weight')
-// //			                        });
+			            //     //        $('#widthTest').html(thisCell.html()).css({
+			            //     //            'font-family': thisCell.css('font-family'),
+			            //     //            'font-size': thisCell.css('font-size'),
+			            //     //            'font-weight': thisCell.css('font-weight')
+			            //     //        });
 
-// //			                        thisWidth = $('#widthTest').width();
-// //			                        if (thisWidth > maxWidth) maxWidth = thisWidth;                        
-// //			                    }                    
+			            //     //        thisWidth = $('#widthTest').width();
+			            //     //        if (thisWidth > maxWidth) maxWidth = thisWidth;                        
+			            //     //    }                    
 
-// 		                    $('#' + gridName + ' .jqgfirstrow td:eq(' + itm + '), #' + gridName + '_' + columnNames[itm].name).width(maxWidth).css('min-width', maxWidth);
+		                //     $('#' + gridName + ' .jqgfirstrow td:eq(' + itm + '), #' + gridName + '_' + columnNames[itm].name).width(maxWidth).css('min-width', maxWidth);
 
-// 		                }
+		                // }
 
-// 		                $('#widthTest').remove();
+		                // $('#widthTest').remove();
 				    },
 				    data: this.gridInfo.sourceData
 			};
@@ -1986,51 +2017,51 @@
 			//theGrid.jqGrid('navGrid','#' + this.gridInfo.pagerId,{search: true,edit:false,add:false,del:false});
 			//theGrid.jqGrid('inlineNav','#' + this.gridInfo.pagerId);
 			theGrid.bind("jqGridAfterGridComplete", function () {
-// 				// Test - resize cols based on content
+				// // Test - resize cols based on content
 
-//                 $('#container').append('<span id="widthTest" />');
+                // $('#container').append('<span id="widthTest" />');
 
-//                 gridName = this.id;
+                // gridName = this.id;
 
-// //	                $('#gbox_' + gridName + ' .ui-jqgrid-htable,#' + gridName).css('width', 'inherit');
-//                 $('#' + gridName).parent().css('width', 'inherit');
+	            // //    $('#gbox_' + gridName + ' .ui-jqgrid-htable,#' + gridName).css('width', 'inherit');
+                // $('#' + gridName).parent().css('width', 'inherit');
 
-//                 var columnNames = $("#" + gridName).jqGrid('getGridParam', 'colModel');
-//                 var thisWidth;
+                // var columnNames = $("#" + gridName).jqGrid('getGridParam', 'colModel');
+                // var thisWidth;
 
-//                 // Loop through Cols
-//                 for (var itm = 0, itmCount = columnNames.length; itm < itmCount; itm++) {
+                // // Loop through Cols
+                // for (var itm = 0, itmCount = columnNames.length; itm < itmCount; itm++) {
 
-//                     var curObj = $('[aria-describedby=' + gridName + '_' + columnNames[itm].name + ']');
+                //     var curObj = $('[aria-describedby=' + gridName + '_' + columnNames[itm].name + ']');
                     
-//                     var thisCell = $('#' + gridName + '_' + columnNames[itm].name + ' div');
-//                     $('#widthTest').html(thisCell.text()).css({
-//                             'font-family': thisCell.css('font-family'),
-//                             'font-size': thisCell.css('font-size'),
-//                             'font-weight': thisCell.css('font-weight')
-//                         });
-//                     var maxWidth = Width = $('#widthTest').width() + 24;                    
-//                     //var maxWidth = 0;                      
+                //     var thisCell = $('#' + gridName + '_' + columnNames[itm].name + ' div');
+                //     $('#widthTest').html(thisCell.text()).css({
+                //             'font-family': thisCell.css('font-family'),
+                //             'font-size': thisCell.css('font-size'),
+                //             'font-weight': thisCell.css('font-weight')
+                //         });
+                //     var maxWidth = Width = $('#widthTest').width() + 24;                    
+                //     //var maxWidth = 0;                      
 
-//                     // Loop through Rows
-// //	                    for (var itm2 = 0, itm2Count = curObj.length; itm2 < itm2Count; itm2++) {
-// //	                        var thisCell = $(curObj[itm2]);
+                //     // Loop through Rows
+	            //     // for (var itm2 = 0, itm2Count = curObj.length; itm2 < itm2Count; itm2++) {
+	            //     	//    var thisCell = $(curObj[itm2]);
 
-// //	                        $('#widthTest').html(thisCell.html()).css({
-// //	                            'font-family': thisCell.css('font-family'),
-// //	                            'font-size': thisCell.css('font-size'),
-// //	                            'font-weight': thisCell.css('font-weight')
-// //	                        });
+	            //         //    $('#widthTest').html(thisCell.html()).css({
+	            //         //        'font-family': thisCell.css('font-family'),
+	            //         //        'font-size': thisCell.css('font-size'),
+	            //         //        'font-weight': thisCell.css('font-weight')
+	            //         //    });
 
-// //	                        thisWidth = $('#widthTest').width();
-// //	                        if (thisWidth > maxWidth) maxWidth = thisWidth;                        
-// //	                    }                    
+	            //         //    thisWidth = $('#widthTest').width();
+	            //         //    if (thisWidth > maxWidth) maxWidth = thisWidth;                        
+	            //     //  }                    
 
-//                     $('#' + gridName + ' .jqgfirstrow td:eq(' + itm + '), #' + gridName + '_' + columnNames[itm].name).width(maxWidth).css('min-width', maxWidth);
+                //     $('#' + gridName + ' .jqgfirstrow td:eq(' + itm + '), #' + gridName + '_' + columnNames[itm].name).width(maxWidth).css('min-width', maxWidth);
 
-//                 }
+                // }
 
-//                 $('#widthTest').remove();
+                // $('#widthTest').remove();
 			});
 			
 
@@ -2068,15 +2099,15 @@
 			$("#loader").show();
 			//$("#container").hide();
 			
-// 			if(dataList.length == 0 ){
-// 				//alert("waiting data!");
-// 				//return;
-// 				//timeout = setTimeout(function(){ }, 20000);
-// 				pendingDrawChart = true;
-// 				return;
-// 			}else{
-// 				pendingDrawChart = false;
-// 			}
+			// if(dataList.length == 0 ){
+			// 	//alert("waiting data!");
+			// 	//return;
+			// 	//timeout = setTimeout(function(){ }, 20000);
+			// 	pendingDrawChart = true;
+			// 	return;
+			// }else{
+			// 	pendingDrawChart = false;
+			// }
 			
 			
 			//Target set
@@ -2203,35 +2234,35 @@
 		//initial construct
 		//this.makeSelectObjects(this);
 		//makeSearchButton start
-// 		var $searchBtn = $(document.createElement( "button" ));
-// 		$searchBtn.attr("type","button");
-// 		$searchBtn.addClass("btn btn-info btn-sm");
-// 		$searchBtn.text("Search");
-// 		var instance = this;
-// 		$searchBtn.click(function(){
-// 			instance.tableSearch();
-// 		});
-// 		$("#"+this.container).append($searchBtn);
-// 		$("#"+this.container).append(" ");
-		//makeSearchButton end
-		//makeUpdateButton start
-// 		var $updateBtn = $(document.createElement( "button" ));
-// 		$updateBtn.attr("type","button");
-// 		$updateBtn.addClass("btn btn-info btn-sm");
-// 		$updateBtn.text("Update");
-// 		$("#"+this.container).append($updateBtn);
-// 		$("#"+this.container).append(" ");
-		//makeUpdateButton end
-		//ChatShowButton start
+		// var $searchBtn = $(document.createElement( "button" ));
+		// $searchBtn.attr("type","button");
+		// $searchBtn.addClass("btn btn-info btn-sm");
+		// $searchBtn.text("Search");
+		// var instance = this;
+		// $searchBtn.click(function(){
+		// 	instance.tableSearch();
+		// });
+		// $("#"+this.container).append($searchBtn);
+		// $("#"+this.container).append(" ");
+		// makeSearchButton end
+		// makeUpdateButton start
+		// var $updateBtn = $(document.createElement( "button" ));
+		// $updateBtn.attr("type","button");
+		// $updateBtn.addClass("btn btn-info btn-sm");
+		// $updateBtn.text("Update");
+		// $("#"+this.container).append($updateBtn);
+		// $("#"+this.container).append(" ");
+		// makeUpdateButton end
+		// ChatShowButton start
 		
-// 		var $applyBtn = $(document.createElement( "button" ));
-// 		$applyBtn.attr("type","button");
-// 		$applyBtn.addClass("btn btn-info btn-sm inline");
-// 		$applyBtn.text("Show");
-// 		$applyBtn.click(function(){
-// 			myInstance.drawchart();
-// 		});
-// 		$("#"+this.container).append($applyBtn);		
+		// var $applyBtn = $(document.createElement( "button" ));
+		// $applyBtn.attr("type","button");
+		// $applyBtn.addClass("btn btn-info btn-sm inline");
+		// $applyBtn.text("Show");
+		// $applyBtn.click(function(){
+		// 	myInstance.drawchart();
+		// });
+		// $("#"+this.container).append($applyBtn);		
 		if($("#report").val() != "Y"){
 			var $applyBtnA = $(document.createElement( "a" ));
 			$applyBtnA.addClass("btn_n2");
@@ -2281,24 +2312,24 @@
 		
 		//ChatShowButton end
 		//**Legend Button start **//
-// 		var $legendLabel1 = $(document.createElement( "label" ));
-// 		$legendLabel1.addClass("checkbox-inline");
-// 		//$legendLabel1.text("legend show");
-// 		$("#"+this.container).append($legendLabel1);
-// 		var $legendOption1 = $(document.createElement( "input" ));
-// 		$legendOption1.attr("type","checkbox");
-// 		//$legendOption1.val("");
-// 		$legendLabel1.append($legendOption1);
-// 		$legendLabel1.append("legend show");
+		// var $legendLabel1 = $(document.createElement( "label" ));
+		// $legendLabel1.addClass("checkbox-inline");
+		// //$legendLabel1.text("legend show");
+		// $("#"+this.container).append($legendLabel1);
+		// var $legendOption1 = $(document.createElement( "input" ));
+		// $legendOption1.attr("type","checkbox");
+		// //$legendOption1.val("");
+		// $legendLabel1.append($legendOption1);
+		// $legendLabel1.append("legend show");
 		
-// 		var $legendLabel2 = $(document.createElement( "label" ));
-// 		$legendLabel2.addClass("checkbox-inline");
-// 		$legendLabel1.text("legend hide");
-// 		$("#"+this.container).append($legendLabel2);
-// 		var $legendOption2 = $(document.createElement( "input" ));
-// 		$legendOption2.attr("type","checkbox");
-// 		//$legendOption1.val("");
-// 		$legendLabel2.append($legendOption2);
+		// var $legendLabel2 = $(document.createElement( "label" ));
+		// $legendLabel2.addClass("checkbox-inline");
+		// $legendLabel1.text("legend hide");
+		// $("#"+this.container).append($legendLabel2);
+		// var $legendOption2 = $(document.createElement( "input" ));
+		// $legendOption2.attr("type","checkbox");
+		// //$legendOption1.val("");
+		// $legendLabel2.append($legendOption2);
 		//** Legend Button end **//
 		//end construct
 			$("#"+this.container).append("   ");
@@ -2308,41 +2339,41 @@
 		    });
 		
 		
-// 		//Button : show All 
-// 		$("#"+this.container).append("   ");
-// 		$("#"+this.container).append("   ");
-// 		$("#"+this.container).append("   ");
-// 		var $showAllBtnA = $(document.createElement( "a" ));
-// 		$showAllBtnA.addClass("btn_n2");
-// 		var $showAllBtn = $(document.createElement( "span" ));
-// 		//$applyBtn.attr("type","button");
-// 		$showAllBtn.addClass("btn_n2_right txt_color_c");
-// 		$showAllBtn.text("All chart");
-// 		$showAllBtn.click(function(){
-// 			//myInstance.drawchart();
-// 		});
-// 		$showAllBtnA.append($showAllBtn);
-// 		$("#"+this.container).append($showAllBtnA);
+		// //Button : show All 
+		// $("#"+this.container).append("   ");
+		// $("#"+this.container).append("   ");
+		// $("#"+this.container).append("   ");
+		// var $showAllBtnA = $(document.createElement( "a" ));
+		// $showAllBtnA.addClass("btn_n2");
+		// var $showAllBtn = $(document.createElement( "span" ));
+		// //$applyBtn.attr("type","button");
+		// $showAllBtn.addClass("btn_n2_right txt_color_c");
+		// $showAllBtn.text("All chart");
+		// $showAllBtn.click(function(){
+		// 	//myInstance.drawchart();
+		// });
+		// $showAllBtnA.append($showAllBtn);
+		// $("#"+this.container).append($showAllBtnA);
 		
-// 		$showAllBtn = $(document.createElement( "button" ));
-// 		$showAllBtn.attr("type","button");
-// 		$showAllBtn.addClass("btn btn-info btn-xs inline");
-// 		$showAllBtn.attr("disabled","disabled");
-// 		$showAllBtn.css("float","right");
-// 		$showAllBtn.css("width","150px");
-// 		$showAllBtn.css("background-color","#FB6C07");
-// 		$showAllBtn.css("border-color","#CC5713");
-// 		$showAllBtn.text("View All");
-// 		$showAllBtn.click(function(){
-// 			//myInstance.drawchart();
-// 			if($(this).text()=="View All"){
-// 				viewAlltab();
-// 				$(this).text("View One");				
-// 			}else{
-// 				viewOnetab();
-// 				$(this).text("View All");
-// 			}
-// 		});
+		// $showAllBtn = $(document.createElement( "button" ));
+		// $showAllBtn.attr("type","button");
+		// $showAllBtn.addClass("btn btn-info btn-xs inline");
+		// $showAllBtn.attr("disabled","disabled");
+		// $showAllBtn.css("float","right");
+		// $showAllBtn.css("width","150px");
+		// $showAllBtn.css("background-color","#FB6C07");
+		// $showAllBtn.css("border-color","#CC5713");
+		// $showAllBtn.text("View All");
+		// $showAllBtn.click(function(){
+		// 	//myInstance.drawchart();
+		// 	if($(this).text()=="View All"){
+		// 		viewAlltab();
+		// 		$(this).text("View One");				
+		// 	}else{
+		// 		viewOnetab();
+		// 		$(this).text("View All");
+		// 	}
+		// });
 			$("#"+this.container).append($showAllBtn);		
 		}
 		
@@ -2386,11 +2417,11 @@
 		        	//setTimeout(function(){ 
 		        		// 이미존재한다면
 			        	$("[id='chart_"+dataSrc+"']" ).addClass("in active");
-	// 		        	$("[id^='chart_"+dataSrc+"'][id$='_highChart']").each(function () { // for only visible charts container in the curent context
-	// 		                var $chart = $(this).highcharts(); // cast from JQuery to highcharts obj
-	// 		                $chart.setSize($(this).width(), $chart.chartHeight, doAnimation = true); // adjust chart size with animation transition
-	// 			        });
-		        	//},0);
+			        // 	$("[id^='chart_"+dataSrc+"'][id$='_highChart']").each(function () { // for only visible charts container in the curent context
+			        //         var $chart = $(this).highcharts(); // cast from JQuery to highcharts obj
+			        //         $chart.setSize($(this).width(), $chart.chartHeight, doAnimation = true); // adjust chart size with animation transition
+				    //     });
+		        	// },0);
 		        }
 				
 	        	//$("[id='chart_"+$(this).attr("target")+"']" ).css("display","none");
@@ -2523,11 +2554,11 @@
 		
 		//01. 데이타필터링
 		var filters = [];
-// 		var selIds = theGrid.jqGrid('getGridParam','selarrrow')
-// 		$.each(selIds,function(i,s){
-// 			var row = theGrid.jqGrid('getRowData',s);
-// 			filters.push({col:"FOLDER_NAME",val: row.FOLDER_NAME});
-// 		});
+		// var selIds = theGrid.jqGrid('getGridParam','selarrrow')
+		// $.each(selIds,function(i,s){
+		// 	var row = theGrid.jqGrid('getRowData',s);
+		// 	filters.push({col:"FOLDER_NAME",val: row.FOLDER_NAME});
+		// });
 		$.each(selectedList,function(i,s){
 			//filters.push(s);
 		});
@@ -2545,7 +2576,7 @@
 				$lineContainer.css("width","100%");
 				$lineContainer.addClass("chartContainerSub");
 				$chartContainer.append($lineContainer);
-				makeHtml($lineContainer,vCateInfo.uiSchema );
+				fn_makeHtml($lineContainer,vCateInfo.uiSchema );
 				return;
 			}
 	    	//계산된컬럼	    	
@@ -2599,12 +2630,12 @@
 			var vColsG = groupbyCount(filteredData,[vCateInfo.multichart.splitCol]);
 			
 			//parent height
-// 			var parentHeight = $chartContainer.height();
-// 			if(vCateInfo.multichart.oneLineChatNum != undefined){
-// 				var lines = Math.ceil(vColsG.length/vCateInfo.multichart.oneLineChatNum);
-// 				parentHeight += (lines -1) * vCateInfo.multichart.oneLineHeight;
-// 			}
-// 			$chartContainer.css("height",  parentHeight + "px");
+			// var parentHeight = $chartContainer.height();
+			// if(vCateInfo.multichart.oneLineChatNum != undefined){
+			// 	var lines = Math.ceil(vColsG.length/vCateInfo.multichart.oneLineChatNum);
+			// 	parentHeight += (lines -1) * vCateInfo.multichart.oneLineHeight;
+			// }
+			// $chartContainer.css("height",  parentHeight + "px");
 			
 			//sortObjects(vColsG,[vCateInfo.multichart.splitCol]);
 			//EI-1057 No.1orderby 
@@ -2690,10 +2721,10 @@
 					$subContainer.attr("data_src",pDataSrc);
 					//css
 					//height
-// 					var subHeight = 600;
-// 					if(vCateInfo.multichart.oneLineHeight != undefined){
-// 						subHeight = vCateInfo.multichart.oneLineHeight;
-// 					}
+					// var subHeight = 600;
+					// if(vCateInfo.multichart.oneLineHeight != undefined){
+					// 	subHeight = vCateInfo.multichart.oneLineHeight;
+					// }
 					//$subContainer.css("height",subHeight + 'px');
 					//width
 					
@@ -2810,6 +2841,7 @@
 				
 				/** Start addSeries **/
 				var yAxisTitle = "";
+				var chartTitle = undefined;
 				if(vCateInfo.yAxisTitle != undefined){
 					yAxisTitle = vCateInfo.yAxisTitle;
 				}else{
@@ -2821,13 +2853,24 @@
 		        		yAxisTitle =  "";
 				}
 				
-				if(vCateInfo.multichart != undefined && vCateInfo.multichart.yAxisTitle != undefined){
-					yAxisTitle = vCateInfo.multichart.yAxisTitle[this.filter[0].val];
-				}
+				if(vCateInfo.multichart != undefined){
+					if(vCateInfo.multichart.yAxisTitle != undefined){
+						yAxisTitle = vCateInfo.multichart.yAxisTitle[this.filter[0].val];
+					}
+					if(vCateInfo.multichart.title != undefined){
+						chartTitle = vCateInfo.multichart.title[this.filter[0].val];
+					}
+				}	
 				
-				if((yAxisTitle == undefined) && vCateInfo.multichart.yAxisTitle != undefined){
+				
+				if((yAxisTitle == undefined) &&  vCateInfo.yAxisTitle != undefined){
 					yAxisTitle = vCateInfo.yAxisTitle;
-				}				
+				}	
+				if((chartTitle == undefined) && vCateInfo.title != undefined){
+					chart_title = vCateInfo.title;
+				}else{
+					chart_title = chartTitle;
+				}		
 				
 				
 				var yAxis = [{
@@ -2972,17 +3015,17 @@
 				            	point:{	                	
 				            		events:{
 				                		click: function(e){
-//		 		                			e.point.select(true,false);
-//			 	                			if(this.drillSeries){
-//			 	                				setChart(this.drillSeries);
-//			 	                			}else{
-//			 	                				//var phase = this.category.parent.parent.name;
-//			 		                			//var cause = this.category.name;
-//			 		                			//var data = "";
-//			 		                			//$("#phase").val(phase);
-//			 		                			//$("#discoveredFrom").val(cause);
-//			 		                			gotoDetail(this.PHASE,this.DISCOVERED_FROM_PURE);
-//			 	                			}
+		 		                			// e.point.select(true,false);
+			 	                			// if(this.drillSeries){
+			 	                			// 	setChart(this.drillSeries);
+			 	                			// }else{
+			 	                			// 	//var phase = this.category.parent.parent.name;
+			 		                		// 	//var cause = this.category.name;
+			 		                		// 	//var data = "";
+			 		                		// 	//$("#phase").val(phase);
+			 		                		// 	//$("#discoveredFrom").val(cause);
+			 		                		// 	gotoDetail(this.PHASE,this.DISCOVERED_FROM_PURE);
+			 	                			// }
 				                			
 				                			
 				                		}
@@ -3028,7 +3071,7 @@
 			if(vCateInfo.fn_drawGrid != undefined){
 				
 			}else{
-//				01. subContainer
+				// 01. subContainer
 				//var gridId =  chartContainerId.split(".")[0].replace(/[\s]/gi,"") + 'Grid';
 				var $subChart = $("[id='"+ this.containerId + "']" );
 				var gridId =  this.containerId.replace(/[\s]/gi,"").replace(/[\.]/gi,"_") + 'Grid';
@@ -3061,7 +3104,7 @@
 						styleUI : 'Bootstrap',
 						//data: this.gridInfo.sourceData,
 						//colModel: this.gridInfo.colModel,
-//	 					rowNum:100000,
+	 					// rowNum:100000,
 						rowNum:10,
 						//rowList:[10,20,30],
 						pager: $subPager , //'#' + pagerId,
@@ -3190,11 +3233,11 @@
 					var griddata = {Series: se.name};
 					$.each(se.data,function(idata,data){
 						griddata[data.category.name] = data.y;
-//	 					$.each(data,function(c,v){
-//	 						if(c == vCateInfo.categoryCols[vCateInfo.categoryCols.length-1]){
-//	 							griddata[v] = data.y;
-//	 						}
-//	 					});
+	 					// $.each(data,function(c,v){
+	 					// 	if(c == vCateInfo.categoryCols[vCateInfo.categoryCols.length-1]){
+	 					// 		griddata[v] = data.y;
+	 					// 	}
+	 					// });
 					});
 					
 					gridOpt.data.push(griddata);
@@ -3219,6 +3262,7 @@
 		//$("[id='"+chartContainerId+"']" ).trigger('resize');
 		//$("[id='"+chartContainerId+"']" ).trigger('resize');
 		//$(".nav-tabs a[target='" + pDataSrc + "']").click();
+		
 	}
 	
 	
@@ -3407,15 +3451,15 @@
 			            			    ,tooltip: {
 			            			    	crosshairs: false,
 			            			    	shared: false,
-//		 	            			        useHTML: true,
+		 	            			        // useHTML: true,
 			            			        headerFormat: '',
-//		 	            			        pointFormat: '<tr><th>slot name:</th><td>{series.name}</td</tr>' +
-//		 	            			            '<tr><th>test name:</th><td>{point.TESTNAME}</td></tr>' +
-//		 	            			            '<tr><th>group name:</th><td>{point.ID}: {point.GROUP_NAME}</td></tr>' +
-//		 										'<tr><th>min:</th><td>{point.MIN}</td></tr>' +
-//		 										'<tr><th>max:</th><td>{point.MAX}</td></tr>' +
-//		 	            			            '<tr><th>avg:</th><td>{point.y}</td></tr>',
-//		 	            			        footerFormat: '</table>',
+		 	            			        // pointFormat: '<tr><th>slot name:</th><td>{series.name}</td</tr>' +
+		 	            			        //     '<tr><th>test name:</th><td>{point.TESTNAME}</td></tr>' +
+		 	            			        //     '<tr><th>group name:</th><td>{point.ID}: {point.GROUP_NAME}</td></tr>' +
+		 									// 	'<tr><th>min:</th><td>{point.MIN}</td></tr>' +
+		 									// 	'<tr><th>max:</th><td>{point.MAX}</td></tr>' +
+		 	            			        //     '<tr><th>avg:</th><td>{point.y}</td></tr>',
+		 	            			        // footerFormat: '</table>',
 											pointFormatter: function(){
 												if(this.series.type=='line'){
 													var rtn = '';
@@ -3542,15 +3586,15 @@
             			    ,tooltip: {
             			    	crosshairs: false,
             			    	shared: false,
-//	            			        useHTML: true,
+	            			        // useHTML: true,
             			        headerFormat: '',
-//	            			        pointFormat: '<tr><th>slot name:</th><td>{series.name}</td</tr>' +
-//	            			            '<tr><th>test name:</th><td>{point.TESTNAME}</td></tr>' +
-//	            			            '<tr><th>group name:</th><td>{point.ID}: {point.GROUP_NAME}</td></tr>' +
-//										'<tr><th>min:</th><td>{point.MIN}</td></tr>' +
-//										'<tr><th>max:</th><td>{point.MAX}</td></tr>' +
-//	            			            '<tr><th>avg:</th><td>{point.y}</td></tr>',
-//	            			        footerFormat: '</table>',
+	            			        // pointFormat: '<tr><th>slot name:</th><td>{series.name}</td</tr>' +
+	            			        //     '<tr><th>test name:</th><td>{point.TESTNAME}</td></tr>' +
+	            			        //     '<tr><th>group name:</th><td>{point.ID}: {point.GROUP_NAME}</td></tr>' +
+									// 	'<tr><th>min:</th><td>{point.MIN}</td></tr>' +
+									// 	'<tr><th>max:</th><td>{point.MAX}</td></tr>' +
+	            			        //     '<tr><th>avg:</th><td>{point.y}</td></tr>',
+	            			        // footerFormat: '</table>',
 								pointFormatter: function(){
 									if(this.series.type=='line'){
 										var rtn = '';
@@ -4273,7 +4317,7 @@
 						}else{
 							return true;
 						}			
-	// 					chart.options.xAxis[0].categories = chart.options.xAxis[0].categoriesOrigin;
+						// chart.options.xAxis[0].categories = chart.options.xAxis[0].categoriesOrigin;
 						
 						var width = $(chartDiv).width() ;
 						var height = $(chartDiv).height() ;
@@ -4282,32 +4326,32 @@
 						var dataString = encodeURI('async=true&type=png&width=' + width + '&height=' + height + '&options=' + optionsStr);
 						//var dataString = encodeURI('async=true&type=jpeg&options=' + optionsStr);
 						
-// 						$.ajax({
-// 			                type: 'POST',
-// 			                data: dataString,
-// 			                url: exportUrl,
-// 			                //async: false,
-// 			                success: function (data) {
-// 			                    //console.log('get the file from relative url: ', data);
-// 			                    $(chartDiv).html('<img style="width:'+width+'px;height:'+height+'px;"  src="' + exportUrl + data + '"/>');		 
-// 			                    chart.destroy();
-// 			                },
-// 			                error: function (err) {
-// 			                    //debugger;
-// 			                    console.log('error', err.statusText)
-// 			                }
-// 			            });
+						// $.ajax({
+			            //     type: 'POST',
+			            //     data: dataString,
+			            //     url: exportUrl,
+			            //     //async: false,
+			            //     success: function (data) {
+			            //         //console.log('get the file from relative url: ', data);
+			            //         $(chartDiv).html('<img style="width:'+width+'px;height:'+height+'px;"  src="' + exportUrl + data + '"/>');		 
+			            //         chart.destroy();
+			            //     },
+			            //     error: function (err) {
+			            //         //debugger;
+			            //         console.log('error', err.statusText)
+			            //     }
+			            // });
 						
-// 						var svg = chart.getSVG();
-// 						var base_image = new Image();
-// 						$(base_image).css("width",width);
-// 					    $(base_image).css("height",height);
-// 					    svg = "data:image/svg+xml,"+svg;
-// 					    base_image.src = svg;
+						// var svg = chart.getSVG();
+						// var base_image = new Image();
+						// $(base_image).css("width",width);
+					    // $(base_image).css("height",height);
+					    // svg = "data:image/svg+xml,"+svg;
+					    // base_image.src = svg;
 					    
-// 					    //$(chartDiv).html('<img style="width:'+width+'px;height:'+height+'px;"  src="' + svg + '"/>')
-// 						chart.destroy();
-// 						$(chartDiv).append(base_image);
+					    // //$(chartDiv).html('<img style="width:'+width+'px;height:'+height+'px;"  src="' + svg + '"/>')
+						// chart.destroy();
+						// $(chartDiv).append(base_image);
 
 
 						//--  offline-exporting.src.js : Highcharts.imageToDataUrl . referred
@@ -4392,11 +4436,11 @@
 				//$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:eq(2)").css("width","90px");
 				//$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:gt(1)").css("width","130px");
 				
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv table").css("width","");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:eq(0)").css("width","35px");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:eq(1)").css("width","150px");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:gt(1)").css("width","100px");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:last").css("width","");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv table").css("width","");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:eq(0)").css("width","35px");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:eq(1)").css("width","150px");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:gt(1)").css("width","100px");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv .ui-jqgrid-htable tr").find("th:last").css("width","");
 				
 				//$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-hdiv table").css("width","");
 				/////body
@@ -4405,11 +4449,11 @@
 				//$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:gt(1)").css("width","130px");
 				//$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:gt(0)").css("width","");
 				
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv table").css("width","");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:eq(0)").css("width","35px");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:eq(1)").css("width","150px");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:gt(1)").css("width","100px");
-// 				$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:last").css("width","");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv table").css("width","");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:eq(0)").css("width","35px");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:eq(1)").css("width","150px");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:gt(1)").css("width","100px");
+				// $("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv tbody tr").find("td:last").css("width","");
 				
 				//$("div.ui-jqgrid-view.table-responsive .ui-jqgrid-bdiv table").css("width","")
 				
@@ -5858,1064 +5902,874 @@
      				gridColWidth: '40px',
      				orderby: 5
 	     		 },
-	     		 {
-	     			 	//x축을 2개이상 사용하도록 설정필요. 
-	     				category:'SLC_Workload_Unalign_Qdepth1.csv',
-	     				calculateCols:[
-							{
-								col:'ORDER',
-								val: function(){
-									if(this.SPEC.match(/512B/gi) != null  ){
-											return 1;
-										}else if(this.SPEC.match(/^4KB/gi) != null ){
-											return 2;
-										}else if(this.SPEC.match(/^8KB/gi) != null ){
-											return 3;
-										}else if(this.SPEC.match(/^16KB/gi) != null ){
-											return 4;
-										}else if(this.SPEC.match(/^32KB/gi) != null ){
-											return 5;
-										}else if(this.SPEC.match(/^64KB/gi) != null ){
-											return 6;
-										}else if(this.SPEC.match(/^128KB/gi) != null ){
-											return 7;
-										}else if(this.SPEC.match(/^256KB/gi) != null ){
-											return 8;
-										}else if(this.SPEC.match(/^512KB/gi) != null ){
-											return 9;
-										}else if(this.SPEC.match(/^1MB/gi) != null ){
-											return 10;
-										}else if(this.SPEC.match(/^2MB/gi) != null ){
-											return 11;
-										}else if(this.SPEC.match(/^4MB/gi) != null ){
-											return 12;
-										}else if(this.SPEC.match(/^8MB/gi) != null ){
-											return 13;
-										}else{
-											return 100;
-										}
-									
-								}
-							},   
-		  					{
-		  						col:'WA_CATEGORY',
-		  						val: function(){
-		  							if(this.FIELD == 'MBps (Decimal)'){
-		  								if(this.SPEC.match(/Seq_Read/gi) != null  ){
-		  									return '01.Seq.Read';
-		  								}else if(this.SPEC.match(/Ran_Read/gi) != null ){
-		  									return '02.Ran.Read';
-		  								}else if(this.SPEC.match(/Seq_Write/gi) != null ){
-		  									return '03.Seq.Write';
-		  								}else if(this.SPEC.match(/Ran_Write/gi) != null ){
-		  									return '04.Ran.Write';
-		  								}else{
-		  									return 'null';
-		  								}
-		  							}else return 'null'
-		  							
-		  						}
-		  					},
-		  					{
-		  						col:'WA_SPEC',
-		  						val: function(){
-		  							if(this.FIELD == 'MBps (Decimal)'){
-		  								if(this.SPEC.match(/^[\d]+[\w]+/gi) != null  ){
-		  									return this.SPEC.match(/^[\d]+[a-z]{0,2}/gi)[0];
-		  								}else{
-		  									return 'null';
-		  								}
-		  							}else{
-		  								return 'null';
-		  							}
-		  							
-		  						}
-		  					}
-		  				],
-		  				filters:[
-		  					{col:'WA_CATEGORY',val:  '01.Seq.Read'},
-		  					{col:'WA_CATEGORY',val:  '02.Ran.Read'},
-		  					{col:'WA_CATEGORY',val:  '03.Seq.Write'},
-		  					{col:'WA_CATEGORY',val:  '04.Ran.Write'},
-		  					{col:'FIELD',val:'MBps (Decimal)'}
-		  				],
-		  				xOderbyCols:['FIRMWARE1','ORDER','WA_SPEC'],
-		  				categoryCols:['WA_CATEGORY','WA_SPEC'],
-		  				yCol:'MEASURE',
-		  				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-		  				multichart:{
-		  					enabled:true ,
-		  					splitCol:'WA_CATEGORY',
-		  					chartWidth: 100 , // percent 로 표시
-		  					oneLineChatNum: 1,
-		  					oneLineHeight: 400
-		  				},
-		  				gridColWidth: '65px',
-		  				orderby: 5.5
-	     		 	},
-	     		 	{
-	     			 	//x축을 2개이상 사용하도록 설정필요. 
-	     				category:'SLC_Workload_Unalign_QD1.csv',
-	     				calculateCols:[
-							{
-								col:'ORDER',
-								val: function(){
-									if(this.SPEC.match(/512B/gi) != null  ){
-											return 1;
-										}else if(this.SPEC.match(/^4KB/gi) != null ){
-											return 2;
-										}else if(this.SPEC.match(/^8KB/gi) != null ){
-											return 3;
-										}else if(this.SPEC.match(/^16KB/gi) != null ){
-											return 4;
-										}else if(this.SPEC.match(/^32KB/gi) != null ){
-											return 5;
-										}else if(this.SPEC.match(/^64KB/gi) != null ){
-											return 6;
-										}else if(this.SPEC.match(/^128KB/gi) != null ){
-											return 7;
-										}else if(this.SPEC.match(/^256KB/gi) != null ){
-											return 8;
-										}else if(this.SPEC.match(/^512KB/gi) != null ){
-											return 9;
-										}else if(this.SPEC.match(/^1MB/gi) != null ){
-											return 10;
-										}else if(this.SPEC.match(/^2MB/gi) != null ){
-											return 11;
-										}else if(this.SPEC.match(/^4MB/gi) != null ){
-											return 12;
-										}else if(this.SPEC.match(/^8MB/gi) != null ){
-											return 13;
-										}else{
-											return 100;
-										}
-									
-								}
-							},   
-		  					{
-		  						col:'WA_CATEGORY',
-		  						val: function(){
-		  							if(this.FIELD == 'MBps (Decimal)'){
-		  								if(this.SPEC.match(/Seq_Read/gi) != null  ){
-		  									return '01.Seq.Read';
-		  								}else if(this.SPEC.match(/Ran_Read/gi) != null ){
-		  									return '02.Ran.Read';
-		  								}else if(this.SPEC.match(/Seq_Write/gi) != null ){
-		  									return '03.Seq.Write';
-		  								}else if(this.SPEC.match(/Ran_Write/gi) != null ){
-		  									return '04.Ran.Write';
-		  								}else{
-		  									return 'null';
-		  								}
-		  							}else return 'null'
-		  							
-		  						}
-		  					},
-		  					{
-		  						col:'WA_SPEC',
-		  						val: function(){
-		  							if(this.FIELD == 'MBps (Decimal)'){
-		  								if(this.SPEC.match(/^[\d]+[\w]+/gi) != null  ){
-		  									return this.SPEC.match(/^[\d]+[a-z]{0,2}/gi)[0];
-		  								}else{
-		  									return 'null';
-		  								}
-		  							}else{
-		  								return 'null';
-		  							}
-		  							
-		  						}
-		  					}
-		  				],
-		  				filters:[
-		  					{col:'WA_CATEGORY',val:  '01.Seq.Read'},
-		  					{col:'WA_CATEGORY',val:  '02.Ran.Read'},
-		  					{col:'WA_CATEGORY',val:  '03.Seq.Write'},
-		  					{col:'WA_CATEGORY',val:  '04.Ran.Write'},
-		  					{col:'FIELD',val:'MBps (Decimal)'}
-		  				],
-		  				xOderbyCols:['FIRMWARE1','ORDER','WA_SPEC'],
-		  				categoryCols:['WA_CATEGORY','WA_SPEC'],
-		  				yCol:'MEASURE',
-		  				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-		  				multichart:{
-		  					enabled:true ,
-		  					splitCol:'WA_CATEGORY',
-		  					chartWidth: 100 , // percent 로 표시
-		  					oneLineChatNum: 1,
-		  					oneLineHeight: 400
-		  				},
-		  				gridSeriesColWidth: '120',
-	     				gridColWidth: '40px',
-		  				orderby: 5.5
-	     		 	},
-	     		 	{
-	     				category:'Mixed_Seq_RW.csv',
-	     				calculateCols:[
-	     					{
-	     						col:'MIXED_SERIES',
-	     						val: function(){
-	     							if(this.FIELD == 'Read MBps (Decimal)'  ){
-	     								return 'Read';
-	     							}else if(this.FIELD == 'Write MBps (Decimal)' ){
-	     								return 'Write';
-	     							}else{
-	     								return null;
-	     							}
-	     							
-	     						}
-	     					},
-	     					{
-	     						col:'MIXED_SPEC',
-	     						val: function(){
-	     							//return this.SPEC;
-	     							if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
-	     								return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
-	     							}else{
-	     								return this.SPEC;
-	     							}
-	     						}
-	     					},
-	     					{
-	     						col:'MIXED_DUMMY',
-	     						val: function(){
-	     							return 'measure';
-	     						}
-	     					}
-	     				],
-	     				filters:[
-	     					{col:'MIXED_SERIES',val:  'Read'},
-	     					{col:'MIXED_SERIES',val:  'Write'}				
-	     				],
-	     				//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
-	     				xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
-	     				categoryCols:['FIRMWARE1','MIXED_SPEC'],
-	     				yCol:'MEASURE',
-	     				//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
-	     				seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
-	     				multichart:{
-	     					enabled: true,
-	     					splitCol:'FIRMWARE1',
-	     					chartWidth: 50 , // percent 로 표시
-     						oneLineChatNum: 2
-	     				},
-	     				addSeries:[
-	     					{
-	     						name: 'Sum',
-	     						type: 'spline',
-	     						seriesFunction: function(){
-		  	     						var series = arguments;
-		  	     						var addS = this;
-		     							$.each(series,function(seriesIndex,s){
-		     								$.each(s.data,function(dataIndex,d){
-		     									if(addS.data[dataIndex] != undefined){
-		     										addS.data[dataIndex].y += d.y;
-		     									}else{
-		     										addS.data[dataIndex] = {
-		     											y : d.y	
-		     										};
-		     									}
-		     								});
-		     								
-		     							});
-		     						}
-	     					}
-	     				],
-	     				gridSeriesColWidth: '50px',
-		  	     		gridColWidth: '58px',
-	     				orderby: 13
-	     		 	},
-	     		 	{
-	     				category:'Mixed_Ran_RW.csv',
-	     				calculateCols:[
-	     					{
-	     						col:'MIXED_SERIES',
-	     						val: function(){
-	     							if(this.FIELD == 'Read MBps (Decimal)'  ){
-	     								return 'Read';
-	     							}else if(this.FIELD == 'Write MBps (Decimal)' ){
-	     								return 'Write';
-	     							}else{
-	     								return null;
-	     							}
-	     							
-	     						}
-	     					},
-	     					{
-	     						col:'MIXED_SPEC',
-	     						val: function(){
-	     							//return this.SPEC;
-	     							if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
-	     								return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
-	     							}else{
-	     								return this.SPEC;
-	     							}
-	     						}
-	     					},
-	     					{
-	     						col:'MIXED_DUMMY',
-	     						val: function(){
-	     							return 'measure';
-	     						}
-	     					}
-	     				],
-	     				filters:[
-	     					{col:'MIXED_SERIES',val:  'Read'},
-	     					{col:'MIXED_SERIES',val:  'Write'}				
-	     				],
-	     				//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
-	     				xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
-	     				categoryCols:['FIRMWARE1','MIXED_SPEC'],
-	     				yCol:'MEASURE',
-	     				//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
-	     				seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
-	     				multichart:{
-	     					enabled: true,
-	     					splitCol:'FIRMWARE1',
-	     					chartWidth: 50 , // percent 로 표시
-     						oneLineChatNum: 2
-	     				},
-	     				addSeries:[
-	   	     					{
-	   	     						name: 'Sum',
-	   	     						type: 'spline',
-		   	     					seriesFunction: function(){
-			  	     						var series = arguments;
-			  	     						var addS = this;
-			     							$.each(series,function(seriesIndex,s){
-			     								$.each(s.data,function(dataIndex,d){
-			     									if(addS.data[dataIndex] != undefined){
-			     										addS.data[dataIndex].y += d.y;
-			     									}else{
-			     										addS.data[dataIndex] = {
-			     											y : d.y	
-			     										};
-			     									}
-			     								});
-			     								
-			     							});
-			     						}
-	   	     					}
-	   	     				],
-	   	     			gridSeriesColWidth: '50px',
-		  	     		gridColWidth: '58px',
-	   	     			orderby: 14
-	     		 	},
-	     		 	// Rw Block Sweep
-	     		 	{
-	     		 		
-     				 	//x축을 2개이상 사용하도록 설정필요.
-     					category:'RW Block Sweep parsed.csv',
-     					//chartType:'spline',
-     					calculateCols:[
-							{
-								col:'Category',
-								val: function(){
-									var vSplit = this.SPEC.split("_");
-									return vSplit[0] + " " + vSplit[1];									
-								}
-							},
-							{
-								col:'BlockSize',
-								val: function(){
-									var vSplit = this.SPEC.split("_");
-									return vSplit[2];
-									
-								}
-							}
-							
-     					],
-     					filters:[
-     						{col:'FIELD',val:  'Average of 3 runs'}
-     					],
-     					xOderbyCols:['FIRMWARE1','BlockSize'],
-     					categoryCols:['Category','BlockSize'],
-     					yCol:'MEASURE',
-     					decimalPoint:2,
-     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-     					multichart:{
-     						enabled:true,
-     						splitCol:'Category',
-     						chartWidth: 50 , // percent 로 표시
-     						oneLineChatNum: 2,
-     						oneLineHeight: 600,
-     						yAxisTitle:{
-     							"Random Read":'IOps',
-     							"Random Write":'IOps',
-     							"Sequential Read":'MBps (Binary)',
-     							"Sequential Write":'MBps (Binary)',
-     							"Random 25R/75W":'IOps',
-     							"Random 75R/25W":'IOps',     							
-     							"Sequential 25R/75W":'MBps (Binary)',
-     							"Sequential 75R/25W":'MBps (Binary)',
-     						},
-     						orderBy : function(){
-	   							if(this.Category.match(/Random Read/gi) != null  ){
-									return 10;
-								}else if(this.Category.match(/Random Write/gi) != null  ){
-									return 20;
-								}else if(this.Category.match(/Sequential Read/gi) != null  ){
-									return 30;
-								}else if(this.Category.match(/Sequential Write/gi) != null  ){
-									return 40;
-								}else if(this.Category.match(/Random 75R\/25W/gi) != null  ){
-									return 50;
-								}else if(this.Category.match(/Random 25R\/75W/gi) != null  ){
-									return 60;
-								}else if(this.Category.match(/Sequential 75R\/25W/gi) != null  ){
-									return 70;
-								}else if(this.Category.match(/Sequential 25R\/75W/gi) != null  ){
-									return 80;
-								}else{
-									return 100;
-								}
-								
-							}
-     					},
-     					gridColWidth: '50px',
-     					orderby:14.2
-	     		 	},
-	     		 	// SSD Performance V1.csv
-	     		 	{
-	     		 		
-     				 	//x축을 2개이상 사용하도록 설정필요.
-     					category:'SSD Performance V1.csv',
-     					//chartType:'spline',
-     					calculateCols:[
-     						{
-								col:'isShow',
-								val: function(){
-									if(this.SPEC == "Seqread" && this.FIELD == "MBps (Decimal)" ){
-										return "O";
-									}else if(this.SPEC == "SeqWrite" && this.FIELD == "MBps (Decimal)" ){
-										return "O";
-									}else if(this.SPEC == "RandomRead" && this.FIELD == "IOps" ){
-										return "O";
-									}else if(this.SPEC == "RandomWrite" && this.FIELD == "IOps" ){
-										return "O";
+				{
+					//x축을 2개이상 사용하도록 설정필요. 
+					category:'SLC_Workload_Unalign_Qdepth1.csv',
+					calculateCols:[
+						{
+							col:'ORDER',
+							val: function(){
+								if(this.SPEC.match(/512B/gi) != null  ){
+										return 1;
+									}else if(this.SPEC.match(/^4KB/gi) != null ){
+										return 2;
+									}else if(this.SPEC.match(/^8KB/gi) != null ){
+										return 3;
+									}else if(this.SPEC.match(/^16KB/gi) != null ){
+										return 4;
+									}else if(this.SPEC.match(/^32KB/gi) != null ){
+										return 5;
+									}else if(this.SPEC.match(/^64KB/gi) != null ){
+										return 6;
+									}else if(this.SPEC.match(/^128KB/gi) != null ){
+										return 7;
+									}else if(this.SPEC.match(/^256KB/gi) != null ){
+										return 8;
+									}else if(this.SPEC.match(/^512KB/gi) != null ){
+										return 9;
+									}else if(this.SPEC.match(/^1MB/gi) != null ){
+										return 10;
+									}else if(this.SPEC.match(/^2MB/gi) != null ){
+										return 11;
+									}else if(this.SPEC.match(/^4MB/gi) != null ){
+										return 12;
+									}else if(this.SPEC.match(/^8MB/gi) != null ){
+										return 13;
 									}else{
-										return "X";
-									}										
-								}
-							},
-							{
-								col:'SeqRandom',
-								val: function(){
-									if(this.SPEC.match(/^Random/gi) != null ){
-										return 'Ran';
-									}else if(this.SPEC.match(/^Seq/gi) != null ){
-										return 'Seq';
-									}										
-								}
-							},
-							{
-								col:'Seq',
-								val: function(){
-									return Number(this.SPEC1);
-									
-								}
+										return 100;
+									}
+								
 							}
-							
-     					],
-     					filters:[
-     						{col:'isShow',val:  "O"}
-     					],
-     					xOderbyCols:['FIRMWARE1','Seq'],
-     					categoryCols:['SPEC','Seq'],
-     					yCol:'MEASURE',
-     					decimalPoint:2,
-     					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-     					multichart:{
-     						enabled:true,
-     						splitCol:'SPEC',
-     						chartWidth: 100 , // percent 로 표시
-     						oneLineChatNum: 1,
-     						oneLineHeight: 600,
-     						yAxisTitle:{
-     							"Seqread":'MB/s',
-     							"SeqWrite":'MB/s',
-     							"RandomRead":'IOps',
-     							"RandomWrite":'IOps'
-     						},
-     						orderBy : function(){
-	   							if(this.SPEC.match(/Seqread/gi) != null  ){
-									return 10;
-								}else if(this.SPEC.match(/SeqWrite/gi) != null  ){
-									return 20;
-								}else if(this.SPEC.match(/RandomRead/gi) != null  ){
-									return 30;
-								}else if(this.SPEC.match(/RandomWrite/gi) != null  ){
-									return 40;
+						},   
+						{
+							col:'WA_CATEGORY',
+							val: function(){
+								if(this.FIELD == 'MBps (Decimal)'){
+									if(this.SPEC.match(/Seq_Read/gi) != null  ){
+										return '01.Seq.Read';
+									}else if(this.SPEC.match(/Ran_Read/gi) != null ){
+										return '02.Ran.Read';
+									}else if(this.SPEC.match(/Seq_Write/gi) != null ){
+										return '03.Seq.Write';
+									}else if(this.SPEC.match(/Ran_Write/gi) != null ){
+										return '04.Ran.Write';
+									}else{
+										return 'null';
+									}
+								}else return 'null'
+								
+							}
+						},
+						{
+							col:'WA_SPEC',
+							val: function(){
+								if(this.FIELD == 'MBps (Decimal)'){
+									if(this.SPEC.match(/^[\d]+[\w]+/gi) != null  ){
+										return this.SPEC.match(/^[\d]+[a-z]{0,2}/gi)[0];
+									}else{
+										return 'null';
+									}
 								}else{
-									return 100;
+									return 'null';
 								}
 								
 							}
-     					},
-     					gridColWidth: '50px',
-     					orderby:14.3
-	     		 	},
-	     		 	{
-	     				category:'SLC_Mixed_Seq_RW.csv',
-	     				calculateCols:[
- 		     					{
- 		     						col:'MIXED_SERIES',
- 		     						val: function(){
- 		     							if(this.FIELD == 'Read MBps (Decimal)'  ){
- 		     								return 'Read';
- 		     							}else if(this.FIELD == 'Write MBps (Decimal)' ){
- 		     								return 'Write';
- 		     							}else{
- 		     								return null;
- 		     							}
- 		     							
- 		     						}
- 		     					},
- 		     					{
- 		     						col:'MIXED_SPEC',
- 		     						val: function(){
- 		     							//return this.SPEC;
- 		     							if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
- 		     								return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
- 		     							}else{
- 		     								return this.SPEC;
- 		     							}
- 		     						}
- 		     					},
- 		     					{
- 		     						col:'MIXED_DUMMY',
- 		     						val: function(){
- 		     							return 'measure';
- 		     						}
- 		     					}
- 		     				],
- 		     				filters:[
- 		     					{col:'MIXED_SERIES',val:  'Read'},
- 		     					{col:'MIXED_SERIES',val:  'Write'}				
- 		     				],
- 		     				//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
- 		     				xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
- 		     				categoryCols:['FIRMWARE1','MIXED_SPEC'],
- 		     				yCol:'MEASURE',
- 		     				//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
- 		     				seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
- 		     				multichart:{
- 		     					enabled: true,
- 		     					splitCol:'FIRMWARE1',
- 		     					chartWidth: 50 , // percent 로 표시
-	     						oneLineChatNum: 2
- 		     				},
- 		     				addSeries:[
- 		  	     					{
- 		  	     						name: 'Sum',
- 		  	     						type: 'spline',
-	 		  	     					seriesFunction: function(){
-	 		  	     						var series = arguments;
-	 		  	     						var addS = this;
-	 		     							$.each(series,function(seriesIndex,s){
-	 		     								$.each(s.data,function(dataIndex,d){
-	 		     									if(addS.data[dataIndex] != undefined){
-	 		     										addS.data[dataIndex].y += d.y;
-	 		     									}else{
-	 		     										addS.data[dataIndex] = {
-	 		     											y : d.y	
-	 		     										};
-	 		     									}
-	 		     								});
-	 		     								
-	 		     							});
-	 		     						}
- 		  	     					}
- 		  	     				] ,
- 		  	     			gridSeriesColWidth: '50px',
- 		  	     			gridColWidth: '58px',
- 		  	     			orderby: 6
-	     		 	},
-	     		 	{
-	     				category:'SLC_Mixed_Ran_RW.csv',
-	     				calculateCols:[
-  		     					{
-  		     						col:'MIXED_SERIES',
-  		     						val: function(){
-  		     							if(this.FIELD == 'Read MBps (Decimal)'  ){
-  		     								return 'Read';
-  		     							}else if(this.FIELD == 'Write MBps (Decimal)' ){
-  		     								return 'Write';
-  		     							}else{
-  		     								return null;
-  		     							}
-  		     							
-  		     						}
-  		     					},
-  		     					{
-  		     						col:'MIXED_SPEC',
-  		     						val: function(){
-  		     							//return this.SPEC;
-  		     							if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
-  		     								return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
-  		     							}else{
-  		     								return this.SPEC;
-  		     							}
-  		     						}
-  		     					},
-  		     					{
-  		     						col:'MIXED_DUMMY',
-  		     						val: function(){
-  		     							return 'measure';
-  		     						}
-  		     					}
-  		     				],
-  		     				filters:[
-  		     					{col:'MIXED_SERIES',val:  'Read'},
-  		     					{col:'MIXED_SERIES',val:  'Write'}				
-  		     				],
-  		     				//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
-  		     				xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
-  		     				categoryCols:['FIRMWARE1','MIXED_SPEC'],
-  		     				yCol:'MEASURE',
-  		     				//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
-  		     				seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
-  		     				multichart:{
-  		     					enabled: true,
-  		     					splitCol:'FIRMWARE1',
-  		     					chartWidth: 50 , // percent 로 표시
-	     						oneLineChatNum: 2
-  		     				},
-  		     				addSeries:[
-  		 	     					{
-  		 	     						name: 'Sum',
-  		 	     						type: 'spline',
-	  		 	     					seriesFunction: function(){
-	 		  	     						var series = arguments;
-	 		  	     						var addS = this;
-	 		     							$.each(series,function(seriesIndex,s){
-	 		     								$.each(s.data,function(dataIndex,d){
-	 		     									if(addS.data[dataIndex] != undefined){
-	 		     										addS.data[dataIndex].y += d.y;
-	 		     									}else{
-	 		     										addS.data[dataIndex] = {
-	 		     											y : d.y	
-	 		     										};
-	 		     									}
-	 		     								});
-	 		     								
-	 		     							});
-	 		     						}
-  		 	     					}
-  		 	     				],
-  		 	     			gridSeriesColWidth: '50px',
- 		  	     			gridColWidth: '58px',
-  		 	     			orderby: 7
-	     		 	},
-	     		 	
-	     		 	{
-	     				category:'CDM301.xlsx',
-	     				calculateCols:[
-	     					{
-	     						col:'CDM_SPEC',
-	     						val: function(){	     							
-	     							if(this.FIELD.match(/[\d]+/gi) != null ){
-	     								var arr = this.FIELD.match(/([\w]+)\s+([\d]+[\w]+)?\s*(\([\w\=\s,]+\))?/i);
-	     								//["Read 4KB (QD=1)", "Read", "4KB", "(QD=1)"]
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = 'Seq.';
-	     								else
-	     									vspec = 'R.';
-	     								
-	     								var vqd = '';
-	     								if(arr[3] != undefined)
-	     									vqd = arr[3];
-	     								
-	     								var vnum = '';
-	     								if(arr[2] != undefined)
-	     									vnum = arr[2];
-	     								
-	     								return arr[2] + ' ' + vspec + arr[1].substr(0,1) + vqd;
-	     								
-	     							}else{
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = 'Seq.';
-	     								else
-	     									vspec = 'R.';
-	     								return vspec + ' ' + this.FIELD;
-	     							}
-	     							
-	     						}
-	     					},
-	     					{
-	     						col:'CDM_ORDER',
-	     						val: function(){	     							
-	     							if(this.FIELD.match(/[\d]+/gi) != null ){
-	     								var arr = this.FIELD.match(/([\w]+)\s+([\d]+[\w]+)?\s*(\([\w\=\s,]+\))?/i);
-	     								//["Read 4KB (QD=1)", "Read", "4KB", "(QD=1)"]
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = 'Seq.';
-	     								else
-	     									vspec = 'R.';
-	     								
-	     								var vqd = '';
-	     								if(arr[3] != undefined)
-	     									vqd = arr[3];
-	     								
-	     								var vnum = '';
-	     								if(arr[2] != undefined)
-	     									vnum = arr[2];
-	     								
-	     								return arr[2] + ' ' + vqd + vspec + arr[1].substr(0,1);
-	     								
-	     							}else{
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = '1.';
-	     								else
-	     									vspec = '2.';
-	     								return vspec + ' ' + this.FIELD;
-	     							}
-	     							
-	     						}
-	     					},
-	     					{
-	     						col:'CDM_DUMMY',
-	     						val: function(){
-	     							return 'measure';
-	     						}
-	     					}
-	     				],
-	     				filters:[
-	     					
-	     				],
-	     				xOderbyCols:['FIRMWARE1','CDM_ORDER','CDM_SPEC'],
-	     				categoryCols:['CDM_SPEC'],
-	     				yCol:'MEASURE',
-	     				yAxisTitle :' MB/s',
-	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-	     				multichart:{
-	     					enabled:false,
-	     					cols:[]
-	     				},
-	     				gridSeriesColWidth: '100px',
-		 	     		gridColWidth: '70px',
-	     				orderby: 210
-	     		 },
-	     		 {
-	     				category:'CDM503.xlsx',
-	     				calculateCols:[
-	     					{
-	     						col:'CDM_SPEC',
-	     						val: function(){
-	     							if(this.FIELD.match(/[\d]+/gi) != null ){
-	     								var arr = this.FIELD.match(/([\w]+)\s+([\d]+[\w]+)?\s*(\([\w\=\s,]+\))?/i);
-	     								//["Read 4KB (QD=1)", "Read", "4KB", "(QD=1)"]
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = 'Seq.';
-	     								else
-	     									vspec = 'R.';
-	     								
-	     								var vqd = '';
-	     								if(arr[3] != undefined)
-	     									vqd = arr[3];
-	     								
-	     								var vnum = '';
-	     								if(arr[2] != undefined)
-	     									vnum = arr[2];
-	     								
-	     								return vnum + ' ' + vspec + arr[1].substr(0,1) + vqd;
-	     								
-	     							}else{
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = 'Seq.';
-	     								else
-	     									vspec = 'R.';
-	     								return vspec + ' ' + this.FIELD;
-	     							}
-	     							
-	     						}
-	     					},
-	     					{
-	     						col:'ORDER',
-	     						val: function(){
-	     							if(this.FIELD.match(/[\d]+/gi) != null ){
-	     								var arr = this.FIELD.match(/([\w]+)\s+([\d]+[\w]+)?\s*(\(([Q\s]+\=[\w\s]+)?,?([T\s]+\=[\w\s]+)?\))?/i);
-	     								//["Read 4KiB (Q= 32,T= 1)", "Read", "4KiB", "(Q= 32,T= 1)", "Q= 32", "T= 1"]
-	     								var qd = '0';
-	     								if(arr[4] != undefined)
-	     									qd = arr[4];
-	     								
-	     								
-	     								var vspec = '0';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = '1';
-	     								else
-	     									vspec = '2';
-	     								
-	     								var vnum = '0';
-	     								if(arr[2] != undefined)
-	     									vnum = arr[2];
-	     								
-	     								var rw = '0';
-	     								if(arr[1] != undefined)
-	     									rw = arr[1];
-	     								//return qd +'_'+ vnum + '_' +  vspec;
-	     								return qd +'_'+ vnum + '_' + rw ;
-	     								
-	     							}else{
-	     								var vspec = '';
-	     								if(this.SPEC.match(/Sequential/gi) != null)
-	     									vspec = '1. ';
-	     								else
-	     									vspec = '2. ';
-	     								return vspec + ' ' + this.FIELD;
-	     							}
-	     							
-	     						}
-	     					},
-	     					{
-	     						col:'CDM_DUMMY',
-	     						val: function(){
-	     							return 'measure';
-	     						}
-	     					}
-	     				],
-	     				filters:[
-	     					
-	     				],
-	     				xOderbyCols:['FIRMWARE1','ORDER','CDM_SPEC'],
-	     				categoryCols:['CDM_SPEC'],
-	     				yCol:'MEASURE',
-	     				yAxisTitle :' MB/s',
-	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-	     				multichart:{
-	     					enabled:false,
-	     					cols:[]
-	     				},
-	     				gridSeriesColWidth: '100px',
-		 	     		gridColWidth: '70px',
-	     				orderby: 220
-	     		 },
-	     		{
-     				category:'AS-SSD1.6.xml',
-     				calculateCols:[
-     					{
-     						col:'AS_SSD_SPEC',
-     						val: function(){
-     							var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
-     							if(sarr != undefined){
-     								//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
-     								var rs = sarr[1];
-     								var rst = '';
-     								if(rs.match(/random/gi) != null)
-     									rst = 'R.';
-     								else
-     									rst = 'Seq.';
-     								var vol = sarr[2];
-     								var speed = sarr[3];
-     								var rw = this.FIELD;
-     								var rwt = '';
-     								if(rw.match(/read/gi) != null)
-     									rwt = 'R';
-     								else if(rw.match(/Write/gi) != null)
-     									rwt = 'W';
-     								
-     								var speedt = '';
-     								if(speed != undefined)
-     									speedt = '('+speed+'Thrd)';
-     								return vol + ' ' + rst + rwt + speedt;
-     								
-     							}else if(this.SPEC == 'AccTimeTest'){
-     								if(this.FIELD == 'Read')
-     									return 'Access Time(Read)';
-     								else
-     									return 'Access Time(Write)';
-     							}else {
-     								if(this.FIELD == 'Read')
-     									return 'Seq. Read';
-     								else
-     									return 'Seq. Write';
-     							}
-     								
-     							
-     						}
-     					},
-     					{
-     						col:'AS_SSD_ORDER',
-     						val: function(){
-     							var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
-     							if(sarr != undefined){
-     								//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
-     								var rs = sarr[1];
-     								var rst = '';
-     								if(rs.match(/random/gi) != null)
-     									rst = 'R.';
-     								else
-     									rst = 'Seq.';
-     								var vol = sarr[2];
-     								var speed = sarr[3];
-     								var rw = this.FIELD;
-     								var rwt = '';
-     								if(rw.match(/read/gi) != null)
-     									rwt = 'R';
-     								else if(rw.match(/Write/gi) != null)
-     									rwt = 'W';
-     								
-     								var speedt = '';
-     								if(speed != undefined)
-     									speedt = '('+speed+'Thrd)';
-     								//return vol + ' ' + rst + rwt + speedt;
-     								return vol + ' ' + speedt + rst + rwt ;
-     								
-     							}else if(this.SPEC == 'AccTimeTest'){
-     								if(this.FIELD == 'Read')
-     									return 'Access Time(Read)';
-     								else
-     									return 'Access Time(Write)';
-     							}else {
-     								if(this.FIELD == 'Read')
-     									return '1';
-     								else
-     									return '2';
-     							}
-     								
-     							
-     						}
-     					},
-     					{
-     						col:'AS_SSD_DUMMY',
-     						val: function(){
-     							return 'measure';
-     						}
-     					}
-     				],
-     				filters:[
-     					{col:'FIELD',val:'Read'},
-     					{col:'FIELD',val:'Write'}
-     				],
-     				xOderbyCols:['FIRMWARE1','AS_SSD_ORDER','AS_SSD_SPEC'],
-     				categoryCols:['AS_SSD_SPEC'],
-     				yCol:'MEASURE',
-     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-     				multichart:{
-     					enabled:false,
-     					cols:[]
-     				},
-     				gridSeriesColWidth: '100px',
-	 	     		gridColWidth: '70px',
-     				orderby: 230
-     		 	},
-     		 	{
-     				category:'AS-SSD1.8.xml',
-     				calculateCols:[
-     					{
-     						col:'AS_SSD_SPEC',
-     						val: function(){
-     							var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
-     							if(sarr != undefined){
-     								//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
-     								var rs = sarr[1];
-     								var rst = '';
-     								if(rs.match(/random/gi) != null)
-     									rst = 'R.';
-     								else
-     									rst = 'Seq.';
-     								var vol = sarr[2];
-     								var speed = sarr[3];
-     								var rw = this.FIELD;
-     								var rwt = '';
-     								if(rw.match(/read/gi) != null)
-     									rwt = 'R';
-     								else if(rw.match(/Write/gi) != null)
-     									rwt = 'W';
-     								
-     								var speedt = '';
-     								if(speed != undefined)
-     									speedt = '('+speed+'Thrd)';
-     								return vol + ' ' + rst + rwt + speedt;
-     								
-     							}else if(this.SPEC == 'AccTimeTest'){
-     								if(this.FIELD == 'Read')
-     									return 'Access Time(Read)';
-     								else
-     									return 'Access Time(Write)';
-     							}else {
-     								if(this.FIELD == 'Read')
-     									return 'Seq. Read';
-     								else
-     									return 'Seq. Write';
-     							}
-     								
-     							
-     						}
-     					},
-     					{
-     						col:'AS_SSD_ORDER',
-     						val: function(){
-     							var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
-     							if(sarr != undefined){
-     								//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
-     								var rs = sarr[1];
-     								var rst = '';
-     								if(rs.match(/random/gi) != null)
-     									rst = 'R.';
-     								else
-     									rst = 'Seq.';
-     								var vol = sarr[2];
-     								var speed = sarr[3];
-     								var rw = this.FIELD;
-     								var rwt = '';
-     								if(rw.match(/read/gi) != null)
-     									rwt = 'R';
-     								else if(rw.match(/Write/gi) != null)
-     									rwt = 'W';
-     								
-     								var speedt = '';
-     								if(speed != undefined)
-     									speedt = '('+speed+'Thrd)';
-     								//return vol + ' ' + rst + rwt + speedt;
-     								return vol + ' ' + speedt + rst + rwt ;
-     								
-     							}else if(this.SPEC == 'AccTimeTest'){
-     								if(this.FIELD == 'Read')
-     									return 'Access Time(Read)';
-     								else
-     									return 'Access Time(Write)';
-     							}else {
-     								if(this.FIELD == 'Read')
-     									return '1';
-     								else
-     									return '2';
-     							}
-     								
-     							
-     						}
-     					},
-     					{
-     						col:'AS_SSD_DUMMY',
-     						val: function(){
-     							return 'measure';
-     						}
-     					}
-     				],
-     				filters:[
-     					{col:'FIELD',val:'Read'},
-     					{col:'FIELD',val:'Write'}
-     				],
-     				xOderbyCols:['FIRMWARE1','AS_SSD_ORDER','AS_SSD_SPEC'],
-     				categoryCols:['AS_SSD_SPEC'],
-     				yCol:'MEASURE',
-     				yAxisTitle :' MB/s',
-     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-     				multichart:{
-     					enabled:false,
-     					cols:[]
-     				},
-     				gridSeriesColWidth: '100px',
-	 	     		gridColWidth: '70px',
-     				orderby: 240
-     		 	},
+						}
+					],
+					filters:[
+						{col:'WA_CATEGORY',val:  '01.Seq.Read'},
+						{col:'WA_CATEGORY',val:  '02.Ran.Read'},
+						{col:'WA_CATEGORY',val:  '03.Seq.Write'},
+						{col:'WA_CATEGORY',val:  '04.Ran.Write'},
+						{col:'FIELD',val:'MBps (Decimal)'}
+					],
+					xOderbyCols:['FIRMWARE1','ORDER','WA_SPEC'],
+					categoryCols:['WA_CATEGORY','WA_SPEC'],
+					yCol:'MEASURE',
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:true ,
+						splitCol:'WA_CATEGORY',
+						chartWidth: 100 , // percent 로 표시
+						oneLineChatNum: 1,
+						oneLineHeight: 400
+					},
+					gridColWidth: '65px',
+					orderby: 5.5
+				},
+				{
+					//x축을 2개이상 사용하도록 설정필요. 
+					category:'SLC_Workload_Unalign_QD1.csv',
+					calculateCols:[
+						{
+							col:'ORDER',
+							val: function(){
+								if(this.SPEC.match(/512B/gi) != null  ){
+										return 1;
+									}else if(this.SPEC.match(/^4KB/gi) != null ){
+										return 2;
+									}else if(this.SPEC.match(/^8KB/gi) != null ){
+										return 3;
+									}else if(this.SPEC.match(/^16KB/gi) != null ){
+										return 4;
+									}else if(this.SPEC.match(/^32KB/gi) != null ){
+										return 5;
+									}else if(this.SPEC.match(/^64KB/gi) != null ){
+										return 6;
+									}else if(this.SPEC.match(/^128KB/gi) != null ){
+										return 7;
+									}else if(this.SPEC.match(/^256KB/gi) != null ){
+										return 8;
+									}else if(this.SPEC.match(/^512KB/gi) != null ){
+										return 9;
+									}else if(this.SPEC.match(/^1MB/gi) != null ){
+										return 10;
+									}else if(this.SPEC.match(/^2MB/gi) != null ){
+										return 11;
+									}else if(this.SPEC.match(/^4MB/gi) != null ){
+										return 12;
+									}else if(this.SPEC.match(/^8MB/gi) != null ){
+										return 13;
+									}else{
+										return 100;
+									}
+								
+							}
+						},   
+						{
+							col:'WA_CATEGORY',
+							val: function(){
+								if(this.FIELD == 'MBps (Decimal)'){
+									if(this.SPEC.match(/Seq_Read/gi) != null  ){
+										return '01.Seq.Read';
+									}else if(this.SPEC.match(/Ran_Read/gi) != null ){
+										return '02.Ran.Read';
+									}else if(this.SPEC.match(/Seq_Write/gi) != null ){
+										return '03.Seq.Write';
+									}else if(this.SPEC.match(/Ran_Write/gi) != null ){
+										return '04.Ran.Write';
+									}else{
+										return 'null';
+									}
+								}else return 'null'
+								
+							}
+						},
+						{
+							col:'WA_SPEC',
+							val: function(){
+								if(this.FIELD == 'MBps (Decimal)'){
+									if(this.SPEC.match(/^[\d]+[\w]+/gi) != null  ){
+										return this.SPEC.match(/^[\d]+[a-z]{0,2}/gi)[0];
+									}else{
+										return 'null';
+									}
+								}else{
+									return 'null';
+								}
+								
+							}
+						}
+					],
+					filters:[
+						{col:'WA_CATEGORY',val:  '01.Seq.Read'},
+						{col:'WA_CATEGORY',val:  '02.Ran.Read'},
+						{col:'WA_CATEGORY',val:  '03.Seq.Write'},
+						{col:'WA_CATEGORY',val:  '04.Ran.Write'},
+						{col:'FIELD',val:'MBps (Decimal)'}
+					],
+					xOderbyCols:['FIRMWARE1','ORDER','WA_SPEC'],
+					categoryCols:['WA_CATEGORY','WA_SPEC'],
+					yCol:'MEASURE',
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:true ,
+						splitCol:'WA_CATEGORY',
+						chartWidth: 100 , // percent 로 표시
+						oneLineChatNum: 1,
+						oneLineHeight: 400
+					},
+					gridSeriesColWidth: '120',
+					gridColWidth: '40px',
+					orderby: 5.5
+				},
+				{
+					category:'Mixed_Seq_RW.csv',
+					calculateCols:[
+						{
+							col:'MIXED_SERIES',
+							val: function(){
+								if(this.FIELD == 'Read MBps (Decimal)'  ){
+									return 'Read';
+								}else if(this.FIELD == 'Write MBps (Decimal)' ){
+									return 'Write';
+								}else{
+									return null;
+								}
+								
+							}
+						},
+						{
+							col:'MIXED_SPEC',
+							val: function(){
+								//return this.SPEC;
+								if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
+									return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
+								}else{
+									return this.SPEC;
+								}
+							}
+						},
+						{
+							col:'MIXED_DUMMY',
+							val: function(){
+								return 'measure';
+							}
+						}
+					],
+					filters:[
+						{col:'MIXED_SERIES',val:  'Read'},
+						{col:'MIXED_SERIES',val:  'Write'}				
+					],
+					//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
+					xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
+					categoryCols:['FIRMWARE1','MIXED_SPEC'],
+					yCol:'MEASURE',
+					//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
+					seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
+					multichart:{
+						enabled: true,
+						splitCol:'FIRMWARE1',
+						chartWidth: 50 , // percent 로 표시
+						oneLineChatNum: 2
+					},
+					addSeries:[
+						{
+							name: 'Sum',
+							type: 'spline',
+							seriesFunction: function(){
+									var series = arguments;
+									var addS = this;
+									$.each(series,function(seriesIndex,s){
+										$.each(s.data,function(dataIndex,d){
+											if(addS.data[dataIndex] != undefined){
+												addS.data[dataIndex].y += d.y;
+											}else{
+												addS.data[dataIndex] = {
+													y : d.y	
+												};
+											}
+										});
+										
+									});
+								}
+						}
+					],
+					gridSeriesColWidth: '50px',
+					gridColWidth: '58px',
+					orderby: 13
+				},
+				{
+					category:'Mixed_Ran_RW.csv',
+					calculateCols:[
+						{
+							col:'MIXED_SERIES',
+							val: function(){
+								if(this.FIELD == 'Read MBps (Decimal)'  ){
+									return 'Read';
+								}else if(this.FIELD == 'Write MBps (Decimal)' ){
+									return 'Write';
+								}else{
+									return null;
+								}
+								
+							}
+						},
+						{
+							col:'MIXED_SPEC',
+							val: function(){
+								//return this.SPEC;
+								if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
+									return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
+								}else{
+									return this.SPEC;
+								}
+							}
+						},
+						{
+							col:'MIXED_DUMMY',
+							val: function(){
+								return 'measure';
+							}
+						}
+					],
+					filters:[
+						{col:'MIXED_SERIES',val:  'Read'},
+						{col:'MIXED_SERIES',val:  'Write'}				
+					],
+					//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
+					xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
+					categoryCols:['FIRMWARE1','MIXED_SPEC'],
+					yCol:'MEASURE',
+					//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
+					seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
+					multichart:{
+						enabled: true,
+						splitCol:'FIRMWARE1',
+						chartWidth: 50 , // percent 로 표시
+						oneLineChatNum: 2
+					},
+					addSeries:[
+							{
+								name: 'Sum',
+								type: 'spline',
+								seriesFunction: function(){
+										var series = arguments;
+										var addS = this;
+										$.each(series,function(seriesIndex,s){
+											$.each(s.data,function(dataIndex,d){
+												if(addS.data[dataIndex] != undefined){
+													addS.data[dataIndex].y += d.y;
+												}else{
+													addS.data[dataIndex] = {
+														y : d.y	
+													};
+												}
+											});
+											
+										});
+									}
+							}
+						],
+					gridSeriesColWidth: '50px',
+					gridColWidth: '58px',
+					orderby: 14
+				},
+				// Rw Block Sweep
+				{
+					
+					//x축을 2개이상 사용하도록 설정필요.
+					category:'RW Block Sweep parsed.csv',
+					//chartType:'spline',
+					calculateCols:[
+						{
+							col:'Category',
+							val: function(){
+								var vSplit = this.SPEC.split("_");
+								return vSplit[0] + " " + vSplit[1];									
+							}
+						},
+						{
+							col:'BlockSize',
+							val: function(){
+								var vSplit = this.SPEC.split("_");
+								return vSplit[2];
+								
+							}
+						}
+						
+					],
+					filters:[
+						{col:'FIELD',val:  'Average of 3 runs'}
+					],
+					xOderbyCols:['FIRMWARE1','BlockSize'],
+					categoryCols:['Category','BlockSize'],
+					yCol:'MEASURE',
+					decimalPoint:2,
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:true,
+						splitCol:'Category',
+						chartWidth: 50 , // percent 로 표시
+						oneLineChatNum: 2,
+						oneLineHeight: 600,
+						yAxisTitle:{
+							"Random Read":'IOps',
+							"Random Write":'IOps',
+							"Sequential Read":'MBps (Binary)',
+							"Sequential Write":'MBps (Binary)',
+							"Random 25R/75W":'IOps',
+							"Random 75R/25W":'IOps',     							
+							"Sequential 25R/75W":'MBps (Binary)',
+							"Sequential 75R/25W":'MBps (Binary)',
+						},
+						orderBy : function(){
+							if(this.Category.match(/Random Read/gi) != null  ){
+								return 10;
+							}else if(this.Category.match(/Random Write/gi) != null  ){
+								return 20;
+							}else if(this.Category.match(/Sequential Read/gi) != null  ){
+								return 30;
+							}else if(this.Category.match(/Sequential Write/gi) != null  ){
+								return 40;
+							}else if(this.Category.match(/Random 75R\/25W/gi) != null  ){
+								return 50;
+							}else if(this.Category.match(/Random 25R\/75W/gi) != null  ){
+								return 60;
+							}else if(this.Category.match(/Sequential 75R\/25W/gi) != null  ){
+								return 70;
+							}else if(this.Category.match(/Sequential 25R\/75W/gi) != null  ){
+								return 80;
+							}else{
+								return 100;
+							}
+							
+						}
+					},
+					gridColWidth: '50px',
+					orderby:14.2
+				},
+				// SSD Performance V1.csv
+				{
+					
+					//x축을 2개이상 사용하도록 설정필요.
+					category:'SSD Performance V1.csv',
+					//chartType:'spline',
+					calculateCols:[
+						{
+							col:'isShow',
+							val: function(){
+								if(this.SPEC == "Seqread" && this.FIELD == "MBps (Decimal)" ){
+									return "O";
+								}else if(this.SPEC == "SeqWrite" && this.FIELD == "MBps (Decimal)" ){
+									return "O";
+								}else if(this.SPEC == "RandomRead" && this.FIELD == "IOps" ){
+									return "O";
+								}else if(this.SPEC == "RandomWrite" && this.FIELD == "IOps" ){
+									return "O";
+								}else{
+									return "X";
+								}										
+							}
+						},
+						{
+							col:'SeqRandom',
+							val: function(){
+								if(this.SPEC.match(/^Random/gi) != null ){
+									return 'Ran';
+								}else if(this.SPEC.match(/^Seq/gi) != null ){
+									return 'Seq';
+								}										
+							}
+						},
+						{
+							col:'Seq',
+							val: function(){
+								return Number(this.SPEC1);
+								
+							}
+						}
+						
+					],
+					filters:[
+						{col:'isShow',val:  "O"}
+					],
+					xOderbyCols:['FIRMWARE1','Seq'],
+					categoryCols:['SPEC','Seq'],
+					yCol:'MEASURE',
+					decimalPoint:2,
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:true,
+						splitCol:'SPEC',
+						chartWidth: 100 , // percent 로 표시
+						oneLineChatNum: 1,
+						oneLineHeight: 600,
+						yAxisTitle:{
+							"Seqread":'MB/s',
+							"SeqWrite":'MB/s',
+							"RandomRead":'IOps',
+							"RandomWrite":'IOps'
+						},
+						orderBy : function(){
+							if(this.SPEC.match(/Seqread/gi) != null  ){
+								return 10;
+							}else if(this.SPEC.match(/SeqWrite/gi) != null  ){
+								return 20;
+							}else if(this.SPEC.match(/RandomRead/gi) != null  ){
+								return 30;
+							}else if(this.SPEC.match(/RandomWrite/gi) != null  ){
+								return 40;
+							}else{
+								return 100;
+							}
+							
+						}
+					},
+					gridColWidth: '50px',
+					orderby:14.3
+				},
+				{
+					category:'SLC_Mixed_Seq_RW.csv',
+					calculateCols:[
+							{
+								col:'MIXED_SERIES',
+								val: function(){
+									if(this.FIELD == 'Read MBps (Decimal)'  ){
+										return 'Read';
+									}else if(this.FIELD == 'Write MBps (Decimal)' ){
+										return 'Write';
+									}else{
+										return null;
+									}
+									
+								}
+							},
+							{
+								col:'MIXED_SPEC',
+								val: function(){
+									//return this.SPEC;
+									if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
+										return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
+									}else{
+										return this.SPEC;
+									}
+								}
+							},
+							{
+								col:'MIXED_DUMMY',
+								val: function(){
+									return 'measure';
+								}
+							}
+						],
+						filters:[
+							{col:'MIXED_SERIES',val:  'Read'},
+							{col:'MIXED_SERIES',val:  'Write'}				
+						],
+						//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
+						xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
+						categoryCols:['FIRMWARE1','MIXED_SPEC'],
+						yCol:'MEASURE',
+						//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
+						seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
+						multichart:{
+							enabled: true,
+							splitCol:'FIRMWARE1',
+							chartWidth: 50 , // percent 로 표시
+							oneLineChatNum: 2
+						},
+						addSeries:[
+								{
+									name: 'Sum',
+									type: 'spline',
+									seriesFunction: function(){
+										var series = arguments;
+										var addS = this;
+										$.each(series,function(seriesIndex,s){
+											$.each(s.data,function(dataIndex,d){
+												if(addS.data[dataIndex] != undefined){
+													addS.data[dataIndex].y += d.y;
+												}else{
+													addS.data[dataIndex] = {
+														y : d.y	
+													};
+												}
+											});
+											
+										});
+									}
+								}
+							] ,
+						gridSeriesColWidth: '50px',
+						gridColWidth: '58px',
+						orderby: 6
+				},
+				{
+					category:'SLC_Mixed_Ran_RW.csv',
+					calculateCols:[
+							{
+								col:'MIXED_SERIES',
+								val: function(){
+									if(this.FIELD == 'Read MBps (Decimal)'  ){
+										return 'Read';
+									}else if(this.FIELD == 'Write MBps (Decimal)' ){
+										return 'Write';
+									}else{
+										return null;
+									}
+									
+								}
+							},
+							{
+								col:'MIXED_SPEC',
+								val: function(){
+									//return this.SPEC;
+									if(this.SPEC.match(/R[\d]+\/W[\d]+$/gi) != null  ){
+										return this.SPEC.match(/R[\d]+\/W[\d]+$/gi)[0];
+									}else{
+										return this.SPEC;
+									}
+								}
+							},
+							{
+								col:'MIXED_DUMMY',
+								val: function(){
+									return 'measure';
+								}
+							}
+						],
+						filters:[
+							{col:'MIXED_SERIES',val:  'Read'},
+							{col:'MIXED_SERIES',val:  'Write'}				
+						],
+						//categoryCols:['MIXED_SPEC','MIXED_CATEGORY'],
+						xOderbyCols:['MIXED_SERIES',['MIXED_SPEC','desc']],
+						categoryCols:['FIRMWARE1','MIXED_SPEC'],
+						yCol:'MEASURE',
+						//seriesCol:{cd:'MIXED_DUMMY',name:'MIXED_DUMMY'},
+						seriesCol:{cd:'MIXED_SERIES',name:'MIXED_SERIES'},
+						multichart:{
+							enabled: true,
+							splitCol:'FIRMWARE1',
+							chartWidth: 50 , // percent 로 표시
+							oneLineChatNum: 2
+						},
+						addSeries:[
+								{
+									name: 'Sum',
+									type: 'spline',
+									seriesFunction: function(){
+										var series = arguments;
+										var addS = this;
+										$.each(series,function(seriesIndex,s){
+											$.each(s.data,function(dataIndex,d){
+												if(addS.data[dataIndex] != undefined){
+													addS.data[dataIndex].y += d.y;
+												}else{
+													addS.data[dataIndex] = {
+														y : d.y	
+													};
+												}
+											});
+											
+										});
+									}
+								}
+							],
+						gridSeriesColWidth: '50px',
+						gridColWidth: '58px',
+						orderby: 7
+				},
+				{
+					category:'AS-SSD1.6.xml',
+					calculateCols:[
+						{
+							col:'AS_SSD_SPEC',
+							val: function(){
+								var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
+								if(sarr != undefined){
+									//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
+									var rs = sarr[1];
+									var rst = '';
+									if(rs.match(/random/gi) != null)
+										rst = 'R.';
+									else
+										rst = 'Seq.';
+									var vol = sarr[2];
+									var speed = sarr[3];
+									var rw = this.FIELD;
+									var rwt = '';
+									if(rw.match(/read/gi) != null)
+										rwt = 'R';
+									else if(rw.match(/Write/gi) != null)
+										rwt = 'W';
+									
+									var speedt = '';
+									if(speed != undefined)
+										speedt = '('+speed+'Thrd)';
+									return vol + ' ' + rst + rwt + speedt;
+									
+								}else if(this.SPEC == 'AccTimeTest'){
+									if(this.FIELD == 'Read')
+										return 'Access Time(Read)';
+									else
+										return 'Access Time(Write)';
+								}else {
+									if(this.FIELD == 'Read')
+										return 'Seq. Read';
+									else
+										return 'Seq. Write';
+								}
+									
+								
+							}
+						},
+						{
+							col:'AS_SSD_ORDER',
+							val: function(){
+								var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
+								if(sarr != undefined){
+									//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
+									var rs = sarr[1];
+									var rst = '';
+									if(rs.match(/random/gi) != null)
+										rst = 'R.';
+									else
+										rst = 'Seq.';
+									var vol = sarr[2];
+									var speed = sarr[3];
+									var rw = this.FIELD;
+									var rwt = '';
+									if(rw.match(/read/gi) != null)
+										rwt = 'R';
+									else if(rw.match(/Write/gi) != null)
+										rwt = 'W';
+									
+									var speedt = '';
+									if(speed != undefined)
+										speedt = '('+speed+'Thrd)';
+									//return vol + ' ' + rst + rwt + speedt;
+									return vol + ' ' + speedt + rst + rwt ;
+									
+								}else if(this.SPEC == 'AccTimeTest'){
+									if(this.FIELD == 'Read')
+										return 'Access Time(Read)';
+									else
+										return 'Access Time(Write)';
+								}else {
+									if(this.FIELD == 'Read')
+										return '1';
+									else
+										return '2';
+								}
+									
+								
+							}
+						},
+						{
+							col:'AS_SSD_DUMMY',
+							val: function(){
+								return 'measure';
+							}
+						}
+					],
+					filters:[
+						{col:'FIELD',val:'Read'},
+						{col:'FIELD',val:'Write'}
+					],
+					xOderbyCols:['FIRMWARE1','AS_SSD_ORDER','AS_SSD_SPEC'],
+					categoryCols:['AS_SSD_SPEC'],
+					yCol:'MEASURE',
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:false,
+						cols:[]
+					},
+					gridSeriesColWidth: '100px',
+					gridColWidth: '70px',
+					orderby: 230
+				},
+				{
+					category:'AS-SSD1.8.xml',
+					calculateCols:[
+						{
+							col:'AS_SSD_SPEC',
+							val: function(){
+								var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
+								if(sarr != undefined){
+									//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
+									var rs = sarr[1];
+									var rst = '';
+									if(rs.match(/random/gi) != null)
+										rst = 'R.';
+									else
+										rst = 'Seq.';
+									var vol = sarr[2];
+									var speed = sarr[3];
+									var rw = this.FIELD;
+									var rwt = '';
+									if(rw.match(/read/gi) != null)
+										rwt = 'R';
+									else if(rw.match(/Write/gi) != null)
+										rwt = 'W';
+									
+									var speedt = '';
+									if(speed != undefined)
+										speedt = '('+speed+'Thrd)';
+									return vol + ' ' + rst + rwt + speedt;
+									
+								}else if(this.SPEC == 'AccTimeTest'){
+									if(this.FIELD == 'Read')
+										return 'Access Time(Read)';
+									else
+										return 'Access Time(Write)';
+								}else {
+									if(this.FIELD == 'Read')
+										return 'Seq. Read';
+									else
+										return 'Seq. Write';
+								}
+									
+								
+							}
+						},
+						{
+							col:'AS_SSD_ORDER',
+							val: function(){
+								var sarr = this.SPEC.match(/([a-z]+)([\d]+[a-z]+)([\d]+)/i);
+								if(sarr != undefined){
+									//Random4K64TTest : ["Random4K64", "Random", "4K", "64"]
+									var rs = sarr[1];
+									var rst = '';
+									if(rs.match(/random/gi) != null)
+										rst = 'R.';
+									else
+										rst = 'Seq.';
+									var vol = sarr[2];
+									var speed = sarr[3];
+									var rw = this.FIELD;
+									var rwt = '';
+									if(rw.match(/read/gi) != null)
+										rwt = 'R';
+									else if(rw.match(/Write/gi) != null)
+										rwt = 'W';
+									
+									var speedt = '';
+									if(speed != undefined)
+										speedt = '('+speed+'Thrd)';
+									//return vol + ' ' + rst + rwt + speedt;
+									return vol + ' ' + speedt + rst + rwt ;
+									
+								}else if(this.SPEC == 'AccTimeTest'){
+									if(this.FIELD == 'Read')
+										return 'Access Time(Read)';
+									else
+										return 'Access Time(Write)';
+								}else {
+									if(this.FIELD == 'Read')
+										return '1';
+									else
+										return '2';
+								}
+									
+								
+							}
+						},
+						{
+							col:'AS_SSD_DUMMY',
+							val: function(){
+								return 'measure';
+							}
+						}
+					],
+					filters:[
+						{col:'FIELD',val:'Read'},
+						{col:'FIELD',val:'Write'}
+					],
+					xOderbyCols:['FIRMWARE1','AS_SSD_ORDER','AS_SSD_SPEC'],
+					categoryCols:['AS_SSD_SPEC'],
+					yCol:'MEASURE',
+					yAxisTitle :' MB/s',
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:false,
+						cols:[]
+					},
+					gridSeriesColWidth: '100px',
+					gridColWidth: '70px',
+					orderby: 240
+				},
 	     		 // PCMARK_VANTAGE.xlsx
 	     		 {
 	     				category:'PCMARK_VANTAGE.xlsx',
@@ -7159,66 +7013,66 @@
 	     				orderby: 260
 	     		 },
 	     		 {
-	     				category:'PCMARK8.xml',
-	     				calculateCols:[
+					category:'PCMARK8.xml',
+					calculateCols:[
+					{
+						col:'IS_SCORE',
+						val: function(){
+							if(this.SPEC.match(/Score/gi) != null  ){
+									return 'Score';
+								}else{
+									return 'NotScore';
+								}
+							
+						}
+					},         
 						{
-							col:'IS_SCORE',
+							col:'PCMARK_DUMMY',
 							val: function(){
-								if(this.SPEC.match(/Score/gi) != null  ){
-										return 'Score';
-									}else{
-										return 'NotScore';
-									}
-								
+								return 'measure';
 							}
-						},         
-	     					{
-	     						col:'PCMARK_DUMMY',
-	     						val: function(){
-	     							return 'measure';
-	     						}
-	     					}
-	     				],
-	     				filters:[
-	     				],
-	     				xOderbyCols:['FIRMWARE1','SPEC'],
-	     				categoryCols:['SPEC'],
-	     				yCol:'MEASURE',
-	     				yAxisTitle :' MB/s',
-	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-	     				multichart:{
-	     					enabled:true,
-	     					splitCol:'IS_SCORE',
-	     					yAxisTitle:{NotScore:'MB/s'},
-	     					chartWidth: 50 , // percent 로 표시
-	     					oneLineChatNum: 2,
-	     					oneLineHeight: 600
-	     				},
-	     				gridColWidth: '140px',
-	     				orderby: 270
-	     		 },
+						}
+					],
+					filters:[
+					],
+					xOderbyCols:['FIRMWARE1','SPEC'],
+					categoryCols:['SPEC'],
+					yCol:'MEASURE',
+					yAxisTitle :' MB/s',
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:true,
+						splitCol:'IS_SCORE',
+						yAxisTitle:{NotScore:'MB/s'},
+						chartWidth: 50 , // percent 로 표시
+						oneLineChatNum: 2,
+						oneLineHeight: 600
+					},
+					gridColWidth: '140px',
+					orderby: 270
+	     		},
 	     		{
-	     				category:'POR.txt',
-	     				calculateCols:[
-	     					
-	     					{
-	     						col:'POR_DUMMY',
-	     						val: function(){
-	     							return 'measure';
-	     						}
-	     					}
-	     				],
-	     				filters:[
-	     				],
-	     				xOderbyCols:['FIRMWARE1','SPEC'],
-	     				categoryCols:['SPEC'],
-	     				yCol:'MEASURE',
-	     				seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
-	     				multichart:{
-	     					enabled:false,
-	     					cols:[]
-	     				},
-	     				orderby: 280
+					category:'POR.txt',
+					calculateCols:[
+						
+						{
+							col:'POR_DUMMY',
+							val: function(){
+								return 'measure';
+							}
+						}
+					],
+					filters:[
+					],
+					xOderbyCols:['FIRMWARE1','SPEC'],
+					categoryCols:['SPEC'],
+					yCol:'MEASURE',
+					seriesCol:{cd:'FIRMWARE1',name:'FIRMWARE1'},
+					multichart:{
+						enabled:false,
+						cols:[]
+					},
+					orderby: 280
 	     		 },
 	     		 {
 	     				category:'SPOR.txt',
@@ -7746,6 +7600,16 @@
 		
 		// 새롭게 추가된 PCI 2017년 9월 27일 수요일 오후 2:34:37
 		$.each(category_sustain,function(i,ca){
+			categoryInfo.push(ca);
+		});
+
+		// 새롭게 추가된 PCI 2017년 9월 27일 수요일 오후 2:34:37
+		$.each(category_sit,function(i,ca){
+			categoryInfo.push(ca);
+		});
+
+		// 새롭게 추가된 2018.05.09
+		$.each(category_cdm,function(i,ca){
 			categoryInfo.push(ca);
 		});
 		

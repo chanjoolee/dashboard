@@ -255,13 +255,12 @@ public class FvtService {
     
     private String getCellValue(Cell cell, int cellIndex) throws Exception {
     	if (cell == null) {
-    		System.out.println(cellIndex);
     		return "";
     	}
     	
 		String value = "";
 		if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
-			value = cell.getStringCellValue();		
+			value = String.valueOf(cell.getNumericCellValue());
 		else if(cell.getCellType() == Cell.CELL_TYPE_STRING)
 			value = cell.getStringCellValue();
 		else if(cell.getCellType() == Cell.CELL_TYPE_BLANK)

@@ -282,7 +282,17 @@
 						<li class="dropdown-submenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">SCript Management</a>
                             <ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/SummaryAll');">SSD Summary</a></li>
+                            	<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/test_master_mgmt');">SSD Mgmt</a></li>
+                            	<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/performance/Summary');">SSD Summary</a></li>
+                            	<li class="dropdown-submenu">
+                            		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Prototype</a>
+                            		 <ul class="dropdown-menu">
+                            		 	<li class="dropdown-submenu">
+                            		 		<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/SummaryAll');">SSD Summary</a></li>
+                            		 	</li>
+                            		 </ul>
+                            	</li>
+								
 								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=coronaSummary');">Corona UFS Summary</a></li>
 								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_emmc/coronaSummary');">Corona EMMC Summary</a></li>
                                 
