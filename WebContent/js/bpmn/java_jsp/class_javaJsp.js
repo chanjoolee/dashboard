@@ -468,7 +468,7 @@ JspGenerator.prototype.fn_schema_default = function(detail_schema_var, task, det
     if (top_obj_schema == undefined) {
         top_obj_schema = {
             name: detail_schema_var.detail._value,
-            containerId : detail_schema_var.container._value,
+            containerId : _.camelCase(detail_schema_var.detail._value + ' Container') ,
             schema: obj_schema
         };
         
@@ -478,7 +478,7 @@ JspGenerator.prototype.fn_schema_default = function(detail_schema_var, task, det
     if (parent_schema_task != null) {
         // var parent_schema =  findAll( parent_schema_task.id, top_obj_schema.schema );
         var parent_schema = _this.generator.findAllFromObject(parent_schema_task.id, top_obj_schema.schema);
-        if (parent_schema.elements == undefined)
+        if (parent_schema.elements == undefined )
             parent_schema.elements = [];
         parent_schema.elements.push(obj_schema);
     }
@@ -557,9 +557,10 @@ JspGenerator.prototype.fn_find_schema_var = function(task){
             "detail" : detail_var , 
             "task" : task
         };
-        var detail_container = _.find(task.eAnnotations.details, {"_key":"keyword_container"});
-        if ( detail_container != undefined )
-            obj.container = detail_container;
+        // 별도의 설정없이 variable로 조합한다.
+        // var detail_container = _.find(task.eAnnotations.details, {"_key":"keyword_container"});
+        // if ( detail_container != undefined )
+        //     obj.container = detail_container;
         return obj;    
     }
     else 
