@@ -93,8 +93,8 @@ Here are a few examples:
 
 **Note:** There are two types of remote references, `relative` and `remote`.
 
-`json-refs resolve https://cdn.rawgit.com/whitlockjc/json-refs/master/test/browser/documents/test-document.yaml --filter relative --filter remote`
+`json-refs resolve https://cdn.jsdelivr.net/gh/whitlockjc/json-refs/test/browser/documents/test-document.yaml --filter relative --filter remote`
 
 #### Skip Validation
 
-`json-refs resolve https://cdn.rawgit.com/whitlockjc/json-refs/master/test/browser/documents/test-document.yaml --force`
+`json-refs resolve https://cdn.jsdelivr.net/gh/whitlockjc/json-refs/test/browser/documents/test-document.yaml --force`

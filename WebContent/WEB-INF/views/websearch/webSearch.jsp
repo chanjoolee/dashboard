@@ -97,15 +97,15 @@
 	<script src="/dashboard/js/jointjs/lodash.min.js"></script>
 	
 	<%-- jqueryDatePicker --%>
-	<script type="text/javascript" src="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.js"></script>
-	<link rel="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.css" />
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/dubrox/Multiple-Dates-Picker-for-jQuery-UI/jquery-ui.multidatespicker.js"></script>
+	<link rel="https://cdn.jsdelivr.net/gh/dubrox/Multiple-Dates-Picker-for-jQuery-UI/jquery-ui.multidatespicker.css" />
 	<!--<link rel="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" />-->
 	
 	
 	<%-- jqueryMohthPicker --%>
-    <link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
-   	<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
-   	<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+    <link rel="https://cdn.jsdelivr.net/gh/KidSysco/jquery-ui-month-picker@v3.0.0/demo/MonthPicker.min.css" />
+   	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/digitalBush/jquery.maskedinput@1.4.1/dist/jquery.maskedinput.min.js"></script>
+   	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/KidSysco/jquery-ui-month-picker@v3.0.0/demo/MonthPicker.min.js"></script>
 	
 	
 	

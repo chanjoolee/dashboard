@@ -94,9 +94,9 @@
 		<script src="/dashboard/js/jointjs/lodash.4.17.10.js"></script>
 		
 		<%-- jqueryMohthPicker --%>
-		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
-		<script type="text/javascript" src="https://rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
-		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
+		<link rel="https://cdn.jsdelivr.net/gh/KidSysco/jquery-ui-month-picker@v3.0.0/demo/MonthPicker.min.css" />
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/digitalBush/jquery.maskedinput@1.4.1/dist/jquery.maskedinput.min.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/KidSysco/jquery-ui-month-picker@v3.0.0/demo/MonthPicker.min.js"></script>
 
 		<!-- xml to js -->
 		<script type="text/javascript" src="/dashboard/js/convertjson/x2js.js"></script>
