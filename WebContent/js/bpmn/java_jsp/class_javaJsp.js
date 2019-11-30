@@ -25,6 +25,7 @@ JspGenerator.prototype.init = function(){
     this.fn_start(this.process);
 }
 
+
 JspGenerator.prototype.fn_depth = Generator.prototype.fn_depth;
 
 
