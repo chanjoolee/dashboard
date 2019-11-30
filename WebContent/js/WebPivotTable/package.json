@@ -16,7 +16,7 @@
   "private": true,
   "dependencies": {
     "express": "~4.2.0",
-    "morgan": "~1.0.0",
+    "morgan": "~1.9.1",
     "body-parser": "~1.0.0",
     "method-override": "~1.0.0",
     "compression": "~1.0.1",
