@@ -35,8 +35,8 @@ public class EfAuthCheckInterceptor extends HandlerInterceptorAdapter {
         String uri   = WebUtil.getCommand(req).toString();
         
         //임시 톰캣용
-//        if(1==1)
-//        	return true;
+        if(1==1)
+        	return true;
         
         // .html로 접근했을때에만 권한체크를 한다.
         // .html, .ajax 로 접근했을때에만 로긴체크를 한다.

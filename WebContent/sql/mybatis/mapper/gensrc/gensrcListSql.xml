@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+<select id="gensrcList.gensrcList.page.list" resultType="hashmap" >
+
+	Select 
+			*		
+		From 
+		(
+			select
+				A.*
+			from 
+			(
+
+
+	select 
+		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,TEST
+	from GENSRC_LIST a 
+	where 1=1
+	<if test="search_soruceId != null and search_soruceId !='' ">
+		and soruce_id = #{search_soruceId}
+	</if>
+	<if test="search_genType != null and search_genType !='' ">
+		and gen_type = #{search_genType}
+	</if>
+	<if test="search_dbType != null and search_dbType !='' ">
+		and db_type = #{search_dbType}
+	</if>
+	<if test="search_url != null and search_url !='' ">
+		and url = #{search_url}
+	</if>
+	<if test="search_btnExec != null and search_btnExec !='' ">
+		and btn_exec = #{search_btnExec}
+	</if>
+	<if test="search_test != null and search_test !='' ">
+		and test = #{search_test}
+	</if>
+
+		<choose>
+   			<when test="searchJson != null and searchJson != '' and searchJson.fields != null and searchJson.fields.size() > 0  ">   				
+   				<foreach collection="searchJson.fields" item="field" index="index"  open=" and " separator=" and " close="">
+	                <choose>
+	                	<when test="field.isArray == true ">
+		                	${field.field} in 
+			                <foreach collection="field.value" item="item" index="index"  open="(" separator=" , " close=")">
+			                	#{item}
+			                </foreach>
+			        	</when>
+			        	<otherwise>
+			        		${field.field} = #{field.value}
+			        	</otherwise>
+	                </choose>
+	                
+	            </foreach>
+   			</when>
+   			<otherwise></otherwise>
+   		</choose>
+		<choose><when test="sidx != null and sidx != '' "> order by ${sidx} <if test="sord != null and sord != '' "> ${sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
+
+
+	) A where 1=1 
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> ${filters.groupOp} </if>
+							<choose>
+								<when test="item.data.equalsIgnoreCase('isnull')"> is null</when>
+				    			<when test="item.op =='eq' ">REGEXP_LIKE(${item.field}, '^' || #{item.data} || '$','i')</when>
+				           		<when test="item.op =='ne' ">${item.field} <![CDATA[ != ]]> #{item.data}</when>
+				           		<when test="item.op =='lt' ">${item.field} <![CDATA[ < ]]> #{item.data}</when>
+				           		<when test="item.op =='le' ">${item.field} <![CDATA[ <= ]]> #{item.data}</when>
+				           		<when test="item.op =='gt' ">${item.field} <![CDATA[ > ]]> #{item.data}</when>
+				           		<when test="item.op =='ge' ">${item.field} <![CDATA[ >= ]]> #{item.data}</when>
+				           		<when test="item.op =='bw' ">REGEXP_LIKE(${item.field}, '^' || #{item.data},'i')</when>
+				           		<when test="item.op =='bn' "> NOT REGEXP_LIKE(${item.field}, '^' || #{item.data},'i')</when>
+				           		<when test="item.op =='in' "></when>
+				           		<when test="item.op =='ni' "></when>
+				           		<when test="item.op =='ew' "> REGEXP_LIKE(${item.field}, #{item.data}|| '$','i')</when>
+				           		<when test="item.op =='en' "> NOT REGEXP_LIKE(${item.field}, #{item.data}|| '$','i')</when>
+				           		<when test="item.op =='cn' ">REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')</when>
+				           		<when test="item.op =='nc' ">NOT REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')</when>
+				           		</choose>
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			${filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> ${group.groupOp} </if>
+	           		 			<choose>
+									<when test="rule.data.equalsIgnoreCase('isnull')"> is null</when>	
+					           		<when test="rule.op =='eq' ">REGEXP_LIKE(${rule.field}, '^' || #{rule.data}|| '$','i')</when>
+					           		<when test="rule.op =='ne' ">${rule.field} <![CDATA[ != ]]> #{rule.data}</when>
+					           		<when test="rule.op =='lt' ">${rule.field} <![CDATA[ < ]]> #{rule.data}</when>
+					           		<when test="rule.op =='le' ">${rule.field} <![CDATA[ <= ]]> #{rule.data}</when>
+					           		<when test="rule.op =='gt' ">${rule.field} <![CDATA[ > ]]> #{rule.data}</when>
+					           		<when test="rule.op =='ge' ">${rule.field} <![CDATA[ >= ]]> #{rule.data}</when>
+					           		<when test="rule.op =='bw' ">REGEXP_LIKE(${rule.field}, '^' || #{rule.data},'i')</when>
+					           		<when test="rule.op =='bn' "> NOT REGEXP_LIKE(${rule.field}, '^' || #{rule.data},'i')</when>
+					           		<when test="rule.op =='in' "></when>
+					           		<when test="rule.op =='ni' "></when>
+					           		<when test="rule.op =='ew' "> REGEXP_LIKE(${rule.field}, #{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='en' "> NOT REGEXP_LIKE(${rule.field}, #{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='cn' ">REGEXP_LIKE(${rule.field}, REGEXP_REPLACE(#{rule.data},' ','|'),'i')</when>
+					           		<when test="rule.op =='nc' ">NOT REGEXP_LIKE(${rule.field}, REGEXP_REPLACE(#{rule.data},' ','|'),'i')</when>
+					           		</choose> 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+		) A
+		LIMIT #{int_limit} OFFSET #{int_offset}
+		
+
+</select>
+<select id="gensrcList.gensrcList.page.total" resultType="hashmap" >
+
+	select 
+		ceil(count(*)/ #{rows} ) as total,
+		#{page} as page ,
+		count(*) records 
+	from 
+	(
+		select a.* from (
+
+
+	select 
+		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,TEST
+	from GENSRC_LIST a 
+	where 1=1
+	<if test="search_soruceId != null and search_soruceId !='' ">
+		and soruce_id = #{search_soruceId}
+	</if>
+	<if test="search_genType != null and search_genType !='' ">
+		and gen_type = #{search_genType}
+	</if>
+	<if test="search_dbType != null and search_dbType !='' ">
+		and db_type = #{search_dbType}
+	</if>
+	<if test="search_url != null and search_url !='' ">
+		and url = #{search_url}
+	</if>
+	<if test="search_btnExec != null and search_btnExec !='' ">
+		and btn_exec = #{search_btnExec}
+	</if>
+	<if test="search_test != null and search_test !='' ">
+		and test = #{search_test}
+	</if>
+
+		<choose>
+   			<when test="searchJson != null and searchJson != '' and searchJson.fields != null and searchJson.fields.size() > 0  ">   				
+   				<foreach collection="searchJson.fields" item="field" index="index"  open=" and " separator=" and " close="">
+	                <choose>
+	                	<when test="field.isArray == true ">
+		                	${field.field} in 
+			                <foreach collection="field.value" item="item" index="index"  open="(" separator=" , " close=")">
+			                	#{item}
+			                </foreach>
+			        	</when>
+			        	<otherwise>
+			        		${field.field} = #{field.value}
+			        	</otherwise>
+	                </choose>
+	                
+	            </foreach>
+   			</when>
+   			<otherwise></otherwise>
+   		</choose>
+		<choose><when test="sidx != null and sidx != '' "> order by ${sidx} <if test="sord != null and sord != '' "> ${sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
+
+
+	) a
+	where 1=1 			
+	<choose>
+		<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+			and (
+			<if test="filters.rules.size() > 0" >
+				<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+					<if test="index > 0 "> ${filters.groupOp} </if>
+					<choose>
+				    <when test="item.op =='eq' ">REGEXP_LIKE(${item.field}, '^' || #{item.data} || '$','i')</when>
+				           		<when test="item.op =='ne' ">${item.field} <![CDATA[ != ]]> #{item.data}</when>
+				           		<when test="item.op =='lt' ">${item.field} <![CDATA[ < ]]> #{item.data}</when>
+				           		<when test="item.op =='le' ">${item.field} <![CDATA[ <= ]]> #{item.data}</when>
+				           		<when test="item.op =='gt' ">${item.field} <![CDATA[ > ]]> #{item.data}</when>
+				           		<when test="item.op =='ge' ">${item.field} <![CDATA[ >= ]]> #{item.data}</when>
+				           		<when test="item.op =='bw' ">REGEXP_LIKE(${item.field}, '^' || #{item.data},'i')</when>
+				           		<when test="item.op =='bn' "> NOT REGEXP_LIKE(${item.field}, '^' || #{item.data},'i')</when>
+				           		<when test="item.op =='in' "></when>
+				           		<when test="item.op =='ni' "></when>
+				           		<when test="item.op =='ew' "> REGEXP_LIKE(${item.field}, #{item.data} || '$','i')</when>
+				           		<when test="item.op =='en' "> NOT REGEXP_LIKE(${item.field}, #{item.data} || '$','i')</when>
+				           		<when test="item.op =='cn' ">REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')</when>
+				           		<when test="item.op =='cn' ">NOT REGEXP_LIKE(${item.field}, REGEXP_REPLACE(#{item.data},' ','|'),'i')</when>
+				           		</choose>
+				</foreach>	
+			</if>	
+			<if test="filters.groups != null and filters.groups.size() > 0">
+				<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+					<if test="group.rules.size() > 0">
+					${filters.groupOp}
+					<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						<if test="rule_index > 0 "> ${group.groupOp} </if>
+						<choose>
+					           		<when test="rule.op =='eq' ">REGEXP_LIKE(${rule.field}, '^' || #{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='ne' ">${rule.field} <![CDATA[ != ]]> #{rule.data}</when>
+					           		<when test="rule.op =='lt' ">${rule.field} <![CDATA[ < ]]> #{rule.data}</when>
+					           		<when test="rule.op =='le' ">${rule.field} <![CDATA[ <= ]]> #{rule.data}</when>
+					           		<when test="rule.op =='gt' ">${rule.field} <![CDATA[ > ]]> #{rule.data}</when>
+					           		<when test="rule.op =='ge' ">${rule.field} <![CDATA[ >= ]]> #{rule.data}</when>
+					           		<when test="rule.op =='bw' ">REGEXP_LIKE(${rule.field}, '^' || #{rule.data},'i')</when>
+					           		<when test="rule.op =='bn' "> NOT REGEXP_LIKE(${rule.field}, '^' || #{rule.data},'i')</when>
+					           		<when test="rule.op =='in' "></when>
+					           		<when test="rule.op =='ni' "></when>
+					           		<when test="rule.op =='ew' "> REGEXP_LIKE(${rule.field}, #{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='en' "> NOT REGEXP_LIKE(${rule.field}, #{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='cn' ">REGEXP_LIKE(${rule.field}, REGEXP_REPLACE(#{rule.data},' ','|'),'i')</when>
+					           		<when test="rule.op =='cn' ">NOT REGEXP_LIKE(${rule.field}, REGEXP_REPLACE(#{rule.data},' ','|'),'i')</when>
+					           		</choose>           		 
+					</foreach>
+					</if>
+				</foreach>
+			</if> 
+				)
+		</when>
+	</choose>
+	) a
+
+</select>
+<select id="gensrcList.gensrcList.one" resultType="hashmap" >
+	select 
+		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,TEST
+	from GENSRC_LIST a 
+	where 1=1
+	<if test="search_soruceId != null and search_soruceId !='' ">
+		and soruce_id = #{search_soruceId}
+	</if>
+	<if test="search_genType != null and search_genType !='' ">
+		and gen_type = #{search_genType}
+	</if>
+	<if test="search_dbType != null and search_dbType !='' ">
+		and db_type = #{search_dbType}
+	</if>
+	<if test="search_url != null and search_url !='' ">
+		and url = #{search_url}
+	</if>
+	<if test="search_btnExec != null and search_btnExec !='' ">
+		and btn_exec = #{search_btnExec}
+	</if>
+	<if test="search_test != null and search_test !='' ">
+		and test = #{search_test}
+	</if>
+
+		<choose>
+   			<when test="searchJson != null and searchJson != '' and searchJson.fields != null and searchJson.fields.size() > 0  ">   				
+   				<foreach collection="searchJson.fields" item="field" index="index"  open=" and " separator=" and " close="">
+	                <choose>
+	                	<when test="field.isArray == true ">
+		                	${field.field} in 
+			                <foreach collection="field.value" item="item" index="index"  open="(" separator=" , " close=")">
+			                	#{item}
+			                </foreach>
+			        	</when>
+			        	<otherwise>
+			        		${field.field} = #{field.value}
+			        	</otherwise>
+	                </choose>
+	                
+	            </foreach>
+   			</when>
+   			<otherwise></otherwise>
+   		</choose>
+		<choose><when test="sidx != null and sidx != '' "> order by ${sidx} <if test="sord != null and sord != '' "> ${sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
+
+</select>
+<update id="gensrcList.gensrcList.insert" parameterType="hashmap" >
+		insert into GENSRC_LIST(
+			soruce_id,gen_type,db_type,url,btn_exec,test
+			,INS_DT
+		)
+		values (
+			#{SORUCE_ID}
+			,
+			#{GEN_TYPE}
+			,
+			#{DB_TYPE}
+			,
+			#{URL}
+			,
+			#{BTN_EXEC}
+			,
+			#{TEST}
+			,now()
+		);
+</update>
+<update id="gensrcList.gensrcList.edit" parameterType="hashmap" >
+	update GENSRC_LIST set
+		MOD_Dt = now(),  
+			 ${fieldName} = #{fieldValue}
+		where 1=1
+		<choose>
+			<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+				<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				 and ${item.field} = #{item.value}
+				</foreach>
+			</when>
+			<otherwise>
+			and 1=2
+			</otherwise>
+		</choose>
+		;
+</update>
+<update id="gensrcList.gensrcList.delete" parameterType="hashmap" >
+			delete from GENSRC_LIST
+			where 1=1
+			and soruce_id = #{detail.SORUCE_ID}
+			and gen_type = #{detail.GEN_TYPE}
+			;
+</update>
+<select id="gensrcList.dictionary.gensrcList" resultType="hashmap" >
+	select  
+	b.TABLE_NAME
+	, b.COLUMN_NAME
+	, a.CODE_CATEGORY
+	, a.CODE_ID
+	, a.CODE_NM
+	from GENSRC_CMM_CD a
+	left outer join  GENSRC_CMM_USE b
+	 on a.CODE_CATEGORY = b.CODE_CATEGORY
+	where b.TABLE_NAME is not null
+	order by 1,2,3,4
+</select>
+<select id="jstree.doc" resultType="hashmap" >
+	select  
+		a.ID as id, 
+		a.ID as text ,
+		(select count(b.id) from JSTREE_DOC b where b.parent_id = a.id) children_cnt ,
+		parent_id
+	from JSTREE_DOC a
+	where a.parent_id = #{id}
+</select>
+</mapper>

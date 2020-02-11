@@ -118,19 +118,22 @@ public class SSDController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/ssdReliabilityMainJson",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView ssdReliabilityMain(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
-    	commonService.requestToVo(request, searchVO);
-    	
-    	List<?> dataList = service.mainList(searchVO);
-        mav.addObject("dataList", dataList);
-        mav.setViewName("jsonView");        
-
-        return mav;
-    }
+	/*
+	 * @RequestMapping(value = "/ssdReliabilityMainJson",method = {
+	 * RequestMethod.GET, RequestMethod.POST }) public ModelAndView
+	 * ssdReliabilityMain(HttpServletRequest request,HttpServletResponse
+	 * response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model
+	 * model) {
+	 * 
+	 * ModelAndView mav = new ModelAndView();
+	 * //searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+	 * commonService.requestToVo(request, searchVO);
+	 * 
+	 * List<?> dataList = service.mainList(searchVO); mav.addObject("dataList",
+	 * dataList); mav.setViewName("jsonView");
+	 * 
+	 * return mav; }
+	 */
     
     @RequestMapping(value = "/ssdReliabilityChartPop",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView ssdReliabilityChartPop(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> parameter,Locale locale, Model model, HttpServletRequest req,ModelAndView mav) {

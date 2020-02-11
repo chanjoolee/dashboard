@@ -5,10 +5,16 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version> 
 	<packaging>war</packaging>
 	
-	
-	
+	<!-- CKEditor -->
+	<!-- <repositories>
+		<repository>
+			<id>cksource-mvn-repo</id>
+			<name>CKSource Maven Repository</name>
+			<url>https://maven.cksource.com/</url>
+		</repository>
+	</repositories> -->
 	<properties>
-        <java-version>1.7</java-version>
+        <java-version>1.8</java-version>
         <org.springframework-version>3.1.0.RELEASE</org.springframework-version>
         <org.aspectj-version>1.6.9</org.aspectj-version>
         <org.slf4j-version>1.5.10</org.slf4j-version>
@@ -257,7 +263,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+		<!-- CKEditor -->
+		<!-- <dependency>
+            <groupId>com.cksource</groupId>
+            <artifactId>ckfinder3</artifactId>
+            <version>3.5.1</version>
+        </dependency> -->
+        
 			
     </dependencies>
     <build>

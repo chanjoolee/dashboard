@@ -68,31 +68,30 @@ public class SSDCusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/ssdCusMainJson",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView ssdCusMainJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
-    	commonService.requestToVo(request, searchVO);
-    	Object filterStr = searchVO.get("filters");
-    	if(filterStr != null){
-    		JSONObject filters = JSONObject.fromObject(filterStr.toString());
-        	searchVO.put("filtersOrigin", filterStr.toString());
-        	searchVO.put("filters", filters);
-    	}
-    	
-    	List<?> dataList = service.mainList(searchVO);
-    	mav.addObject("rows", dataList);
-    	
-    	Map<String,Object> paging = service.mainListPage(searchVO);
-    	mav.addObject("total", paging.get("TOTAL"));
-    	mav.addObject("page", paging.get("PAGE"));
-    	mav.addObject("records", paging.get("RECORDS"));
-        
-        mav.setViewName("jsonView");        
-
-        return mav;
-    }
+	/*
+	 * @RequestMapping(value = "/ssdCusMainJson",method = { RequestMethod.GET,
+	 * RequestMethod.POST }) public ModelAndView ssdCusMainJson(HttpServletRequest
+	 * request,HttpServletResponse response, @RequestParam Map<Object,Object>
+	 * searchVO ,Locale locale, Model model) {
+	 * 
+	 * ModelAndView mav = new ModelAndView();
+	 * //searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+	 * commonService.requestToVo(request, searchVO); Object filterStr =
+	 * searchVO.get("filters"); if(filterStr != null){ JSONObject filters =
+	 * JSONObject.fromObject(filterStr.toString()); searchVO.put("filtersOrigin",
+	 * filterStr.toString()); searchVO.put("filters", filters); }
+	 * 
+	 * List<?> dataList = service.mainList(searchVO); mav.addObject("rows",
+	 * dataList);
+	 * 
+	 * Map<String,Object> paging = service.mainListPage(searchVO);
+	 * mav.addObject("total", paging.get("TOTAL")); mav.addObject("page",
+	 * paging.get("PAGE")); mav.addObject("records", paging.get("RECORDS"));
+	 * 
+	 * mav.setViewName("jsonView");
+	 * 
+	 * return mav; }
+	 */
     
     @RequestMapping(value = "/ssdCusMainAllJson",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView ssdCusMainAllJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {

@@ -34,32 +34,26 @@ public class SSDCusService {
         return (Map)dao.selectOne(statement, parameter);
     }
    
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<?> mainList(Map<Object, Object> parameter) {
-		List models = commonService.pmsModelListByPjtId(parameter);
-		parameter.put("models", models);
-		List list = (List)dao.selectList("dashboard.ssd.custom.mainlist", parameter);
-		for(int i=0;i<list.size();i++){
-			Map m = (Map)list.get(i);
-			m.put("TESTER_NAME_KO",m.get("TESTER_NAME"));
-			if(m.get("TESTER_NAME") != null){
-				m.put("empId", m.get("TESTER_NAME"));
-				Map user = (Map)pmsDao.selectOne("common.username.byEmpId", m);
-				if(user != null && user.get("USER_NAME") != null){
-					m.put("TESTER_NAME_KO",  user.get("USER_NAME"));
-				}
-			}
-			
-		}
-		return list;
-	}	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map<String,Object> mainListPage(Map<Object, Object> parameter) {
-		List models = commonService.pmsModelListByPjtId(parameter);
-		parameter.put("models", models);
-		Map map = (Map)dao.selectOne("dashboard.ssd.custom.mainlist.page", parameter);
-		return map;
-	}
+	/* @SuppressWarnings({ "rawtypes", "unchecked" })
+	 *
+	 * public List<?> mainList(Map<Object, Object> parameter) { List models =
+	 * commonService.pmsModelListByPjtId(parameter); parameter.put("models",
+	 * models); List list = (List)dao.selectList("dashboard.ssd.custom.mainlist",
+	 * parameter); for(int i=0;i<list.size();i++){ Map m = (Map)list.get(i);
+	 * m.put("TESTER_NAME_KO",m.get("TESTER_NAME")); if(m.get("TESTER_NAME") !=
+	 * null){ m.put("empId", m.get("TESTER_NAME")); Map user =
+	 * (Map)pmsDao.selectOne("common.username.byEmpId", m); if(user != null &&
+	 * user.get("USER_NAME") != null){ m.put("TESTER_NAME_KO",
+	 * user.get("USER_NAME")); } }
+	 * 
+	 * } return list; }
+	 * 
+	 * @SuppressWarnings({ "rawtypes", "unchecked" }) public Map<String,Object>
+	 * mainListPage(Map<Object, Object> parameter) { List models =
+	 * commonService.pmsModelListByPjtId(parameter); parameter.put("models",
+	 * models); Map map = (Map)dao.selectOne("dashboard.ssd.custom.mainlist.page",
+	 * parameter); return map; }
+	 */
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<?> mainListAll(Map<Object, Object> parameter) {

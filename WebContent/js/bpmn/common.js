@@ -56,7 +56,7 @@ function fn_load_schema(){
             genmyModelxmi = response.responseText;
             schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
             // fn_create_source();
-            generator = new Generator(schema_bpmn);
+            generator = new Generator(schema_bpmn,"ToolBox","mysql");
             generator.fn_source();
             // generator.fn_fileSave();
         }

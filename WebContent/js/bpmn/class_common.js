@@ -147,6 +147,9 @@ Generator.prototype.fn_source = function(){
             }else if(_.find(v.process.eAnnotations.details,{"_key":"file_type"})._value == "java_jsp"){
                 var generator = new JspGenerator(k, _this);
                 _this.files[k].generator = generator;
+            }else if(_.find(v.process.eAnnotations.details,{"_key":"file_type"})._value == "toolbox"){
+                var generator = new JpaAllGeneratorToolBox(k, _this);
+                _this.files[k].generator = generator;
             }
             
         }

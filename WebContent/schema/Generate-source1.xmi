@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmmjpa:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gmmjpa="http://com.genmymodel.jpa/1.0" xmi:id="_YmcC0EcIEeqonN_RS9oRzw" name="genSrc0523_01" url="" user="">
+  <eAnnotations xmi:id="_YmcC0UcIEeqonN_RS9oRzw" source="genmymodel">
+    <details xmi:id="_YmcC0kcIEeqonN_RS9oRzw" key="uuid" value="_co2B4H0hEemtbe7XArhuwQ"/>
+  </eAnnotations>
+  <ownedEntities xmi:id="_YmcC00cIEeqonN_RS9oRzw" name="gensrc_list">
+    <eAnnotations xmi:id="_YmcC1EcIEeqonN_RS9oRzw" source="genmymodel">
+      <details xmi:id="_YmcC1UcIEeqonN_RS9oRzw" key="uuid" value="_oZZBAF9PEDek0JnbBus9EQ"/>
+    </eAnnotations>
+    <properties xmi:id="_YmcC1kcIEeqonN_RS9oRzw" name="soruce_id">
+      <eAnnotations xmi:id="_YmcC10cIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC2EcIEeqonN_RS9oRzw" key="uuid" value="_EGy8MV9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcC2UcIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcC2kcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcC20cIEeqonN_RS9oRzw" key="uuid" value="_KJ0OkV9QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcC3EcIEeqonN_RS9oRzw" name="gen_type">
+      <eAnnotations xmi:id="_YmcC3UcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC3kcIEeqonN_RS9oRzw" key="uuid" value="_5fm7EV9PEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcC30cIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcC4EcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcC4UcIEeqonN_RS9oRzw" key="uuid" value="_hH-ggF9dEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcC4kcIEeqonN_RS9oRzw" name="db_type">
+      <eAnnotations xmi:id="_YmcC40cIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC5EcIEeqonN_RS9oRzw" key="uuid" value="_2CtT8R5NEDiJl4vo7-ai9A"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Embedded" xmi:id="_YmcC5UcIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcC5kcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcC50cIEeqonN_RS9oRzw" key="uuid" value="_P3zCoR5OEDiJl4vo7-ai9A"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcC6EcIEeqonN_RS9oRzw" name="url">
+      <eAnnotations xmi:id="_YmcC6UcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC6kcIEeqonN_RS9oRzw" key="uuid" value="_oZa2MF9PEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcC60cIEeqonN_RS9oRzw" name="btn_exec">
+      <eAnnotations xmi:id="_YmcC7EcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC7UcIEeqonN_RS9oRzw" key="uuid" value="_cyhPEF9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcC7kcIEeqonN_RS9oRzw" name="test">
+      <eAnnotations xmi:id="_YmcC70cIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC8EcIEeqonN_RS9oRzw" key="uuid" value="_NtfFgSk2EDiyEI_8z_t5cA"/>
+      </eAnnotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+  </ownedEntities>
+  <ownedEntities xmi:id="_YmcC8UcIEeqonN_RS9oRzw" name="gensrc_tab_cols">
+    <eAnnotations xmi:id="_YmcC8kcIEeqonN_RS9oRzw" source="genmymodel">
+      <details xmi:id="_YmcC80cIEeqonN_RS9oRzw" key="uuid" value="_XiuJYF9QEDek0JnbBus9EQ"/>
+    </eAnnotations>
+    <properties xmi:id="_YmcC9EcIEeqonN_RS9oRzw" name="table_name">
+      <eAnnotations xmi:id="_YmcC9UcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC9kcIEeqonN_RS9oRzw" key="uuid" value="_XiuwcF9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcC90cIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcC-EcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcC-UcIEeqonN_RS9oRzw" key="uuid" value="_XiuwcV9QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcC-kcIEeqonN_RS9oRzw" name="column_name">
+      <eAnnotations xmi:id="_YmcC-0cIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcC_EcIEeqonN_RS9oRzw" key="uuid" value="_XivXgF9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcC_UcIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcC_kcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcC_0cIEeqonN_RS9oRzw" key="uuid" value="_XivXgV9QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <references xmi:id="_YmcDAEcIEeqonN_RS9oRzw" name="hawk_cmm_use" referencedEntity="_YmcDIUcIEeqonN_RS9oRzw">
+      <eAnnotations xmi:id="_YmcDAUcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDAkcIEeqonN_RS9oRzw" key="uuid" value="_XivXgl9QEDek0JnbBus9EQ"/>
+        <details xmi:id="_YmcDA0cIEeqonN_RS9oRzw" key="child_columns" value="table_name,column_name"/>
+        <details xmi:id="_YmcDBEcIEeqonN_RS9oRzw" key="parent_columns" value="table_name,column_name"/>
+      </eAnnotations>
+    </references>
+  </ownedEntities>
+  <ownedEntities xmi:id="_YmcDBUcIEeqonN_RS9oRzw" name="gensrc_cmm_cd">
+    <eAnnotations xmi:id="_YmcDBkcIEeqonN_RS9oRzw" source="genmymodel">
+      <details xmi:id="_YmcDB0cIEeqonN_RS9oRzw" key="uuid" value="_Xiv-kF9QEDek0JnbBus9EQ"/>
+      <details xmi:id="_YmcDCEcIEeqonN_RS9oRzw" key="isDictionaryDefine" value="true"/>
+      <details xmi:id="_YmcDCUcIEeqonN_RS9oRzw" key="categoryColumn" value="code_category"/>
+      <details xmi:id="_YmcDCkcIEeqonN_RS9oRzw" key="codeColumn" value="code_id"/>
+      <details xmi:id="_YmcDC0cIEeqonN_RS9oRzw" key="nameColumn" value="code_nm"/>
+    </eAnnotations>
+    <properties xmi:id="_YmcDDEcIEeqonN_RS9oRzw" name="code_category">
+      <eAnnotations xmi:id="_YmcDDUcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDDkcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-kV9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcDD0cIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcDEEcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcDEUcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-kl9QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcDEkcIEeqonN_RS9oRzw" name="code_id">
+      <eAnnotations xmi:id="_YmcDE0cIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDFEcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-k19QEDek0JnbBus9EQ"/>
+        <details xmi:id="_YmcDFUcIEeqonN_RS9oRzw" key="name_column" value="code_nm"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcDFkcIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcDF0cIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcDGEcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-lF9QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcDGUcIEeqonN_RS9oRzw" name="code_nm">
+      <eAnnotations xmi:id="_YmcDGkcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDG0cIEeqonN_RS9oRzw" key="uuid" value="_Xiv-lV9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <references xmi:id="_YmcDHEcIEeqonN_RS9oRzw" name="hawk_cmm_use" referencedEntity="_YmcDIUcIEeqonN_RS9oRzw">
+      <eAnnotations xmi:id="_YmcDHUcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDHkcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-ll9QEDek0JnbBus9EQ"/>
+        <details xmi:id="_YmcDH0cIEeqonN_RS9oRzw" key="child_columns" value="code_category"/>
+        <details xmi:id="_YmcDIEcIEeqonN_RS9oRzw" key="parent_columns" value="code_category"/>
+      </eAnnotations>
+    </references>
+  </ownedEntities>
+  <ownedEntities xmi:id="_YmcDIUcIEeqonN_RS9oRzw" name="gensrc_cmm_use">
+    <eAnnotations xmi:id="_YmcDIkcIEeqonN_RS9oRzw" source="genmymodel">
+      <details xmi:id="_YmcDI0cIEeqonN_RS9oRzw" key="uuid" value="_Xiv-l19QEDek0JnbBus9EQ"/>
+      <details xmi:id="_YmcDJEcIEeqonN_RS9oRzw" key="isDictionaryUse" value="true"/>
+    </eAnnotations>
+    <properties xmi:id="_YmcDJUcIEeqonN_RS9oRzw" name="table_name">
+      <eAnnotations xmi:id="_YmcDJkcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDJ0cIEeqonN_RS9oRzw" key="uuid" value="_Xiv-mF9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcDKEcIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcDKUcIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcDKkcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-mV9QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcDK0cIEeqonN_RS9oRzw" name="column_name">
+      <eAnnotations xmi:id="_YmcDLEcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDLUcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-ml9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <annotations xsi:type="gmmjpa:Id" xmi:id="_YmcDLkcIEeqonN_RS9oRzw">
+        <eAnnotations xmi:id="_YmcDL0cIEeqonN_RS9oRzw" source="genmymodel">
+          <details xmi:id="_YmcDMEcIEeqonN_RS9oRzw" key="uuid" value="_Xiv-m19QEDek0JnbBus9EQ"/>
+        </eAnnotations>
+      </annotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+    <properties xmi:id="_YmcDMUcIEeqonN_RS9oRzw" name="code_category">
+      <eAnnotations xmi:id="_YmcDMkcIEeqonN_RS9oRzw" source="genmymodel">
+        <details xmi:id="_YmcDM0cIEeqonN_RS9oRzw" key="uuid" value="_XiwloF9QEDek0JnbBus9EQ"/>
+      </eAnnotations>
+      <type href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </properties>
+  </ownedEntities>
+</gmmjpa:Model>

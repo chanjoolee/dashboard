@@ -64,19 +64,32 @@
   </servlet-mapping>
   
   <servlet>
-	<servlet-name>Jersey Web Application</servlet-name>
-	<!-- <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class> -->
-	<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
-	<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>dashboard.ssd.rest</param-value>
-	</init-param>
-	<load-on-startup>1</load-on-startup>
- </servlet>
- <servlet-mapping>
-	<servlet-name>Jersey Web Application</servlet-name>
-	<url-pattern>/rest/*</url-pattern>
- </servlet-mapping>
+    <servlet-name>Jersey Web Application</servlet-name>
+    <!-- <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class> -->
+    <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+    <init-param>
+        <param-name>com.sun.jersey.config.property.packages</param-name>
+        <param-value>dashboard.ssd.rest</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Jersey Web Application</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- CKEditor -->
+  <!-- <servlet>
+    <servlet-name>CKFinder</servlet-name>
+    <servlet-class>com.cksource.ckfinder.servlet.CKFinderServlet</servlet-class>
+    <multipart-config>
+        <location>/tmp</location>
+        <max-file-size>5242880</max-file-size>5MB
+        <max-request-size>20971520</max-request-size>20MB
+        <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+  </servlet> -->
+  
   
   
   <welcome-file-list>

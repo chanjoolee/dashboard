@@ -56,13 +56,13 @@ public class SSDService {
 	}	
    
     
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<?> mainList(Map<Object, Object> parameter) {
-		List models = commonService.pmsModelListByPjtId(parameter);
-		parameter.put("models", models);
-		List list = (List)dao.selectList("dashboard.ssd.mainlist", parameter);
-		return list;
-	}	
+	/*
+	 * @SuppressWarnings({ "rawtypes", "unchecked" }) public List<?>
+	 * mainList(Map<Object, Object> parameter) { List models =
+	 * commonService.pmsModelListByPjtId(parameter); parameter.put("models",
+	 * models); List list = (List)dao.selectList("dashboard.ssd.mainlist",
+	 * parameter); return list; }
+	 */
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<?> chartList(Map<Object, Object> parameter) {

@@ -1,7 +1,8 @@
 function JpaAllGeneratorToolBox( _generator){
+    // _generator : class_javaJsp
     var _this = this;
     this.generator = _generator;
-    this.includeFile = "include.toolbox.pmstable.1.jsp";
+    this.includeFile = "include.toolbox.pmstable.jsp";
     this.files = [];
     // files example
     var ex =  {
@@ -63,7 +64,7 @@ function JpaAllGeneratorToolBox( _generator){
     this.sqlAddDate = true;
     if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlAddDate", "_value": "false"}) != null)
         this.sqlAddDate = false;
-
+    
 
     // Toda Str
     var today = new Date();
@@ -78,7 +79,7 @@ function JpaAllGeneratorToolBox( _generator){
     this.init();
 }
 
-JpaAllGeneratorToolBox.prototype.getDefaultOption = function(){
+JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
     var _this = this;
     // find parent table
     var foreign_entities = _file.foreignEntities ;
@@ -130,7 +131,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function(){
             }
         } ,
         "Button" : {
-            cls: 'btn_txt btn_type_e btn_color_a',
+            // cls: 'btn_txt btn_type_e btn_color_a',
             containerCss:[
                 {code: 'margin-right', value:'3px'} ,
                 {code: 'float', value:'right'} 
@@ -992,6 +993,7 @@ JpaAllGeneratorToolBox.prototype.init = function(){
     _this.fn_entities();    
 }
 
+
 JpaAllGeneratorToolBox.prototype.fn_entities = function () {
     var _this = this;
     // SqlPreFix For Each Entity
@@ -1023,7 +1025,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities = function () {
 JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
     var _this = this;    
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
-    
+    if ( v_entity_doc_obj.dbType == null )
+        v_entity_doc_obj.dbType = _this.generator.dbType;
+
     var file_name = _.camelCase( entity._name );
     var fileObj = {
         fileType: "jsp" ,
@@ -1526,6 +1530,8 @@ JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
 JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
     var _this = this;
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
+    if ( v_entity_doc_obj.dbType == null )
+        v_entity_doc_obj.dbType = _this.generator.dbType;
     
     var file_name = _.camelCase( entity._name );
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
@@ -1714,10 +1720,11 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                         return true;
                     var v_property = _.find(gridProperties, { _name : _item.col.toLowerCase() });
                     if ( v_property != null && v_property._documentation != null){
-                        if (v_property._documentation.label != null){
-                            _.merge(_item , v_property._documentation);
-                            _item.label = v_property._documentation.label ;
-                        }
+                        _.merge(_item , v_property._documentation);
+                        // if (v_property._documentation.label != null){
+                        //     _.merge(_item , v_property._documentation);
+                        //     _item.label = v_property._documentation.label ;
+                        // }
                     }
 
                 });
@@ -2213,6 +2220,8 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
 JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
     var _this = this;
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
+    if ( v_entity_doc_obj.dbType == null )
+        v_entity_doc_obj.dbType = _this.generator.dbType;
     
     var file_name = _.camelCase( entity._name );
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
@@ -2395,10 +2404,11 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                         return true;
                     var v_property = _.find(gridProperties, { _name : _item.col.toLowerCase() });
                     if ( v_property != null && v_property._documentation != null){
-                        if (v_property._documentation.label != null){
-                            _.merge(_item , v_property._documentation);
-                            _item.label = v_property._documentation.label ;
-                        }
+                        _.merge(_item , v_property._documentation);
+                        // if (v_property._documentation.label != null){
+                        //     _.merge(_item , v_property._documentation);
+                        //     _item.label = v_property._documentation.label ;
+                        // }
                     }
 
                 });
@@ -2876,6 +2886,8 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
 JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
     var _this = this;
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
+    if ( v_entity_doc_obj.dbType == null )
+        v_entity_doc_obj.dbType = _this.generator.dbType;
     
 
     var file_name = _.camelCase( entity._name );
@@ -3059,10 +3071,11 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                         return true;
                     var v_property = _.find(gridProperties, { _name : _item.col.toLowerCase() });
                     if ( v_property != null && v_property._documentation != null){
-                        if (v_property._documentation.label != null){
-                            _.merge(_item , v_property._documentation);
-                            _item.label = v_property._documentation.label ;
-                        }
+                        _.merge(_item , v_property._documentation);
+                        // if (v_property._documentation.label != null){
+                        //     _.merge(_item , v_property._documentation);
+                        //     _item.label = v_property._documentation.label ;
+                        // }
                     }
 
                 });
@@ -3519,6 +3532,8 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
 JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
     var _this = this;
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
+    if ( v_entity_doc_obj.dbType != null )
+        v_entity_doc_obj.dbType = _this.generator.dbType;
 
     var file_name = _.camelCase( entity._name );
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
@@ -3701,10 +3716,11 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
                         return true;
                     var v_property = _.find(gridProperties, { _name : _item.col.toLowerCase() });
                     if ( v_property != null && v_property._documentation != null){
-                        if (v_property._documentation.label != null){
-                            _.merge(_item , v_property._documentation);
-                            _item.label = v_property._documentation.label ;
-                        }
+                        _.merge(_item , v_property._documentation);
+                        // if (v_property._documentation.label != null){
+                        //     _.merge(_item , v_property._documentation);
+                        //     _item.label = v_property._documentation.label ;
+                        // }
                     }
 
                 });
@@ -4360,12 +4376,12 @@ JpaAllGeneratorToolBox.prototype.fn_schema = function ( _file) {
                                 ],
                                 elements:[
                                     {
-                                        type:'Button',
+                                        type:'ButtonBootstrap',
                                         id: 'btnSearch',
                                         name: 'btnSearch',
                                         label:'SEARCH',
                                         //width: '50px',
-                                        cls: 'btn_txt btn_type_e btn_color_a',
+                                        // cls: 'btn_txt btn_type_e btn_color_a',
                                         containerCss:[
                                             {code: 'margin-right', value:'3px'}
                                         ],
@@ -4709,8 +4725,12 @@ JpaAllGeneratorToolBox.prototype.fn_schema_content = function ( _file) {
     var schema = _this.generator.findAllByElName( _file.schema.contents.schema , { id: 'contentVertical' } );
     var entity = _.find(_this.Model.ownedEntities, {"_xmi:id": _file.entityId});
 
+    var vType = "grid";
+    if (_file.entity_doc_obj != null && _file.entity_doc_obj.type != null)
+        vType = _file.entity_doc_obj.type ;
+
     var schema_obj = {
-        type: "grid",
+        type: vType,
         id: _.camelCase(entity._name) + 'Grid' ,
         name: _.camelCase(entity._name) + 'Grid' ,
         label: "" , //_.capitalize(entity._name) ,
@@ -6023,7 +6043,7 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
             function(prop,i){
                 var rtn = "";
                 
-                rtn = prop._name;  
+                rtn = prop._name.toUpperCase();  
                 var isSqlSelectCustomed = false; 
                 var matches = null;                
                 if(prop._documentation != null)
@@ -6038,18 +6058,18 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
                         var custom_obj = eval( "(" + _.unescape(content) + ")");
                         // sub column 
                         if ( custom_obj.sql_select != null ){
-                            rtn = "(" + custom_obj.sql_select + ") as " + prop._name ;  
+                            rtn = "(" + custom_obj.sql_select.toUpperCase() + ") as " + prop._name.toUpperCase() ;  
                             isSqlSelectCustomed = true;             
                         }else if ( custom_obj.query != null ){
                             // 혹시몰라서
-                            rtn = "(" + custom_obj.query + ") as " + prop._name ;      
+                            rtn = "(" + custom_obj.query.toUpperCase() + ") as " + prop._name.toUpperCase() ;      
                             isSqlSelectCustomed = true;     
                         }
                         
                     });
                 }            
                 if ( !isSqlSelectCustomed && prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" )
-                    rtn = "to_char(" + prop._name + ",'YYYY-MM-DD HH24:MI:SS') as " + prop._name;
+                    rtn = "to_char(" + prop._name.toUpperCase() + ",'YYYY-MM-DD HH24:MI:SS') as " + prop._name.toUpperCase();
                 
                 return rtn;
             }
@@ -6070,7 +6090,7 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
                         // var custom_obj = JSON.parse(content);            
                         eval("var custom_obj = " + _.unescape(content));
                         if ( custom_obj.subquery != null ){
-                            var subquery = "(" + custom_obj.subquery.query + ") as " + custom_obj.subquery.column_name;
+                            var subquery = "(" + custom_obj.subquery.query.toUpperCase() + ") as " + custom_obj.subquery.column_name.toUpperCase();
                             columns_0.push(subquery);
                         }
                         
@@ -6094,7 +6114,7 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
                         $.each([].concat(custom_obj.custom_columns), function(i ,custom_column){
 
                             if(custom_column.query != null){
-                                var subquery = "(" + custom_column.query + ") as " + custom_column.column_name;
+                                var subquery = "(" + custom_column.query.toUpperCase() + ") as " + custom_column.column_name.toUpperCase();
                                 columns_0.push(subquery);
                             }
 
@@ -6113,17 +6133,17 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
 
         if (obj_schema.type == "multiCombo" && obj_schema.jpa_column != null){
             src = "distinct"; sql.contents.push(src);
-            columns = "\t" + obj_schema.jpa_column.parent_column;
+            columns = "\t" + obj_schema.jpa_column.parent_column.toUpperCase();
             let _parentProp =  _.find([].concat(schema_jpa_enity.properties),{_name:obj_schema.jpa_column.parent_column});
             if( _parentProp == null )
                 debugger;
             let _parentNameCol = _.find(_parentProp.eAnnotations.details , {"_key": "name_column"});
             if ( _parentNameCol != null )
-                columns += "," + _parentNameCol._value;
+                columns += "," + _parentNameCol._value.toUpperCase();
             
         }
         sql.contents.push(columns);
-        src = "from " + schema_jpa_enity._name + " a "; sql.contents.push(src);
+        src = "from " + schema_jpa_enity._name.toUpperCase() + " a "; sql.contents.push(src);
         src = "where 1=1"; sql.contents.push(src);
         if ( obj_schema.type == "grid" ){
             $.each([].concat(schema_jpa_enity.properties), function (i, prop) {
@@ -6181,17 +6201,17 @@ JpaAllGeneratorToolBox.prototype.sqlSelectJsTree = function( _file , jpaEntity, 
         // ).join(","); 
 
         var columns = "\t" + _.map([].concat(obj_schema.keys), function(key,i){
-                var rtn =  key.codeColumn;
+                var rtn =  key.codeColumn.toUpperCase();
                 if( key.topParent != undefined &&  key.topParent._name != jpaEntity._name){
                     if ( key.codeColumn != key.nameColumn ){
                         rtn += ",(";
-                        rtn += "select max(t." + key.topParent.nameColumn + ") from " + key.topParent.entity._name + " t";
+                        rtn += "select max(t." + key.topParent.nameColumn.toUpperCase() + ") from " + key.topParent.entity._name.toUpperCase() + " t";
                         rtn += " where t." + key.topParent.columnName + " = " + "a." + key.codeColumn;
-                        rtn += " ) AS " + key.nameColumn;
+                        rtn += " ) AS " + key.nameColumn.toUpperCase();
                     }
                 }else{
                     if ( key.codeColumn != key.nameColumn ){
-                        rtn += "," + key.nameColumn;
+                        rtn += "," + key.nameColumn.toUpperCase();
                     }
                 }
                     
@@ -6200,7 +6220,7 @@ JpaAllGeneratorToolBox.prototype.sqlSelectJsTree = function( _file , jpaEntity, 
         ).join(",\r\n\t\t\t"); 
         
         sql.contents.push(columns);
-        src = "from " + jpaEntity._name + " a"; sql.contents.push(src);
+        src = "from " + jpaEntity._name.toUpperCase() + " a"; sql.contents.push(src);
         src = "where 1=1"; sql.contents.push(src);        
         src = "order by 1 "; sql.contents.push(src);
        
@@ -6268,11 +6288,15 @@ JpaAllGeneratorToolBox.prototype.sqlInsert = function( _file , schema_jpa_enity,
         vSqlAddDate = _file.entity_doc_obj.sqlAddDate;
     
     // query
-    var src =  "declare" ; sql.contents.push(src);
-    src = "\t" + "cnt number;" ; sql.contents.push(src);
-    src = ""+ "begin" ; sql.contents.push(src);
+    var src = "";
+    if(_file.sqlGenerator.dbType == "oracle"){
+        src = "declare" ; sql.contents.push(src);
+        src = "\t" + "cnt number;" ; sql.contents.push(src);
+        src = ""+ "begin" ; sql.contents.push(src);
+    }
+    
 
-    src = "\tinsert into " + schema_jpa_enity._name + "(" ;  sql.contents.push(src);
+    src = "\tinsert into " + schema_jpa_enity._name.toUpperCase() + "(" ;  sql.contents.push(src);
     src = "\t\t" + _.map([].concat(schema_jpa_enity.properties) ,'_name').join(","); sql.contents.push(src);
     if(vSqlAddDate){
         src = "\t\t" + ",INS_DT"; sql.contents.push(src);
@@ -6316,11 +6340,18 @@ JpaAllGeneratorToolBox.prototype.sqlInsert = function( _file , schema_jpa_enity,
     });
 
     if(vSqlAddDate){
-        src = "\t\t,sysdate" ; sql.contents.push(src);
+        if(_file.sqlGenerator.dbType == "oracle"){
+            src = "\t\t,sysdate" ; sql.contents.push(src);
+        }
+        else if ( _file.sqlGenerator.dbType == "mysql" ){
+            src = "\t\t,now()" ; sql.contents.push(src);
+        }
+            
     }
     src = "\t);" ; sql.contents.push(src);
-    
-    src = "end;"; sql.contents.push(src);
+    if(_file.sqlGenerator.dbType == "oracle"){
+        src = "end;"; sql.contents.push(src);
+    }
     if (obj_schema.type == "grid") {
         // sql.type = "sql";
         sql.jsp_type = "grid";
@@ -6345,14 +6376,20 @@ JpaAllGeneratorToolBox.prototype.sqlEdit = function( _file , schema_jpa_enity,  
     if(_file.entity_doc_obj.sqlAddDate != null)
         vSqlAddDate = _file.entity_doc_obj.sqlAddDate;
     // query
-    src =  "declare" ; sql.contents.push(src);
-    src = "\t" + "cnt number;" ; sql.contents.push(src);
-    src = "\t"+ "begin" ; sql.contents.push(src);
+    if(_file.sqlGenerator.dbType == "oracle"){
+        src =  "declare" ; sql.contents.push(src);
+        src = "\t" + "cnt number;" ; sql.contents.push(src);
+        src = "\t"+ "begin" ; sql.contents.push(src);
+    }
 
-
-    src = "update " + schema_jpa_enity._name + " set" ;  sql.contents.push(src);
+    src = "update " + schema_jpa_enity._name.toUpperCase() + " set" ;  sql.contents.push(src);
     if ( vSqlAddDate ){
-        src = "\t" + "MOD_Dt = sysdate,  "; sql.contents.push(src);
+        if(_file.sqlGenerator.dbType == "oracle"){
+            src = "\t" + "MOD_Dt = sysdate,  "; sql.contents.push(src);
+        }
+        else if ( _file.sqlGenerator.dbType == "mysql" ){
+            src = "\t" + "MOD_Dt = now(),  "; sql.contents.push(src);
+        }
     }
     var vDtCols = _.filter(schema_jpa_enity.properties,{type:{_href:'http://www.eclipse.org/emf/2002/Ecore#//EDate'}});
     if (vDtCols.length > 0 ){
@@ -6396,7 +6433,9 @@ JpaAllGeneratorToolBox.prototype.sqlEdit = function( _file , schema_jpa_enity,  
     src = "\t" + "</choose>"; sql.contents.push(src);
     src = "\t;"; sql.contents.push(src);
 
-    src = "end;"; sql.contents.push(src);
+    if(_file.sqlGenerator.dbType == "oracle"){
+        src = "end;"; sql.contents.push(src);
+    }
 
 }
 
@@ -6416,11 +6455,13 @@ JpaAllGeneratorToolBox.prototype.sqlDelete = function( _file , schema_jpa_enity,
     _file.sqlGenerator.sqls.push(sql);
 
     // query
-    src =  "declare" ; sql.contents.push(src);
-    src = "\t" + "cnt number;" ; sql.contents.push(src);
-    src = "\t"+ "begin" ; sql.contents.push(src);
+    if(_file.sqlGenerator.dbType == "oracle"){
+        src =  "declare" ; sql.contents.push(src);
+        src = "\t" + "cnt number;" ; sql.contents.push(src);
+        src = "\t"+ "begin" ; sql.contents.push(src);
+    }
 
-    src = "\t\tdelete from " + schema_jpa_enity._name  ;  sql.contents.push(src);
+    src = "\t\tdelete from " + schema_jpa_enity._name.toUpperCase()  ;  sql.contents.push(src);
     src = "\t\twhere 1=1"; sql.contents.push(src);
     $.each([].concat(schema_jpa_enity.properties), function (i, prop) {
         let vId = _.find( [].concat(prop.annotations) , { "_xsi:type": "gmmjpa:Id" });
@@ -6434,7 +6475,9 @@ JpaAllGeneratorToolBox.prototype.sqlDelete = function( _file , schema_jpa_enity,
         }
     });
     src = "\t\t;"; sql.contents.push(src);
-    src = "end;"; sql.contents.push(src);
+    if(_file.sqlGenerator.dbType == "oracle"){
+        src = "end;"; sql.contents.push(src);
+    }
 }
 
 JpaAllGeneratorToolBox.prototype.fn_datasource = function(foreign_entities, vEntity, jpa_prop, _file, gridCol) {
@@ -6520,7 +6563,7 @@ JpaAllGeneratorToolBox.prototype.fn_datasource = function(foreign_entities, vEnt
                         sql.contents.push(src);
                         var columns = "\t" + _.map([].concat(parent.properties), '_name').join(",");
                         sql.contents.push(columns);
-                        src = "from " + parent._name;
+                        src = "from " + parent._name.toUpperCase();
                         sql.contents.push(src);
                         src = "where 1=1";
                         sql.contents.push(src);
@@ -6540,6 +6583,174 @@ JpaAllGeneratorToolBox.prototype.fn_datasource = function(foreign_entities, vEnt
     }
     return hasParents;
 }
+
+
+JpaAllGeneratorToolBox.prototype.fn_datasource_by_top = function(vEntity, jpa_prop, _file, gridCol) {
+    var _this = this;
+    var hasParents = false;
+    var paramForTopParent1 = { 
+        "entity": vEntity, 
+        "columnName": jpa_prop._name
+    };
+    // if ( vEntity._name == "ssd_sm_result_h" && gridCol.name=="SCRIPT_NAME")
+    //     debugger;
+    var topParent = _this.fn_get_top_parent(paramForTopParent1);
+    var parent = _this.fn_get_parent(paramForTopParent1);
+    if (paramForTopParent1 != topParent)
+        hasParents = true;
+    if (paramForTopParent1 != topParent){
+        
+        var referenceId = parent.reference["_xmi:id"];
+        var topReferenceId = topParent.reference["_xmi:id"];
+        var sqlId = topParent.entity.sqlPreFix + _.camelCase(_file.fileName) + ".datasrc." + _.camelCase(topParent.entity._name) + "." + _.camelCase(topParent.columnName) ;
+        // var dataSrc = _.find(_file.dataSources, { "referenceId": referenceId , "topRefrencedId": topReferenceId });
+        var dataSrc = _.find(_file.dataSources, { "sqlId": sqlId });
+        if (dataSrc == null) {
+            var sqlIdDynamic = parent.entity.sqlPreFix + _.camelCase(_file.fileName) + ".datasrc.dynamic." + _.camelCase(parent.entity._name) + "." + _.camelCase(parent.columnName) ;
+            dataSrc = {
+                "referenceId": referenceId,
+                "topRefrenceId" :  topReferenceId ,
+                "parentEntity" : parent.entity._name,
+                "parentColumnName": parent.columnName,
+                "childColumnName": jpa_prop._name,
+                "childColumnNames": parent.childColumnNames,  
+                "parentNameColumn": parent.nameColumn,
+                "parentColumnNames": parent.columnNames,
+                
+                "topEntity" : topParent.entity._name ,
+                "topColumnName" : topParent.columnName ,
+                "topColumnNames" : topParent.columnNames ,
+                "topNameColumn" : topParent.nameColumn ,
+                "sqlId": sqlId,                
+                "data": function () {
+                    var _this = this;
+                    var prop = _.find(gridProperties , { _name : _this.childColumnName } );
+                    var dataSrcType = "select";
+                    if ( prop != null && prop._documentation != null && prop._documentation.data_src_type != null)
+                        dataSrcType = prop._documentation.data_src_type;
+                    if (dataSrcType == "select")
+                        var dataSrcType = "select";
+                    if (dataSrcType != "select")
+                        return;
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                            "&sqlid=" + _this.sqlId,
+                        data: {},
+                        async: false,
+                        success: function (response) {
+                            var dataList = response.dataList;
+                            $.each(dataList, function (i, data) {
+                                if( data != null)
+                                    _this.value[data[ _this.topColumnName.toUpperCase()]] = data[_this.topNameColumn.toUpperCase()];
+                            });
+                        }
+                    });
+                },
+                "value": {} ,
+                "sqlIdDynamic": sqlIdDynamic, 
+                "dataDynamic": function ( param ) {
+                    var _this = this;
+                    var rtnList = [];
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                            "&sqlid=" + _this.sqlIdDynamic,
+                        data: param,
+                        async: false,
+                        success: function (response) {
+                            rtnList = response.dataList;
+                        }
+                    });
+                    return rtnList;
+                }
+            };
+            var editSetting = {
+                // "edittype": 'select' ,
+                // "formatter": 'select' ,
+                "referenceId": referenceId ,
+                "topRefrenceId" :  topReferenceId,
+                editoptions : {
+                    dataEvents: []
+                }
+
+            };
+            _file.dataSources.push(dataSrc);
+            // query xml 만들기
+            var sql = _.find(_file.sqlGenerator.sqls, { "id": sqlId });
+            if (sql == null) {
+                sql = {
+                    id: sqlId,
+                    type: "select",
+                    contents: [],
+                    wheres: []
+                };
+                _file.sqlGenerator.sqls.push(sql);
+                // query select
+                var src = "select distinct ";
+                sql.contents.push(src);
+
+                // var columns = "\t" + [ topParent.columnName , topParent.nameColumn ].join(",");
+                var columns = [topParent.columnName.toUpperCase()];
+                if ( topParent.columnName !=  topParent.nameColumn)
+                    columns.push(topParent.nameColumn.toUpperCase());
+                
+                sql.contents.push("\t" + columns.join(","));
+                src = "from " + topParent.entity._name.toUpperCase();  sql.contents.push(src);
+                src = "where 1=1"; sql.contents.push(src);
+                if(topParent.columnNames.length == 1){
+                
+                }
+                src = "order by 1"; sql.contents.push(src);
+                
+            }
+
+            // query dependency dynamic
+            var sql = _.find(_file.sqlGenerator.sqls, { "id": sqlIdDynamic });
+            if (sql == null) {
+                sql = {
+                    id: sqlIdDynamic,
+                    type: "select",
+                    contents: [],
+                    wheres: []
+                };
+                _file.sqlGenerator.sqls.push(sql);
+                // query select
+                var src = "select distinct ";
+                sql.contents.push(src);
+
+                // var columns = "\t" + [ topParent.columnName , topParent.nameColumn ].join(",");
+                var columns = [parent.columnName.toUpperCase()];
+                if ( parent.columnName !=  parent.nameColumn)
+                    columns.push(parent.nameColumn.toUpperCase());
+                
+                sql.contents.push("\t" + columns.join(","));
+                src = "from " + parent.entity._name.toUpperCase();  sql.contents.push(src);
+                src = "where 1=1"; sql.contents.push(src);
+                if(parent.columnNames.length > 1){
+                    var index = _.indexOf(dataSrc.childColumnNames,dataSrc.childColumnName);
+                    if ( index > -1){
+                        var wheres = dataSrc.childColumnNames.slice(0,index);
+                        $.each(wheres , function(i, where ){
+                            src = "<if test=\"search_" + _.camelCase(where) + " != null and search_" + _.camelCase(where) + " !='' \">"; sql.wheres.push(src);
+                            src = "\tand " + where + " = #{search_" + _.camelCase(where) + "}"; sql.wheres.push(src);
+                            src = "</if>"; sql.wheres.push(src);
+                        } );
+                    }
+                    
+                }
+                src = "order by 1"; sql.wheres.push(src);
+                
+            }
+            
+            _.merge(gridCol, editSetting);
+            
+        }
+    }
+
+    return hasParents;
+}
+
 
 /**
  * if field has dictionary override datasrc
@@ -6601,15 +6812,15 @@ JpaAllGeneratorToolBox.prototype.fn_datasource_by_dictionary = function(vEntity,
             };
             _file.sqlGenerator.sqls.push(sql);
             var src = "select  ";  sql.contents.push(src);
-            src = "b.table_name" ; sql.contents.push(src);
-            src = ", b.column_name" ; sql.contents.push(src);
-            src = ", a." + dictionary.categoryColumn; sql.contents.push(src);
-            src = ", a." + dictionary.codeColumn; sql.contents.push(src);
-            src = ", a." + dictionary.nameColumn; sql.contents.push(src);
+            src = "b.TABLE_NAME" ; sql.contents.push(src);
+            src = ", b.COLUMN_NAME" ; sql.contents.push(src);
+            src = ", a." + dictionary.categoryColumn.toUpperCase(); sql.contents.push(src);
+            src = ", a." + dictionary.codeColumn.toUpperCase(); sql.contents.push(src);
+            src = ", a." + dictionary.nameColumn.toUpperCase(); sql.contents.push(src);
             
-            src = "from " + dictionary.dictionaryDefTable + " a";  sql.contents.push(src);
-            src = "left outer join  " + dictionary.dictionaryUseTable + " b";  sql.contents.push(src);
-            src = " on a." + dictionary.categoryColumn + " = " + "b." +  dictionary.categoryColumn ;  sql.contents.push(src);
+            src = "from " + dictionary.dictionaryDefTable.toUpperCase() + " a";  sql.contents.push(src);
+            src = "left outer join  " + dictionary.dictionaryUseTable.toUpperCase() + " b";  sql.contents.push(src);
+            src = " on a." + dictionary.categoryColumn.toUpperCase() + " = " + "b." +  dictionary.categoryColumn.toUpperCase() ;  sql.contents.push(src);
             // src = " and a." + dictionary.codeColumn + " = " + "b." +  dictionary.codeColumn ;  sql.contents.push(src);
             // src = "where  REGEXP_LIKE(b.table_name, '^" + vEntity._name + "' ,'i') "   ; sql.contents.push(src);
             src = "where b.TABLE_NAME is not null"   ; sql.contents.push(src);

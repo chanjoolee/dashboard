@@ -66,35 +66,38 @@ public class PerformanceController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/performanceJson",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView performanceJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
-    	
-    	List<?> dataList = service.dataList(searchVO);
-    	List<?> folderList = service.folderList(searchVO);
-        mav.addObject("dataList", dataList);
-        mav.addObject("folderList", folderList);
-        mav.setViewName("jsonView");        
-
-        return mav;
-    }
+	/*
+	 * @RequestMapping(value = "/performanceJson",method = { RequestMethod.GET,
+	 * RequestMethod.POST }) public ModelAndView performanceJson(HttpServletRequest
+	 * request,HttpServletResponse response, @RequestParam Map<Object,Object>
+	 * searchVO ,Locale locale, Model model) {
+	 * 
+	 * ModelAndView mav = new ModelAndView();
+	 * //searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+	 * 
+	 * List<?> dataList = service.dataList(searchVO); List<?> folderList =
+	 * service.folderList(searchVO); mav.addObject("dataList", dataList);
+	 * mav.addObject("folderList", folderList); mav.setViewName("jsonView");
+	 * 
+	 * return mav; }
+	 */
     
-    @RequestMapping(value = "/performanceFolderListJson",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView performanceFolderListJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	commonService.requestToVo(request, searchVO);
-    	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
-    	List<?> folderList = service.folderList(searchVO);
-    	//List<?> tabList = service.tabList(searchVO);
-        mav.addObject("folderList", folderList);
-        //mav.addObject("tabList", tabList);
-        mav.setViewName("jsonView");        
-
-        return mav;
-    }
+	/*
+	 * @RequestMapping(value = "/performanceFolderListJson",method = {
+	 * RequestMethod.GET, RequestMethod.POST }) public ModelAndView
+	 * performanceFolderListJson(HttpServletRequest request,HttpServletResponse
+	 * response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model
+	 * model) {
+	 * 
+	 * ModelAndView mav = new ModelAndView(); commonService.requestToVo(request,
+	 * searchVO);
+	 * //searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
+	 * List<?> folderList = service.folderList(searchVO); //List<?> tabList =
+	 * service.tabList(searchVO); mav.addObject("folderList", folderList);
+	 * //mav.addObject("tabList", tabList); mav.setViewName("jsonView");
+	 * 
+	 * return mav; }
+	 */
     @RequestMapping(value = "/performanceDataListJson",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView performanceDataListJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
     	

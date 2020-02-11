@@ -328,46 +328,43 @@ public class BatchController {
         return mav;
     }
     
-    @SuppressWarnings("rawtypes")
-    @RequestMapping(value = "/batchFwqLinkCheckJson",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView batchFwqLinkCheckJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO,Locale locale, Model model) throws Exception {
-
-    	ModelAndView mav = new ModelAndView();
-    	
-    	String newId = batchCommonService.getNewBatchId();
-    	searchVO.put("batchCategory","FWQualityUrlCheck");
-    	searchVO.put("batchId",newId);
-    	batchCommonService.insertNewBatchId(searchVO);
-    	try{
-    		//List<?> dataList = fwqService.getFileUrlList(searchVO);
-    		//searchVO.put("urlList",dataList);
-    		//fwqService.parseXlsx(searchVO);
-    		List projects = commonService.pmsProjectList(searchVO);
-    		searchVO.put("pjtCodeList", projects);
-    		
-    		@SuppressWarnings("unchecked")
-			List<Map<String,Object>> linkList = fwqService.getLinkUrlList(searchVO);
-    		
-    		fwqService.checkUrl(linkList,searchVO);
-    		
-    		searchVO.put("batchResult","SUCCESS");
-    		searchVO.put("message","");
-    		batchCommonService.updateBatchResult(searchVO);
-    		mav.addObject("result","success");
-    	}catch(Exception ex){
-    		
-    		searchVO.put("batchResult","FAIL");
-    		searchVO.put("message",ex.getMessage());
-    		batchCommonService.updateBatchResult(searchVO);
-    		
-    		mav.addObject("result","fail: " + ex.getMessage());
-    	}
-        
-        
-        mav.setViewName("jsonView");
-
-        return mav;
-    }
+	/*
+	 * @SuppressWarnings("rawtypes")
+	 * 
+	 * @RequestMapping(value = "/batchFwqLinkCheckJson",method = {
+	 * RequestMethod.GET, RequestMethod.POST }) public ModelAndView
+	 * batchFwqLinkCheckJson(HttpServletRequest request,@RequestParam
+	 * Map<Object,Object> searchVO,Locale locale, Model model) throws Exception {
+	 * 
+	 * ModelAndView mav = new ModelAndView();
+	 * 
+	 * String newId = batchCommonService.getNewBatchId();
+	 * searchVO.put("batchCategory","FWQualityUrlCheck");
+	 * searchVO.put("batchId",newId); batchCommonService.insertNewBatchId(searchVO);
+	 * try{ //List<?> dataList = fwqService.getFileUrlList(searchVO);
+	 * //searchVO.put("urlList",dataList); //fwqService.parseXlsx(searchVO); List
+	 * projects = commonService.pmsProjectList(searchVO);
+	 * searchVO.put("pjtCodeList", projects);
+	 * 
+	 * @SuppressWarnings("unchecked") List<Map<String,Object>> linkList =
+	 * fwqService.getLinkUrlList(searchVO);
+	 * 
+	 * fwqService.checkUrl(linkList,searchVO);
+	 * 
+	 * searchVO.put("batchResult","SUCCESS"); searchVO.put("message","");
+	 * batchCommonService.updateBatchResult(searchVO);
+	 * mav.addObject("result","success"); }catch(Exception ex){
+	 * 
+	 * searchVO.put("batchResult","FAIL"); searchVO.put("message",ex.getMessage());
+	 * batchCommonService.updateBatchResult(searchVO);
+	 * 
+	 * mav.addObject("result","fail: " + ex.getMessage()); }
+	 * 
+	 * 
+	 * mav.setViewName("jsonView");
+	 * 
+	 * return mav; }
+	 */
     
     
     @RequestMapping(value = "/batchSsdCustomMigrationJson",method = { RequestMethod.GET, RequestMethod.POST })

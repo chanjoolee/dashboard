@@ -321,19 +321,12 @@
 					
                 </li>
 				<li>
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Batch <b class="caret"></b></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Generate<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchPjtnameMappingJson.html');">PjtnameMapping(pms의 pjtName과 dashboard pjtName parsing)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchMappingSchedulePmsWithDashboard.html');">MappingSchedule(pms의 schedule 데이타를 dashboard schedule로 update)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchJiraProjectMappingJson.html');">JiraProjectMapping(pms의 project와  dashboard jira project mapping)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchCodesonarProjectMappingJson.html');">CodesonarProjectMapping(pms의 project와  dashboard codesonar project mapping)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFileFvt.html');">Fvt batch</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fvtPassByDt.html');">Fvt Chart(Progress)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fvtPhaseCount.html');">Fvt Chart(phase count)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFwqJson.html');">FW Quality Index</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFwqLinkCheckJson.html');">FW Quality Link check</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchSsdCustomMigrationJson.html');">SSD Custom Test Migration</a></li>
-						
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate Source</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','https://www.jstree.com/demo_sitebrowser/index.php');">Jstree Demo DataBase (JsTree Site)</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Manual Ck5(MySite)</a></li>
+
 					</ul>
 					
 				</li>

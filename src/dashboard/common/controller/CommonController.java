@@ -1,5 +1,7 @@
 package dashboard.common.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import common.service.CommonService;
 import dashboard.service.ComplexService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -58,53 +61,10 @@ public class CommonController {
         return mav;
     }
     
-    /**
-     * pms 공통코드를 가져온다. prameter: codeName
-     * @param request
-     * @param searchVO
-     * @param locale
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/pmsCodeListJson" ,method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView pmsCodeListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	
-    	List<?> dataList = commonService.pmsCodeList(searchVO);
-        mav.addObject("dataList", dataList);
-       
-        mav.setViewName("jsonView");        
-        
-
-        return mav;
-    }
     
-    @RequestMapping(value = "/pmsProjectListJson" ,method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView pmsProjectListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	
-    	List<?> dataList = commonService.pmsProjectList(searchVO);
-        mav.addObject("dataList", dataList);       
-        mav.setViewName("jsonView");        
-        
-
-        return mav;
-    }
     
-    @RequestMapping(value = "/pmsModelListJson" ,method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView pmsModelListJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
-    	ModelAndView mav = new ModelAndView(); 
-    	
-    	List<?> dataList = commonService.pmsModelListByPjtId(searchVO);
-        mav.addObject("dataList", dataList);       
-        mav.setViewName("jsonView");        
-        
+    
 
-        return mav;
-    }
     
     @RequestMapping(value = "/generic",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView generic(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletRequest request,ModelAndView mav) {
@@ -133,6 +93,32 @@ public class CommonController {
 
         return mav;
     }
+    
+    @RequestMapping(value = "/jstreeJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public void jstreeJson(HttpServletResponse response, HttpServletRequest request,@RequestParam Map<Object,Object> searchVO) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        commonService.requestToVo(request, searchVO);
+    	Object filterStr = searchVO.get("filters");
+    	if(filterStr != null){
+    		JSONObject filters = JSONObject.fromObject(filterStr.toString());
+        	searchVO.put("filtersOrigin", filterStr.toString());
+        	searchVO.put("filters", filters);
+    	}
+    	List<?> dataList = commonService.selectList(searchVO.get("sqlid").toString(),searchVO);
+    	
+    	//for
+    	
+    	JSONArray jsonArray = JSONArray.fromObject(dataList);
+    	
+    	
+        //out.write(dataList.getJson().getBytes());
+    	//out.write(jsonArray.getInt(0));
+        response.setContentType("application/json");
+        jsonArray.write(response.getWriter());
+//        response.setContentLength(out.size());
+//        response.getOutputStream().write(out.toByteArray());
+//        response.getOutputStream().flush();
+      }
     
     @RequestMapping(value = "/genericlListPageJson",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView genericlListPageJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
@@ -303,6 +289,31 @@ public class CommonController {
         return mav;
     }
     
+    
+    @RequestMapping(value = "/ckfinderUploadJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView ckfinderUploadJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) throws Exception {
+    	
+    	final MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+    	ModelAndView mav = new ModelAndView(); 
+    	commonService.multipartProcess(searchVO, multiRequest);
+    	mav.addObject("searchVO",searchVO);
+            
+    	/**** setting for ck5editor Start ****/
+    	// 01. uploaded
+        mav.addObject("uploaded",true);
+        // 02. url
+        java.util.ArrayList files = (java.util.ArrayList) searchVO.get("fileInfoList");
+	   	Map file = (Map)files.get(0);
+	   	String filePath = (String)file.get("filePath");
+        mav.addObject("url",request.getSession().getServletContext().getContextPath() + filePath );
+        /**** setting for ck5editor End ****/
+        
+        mav.setViewName("jsonView");
+
+        return mav;
+    }
+    
+    
     @RequestMapping(value = "/transactionTestJson" ,method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView transactionTestJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
     	ModelAndView mav = new ModelAndView(); 
@@ -324,5 +335,9 @@ public class CommonController {
 
         return mav;
     }
+    
+    
+    
+    
     
 }

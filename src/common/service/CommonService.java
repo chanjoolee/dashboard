@@ -34,7 +34,6 @@ import com.sun.jersey.core.header.ContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 
 import common.dao.CommonDao;
-import common.dao.PmsDao;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -44,9 +43,6 @@ public class CommonService {
 
     @Autowired
     private CommonDao dao;
-    
-    @Autowired
-    private PmsDao pmsDao;
     
     @Autowired
 	DataSourceTransactionManager transactionManager;
@@ -127,20 +123,6 @@ public class CommonService {
         dao.update(statement, parameter);
     }
 	
-	@SuppressWarnings("rawtypes")
-    public List pmsCodeList(Map<Object, Object> parameter) {
-        return (List)pmsDao.selectList("pms.cmm.cdbase", parameter);
-    }
-	
-	@SuppressWarnings("rawtypes")
-    public List pmsProjectList(Map<Object, Object> parameter) {
-        return (List)pmsDao.selectList("dashboard.pms.project.list", parameter);
-    }
-	
-	@SuppressWarnings("rawtypes")
-    public List pmsModelListByPjtId(Map<Object, Object> parameter) {
-        return (List)pmsDao.selectList("dashboard.pms.modelname.by.pjtid", parameter);
-    }
 	
 	/**
 	 * pms의 pjtcode로 jira등의 regacy project code 를 가져온다.
@@ -474,6 +456,22 @@ public class CommonService {
 		    		vo.put("autoJson", autoJson);
 		    	}
 			}
+			
+			// mysql page variable : mysql_offset
+			if ( vo.get("rows") != null) {
+				String str_page = (String)vo.get("page");
+				int int_page = Integer.parseInt(str_page);
+				
+
+				String str_rows = (String)vo.get("rows");
+				int int_rows = Integer.parseInt(str_rows);
+
+				int offset = (int_page - 1) * int_rows;
+				
+				vo.put("int_offset", offset);
+				vo.put("int_limit", int_rows);
+			}
+			
 			
 		   
 		}

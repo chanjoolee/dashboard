@@ -22,16 +22,16 @@
 		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
 		
 		<%-- http://swebdeveloper.com/apps/forms-plus-css/popup-form-comment.html --%>
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/font-awesome.min.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/modern-forms-plus.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/purple.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/cadetBlue.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/orange.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color3.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra1color4.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/extra2color3.css">
-		<link rel="stylesheet" href="/dashboard/css/bootstrap/steelBlue.css">
+		<link rel="stylesheet" href="./css/bootstrap/font-awesome.min.css">
+		<link rel="stylesheet" href="./css/bootstrap/modern-forms-plus.css">
+		<link rel="stylesheet" href="./css/bootstrap/purple.css">
+		<link rel="stylesheet" href="./css/bootstrap/cadetBlue.css">
+		<link rel="stylesheet" href="./css/bootstrap/orange.css">
+		<link rel="stylesheet" href="./css/bootstrap/extra1color3.css">
+		<link rel="stylesheet" href="./css/bootstrap/extra1color4.css">
+		<link rel="stylesheet" href="./css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="./css/bootstrap/extra2color3.css">
+		<link rel="stylesheet" href="./css/bootstrap/steelBlue.css">
 		
 		
 	
@@ -49,13 +49,13 @@
 		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
 		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
 		
-		<script src="/dashboard/js/Highstock-5.0.9/code/highstock.src.js"></script>
-		<script src="/dashboard/js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
-		<script src="/dashboard/js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
-		<script src="/dashboard/js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
-		<script src="/dashboard/js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
-		<script src="/dashboard/js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
-		<script src="/dashboard/js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
+		<script src="./js/Highstock-5.0.9/code/highstock.src.js"></script>
+		<script src="./js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
+		<script src="./js/Highstock-5.0.9/code/highcharts-more.src.js"></script>
+		<script src="./js/Highstock-5.0.9/code/modules/drilldown.src.js"></script>
+		<script src="./js/Highstock-5.0.9/code/modules/no-data-to-display.js"></script>
+		<script src="./js/Highstock-5.0.9/code/modules/exporting.src.js"></script>
+		<script src="./js/Highstock-5.0.9/code/modules/offline-exporting.src.js"></script>
 		
 		<%-- x축 그룹라벨 --%>
 		<!-- <script src="js/highcharts/grouped-categories.js"></script> -->
@@ -66,7 +66,8 @@
 		<script type="text/javascript" src="js/highslide/highslide.config.js" charset="utf-8"></script> -->
 		
 		<%-- 4. local common --%>
-		<script src="js/dashboard.js?version=2017.10.31.01"></script>
+		<!-- <script src="./js/dashboard.js?version=2017.10.31.01"></script> -->
+		<script src="./js/dashboard.toolbox.js?version=2020.01.28"></script>
 		
 		<%-- 5. local --%>
 		<!-- <link rel="stylesheet" type="text/css" href="js/highslide/highslide.css" /> -->
@@ -74,24 +75,24 @@
 		<!-- <link rel="stylesheet" type="text/css" href="http://www.trirand.com/blog/jqgrid/themes/redmond/jquery-ui-custom.css" /> -->
 		
 		<%-- multi select --%>
-		<script src="/dashboard/js/jquery-multiselect/jquery.multiselect.js"></script>
-		<script src="/dashboard/js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.css" />
-		<link rel="stylesheet" type="text/css" href="/dashboard/js/jquery-multiselect/jquery.multiselect.filter.css" />
+		<script src="./js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="./js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.css" />
+		<link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.filter.css" />
 		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
-		<script src="/dashboard/js/jmespath.js-master/jmespath.js?version=1"></script>
+		<script src="./js/jmespath.js-master/jmespath.js?version=1"></script>
 		
-		<link rel="stylesheet" type="text/css" href="/nspim/css/common.css" />
-		<link rel="stylesheet" type="text/css" href="/nspim/css/new.css" />
-		<link rel="stylesheet" type="text/css" href="/nspim/css/board.css" />
-		<script src="/common/js/module.js"></script>
+		<link rel="stylesheet" type="text/css" href="./css/pms/common.css" />
+		<link rel="stylesheet" type="text/css" href="./css/pms/new.css" />
+		<link rel="stylesheet" type="text/css" href="./css/pms/board.css" />
+		<!-- <script src="/common/js/module.js"></script> -->
 		
 		<%-- File Saver --%>
-		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
-		<script type="text/javascript" src="/dashboard/js/jquery-zclip-master/jquery.zclip.js"></script>
+		<script type="text/javascript" src="./js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./js/jquery-zclip-master/jquery.zclip.js"></script>
 		
-		<script type="text/javascript" src="/dashboard/js/alasql-develop/dist/alasql.js"></script>
-		<script src="/dashboard/js/jointjs/lodash.4.17.10.js"></script>
+		<script type="text/javascript" src="./js/alasql-develop/dist/alasql.js"></script>
+		<script src="./js/jointjs/lodash.4.17.10.js"></script>
 		
 		<%-- jqueryMohthPicker --%>
 		<link rel="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.css" />
@@ -99,14 +100,18 @@
 		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script>
 
 		<!-- xml to js -->
-		<script type="text/javascript" src="/dashboard/js/convertjson/x2js.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/python.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/common.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/class_common.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/class_python.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/class_python_txt.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/class_python_txt.js"></script>
-		<script type="text/javascript" src="/dashboard/js/bpmn/java_jsp/class_javaJsp.js"></script>
+		<script type="text/javascript" src="./js/convertjson/x2js.js"></script>
+		<script type="text/javascript" src="./js/bpmn/python.js"></script>
+		<script type="text/javascript" src="./js/bpmn/common.js"></script>
+		<script type="text/javascript" src="./js/bpmn/class_common.js"></script>
+		<script type="text/javascript" src="./js/bpmn/class_python.js"></script>
+		<script type="text/javascript" src="./js/bpmn/class_python_txt.js"></script>
+		<script type="text/javascript" src="./js/bpmn/java_jsp/class_javaJsp.js"></script>
+		<script type="text/javascript" src="./js/bpmn/java_jsp/class_sql.js"></script>
+		<script type="text/javascript" src="./js/bpmn/java_jsp/allFromJpa.toolbox.js"></script>
+
+		<!-- jszip -->
+		<script type="text/javascript" src="./js/Stuk-jszip-3109282/dist/jszip.js"></script>
 		
   
   	<style type="text/css" title="main">
@@ -503,12 +508,12 @@
 										],
 										elements:[
 											{
-												type:'Button',
+												type:'ButtonBootstrap',
 												id: 'btnCreate',
 												name: 'btnCreate',
 												label:'Create Source From BPMN2',
 												//width: '50px',
-												cls: 'btn_txt btn_type_e btn_color_a',
+												// cls: 'btn_txt btn_type_e btn_color_a',
 												containerCss:[
 													{code: 'margin-right', value:'3px'}
 												],
@@ -578,7 +583,9 @@
 			
 			fn_makeHtml('searchCondition',schemaSearch);
 			// $("#schemaUrl").val("https://api.genmymodel.com/projects/_OlwJkAbzEeipbtix-oa2Dg/xmi");
-			$("#schemaUrl").val("https://api.genmymodel.com/projects/_VRLEQHmoEeiF6cTK02sxJA/xmi");
+			// $("#schemaUrl").val("https://api.genmymodel.com/projects/_VRLEQHmoEeiF6cTK02sxJA/xmi");
+			$("#schemaUrl").val("/dashboard/schema/Generate-source.xmi");
+			
 			$("#loader").hide();
 			
 		});
@@ -607,5 +614,259 @@
 	<input type="hidden" id="searchJson" name="searchJson" value=""/>
 </form>
 </body>
-<script src="js/highcharts/themes/dashboard-simple.js"></script>
+<script src="./js/highcharts/themes/dashboard-simple.js"></script>
+<script type="text/aaa" id="pagelistHeadOracle">
+	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(
+
+</script>
+<script type="text/aaa" id="pagelistHeadMysql">
+	Select 
+			*		
+		From 
+		(
+			select
+				A.*
+			from 
+			(
+
+</script>
+<script type="text/aaa" id="pagelistFooterOracle">
+	) A where 1=1 
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> !{filters.groupOp} </if>
+							<choose>
+								<when test="item.data.equalsIgnoreCase('isnull')">${item.field} is null</when>
+				    			<when test="item.op =='eq' ">REGEXP_LIKE(!{item.field}, '^' || @{item.data} || '$','i')</when>
+				           		<when test="item.op =='ne' ">!{item.field} <![CDATA[ != ]]> @{item.data}</when>
+				           		<when test="item.op =='lt' ">!{item.field} <![CDATA[ < ]]> @{item.data}</when>
+				           		<when test="item.op =='le' ">!{item.field} <![CDATA[ <= ]]> @{item.data}</when>
+				           		<when test="item.op =='gt' ">!{item.field} <![CDATA[ > ]]> @{item.data}</when>
+				           		<when test="item.op =='ge' ">!{item.field} <![CDATA[ >= ]]> @{item.data}</when>
+				           		<when test="item.op =='bw' ">REGEXP_LIKE(!{item.field}, '^' || @{item.data},'i')</when>
+				           		<when test="item.op =='bn' "> NOT REGEXP_LIKE(!{item.field}, '^' || @{item.data},'i')</when>
+				           		<when test="item.op =='in' "></when>
+				           		<when test="item.op =='ni' "></when>
+				           		<when test="item.op =='ew' "> REGEXP_LIKE(!{item.field}, @{item.data}|| '$','i')</when>
+				           		<when test="item.op =='en' "> NOT REGEXP_LIKE(!{item.field}, @{item.data}|| '$','i')</when>
+				           		<when test="item.op =='cn' ">REGEXP_LIKE(!{item.field}, REGEXP_REPLACE(@{item.data},' ','|'),'i')</when>
+				           		<when test="item.op =='nc' ">NOT REGEXP_LIKE(!{item.field}, REGEXP_REPLACE(@{item.data},' ','|'),'i')</when>
+				           		</choose>
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			!{filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> !{group.groupOp} </if>
+	           		 			<choose>
+									<when test="rule.data.equalsIgnoreCase('isnull')">${rule.field} is null</when>	
+					           		<when test="rule.op =='eq' ">REGEXP_LIKE(!{rule.field}, '^' || @{rule.data}|| '$','i')</when>
+					           		<when test="rule.op =='ne' ">!{rule.field} <![CDATA[ != ]]> @{rule.data}</when>
+					           		<when test="rule.op =='lt' ">!{rule.field} <![CDATA[ < ]]> @{rule.data}</when>
+					           		<when test="rule.op =='le' ">!{rule.field} <![CDATA[ <= ]]> @{rule.data}</when>
+					           		<when test="rule.op =='gt' ">!{rule.field} <![CDATA[ > ]]> @{rule.data}</when>
+					           		<when test="rule.op =='ge' ">!{rule.field} <![CDATA[ >= ]]> @{rule.data}</when>
+					           		<when test="rule.op =='bw' ">REGEXP_LIKE(!{rule.field}, '^' || @{rule.data},'i')</when>
+					           		<when test="rule.op =='bn' "> NOT REGEXP_LIKE(!{rule.field}, '^' || @{rule.data},'i')</when>
+					           		<when test="rule.op =='in' "></when>
+					           		<when test="rule.op =='ni' "></when>
+					           		<when test="rule.op =='ew' "> REGEXP_LIKE(!{rule.field}, @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='en' "> NOT REGEXP_LIKE(!{rule.field}, @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='cn' ">REGEXP_LIKE(!{rule.field}, REGEXP_REPLACE(@{rule.data},' ','|'),'i')</when>
+					           		<when test="rule.op =='nc' ">NOT REGEXP_LIKE(!{rule.field}, REGEXP_REPLACE(@{rule.data},' ','|'),'i')</when>
+					           		</choose> 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+		) A
+		where
+    	<![CDATA[
+	    	A.row_num >  to_number(@{rows}) * (to_number(@{page}) -1) 
+	    	and A.row_num <= to_number(@{rows}) * to_number(@{page})
+    	]]>
+</script>
+<script type="text/aaa" id="pagelistFooterMysql">
+	) A where 1=1 
+			<choose>
+				<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+					and (
+					<if test="filters.rules.size() > 0" >
+			       		<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+			           		<if test="index > 0 "> !{filters.groupOp} </if>
+							<choose>
+								<when test="item.data.equalsIgnoreCase('isnull')">${item.field} is null</when>
+				    			<when test="item.op =='eq' ">REGEXP_LIKE(!{item.field}, '^' || @{item.data} || '$','i')</when>
+				           		<when test="item.op =='ne' ">!{item.field} <![CDATA[ != ]]> @{item.data}</when>
+				           		<when test="item.op =='lt' ">!{item.field} <![CDATA[ < ]]> @{item.data}</when>
+				           		<when test="item.op =='le' ">!{item.field} <![CDATA[ <= ]]> @{item.data}</when>
+				           		<when test="item.op =='gt' ">!{item.field} <![CDATA[ > ]]> @{item.data}</when>
+				           		<when test="item.op =='ge' ">!{item.field} <![CDATA[ >= ]]> @{item.data}</when>
+				           		<when test="item.op =='bw' ">REGEXP_LIKE(!{item.field}, '^' || @{item.data},'i')</when>
+				           		<when test="item.op =='bn' "> NOT REGEXP_LIKE(!{item.field}, '^' || @{item.data},'i')</when>
+				           		<when test="item.op =='in' "></when>
+				           		<when test="item.op =='ni' "></when>
+				           		<when test="item.op =='ew' "> REGEXP_LIKE(!{item.field}, @{item.data}|| '$','i')</when>
+				           		<when test="item.op =='en' "> NOT REGEXP_LIKE(!{item.field}, @{item.data}|| '$','i')</when>
+				           		<when test="item.op =='cn' ">REGEXP_LIKE(!{item.field}, REGEXP_REPLACE(@{item.data},' ','|'),'i')</when>
+				           		<when test="item.op =='nc' ">NOT REGEXP_LIKE(!{item.field}, REGEXP_REPLACE(@{item.data},' ','|'),'i')</when>
+				           		</choose>
+			       		</foreach>	
+			       	</if>	
+			       	<if test="filters.groups != null and filters.groups.size() > 0">
+		       			<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+			       			<if test="group.rules.size() > 0">
+			       			!{filters.groupOp}
+				           	<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+					        	<if test="rule_index > 0 "> !{group.groupOp} </if>
+	           		 			<choose>
+									<when test="rule.data.equalsIgnoreCase('isnull')">${rule.field} is null</when>	
+					           		<when test="rule.op =='eq' ">REGEXP_LIKE(!{rule.field}, '^' || @{rule.data}|| '$','i')</when>
+					           		<when test="rule.op =='ne' ">!{rule.field} <![CDATA[ != ]]> @{rule.data}</when>
+					           		<when test="rule.op =='lt' ">!{rule.field} <![CDATA[ < ]]> @{rule.data}</when>
+					           		<when test="rule.op =='le' ">!{rule.field} <![CDATA[ <= ]]> @{rule.data}</when>
+					           		<when test="rule.op =='gt' ">!{rule.field} <![CDATA[ > ]]> @{rule.data}</when>
+					           		<when test="rule.op =='ge' ">!{rule.field} <![CDATA[ >= ]]> @{rule.data}</when>
+					           		<when test="rule.op =='bw' ">REGEXP_LIKE(!{rule.field}, '^' || @{rule.data},'i')</when>
+					           		<when test="rule.op =='bn' "> NOT REGEXP_LIKE(!{rule.field}, '^' || @{rule.data},'i')</when>
+					           		<when test="rule.op =='in' "></when>
+					           		<when test="rule.op =='ni' "></when>
+					           		<when test="rule.op =='ew' "> REGEXP_LIKE(!{rule.field}, @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='en' "> NOT REGEXP_LIKE(!{rule.field}, @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='cn' ">REGEXP_LIKE(!{rule.field}, REGEXP_REPLACE(@{rule.data},' ','|'),'i')</when>
+					           		<when test="rule.op =='nc' ">NOT REGEXP_LIKE(!{rule.field}, REGEXP_REPLACE(@{rule.data},' ','|'),'i')</when>
+					           		</choose> 
+					       	</foreach>
+					       	</if>
+				       	</foreach>
+		       		</if> 
+		       		 )
+		   		</when>
+	   		</choose>
+		) A
+		LIMIT @{int_limit} OFFSET @{int_offset}
+		
+</script>
+<script type="text/aaa" id="pageTotalFooter">
+	) a
+	where 1=1 			
+	<choose>
+		<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+			and (
+			<if test="filters.rules.size() > 0" >
+				<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+					<if test="index > 0 "> !{filters.groupOp} </if>
+					<choose>
+				    <when test="item.op =='eq' ">REGEXP_LIKE(!{item.field}, '^' || @{item.data} || '$','i')</when>
+				           		<when test="item.op =='ne' ">!{item.field} <![CDATA[ != ]]> @{item.data}</when>
+				           		<when test="item.op =='lt' ">!{item.field} <![CDATA[ < ]]> @{item.data}</when>
+				           		<when test="item.op =='le' ">!{item.field} <![CDATA[ <= ]]> @{item.data}</when>
+				           		<when test="item.op =='gt' ">!{item.field} <![CDATA[ > ]]> @{item.data}</when>
+				           		<when test="item.op =='ge' ">!{item.field} <![CDATA[ >= ]]> @{item.data}</when>
+				           		<when test="item.op =='bw' ">REGEXP_LIKE(!{item.field}, '^' || @{item.data},'i')</when>
+				           		<when test="item.op =='bn' "> NOT REGEXP_LIKE(!{item.field}, '^' || @{item.data},'i')</when>
+				           		<when test="item.op =='in' "></when>
+				           		<when test="item.op =='ni' "></when>
+				           		<when test="item.op =='ew' "> REGEXP_LIKE(!{item.field}, @{item.data} || '$','i')</when>
+				           		<when test="item.op =='en' "> NOT REGEXP_LIKE(!{item.field}, @{item.data} || '$','i')</when>
+				           		<when test="item.op =='cn' ">REGEXP_LIKE(!{item.field}, REGEXP_REPLACE(@{item.data},' ','|'),'i')</when>
+				           		<when test="item.op =='cn' ">NOT REGEXP_LIKE(!{item.field}, REGEXP_REPLACE(@{item.data},' ','|'),'i')</when>
+				           		</choose>
+				</foreach>	
+			</if>	
+			<if test="filters.groups != null and filters.groups.size() > 0">
+				<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+					<if test="group.rules.size() > 0">
+					!{filters.groupOp}
+					<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						<if test="rule_index > 0 "> !{group.groupOp} </if>
+						<choose>
+					           		<when test="rule.op =='eq' ">REGEXP_LIKE(!{rule.field}, '^' || @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='ne' ">!{rule.field} <![CDATA[ != ]]> @{rule.data}</when>
+					           		<when test="rule.op =='lt' ">!{rule.field} <![CDATA[ < ]]> @{rule.data}</when>
+					           		<when test="rule.op =='le' ">!{rule.field} <![CDATA[ <= ]]> @{rule.data}</when>
+					           		<when test="rule.op =='gt' ">!{rule.field} <![CDATA[ > ]]> @{rule.data}</when>
+					           		<when test="rule.op =='ge' ">!{rule.field} <![CDATA[ >= ]]> @{rule.data}</when>
+					           		<when test="rule.op =='bw' ">REGEXP_LIKE(!{rule.field}, '^' || @{rule.data},'i')</when>
+					           		<when test="rule.op =='bn' "> NOT REGEXP_LIKE(!{rule.field}, '^' || @{rule.data},'i')</when>
+					           		<when test="rule.op =='in' "></when>
+					           		<when test="rule.op =='ni' "></when>
+					           		<when test="rule.op =='ew' "> REGEXP_LIKE(!{rule.field}, @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='en' "> NOT REGEXP_LIKE(!{rule.field}, @{rule.data} || '$','i')</when>
+					           		<when test="rule.op =='cn' ">REGEXP_LIKE(!{rule.field}, REGEXP_REPLACE(@{rule.data},' ','|'),'i')</when>
+					           		<when test="rule.op =='cn' ">NOT REGEXP_LIKE(!{rule.field}, REGEXP_REPLACE(@{rule.data},' ','|'),'i')</when>
+					           		</choose>           		 
+					</foreach>
+					</if>
+				</foreach>
+			</if> 
+				)
+		</when>
+	</choose>
+	) a
+</script>
+<script type="text/aaa" id="pageTotalHead">
+	select 
+		ceil(count(*)/ @{rows} ) as total,
+		@{page} as page ,
+		count(*) records 
+	from 
+	(
+		select a.* from (
+
+</script>
+
+
+
+<script type="text/aaa" id="editSqlReactWhere">
+	<choose>
+		<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				and !{item.field} = @{item.value}
+			</foreach>
+		</when>
+		<otherwise>
+			and 1=2
+		</otherwise>
+	</choose>
+</script>
+<script type="text/aaa" id="jstreeSearchJson">
+		<choose>
+   			<when test="searchJson != null and searchJson != '' and searchJson.fields != null and searchJson.fields.size() > 0  ">   				
+   				<foreach collection="searchJson.fields" item="field" index="index"  open=" and " separator=" and " close="">
+	                <choose>
+	                	<when test="field.isArray == true ">
+		                	!{field.field} in 
+			                <foreach collection="field.value" item="item" index="index"  open="(" separator=" , " close=")">
+			                	@{item}
+			                </foreach>
+			        	</when>
+			        	<otherwise>
+			        		!{field.field} = @{field.value}
+			        	</otherwise>
+	                </choose>
+	                
+	            </foreach>
+   			</when>
+   			<otherwise></otherwise>
+   		</choose>
+		<choose><when test="sidx != null and sidx != '' "> order by !{sidx} <if test="sord != null and sord != '' "> !{sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
+</script>
+<iframe name="mainFrame" id="mainFrame" src="/dashboard/generic.html?viewName=schema/manage_tabs&sender=${param.sender}" style="min-width:1000px; width:100%;border: 0;height: 1000px; display:block ;"></iframe>
+
 </html>

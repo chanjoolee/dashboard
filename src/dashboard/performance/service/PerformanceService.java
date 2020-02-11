@@ -39,14 +39,15 @@ public class PerformanceService {
 		return list;
 	}	
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<?> folderList(Map<Object, Object> parameter) {
-		
-		List models = commonService.pmsModelListByPjtId(parameter);
-		parameter.put("models", models);
-		List list = (List)dao.selectList("dashboard.preformance.folderlist", parameter);
-		return list;
-	}
+	/*
+	 * @SuppressWarnings({ "rawtypes", "unchecked" }) public List<?>
+	 * folderList(Map<Object, Object> parameter) {
+	 * 
+	 * List models = commonService.pmsModelListByPjtId(parameter);
+	 * parameter.put("models", models); List list =
+	 * (List)dao.selectList("dashboard.preformance.folderlist", parameter); return
+	 * list; }
+	 */
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void saveGoodData(Map<Object, Object> parameter) {
