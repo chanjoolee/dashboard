@@ -157,7 +157,14 @@ public class CommonService {
     	
     	String upload = "upload";
     	String uploadBoard = "dashboard";
-      
+    	Boolean useRealFileName = false;
+		
+    	if ( resultDs.get("uploadBoard") != null)
+    		uploadBoard = resultDs.get("uploadBoard").toString();
+    	
+    	if(resultDs.get("useRealFileName") != null && resultDs.get("useRealFileName").toString().equalsIgnoreCase("Y")) {
+			useRealFileName = true;
+		}
     	/*
     	 * validate 
 	   		request type
@@ -182,13 +189,15 @@ public class CommonService {
     	
 		SimpleDateFormat dateFile = new SimpleDateFormat("yyyyMMdd");
 		Date nowFile = new Date();
-		String curDateFile = dateFile.format(nowFile);    	
+		String curDateFile = "/" + dateFile.format(nowFile);
+		if (useRealFileName)
+			curDateFile = "";
     	
     	/*
     	 * process files
     	 */
     	//String uploadPath = fileUploadProperties.getProperty("file.upload.path")+"\\"+request.getParameter("grpName");
-    	String uploadPath = multiRequest.getSession().getServletContext().getRealPath("/") + "/" + upload + "/" + uploadBoard + "/" +  curDateFile;
+    	String uploadPath = multiRequest.getSession().getServletContext().getRealPath("/") + "/" + upload + "/" + uploadBoard + curDateFile;
  
     	File saveFolder = new File(uploadPath);
     	// 디렉토리 생성 (보안 취약점 개선) 2009.04.02
@@ -213,12 +222,14 @@ public class CommonService {
     				int i = -1;
     				i = file.getOriginalFilename().lastIndexOf(".");
     				String realFileName = curDate+file.getOriginalFilename().substring(i,file.getOriginalFilename().length());
-
+    				if (useRealFileName)
+    					realFileName = file.getOriginalFilename();
+    				
     				//filePath = uploadPath + "\\" + realFileName;
     				filePath = uploadPath + "/" + realFileName;
     				logger.debug("filePath==>"+filePath);
     				//String path = "/upload/"+req.getParameter("grpName")+"/"+realFileName;
-    				String path = "/" + upload + "/" + uploadBoard + "/" + curDateFile + "/" + realFileName;
+    				String path = "/" + upload + "/" + uploadBoard  + curDateFile + "/" + realFileName;
     				logger.debug("path==>"+path);
     				file.transferTo(new File(filePath));
     				

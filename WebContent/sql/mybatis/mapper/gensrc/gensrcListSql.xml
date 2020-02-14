@@ -336,13 +336,4 @@
 	where b.TABLE_NAME is not null
 	order by 1,2,3,4
 </select>
-<select id="jstree.doc" resultType="hashmap" >
-	select  
-		a.ID as id, 
-		a.ID as text ,
-		(select count(b.id) from JSTREE_DOC b where b.parent_id = a.id) children_cnt ,
-		parent_id
-	from JSTREE_DOC a
-	where a.parent_id = #{id}
-</select>
 </mapper>

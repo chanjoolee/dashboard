@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="">
+<select id="jstree.doc" resultType="hashmap" >
+	select  
+		a.ID as id, 
+		a.TITLE as text ,
+		(select count(b.id) from JSTREE_DOC b where b.parent_id = a.id) children_cnt ,
+		parent_id
+	from JSTREE_DOC a
+	where a.parent_id = #{id}
+	order by position
+</select>
+<update id="jstree.update.title" parameterType="hashmap" >
+			
+	update JSTREE_DOC set
+		title = #{text} ,
+		MOD_DT = now()
+	where id = #{id} ;
+	
+</update>
+<update id="jstree.move" parameterType="hashmap" >
+			
+	update JSTREE_DOC set
+		parent_id = #{parent} ,
+		position = #{position , jdbcType=NUMERIC} ,
+		MOD_DT = now()
+	where id = #{id} ;
+	
+</update>
+<update id="jstree.copy" parameterType="hashmap" >
+	insert into JSTREE_DOC (ID, TITLE, PARENT_ID,POSITION , INS_DT)
+	values (#{id}, #{text}, #{parent} , #{position , jdbcType=NUMERIC} ,now() );
+	
+</update>
+<update id="jstree.create" parameterType="hashmap" >
+	insert into JSTREE_DOC (ID, TITLE, PARENT_ID,POSITION , INS_DT )
+	values (#{id}, #{text}, #{parent} , #{position , jdbcType=NUMERIC} ,now() );
+	
+</update>
+<update id="jstree.delete" parameterType="hashmap" >
+			
+	delete from JSTREE_DOC 
+	where id = #{id} ;
+	
+</update>
+
+
+</mapper>

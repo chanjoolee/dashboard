@@ -1702,8 +1702,8 @@
 <input type="hidden" id="detailType" name="detailType" value=""/>
 <input type="hidden" id="frameName" name="frameName" value="${param.frameName}"/>
 <input type="hidden" id="isSubFrame" name="isSubFrame" value="${param.isSubFrame}"/>
-	<div id="v_schema_searchContainer" class="srch_box2" style="margin-top: 3px;margin-left: 0px;margin-right: 0px;"></div>
-	<div id="v_schema_contentContainer" class="" style="margin-top: 3px;margin-left: 0px;margin-right: 0px;"></div>
+	<div id="v_schema_searchContainer" class="srch_box2" style="margin-top: 3px;margin-left: 20px;margin-right: 20px;"></div>
+	<div id="v_schema_contentContainer" class="" style="margin-top: 3px;margin-left: 20px;margin-right: 20px;"></div>
 </form>
 <div id="dialog-confirm"></div>
 <div id="loader" style='display:none'></div>

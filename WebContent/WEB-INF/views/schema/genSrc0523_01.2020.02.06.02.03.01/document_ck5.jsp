@@ -30,11 +30,42 @@
 		<script src="//static.jstree.com/latest/assets/dist/libs/jquery.js"></script>
 		<script src="//static.jstree.com/latest/assets/dist/jstree.min.js"></script>
 		<!-- <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script> -->
-		<script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/ckeditor.formatted.js"></script>
+		<script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/ckeditor.js"></script>
+		<!-- <script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/autosave.js"></script> -->
 
 		<script src="./js/jointjs/lodash.4.17.10.js"></script>
 		<script>
-			var editors = [];
+		var editors = [];
+		var vEditable = true;
+		function saveEditor( _id , _editor ){
+			
+			var blob = new Blob([_editor.getData()], {type: "text/plain;charset=utf-8"});
+			//var blob = yourAudioBlobCapturedFromWebAudioAPI;// for example   
+			var reader = new FileReader();
+			// this function is triggered once a call to readAsDataURL returns
+			reader.onload = function(event){
+				var fd = new FormData();
+				var fileOfBlob = new File([blob], _id + ".txt");
+				fd.append('file', fileOfBlob);
+				fd.append('uploadBoard', 'manual_ck5');
+				fd.append('useRealFileName', 'Y');
+				$.ajax({
+					type: 'POST',
+					url: '${pageContext.request.contextPath}/fileTestJson.html',
+					data: fd
+					, processData: false
+					, contentType: false
+					, success:  function(data){
+
+					} 
+					
+				});
+				
+			};
+			// trigger the read from the reader...
+			reader.readAsDataURL(blob); 
+
+		}
 		$(function () {
 			$(window).resize(function () {
 				var h = Math.max($(window).height() - 0, 420);
@@ -48,11 +79,8 @@
 							'url' : function(node) {
 								return '/dashboard/jstreeJson.html?sqlid=jstree.doc';
 							},
-							// 'url' : '/dashboard/genericlListJson.html?sqlid=jstree.doc',
 							'data' : function (node) {
 								var v_node_id = node.id;
-								// if (node.id == "#")
-								// 	v_node_id = "1";
 								return { 'id' : v_node_id };
 							},
 							'success' : function(nodes) {
@@ -81,37 +109,141 @@
 					'plugins' : ['state','dnd','contextmenu','wholerow']
 				})
 				.on('delete_node.jstree', function (e, data) {
-					$.get('?operation=delete_node', { 'id' : data.node.id })
-						.fail(function () {
+					var bind = {
+						id : data.node.id ,
+						text : data.text
+					};
+					$.ajax({
+						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.delete",
+						type: "POST",
+						data: bind , 
+						// async: false,			                    		
+						success:  function(_response){
+							if(_response.result != 'success'){
+								data.instance.refresh();
+							} 
+							// Success
+							else {
+								
+							}						                    			
+						} 
+						, error:function(request,status,error){
 							data.instance.refresh();
-						});
+							// alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+						}
+					});
 				})
 				.on('create_node.jstree', function (e, data) {
-					$.get('?operation=create_node', { 'id' : data.node.parent, 'position' : data.position, 'text' : data.node.text })
-						.done(function (d) {
-							data.instance.set_id(data.node, d.id);
-						})
-						.fail(function () {
+					var bind = {
+						id : data.node.id ,
+						parent : data.node.parent, 
+						position : data.position,
+						text : data.node.text
+					};
+					$.ajax({
+						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.create",
+						type: "POST",
+						data: bind , 
+						// async: false,			                    		
+						success:  function(_response){
+							if(_response.result != 'success'){
+								// var state = false;
+								data.instance.refresh();
+							} 
+							// Success
+							else {
+								// data.instance.set_id(data.node, d.id);
+							}						                    			
+						} 
+						, error:function(request,status,error){
 							data.instance.refresh();
-						});
+						}
+					});
+
 				})
 				.on('rename_node.jstree', function (e, data) {
-					$.get('?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
-						.fail(function () {
+					var bind = {
+						id : data.node.id ,
+						text : data.text
+					};
+					$.ajax({
+						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.update.title",
+						type: "POST",
+						data: bind , 
+						// async: false,			                    		
+						success:  function(_response){
+							if(_response.result != 'success'){
+								// var state = false;
+								data.instance.refresh();
+							} 
+							// Success
+							else {
+								
+							}						                    			
+						} 
+						, error:function(request,status,error){
 							data.instance.refresh();
-						});
+						}
+					});
+					
 				})
 				.on('move_node.jstree', function (e, data) {
-					$.get('?operation=move_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
-						.fail(function () {
-							data.instance.refresh();
+					
+					var parent = _.find(data.instance._model.data, {id : data.parent});
+					$.each(parent.children , function(i,child){
+						var bind = { 'id' : child, 'parent' : data.parent, 'position' : i };
+						$.ajax({
+							url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.move",
+							type: "POST",
+							data: bind , 
+							async: false ,			                    		
+							success:  function(_response){
+								if(_response.result != 'success'){
+									// var state = false;
+									data.instance.refresh();
+								} 
+								// Success
+								else {
+									// data.instance.set_id(data.node, d.id);
+								}						                    			
+							} 
+							, error:function(request,status,error){
+								data.instance.refresh();
+							}
 						});
+					});
+					
+					
 				})
 				.on('copy_node.jstree', function (e, data) {
-					$.get('?operation=copy_node', { 'id' : data.original.id, 'parent' : data.parent, 'position' : data.position })
-						.always(function () {
+					// { 'id' : data.original.id, 'parent' : data.parent, 'position' : data.position }
+					var bind = {
+						id : data.node.id ,
+						parent : data.node.parent, 
+						position : data.position,
+						text : data.node.text
+					};
+
+					$.ajax({
+						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.copy",
+						type: "POST",
+						data: bind , 
+						// async: false,			                    		
+						success:  function(_response){
+							if(_response.result != 'success'){
+								// var state = false;
+								data.instance.refresh();
+							} 
+							// Success
+							else {
+								// data.instance.set_id(data.node, d.id);
+							}						                    			
+						} 
+						, error:function(request,status,error){
 							data.instance.refresh();
-						});
+						}
+					});
+					
 				})
 				.on('changed.jstree', function (e, data) {
 					if(data && data.selected && data.selected.length) {
@@ -125,27 +257,39 @@
 								ckfinder: {
 									uploadUrl  : "${pageContext.request.contextPath}/ckfinderUploadJson.html"
 								}
+								// , removePlugins :'toolbar'
 							})
 							.then( editor => {
 								editors.push({
 									id : data.node.id ,
 									editor : editor 
 								});
+								editor.isReadOnly = !vEditable;
+								$(".ck.ck-button .ck.ck-tooltip").hide();
+								// getfile
+								$.ajax({
+									url: "./upload/manual_ck5/" + data.node.id + ".txt",
+									async: false,
+									success: function (content){
+										editor.setData(content);
+									}
+								});
+
+								editor.model.document.on( 'change:data', () => {
+									// console.log( 'The data has changed!' );
+									return saveEditor( data.node.id , editor );
+								} );
 							} )
 							.catch( error => {
-								console.error( error );
+								// console.error( error );
 							} );
 						}else{
 							$(v_edit.editor.ui.view.element).show();
 						}
 
-						// $.get('/dashboard/jstreeJson.html?sqlid=jstree.doc&id=' + data.selected.join(':'), function (d) {
-						// 	$('#data .default').text(d.content).show();
-						// });
 					}
 					else {
-						// $('#data .content').hide();
-						// $('#data .default').text('Select a file from the tree.').show();
+					
 					}
 				})
 				;

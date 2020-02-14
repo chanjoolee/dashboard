@@ -1823,8 +1823,8 @@
 <input type="hidden" id="detailType" name="detailType" value=""/>
 <input type="hidden" id="frameName" name="frameName" value="${param.frameName}"/>
 <input type="hidden" id="isSubFrame" name="isSubFrame" value="${param.isSubFrame}"/>
-	<div id="v_schema_searchContainer" class="srch_box2" style="margin-top: 3px;margin-left: 0px;margin-right: 0px;"></div>
-	<div id="v_schema_contentContainer" class="" style="margin-top: 3px;margin-left: 0px;margin-right: 0px;"></div>
+	<div id="v_schema_searchContainer" class="srch_box2" style="margin-top: 3px;margin-left: 20px;margin-right: 20px;"></div>
+	<div id="v_schema_contentContainer" class="" style="margin-top: 3px;margin-left: 20px;margin-right: 20px;"></div>
 </form>
 <div id="dialog-confirm"></div>
 <div id="loader" style='display:none'></div>
@@ -2082,4 +2082,6 @@
    		</choose>
 		<choose><when test="sidx != null and sidx != '' "> order by !{sidx} <if test="sord != null and sord != '' "> !{sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
 </script>
+<div style="display: none;">
 <iframe name="mainFrame" id="mainFrame" src="/dashboard/generic.html?viewName=schema/manage_tabs&sender=${param.sender}" style="min-width:1000px; width:100%;border: 0;height: 1000px; display:block ;"></iframe>
+</div>
