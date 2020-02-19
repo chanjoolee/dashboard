@@ -14,6 +14,7 @@
 		#data { margin-left:320px;  overflow: scroll;}
 		#data textarea { margin:0; padding:0; height:100%; width:100%; border:0; background:white; display:block; line-height:18px; }
 		#data, #code { font: normal normal normal 12px/18px 'Consolas', monospace !important; }
+		/* .ck.ck-editor__top { display: none;} */
 		</style>
 	</head>
 	<body>
@@ -34,6 +35,7 @@
 		<!-- <script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/autosave.js"></script> -->
 
 		<script src="./js/jointjs/lodash.4.17.10.js"></script>
+
 		<script>
 		var editors = [];
 		var vEditable = true;
