@@ -155,7 +155,7 @@
 	}
 </style>
 </head>
-<body>
+<body style="overflow: hidden;">
 <form name="form1" id="form1">
 <input type="hidden" name="sender" value="confluence"/>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0px;">
