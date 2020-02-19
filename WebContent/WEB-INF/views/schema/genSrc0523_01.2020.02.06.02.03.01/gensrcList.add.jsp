@@ -185,6 +185,12 @@
 				},
 				"_xmi:id": "_SmZl2Eg2EeqonN_RS9oRzw",
 				"_name": "url",
+				"_documentation": {
+					"file_info": {
+						"path_column": "URL"
+					}
+					
+				},
 				"__prefix": null
 			}
 		];
@@ -564,8 +570,36 @@
 			                            addRow['sqlid'] = gridJson.sqlId + ".insert";
 			
 			                            var form1 = $("#form");
-			                            _.merge(addRow, form1.serializeFormJSON() );
-			                            
+										
+										var parameter = "uploadBoard=schema";
+										parameter += "&useRealFileName=Y";
+
+										$('#form').ajaxForm({
+											url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+											, type:"POST"
+											, dataType:"json"
+											, async: false
+											, success:function(json) {
+												fileInfo = json;
+											}
+											, error:function(e){
+												alert(e);
+											}
+										});
+										$('#form').submit();
+										
+										_.merge(addRow, form1.serializeFormJSON() );
+
+										var edit_item = findAllByElName(v_schema.elements , {edit_tag : 'file'});
+										if (edit_item != null){
+											var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+											if (item_fileinfo != null){
+												addRow[edit_item.col] = item_fileinfo.orgFileName;
+												addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
+											}											
+										}
+
+
 			                            $.ajax({
 			                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
 			                                type: "POST",

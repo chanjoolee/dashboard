@@ -1024,11 +1024,12 @@ JpaAllGeneratorToolBox.prototype.fn_entities = function () {
 
 JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
     var _this = this;    
+    var file_name = _.camelCase( entity._name );
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
     if ( v_entity_doc_obj.dbType == null )
         v_entity_doc_obj.dbType = _this.generator.dbType;
-
-    var file_name = _.camelCase( entity._name );
+    v_entity_doc_obj.entityId = file_name;
+    
     var fileObj = {
         fileType: "jsp" ,
         editType: "general",
@@ -1529,11 +1530,12 @@ JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
 
 JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
     var _this = this;
+    var file_name = _.camelCase( entity._name );
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
     if ( v_entity_doc_obj.dbType == null )
         v_entity_doc_obj.dbType = _this.generator.dbType;
+    v_entity_doc_obj.entityId = file_name;
     
-    var file_name = _.camelCase( entity._name );
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
     var fileObj = {
         fileType: "jsp" ,
@@ -1729,6 +1731,8 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
 
                 });
 
+
+
                 var schema_options = {
                     keys : vKeys ,
                     fn_change: function( input ){									
@@ -1854,8 +1858,40 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                             addRow['sqlid'] = gridJson.sqlId + ".insert";
 
                             var form1 = $("#form");
+
+                            // fileupload
+                            var parameter = "";
+                            // if you want to upload options ....
+                            // parameter = "uploadBoard=schema";
+							// parameter += "&useRealFileName=Y";
+                            $('#form').ajaxForm({
+                                url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                , type:"POST"
+                                , dataType:"json"
+                                , async: false
+                                , success:function(json) {
+                                    fileInfo = json;
+                                }
+                                , error:function(e){
+                                    alert(e);
+                                }
+                            });
+                            $('#form').submit();
                             _.merge(addRow, form1.serializeFormJSON() );
                             
+                            var edit_items = filterAllByElName(v_schema.elements , {edit_tag : 'file'});
+                            if (edit_items.length > 0 ){
+                                $.each(edit_items, function(i,edit_item){
+                                    var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+                                    if (item_fileinfo != null){
+                                        addRow[edit_item.col] = item_fileinfo.orgFileName;
+                                        addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
+                                        
+                                    }		
+                                });
+                                									
+                            }
+
                             $.ajax({
                                 url: "${pageContext.request.contextPath}/genericSaveJson.html",
                                 type: "POST",
@@ -2219,11 +2255,12 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
 
 JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
     var _this = this;
+    var file_name = _.camelCase( entity._name );
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
     if ( v_entity_doc_obj.dbType == null )
         v_entity_doc_obj.dbType = _this.generator.dbType;
+    v_entity_doc_obj.entityId = file_name;
     
-    var file_name = _.camelCase( entity._name );
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
     var fileObj = {
         fileType: "jsp" ,
@@ -2538,7 +2575,38 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                             addRow['sqlid'] = gridJson.sqlId + ".insert";
 
                             var form1 = $("#form");
+                            // fileupload
+                            var parameter = "";
+                            // if you want to upload options ....
+                            // parameter = "uploadBoard=schema";
+							// parameter += "&useRealFileName=Y";
+                            $('#form').ajaxForm({
+                                url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                , type:"POST"
+                                , dataType:"json"
+                                , async: false
+                                , success:function(json) {
+                                    fileInfo = json;
+                                }
+                                , error:function(e){
+                                    alert(e);
+                                }
+                            });
+                            $('#form').submit();
                             _.merge(addRow, form1.serializeFormJSON() );
+                            
+                            var edit_items = filterAllByElName(v_schema.elements , {edit_tag : 'file'});
+                            if (edit_items.length > 0 ){
+                                $.each(edit_items, function(i,edit_item){
+                                    var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+                                    if (item_fileinfo != null){
+                                        addRow[edit_item.col] = item_fileinfo.orgFileName;
+                                        addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
+                                        
+                                    }		
+                                });
+                                									
+                            }
                             
                             $.ajax({
                                 url: "${pageContext.request.contextPath}/genericSaveJson.html",
@@ -2885,12 +2953,13 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
 
 JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
     var _this = this;
+    var file_name = _.camelCase( entity._name );
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
     if ( v_entity_doc_obj.dbType == null )
         v_entity_doc_obj.dbType = _this.generator.dbType;
-    
+    v_entity_doc_obj.entityId = file_name;
 
-    var file_name = _.camelCase( entity._name );
+    
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
     var fileObj = {
         fileType: "jsp" ,
@@ -3531,11 +3600,12 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
 
 JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
     var _this = this;
+    var file_name = _.camelCase( entity._name );
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
     if ( v_entity_doc_obj.dbType != null )
         v_entity_doc_obj.dbType = _this.generator.dbType;
-
-    var file_name = _.camelCase( entity._name );
+    v_entity_doc_obj.entityId = file_name;
+   
     var originFile = _.find(_this.files , {editType : "general", fileName :file_name});
     var fileObj = {
         fileType: "jsp" ,
@@ -4800,7 +4870,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         
         //  script
         src = '\t<script>'; _file.sources.push(src);
-        src = '\t\tlocalStorage.removeItem("jstree");'; _file.sources.push(src);
+        src = '\t\t//localStorage.removeItem("jstree");'; _file.sources.push(src);
 
         src = '\t\t' + '// to find origin list page not use in general'; _file.sources.push(src);
         src = '\t\tvar parentFrame = "${param.frameName}";'; _file.sources.push(src);
@@ -4888,7 +4958,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         
         //  script
         src = '\t<script>'; _file.sources.push(src);
-        src = '\t\tlocalStorage.removeItem("jstree");'; _file.sources.push(src);
+        src = '\t\t//localStorage.removeItem("jstree");'; _file.sources.push(src);
         src = '\t\t' + '// to find origin list page'; _file.sources.push(src);
         src = '\t\tvar parentFrame = "${param.frameName}";'; _file.sources.push(src);
 		src = '\t\tif (parentFrame != ""){'; _file.sources.push(src);
@@ -4959,7 +5029,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         
         //  script
         src = '\t<script>'; _file.sources.push(src);
-        src = '\t\tlocalStorage.removeItem("jstree");'; _file.sources.push(src);
+        src = '\t\t//localStorage.removeItem("jstree");localStorage.removeItem("jstree");'; _file.sources.push(src);
         src = '\t\t' + '// to find origin list page'; _file.sources.push(src);
         src = '\t\tvar parentFrame = "${param.frameName}";'; _file.sources.push(src);
 		src = '\t\tif (parentFrame != ""){'; _file.sources.push(src);
@@ -5029,7 +5099,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         
         //  script
         src = '\t<script>'; _file.sources.push(src);
-        src = '\t\tlocalStorage.removeItem("jstree");'; _file.sources.push(src);
+        src = '\t\t//localStorage.removeItem("jstree");'; _file.sources.push(src);
         src = '\t\t' + '// to find origin list page'; _file.sources.push(src);
         src = '\t\tvar parentFrame = "${param.frameName}";'; _file.sources.push(src);
 		src = '\t\tif (parentFrame != ""){'; _file.sources.push(src);
@@ -5099,7 +5169,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         
         //  script
         src = '\t<script>'; _file.sources.push(src);
-        src = '\t\tlocalStorage.removeItem("jstree");'; _file.sources.push(src);
+        src = '\t\t//localStorage.removeItem("jstree");'; _file.sources.push(src);
         src = '\t\tvar parentFrame = parent.${param.frameName};'; _file.sources.push(src);
         src = '\t\tvar beforEditRow = {};'; _file.sources.push(src);
         src = '\t\tvar EfContextPath = "";'; _file.sources.push(src);

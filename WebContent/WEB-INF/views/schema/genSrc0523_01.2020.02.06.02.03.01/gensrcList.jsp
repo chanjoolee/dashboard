@@ -260,6 +260,12 @@
 				},
 				"_xmi:id": "_SmZl2Eg2EeqonN_RS9oRzw",
 				"_name": "url",
+				"_documentation": {
+					"file_info": {
+						"path_column": "URL"
+					}
+					
+				},
 				"__prefix": null
 			}
 		];
@@ -978,30 +984,45 @@
 							"label": "Url",
 							"name": "URL",
 							"id": "URL",
-							"align": "center",
+							"align": "left",
 							"entityName": "gensrc_list",
 							"editable": true,
 							"gridId": "gensrcListGrid",
+							"file_info": {
+								"path_column": "URL"
+							} ,
 							"editrules": {
 								"edithidden": true
 							},
 							"cellattr": function( rowId, cellValue, rawObject, cm, rdata ){
-							                        var grid = $(this).jqGrid();
-							                        var vGridOpt = grid.getGridParam();                    
-							                        var result = "";
-							                        
-							                        if ( cm.file_info != null){
-							                            result = " class='glyphicon glyphicon-download-alt'";
-							                            result += " style='vertical-align: middle;";
-							                            result += "cursor:pointer;'";
-							                        }
-							                        result += " gridId='" + vGridOpt.gridId + "'";
-							                        result += " entityId='" + vGridOpt.entityId + "'";
-							                        result += " columnName='" + cm.name + "'";
-							                        result += " cellValue='" + rawObject[cm.name] + "'";
-							                        
-							                        return result;
-							                    }
+								var grid = $(this).jqGrid();
+								var vGridOpt = grid.getGridParam();                    
+								var result = "";
+								
+								if ( cm.file_info != null){
+									result = " class='glyphicon glyphicon-download-alt'";
+									result += " style='vertical-align: middle;";
+									result += "cursor:pointer;'";
+								}
+								result += " gridId='" + vGridOpt.gridId + "'";
+								result += " entityId='" + vGridOpt.entityId + "'";
+								result += " columnName='" + cm.name + "'";
+								result += " cellValue='" + rawObject[cm.name] + "'";
+								
+								return result;
+							} ,
+							"formatter": function(cellValue, options, rowObject){
+								
+								var value_split = cellValue.split("/");
+								var return_text = value_split.pop();
+								return return_text;
+							},
+							unformat : function( cellval ,  opts , cell){
+								var grid = $(this).jqGrid();
+								var originVal = $(cell).attr("cellValue");
+								//opts.colModel.editoptions.value[]
+								return originVal;
+							}
 
 						},
 						{
@@ -1231,6 +1252,7 @@
 
 		};
 		var entityDoc = {
+			entityId : "gensrc_list",
 			"custom_columns": [
 				{
 					"column_name": "btn_exec",
@@ -1250,7 +1272,7 @@
 							var grid = $("#gensrcListGrid");
 							var rowData = grid.getRowData(rowId);
 							
-						    var url = rowData.URL;
+						    var url = "." + rowData.URL;
 						    $.ajax({
 						        url: url ,
 						        // data: {sqlid: "codegen.tables",owner: $("#owner").val()}, 

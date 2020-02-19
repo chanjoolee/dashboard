@@ -2554,6 +2554,9 @@ function fn_makeHtml( container , _schema ){
 					
 					var width_select = "100%";
 					var width_input = "100%";
+					if (item.file_info != null){
+						item.edit_tag = "file";
+					}
 					if( item.edit_tag != undefined )	{
 						tdOption.edit_tag = item.edit_tag;
 						if(item.edit_style != undefined ){
