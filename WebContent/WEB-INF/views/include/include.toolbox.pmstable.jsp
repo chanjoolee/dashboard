@@ -3,10 +3,11 @@
 		<link rel="stylesheet" type="text/css" href="./css/pms/style_master_pop.css" />
 		<%-- 1. jquery --%>
 		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
-		<script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
-		<script src="js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+		<script type="text/javascript" src="./js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script>
+		<script src="./js/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
 		<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.3.custom/jquery-ui.css" />
 		<!-- <script src="js/jquery.csv-0.71.js"></script> -->
+		<script src="./js/jquery/jquery.form.js"></script>
 		
 		<%-- jqgrid --%>
 		<!-- <script type="text/javascript" src="js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js"></script> -->
