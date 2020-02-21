@@ -258,8 +258,8 @@
 							.create( document.querySelector( '#data .default' ) ,{
 								ckfinder: {
 									uploadUrl  : "${pageContext.request.contextPath}/ckfinderUploadJson.html"
-								}
-								// , removePlugins :'toolbar'
+								} 
+								
 							})
 							.then( editor => {
 								editors.push({
