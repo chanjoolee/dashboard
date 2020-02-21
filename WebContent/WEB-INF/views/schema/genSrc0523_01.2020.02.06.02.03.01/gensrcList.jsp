@@ -393,7 +393,7 @@
 						"viewrecords": true,
 						"width": "100%",
 						"autowidth": true,
-						"height": 650,
+						"height": 650 ,
 						"multiselect": false,
 						"multiboxonly": true,
 						"multiSort": true,
@@ -1417,7 +1417,7 @@
 			                    grid_shema.gridOpt.height = 420;
 			                    grid_shema.gridOpt.rowNum = 15;
 			                }else {
-			                    grid_shema.gridOpt.height = 650;
+			                    grid_shema.gridOpt.height = "100%";
 			                    grid_shema.gridOpt.rowNum = 20;
 			                }
 			            },
