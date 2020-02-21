@@ -67,11 +67,12 @@ public class CommonController {
 
     
     @RequestMapping(value = "/generic",method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView generic(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletRequest request,ModelAndView mav) {
+    public ModelAndView generic(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletResponse response,HttpServletRequest request, ModelAndView mav) {
     	//parameter.put("pjtCodeList",req.getParameterValues("pjtCodeList"));
     	mav.addObject("searchVO",searchVO);
     	commonService.requestToVo(request, searchVO);
     	mav.setViewName(searchVO.get("viewName").toString());
+    	mav.addObject("locale_language",response.getLocale().getLanguage());
         return mav;
     }
     

@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=utf-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -37,6 +40,10 @@
 		<script src="./js/jointjs/lodash.4.17.10.js"></script>
 
 		<script>
+		var language = "${locale_language}";
+		var document_postfix = "";
+		if (language != "ko")
+			document_postfix = "_en";
 		var editors = [];
 		var vEditable = true;
 		function saveEditor( _id , _editor ){
@@ -47,7 +54,7 @@
 			// this function is triggered once a call to readAsDataURL returns
 			reader.onload = function(event){
 				var fd = new FormData();
-				var fileOfBlob = new File([blob], _id + ".txt");
+				var fileOfBlob = new File([blob], _id + document_postfix + ".txt");
 				fd.append('file', fileOfBlob);
 				fd.append('uploadBoard', 'manual_ck5');
 				fd.append('useRealFileName', 'Y');
@@ -270,7 +277,7 @@
 								$(".ck.ck-button .ck.ck-tooltip").hide();
 								// getfile
 								$.ajax({
-									url: "./upload/manual_ck5/" + data.node.id + ".txt",
+									url: "./upload/manual_ck5/" + data.node.id +  document_postfix + ".txt",
 									async: false,
 									success: function (content){
 										editor.setData(content);
