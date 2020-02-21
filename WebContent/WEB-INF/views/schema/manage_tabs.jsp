@@ -17,74 +17,74 @@
 			"text": "tabList",
 			"elements": [
 				
-				{
-					"type": "tab_iframe",
-					"id": "gensrcListIframe",
-					"name": "gensrcListIframe",
-					"label": "Generate list",
-					"text": "Generate list",
-					"connected_content": {
-						"viewName": "gensrc/genSrcCustom/gensrcList",
-						"form_id": "form"
-					},
-					"iframe_css": [
-						{
-							"code": "height",
-							"value": "1000px"
-						}
-					]
-				},
-				{
-					"type": "tab_iframe",
-					"id": "cmmCdIframe",
-					"name": "cmmCdIframe",
-					"label": "Common Code",
-					"text": "Common Code",
-					"connected_content": {
-						"viewName": "gensrc/genSrcCustom/gensrcCmmCd",
-						"form_id": "form"
-					},
-					"iframe_css": [
-						{
-							"code": "height",
-							"value": "1000px"
-						}
-					]
-				},
-				{
-					"type": "tab_iframe",
-					"id": "gensrcCmmUseIframe",
-					"name": "gensrcCmmUseIframe",
-					"label": "Cmm Use",
-					"text": "Cmm Use",
-					"connected_content": {
-						"viewName": "gensrc/genSrcCustom/gensrcCmmUse",
-						"form_id": "form"
-					},
-					"iframe_css": [
-						{
-							"code": "height",
-							"value": "1000px"
-						}
-					]
-				},
-				{
-					"type": "tab_iframe",
-					"id": "gensrcTabColsIframe",
-					"name": "gensrcTabColsIframe",
-					"label": "Tables",
-					"text": "Tables",
-					"connected_content": {
-						"viewName": "gensrc/genSrcCustom/gensrcTabCols",
-						"form_id": "form"
-					},
-					"iframe_css": [
-						{
-							"code": "height",
-							"value": "1000px"
-						}
-					]
-				}
+				// {
+				// 	"type": "tab_iframe",
+				// 	"id": "gensrcListIframe",
+				// 	"name": "gensrcListIframe",
+				// 	"label": "Generate list",
+				// 	"text": "Generate list",
+				// 	"connected_content": {
+				// 		"viewName": "gensrc/genSrcCustom/gensrcList",
+				// 		"form_id": "form"
+				// 	},
+				// 	"iframe_css": [
+				// 		{
+				// 			"code": "height",
+				// 			"value": "1000px"
+				// 		}
+				// 	]
+				// },
+				// {
+				// 	"type": "tab_iframe",
+				// 	"id": "cmmCdIframe",
+				// 	"name": "cmmCdIframe",
+				// 	"label": "Common Code",
+				// 	"text": "Common Code",
+				// 	"connected_content": {
+				// 		"viewName": "gensrc/genSrcCustom/gensrcCmmCd",
+				// 		"form_id": "form"
+				// 	},
+				// 	"iframe_css": [
+				// 		{
+				// 			"code": "height",
+				// 			"value": "1000px"
+				// 		}
+				// 	]
+				// },
+				// {
+				// 	"type": "tab_iframe",
+				// 	"id": "gensrcCmmUseIframe",
+				// 	"name": "gensrcCmmUseIframe",
+				// 	"label": "Cmm Use",
+				// 	"text": "Cmm Use",
+				// 	"connected_content": {
+				// 		"viewName": "gensrc/genSrcCustom/gensrcCmmUse",
+				// 		"form_id": "form"
+				// 	},
+				// 	"iframe_css": [
+				// 		{
+				// 			"code": "height",
+				// 			"value": "1000px"
+				// 		}
+				// 	]
+				// },
+				// {
+				// 	"type": "tab_iframe",
+				// 	"id": "gensrcTabColsIframe",
+				// 	"name": "gensrcTabColsIframe",
+				// 	"label": "Tables",
+				// 	"text": "Tables",
+				// 	"connected_content": {
+				// 		"viewName": "gensrc/genSrcCustom/gensrcTabCols",
+				// 		"form_id": "form"
+				// 	},
+				// 	"iframe_css": [
+				// 		{
+				// 			"code": "height",
+				// 			"value": "1000px"
+				// 		}
+				// 	]
+				// }
 				
 			]
 		};

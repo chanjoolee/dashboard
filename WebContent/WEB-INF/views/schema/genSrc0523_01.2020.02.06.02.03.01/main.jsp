@@ -531,7 +531,22 @@
 			"label": "",
 			"text": "tabList",
 			"elements": [
-				
+				{
+					"type": "tab_iframe",
+					"id": "gensrcListIframe",
+					"name": "gensrcListIframe",
+					"label": "gensrcList",
+					"connected_content": {
+						"viewName": "schema/genSrc0523_01.2020.02.06.02.03.01/gensrcList",
+						"form_id": "form"
+					},
+					"iframe_css": [
+						{
+							"code": "height",
+							"value": "1000px"
+						}
+					]
+				},
 				{
 					"type": "tab_iframe",
 					"id": "gensrcCmmCdIframe",
@@ -580,23 +595,23 @@
 							"value": "1000px"
 						}
 					]
-				},
-				{
-					"type": "tab_iframe",
-					"id": "gensrcListIframe",
-					"name": "gensrcListIframe",
-					"label": "gensrcList",
-					"connected_content": {
-						"viewName": "schema/genSrc0523_01.2020.02.06.02.03.01/gensrcList",
-						"form_id": "form"
-					},
-					"iframe_css": [
-						{
-							"code": "height",
-							"value": "1000px"
-						}
-					]
 				}
+				// ,{
+				// 	"type": "tab_iframe",
+				// 	"id": "gensrcListIframe",
+				// 	"name": "gensrcListIframe",
+				// 	"label": "gensrcList",
+				// 	"connected_content": {
+				// 		"viewName": "schema/genSrc0523_01.2020.02.06.02.03.01/gensrcList",
+				// 		"form_id": "form"
+				// 	},
+				// 	"iframe_css": [
+				// 		{
+				// 			"code": "height",
+				// 			"value": "1000px"
+				// 		}
+				// 	]
+				// }
 			]
 		}
 </script>
