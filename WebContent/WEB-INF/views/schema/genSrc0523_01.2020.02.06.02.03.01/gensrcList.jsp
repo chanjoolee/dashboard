@@ -1034,7 +1034,7 @@
 							"editable": true,
 							"gridId": "gensrcListGrid",
 							"formatter": function(cellValue, options, rowObject){
-												var btnHtml = '<button type="button" class="btn btn-warning btn-sm" onclick="entityDoc.customFunc.fn_generateClick(\''+ options.rowId +'\');">Generate</button>';
+												var btnHtml = '<button type="button" class="btn btn-warning btn-xs" onclick="entityDoc.customFunc.fn_generateClick(\''+ options.rowId +'\');">Generate</button>';
 												return btnHtml;
 											}
 
@@ -1259,7 +1259,7 @@
 					"column_after": "url",
 					"properties": {
 						"formatter": function(cellValue, options, rowObject){
-											var btnHtml = '<button type="button" class="btn btn-warning btn-sm" onclick="entityDoc.customFunc.fn_generateClick(\''+ options.rowId +'\');">Generate</button>';
+											var btnHtml = '<button type="button" class="btn btn-warning btn-xs" onclick="entityDoc.customFunc.fn_generateClick(\''+ options.rowId +'\');">Generate</button>';
 											return btnHtml;
 										},
 
