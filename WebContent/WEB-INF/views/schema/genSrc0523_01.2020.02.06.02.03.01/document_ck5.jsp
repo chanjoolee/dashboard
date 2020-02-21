@@ -40,12 +40,20 @@
 		<script src="./js/jointjs/lodash.4.17.10.js"></script>
 
 		<script>
-		var language = "${locale_language}";
-		var document_postfix = "";
-		if (language != "ko")
-			document_postfix = "_en";
+		
 		var editors = [];
+		var cur_editor = null;
 		var vEditable = true;
+		function get_language(){
+			var language = "${locale_language}";
+			if(parent.$("#language_head") != null)
+				language = parent.$("#language_head:first-child").text();
+
+			var document_postfix = "";
+			if (language != "ko")
+				document_postfix = "_en";
+			return document_postfix;
+		}
 		function saveEditor( _id , _editor ){
 			
 			var blob = new Blob([_editor.getData()], {type: "text/plain;charset=utf-8"});
@@ -54,7 +62,7 @@
 			// this function is triggered once a call to readAsDataURL returns
 			reader.onload = function(event){
 				var fd = new FormData();
-				var fileOfBlob = new File([blob], _id + document_postfix + ".txt");
+				var fileOfBlob = new File([blob], _id + get_language() + ".txt");
 				fd.append('file', fileOfBlob);
 				fd.append('uploadBoard', 'manual_ck5');
 				fd.append('useRealFileName', 'Y');
@@ -256,11 +264,13 @@
 				})
 				.on('changed.jstree', function (e, data) {
 					if(data && data.selected && data.selected.length) {
-						$.each( editors , function(i, edit){
-							$(edit.editor.ui.view.element).hide();
-						});
-						var v_edit = _.find(editors,{id: data.node.id});
-						if(v_edit == null){
+						// $.each( editors , function(i, edit){
+						// 	$(edit.editor.ui.view.element).hide();
+						// });
+						// var v_edit = _.find(editors,{id: data.node.id});
+						// if(v_edit == null){
+							if (cur_editor != null)
+								cur_editor.destroy();
 							ClassicEditor
 							.create( document.querySelector( '#data .default' ) ,{
 								ckfinder: {
@@ -269,20 +279,26 @@
 								
 							})
 							.then( editor => {
-								editors.push({
-									id : data.node.id ,
-									editor : editor 
-								});
+								// editors.push({
+								// 	id : data.node.id ,
+								// 	editor : editor 
+								// });
+								cur_editor = editor;
 								editor.isReadOnly = !vEditable;
 								$(".ck.ck-button .ck.ck-tooltip").hide();
 								// getfile
 								$.ajax({
-									url: "./upload/manual_ck5/" + data.node.id +  document_postfix + ".txt",
+									url: "./upload/manual_ck5/" + data.node.id +  get_language() + ".txt",
 									async: false,
 									success: function (content){
 										editor.setData(content);
-									}
+									} ,
+									error : function (){
+										editor.setData("");
+									},
+									
 								});
+								
 
 								editor.model.document.on( 'change:data', () => {
 									// console.log( 'The data has changed!' );
@@ -292,9 +308,9 @@
 							.catch( error => {
 								// console.error( error );
 							} );
-						}else{
-							$(v_edit.editor.ui.view.element).show();
-						}
+						// }else{
+						// 	$(v_edit.editor.ui.view.element).show();
+						// }
 
 					}
 					else {

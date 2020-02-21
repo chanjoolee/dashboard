@@ -10,6 +10,15 @@
 		var h_iframe = Math.max($(window).height() - h_navbar -10 );
 		$("#frame_content").height(h_iframe);
 
+		
+		$("#language_head:first-child").text("<%=response.getLocale().getLanguage()%>");
+		$("#language_head:first-child").val("<%=response.getLocale().getLanguage()%>");
+		$("#language_select li a").click(function(){
+			$("#language_head:first-child").text($(this).text());
+			$("#language_head:first-child").val($(this).text());
+			document.getElementById('frame_content').contentWindow.location.reload(true);
+		});
+
 	});
 	
 	function windowOpen(){
@@ -178,7 +187,14 @@
 				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Document</a></li>
 				<li class=""><a href="#">Demo</a></li>
 				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate-Source</a></li>
-				
+				<!-- locale -->
+				<li class="btn-group">
+					<button id="language_head" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 50px;"></button>
+					<ul id="language_select" class="dropdown-menu">
+						<li><a href="#">ko</a></li>
+						<li><a href="#">en</a></li>
+					</ul>
+				</li>
 
 			</ul>
         </div><!--/.nav-collapse -->
