@@ -6,7 +6,7 @@
 <head>
 <jsp:include page="/WEB-INF/views/include/include.toolbox.pmstable.jsp"></jsp:include>
 	<script>
-		localStorage.removeItem("jstree");
+		// localStorage.removeItem("jstree");
 		// to find origin list page not use in general
 		var parentFrame = "${param.frameName}";
 		if (parentFrame != ""){
@@ -263,6 +263,32 @@
 				"_documentation": {
 					"file_info": {
 						"path_column": "URL"
+					}
+					
+				},
+				"__prefix": null
+			},
+			{
+				"eAnnotations": {
+					"details": {
+						"_xmi:id": "_SmZl2kg2EeqonN_RS9oRzw",
+						"_key": "uuid",
+						"_value": "_oZa2MF9PEDek0JnbBus9EQ",
+						"__prefix": null
+					},
+					"_xmi:id": "_SmZl2Ug2EeqonN_RS9oRzw",
+					"_source": "genmymodel",
+					"__prefix": null
+				},
+				"type": {
+					"_href": "http://www.eclipse.org/emf/2002/Ecore#//EString",
+					"__prefix": null
+				},
+				"_xmi:id": "_SmZl2Eg2EeqonN_RS9oRzw",
+				"_name": "source",
+				"_documentation": {
+					"file_info": {
+						"path_column": "SOURCE"
 					}
 					
 				},
@@ -891,6 +917,7 @@
 							"label": "Soruce id",
 							"name": "SORUCE_ID",
 							"id": "SORUCE_ID",
+							width : 120,
 							"align": "center",
 							"entityName": "gensrc_list",
 							"editable": true,
@@ -922,6 +949,7 @@
 							"label": "Gen type",
 							"name": "GEN_TYPE",
 							"id": "GEN_TYPE",
+							width : 100,
 							"align": "center",
 							"entityName": "gensrc_list",
 							"editable": true,
@@ -953,6 +981,7 @@
 							"label": "Db type",
 							"name": "DB_TYPE",
 							"id": "DB_TYPE",
+							width : 80,
 							"align": "center",
 							"entityName": "gensrc_list",
 							"editable": true,
@@ -981,7 +1010,7 @@
 							"required": true
 						},
 						{
-							"label": "Url",
+							"label": "Schema",
 							"name": "URL",
 							"id": "URL",
 							"align": "left",
@@ -1012,7 +1041,8 @@
 								return result;
 							} ,
 							"formatter": function(cellValue, options, rowObject){
-								
+								if ( cellValue == null)
+									return "";
 								var value_split = cellValue.split("/");
 								var return_text = value_split.pop();
 								return return_text;
@@ -1026,17 +1056,81 @@
 
 						},
 						{
-							"label": "Btn exec",
-							"name": "BTN_EXEC",
-							"id": "BTN_EXEC",
-							"align": "center",
+							"label": "Source",
+							"name": "SOURCE",
+							"id": "SOURCE",
+							"align": "left",
 							"entityName": "gensrc_list",
 							"editable": true,
 							"gridId": "gensrcListGrid",
+							"file_info": {
+								"path_column": "SOURCE"
+							} ,
+							"editrules": {
+								"edithidden": true
+							},
+							"cellattr": function( rowId, cellValue, rawObject, cm, rdata ){
+								var grid = $(this).jqGrid();
+								var vGridOpt = grid.getGridParam();                    
+								var result = "";
+								
+								if ( cm.file_info != null){
+									result = " class='glyphicon glyphicon-download-alt'";
+									result += " style='vertical-align: middle;";
+									result += "cursor:pointer;'";
+								}
+								result += " gridId='" + vGridOpt.gridId + "'";
+								result += " entityId='" + vGridOpt.entityId + "'";
+								result += " columnName='" + cm.name + "'";
+								result += " cellValue='" + rawObject[cm.name] + "'";
+								
+								return result;
+							} ,
 							"formatter": function(cellValue, options, rowObject){
-												var btnHtml = '<button type="button" class="btn btn-warning btn-xs" onclick="entityDoc.customFunc.fn_generateClick(\''+ options.rowId +'\');">Generate</button>';
-												return btnHtml;
-											}
+								if ( cellValue == null)
+									return "";
+								var value_split = cellValue.split("/");
+								var return_text = value_split.pop();
+								return return_text;
+							},
+							unformat : function( cellval ,  opts , cell){
+								var grid = $(this).jqGrid();
+								var originVal = $(cell).attr("cellValue");
+								//opts.colModel.editoptions.value[]
+								return originVal;
+							}
+
+						},
+						{
+							"label": "Generate",
+							"name": "BTN_EXEC",
+							"id": "BTN_EXEC",
+							width : 80,
+							"align": "center",
+							"entityName": "gensrc_list",
+							"editable": false,
+							"gridId": "gensrcListGrid",
+							"formatter": function(cellValue, options, rowObject){
+								// $("#loader").show();				
+								var btnHtml = '<button type="button" class="btn btn-warning btn-xs" onclick="entityDoc.customFunc.fn_generateClick(\''+ options.rowId +'\');">Generate</button>';
+								return btnHtml;
+							}
+
+						},
+						{
+							"label": "Deploy",
+							"name": "BTN_DEPLOY",
+							"id": "BTN_DEPLOY",
+							width : 80,
+							"align": "center",
+							"entityName": "gensrc_list",
+							"editable": false,
+							"gridId": "gensrcListGrid",
+							"formatter": function(cellValue, options, rowObject){
+								// $("#loader").show();
+								var btnHtml = '<button type="button" class="btn btn-warning btn-xs" onclick="entityDoc.customFunc.fn_deployClick(\''+ options.rowId +'\');">Deploy</button>';
+								return btnHtml;
+							}
 
 						}
 					]
@@ -1251,6 +1345,7 @@
 			            }
 
 		};
+		var save_file = null;
 		var entityDoc = {
 			entityId : "gensrc_list",
 			"custom_columns": [
@@ -1269,38 +1364,99 @@
 			],
 			"customFunc": {
 				"fn_generateClick": function(rowId){
-							var grid = $("#gensrcListGrid");
+					$("#loader").show();
+					var grid = $("#gensrcListGrid");
+					var rowData = grid.getRowData(rowId);
+					
+					var url = "." + rowData.URL;
+					$.ajax({
+						url: url ,
+						// data: {sqlid: "codegen.tables",owner: $("#owner").val()}, 
+						async: false,
+						headers:{
+							authorization : "Bearer 1bb9a71d-3742-471e-8d0a-aaf68db4eab8"
+						},
+						success:  function(doc,result,response){
+							// console.log(response.responseText);
+							genmyModelxmi = response.responseText;
+		
+							var config = {};
+							config.skipEmptyTextNodesForObj = true;
+							//config.arrayAccessForm = "property";
+							config.stripWhitespaces = true;
+							config.enableToStringFunc = false;
+		
+							var x2js = new X2JS(config);
+							schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
+							// fn_create_source();
+							generator = new Generator(schema_bpmn,rowData.GEN_TYPE, rowData.DB_TYPE, false);
+							save_file = generator.fn_source();
+							// generator.fn_fileSave();
+						}
+					});
+					
+				},
+				"fn_deployClick": function(rowId){
+					$("#loader").show();		
+					var grid = $("#gensrcListGrid");
 							var rowData = grid.getRowData(rowId);
 							
-						    var url = "." + rowData.URL;
 						    $.ajax({
-						        url: url ,
-						        // data: {sqlid: "codegen.tables",owner: $("#owner").val()}, 
+								url: "./gensrcDeployJson.html" ,
+								type: "POST",
+						        data: {SOURCE: rowData.SOURCE }, 
 								async: false,
-								headers:{
-									authorization : "Bearer 1bb9a71d-3742-471e-8d0a-aaf68db4eab8"
-								},
-						        success:  function(doc,result,response){
-						            // console.log(response.responseText);
-						            genmyModelxmi = response.responseText;
-				
-									var config = {};
-									config.skipEmptyTextNodesForObj = true;
-									//config.arrayAccessForm = "property";
-									config.stripWhitespaces = true;
-									config.enableToStringFunc = false;
-				
-									var x2js = new X2JS(config);
-						            schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
-						            // fn_create_source();
-						            generator = new Generator(schema_bpmn,rowData.GEN_TYPE, rowData.DB_TYPE);
-						            generator.fn_source();
-						            // generator.fn_fileSave();
+						        success:  function(response){
+									$("#loader").hide();
+									if(response1.result == 'success'){
+										
+										var msg = "Deploy Success!";
+										$("#dialog-confirm").html(msg);
+										$("#dialog-confirm").dialog({
+											resizable: false,
+											modal: true,
+											title: "Success",
+											//height: 200,
+											width: 300,
+											dialogClass: 'no-close',
+											closeOnEscape: false,
+											buttons: [
+												{
+													text: "OK",
+													click: function() {
+														$( this ).dialog( "close" );											                    			                  
+													}
+												}
+											]
+										});
+									}else{
+										$("#dialog-confirm").html(response.message);
+										$("#dialog-confirm").dialog({
+											resizable: false,
+											modal: true,
+											title: "Error",
+											//height: 200,
+											width: 500,
+											dialogClass: 'no-close',
+											closeOnEscape: false,
+											buttons: [
+												{
+													text: "OK",
+													click: function() {
+														
+														$( this ).dialog( "close" );	
+
+													}
+												}
+											]
+										});
+									}
 						        }
 						    });
 							
-						}
-
+						},
+				
+				
 			}
 		};
 		var commonFunc = {

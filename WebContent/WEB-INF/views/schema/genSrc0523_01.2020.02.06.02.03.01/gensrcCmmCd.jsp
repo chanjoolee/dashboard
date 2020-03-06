@@ -6,7 +6,7 @@
 <head>
 <jsp:include page="/WEB-INF/views/include/include.toolbox.pmstable.jsp"></jsp:include>
 	<script>
-		localStorage.removeItem("jstree");
+		// localStorage.removeItem("jstree");
 		// to find origin list page not use in general
 		var parentFrame = "${param.frameName}";
 		if (parentFrame != ""){

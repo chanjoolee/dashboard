@@ -1,11 +1,11 @@
-function Generator(_schema_bpmn, _cssType, _dbType){
+function Generator(_schema_bpmn, _cssType, _dbType, _deploy){
     this.files = {};
     this.cssType = _cssType;
     if(_dbType != null)
         this.dbType = _dbType;
     else
         this.dbType = "oracle";
-    
+    this.deploy = _deploy ;
     /**
      * two times call prepend
      * url

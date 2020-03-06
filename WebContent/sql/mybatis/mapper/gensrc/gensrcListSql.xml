@@ -14,7 +14,7 @@
 
 
 	select 
-		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,TEST
+		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,SOURCE
 	from GENSRC_LIST a 
 	where 1=1
 	<if test="search_soruceId != null and search_soruceId !='' ">
@@ -131,7 +131,7 @@
 
 
 	select 
-		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,TEST
+		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,SOURCE
 	from GENSRC_LIST a 
 	where 1=1
 	<if test="search_soruceId != null and search_soruceId !='' ">
@@ -235,7 +235,7 @@
 </select>
 <select id="gensrcList.gensrcList.one" resultType="hashmap" >
 	select 
-		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,TEST
+		SORUCE_ID,GEN_TYPE,DB_TYPE,URL,BTN_EXEC,SOURCE
 	from GENSRC_LIST a 
 	where 1=1
 	<if test="search_soruceId != null and search_soruceId !='' ">
@@ -315,6 +315,7 @@
 			</otherwise>
 		</choose>
 		;
+		
 </update>
 <update id="gensrcList.gensrcList.delete" parameterType="hashmap" >
 			delete from GENSRC_LIST
@@ -336,4 +337,6 @@
 	where b.TABLE_NAME is not null
 	order by 1,2,3,4
 </select>
+
+
 </mapper>

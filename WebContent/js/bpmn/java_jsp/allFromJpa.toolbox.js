@@ -1017,6 +1017,8 @@ JpaAllGeneratorToolBox.prototype.fn_entities = function () {
         _this.fn_entities_edit(entity);
         _this.fn_entities_copy(entity);      
         _this.fn_entities_view(entity);  
+        if(_this.generator.dbType == 'mysql')
+            _this.manageTable(entity);
     });
 
     // Make Main Page
@@ -6075,7 +6077,127 @@ JpaAllGeneratorToolBox.prototype.fn_fileSave = function(){
         var ss = _.padStart(today.getSeconds(), 2,'0');
         
         var dateStr = yyyy + '.' + MM + '.' + dd + '.' +  hh + '.'  + mm + '.' + ss ;
-        saveAs(content, _this.Model._name + "." + _this.dateStr + ".zip");
+        var reader = new FileReader();
+        // this function is triggered once a call to readAsDataURL returns
+        reader.onload = function(event){
+            var generated_file_info = {};
+            var fd = new FormData();
+            var fileOfBlob = new File([content], _this.Model._name + "." + _this.dateStr + ".zip");
+            fd.append('file', fileOfBlob);
+            fd.append('uploadBoard', 'generated_sources');
+            fd.append('useRealFileName', 'Y');
+            $.ajax({
+                type: 'POST',
+                async : false,
+                url: './fileTestJson.html',
+                data: fd
+                , processData: false
+                , contentType: false
+                , success:  function(data){
+                    // console.log("Uploaded " + _this.Model._name + "." + _this.dateStr + ".zip");
+                    // alert("Uploaded " + _this.Model._name + "." + _this.dateStr + ".zip");
+                    generated_file_info = data;
+                    $("#loader").hide();
+                } 
+                
+            });
+
+
+            // generated file info save
+            var grid = $("#gensrcListGrid");
+            var rowId = grid.getGridParam( "selrow" );
+            var rowData = grid.getRowData(rowId); 
+            
+
+            var item_fileinfo = _.find( generated_file_info.searchVO.fileInfoList , {fieldName : "file" });
+            if (item_fileinfo != null){
+                rowData['SOURCE'] = item_fileinfo.filePath;
+                // grid.setRowData(rowId,{SOURCE : item_fileinfo.filePath });
+            }	
+            var paramObj = {
+                "origindatas": [
+                    {
+                        "field": "SORUCE_ID",
+                        "value": rowData["SORUCE_ID"]
+                    },
+                    {
+                        "field": "GEN_TYPE",
+                        "value": rowData["GEN_TYPE"]
+                    }
+                ]
+            }
+            $.ajax({
+                url: "./genericSaveJson.html",
+                type: "POST",
+                data: {
+                    searchJson: JSON.stringify(paramObj),
+                    fieldName: "SOURCE",
+                    fieldValue: rowData['SOURCE'],
+                    fieldValueOrigin: rowData['SOURCE'],
+                    userId: $("#userId").val(),
+                    sqlid: "gensrcList.gensrcList.edit"
+                } , 
+                async: false,			                    		
+                success:  function(data){
+                    response1 = data;
+                    if(response1.result != 'success'){
+                        state = false;
+                        var msg = "Save Success!";
+                        $("#dialog-confirm").html(response1.message);
+                        $("#dialog-confirm").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Error",
+                            //height: 200,
+                            width: 500,
+                            dialogClass: 'no-close',
+                            closeOnEscape: false,
+                            buttons: [
+                                {
+                                    text: "OK",
+                                    click: function() {
+                                        
+                                        $( this ).dialog( "close" );	
+
+                                    }
+                                }
+                            ]
+                        });
+                    } 
+                    // Success
+                    else {
+                        // To do 
+                        // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
+                        fn_search();
+                        var msg = "Save Success!";
+                        $("#dialog-confirm").html(msg);
+                        $("#dialog-confirm").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Success",
+                            //height: 200,
+                            width: 500,
+                            dialogClass: 'no-close',
+                            closeOnEscape: false,
+                            buttons: [
+                                {
+                                    text: "OK",
+                                    click: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            ]
+                        });
+                        
+                        // reload to edit mode;
+                    }						                    			
+                }
+            });
+            
+        };
+        // trigger the read from the reader...
+        reader.readAsDataURL(content);
+        
     });
 
 }
@@ -6654,6 +6776,348 @@ JpaAllGeneratorToolBox.prototype.fn_datasource = function(foreign_entities, vEnt
     return hasParents;
 }
 
+JpaAllGeneratorToolBox.prototype.manageTable = function( _entity ){
+    
+    // select table exists
+    // create table
+    
+    // columns
+    // select column exists
+    // alter column add
+    // primary key delete
+    // primary key create
+
+
+    var _this = this;
+    // select table exists
+    var existsTable = _this.existsTable( _entity )
+    // create table
+    if( !existsTable)
+        _this.createTable(_entity);
+    // columns
+    if(existsTable){
+        // select column exists
+        // alter column add
+        _this.addColumns(_entity);
+        // primary key delete
+        
+    }
+
+    var existskey = _this.existsPrimaryKey(_entity);
+    if(existskey)
+        _this.deletePrimaryKey(_entity);
+    // primary key create
+    _this.createPrimaryKey(_entity);
+    
+}
+JpaAllGeneratorToolBox.prototype.existsTable = function( _entity ){
+    var _this = this;
+    var rtn = false;
+    $.ajax({
+        url: "./genericlListJson.html",
+        type: "POST",
+        data: {
+            table_name : _entity._name.toUpperCase(),
+            sqlid :"gensrc.common.select.table" 
+        } , 
+        async: false,			                    		
+        success:  function(data){
+            if(data.dataList[0].CNT > 0)
+                rtn = true;
+        } 
+    });
+    return rtn;
+}
+JpaAllGeneratorToolBox.prototype.existsPrimaryKey = function( _entity ){
+    var _this = this;
+    var rtn = false;
+    $.ajax({
+        url: "./genericlListJson.html",
+        type: "POST",
+        data: {
+            table_name : _entity._name.toUpperCase(),
+            sqlid :"gensrc.common.select.primarykey" 
+        } , 
+        async: false,			                    		
+        success:  function(data){
+            if(data.dataList.length > 0)
+                rtn = true;
+        } 
+    });
+    return rtn;
+}
+JpaAllGeneratorToolBox.prototype.createTable = function( _entity ){
+    var _this = this;
+    var rtn = false;
+    var type = function(_prop){
+        var rtn_type = "VARCHAR(100)";
+        if (_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" )
+            rtn_type = "DATE";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EInt")
+            rtn_type = "INT";
+        return rtn_type;
+    };
+    var columns =  _.map([].concat(_entity.properties),function(prop,i){
+        var notnull = "NULL";
+        let vId = _.find( [].concat(prop.annotations) , { "_xsi:type": "gmmjpa:Id" });
+        if (vId != null) {
+            notnull = "NOT NULL";
+        }
+        var col = {
+            column_name : prop._name.toUpperCase(),
+            data_type : type(prop) ,
+            notnull : notnull
+        };
+        return col;
+    });
+    columns.push(
+        {
+            column_name : "INS_DT",
+            data_type : "DATE",
+            notnull: "NULL"
+        },
+        {
+            column_name : "MOD_DT",
+            data_type : "DATE",
+            notnull: "NULL"
+        }
+    );
+    var paramObj = {
+        "columns" : columns
+    };
+    $.ajax({
+        url: "./genericSaveJson.html",
+        type: "POST",
+        data: {
+            table_name : _entity._name.toUpperCase() ,
+            sqlid :"gensrc.common.create_table" ,
+            searchJson: JSON.stringify(paramObj)
+            
+        } , 
+        async: false,			                    		
+        success:  function(data){
+            if(data.result != "success"){
+                $("#dialog-confirm").html(data.message);
+                $("#dialog-confirm").dialog({
+                    resizable: false,
+                    modal: true,
+                    title: "Error",
+                    //height: 200,
+                    width: 500,
+                    dialogClass: 'no-close',
+                    closeOnEscape: false,
+                    buttons: [
+                        {
+                            text: "OK",
+                            click: function() {
+                                $( this ).dialog( "close" );											                    			                  
+                            }
+                        }
+                    ]
+                });
+                $("#loader").hide();
+                throw data.message;
+            }
+            
+        } 
+    });
+    
+}
+JpaAllGeneratorToolBox.prototype.addColumns = function( _entity ){
+    var _this = this;
+    var rtn = false;
+    var type = function(_prop){
+        var rtn_type = "VARCHAR(100)";
+        if (_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" )
+            rtn_type = "DATE";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EInt")
+            rtn_type = "INT";
+        return rtn_type;
+    };
+    var columns =  _.map([].concat(_entity.properties),function(prop,i){
+        var notnull = "NULL";
+        let vId = _.find( [].concat(prop.annotations) , { "_xsi:type": "gmmjpa:Id" });
+        if (vId != null) {
+            notnull = "NOT NULL";
+        }
+        var col = {
+            sqlid : "gensrc.common.entity.add_column",
+            table_name : _entity._name.toUpperCase(),
+            column_name : prop._name.toUpperCase(),
+            data_type : type(prop) ,
+            notnull : notnull
+        };
+        return col;
+    });
+    columns.push(
+        {
+            sqlid : "gensrc.common.entity.add_column",
+            table_name : _entity._name.toUpperCase(),
+            column_name : "INS_DT",
+            data_type : "DATE",
+            notnull: "NULL"
+        },
+        {
+            sqlid : "gensrc.common.entity.add_column",
+            table_name : _entity._name.toUpperCase(),
+            column_name : "MOD_DT",
+            data_type : "DATE",
+            notnull: "NULL"
+        }
+    );
+    $.each(columns, function(i,column){
+        $.ajax({
+            url: "./genericlListJson.html",
+            type: "POST",
+            data: {
+                table_name : _entity._name.toUpperCase(),
+                column_name : column.column_name,
+                sqlid :"gensrc.common.select.column" 
+            } , 
+            async: false,			                    		
+            success:  function(data){
+                if(data.dataList[0].CNT == 0){
+                    $.ajax({
+                        url: "./genericSaveJson.html",
+                        type: "POST",
+                        data: column , 
+                        async: false,			                    		
+                        success:  function(data){
+                            if(data.result != "success"){
+                                $("#dialog-confirm").html(data.message);
+                                $("#dialog-confirm").dialog({
+                                    resizable: false,
+                                    modal: true,
+                                    title: "Error",
+                                    //height: 200,
+                                    width: 500,
+                                    dialogClass: 'no-close',
+                                    closeOnEscape: false,
+                                    buttons: [
+                                        {
+                                            text: "OK",
+                                            click: function() {
+                                                $( this ).dialog( "close" );											                    			                  
+                                            }
+                                        }
+                                    ]
+                                });
+                                $("#loader").hide();
+                                throw data.message;
+                            }
+                        } 
+                    });
+                }
+                    
+            } 
+        });
+    });
+
+    
+    
+
+   
+    
+}
+JpaAllGeneratorToolBox.prototype.deletePrimaryKey = function( _entity ){
+    var _this = this;
+    var rtn = false;
+    
+    
+    $.ajax({
+        url: "./genericSaveJson.html",
+        type: "POST",
+        data: {
+            table_name : _entity._name.toUpperCase() ,
+            sqlid :"gensrc.common.entity.drop.primarykey" 
+        } , 
+        async: false,			                    		
+        success:  function(data){
+            if(data.result != "success"){
+                $("#dialog-confirm").html(data.message);
+                $("#dialog-confirm").dialog({
+                    resizable: false,
+                    modal: true,
+                    title: "Error",
+                    //height: 200,
+                    width: 500,
+                    dialogClass: 'no-close',
+                    closeOnEscape: false,
+                    buttons: [
+                        {
+                            text: "OK",
+                            click: function() {
+                                $( this ).dialog( "close" );											                    			                  
+                            }
+                        }
+                    ]
+                });
+                $("#loader").hide();
+                throw data.message;
+            }
+        } 
+    });
+}
+JpaAllGeneratorToolBox.prototype.createPrimaryKey = function( _entity ){
+    var _this = this;
+    var rtn = false;
+    
+    var columns =  [];
+    $.each([].concat(_entity.properties),function(i, prop){
+        var isId = "N";
+        let vId = _.find( [].concat(prop.annotations) , { "_xsi:type": "gmmjpa:Id" });
+        if (vId != null) {
+            isId = "Y";
+        }
+        var col = {
+            column_name : prop._name.toUpperCase(),
+            notnull : isId
+        };
+        if (vId != null) {
+            columns.push(col);
+        }
+    });
+    
+    
+    var paramObj = {
+        "columns" : columns
+    };
+    $.ajax({
+        url: "./genericSaveJson.html",
+        type: "POST",
+        data: {
+            table_name : _entity._name.toUpperCase() ,
+            sqlid :"gensrc.common.entity.create.primarykey" ,
+            searchJson: JSON.stringify(paramObj)
+            
+        } , 
+        async: false,			                    		
+        success:  function(data){
+            if(data.result != "success"){
+                $("#dialog-confirm").html(data.message);
+                $("#dialog-confirm").dialog({
+                    resizable: false,
+                    modal: true,
+                    title: "Error",
+                    //height: 200,
+                    width: 500,
+                    dialogClass: 'no-close',
+                    closeOnEscape: false,
+                    buttons: [
+                        {
+                            text: "OK",
+                            click: function() {
+                                $( this ).dialog( "close" );											                    			                  
+                            }
+                        }
+                    ]
+                });
+                $("#loader").hide();
+                throw data.message;
+            }
+        } 
+    });
+}
 
 JpaAllGeneratorToolBox.prototype.fn_datasource_by_top = function(vEntity, jpa_prop, _file, gridCol) {
     var _this = this;

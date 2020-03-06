@@ -185,6 +185,12 @@
 				},
 				"_xmi:id": "_SmZl2Eg2EeqonN_RS9oRzw",
 				"_name": "url",
+				"_documentation": {
+					"file_info": {
+						"path_column": "URL"
+					}
+					
+				},
 				"__prefix": null
 			}
 		];
@@ -495,21 +501,48 @@
 			                    fn_submit: function(_editType){
 			                        if (_editType == "edit"){
 			                            //alert("submit function defined");
-			                            var state = true;
+										var state = true;
+										var edit_value = this.state.value;
 			                            var paramObj = {
 			                                //origindatas: this.props.options.keys
 			                                origindatas: this.state.keys
 			                            };
 			                            
 			                            if(this.props.options.value == this.state.value)
-			                                return state;
+											return state;
+
+										var edit_item = findAllByElName(v_schema.elements , {edit_tag : 'file'});
+										if (edit_item != null && edit_item.col == this.state.name){
+											
+											var parameter = "uploadBoard=schema";
+											parameter += "&useRealFileName=Y";
+
+											$('#form').ajaxForm({
+												url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+												, type:"POST"
+												, dataType:"json"
+												, async: false
+												, success:function(json) {
+													fileInfo = json;
+												}
+												, error:function(e){
+													alert(e);
+												}
+											});
+											$('#form').submit();
+											var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+											if (item_fileinfo != null){
+												edit_value = item_fileinfo.filePath;
+											}		
+										}
+										
 			                            $.ajax({
 			                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
 			                                type: "POST",
 			                                data: {
 			                                    searchJson: JSON.stringify(paramObj),
 			                                    fieldName: this.state.name,
-			                                    fieldValue: this.state.value,
+			                                    fieldValue: edit_value,
 			                                    fieldValueOrigin: this.state.value_origin,
 			                                    userId: $("#userId").val(),
 			                                    // sqlid: "dashboard.ssd_sm.script_master.update"
@@ -632,16 +665,16 @@
 			                    },
 			                    fn_afterSubmit: function(keyUpdatedObjects){
 			                        // if only edit
-			                        $.each(this,function(i,react){
-			                            if(_.find(cms,function(cm){return cm.name == react.state.name})){
-			                                var vobject = {}; 
-			                                var parentRowKey = theGrid.getGridParam('selrow');
-			                                vobject[react.state.name] = react.state.value;
-			                                theGrid.setRowData(parentRowKey,vobject);
-			                            }
+			                        // $.each(this,function(i,react){
+			                        //     if(_.find(cms,function(cm){return cm.name == react.state.name})){
+			                        //         var vobject = {}; 
+			                        //         var parentRowKey = theGrid.getGridParam('selrow');
+			                        //         vobject[react.state.name] = react.state.value;
+			                        //         theGrid.setRowData(parentRowKey,vobject);
+			                        //     }
 			                            
-			                        });
-			                        
+			                        // });
+			                        parentFrame.fn_search();
 			                        var msg = "Save Success!";
 			                        $("#dialog-confirm").html(msg);
 			                        $("#dialog-confirm").dialog({
