@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<link rel="icon" href="./images/gear.svg">
 		<link rel="stylesheet" type="text/css" href="./css/pms/style_master_pop.css" />
 		<%-- 1. jquery --%>
 		<!-- <script src="js/jquery/jquery-1.11.2.js"></script> -->
