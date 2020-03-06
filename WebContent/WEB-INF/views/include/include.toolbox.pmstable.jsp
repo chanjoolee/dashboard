@@ -176,6 +176,11 @@
 			/* margin-top: 10px; */
 			/* height: 90%; */	
 		}
+
+		.content_container {
+			margin-left: 20px;
+			margin-right: 20px;
+		}
 		
 		.container {
 		    padding-right: 0px;
@@ -432,7 +437,7 @@
             float:right;
         }
 		
-		<%--  jqGrid에서 dialog가 뒤로 숨는 문제.--%>
+		/* jqGrid에서 dialog가 뒤로 숨는 문제 */
 		.ui-dialog { z-index: 1000 !important ;}
 		div button.ui-button.ui-dialog-titlebar-close {
 			display: none;

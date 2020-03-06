@@ -1865,20 +1865,23 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                             var parameter = "";
                             // if you want to upload options ....
                             // parameter = "uploadBoard=schema";
-							// parameter += "&useRealFileName=Y";
-                            $('#form').ajaxForm({
-                                url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
-                                , type:"POST"
-                                , dataType:"json"
-                                , async: false
-                                , success:function(json) {
-                                    fileInfo = json;
-                                }
-                                , error:function(e){
-                                    alert(e);
-                                }
-                            });
-                            $('#form').submit();
+                            // parameter += "&useRealFileName=Y";
+                            if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
+                                $('#form').ajaxForm({
+                                    url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                    , type:"POST"
+                                    , dataType:"json"
+                                    , async: false
+                                    , success:function(json) {
+                                        fileInfo = json;
+                                    }
+                                    , error:function(e){
+                                        alert(e.responseText);
+                                    }
+                                });
+                                $('#form').submit();
+                            }
+                            
                             _.merge(addRow, form1.serializeFormJSON() );
                             
                             var edit_items = filterAllByElName(v_schema.elements , {edit_tag : 'file'});
@@ -2582,19 +2585,22 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                             // if you want to upload options ....
                             // parameter = "uploadBoard=schema";
 							// parameter += "&useRealFileName=Y";
-                            $('#form').ajaxForm({
-                                url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
-                                , type:"POST"
-                                , dataType:"json"
-                                , async: false
-                                , success:function(json) {
-                                    fileInfo = json;
-                                }
-                                , error:function(e){
-                                    alert(e);
-                                }
-                            });
-                            $('#form').submit();
+                            if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
+                                $('#form').ajaxForm({
+                                    url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                    , type:"POST"
+                                    , dataType:"json"
+                                    , async: false
+                                    , success:function(json) {
+                                        fileInfo = json;
+                                    }
+                                    , error:function(e){
+                                        
+                                        alert(e.responseText);
+                                    }
+                                });
+                                $('#form').submit();
+                            }
                             _.merge(addRow, form1.serializeFormJSON() );
                             
                             var edit_items = filterAllByElName(v_schema.elements , {edit_tag : 'file'});
@@ -5982,16 +5988,13 @@ JpaAllGeneratorToolBox.prototype.fn_generate_make_search = function( _file ){
 JpaAllGeneratorToolBox.prototype.fn_generate_container = function( _file ){
     var _this = this;
     $.each(_file.schema, function(schemaName,schema){
-        var vClass = "";
-        if(schemaName == "search"){
-            vClass = "srch_box2";
-            var src = '\t<div id="' + schema.containerId + '" class="' + vClass+ '" style="margin-top: 3px;margin-left: 0px;margin-right: 0px;"></div>'; 
-        }else{
-            var src = '\t<div id="' + schema.containerId + '" class="' + vClass+ '" style="margin-top: 3px;margin-left: 0px;margin-right: 0px;"></div>'; 
-        }
+        var vClass = "content_container";
+        if(schemaName == "search")
+            vClass += " srch_box2";
+        var src = '\t<div id="' + schema.containerId + '" class="' + vClass+ '" style="margin-top: 3px;"></div>'; 
         
         _file.sources.push(src);
-    }) ;
+    });
 
 }
 

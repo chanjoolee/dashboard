@@ -1105,7 +1105,7 @@
 							"label": "Generate",
 							"name": "BTN_EXEC",
 							"id": "BTN_EXEC",
-							width : 80,
+							width : 70,
 							"align": "center",
 							"entityName": "gensrc_list",
 							"editable": false,
@@ -1121,7 +1121,7 @@
 							"label": "Deploy",
 							"name": "BTN_DEPLOY",
 							"id": "BTN_DEPLOY",
-							width : 80,
+							width : 70,
 							"align": "center",
 							"entityName": "gensrc_list",
 							"editable": false,
@@ -1132,7 +1132,24 @@
 								return btnHtml;
 							}
 
-						}
+						},
+						{
+							"label": "Execute",
+							"name": "BTN_EXECUTE",
+							"id": "BTN_EXECUTE",
+							width : 70,
+							"align": "center",
+							"entityName": "gensrc_list",
+							"editable": false,
+							"gridId": "gensrcListGrid",
+							"formatter": function(cellValue, options, rowObject){
+								// $("#loader").show();
+								var btnHtml = '<button type="button" class="btn btn-warning btn-xs" onclick="entityDoc.customFunc.fn_exec_source(\''+ options.rowId +'\');">Execute</button>';
+								return btnHtml;
+							}
+
+						},
+
 					]
 				}
 			]
@@ -1399,63 +1416,74 @@
 				"fn_deployClick": function(rowId){
 					$("#loader").show();		
 					var grid = $("#gensrcListGrid");
-							var rowData = grid.getRowData(rowId);
+					var rowData = grid.getRowData(rowId);
 							
-						    $.ajax({
-								url: "./gensrcDeployJson.html" ,
-								type: "POST",
-						        data: {SOURCE: rowData.SOURCE }, 
-								async: false,
-						        success:  function(response){
-									$("#loader").hide();
-									if(response1.result == 'success'){
-										
-										var msg = "Deploy Success!";
-										$("#dialog-confirm").html(msg);
-										$("#dialog-confirm").dialog({
-											resizable: false,
-											modal: true,
-											title: "Success",
-											//height: 200,
-											width: 300,
-											dialogClass: 'no-close',
-											closeOnEscape: false,
-											buttons: [
-												{
-													text: "OK",
-													click: function() {
-														$( this ).dialog( "close" );											                    			                  
-													}
-												}
-											]
-										});
-									}else{
-										$("#dialog-confirm").html(response.message);
-										$("#dialog-confirm").dialog({
-											resizable: false,
-											modal: true,
-											title: "Error",
-											//height: 200,
-											width: 500,
-											dialogClass: 'no-close',
-											closeOnEscape: false,
-											buttons: [
-												{
-													text: "OK",
-													click: function() {
-														
-														$( this ).dialog( "close" );	
+					$.ajax({
+						url: "./gensrcDeployJson.html" ,
+						type: "POST",
+						data: {SOURCE: rowData.SOURCE }, 
+						async: false,
+						success:  function(response){
+							$("#loader").hide();
+							if(response1.result == 'success'){
+								
+								var msg = "Deploy Success!";
+								$("#dialog-confirm").html(msg);
+								$("#dialog-confirm").dialog({
+									resizable: false,
+									modal: true,
+									title: "Success",
+									//height: 200,
+									width: 300,
+									dialogClass: 'no-close',
+									closeOnEscape: false,
+									buttons: [
+										{
+											text: "OK",
+											click: function() {
+												$( this ).dialog( "close" );											                    			                  
+											}
+										}
+									]
+								});
+							}else{
+								$("#dialog-confirm").html(response.message);
+								$("#dialog-confirm").dialog({
+									resizable: false,
+									modal: true,
+									title: "Error",
+									//height: 200,
+									width: 500,
+									dialogClass: 'no-close',
+									closeOnEscape: false,
+									buttons: [
+										{
+											text: "OK",
+											click: function() {
+												
+												$( this ).dialog( "close" );	
 
-													}
-												}
-											]
-										});
-									}
-						        }
-						    });
-							
-						},
-				
+											}
+										}
+									]
+								});
+							}
+						}
+					});
+					
+				},
+				fn_exec_source : function(rowId){
+					var grid = $("#gensrcListGrid");
+					var rowData = grid.getRowData(rowId);
+					// /upload/generated_sources/testEntity.2020.03.06.19.27.27.zip
+					var source = rowData['SOURCE'];
+					var source_split = source.split("/");
+					var source_zip = source_split.pop();
+					var source_zip_split = source_zip.split(".");
+					var source_ext = source_zip_split.pop();
+					var source_target = source_zip_split.join(".");
+					var newWin1 = window.open("./generic.html?viewName=schema/"+ source_target +"/main", '_blank' , "width=1000,height=750, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + (event.screenX + 0) + ", scrollbars=yes,resizable=yes");
+				}
 				
 			}
 		};

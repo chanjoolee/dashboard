@@ -185,7 +185,7 @@
             <ul id="navbar-first" class="nav navbar-nav">
 				<li class="active"><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_home');">Home</a></li>
 				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Document</a></li>
-				<li class=""><a href="#">Demo</a></li>
+				<!-- <li class=""><a href="#">Demo</a></li> -->
 				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate-Source</a></li>
 				<!-- locale -->
 				<li class="btn-group">
