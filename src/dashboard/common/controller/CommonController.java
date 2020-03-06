@@ -328,7 +328,7 @@ public class CommonController {
         java.util.ArrayList files = (java.util.ArrayList) searchVO.get("fileInfoList");
 	   	Map file = (Map)files.get(0);
 	   	String filePath = (String)file.get("filePath");
-        mav.addObject("url",request.getSession().getServletContext().getContextPath() + filePath );
+        mav.addObject("url","." + filePath );
         /**** setting for ck5editor End ****/
         
         mav.setViewName("jsonView");

@@ -68,7 +68,7 @@
 				fd.append('useRealFileName', 'Y');
 				$.ajax({
 					type: 'POST',
-					url: '${pageContext.request.contextPath}/fileTestJson.html',
+					url: './fileTestJson.html',
 					data: fd
 					, processData: false
 					, contentType: false
@@ -274,7 +274,7 @@
 							ClassicEditor
 							.create( document.querySelector( '#data .default' ) ,{
 								ckfinder: {
-									uploadUrl  : "${pageContext.request.contextPath}/ckfinderUploadJson.html"
+									uploadUrl  : "./ckfinderUploadJson.html"
 								} 
 								
 							})
