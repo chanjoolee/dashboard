@@ -276,7 +276,7 @@ public class CommonController {
     }
     
     @RequestMapping(value = "/fileTestJson" ,method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView fileTestJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) throws Exception {
+    public ModelAndView fileTestJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) throws Throwable {
     	
     	final MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
     	ModelAndView mav = new ModelAndView(); 
@@ -291,8 +291,30 @@ public class CommonController {
     }
     
     
+    @RequestMapping(value = "/gensrcDeployJson" ,method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView gensrcDeployJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) throws Throwable {
+    	
+    	ModelAndView mav = new ModelAndView(); 
+    	try{
+    		commonService.decompressGensrcByUrl(searchVO, request);
+    		mav.addObject("result", "success");;
+    	}catch(Exception ex){
+    		//searchVO.put("result","fail");
+    		//searchVO.put("message",ex.getMessage());
+    		mav.addObject("result", "fail");       
+    		mav.addObject("message", ex.getMessage());       
+    		
+    	}
+    	mav.addObject("searchVO",searchVO);
+        mav.setViewName("jsonView");        
+        
+
+        return mav;
+    }
+    
+    
     @RequestMapping(value = "/ckfinderUploadJson" ,method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView ckfinderUploadJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) throws Exception {
+    public ModelAndView ckfinderUploadJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) throws Throwable {
     	
     	final MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
     	ModelAndView mav = new ModelAndView(); 

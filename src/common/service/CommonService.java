@@ -1,6 +1,7 @@
 package common.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -152,7 +155,7 @@ public class CommonService {
     }
 	
 	@SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
-    public void multipartProcess(Map resultDs, HttpServletRequest req)   throws Exception {
+    public void multipartProcess(Map resultDs, HttpServletRequest req)   throws Throwable {
     	
     	
     	String upload = "upload";
@@ -221,7 +224,9 @@ public class CommonService {
 
     				int i = -1;
     				i = file.getOriginalFilename().lastIndexOf(".");
-    				String realFileName = curDate+file.getOriginalFilename().substring(i,file.getOriginalFilename().length());
+    				String fileExt = file.getOriginalFilename().substring(i,file.getOriginalFilename().length());
+    				String realFileName = curDate+fileExt;
+    				
     				if (useRealFileName)
     					realFileName = file.getOriginalFilename();
     				
@@ -231,7 +236,8 @@ public class CommonService {
     				//String path = "/upload/"+req.getParameter("grpName")+"/"+realFileName;
     				String path = "/" + upload + "/" + uploadBoard  + curDateFile + "/" + realFileName;
     				logger.debug("path==>"+path);
-    				file.transferTo(new File(filePath));
+    				File uploadedFile = new File(filePath);
+    				file.transferTo(uploadedFile);
     				
     				Map<String, Object> fileInfo = new HashMap<String, Object>();
     				fileInfo.put("fieldName", file.getName());
@@ -248,6 +254,229 @@ public class CommonService {
     	}
     	//return resultDs;
     } 
+	
+	public void decompressGensrc(File zipFile, HttpServletRequest req) throws Throwable {
+		
+		String context_path = req.getSession().getServletContext().getRealPath("/");
+		
+		FileInputStream fis = null;
+		ZipInputStream zis = null;
+		ZipEntry zipentry = null;
+		try {
+			// 파일 스트림
+			fis = new FileInputStream(zipFile);
+			// Zip 파일 스트림
+			zis = new ZipInputStream(fis);
+			// entry가 없을때까지 뽑기
+			while ((zipentry = zis.getNextEntry()) != null) {
+				
+				String filename = zipentry.getName();
+				String[] pathes = filename.split("/");
+				String last_path = "";
+				
+				// entiry가 폴더면 폴더 생성
+				if (zipentry.isDirectory()) {
+					
+					last_path = pathes[pathes.length - 1];
+					String sub_dir = "";
+					if(last_path.equals("query")) {
+						sub_dir = "/sql/mybatis/mapper" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						sub_dir += "/" + filenames[0];
+					}else if (last_path.equals("javascript")) {
+						sub_dir = "/js/bpmn/gen" ;
+					}else {
+						sub_dir = "/WEB-INF/views/schema" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						int i = -1;
+	    				i = zipFile.getName().lastIndexOf(".");
+	    				String zipFilePre = zipFile.getName().substring(0, i);
+	    				String zipFileeExt = zipFile.getName().substring(i,zipFile.getName().length());
+	    				sub_dir += "/" + zipFilePre;
+	    				
+					}					
+					
+					File file = new File(context_path + sub_dir);
+					if ( !file.exists() )
+						file.mkdirs();
+				} else {
+					if (pathes.length > 1)
+						last_path = pathes[pathes.length - 2];
+					else
+						last_path = "";
+					String sub_dir = "";
+					if(last_path.equals("query")) {
+						sub_dir = "/sql/mybatis/mapper" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						sub_dir += "/" + filenames[0];
+					}else if (last_path.equals("javascript")) {
+						sub_dir = "/js/bpmn/gen" ;
+					}else {
+						sub_dir = "/WEB-INF/views/schema" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						int i = -1;
+	    				i = zipFile.getName().lastIndexOf(".");
+	    				String zipFilePre = zipFile.getName().substring(0, i);
+	    				String zipFileeExt = zipFile.getName().substring(i,zipFile.getName().length());
+	    				sub_dir += "/" + zipFilePre;
+	    				
+	    				File jspDir = new File(sub_dir);
+	    				if (!jspDir.exists())
+	    					jspDir.mkdirs();   				
+	    				
+					}					
+					
+    				
+					File file = new File(context_path + sub_dir , pathes[pathes.length - 1]);
+					
+					// 파일이면 파일 만들기
+					if(last_path.equals("query")) {
+						if (!file.exists()) {
+							createFile(file, zis);
+						}
+					}else {
+						createFile(file, zis);
+					}
+					
+				}
+			}
+		} catch (Throwable e) {
+			throw e;
+		} finally {
+			if (zis != null)
+				zis.close();
+			if (fis != null)
+				fis.close();
+		}
+	}
+
+	public void decompressGensrcByUrl(Map searchVO , HttpServletRequest req) throws Throwable {
+		
+		String zipFileUrl = searchVO.get("SOURCE").toString();
+	    String zipFileRealPath = req.getSession().getServletContext().getRealPath(zipFileUrl);
+	    
+		File zipFile = new File(zipFileRealPath);
+		String context_path = req.getSession().getServletContext().getRealPath("/");
+		
+		FileInputStream fis = null;
+		ZipInputStream zis = null;
+		ZipEntry zipentry = null;
+		try {
+			// 파일 스트림
+			fis = new FileInputStream(zipFile);
+			// Zip 파일 스트림
+			zis = new ZipInputStream(fis);
+			// entry가 없을때까지 뽑기
+			while ((zipentry = zis.getNextEntry()) != null) {
+				
+				String filename = zipentry.getName();
+				String[] pathes = filename.split("/");
+				String last_path = "";
+				
+				// entiry가 폴더면 폴더 생성
+				if (zipentry.isDirectory()) {
+					
+					last_path = pathes[pathes.length - 1];
+					String sub_dir = "";
+					if(last_path.equals("query")) {
+						sub_dir = "/sql/mybatis/mapper" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						sub_dir += "/" + filenames[0];
+					}else if (last_path.equals("javascript")) {
+						sub_dir = "/js/bpmn/gen" ;
+					}else {
+						sub_dir = "/WEB-INF/views/schema" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						int i = -1;
+	    				i = zipFile.getName().lastIndexOf(".");
+	    				String zipFilePre = zipFile.getName().substring(0, i);
+	    				String zipFileeExt = zipFile.getName().substring(i,zipFile.getName().length());
+	    				sub_dir += "/" + zipFilePre;
+	    				
+					}					
+					
+					File file = new File(context_path + sub_dir);
+					if ( !file.exists() )
+						file.mkdirs();
+				} else {
+					if (pathes.length > 1)
+						last_path = pathes[pathes.length - 2];
+					else
+						last_path = "";
+					String sub_dir = "";
+					if(last_path.equals("query")) {
+						sub_dir = "/sql/mybatis/mapper" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						sub_dir += "/" + filenames[0];
+					}else if (last_path.equals("javascript")) {
+						sub_dir = "/js/bpmn/gen" ;
+					}else {
+						sub_dir = "/WEB-INF/views/schema" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						int i = -1;
+	    				i = zipFile.getName().lastIndexOf(".");
+	    				String zipFilePre = zipFile.getName().substring(0, i);
+	    				String zipFileeExt = zipFile.getName().substring(i,zipFile.getName().length());
+	    				sub_dir += "/" + zipFilePre;
+	    				
+	    				File jspDir = new File(sub_dir);
+	    				if (!jspDir.exists())
+	    					jspDir.mkdirs();   				
+	    				
+					}					
+					
+    				
+					File file = new File(context_path + sub_dir , pathes[pathes.length - 1]);
+					
+					// 파일이면 파일 만들기
+					if(last_path.equals("query")) {
+						if (!file.exists()) {
+							createFile(file, zis);
+						}
+					}else {
+						createFile(file, zis);
+					}
+					
+				}
+			}
+		} catch (Throwable e) {
+			throw e;
+		} finally {
+			if (zis != null)
+				zis.close();
+			if (fis != null)
+				fis.close();
+		}
+	}
+
+	/**
+	 * 파일 만들기 메소드
+	 * 
+	 * @param file 파일
+	 * @param zis  Zip스트림
+	 */
+	private static void createFile(File file, ZipInputStream zis) throws Throwable {
+		// 디렉토리 확인
+		File parentDir = new File(file.getParent());
+		// 디렉토리가 없으면 생성하자
+		if (!parentDir.exists()) {
+			parentDir.mkdirs();
+		}
+		// 파일 스트림 선언
+		try (FileOutputStream fos = new FileOutputStream(file)) {
+			byte[] buffer = new byte[256];
+			int size = 0;
+			// Zip스트림으로부터 byte뽑아내기
+			while ((size = zis.read(buffer)) > 0) {
+				// byte로 파일 만들기
+				fos.write(buffer, 0, size);
+			}
+		} catch (Throwable e) {
+			throw e;
+		}
+	}
+
+
 	
 	@SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
     public void multipartProcess1(Map resultDs, HttpServletRequest req)   throws Exception {
