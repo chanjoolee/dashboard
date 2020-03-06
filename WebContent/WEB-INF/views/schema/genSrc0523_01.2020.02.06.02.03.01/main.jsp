@@ -59,11 +59,11 @@
 		
 		
 		<!--<script src="js/Highcharts-5.0.7/code/highcharts.src.js"></script>
-		<script src="/dashboard/js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
-		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
-		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
-		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
-		<script src="/dashboard/js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
+		<script src="./js/Highcharts-5.0.7/code/highcharts-more.src.js"></script>
+		<script src="./js/Highcharts-5.0.7/code/modules/drilldown.src.js"></script>
+		<script src="./js/Highcharts-5.0.7/code/modules/no-data-to-display.js"></script>
+		<script src="./js/Highcharts-5.0.7/code/modules/exporting.src.js"></script>
+		<script src="./js/Highcharts-5.0.7/code/modules/offline-exporting.src.js"></script> -->
 		
 		<script src="./js/Highstock-5.0.9/code/highstock.src.js"></script>
 		<script src="./js/Highstock-5.0.9/code/modules/heatmap.src.js"></script>
@@ -126,7 +126,7 @@
 		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script> -->
 
 		<!-- xml to js -->
-		<script type="text/javascript" src="/dashboard/js/convertjson/x2js.js"></script>
+		<script type="text/javascript" src="./js/convertjson/x2js.js"></script>
 
 		<!-- fileconvert -->
 		<script type="text/javascript" src="./js/bpmn/python.js"></script>
@@ -146,7 +146,7 @@
 		<link rel="stylesheet" type="text/css" href="./css/pms/new.css">
 		<link rel="stylesheet" type="text/css" href="./css/pms/board.css">
 		<!-- <script src="/common/js/module.js"></script> -->
-		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
 
 		<style type="text/css" title="main">
 	
@@ -652,7 +652,7 @@
 	</script>
 </head>
 <body style="min-width:920px">
-<form name="form" id="form" class="" action="/dashboard/generic.html?viewName=gensrc/genSrcCustom/gensrcList" method="post" target="gensrcListIframeFrame">
+<form name="form" id="form" class="" action="./generic.html?viewName=gensrc/genSrcCustom/gensrcList" method="post" target="gensrcListIframeFrame">
 	<input type="hidden" id="sender" name="sender" value="xxx">
 	<div id="schemaTabContainer" class="" style="margin-top: 3px;margin-left: 20px;margin-right: 20px;"><div id="tabListTabListContainer" class="tit_btn m_top_10"><ul id="tabListTabListUl" class="tab_2depth"><li id="gensrcListIframeTab" target="gensrcListIframeContent" class="on"><a id="gensrcListIframe_a" origin_id="gensrcListIframe" viewname="gensrc/genSrcCustom/gensrcList" form_id="form" roaded="y">Generate list</a></li><li id="cmmCdIframeTab" target="cmmCdIframeContent" class="off"><a id="cmmCdIframe_a" origin_id="cmmCdIframe" viewname="gensrc/genSrcCustom/gensrcCmmCd" form_id="form">Common Code</a></li><li id="gensrcCmmUseIframeTab" target="gensrcCmmUseIframeContent" class="off"><a id="gensrcCmmUseIframe_a" origin_id="gensrcCmmUseIframe" viewname="gensrc/genSrcCustom/gensrcCmmUse" form_id="form">Cmm Use</a></li><li id="gensrcTabColsIframeTab" target="gensrcTabColsIframeContent" class="off"><a id="gensrcTabColsIframe_a" origin_id="gensrcTabColsIframe" viewname="gensrc/genSrcCustom/gensrcTabCols" form_id="form">Tables</a></li></ul></div><div type="tab_list"></div></div>
 </form>

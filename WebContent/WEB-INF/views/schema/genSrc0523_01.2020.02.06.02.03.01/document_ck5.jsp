@@ -94,7 +94,7 @@
 					'core' : {
 						'data' : {
 							'url' : function(node) {
-								return '/dashboard/jstreeJson.html?sqlid=jstree.doc';
+								return './jstreeJson.html?sqlid=jstree.doc';
 							},
 							'data' : function (node) {
 								var v_node_id = node.id;

@@ -125,7 +125,7 @@
 		<script type="text/javascript" src="https://rawgit.com/KidSysco/jquery-ui-month-picker/v3.0.0/demo/MonthPicker.min.js"></script> -->
 
 		<!-- xml to js -->
-		<script type="text/javascript" src="/dashboard/js/convertjson/x2js.js"></script>
+		<script type="text/javascript" src="./js/convertjson/x2js.js"></script>
 
 		<!-- fileconvert -->
 		<script type="text/javascript" src="./js/bpmn/python.js"></script>
@@ -145,7 +145,7 @@
 		<link rel="stylesheet" type="text/css" href="./css/pms/new.css" />
 		<link rel="stylesheet" type="text/css" href="./css/pms/board.css" />
 		<!-- <script src="/common/js/module.js"></script> -->
-		<script type="text/javascript" src="/dashboard/js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./js/FileSaver.js/FileSaver.js" charset="utf-8"></script>
 
 		<style type="text/css" title="main">
 	
