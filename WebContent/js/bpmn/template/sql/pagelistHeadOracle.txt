@@ -1,0 +1,8 @@
+	Select 
+			*		
+		From 
+		(
+			select
+				A.*, ROWNUM AS ROW_NUM
+			from 
+			(

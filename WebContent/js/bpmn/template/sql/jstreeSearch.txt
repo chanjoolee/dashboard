@@ -1,0 +1,20 @@
+        <choose>
+   			<when test="searchJson != null and searchJson != '' and searchJson.fields != null and searchJson.fields.size() > 0  ">   				
+   				<foreach collection="searchJson.fields" item="field" index="index"  open=" and " separator=" and " close="">
+	                <choose>
+	                	<when test="field.isArray == true ">
+		                	${field.field} in 
+			                <foreach collection="field.value" item="item" index="index"  open="(" separator=" , " close=")">
+			                	#{item}
+			                </foreach>
+			        	</when>
+			        	<otherwise>
+			        		${field.field} = #{field.value}
+			        	</otherwise>
+	                </choose>
+	                
+	            </foreach>
+   			</when>
+   			<otherwise></otherwise>
+   		</choose>
+		<choose><when test="sidx != null and sidx != '' "> order by ${sidx} <if test="sord != null and sord != '' "> ${sord} </if> </when><otherwise>order by 1,2</otherwise></choose>

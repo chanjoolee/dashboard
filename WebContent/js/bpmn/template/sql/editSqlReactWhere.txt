@@ -1,0 +1,10 @@
+	<choose>
+		<when test="searchJson != null and searchJson != '' and searchJson.origindatas.size() > 0 " >
+			<foreach collection="searchJson.origindatas" item="item" index="index"  >
+				and ${item.field} = #{item.value}
+			</foreach>
+		</when>
+		<otherwise>
+			and 1=2
+		</otherwise>
+	</choose>

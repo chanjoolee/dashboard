@@ -1,0 +1,8 @@
+	Select 
+			*		
+		From 
+		(
+			select
+				A.*
+			from 
+			(

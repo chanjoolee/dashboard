@@ -1,0 +1,7 @@
+	select 
+		ceil(count(*)/ #{rows} ) as total,
+		#{page} as page ,
+		count(*) records 
+	from 
+	(
+		select a.* from (
