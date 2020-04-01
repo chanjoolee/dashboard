@@ -5228,7 +5228,8 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         src = '</body>'; _file.sources.push(src);
         src = '<jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>'; _file.sources.push(src);
     });
-    _this.fn_generate_main();    
+    // _this.fn_generate_main();
+    _this.fn_generate_main_bracket();    
     
 }
 
@@ -5302,6 +5303,53 @@ JpaAllGeneratorToolBox.prototype.fn_generate_main = function () {
     };
 
     _this.files.push(fileObj);
+
+}
+
+
+JpaAllGeneratorToolBox.prototype.fn_generate_main_bracket = function () {
+    var _this = this; 
+
+    var template_strs = [
+        "bracket"
+    ];
+    
+    var menu_src = "";
+
+    $.each(template_strs , function(i,template){
+        $.ajax({
+            url: "./js/bpmn/template/menu/" + template + ".txt",
+            async: false,
+            success: function (content){
+                menu_src = content;
+            } ,
+            error : function (){
+                // editor.setData("");
+            },
+            
+        });
+    });
+    var menu_dom = $(menu_src);
+    var side_menu = menu_dom.find(".br-sideleft-menu");
+    side_menu.html("");
+
+
+    $.each( _.orderBy( _.filter( _this.files ,{editType: "general"} )  , ['fileName'],['asc']) , function(i, _file){
+
+        
+        
+    });
+
+
+    // Iframe Create
+    // mainFrame.$('html').html();
+    // var fileObj = {
+    //     fileType: "jsp" ,
+    //     fileName : "main" ,
+    //     sources : mainFrame.$('html').html().split("\n")
+    // };
+
+    // _this.files.push(fileObj);
 
 }
 

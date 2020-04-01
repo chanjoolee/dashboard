@@ -32,15 +32,15 @@
     <title>Bracket Responsive Bootstrap 4 Admin Template</title>
 
     <!-- vendor css -->
-    <link href="templates/bracket/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="templates/bracket/lib/Ionicons/css/ionicons.css" rel="stylesheet">
-    <link href="templates/bracket/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
-    <link href="templates/bracket/lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
-    <link href="templates/bracket/lib/rickshaw/rickshaw.min.css" rel="stylesheet">
-    <link href="templates/bracket/lib/chartist/chartist.css" rel="stylesheet">
+    <link href="./templates/bracket/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="./templates/bracket/lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link href="./templates/bracket/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
+    <link href="./templates/bracket/lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
+    <link href="./templates/bracket/lib/rickshaw/rickshaw.min.css" rel="stylesheet">
+    <link href="./templates/bracket/lib/chartist/chartist.css" rel="stylesheet">
 
     <!-- Bracket CSS -->
-    <link rel="stylesheet" href="templates/bracket/css/bracket.css">
+    <link rel="stylesheet" href="./templates/bracket/css/bracket.css">
   </head>
 
   <body>
@@ -1127,18 +1127,18 @@
     </div><!-- br-mainpanel -->
     <!-- ########## END: MAIN PANEL ########## -->
 
-    <script src="templates/bracket/lib/jquery/jquery.js"></script>
-    <script src="templates/bracket/lib/popper.js/popper.js"></script>
-    <script src="templates/bracket/lib/bootstrap/bootstrap.js"></script>
-    <script src="templates/bracket/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
-    <script src="templates/bracket/lib/moment/moment.js"></script>
-    <script src="templates/bracket/lib/jquery-ui/jquery-ui.js"></script>
-    <script src="templates/bracket/lib/jquery-switchbutton/jquery.switchButton.js"></script>
-    <script src="templates/bracket/lib/peity/jquery.peity.js"></script>
-    <script src="templates/bracket/lib/chartist/chartist.js"></script>
-    <script src="templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
-    <script src="templates/bracket/lib/d3/d3.js"></script>
-    <script src="templates/bracket/lib/rickshaw/rickshaw.min.js"></script>
+    <script src="./templates/bracket/lib/jquery/jquery.js"></script>
+    <script src="./templates/bracket/lib/popper.js/popper.js"></script>
+    <script src="./templates/bracket/lib/bootstrap/bootstrap.js"></script>
+    <script src="./templates/bracket/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+    <script src="./templates/bracket/lib/moment/moment.js"></script>
+    <script src="./templates/bracket/lib/jquery-ui/jquery-ui.js"></script>
+    <script src="./templates/bracket/lib/jquery-switchbutton/jquery.switchButton.js"></script>
+    <script src="./templates/bracket/lib/peity/jquery.peity.js"></script>
+    <script src="./templates/bracket/lib/chartist/chartist.js"></script>
+    <script src="./templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
+    <script src="./templates/bracket/lib/d3/d3.js"></script>
+    <script src="./templates/bracket/lib/rickshaw/rickshaw.min.js"></script>
 
 
     <script src="./templates/bracket/js/bracket.js"></script>

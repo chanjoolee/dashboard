@@ -3898,7 +3898,7 @@ function fn_makeHtml( container , _schema ){
 					//var vform = $(document.createElement( "form" ));
 					
 					var vform =  document.getElementById(form_id);
-					vform.action = '/' + contextName + '/generic.html?viewName='+viewName;
+					vform.action = './generic.html?viewName='+viewName;
 					vform.method = "post";
 					vform.target = _schema.id + 'Frame';
 					//vform.target = v_content[0];
