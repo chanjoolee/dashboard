@@ -2,14 +2,17 @@ package dashboard.common.controller;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +30,10 @@ import dashboard.service.ComplexService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
+
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 
 /**
  * 
@@ -74,6 +81,32 @@ public class CommonController {
     	mav.setViewName(searchVO.get("viewName").toString());
     	mav.addObject("locale_language",response.getLocale().getLanguage());
         return mav;
+    }
+    
+    @RequestMapping(value = "/template",method = { RequestMethod.GET, RequestMethod.POST })
+    public void template(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletResponse response,HttpServletRequest request, ModelAndView mav) throws IOException {
+    	commonService.requestToVo(request, searchVO);
+    	VelocityEngine ve = new VelocityEngine();
+    	Properties p = new Properties();
+    	p.setProperty( "resource.loader", "class" );
+    	p.setProperty( "class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
+//    	p.setProperty( "class.resource.loader.path","/WEB-INF/velocity/");
+        ve.init(p);
+        
+        
+    	/* add that list to a VelocityContext */
+        VelocityContext context = new VelocityContext();
+        context.put("searchVO", searchVO);
+ 
+        /* get the Template */
+        Template t = ve.getTemplate("bracket.vm");
+ 
+        /* now render the template into a Writer */
+		StringWriter writer = new StringWriter();
+		t.merge(context, writer);
+		
+		response.getWriter().println(writer);		
+        writer.close();
     }
     
     @RequestMapping(value = "/genericlListJson" ,method = { RequestMethod.GET, RequestMethod.POST })
