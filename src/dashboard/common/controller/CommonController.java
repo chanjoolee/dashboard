@@ -90,16 +90,18 @@ public class CommonController {
     	Properties p = new Properties();
     	p.setProperty( "resource.loader", "class" );
     	p.setProperty( "class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
-//    	p.setProperty( "class.resource.loader.path","/WEB-INF/velocity/");
+//    	p.setProperty( "resource.loader", "webapp" );
+//    	p.setProperty( "class.resource.loader.class", "org.apache.velocity.tools.view.WebappResourceLoader" );
+//    	p.setProperty( "class.resource.loader.path","/WEB-INF/template/");
         ve.init(p);
         
         
     	/* add that list to a VelocityContext */
         VelocityContext context = new VelocityContext();
         context.put("searchVO", searchVO);
- 
+        
         /* get the Template */
-        Template t = ve.getTemplate("bracket.vm");
+        Template t = ve.getTemplate(searchVO.get("viewName").toString());
  
         /* now render the template into a Writer */
 		StringWriter writer = new StringWriter();
