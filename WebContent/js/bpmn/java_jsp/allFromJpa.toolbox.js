@@ -5318,7 +5318,8 @@ JpaAllGeneratorToolBox.prototype.fn_generate_main_bracket = function () {
         async: false,
         data : {    
             searchJson : JSON.stringify(searchJson),
-            viewName : "bracket.vm"
+            viewName : "bracket.vm" ,
+            menuFolder : 'schema/'+ _this.Model._name + "." + _this.dateStr + '/'
         },
         success: function (content){
             menu_src = content;

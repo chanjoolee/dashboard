@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -60,10 +62,12 @@
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
         <ul class="br-menu-sub nav flex-column">
-          <li class="nav-item"><a href="navigation.html" class="nav-link">Basic Nav</a></li>
-          <li class="nav-item"><a href="navigation-layouts.html" class="nav-link">Nav Layouts</a></li>
+          #set( $ext = ".html" )
+          #foreach( $menu in $searchVO.searchJson.menus )
+            <li class="nav-item"><a href=$searchVO.menuFolder$menu.fileName  class="nav-link">$menu.fileName</a></li>
+          #end
+          
         </ul>
-        
       </div><!-- br-sideleft-menu -->
 
       <br>
