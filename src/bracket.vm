@@ -64,7 +64,7 @@
         <ul class="br-menu-sub nav flex-column">
           #set( $ext = ".html" )
           #foreach( $menu in $searchVO.searchJson.menus )
-            <li class="nav-item"><a href=$searchVO.menuFolder$menu.fileName  class="nav-link">$menu.fileName</a></li>
+            <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('$searchVO.menuFolder$menu.fileName');" class="nav-link">$menu.fileName</a></li>
           #end
           
         </ul>
@@ -487,7 +487,7 @@
     <!--  START: MAIN PANEL  -->
     <div class="br-mainpanel">
 
-      <div class="br-pagebody mg-t-5 pd-x-30">
+      <div id="pagebody" class="br-pagebody mg-t-5 pd-x-30">
         
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
@@ -504,6 +504,7 @@
     <script src="./templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
     <script src="./templates/bracket/lib/d3/d3.js"></script>
     <script src="./templates/bracket/lib/rickshaw/rickshaw.min.js"></script>
+    <script src="./js/bpmn/generator.js"></script>
 
 
     <script src="./templates/bracket/js/bracket.js"></script>
