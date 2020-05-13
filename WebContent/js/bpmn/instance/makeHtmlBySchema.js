@@ -7,18 +7,19 @@ function makeHtmlBySchema( _container , _schema , _instance ){
 
 makeHtmlBySchema.prototype.process_type = function(  _schema , _schema_parent , container_parent ){
     var _this = this;
+    _schema.parentSchema = _schema_parent;
+    _schema.parentContainer = container_parent;
     var container = eval("_this." + _schema.type + "( _schema , _schema_parent , container_parent)");
-
+    container_parent.append(container);
     if(_schema.elements != null){
         $.each( _schema.elements , function( i , el){
             _this.process_type( el , _schema ,  container  );
         });
-    }
-    
+    }    
 }
 
 
-makeHtmlBySchema.prototype.defaultSetting = function( _container ){
+makeHtmlBySchema.prototype.defaultSetting = function( _schema , _container ){
     var _this = this;
     if( _schema.id != null){
         _container.attr("id", _schema.id + "Container");
@@ -28,15 +29,14 @@ makeHtmlBySchema.prototype.defaultSetting = function( _container ){
 makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , container_parent ){
     var _this = this;
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
-    container_parent.append(container);    
+    _this.defaultSetting( _schema , container);
     return container;
 }
 
 makeHtmlBySchema.prototype.HorizontalLayout = function( _schema , _schema_parent , container_parent){
     var _this = this;
     var container = $("<div/>",{ style: "display: inline-block "});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema , container);
     if(_schema.width != undefined){
         container.css("width",_schema.width);
     }
@@ -47,7 +47,7 @@ makeHtmlBySchema.prototype.inline = function(_schema ,_schema_parent , container
     var _this = this;
 
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema, container);
 
     var cols = 3;
     if(_schema.cols != undefined)
@@ -79,7 +79,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
     var _this = this;
 
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema, container);
 
     var cols = 1;
     if(_schema.cols != undefined)
@@ -321,7 +321,7 @@ makeHtmlBySchema.prototype.inline_iframe = function(_schema ,_schema_parent , co
     var _this = this;
 
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema, container);
 
     return container;
     
@@ -331,7 +331,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
     var _this = this;
 
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema, container);
 
     //==grid create    
     container.attr("id",_schema.id + 'Container');
@@ -486,14 +486,14 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
 }
 
 
-makeHtmlBySchema.prototype.SearchHeader = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , container_parent){
     var _this = this;
 
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema, container);
 
     if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container_parent.css("display","inline-block");
+        container.css("display","inline-block");
         if(_schema.width != undefined)
             container.css("width",_schema.width);
         if(container.children().length > 0)
@@ -516,7 +516,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
     var _this = this;
 
     var container = $("<div/>",{});
-    _this.defaultSetting(container);
+    _this.defaultSetting(_schema, container);
 
     if(_schema.parentSchema.type == 'HorizontalLayout'){
         container.css("display","inline-block");
@@ -529,7 +529,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
     var vData = _schema.data();
     var sb = [];
     //sb.push("<option value='' multiple='multiple' ></option>");
-    mainControl = $(document.createElement( "select" ));
+    var mainControl = $(document.createElement( "select" ));
     mainControl.css("width",_schema.width);
     if(_schema.multiselectOpt != undefined && _schema.multiselectOpt.multiple != undefined && _schema.multiselectOpt.multiple == true )
         mainControl.attr("multiple","multiple");
@@ -680,7 +680,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
                     // 해당하는 Object 만 refresh 한다.
                     var my = $("select[name="+ child.id+"]");
                     //my.multiselect('refresh');
-                    $menu = $.data(my[0],"ech-multiselect").menu;
+                    var $menu = $.data(my[0],"ech-multiselect").menu;
                     $menu.css("width","400px");
                     $menu.find(".ui-multiselect-filter input").css("width","150px");
                     
@@ -700,4 +700,233 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
     
 
     return container;
+}
+
+makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    if(_schema.parentSchema.type == 'HorizontalLayout'){
+        container.css("display","inline-block");
+        if(_schema.width != undefined)
+            container.css("width",_schema.width);
+        if(container.children().length > 0)
+            container.css("margin-left","10px");
+    }
+    if(_schema.width != undefined)
+		container.css("width",_schema.width);
+
+    var vData = _schema.data();
+    var mainControl = $(document.createElement( "div" ));
+
+    mainControl.addClass("ui-multiselect-menu ui-widget-content ui-corner-all");
+    if(_schema.name != undefined)
+        mainControl.attr("name",_schema.name);
+    if(_schema.id != undefined)
+        mainControl.attr("id",_schema.id);
+    mainControl.hide();
+    // mainContainer.append(mainControl);
+    mainControl.appendTo(document.body);
+    
+    var button = $('<button type="button"><span class="ui-icon ui-icon-triangle-2-n-s"></span></button>')
+    .addClass('ui-multiselect ui-widget ui-state-default ui-corner-all')
+    .addClass("")
+    .attr({ 'title':"", 'aria-haspopup':true }) 
+    .css({width: "100%"})
+    .appendTo(container);
+
+    var buttonlabel = $('<span />')
+    .html("Js Tree Search")
+    .appendTo(button);
+    button.on( "click", function() {
+        // mainControl.toggle( 'blind', { to: { width: 200, height: 300 } }, 500 );
+        var display = mainControl.css("display");
+        var pos = $(this).offset();
+        mainControl.css({
+            top: pos.top + $(this).outerHeight(),
+            left : pos.left
+        });
+        if (display == "none"){
+            mainControl.show();
+        }else
+            mainControl.hide();
+        
+
+    });
+
+    buttonlabel.attr("mainControlId",_schema.id );
+    var searchTree = new List2Tree(vData, _schema.keys);
+    _.merge(searchTree.tree ,
+        {
+            checkbox : {
+                // three_state : false,
+                // cascade: 'undetermined',
+                // visible: true,
+                // three_state: false
+                // tie_selection: false
+            },
+            'plugins': ["checkbox", "state"],
+            // 'plugins': ["checkbox", "wholerow"],
+            "core": {
+                themes:{
+                    'icons':false
+                }
+            }
+        }
+    );
+
+    if(_schema.rootText != null){
+        searchTree.tree.core.data[0].text = _schema.rootText;
+    }else{
+        searchTree.tree.core.data[0].text = _.map( _schema.keys,function(key , i){
+            return _.camelCase(key);
+        }).join("/");
+    }
+
+    mainControl.css("width","400px");
+    mainControl.css("max-height","600px");
+    mainControl.css("overflow","scroll");
+    mainControl.jstree(_.cloneDeep(searchTree.tree));
+    var vtree = mainControl.jstree(true);
+    mainControl.on("changed.jstree", function(){
+        // var vLabel = $("[mainControlId="+_schema.id + "]");
+        // vLabel.text(vtree.get_selected().length + " Selected");
+        buttonlabel.text(vtree.get_selected().length + " Selected");
+    });
+
+    $(document).bind('mousedown.' + this._namespaceID, function(e) {
+        var display = mainControl.css("display");
+
+        if(display != "none" && e.target != mainControl[0] && !$.contains(mainControl[0], e.target) && !$.contains(button[0], e.target) && e.target !== button[0]) {
+            mainControl.hide();
+        }
+    });
+
+    return container;
+}
+
+/**
+Bootstrap 버튼을 사용한다.
+*/
+makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+    if(_schema.parentSchema.type == 'HorizontalLayout'){
+        container.css("display","inline-block");
+        if(_schema.width != undefined)
+            container.css("width",_schema.width);
+        
+    }
+
+    var mainControl = $(document.createElement("button"));
+    mainControl.attr("type","button");
+    mainControl.addClass("btn btn-warning btn-sm");
+    mainControl.text(_schema.label);
+    container.append(mainControl);
+			
+
+    /***
+    End Logic    
+    */
+
+
+    return container;
+    
+}
+
+makeHtmlBySchema.prototype.radioButton = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+    if(_schema.parentSchema.type == 'HorizontalLayout'){
+        container.css("display","inline-block");
+        if(_schema.width != undefined)
+            container.css("width",_schema.width);
+        
+    }
+
+    var vData = _schema.data();
+    $.each(vData,function(i,data){
+        var vDiv = $("<div/>",{class : "form-check form-check-inline"});
+        container.append(vDiv);
+        // input
+        var vInput = $("<input/>",{
+            class: "form-check-input", 
+            type: "radio", 
+            value : this[_schema.options.cd] ,
+            name : _schema.id ,
+            id : _schema.id + "_" + i
+        });
+        vDiv.append(vInput);
+        // label
+        var label = $("<label/>",{
+            class : "form-check-label", 
+            value : this[_schema.options.name]
+        });
+        container.append(label);
+    });
+    /***
+    End Logic    
+    */
+
+    return container;
+    
+}
+
+
+makeHtmlBySchema.prototype.dateInput = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+    if(_schema.parentSchema.type == 'HorizontalLayout'){
+        container.css("display","inline-block");
+        if(_schema.width != undefined)
+            container.css("width",_schema.width);
+        
+    }
+
+    var vData = _schema.data();
+    $.each(vData,function(i,data){
+        var vDiv = $("<div/>",{class : "form-check form-check-inline"});
+        container.append(vDiv);
+        // input
+        var vInput = $("<input/>",{
+            class: "form-check-input", 
+            type: "radio", 
+            value : this[_schema.options.cd] ,
+            name : _schema.id ,
+            id : _schema.id + "_" + i 
+        });
+        vDiv.append(vInput);
+        // label
+        var label = $("<label/>",{
+            class : "form-check-label", 
+            value : this[_schema.options.name]
+        });
+        container.append(label);
+    });
+    /***
+    End Logic    
+    */
+
+    return container;
+    
 }

@@ -487,7 +487,11 @@
     <div class="br-mainpanel">
 
       <div id="pagebody" class="br-pagebody mg-t-5 pd-x-30">
-        
+        <!-- test date -->
+        <div class="input-group">
+          <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+          <input type="text" class="form-control fc-datepicker" placeholder="YYYY/MM/DD">
+        </div>
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
@@ -503,12 +507,18 @@
     <script src="./templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
     <script src="./templates/bracket/lib/d3/d3.js"></script>
     <script src="./templates/bracket/lib/rickshaw/rickshaw.min.js"></script>
+    <!-- <script src="./templates/bracket/lib/jquery.maskedinput/jquery.maskedinput.js"></script> -->
+    <script src="http://themetrace.com/templates/bracket/lib/jquery.maskedinput/jquery.maskedinput.js"></script>
+    <script src="http://themetrace.com/templates/bracket/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
 
 
     <script src="./templates/bracket/js/bracket.js"></script>
     <script src="./templates/bracket/js/ResizeSensor.js"></script>
-    <script src="./js/bpmn/generator.js"></script>
-    <script src="./js/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_list.js"></script>
+    <script src="./js/bpmn/instance/gen_instance.js"></script>
+    <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
+    <script src="./js/bpmn/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script>
     <script>
       var instances = {};
       $(function(){
@@ -536,7 +546,11 @@
             $('.show-sub + .br-menu-sub').slideDown();
           }
         }
-
+        $('.fc-datepicker').datepicker({
+          format: "yyyy/mm/dd",
+          showOtherMonths: true,
+          selectOtherMonths: true
+        });
 
       });
 

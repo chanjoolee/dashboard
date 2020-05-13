@@ -504,11 +504,14 @@
     <script src="./templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
     <script src="./templates/bracket/lib/d3/d3.js"></script>
     <script src="./templates/bracket/lib/rickshaw/rickshaw.min.js"></script>
-    <script src="./js/bpmn/generator.js"></script>
-
 
     <script src="./templates/bracket/js/bracket.js"></script>
     <script src="./templates/bracket/js/ResizeSensor.js"></script>
+    <!-- 스키마를 바탕으로 소스를 생성하기  -->
+    <script src="./js/bpmn/gen/gen_instance_list.js"></script>
+    <script src="./js/bpmn/gen/gen_instance.js"></script>
+    <script src="./js/bpmn/gen/makeHtmlBySchema.js"></script>
+    <script src="./js/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script>
     <script>
       $(function(){
         'use strict'
