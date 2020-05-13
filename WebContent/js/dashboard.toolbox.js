@@ -1718,248 +1718,248 @@ function setAlldataInList(dataList){
 }
 
 
-Highcharts.TAT = function (options, callback) {
-    var defaultOptions = {
-        chart: {
-            renderTo: (options.chart && options.chart.renderTo) || this,
-            backgroundColor: null,
-            borderWidth: 0,
-            type: 'bar',
-            margin: [-10, 0, -10, -10],
-            //width: 600,
-            height: 30,
-            style: {
-                overflow: 'visible'
-            },
-            skipClone: true
-        },
-        exporting:{buttons:[]} ,
-        title: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-        },
-        xAxis: {
-            labels: {
-                enabled: false
-            },
-            title: {
-                text: null
-            },
-            startOnTick: false,
-            endOnTick: false
-            ,tickPositions: [1]
-            ,tickLength :0
-        },
-        yAxis: {
-        	type: 'datetime',
-            endOnTick: false,
-            startOnTick: false,
-            labels: {
-                enabled: false
-            },
-            title: {
-                text: null
-            }
-            ,tickPositions: [1]
-            ,tickLength :0
+// Highcharts.TAT = function (options, callback) {
+//     var defaultOptions = {
+//         chart: {
+//             renderTo: (options.chart && options.chart.renderTo) || this,
+//             backgroundColor: null,
+//             borderWidth: 0,
+//             type: 'bar',
+//             margin: [-10, 0, -10, -10],
+//             //width: 600,
+//             height: 30,
+//             style: {
+//                 overflow: 'visible'
+//             },
+//             skipClone: true
+//         },
+//         exporting:{buttons:[]} ,
+//         title: {
+//             text: ''
+//         },
+//         credits: {
+//             enabled: false
+//         },
+//         xAxis: {
+//             labels: {
+//                 enabled: false
+//             },
+//             title: {
+//                 text: null
+//             },
+//             startOnTick: false,
+//             endOnTick: false
+//             ,tickPositions: [1]
+//             ,tickLength :0
+//         },
+//         yAxis: {
+//         	type: 'datetime',
+//             endOnTick: false,
+//             startOnTick: false,
+//             labels: {
+//                 enabled: false
+//             },
+//             title: {
+//                 text: null
+//             }
+//             ,tickPositions: [1]
+//             ,tickLength :0
             
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-        	//enabled:false ,
-            backgroundColor: null,
-            //borderWidth: 0,
-            shadow: false,
-            useHTML: true,
-            hideDelay: 0,
-            shared: false,
-            padding: 0,
-            positioner: function (w, h, point) {
-                return { x: point.plotX - w , y: point.plotY - h};
-            }
-           /* ,formatter: function() {
-                //console.log(this.point);
-                var point = this.point;
-                return Highcharts.dateFormat('%y/%m/%e', point.low) + ' - ' +  Highcharts.dateFormat('%y/%m/%e', point.y);
-            }*/
-        },
-        plotOptions: {
-            /*series: {
-                animation: false,
-                lineWidth: 1,
-                shadow: false,
-                states: {
-                    hover: {
-                        lineWidth: 1
-                    }
-                },
-                marker: {
-                    radius: 1,
-                    states: {
-                        hover: {
-                            radius: 2
-                        }
-                    }
-                },
-                fillOpacity: 0.25
-            },*/
-            bar: {
-            	grouping:false
-            	//,edgeWidth: 0
-            	//,groupZPadding: 0
-            	//,groupPadding: 0
-            	,dataLabels: {
-                    enabled: true,
-                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
-                    inside:true,
-                    format:'{point.options.PHASE_NAME}({point.options.TAT})'
-            	}
-            },
-            column: {
-                negativeColor: '#910000',
-                borderColor: 'silver'
-            }
-        }
-    };
-    options = Highcharts.merge(defaultOptions, options);
+//         },
+//         legend: {
+//             enabled: false
+//         },
+//         tooltip: {
+//         	//enabled:false ,
+//             backgroundColor: null,
+//             //borderWidth: 0,
+//             shadow: false,
+//             useHTML: true,
+//             hideDelay: 0,
+//             shared: false,
+//             padding: 0,
+//             positioner: function (w, h, point) {
+//                 return { x: point.plotX - w , y: point.plotY - h};
+//             }
+//            /* ,formatter: function() {
+//                 //console.log(this.point);
+//                 var point = this.point;
+//                 return Highcharts.dateFormat('%y/%m/%e', point.low) + ' - ' +  Highcharts.dateFormat('%y/%m/%e', point.y);
+//             }*/
+//         },
+//         plotOptions: {
+//             /*series: {
+//                 animation: false,
+//                 lineWidth: 1,
+//                 shadow: false,
+//                 states: {
+//                     hover: {
+//                         lineWidth: 1
+//                     }
+//                 },
+//                 marker: {
+//                     radius: 1,
+//                     states: {
+//                         hover: {
+//                             radius: 2
+//                         }
+//                     }
+//                 },
+//                 fillOpacity: 0.25
+//             },*/
+//             bar: {
+//             	grouping:false
+//             	//,edgeWidth: 0
+//             	//,groupZPadding: 0
+//             	//,groupPadding: 0
+//             	,dataLabels: {
+//                     enabled: true,
+//                     color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
+//                     inside:true,
+//                     format:'{point.options.PHASE_NAME}({point.options.TAT})'
+//             	}
+//             },
+//             column: {
+//                 negativeColor: '#910000',
+//                 borderColor: 'silver'
+//             }
+//         }
+//     };
+//     options = Highcharts.merge(defaultOptions, options);
 
-    return new Highcharts.Chart(options, callback);
-};
+//     return new Highcharts.Chart(options, callback);
+// };
 
-Highcharts.SocDesign = function (options, callback) {
-    var defaultOptions = {
-        chart: {
-            renderTo: (options.chart && options.chart.renderTo) || this,
-            backgroundColor: null,
-            borderWidth: 0,
-            type: 'bar',
-            //margin: [-10, 0, -10, -10],
-            margin: [-10, 10, -10, 0],
-            //width: 600,
-            height: 22,
-            style: {
-                overflow: 'visible'
-            },
-            skipClone: true
-        },
-        exporting:{buttons:[]} ,
-        title: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-        },
-        xAxis: {
-            labels: {
-                enabled: false
-            },
-            title: {
-                text: null
-            },
-            //startOnTick: false,
-            //endOnTick: false
-            tickPositions: [0]
-            ,tickLength :0
-            ,lineWidth :0
-        },
-        yAxis: {
-        	//type: 'datetime',
-            endOnTick: false,
-            startOnTick: false,
-            labels: {
-                enabled: false
-            },
-            title: {
-                text: null
-            }
-            ,tickPositions: []
-            ,tickLength :0
-            ,min:0
-            ,max: 100
-            ,tickWidth :0
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-        	//enabled:false ,
-            backgroundColor: null,
-            //borderWidth: 0,
-            shadow: false,
-            useHTML: true,
-            hideDelay: 0,
-            shared: false,
-            padding: 0,
-            positioner: function (w, h, point) {
-                return { x: point.plotX - w , y: point.plotY - h};
-            } , 
-        	//headerFormat: '<span style="font-size: 10px">' + $td.parent().find('td').html() + '</span><br/>',
-	        headerFormat:'',
-	        //pointFormat: '<b>{point.options.EST_START_DATE} - {point.options.EST_END_DATE}</b>'
-	        //pointFormat: '<b>{point.options.PHASE_NAME}: {point.low:%y/%m/%e} - {point.y:%y/%m/%e}</b></br>'
-	        //pointFormat: '<b>{point.options.RATIO}({point.options.PASS}/{point.options.CASES})'
-	        pointFormat: '<b>case: {point.options.CASES}, pass: {point.options.PASS}'
-           /* ,formatter: function() {
-                //console.log(this.point);
-                var point = this.point;
-                return Highcharts.dateFormat('%y/%m/%e', point.low) + ' - ' +  Highcharts.dateFormat('%y/%m/%e', point.y);
-            }*/
-        },
-        plotOptions: {
-            /*series: {
-                animation: false,
-                lineWidth: 1,
-                shadow: false,
-                states: {
-                    hover: {
-                        lineWidth: 1
-                    }
-                },
-                marker: {
-                    radius: 1,
-                    states: {
-                        hover: {
-                            radius: 2
-                        }
-                    }
-                },
-                fillOpacity: 0.25
-            },*/
-            bar: {
-            	grouping:false
-            	//,edgeWidth: 0
-            	//,groupZPadding: 0
-            	//,groupPadding: 0
-            	,dataLabels: {
-                    enabled: true,
-                    //color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
-                    //color: ('white'),
-                    align: 'right',
-                    inside:true,
-                    //format:'{point.options.RATIO}({point.options.PASS}/{point.options.CASES})'
-                    //format:'{point.options.RATIO:.1f}%',
-                   formatter:function(){
-                	   //var max = this.series.yAxis.max,
-                       //color =  this.y / max < 0.05 ? 'black' : 'white'; // 5% width
-                	   var color =  this.y > 10 ? 'white' : 'black'; // 5% width
-                	   return '<span style="color: ' + color + '">' + Highcharts.numberFormat(this.y,1) + '% </span>'; 
-                    }
-            	}
-            },
-            column: {
-                negativeColor: '#910000',
-                borderColor: 'silver'
-            }
-        }
-    };
-    options = Highcharts.merge(defaultOptions, options);
+// Highcharts.SocDesign = function (options, callback) {
+//     var defaultOptions = {
+//         chart: {
+//             renderTo: (options.chart && options.chart.renderTo) || this,
+//             backgroundColor: null,
+//             borderWidth: 0,
+//             type: 'bar',
+//             //margin: [-10, 0, -10, -10],
+//             margin: [-10, 10, -10, 0],
+//             //width: 600,
+//             height: 22,
+//             style: {
+//                 overflow: 'visible'
+//             },
+//             skipClone: true
+//         },
+//         exporting:{buttons:[]} ,
+//         title: {
+//             text: ''
+//         },
+//         credits: {
+//             enabled: false
+//         },
+//         xAxis: {
+//             labels: {
+//                 enabled: false
+//             },
+//             title: {
+//                 text: null
+//             },
+//             //startOnTick: false,
+//             //endOnTick: false
+//             tickPositions: [0]
+//             ,tickLength :0
+//             ,lineWidth :0
+//         },
+//         yAxis: {
+//         	//type: 'datetime',
+//             endOnTick: false,
+//             startOnTick: false,
+//             labels: {
+//                 enabled: false
+//             },
+//             title: {
+//                 text: null
+//             }
+//             ,tickPositions: []
+//             ,tickLength :0
+//             ,min:0
+//             ,max: 100
+//             ,tickWidth :0
+//         },
+//         legend: {
+//             enabled: false
+//         },
+//         tooltip: {
+//         	//enabled:false ,
+//             backgroundColor: null,
+//             //borderWidth: 0,
+//             shadow: false,
+//             useHTML: true,
+//             hideDelay: 0,
+//             shared: false,
+//             padding: 0,
+//             positioner: function (w, h, point) {
+//                 return { x: point.plotX - w , y: point.plotY - h};
+//             } , 
+//         	//headerFormat: '<span style="font-size: 10px">' + $td.parent().find('td').html() + '</span><br/>',
+// 	        headerFormat:'',
+// 	        //pointFormat: '<b>{point.options.EST_START_DATE} - {point.options.EST_END_DATE}</b>'
+// 	        //pointFormat: '<b>{point.options.PHASE_NAME}: {point.low:%y/%m/%e} - {point.y:%y/%m/%e}</b></br>'
+// 	        //pointFormat: '<b>{point.options.RATIO}({point.options.PASS}/{point.options.CASES})'
+// 	        pointFormat: '<b>case: {point.options.CASES}, pass: {point.options.PASS}'
+//            /* ,formatter: function() {
+//                 //console.log(this.point);
+//                 var point = this.point;
+//                 return Highcharts.dateFormat('%y/%m/%e', point.low) + ' - ' +  Highcharts.dateFormat('%y/%m/%e', point.y);
+//             }*/
+//         },
+//         plotOptions: {
+//             /*series: {
+//                 animation: false,
+//                 lineWidth: 1,
+//                 shadow: false,
+//                 states: {
+//                     hover: {
+//                         lineWidth: 1
+//                     }
+//                 },
+//                 marker: {
+//                     radius: 1,
+//                     states: {
+//                         hover: {
+//                             radius: 2
+//                         }
+//                     }
+//                 },
+//                 fillOpacity: 0.25
+//             },*/
+//             bar: {
+//             	grouping:false
+//             	//,edgeWidth: 0
+//             	//,groupZPadding: 0
+//             	//,groupPadding: 0
+//             	,dataLabels: {
+//                     enabled: true,
+//                     //color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
+//                     //color: ('white'),
+//                     align: 'right',
+//                     inside:true,
+//                     //format:'{point.options.RATIO}({point.options.PASS}/{point.options.CASES})'
+//                     //format:'{point.options.RATIO:.1f}%',
+//                    formatter:function(){
+//                 	   //var max = this.series.yAxis.max,
+//                        //color =  this.y / max < 0.05 ? 'black' : 'white'; // 5% width
+//                 	   var color =  this.y > 10 ? 'white' : 'black'; // 5% width
+//                 	   return '<span style="color: ' + color + '">' + Highcharts.numberFormat(this.y,1) + '% </span>'; 
+//                     }
+//             	}
+//             },
+//             column: {
+//                 negativeColor: '#910000',
+//                 borderColor: 'silver'
+//             }
+//         }
+//     };
+//     options = Highcharts.merge(defaultOptions, options);
 
-    return new Highcharts.Chart(options, callback);
-};
+//     return new Highcharts.Chart(options, callback);
+// };
 
 
 function minValue(srcData,column){
