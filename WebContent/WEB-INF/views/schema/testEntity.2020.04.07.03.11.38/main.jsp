@@ -488,10 +488,17 @@
 
       <div id="pagebody" class="br-pagebody mg-t-5 pd-x-30">
         <!-- test date -->
-        <div class="input-group">
-          <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-          <input type="text" class="form-control fc-datepicker" placeholder="YYYY/MM/DD">
+        <div class="wd-200 mg-b-30">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+            <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+            <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
+          </div>
         </div>
+        <!-- test date -->
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
@@ -511,6 +518,11 @@
     <script src="http://themetrace.com/templates/bracket/lib/jquery.maskedinput/jquery.maskedinput.js"></script>
     <script src="http://themetrace.com/templates/bracket/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 
+    <!-- react  -->
+    <script  src="./js/react-0.14.3/build/react.js"></script>
+		<script  src="./js/react-0.14.3/build/react-dom.js"></script>
+		<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
+		<script  src="./js/react-0.14.3/browser.js" ></script>
 
 
     <script src="./templates/bracket/js/bracket.js"></script>
@@ -519,6 +531,7 @@
     <script src="./js/bpmn/instance/gen_instance.js"></script>
     <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
     <script src="./js/bpmn/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script>
+    
     <script>
       var instances = {};
       $(function(){
@@ -546,11 +559,11 @@
             $('.show-sub + .br-menu-sub').slideDown();
           }
         }
-        $('.fc-datepicker').datepicker({
-          format: "yyyy/mm/dd",
-          showOtherMonths: true,
-          selectOtherMonths: true
-        });
+        // $('.fc-datepicker').datepicker({
+        //   dateFormat: "yy-mm-dd",
+        //   showOtherMonths: true,
+        //   selectOtherMonths: true
+        // });
 
       });
 
@@ -562,6 +575,7 @@
 
     </script>
   </body>
+  <jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>
 </html>
 
 

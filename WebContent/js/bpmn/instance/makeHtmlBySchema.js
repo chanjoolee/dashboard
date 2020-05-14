@@ -24,6 +24,14 @@ makeHtmlBySchema.prototype.defaultSetting = function( _schema , _container ){
     if( _schema.id != null){
         _container.attr("id", _schema.id + "Container");
     }
+
+    if(_schema.parentSchema.type == 'HorizontalLayout'){
+        container.css("display","inline-block");
+    }
+    if(_schema.width != undefined)
+        container.css("width",_schema.width);
+    if(container.children().length > 0)
+        container.css("margin-left","10px");
 }
 
 makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , container_parent ){
@@ -37,9 +45,7 @@ makeHtmlBySchema.prototype.HorizontalLayout = function( _schema , _schema_parent
     var _this = this;
     var container = $("<div/>",{ style: "display: inline-block "});
     _this.defaultSetting(_schema , container);
-    if(_schema.width != undefined){
-        container.css("width",_schema.width);
-    }
+    
     return container;
 }
 
@@ -337,11 +343,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
     container.attr("id",_schema.id + 'Container');
     
     var containerType = container.attr("type");
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(container.children().length > 0)
-            container.css("margin-left","10px");
-    }
+    
         
     //==table create
     var mainControl = $(document.createElement( "table" ));
@@ -491,14 +493,6 @@ makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , co
 
     var container = $("<div/>",{});
     _this.defaultSetting(_schema, container);
-
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(_schema.width != undefined)
-            container.css("width",_schema.width);
-        if(container.children().length > 0)
-            container.css("margin-left","1px");
-    }
         
     var mainControl = $(document.createElement("h3"));
     //h3.addClass("cont_tit");
@@ -517,14 +511,6 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
 
     var container = $("<div/>",{});
     _this.defaultSetting(_schema, container);
-
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(_schema.width != undefined)
-            container.css("width",_schema.width);
-        if(container.children().length > 0)
-            container.css("margin-left","10px");
-    }
     
     var vData = _schema.data();
     var sb = [];
@@ -708,16 +694,6 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
     var container = $("<div/>",{});
     _this.defaultSetting(_schema, container);
 
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(_schema.width != undefined)
-            container.css("width",_schema.width);
-        if(container.children().length > 0)
-            container.css("margin-left","10px");
-    }
-    if(_schema.width != undefined)
-		container.css("width",_schema.width);
-
     var vData = _schema.data();
     var mainControl = $(document.createElement( "div" ));
 
@@ -819,12 +795,6 @@ makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container
     /**
     Start Logic
     */
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(_schema.width != undefined)
-            container.css("width",_schema.width);
-        
-    }
 
     var mainControl = $(document.createElement("button"));
     mainControl.attr("type","button");
@@ -851,12 +821,6 @@ makeHtmlBySchema.prototype.radioButton = function(_schema ,_schema_parent , cont
     /**
     Start Logic
     */
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(_schema.width != undefined)
-            container.css("width",_schema.width);
-        
-    }
 
     var vData = _schema.data();
     $.each(vData,function(i,data){
@@ -896,33 +860,135 @@ makeHtmlBySchema.prototype.dateInput = function(_schema ,_schema_parent , contai
     /**
     Start Logic
     */
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
-        if(_schema.width != undefined)
-            container.css("width",_schema.width);
-        
-    }
 
-    var vData = _schema.data();
-    $.each(vData,function(i,data){
-        var vDiv = $("<div/>",{class : "form-check form-check-inline"});
-        container.append(vDiv);
-        // input
-        var vInput = $("<input/>",{
-            class: "form-check-input", 
-            type: "radio", 
-            value : this[_schema.options.cd] ,
-            name : _schema.id ,
-            id : _schema.id + "_" + i 
-        });
-        vDiv.append(vInput);
-        // label
-        var label = $("<label/>",{
-            class : "form-check-label", 
-            value : this[_schema.options.name]
-        });
-        container.append(label);
+    var template = `
+        <div class="input-group">
+            <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+            <input type="text" class="form-control fc-datepicker" placeholder="YYYY/MM/DD">
+        </div>
+    `;
+    
+    var subContainer = $(template);
+    subContainer.find("input").attr("id", _schema.id);
+    subContainer.find("input").attr("name", _schema.id);
+    
+    container.append(subContainer);
+    $("#" + _schema.id ).datepicker({
+        dateFormat: "yy-mm-dd" ,
+        showOtherMonths: true ,
+        selectOtherMonths: true
     });
+
+    /***
+    End Logic    
+    */
+
+    return container;
+    
+}
+
+
+makeHtmlBySchema.prototype.title = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+
+    var template = `
+        <div><h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10"></h6></div>
+    `;
+    
+    var subContainer = $(template);
+    subContainer.find("h6").text(_schema.label);
+    container.append(subContainer);
+
+    /***
+    End Logic    
+    */
+
+    return container;
+    
+}
+
+makeHtmlBySchema.prototype.emptyDiv = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+    
+    /***
+    End Logic    
+    */
+
+    return container;
+    
+}
+
+makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+
+    var template = `
+        <ul class="nav nav-pills mb-3" id="` + _schema.id + `" role="tablist">
+    `;
+    
+    var maincontrol = $(template);
+    container.append(maincontrol);
+    
+
+    /***
+    End Logic    
+    */
+
+    return container;
+    
+}
+
+makeHtmlBySchema.prototype.tab_item = function(_schema ,_schema_parent , container_parent){
+    var _this = this;
+
+    var container = $("<div/>",{});
+    _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+
+    var v_ul = _schema.parentContainer.find("ul");
+
+    var template = `
+        <li class="nav-item">
+            <a class="nav-link active" id="" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home">Home</a>
+        </li>
+    `;
+
+    var $template = $(template);
+    var mainControl = $template.find("a");
+    mainControl.attr("id", _schema.id + '_a' );
+    mainControl.attr("origin_id", _schema.id );
+    
+    $.each(_schema.connected_content, function(key,val){
+        mainControl.attr(key,val);
+    });
+    
+    
+    container.append(maincontrol);
+    
+
     /***
     End Logic    
     */

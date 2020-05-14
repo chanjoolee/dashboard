@@ -507,6 +507,13 @@
 
     <script src="./templates/bracket/js/bracket.js"></script>
     <script src="./templates/bracket/js/ResizeSensor.js"></script>
+
+    <!-- react  -->
+    <script  src="./js/react-0.14.3/build/react.js"></script>
+		<script  src="./js/react-0.14.3/build/react-dom.js"></script>
+		<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
+		<script  src="./js/react-0.14.3/browser.js" ></script>
+
     <!-- 스키마를 바탕으로 소스를 생성하기  -->
     <script src="./js/bpmn/gen/gen_instance_list.js"></script>
     <script src="./js/bpmn/gen/gen_instance.js"></script>
@@ -538,7 +545,21 @@
             $('.show-sub + .br-menu-sub').slideDown();
           }
         }
+
+        // $('.fc-datepicker').datepicker({
+        //   dateFormat: "yy-mm-dd",
+        //   showOtherMonths: true,
+        //   selectOtherMonths: true
+        // });
+
       });
+
+      function fn_makeInstance(_entityId){
+        delete instances;
+        instances = new gen_instance_list($("#pagebody") , testEntityJpaFiles );
+        instances.add_instance(_entityId);
+      }
     </script>
   </body>
+  <jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>
 </html>
