@@ -518,15 +518,17 @@
     <script src="http://themetrace.com/templates/bracket/lib/jquery.maskedinput/jquery.maskedinput.js"></script>
     <script src="http://themetrace.com/templates/bracket/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 
+
+    <script src="./templates/bracket/js/bracket.js"></script>
+    <script src="./templates/bracket/js/ResizeSensor.js"></script>
+
     <!-- react  -->
     <script  src="./js/react-0.14.3/build/react.js"></script>
 		<script  src="./js/react-0.14.3/build/react-dom.js"></script>
 		<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
-		<script  src="./js/react-0.14.3/browser.js" ></script>
-
-
-    <script src="./templates/bracket/js/bracket.js"></script>
-    <script src="./templates/bracket/js/ResizeSensor.js"></script>
+    <script  src="./js/react-0.14.3/browser.js" ></script>
+    
+    <!-- 스키마를 바탕으로 소스를 생성하기  -->
     <script src="./js/bpmn/instance/gen_instance_list.js"></script>
     <script src="./js/bpmn/instance/gen_instance.js"></script>
     <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>

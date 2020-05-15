@@ -6,7 +6,7 @@ function genInstance(_entityId, _type,  _list_instance ){
     this.containerId = "div_" + this.entityId + "_"+ this.type ; 
     this.searchContainerId = this.containerId + "_search";
     this.gridCotainerId = this.containerId + "_grid";
-    this.container = $("<div/>",{id: containerId });
+    this.container = $("<div/>",{id:  this.containerId });
     this.list_instance.container.append(this.container);
     this.searchContainer = null;
     this.gridCContainer = null;

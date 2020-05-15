@@ -942,12 +942,23 @@ makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , contain
     Start Logic
     */
 
+    // tab list
     var template = `
-        <ul class="nav nav-pills mb-3" id="` + _schema.id + `" role="tablist">
+        <ul class="nav nav-pills mb-3" id="` + _schema.id + `Ul" role="tablist"></ul>
     `;
     
     var maincontrol = $(template);
+    maincontrol.attr("href","");
     container.append(maincontrol);
+
+    // tab content
+    var template1 = `
+        <ul class="tab-content" id="` + _schema.id + `TabContent"></ul>
+    `;
+    
+    var maincontrol1 = $(template1);
+    container.append(maincontrol1);
+
     
 
     /***
@@ -961,31 +972,58 @@ makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , contain
 makeHtmlBySchema.prototype.tab_item = function(_schema ,_schema_parent , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
-
     /**
     Start Logic
     */
 
-    var v_ul = _schema.parentContainer.find("ul");
+    var v_tab_group = _schema.parentContainer.find("ul[role=tablist]");
+    var v_content_group = _schema.parentContainer.find("ul.tab-content");
 
+    // tab
     var template = `
         <li class="nav-item">
-            <a class="nav-link active" id="" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home">Home</a>
+            <a class="nav-link" id="" data-toggle="pill" href="" role="tab" aria-controls="">Home</a>
         </li>
     `;
-
+    var tab_id = _schema.id + '-tab';
+    var content_id = _schema.id + 'Content';
     var $template = $(template);
-    var mainControl = $template.find("a");
-    mainControl.attr("id", _schema.id + '_a' );
-    mainControl.attr("origin_id", _schema.id );
+    container = $template;
+    if(v_tab_group.children().length > 0){
+        container.addClass("active");
+    }
+    
+    var tab_control = $template.find("a");
+    tab_control.attr("origin_id", _schema.id );
+    tab_control.attr("id", tab_id );
+    tab_control.attr("href", "#" + content_id );
+    tab_control.attr("aria-controls", content_id );
+    tab_control.text(_schema.label);
     
     $.each(_schema.connected_content, function(key,val){
-        mainControl.attr(key,val);
+        tab_control.attr(key,val);
     });
     
+    v_tab_group.append($template);
     
+    // content
+    var template1 = `
+    <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
+    `;
+    
+    var tab_content = $(template1);
+    if(v_content_group.children().length > 0){
+        tab_content.addClass("show active");
+    }
+
+    tab_content.attr("origin_id", _schema.id );
+    tab_content.attr("id", content_id );
+    tab_content.attr("aria-labelledby", tab_id );
+
+    
+    v_content_group.append(tab_content);
+    
+
     container.append(maincontrol);
     
 

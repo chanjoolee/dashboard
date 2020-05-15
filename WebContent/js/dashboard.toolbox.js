@@ -3448,7 +3448,7 @@ function fn_makeHtml( container , _schema ){
 							// 해당하는 Object 만 refresh 한다.
 							var my = $("select[name="+ child.id+"]");
 							//my.multiselect('refresh');
-							$menu = $.data(my[0],"ech-multiselect").menu;
+							var $menu = $.data(my[0],"ech-multiselect").menu;
 							$menu.css("width","400px");
 							$menu.find(".ui-multiselect-filter input").css("width","150px");
 							
