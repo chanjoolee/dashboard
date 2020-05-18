@@ -25,13 +25,13 @@ makeHtmlBySchema.prototype.defaultSetting = function( _schema , _container ){
         _container.attr("id", _schema.id + "Container");
     }
 
-    if(_schema.parentSchema.type == 'HorizontalLayout'){
-        container.css("display","inline-block");
+    if( _schema.parentSchema != null && _schema.parentSchema.type == 'HorizontalLayout'){
+        _container.css("display","inline-block");
     }
-    if(_schema.width != undefined)
-        container.css("width",_schema.width);
-    if(container.children().length > 0)
-        container.css("margin-left","10px");
+    if( _schema.width != undefined)
+        _container.css("width",_schema.width);
+    if( _container.children().length > 0)
+        _container.css("margin-left","10px");
 }
 
 makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , container_parent ){
@@ -809,6 +809,11 @@ makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container
 
 
     return container;
+    
+}
+
+makeHtmlBySchema.prototype.ButtonBootstrap = function(_schema ,_schema_parent , container_parent){
+    return this.Button(_schema ,_schema_parent , container_parent);
     
 }
 

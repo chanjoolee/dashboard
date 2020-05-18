@@ -9,9 +9,10 @@ function gen_instance_list(_container , JpaFiles ){
 }
 
 
-gen_instance_list.prototype.add_instance = function( _entityId, _type){
+gen_instance_list.prototype.add_instance = function( _entityId, _type , _option){
     var _this = this;
-    var newInstance = new genInstance(_entityId, _type , _this);
+    
+    var newInstance = new genInstance(_entityId, _type , _this ,_option);
     _this.list.push(newInstance);
 }
 

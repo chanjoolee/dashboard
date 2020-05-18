@@ -62,9 +62,9 @@
           </div><!-- menu-item -->
         </a><!-- br-menu-link -->
         <ul class="br-menu-sub nav flex-column">
-          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmmCd')" class="nav-link">cmmCd</a></li>
-          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmmUse')" class="nav-link">cmmUse</a></li>
-          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('tabCols')"  class="nav-link">tabCols</a></li>
+          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmm_cd')" class="nav-link">cmmCd</a></li>
+          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmm_yse')" class="nav-link">cmmUse</a></li>
+          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('tab_cols')"  class="nav-link">tabCols</a></li>
                     
         </ul>
       </div><!-- br-sideleft-menu -->
@@ -488,7 +488,7 @@
 
       <div id="pagebody" class="br-pagebody mg-t-5 pd-x-30">
         <!-- test date -->
-        <div class="wd-200 mg-b-30">
+        <!-- <div class="wd-200 mg-b-30">
           <div class="input-group">
             <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
             <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
@@ -497,7 +497,8 @@
             <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
             <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
           </div>
-        </div>
+        </div> -->
+
         <!-- test date -->
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
@@ -522,12 +523,27 @@
     <script src="./templates/bracket/js/bracket.js"></script>
     <script src="./templates/bracket/js/ResizeSensor.js"></script>
 
+    <!-- jqgrid -->
+    <script src="./js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+		<script src="./js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>
+    
+    <!-- contextMenu -->
+    <link rel="stylesheet" media="screen" href="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.css" type="text/css" />
+		<script src="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.js"></script>
+    <script src="./js/jQuery-contextMenu-master/dist/jquery.ui.position.js"></script>
+    
+    <!-- lodash -->
+    <script src="./js/jointjs/lodash.4.17.10.js"></script>
+    <!-- utils -->
+    <script src="./js/dashboard.toolbox.js?version=0"></script>
+    
+
     <!-- react  -->
     <script  src="./js/react-0.14.3/build/react.js"></script>
 		<script  src="./js/react-0.14.3/build/react-dom.js"></script>
 		<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
     <script  src="./js/react-0.14.3/browser.js" ></script>
-    
+
     <!-- 스키마를 바탕으로 소스를 생성하기  -->
     <script src="./js/bpmn/instance/gen_instance_list.js"></script>
     <script src="./js/bpmn/instance/gen_instance.js"></script>
@@ -572,7 +588,10 @@
       function fn_makeInstance(_entityId){
         delete instances;
         instances = new gen_instance_list($("#pagebody") , testEntityJpaFiles );
-        instances.add_instance(_entityId);
+        var instanceOption = {
+            isPopSelect : false
+        };
+        instances.add_instance(_entityId ,'general', instanceOption );
       }
 
     </script>
