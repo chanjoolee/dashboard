@@ -61,13 +61,45 @@ genInstance.prototype.fn_setDataSourceValue = function(){
         src.data();
     });
     // data scource
+
     $.each(_this.jpaFile.dataSrc,function(i, src){
         var prop = _.find( _this.jpaFile.gridProperties , { _name : src.childColumnName } );
         var dataSrcType = 'select';
         if ( prop != null && prop._documentation != null && prop._documentation.data_src_type != null)
             dataSrcType = prop._documentation.data_src_type;
-        if (dataSrcType == 'select')
-            src.data();
+        if (dataSrcType == 'select'){
+            _this.fn_setDataSourceValueParent(src);
+        }
+        
+    });
+}
+
+/**
+부모를 참조하는 데이타 셋팅
+*/
+genInstance.prototype.fn_setDataSourceValueParent = function( _datasrc ){
+    var _this = this;
+    var prop = _.find( _this.jpaFile.gridProperties , { _name : _datasrc.childColumnName } );
+    var dataSrcType = "select";
+    if ( prop != null && prop._documentation != null && prop._documentation.data_src_type != null)
+        dataSrcType = prop._documentation.data_src_type;
+    if (dataSrcType == "select")
+        var dataSrcType = "select";
+    if (dataSrcType != "select")
+        return;
+    $.ajax({
+        type: "POST",
+        url: "./genericlListJson.html?" +
+            "&sqlid=" + _datasrc.sqlId,
+        data: {},
+        async: false,
+        success: function (response) {
+            var dataList = response.dataList;
+            $.each(dataList, function (i, data) {
+                if( data != null)
+                _datasrc.value[data[ _datasrc.topColumnName.toUpperCase()]] = data[_datasrc.topNameColumn.toUpperCase()];
+            });
+        }
     });
 }
 

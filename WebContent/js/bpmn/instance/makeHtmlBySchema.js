@@ -360,8 +360,8 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
     $.each(_schema.items , function(i, item){
         var dictionary = null;
         var dicCodes = [];
-        if(typeof(dictionaries) != 'undefined' ){
-            dictionary = _.find(dictionaries,{entityName: item.entityName  });
+        if(typeof(_this.instance.jpaFile.dictionaries) != 'undefined' ){
+            dictionary = _.find(_this.instance.jpaFile.dictionaries,{entityName: item.entityName  });
             if (dictionary != null)
                 dicCodes = _.filter(dictionary.value, {"TABLE_NAME":item.entityName.toUpperCase(),"COLUMN_NAME": item.name});
         }
@@ -391,8 +391,8 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
             }
             
 
-        }else if(item.referenceId != undefined && dataSrc != undefined && !_.includes(['pop_select'], item.data_src_type)){
-            var src = _.find(dataSrc, {"referenceId": item.referenceId, "topRefrenceId" : item.topRefrenceId , "childColumnName": item.name.toLowerCase()  });
+        }else if(item.referenceId != undefined && _this.instance.jpaFile.dataSrc != undefined && !_.includes(['pop_select'], item.data_src_type)){
+            var src = _.find(_this.instance.jpaFile.dataSrc, {"referenceId": item.referenceId, "topRefrenceId" : item.topRefrenceId , "childColumnName": item.name.toLowerCase()  });
             if( src != null ){
                 item.edittype = "select";
                 if(item.formatter == null)

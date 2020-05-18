@@ -63,7 +63,7 @@
         </a><!-- br-menu-link -->
         <ul class="br-menu-sub nav flex-column">
           <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmm_cd')" class="nav-link">cmmCd</a></li>
-          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmm_yse')" class="nav-link">cmmUse</a></li>
+          <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('cmm_use')" class="nav-link">cmmUse</a></li>
           <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('tab_cols')"  class="nav-link">tabCols</a></li>
                     
         </ul>
@@ -487,6 +487,7 @@
     <div class="br-mainpanel">
 
       <div id="pagebody" class="br-pagebody mg-t-5 pd-x-30">
+        <div class="br-section-wrapper"></div>
         <!-- test date -->
         <!-- <div class="wd-200 mg-b-30">
           <div class="input-group">
@@ -525,13 +526,25 @@
 
     <!-- jqgrid -->
     <script src="./js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-		<script src="./js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>
+    <script src="./js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>
+    
+    <!-- multiselect -->
+    <script src="./js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="./js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.filter.css" />
+
+    <!-- JS Tree -->
+		<script type="text/javascript" src="./js/jstree/3.3.8/dist/jstree.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./js/jstree/3.3.8/dist/themes/default/style.min.css" />
     
     <!-- contextMenu -->
     <link rel="stylesheet" media="screen" href="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.css" type="text/css" />
 		<script src="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.js"></script>
     <script src="./js/jQuery-contextMenu-master/dist/jquery.ui.position.js"></script>
     
+    <!-- alasql -->
+    <script type="text/javascript" src="./js/alasql-develop/dist/alasql.js"></script>
     <!-- lodash -->
     <script src="./js/jointjs/lodash.4.17.10.js"></script>
     <!-- utils -->
@@ -548,7 +561,9 @@
     <script src="./js/bpmn/instance/gen_instance_list.js"></script>
     <script src="./js/bpmn/instance/gen_instance.js"></script>
     <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
-    <script src="./js/bpmn/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script>
+    <!-- <script src="./js/bpmn/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script> -->
+    <script src="./js/bpmn/gen/testEntityJpaFiles.2020.05.18.21.52.59.js"></script>
+    
     
     <script>
       var instances = {};
@@ -587,7 +602,7 @@
 
       function fn_makeInstance(_entityId){
         delete instances;
-        instances = new gen_instance_list($("#pagebody") , testEntityJpaFiles );
+        instances = new gen_instance_list($("#pagebody .br-section-wrapper") , testEntityJpaFiles );
         var instanceOption = {
             isPopSelect : false
         };

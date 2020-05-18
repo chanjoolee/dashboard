@@ -105,7 +105,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
             data: function(){
                 var rtnList = [];
                 $.ajax({
-                    url: "${pageContext.request.contextPath}/genericlListJson.html",
+                    url: "./genericlListJson.html",
                     data: {"sqlid": "$sqlId"}, 
                     async: false,
                     success:  function(response){
@@ -154,12 +154,12 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                 gridId: _schema.id ,
                 modelVarName : varModelName,                
                 url:function(){ 
-                    return	"${pageContext.request.contextPath}/genericlListPageJson.html?" + 
+                    return	"./genericlListPageJson.html?" + 
                         $("#form").serialize() + 
                         "&sqlid=$sqlId.page.list" +  
                         "&paging_sqlid=$sqlId.page.total" 
                 },
-                editurl: '${pageContext.request.contextPath}/ssdCusDummySaveJson.html',
+                editurl: './ssdCusDummySaveJson.html',
                 styleUI : 'Bootstrap',
                 viewrecords: true,
                 width: '100%',
@@ -237,7 +237,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                                 var response1 = {};
                                 
                                 $.ajax({
-                                    url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=" + gridParam.sqlId + ".insert",
+                                    url: "./genericSaveJson.html?sqlid=" + gridParam.sqlId + ".insert",
                                     type: "POST",
                                     data: fd, 
                                     async: false,
@@ -280,7 +280,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                                 //  
                                 paramObj.loop_id = "delRows";
                                 $.ajax({
-                                    url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                    url: "./genericSaveJson.html",
                                     type: "POST",
                                     data: {
                                         searchJson: JSON.stringify(paramObj),
@@ -391,7 +391,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
 
                     if ( somCondition ){
                         var path_column = v_property._documentation.file_info.path_column ;
-                        var path = '${pageContext.request.contextPath}'+ row[path_column] ;
+                        var path = '.'+ row[path_column] ;
                         if((/\.(txt|config|pdf|jpg|jpeg|gif|png|log)$/i).test(path)){
                             var newWin1 = window.open("", "filedownload", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
                             
@@ -408,7 +408,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                             
                             var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
                             if (isIE){
-                                //var fileData = ['\ufeff' + "${pageContext.request.contextPath}" + row.FILE_PATH];
+                                //var fileData = ['\ufeff' + "." + row.FILE_PATH];
                                 //var blobObject = new Blob(fileData);
                                 //window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
                                 var link = document.createElement('a');
@@ -417,7 +417,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                                 var return_text = value_split.pop();
                                 // link.download = row[cm.name];
                                 link.download = return_text;
-                                link.href = "${pageContext.request.contextPath}" + row[path_column] ;
+                                link.href = "." + row[path_column] ;
                                 //Firefox requires the link to be in the body
                                 document.body.appendChild(link);
                                 link.click();
@@ -431,7 +431,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                                 var return_text = value_split.pop();
                                 // link.download = row[cm.name];
                                 link.download = return_text;
-                                link.href = "${pageContext.request.contextPath}" + row[path_column] ;
+                                link.href = "." + row[path_column] ;
                                 //Firefox requires the link to be in the body
                                 document.body.appendChild(link);
                                 link.click();
@@ -802,7 +802,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                         var detailList = [];
                         $.ajax({
                             type: "POST",
-                            url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=$sqlId.one" ,
+                            url: "./genericlListJson.html?sqlid=$sqlId.one" ,
                             data: searchRow ,
                             //data: $("#form").serialize(), 
                             async: false,
@@ -867,7 +867,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                                                     if(this.props.options.value == this.state.value)
                                                         return state;
                                                     $.ajax({
-                                                        url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                                        url: "./genericSaveJson.html",
                                                         type: "POST",
                                                         data: {
                                                             searchJson: JSON.stringify(paramObj),
@@ -1186,7 +1186,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
                 var viewName = $("#viewName").val();
                 var viewPath = viewName.split("/");
                 var itemName = viewPath.pop();
-                oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "." + _type + "&backgroundColor=FFF&isPop=Y";;
+                oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "." + _type + "&backgroundColor=FFF&isPop=Y";;
                 // oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=common/commonDetail";
                 $("#detailSqlId").val("$sqlId.one");
                 $("#detailSqlUpdateId").val("$sqlId.edit");
@@ -1561,7 +1561,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                 if( _.includes(['edit','view', 'copy'],$("#detailType").val()) ){
                     $.ajax({
                         type: "POST",
-                        url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=$sqlId.one",
+                        url: "./genericlListJson.html?sqlid=$sqlId.one",
                         // data: searchRow ,
                         data: $("#form").serialize(), 
                         async: false,
@@ -1806,7 +1806,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                             if(this.props.options.value == this.state.value)
                                 return state;
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: {
                                     searchJson: JSON.stringify(paramObj),
@@ -1868,7 +1868,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                             // parameter += "&useRealFileName=Y";
                             if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
                                 $('#form').ajaxForm({
-                                    url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                    url: "./fileTestJson.html?" + parameter 
                                     , type:"POST"
                                     , dataType:"json"
                                     , async: false
@@ -1898,7 +1898,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                             }
 
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: addRow , 
                                 async: false,			                    		
@@ -2084,7 +2084,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = viewPath.pop();
 					var parentViewName = _.camelCase( v_datasrc.parentEntity);
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
 					oFrm.method = "post";
 					oFrm.target = frameId;
                     
@@ -2197,7 +2197,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = _.camelCase(child.childEntityName);
 					viewPath.pop();
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
 					oFrm.method = "post";
 					oFrm.target = frameId;
 					frameDom.show();
@@ -2241,7 +2241,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
             var _this = commonFunc;
             $.ajax({
                 type: "POST",
-                url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                url: "./genericlListJson.html?" +
                     "&sqlid=" + _this.sqlId + ".get.nextsequence",
                 data: {},
                 async: false,
@@ -2288,7 +2288,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                 if( _.includes(['edit','view', 'copy'],$("#detailType").val()) ){
                     $.ajax({
                         type: "POST",
-                        url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=$sqlId.one",
+                        url: "./genericlListJson.html?sqlid=$sqlId.one",
                         // data: searchRow ,
                         data: $("#form").serialize(), 
                         async: false,
@@ -2526,7 +2526,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                             if(this.props.options.value == this.state.value)
                                 return state;
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: {
                                     searchJson: JSON.stringify(paramObj),
@@ -2587,7 +2587,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
 							// parameter += "&useRealFileName=Y";
                             if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
                                 $('#form').ajaxForm({
-                                    url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                    url: "./fileTestJson.html?" + parameter 
                                     , type:"POST"
                                     , dataType:"json"
                                     , async: false
@@ -2617,7 +2617,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                             }
                             
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: addRow , 
                                 async: false,			                    		
@@ -2802,7 +2802,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = viewPath.pop();
 					var parentViewName = _.camelCase( v_datasrc.parentEntity);
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
 					oFrm.method = "post";
                     oFrm.target = frameId;
                     
@@ -2897,7 +2897,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = _.camelCase(child.childEntityName);
 					viewPath.pop();
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
 					oFrm.method = "post";
 					oFrm.target = frameId;
 					frameDom.show();
@@ -2942,7 +2942,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
             var _this = commonFunc;
             $.ajax({
                 type: "POST",
-                url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                url: "./genericlListJson.html?" +
                     "&sqlid=" + _this.sqlId + ".get.nextsequence",
                 data: {},
                 async: false,
@@ -2990,7 +2990,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                 if( _.includes(['edit','view', 'copy'],$("#detailType").val()) ){
                     $.ajax({
                         type: "POST",
-                        url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=$sqlId.one",
+                        url: "./genericlListJson.html?sqlid=$sqlId.one",
                         // data: searchRow ,
                         data: $("#form").serialize(), 
                         async: false,
@@ -3228,7 +3228,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                             if(this.props.options.value == this.state.value)
                                 return state;
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: {
                                     searchJson: JSON.stringify(paramObj),
@@ -3285,7 +3285,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                             _.merge(addRow, form1.serializeFormJSON() );
                             
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: addRow , 
                                 async: false,			                    		
@@ -3470,7 +3470,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = viewPath.pop();
 					var parentViewName = _.camelCase( v_datasrc.parentEntity);
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
 					oFrm.method = "post";
                     oFrm.target = frameId;
                     
@@ -3565,7 +3565,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = _.camelCase(child.childEntityName);
 					viewPath.pop();
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
 					oFrm.method = "post";
 					oFrm.target = frameId;
 					frameDom.show();
@@ -3636,7 +3636,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
                 if( _.includes(['edit','view', 'copy'],$("#detailType").val()) ){
                     $.ajax({
                         type: "POST",
-                        url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=$sqlId.one",
+                        url: "./genericlListJson.html?sqlid=$sqlId.one",
                         // data: searchRow ,
                         data: $("#form").serialize(), 
                         async: false,
@@ -3874,7 +3874,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
                             if(this.props.options.value == this.state.value)
                                 return state;
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: {
                                     searchJson: JSON.stringify(paramObj),
@@ -3931,7 +3931,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
                             _.merge(addRow, form1.serializeFormJSON() );
                             
                             $.ajax({
-                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+                                url: "./genericSaveJson.html",
                                 type: "POST",
                                 data: addRow , 
                                 async: false,			                    		
@@ -4116,7 +4116,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = viewPath.pop();
 					var parentViewName = _.camelCase( v_datasrc.parentEntity);
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
 					oFrm.method = "post";
                     oFrm.target = frameId;
                     
@@ -4207,7 +4207,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
 					var viewPath = viewName.split("/");
 					var itemName = _.camelCase(child.childEntityName);
 					viewPath.pop();
-					oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
+					oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
 					oFrm.method = "post";
 					oFrm.target = frameId;
 					frameDom.show();
@@ -5762,7 +5762,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate_content_contextmenu = function ( _f
                                 // $(this).attr("cellValue");
                             });
                             $("#filterPop").val(JSON.stringify(filter));
-                            oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
+                            oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
                             oFrm.method = "post";
                             oFrm.target = frameId;
                             frameDom.show();
@@ -5808,7 +5808,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate_content_contextmenu = function ( _f
 
                         
                         $("#filterPop").val(JSON.stringify(filter));
-                        oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";
+                        oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";
                         oFrm.method = "post";
                         oFrm.target = windowName; 
                         oFrm.submit();		
@@ -5889,7 +5889,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate_content_contextmenu = function ( _f
                                 // $(this).attr("cellValue");
                             });
                             $("#filterPop").val(JSON.stringify(filter));
-                            oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
+                            oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
                             oFrm.method = "post";
                             oFrm.target = frameId;
                             frameDom.show();
@@ -5933,7 +5933,7 @@ JpaAllGeneratorToolBox.prototype.fn_generate_content_contextmenu = function ( _f
 
 
                         $("#filterPop").val(JSON.stringify(filter));
-                        oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName;
+                        oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName;
                         oFrm.method = "post";
                         oFrm.target = windowName; 
                         oFrm.submit();		
@@ -6467,7 +6467,7 @@ JpaAllGeneratorToolBox.prototype.sqlSelectJsTree = function( _file , jpaEntity, 
         var _this = this;
         var rtnList = [];
         $.ajax({
-            url: "${pageContext.request.contextPath}/genericlListJson.html",
+            url: "./genericlListJson.html",
             data: {"sqlid": _this.sqlId }, 
             async: false,
             success:  function(response){
@@ -6760,7 +6760,7 @@ JpaAllGeneratorToolBox.prototype.fn_datasource = function(foreign_entities, vEnt
                             $.ajax({
                                 type: "POST",
                                 // url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_test.summary.all.1",
-                                url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                                url: "./genericlListJson.html?" +
                                     "&sqlid=" + _this.sqlId,
                                 data: {},
                                 async: false,
@@ -7200,19 +7200,23 @@ JpaAllGeneratorToolBox.prototype.fn_datasource_by_top = function(vEntity, jpa_pr
                 "topColumnNames" : topParent.columnNames ,
                 "topNameColumn" : topParent.nameColumn ,
                 "sqlId": sqlId,                
-                "data": function () {
+                "data": function ( _gridProperties ) {
                     var _this = this;
-                    var prop = _.find(gridProperties , { _name : _this.childColumnName } );
+                    var vGridProperties = null;
+                    if( _gridProperties == null)
+                        vGridProperties = gridProperties;
+                    else 
+                        vGridProperties = _gridProperties;
+                    
+                    var prop = _.find( vGridProperties , { _name : _this.childColumnName } );
                     var dataSrcType = "select";
                     if ( prop != null && prop._documentation != null && prop._documentation.data_src_type != null)
                         dataSrcType = prop._documentation.data_src_type;
-                    if (dataSrcType == "select")
-                        var dataSrcType = "select";
                     if (dataSrcType != "select")
                         return;
                     $.ajax({
                         type: "POST",
-                        url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                        url: "./genericlListJson.html?" +
                             "&sqlid=" + _this.sqlId,
                         data: {},
                         async: false,
@@ -7232,7 +7236,7 @@ JpaAllGeneratorToolBox.prototype.fn_datasource_by_top = function(vEntity, jpa_pr
                     var rtnList = [];
                     $.ajax({
                         type: "POST",
-                        url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                        url: "./genericlListJson.html?" +
                             "&sqlid=" + _this.sqlIdDynamic,
                         data: param,
                         async: false,
@@ -7363,7 +7367,7 @@ JpaAllGeneratorToolBox.prototype.fn_datasource_by_dictionary = function(vEntity,
                 var _this = this;
                 $.ajax({
                     type: "POST",
-                    url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+                    url: "./genericlListJson.html?" +
                         "&sqlid=" + _this.sqlId,
                     data: {},
                     async: false,
