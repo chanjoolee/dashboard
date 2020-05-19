@@ -1425,7 +1425,7 @@
 						async: false,
 						success:  function(response){
 							$("#loader").hide();
-							if(response1.result == 'success'){
+							if(response.result == 'success'){ 
 								
 								var msg = "Deploy Success!";
 								$("#dialog-confirm").html(msg);
