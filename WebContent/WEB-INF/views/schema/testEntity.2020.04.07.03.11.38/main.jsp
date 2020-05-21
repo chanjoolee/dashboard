@@ -36,12 +36,15 @@
     <!-- vendor css -->
     <link href="./templates/bracket/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="./templates/bracket/lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.css">
     <link href="./templates/bracket/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
     <link href="./templates/bracket/lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
     <link href="./templates/bracket/lib/rickshaw/rickshaw.min.css" rel="stylesheet">
 
     <!-- Bracket CSS -->
     <link rel="stylesheet" href="./templates/bracket/css/bracket.css">
+    <!-- jqgrid CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="http://www.guriddo.net/demo/css/trirand/ui.jqgrid-bootstrap4.css" />
   </head>
 
   <body>
@@ -511,6 +514,7 @@
     <script src="./templates/bracket/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
     <script src="./templates/bracket/lib/moment/moment.js"></script>
     <script src="./templates/bracket/lib/jquery-ui/jquery-ui.js"></script>
+    
     <script src="./templates/bracket/lib/jquery-switchbutton/jquery.switchButton.js"></script>
     <script src="./templates/bracket/lib/peity/jquery.peity.js"></script>
     <script src="./templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
@@ -526,8 +530,9 @@
 
     <!-- jqgrid -->
     <script src="./js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
-    <script src="./js/jqGrid_JS_5.1.0/src/jquery.jqGrid.js?version=2018.02.23"></script>
+    <script src="./js/jqGrid_JS_5.3.1/src/jquery.jqGrid.js"></script>
     
+
     <!-- multiselect -->
     <script src="./js/jquery-multiselect/jquery.multiselect.js"></script>
 		<script src="./js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
@@ -566,10 +571,14 @@
     
     
     <script>
+      $.jgrid.defaults.responsive = true;
+      $.jgrid.defaults.styleUI = 'Bootstrap4';
+      $.jgrid.defaults.iconSet = "Octicons";
+
       var instances = {};
       $(function(){
         'use strict'
-
+        
         // FOR DEMO ONLY
         // menu collapsed by default during first page load or refresh with screen
         // having a size between 992px and 1299px. This is intended on this page only
@@ -612,6 +621,60 @@
     </script>
   </body>
   <jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>
+  <style>
+    .ui-dialog { z-index: 1000 !important ;}
+    .contextMenu{
+			color: #337ab7;			
+			font-weight: bold;
+		}
+
+    /* *********** Bootstrap Custom Start************/
+		/***  jqgrid Header   ***/
+		.ui-jqgrid-hdiv th {
+			text-align: center;
+		}
+		
+		.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    	    color: #000;
+			background-color: #f5f5f5;
+    	    background-image: none
+    	}
+    	
+    	.ui-jqgrid .ui-jqgrid-htable th div {
+			height:auto;
+			overflow:hidden;
+			padding-right:4px;
+			padding-top:2px;
+			position:relative;
+			vertical-align:text-top;
+			white-space:normal !important;
+		}
+		.ui-jqgrid .ui-jqgrid-bdiv .table>tbody>tr>td.active {
+			background-color: unset;
+		}
+
+		.ui-jqgrid {
+			border-top: 2px solid #fc5d57;
+		} 
+
+		.ui-jqgrid-view  .ui-jqgrid-bdiv td.glyphicon {
+			top : 0px;
+			display: table-cell ;
+		}
+
+		/* *********** Bootstrap Custom End************/
+		.modal-content.ui-resizable {
+			overflow: scroll;
+		}
+
+		.required:after {
+			content:"*";color:red;
+		}
+
+		div[type=HorizontalLayout] {
+			min-height:  22px;
+		}
+  </style>
 </html>
 
 

@@ -9,8 +9,12 @@ makeHtmlBySchema.prototype.process_type = function(  _schema , _schema_parent , 
     var _this = this;
     _schema.parentSchema = _schema_parent;
     _schema.parentContainer = container_parent;
-    var container = eval("_this." + _schema.type + "( _schema , _schema_parent , container_parent)");
+
+    var container = $("<div/>",{});
     container_parent.append(container);
+    _this.defaultSetting( _schema , container);
+    eval("_this." + _schema.type + "( _schema , _schema_parent , container , container_parent)");
+    
     if(_schema.elements != null){
         $.each( _schema.elements , function( i , el){
             _this.process_type( el , _schema ,  container  );
@@ -30,30 +34,43 @@ makeHtmlBySchema.prototype.defaultSetting = function( _schema , _container ){
     }
     if( _schema.width != undefined)
         _container.css("width",_schema.width);
+
     if( _container.children().length > 0)
         _container.css("margin-left","10px");
+
+
+    if(_schema.containerCls != undefined)
+        container.addClass(_schema.containerCls);
+
+
+    //***  css ***//
+    if(_schema.containerCss != null){
+        $.each(_schema.containerCss,function(i,v){
+            _container.css(v.code,v.value);
+        });
+    }
 }
 
-makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , container_parent ){
+makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , container , container_parent ){
     var _this = this;
-    var container = $("<div/>",{});
-    _this.defaultSetting( _schema , container);
-    return container;
+    // var container = $("<div/>",{});
+    // _this.defaultSetting( _schema , container);
+    // return container;
 }
 
-makeHtmlBySchema.prototype.HorizontalLayout = function( _schema , _schema_parent , container_parent){
+makeHtmlBySchema.prototype.HorizontalLayout = function( _schema , _schema_parent , container, container_parent){
     var _this = this;
-    var container = $("<div/>",{ style: "display: inline-block "});
-    _this.defaultSetting(_schema , container);
+    // var container = $("<div/>",{ style: "display: inline-block "});
+    // _this.defaultSetting(_schema , container);
     
-    return container;
+    // return container;
 }
 
-makeHtmlBySchema.prototype.inline = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.inline = function(_schema ,_schema_parent , container,  container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     var cols = 3;
     if(_schema.cols != undefined)
@@ -77,15 +94,15 @@ makeHtmlBySchema.prototype.inline = function(_schema ,_schema_parent , container
 
     });
 
-    return container;
+    // return container;
     
 }
 
-makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     var cols = 1;
     if(_schema.cols != undefined)
@@ -316,34 +333,33 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
 
     
 
-    return container;
+    // return container;
     
 }
 
 /**
 특이한 경우에만 사용한다. Iframe 을 어쩔 수 없이 써야만 하는 경우에만.
 */
-makeHtmlBySchema.prototype.inline_iframe = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.inline_iframe = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
-    return container;
+    // return container;
     
 }
 
-makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     //==grid create    
     container.attr("id",_schema.id + 'Container');
     
     var containerType = container.attr("type");
-    
         
     //==table create
     var mainControl = $(document.createElement( "table" ));
@@ -450,20 +466,20 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
 
     //== common option
     var opt = {
-            datatype: 'local',
-            styleUI : 'Bootstrap4',
-            // guiStyle: "bootstrap4",
-            colModel: _schema.items,
-            //rowNum:10,
-            rownumbers: true, // show row numbers
-            caption: _schema.label,
-            //width: '100%',
-            //height: '100%',
-            iconSet: "fontAwesome",
-            sortable: false,
-            //viewrecords: true,
-            //pager : pager, 
-            //data : _schema.data() 
+        datatype: 'local',
+        styleUI : 'Bootstrap4',
+        // guiStyle: "bootstrap4",
+        colModel: _schema.items,
+        //rowNum:10,
+        rownumbers: true, // show row numbers
+        caption: _schema.label,
+        //width: '100%',
+        //height: '100%',
+        iconSet: "fontAwesome",
+        sortable: false,
+        //viewrecords: true,
+        //pager : pager, 
+        //data : _schema.data() 
     };
     if(_schema.data != undefined && typeof _schema.data == 'function')
         opt.data = _schema.data();
@@ -471,6 +487,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
     if(_schema.gridOpt != undefined){
         $.extend(opt, _schema.gridOpt);
     }
+    $.extend(opt, {styleUI: "Bootstrap4", iconSet: "Octicons"});
 
     mainControl.jqGrid(opt);
     
@@ -484,15 +501,15 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container_p
         container.find(".ui-jqgrid-pager").css("width","100%");
     }
 
-    return container;
+    // return container;
 }
 
 
-makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , container_parent){
+makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
         
     var mainControl = $(document.createElement("h3"));
     //h3.addClass("cont_tit");
@@ -503,14 +520,14 @@ makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , co
     mainControl.css("color","#000");
     
 
-    return container;
+    // return container;
 }
 
-makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , container, container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
     
     var vData = _schema.data();
     var sb = [];
@@ -685,14 +702,14 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
     }
     
 
-    return container;
+    // return container;
 }
 
-makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     var vData = _schema.data();
     var mainControl = $(document.createElement( "div" ));
@@ -780,17 +797,17 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
         }
     });
 
-    return container;
+    // return container;
 }
 
 /**
 Bootstrap 버튼을 사용한다.
 */
-makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     /**
     Start Logic
@@ -808,20 +825,20 @@ makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container
     */
 
 
-    return container;
+    // return container;
     
 }
 
-makeHtmlBySchema.prototype.ButtonBootstrap = function(_schema ,_schema_parent , container_parent){
-    return this.Button(_schema ,_schema_parent , container_parent);
+makeHtmlBySchema.prototype.ButtonBootstrap = function(_schema ,_schema_parent ,container , container_parent){
+    this.Button(_schema ,_schema_parent , container , container_parent);
     
 }
 
-makeHtmlBySchema.prototype.radioButton = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.radioButton = function(_schema ,_schema_parent ,container, container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     /**
     Start Logic
@@ -851,16 +868,16 @@ makeHtmlBySchema.prototype.radioButton = function(_schema ,_schema_parent , cont
     End Logic    
     */
 
-    return container;
+    // return container;
     
 }
 
 
-makeHtmlBySchema.prototype.dateInput = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.dateInput = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     /**
     Start Logic
@@ -888,16 +905,16 @@ makeHtmlBySchema.prototype.dateInput = function(_schema ,_schema_parent , contai
     End Logic    
     */
 
-    return container;
+    // return container;
     
 }
 
 
-makeHtmlBySchema.prototype.title = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.title = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     /**
     Start Logic
@@ -915,15 +932,15 @@ makeHtmlBySchema.prototype.title = function(_schema ,_schema_parent , container_
     End Logic    
     */
 
-    return container;
+    // return container;
     
 }
 
-makeHtmlBySchema.prototype.emptyDiv = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.emptyDiv = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     /**
     Start Logic
@@ -933,15 +950,15 @@ makeHtmlBySchema.prototype.emptyDiv = function(_schema ,_schema_parent , contain
     End Logic    
     */
 
-    return container;
+    // return container;
     
 }
 
-makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
-    var container = $("<div/>",{});
-    _this.defaultSetting(_schema, container);
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
 
     /**
     Start Logic
@@ -970,11 +987,11 @@ makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , contain
     End Logic    
     */
 
-    return container;
+    // return container;
     
 }
 
-makeHtmlBySchema.prototype.tab_item = function(_schema ,_schema_parent , container_parent){
+makeHtmlBySchema.prototype.tab_item = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
     /**
@@ -1036,6 +1053,6 @@ makeHtmlBySchema.prototype.tab_item = function(_schema ,_schema_parent , contain
     End Logic    
     */
 
-    return container;
+   
     
 }

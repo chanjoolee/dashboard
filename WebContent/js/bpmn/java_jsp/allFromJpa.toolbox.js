@@ -5228,8 +5228,8 @@ JpaAllGeneratorToolBox.prototype.fn_generate = function () {
         src = '</body>'; _file.sources.push(src);
         src = '<jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>'; _file.sources.push(src);
     });
-    // _this.fn_generate_main();
-    _this.fn_generate_main_bracket();    
+    _this.fn_generate_main();
+    // _this.fn_generate_main_bracket();    
     
 }
 
