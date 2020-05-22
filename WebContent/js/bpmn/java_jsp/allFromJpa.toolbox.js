@@ -1054,6 +1054,11 @@ JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
                     return;
                 var selJsTree3 = [];
                 $.each(_this.idList, function(i,vJsTreeId){
+                    // 만약 Child Pop 인 경우, jstree가 없으므로 넘어간다.
+                    var $jsTree = $("#" + vJsTreeId );
+                    if ($jsTree.length == 0)
+                        return true;
+
                     var vJsTree = $("#" + vJsTreeId ).jstree(true);
                     // var selJsTree = _.filter(vJsTree._model.data , {state : {selected: true } });
                     var selJsTree = _.filter(vJsTree._model.data , function( data ){
@@ -1574,7 +1579,7 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                 }
                 var data = commonFunc.data;
                 if ( _.includes(['add'],$("#detailType").val()) && parentFrame.v_filterPop != null && _.keys(parentFrame.v_filterPop).length > 0 ) {
-                    data = parentFrame.v_filterPop;
+                    commonFunc.data = parentFrame.v_filterPop;
                 }
 
                 if( _.includes(['edit','add'],$("#detailType").val()) ){
