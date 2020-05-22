@@ -505,7 +505,8 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                 gridItem.editrules = {edithidden:true} ;
                 let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] , { "_xsi:type": "gmmjpa:Id" });
                 if (vId != null) {
-                    gridItem.editrules.edithidden = true ;
+                    gridItem.editrules.edithidden = true ;                    
+                    gridItem.required = true;
                 }
                 
                 // list hiden columns
@@ -1617,6 +1618,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                                 orderby : i
                             };
                             let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                            if (vId != null){
+                                rtnObj.required = true;
+                            }
                             if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                                 rtnObj.editable = false;
                             }
@@ -1680,6 +1684,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_add = function (entity) {
                             orderby : 100
                         };
                         let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if (vId != null){
+                            rtnObj.required = true;
+                        }
                         if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                             rtnObj.editable = false;
                         }
@@ -2341,6 +2348,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                                 orderby : i
                             };
                             let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                            if (vId != null){
+                                rtnObj.required = true;
+                            }
                             if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                                 rtnObj.editable = false;
                             }
@@ -2401,6 +2411,12 @@ JpaAllGeneratorToolBox.prototype.fn_entities_copy = function (entity) {
                             orderby : 100
                         };
                         let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if (vId != null){
+                            rtnObj.required = true;
+                        }
+                        if (vId != null){
+                            rtnObj.required = true;
+                        }
                         if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                             rtnObj.editable = false;
                         }
@@ -3043,6 +3059,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                                 orderby : i
                             };
                             let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                            if (vId != null){
+                                rtnObj.required = true;
+                            }
                             if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                                 rtnObj.editable = false;
                             }
@@ -3103,6 +3122,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                             orderby : 100
                         };
                         let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if (vId != null){
+                            rtnObj.required = true;
+                        }
                         if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                             rtnObj.editable = false;
                         }
@@ -3689,6 +3711,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
                                 orderby : i
                             };
                             let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                            if (vId != null){
+                                rtnObj.required = true;
+                            }
                             if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                                 rtnObj.editable = false;
                             }
@@ -3749,6 +3774,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_view = function (entity) {
                             orderby : 100
                         };
                         let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if (vId != null){
+                            rtnObj.required = true;
+                        }
                         if (vId != null &&  _.includes(['edit'], "${param.detailType}")){
                             rtnObj.editable = false;
                         }
