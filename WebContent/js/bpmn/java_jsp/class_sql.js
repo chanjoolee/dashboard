@@ -40,7 +40,7 @@ SqlGenerator.prototype.fn_generate = function(){
                     src = "\t" + where ; _this.sources.push(src);
                 });
                 // jstree
-                src = $("#jstreeSearchJson").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#jstreeSearch").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 //  include foot
                 src = $("#pagelistFooter").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 src = '</' + sql.type + '>'; _this.sources.push(src);
@@ -162,7 +162,7 @@ SqlGeneratorAll.prototype.fn_generate = function(){
                     src = "\t" + where ; _this.sources.push(src);
                 });
                 // jstree
-                src = $("#jstreeSearchJson").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#jstreeSearch").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 //  include foot
                 src = $("#pagelistFooter" + _.capitalize(_this.dbType)).text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 src = '</' + sql.type + '>'; _this.sources.push(src);
@@ -182,7 +182,7 @@ SqlGeneratorAll.prototype.fn_generate = function(){
                     src = "\t" + where ; _this.sources.push(src);
                 });
                 // jstree
-                src = $("#jstreeSearchJson").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#jstreeSearch").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 //  include foot
                 src = $("#pageTotalFooter").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 
@@ -204,7 +204,7 @@ SqlGeneratorAll.prototype.fn_generate = function(){
                     src = "\t" + where ; _this.sources.push(src);
                 });
                 //  include foot
-                src = $("#jstreeSearchJson").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#jstreeSearch").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
 
                 src = '</' + sql.type + '>'; _this.sources.push(src);
 

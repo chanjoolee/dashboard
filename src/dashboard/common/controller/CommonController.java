@@ -109,6 +109,7 @@ public class CommonController {
 		
 		response.getWriter().println(writer);		
         writer.close();
+        
     }
     
     @RequestMapping(value = "/genericlListJson" ,method = { RequestMethod.GET, RequestMethod.POST })
