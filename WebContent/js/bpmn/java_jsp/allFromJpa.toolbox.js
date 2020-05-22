@@ -1058,7 +1058,9 @@ JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
                     var $jsTree = $("#" + vJsTreeId );
                     if ($jsTree.length == 0)
                         return true;
-
+                    if($("#filterPop").val() != "" ){
+                        return;
+                    }
                     var vJsTree = $("#" + vJsTreeId ).jstree(true);
                     // var selJsTree = _.filter(vJsTree._model.data , {state : {selected: true } });
                     var selJsTree = _.filter(vJsTree._model.data , function( data ){
