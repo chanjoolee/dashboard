@@ -7463,10 +7463,10 @@ JpaAllGeneratorToolBox.prototype.objectToFileScript = function(_file, object_nam
         if (key == "_documentation") {
             var value_to = {};
             // var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+\.\\\/,"'\=:;\r\n\[\]{}]+)<\/code>/g);
-            var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+            var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
             if(matches){
                 $.each(matches,function(i,m){
-                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                     var content = match.groups.content;
                     var custom_obj = eval( "(" + _.unescape(content) + ")");
                     delete custom_obj.sql_insert;
@@ -7548,10 +7548,10 @@ JpaAllGeneratorToolBox.prototype.documentToScript = function(_file, object_name,
     var v_doc_object = {};
     if ( _docstr != null){
         // var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+\.\\\/,"'\=:;\r\n\[\]{}]+)<\/code>/g);
-        var matches = _docstr.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+        var matches = _docstr.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+||ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
         if(matches){
             $.each(matches,function(i,m){
-                var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+||ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                 var content = match.groups.content;
                 var custom_obj = eval( "(" + _.unescape(content) + ")");           
                 _.merge(v_doc_object,custom_obj );
@@ -7620,10 +7620,10 @@ JpaAllGeneratorToolBox.prototype.documentToObject = function(_docstr){
     var v_doc_object = {};
     if ( _docstr != null){
         // var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+\.\\\/,"'\=:;\r\n\[\]{}]+)<\/code>/g);
-        var matches = _docstr.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+        var matches = _docstr.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+||ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
         if(matches){
             $.each(matches,function(i,m){
-                var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+||ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                 var content = match.groups.content;
                 var custom_obj = eval( "(" + _.unescape(content) + ")");           
                 _.merge(v_doc_object,custom_obj );
