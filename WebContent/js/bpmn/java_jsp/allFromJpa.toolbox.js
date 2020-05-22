@@ -501,6 +501,7 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                     editable: true ,
                     gridId : _schema.id 
                 };
+                
                 gridItem.editrules = {edithidden:true} ;
                 let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] , { "_xsi:type": "gmmjpa:Id" });
                 if (vId != null) {
@@ -7431,10 +7432,10 @@ JpaAllGeneratorToolBox.prototype.fn_set_grid_custom_item = function(_prop, _grid
         return;
     // if(task._name == "regex pattern")
     //     debugger;
-    var matches = _prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+    var matches = _prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
     if(matches){
         $.each(matches,function(i,m){
-            var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+            var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
             var content = match.groups.content;
             // var custom_obj = JSON.parse(content);            
             // eval("var custom_obj = " + _.unescape(content));
