@@ -1052,15 +1052,16 @@ JpaAllGeneratorToolBox.prototype.fn_entities_general = function (entity) {
                 var _this = this;
                 if (_this.idList.length == 0)
                     return;
+                if($("#filterPop").val() != "" ){
+                    return;
+                }
                 var selJsTree3 = [];
                 $.each(_this.idList, function(i,vJsTreeId){
                     // 만약 Child Pop 인 경우, jstree가 없으므로 넘어간다.
                     var $jsTree = $("#" + vJsTreeId );
                     if ($jsTree.length == 0)
                         return true;
-                    if($("#filterPop").val() != "" ){
-                        return;
-                    }
+                    
                     var vJsTree = $("#" + vJsTreeId ).jstree(true);
                     // var selJsTree = _.filter(vJsTree._model.data , {state : {selected: true } });
                     var selJsTree = _.filter(vJsTree._model.data , function( data ){
