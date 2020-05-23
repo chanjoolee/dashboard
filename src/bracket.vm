@@ -36,12 +36,15 @@
     <!-- vendor css -->
     <link href="./templates/bracket/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="./templates/bracket/lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.css">
     <link href="./templates/bracket/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
     <link href="./templates/bracket/lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
     <link href="./templates/bracket/lib/rickshaw/rickshaw.min.css" rel="stylesheet">
 
     <!-- Bracket CSS -->
     <link rel="stylesheet" href="./templates/bracket/css/bracket.css">
+    <!-- jqgrid CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="http://www.guriddo.net/demo/css/trirand/ui.jqgrid-bootstrap4.css" />
   </head>
 
   <body>
@@ -64,7 +67,7 @@
         <ul class="br-menu-sub nav flex-column">
           #set( $ext = ".html" )
           #foreach( $menu in $searchVO.searchJson.menus )
-            <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('$searchVO.menuFolder$menu.fileName');" class="nav-link">$menu.fileName</a></li>
+            <li class="nav-item"><a href="javascript:;" onclick="fn_makeInstance('$menu.entityId');" class="nav-link">$menu.fileName</a></li>
           #end
           
         </ul>
@@ -488,7 +491,7 @@
     <div class="br-mainpanel">
 
       <div id="pagebody" class="br-pagebody mg-t-5 pd-x-30">
-        
+        <div class="br-section-wrapper"></div>
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
@@ -504,22 +507,59 @@
     <script src="./templates/bracket/lib/jquery.sparkline.bower/jquery.sparkline.min.js"></script>
     <script src="./templates/bracket/lib/d3/d3.js"></script>
     <script src="./templates/bracket/lib/rickshaw/rickshaw.min.js"></script>
+    <script src="http://themetrace.com/templates/bracket/lib/jquery.maskedinput/jquery.maskedinput.js"></script>
+    <script src="http://themetrace.com/templates/bracket/lib/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 
     <script src="./templates/bracket/js/bracket.js"></script>
     <script src="./templates/bracket/js/ResizeSensor.js"></script>
+
+    <!-- jqgrid -->
+    <script src="./js/jqGrid_JS_5.1.0/js/i18n/grid.locale-en.js" ></script>
+    <script src="./js/jqGrid_JS_5.3.1/src/jquery.jqGrid.js"></script>
+    
+
+    <!-- multiselect -->
+    <script src="./js/jquery-multiselect/jquery.multiselect.js"></script>
+		<script src="./js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+		<link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.filter.css" />
+
+    <!-- JS Tree -->
+		<script type="text/javascript" src="./js/jstree/3.3.8/dist/jstree.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./js/jstree/3.3.8/dist/themes/default/style.min.css" />
+    
+    <!-- contextMenu -->
+    <link rel="stylesheet" media="screen" href="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.css" type="text/css" />
+		<script src="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.js"></script>
+    <script src="./js/jQuery-contextMenu-master/dist/jquery.ui.position.js"></script>
+    
+    <!-- alasql -->
+    <script type="text/javascript" src="./js/alasql-develop/dist/alasql.js"></script>
+    <!-- lodash -->
+    <script src="./js/jointjs/lodash.4.17.10.js"></script>
+    <!-- utils -->
+    <script src="./js/dashboard.toolbox.js?version=0"></script>
+    
 
     <!-- react  -->
     <script  src="./js/react-0.14.3/build/react.js"></script>
 		<script  src="./js/react-0.14.3/build/react-dom.js"></script>
 		<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
-		<script  src="./js/react-0.14.3/browser.js" ></script>
+    <script  src="./js/react-0.14.3/browser.js" ></script>
 
     <!-- 스키마를 바탕으로 소스를 생성하기  -->
-    <script src="./js/bpmn/gen/gen_instance_list.js"></script>
-    <script src="./js/bpmn/gen/gen_instance.js"></script>
-    <script src="./js/bpmn/gen/makeHtmlBySchema.js"></script>
-    <script src="./js/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_list.js"></script>
+    <script src="./js/bpmn/instance/gen_instance.js"></script>
+    <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
+    <script src="./js/bpmn/gen/$searchVO.searchJson.jpaFiles"></script>
+    <!-- <script src="./js/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script> -->
     <script>
+      $.jgrid.defaults.responsive = true;
+      $.jgrid.defaults.styleUI = 'Bootstrap4';
+      $.jgrid.defaults.iconSet = "fontAwesome";
+
+      var instances = {};
+
       $(function(){
         'use strict'
 
@@ -556,10 +596,67 @@
 
       function fn_makeInstance(_entityId){
         delete instances;
-        instances = new gen_instance_list($("#pagebody") , testEntityJpaFiles );
-        instances.add_instance(_entityId);
+        instances = new gen_instance_list($("#pagebody .br-section-wrapper") , $searchVO.searchJson.jpaVarName );
+        var instanceOption = {
+            isPopSelect : false
+        };
+        instances.add_instance(_entityId ,'general', instanceOption );
       }
     </script>
   </body>
   <jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>
+   <style>
+    .ui-dialog { z-index: 1000 !important ;}
+    .contextMenu{
+			color: #337ab7;			
+			font-weight: bold;
+		}
+
+    /* *********** Bootstrap Custom Start************/
+		/***  jqgrid Header   ***/
+		.ui-jqgrid-hdiv th {
+			text-align: center;
+		}
+		
+		.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    	    color: #000;
+			background-color: #f5f5f5;
+    	    background-image: none
+    	}
+    	
+    	.ui-jqgrid .ui-jqgrid-htable th div {
+			height:auto;
+			overflow:hidden;
+			padding-right:4px;
+			padding-top:2px;
+			position:relative;
+			vertical-align:text-top;
+			white-space:normal !important;
+		}
+		.ui-jqgrid .ui-jqgrid-bdiv .table>tbody>tr>td.active {
+			background-color: unset;
+		}
+
+		.ui-jqgrid {
+			border-top: 2px solid #fc5d57;
+		} 
+
+		.ui-jqgrid-view  .ui-jqgrid-bdiv td.glyphicon {
+			top : 0px;
+			display: table-cell ;
+		}
+
+		/* *********** Bootstrap Custom End************/
+		.modal-content.ui-resizable {
+			overflow: scroll;
+		}
+
+		.required:after {
+			content:"*";color:red;
+		}
+
+		div[type=HorizontalLayout] {
+			min-height:  22px;
+		}
+  </style>
 </html>

@@ -487,7 +487,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     if(_schema.gridOpt != undefined){
         $.extend(opt, _schema.gridOpt);
     }
-    $.extend(opt, {styleUI: "Bootstrap4", iconSet: "Octicons"});
+    $.extend(opt, {styleUI: "Bootstrap4", iconSet: "fontAwesome"});
 
     mainControl.jqGrid(opt);
     

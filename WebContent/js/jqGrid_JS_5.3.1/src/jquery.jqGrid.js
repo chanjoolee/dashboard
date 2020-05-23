@@ -1476,7 +1476,7 @@ $.extend($.jgrid,{
 		},
 		fontAwesome : {
 			common : {
-				icon_base : "fas"
+				icon_base : "fa"
 			},
 			base : {
 				icon_first : "fa-step-backward",

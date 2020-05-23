@@ -53,6 +53,13 @@ Generator.prototype.init = function(){
         generator.fn_fileSave();
 
     }
+    else if( _this.schema_bpmn.Model != undefined && _this.cssType != null && _this.cssType == "Bracket" ){
+        _this.fn_convert_id();
+        var generator = new JpaAllGeneratorBracket( _this ) ;
+        generator.fn_generate();
+        generator.fn_fileSave();
+
+    }
     
 }
 

@@ -573,7 +573,7 @@
     <script>
       $.jgrid.defaults.responsive = true;
       $.jgrid.defaults.styleUI = 'Bootstrap4';
-      $.jgrid.defaults.iconSet = "Octicons";
+      $.jgrid.defaults.iconSet = "fontAwesome";
 
       var instances = {};
       $(function(){
