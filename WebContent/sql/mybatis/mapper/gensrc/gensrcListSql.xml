@@ -122,9 +122,9 @@
 <select id="gensrcList.gensrcList.page.total" resultType="hashmap" >
 
 	select 
-		ceil(count(*)/ #{rows} ) as total,
-		#{page} as page ,
-		count(*) records 
+		ceil(count(*)/ #{rows} ) as TOTAL,
+		#{page} as PAGE ,
+		count(*) RECORDS 
 	from 
 	(
 		select a.* from (
