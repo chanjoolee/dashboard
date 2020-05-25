@@ -5354,11 +5354,13 @@ JpaAllGeneratorBracket.prototype.fn_generate_main_bracket = function () {
         , jpaVarName : _this.Model._name + "JpaFiles"
     };
     $.ajax({
+        // url: "./template" ,
         url: "./template.html" ,
         type : "POST",
         async: false,
         data : {    
             searchJson : JSON.stringify(searchJson),
+            // searchJson : searchJson ,
             viewName : "bracket.vm" ,
             menuFolder : 'schema/'+ _this.Model._name + "." + _this.dateStr + '/'
         },

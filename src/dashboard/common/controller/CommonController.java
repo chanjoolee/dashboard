@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +51,9 @@ public class CommonController {
     
     @Autowired
     private ComplexService service;
+    
+    @Autowired
+    private VelocityEngine velocityEngine;
 
     @RequestMapping(value = "/checkSearchConditionJson" ,method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView checkSearchConditionJson(HttpServletRequest request,@RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
@@ -84,24 +88,25 @@ public class CommonController {
     }
     
     @RequestMapping(value = "/template",method = { RequestMethod.GET, RequestMethod.POST })
-    public void template(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletResponse response,HttpServletRequest request, ModelAndView mav) throws IOException {
+    public void template(@SuppressWarnings("rawtypes") @RequestParam Map<Object,Object> searchVO,Locale locale, Model model, HttpServletResponse response,HttpServletRequest request, ModelAndView mav , VelocityContext context) throws IOException {
     	commonService.requestToVo(request, searchVO);
-    	VelocityEngine ve = new VelocityEngine();
-    	Properties p = new Properties();
-    	p.setProperty( "resource.loader", "class" );
-    	p.setProperty( "class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
-//    	p.setProperty( "resource.loader", "webapp" );
-//    	p.setProperty( "class.resource.loader.class", "org.apache.velocity.tools.view.WebappResourceLoader" );
-//    	p.setProperty( "class.resource.loader.path","/WEB-INF/template/");
-        ve.init(p);
+//    	VelocityEngine velocityEngine = new VelocityEngine();
+//    	Properties p = new Properties();
+//    	p.setProperty( "resource.loader", "class" );
+//    	p.setProperty( "class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
+
+//    	p.setProperty( "resource.loader", "file" );
+//    	p.setProperty( "file.resource.loader.class", "org.apache.velocity.tools.view.WebappResourceLoader" );
+//    	p.setProperty( "file.resource.loader.path","/WEB-INF/template/");
+//    	velocityEngine.init(p);
         
-        
+//    	velocityEngine.FILE_RESOURCE_LOADER_PATH
     	/* add that list to a VelocityContext */
-        VelocityContext context = new VelocityContext();
+//        VelocityContext context = new VelocityContext();
         context.put("searchVO", searchVO);
         
         /* get the Template */
-        Template t = ve.getTemplate(searchVO.get("viewName").toString());
+        Template t = velocityEngine.getTemplate(searchVO.get("viewName").toString());
  
         /* now render the template into a Writer */
 		StringWriter writer = new StringWriter();
