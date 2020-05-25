@@ -63,15 +63,26 @@
     <url-pattern>*.html</url-pattern>
   </servlet-mapping>
   
-  <servlet>
-      <servlet-name>velocity</servlet-name>
-      <servlet-class>org.apache.velocity.tools.view.servlet.VelocityViewServlet</servlet-class>
-     <load-on-startup>1</load-on-startup>
-   </servlet>
+  	<servlet>
+        <servlet-name>template</servlet-name>
+        <servlet-class>dashboard.common.controller.LayoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>template</servlet-name>
+        <url-pattern>/template</url-pattern>
+    </servlet-mapping>
+	<servlet>
+		<servlet-name>velocityLayout</servlet-name>
+		<servlet-class>org.apache.velocity.tools.view.VelocityLayoutServlet</servlet-class>
+		<init-param>
+		    <param-name>org.apache.velocity.properties</param-name>
+		    <param-value>/WEB-INF/velocity/velocity.properties</param-value>
+		</init-param>
+	</servlet>
 
    <servlet-mapping>
-      <servlet-name>velocity</servlet-name>
-      <url-pattern>*.vm</url-pattern>
+		<servlet-name>velocityLayout</servlet-name>
+		<url-pattern>*.vm</url-pattern>
    </servlet-mapping>
   
   <servlet>
