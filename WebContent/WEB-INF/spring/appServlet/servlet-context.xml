@@ -70,12 +70,8 @@
 	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<value>
-		      	resource.loader = file
-				file.resource.loader.description = Velocity File Resource Loader
-				file.resource.loader.class = org.apache.velocity.runtime.resource.loader.FileResourceLoader
-				file.resource.loader.path =
-				file.resource.loader.cache = true
-				file.resource.loader.modificationCheckInterval = 2
+		      	resource.loader=class
+				class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
 		    </value>
 		</property>
 	</bean>
