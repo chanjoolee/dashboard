@@ -45,7 +45,7 @@
     <!-- Bracket CSS -->
     <link rel="stylesheet" href="./templates/bracket/css/bracket.css">
     <!-- jqgrid CSS -->
-    <link rel="stylesheet" type="text/css" media="screen" href="http://www.guriddo.net/demo/css/trirand/ui.jqgrid-bootstrap4.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="./js/bootstrap/ui.jqgrid-bootstrap4.css" />
   </head>
 
   <body>
