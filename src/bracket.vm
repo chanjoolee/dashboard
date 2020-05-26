@@ -36,10 +36,11 @@
     <!-- vendor css -->
     <link href="./templates/bracket/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="./templates/bracket/lib/Ionicons/css/ionicons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.css" rel="stylesheet" >
     <link href="./templates/bracket/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
     <link href="./templates/bracket/lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
     <link href="./templates/bracket/lib/rickshaw/rickshaw.min.css" rel="stylesheet">
+    <link href="./js/jquery-ui-1.11.3.custom/jquery-ui.css" rel="stylesheet"/>
 
     <!-- Bracket CSS -->
     <link rel="stylesheet" href="./templates/bracket/css/bracket.css">
