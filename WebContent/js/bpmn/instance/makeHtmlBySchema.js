@@ -362,14 +362,15 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     var containerType = container.attr("type");
         
     //==table create
+    var gridId = _this.instance.containerId + "_grid";
     var mainControl = $(document.createElement( "table" ));
-    mainControl.attr("id",_schema.id);
+    mainControl.attr("id", gridId );
     //table.css("width","100%");
     container.append(mainControl);
     
     //== page create
     var pager = $(document.createElement( "div" ));
-    pager.attr("id",_schema.id + 'Pager');
+    pager.attr("id", gridId + "_pager");
     container.append(pager);
     
     // refereced Items
@@ -491,7 +492,14 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
 
     // getGridParam 추가
     opt.gridProperties = _this.instance.jpaFile.gridProperties ;
+
+    // gridId , pagerId
+    opt.gridId = gridId ;
+    opt.pager = gridId + "_pager";
+
     mainControl.jqGrid(opt);
+
+    
     
     // width가 100%인 경우
     if(opt.width != undefined && opt.width == '100%'){

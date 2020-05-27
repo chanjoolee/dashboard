@@ -26,8 +26,8 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.jpaFile = _.find( this.list_instance.jpaFiles , { entityId : this.entityId, editType: this.type });
     this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
-    this.searchContainerId = this.containerId + "_search";
-    this.gridCotainerId = this.containerId + "_grid";
+    this.searchContainerId = this.containerId + "_searchContainer";
+    this.gridCotainerId = this.containerId + "_gridContainer";
     this.container = $("<div/>",{id:  this.containerId });
     this.list_instance.container.append(this.container);
     this.searchContainer = null;
@@ -57,11 +57,12 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
 
 genInstance.prototype.fn_setDataSourceValue = function(){
     var _this = this;
+    // dictionary
     $.each(_this.jpaFile.dictionaries,function(i, src){
         src.data();
     });
-    // data scource
 
+    // data scource
     $.each(_this.jpaFile.dataSrc,function(i, src){
         var prop = _.find( _this.jpaFile.gridProperties , { _name : src.childColumnName } );
         var dataSrcType = 'select';
@@ -72,6 +73,7 @@ genInstance.prototype.fn_setDataSourceValue = function(){
         }
         
     });
+
 }
 
 /**
@@ -126,7 +128,7 @@ genInstance.prototype.fn_contextmenu = function(){
 
     $.contextMenu(
         {
-            "selector": "#" + this.containerId + ".jqgrow td.contextMenu",
+            "selector": "#" + _this.gridCotainerId + " .jqgrow td.contextMenu",
             "trigger": "left",
             "build": function($trigger) {
                         var options = {
@@ -149,7 +151,7 @@ genInstance.prototype.fn_contextmenu = function(){
                             return false;
             
                         var gridId = $trigger.attr("gridId");
-                        var grid = $("#"+gridId).jqGrid();
+                        var grid = _this.container.find("#"+gridId).jqGrid();
                         var rowId = $trigger.parent().attr("id");
                         var rowData = grid.getRowData(rowId);
                         var vGridOpt = grid.getGridParam();
@@ -164,8 +166,8 @@ genInstance.prototype.fn_contextmenu = function(){
                         if ( cm.referenceId != null){
                             
                             var src = _.find( _this.jpaFile.dataSrc, {"referenceId": cm.referenceId , "topRefrenceId" : cm.topRefrenceId  });
-                            // if ( _.includes(_.map(src.childColumnNames, function( _name ){  return _name.toUpperCase(); } ), cm.name.toUpperCase()) ) {
-                            var itemName = _.camelCase(src.parentEntity);
+                            // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
+                            var itemName = src.parentEntity;
                             options.items[itemName] = {
                                 name: "Parents: " + itemName ,
                                 callback : function(key, options){
@@ -235,7 +237,9 @@ genInstance.prototype.fn_contextmenu = function(){
                             var child_columns_index = _.indexOf(child.parent_columns, cm.name.toLowerCase());
                             if (child_columns_index == -1)
                                 return false;
-                            var itemName = _.camelCase(child.childEntityName);
+
+                            // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
+                            var itemName = child.childEntityName;
                             options.items[itemName] = {
                                 name: "Child: " + itemName ,
                                 callback : function(key, options){
