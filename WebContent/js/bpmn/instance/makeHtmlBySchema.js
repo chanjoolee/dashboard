@@ -489,6 +489,8 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     }
     $.extend(opt, {styleUI: "Bootstrap4", iconSet: "fontAwesome"});
 
+    // getGridParam 추가
+    opt.gridProperties = _this.instance.jpaFile.gridProperties ;
     mainControl.jqGrid(opt);
     
     // width가 100%인 경우
@@ -503,6 +505,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
 
     // return container;
 }
+
 
 
 makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , container , container_parent){

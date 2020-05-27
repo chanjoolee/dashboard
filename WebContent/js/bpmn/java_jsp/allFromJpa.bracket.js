@@ -379,10 +379,10 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                     var row = grid.jqGrid('getRowData',rowId);
                     var cms = grid.jqGrid("getGridParam", "colModel");
                     var cm = cms[iCol];
+                    var vGridOpt  = grid.getGridParam();
 
                     var oFrm = document.getElementById("form1");
-
-                    var v_property = _.find(gridProperties, { _name : cm.name.toLowerCase() });
+                    var v_property = _.find(vGridOpt.gridProperties, { _name : cm.name.toLowerCase() });
                     
                     //customize
                     var somCondition = ( v_property != null && 
@@ -780,13 +780,15 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         var cms = theGrid.jqGrid("getGridParam", "colModel");
                         var searchRow = {};
                         var vGridOpt  = theGrid.getGridParam();
+                        
                         $.each(row,function(k,v){
                             // searchRow['search_' + _.camelCase(k)] = v;
                         });
                         var vKeys = [];
                         // var models = eval(vGridOpt.modelVarName);
                         // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
-                        $.each([].concat(gridProperties), function(i, prop){
+                        
+                        $.each([].concat(vGridOpt.gridProperties), function(i, prop){
                             let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
                             if (vId != null){
                                 vKeys.push(prop._name.toUpperCase());
