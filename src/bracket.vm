@@ -693,9 +693,9 @@
 		}
 
 		/* *********** Bootstrap Custom End************/
-		.modal-content.ui-resizable {
+		/* .modal-content.ui-resizable {
 			overflow: scroll;
-		}
+		} */
 
 		.required:after {
 			content:"*";color:red;
