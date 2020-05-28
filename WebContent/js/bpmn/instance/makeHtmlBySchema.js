@@ -363,6 +363,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
         
     //==table create
     var gridId = _this.instance.containerId + "_grid";
+    _this.instance.gridId = gridId;
     var mainControl = $(document.createElement( "table" ));
     mainControl.attr("id", gridId );
     //table.css("width","100%");

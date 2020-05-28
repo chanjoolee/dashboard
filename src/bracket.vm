@@ -496,6 +496,21 @@
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
+    <!-- Stacked  Modal -->
+    <div name="infiniteLogModal"  class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="tx-14 mg-b-0 tx-inverse tx-bold"><span></span></h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body" >
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="./templates/bracket/lib/jquery/jquery.js"></script>
     <script src="./templates/bracket/lib/popper.js/popper.js"></script>
@@ -603,6 +618,36 @@
         };
         instances.add_instance(_entityId ,'general', instanceOption );
       }
+
+      // Stacked Modal
+		  $(document).on('show.bs.modal', '.modal', function (event) {
+				
+          // var zIndex = 1500 + (10 * $('.modal:visible').length);
+          // $(this).css('z-index', zIndex);
+          // setTimeout(function() {
+          //     $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+          // }, 0);
+      });
+
+      $(document).on('shown.bs.modal', '.modal', function (event) {
+          var grid = $(event.target).find(".ui-jqgrid-btable")
+          grid.setGridWidth($(event.target).find(".modal-body").width())
+      });
+
+      // modal Close
+			$(document).on('hidden.bs.modal', function (event) {
+				
+				$('.modal:visible').length && $(document.body).addClass('modal-open');
+				 
+				// $("#modal_2019-5-31-11-38-56").remove();
+				var _this = $(this);
+				var target = $(event.target);
+				if(target.attr("isCloned") != null)
+					target.remove();
+        instances.list.pop();
+			});
+
+
     </script>
   </body>
   <jsp:include page="/WEB-INF/views/include/includeReactComponent.jsp"></jsp:include>
@@ -692,6 +737,12 @@
     .table-bordered > tbody > tr > td:last-child {
       border-right: 1px solid #e9ecef;
       border-right-width: 1;
+    }
+
+    @media (min-width: 1200px) {
+      .modal-xl {
+        max-width: 1140px;
+      }
     }
   </style>
 </html>

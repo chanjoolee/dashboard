@@ -508,6 +508,22 @@
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
+    <!-- Stacked  Modal -->
+    <div name="infiniteLogModal" class="modal fade" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog modal-dialog-vertical-center" role="document">
+        <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0  tx-inverse tx-bold"><span id="popFailMode"></span> </h6>
+          <button type="button" class="close csr-ptr" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        <div class="modal-body pd-25" style="padding: 10px;"> 
+          <div class="infiniteLogContainer" style="width: 100%"></div>
+        </div>
+        </div>
+      </div><!-- modal-dialog -->
+    </div>
 
     <script src="./templates/bracket/lib/jquery/jquery.js"></script>
     <script src="./templates/bracket/lib/popper.js/popper.js"></script>
@@ -607,6 +623,16 @@
         //   showOtherMonths: true,
         //   selectOtherMonths: true
         // });
+
+        // Stacked Modal
+        $(document).on('show.bs.modal', '.modal', function (event) {
+          
+          var zIndex = 1500 + (10 * $('.modal:visible').length);
+          $(this).css('z-index', zIndex);
+          setTimeout(function() {
+              $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+          }, 0);
+      });
 
       });
 
