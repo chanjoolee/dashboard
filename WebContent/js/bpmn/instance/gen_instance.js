@@ -148,8 +148,10 @@ genInstance.prototype.makeSearch = function(){
     var _this = this;
     var searchContainer = $("<div/>",{id: this.searchContainerId});
     this.searchContainer = searchContainer;
+    this.searchContainer.addClass("form-layout form-layout-7");
     this.container.append(searchContainer);
     var schema = this.jpaFile.schema.search.schema ;
+    schema.containerType = "search";
     var makehtml = new makeHtmlBySchema( this.searchContainer , schema , this );
 }
 

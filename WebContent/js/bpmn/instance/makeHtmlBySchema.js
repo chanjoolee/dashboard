@@ -25,22 +25,28 @@ makeHtmlBySchema.prototype.process_type = function(  _schema , _schema_parent , 
 
 makeHtmlBySchema.prototype.defaultSetting = function( _schema , _container ){
     var _this = this;
+    // if(_this.schema.containerType == "search" && _schema.type != "SearchHeader"){
+    //     _container.removeClass("col-sm-2");
+    //     _container.addClass("col-sm");
+    // }
+
     if( _schema.id != null){
         _container.attr("id", _schema.id + "Container");
     }
 
-    if( _schema.parentSchema != null && _schema.parentSchema.type == 'HorizontalLayout'){
-        _container.css("display","inline-block");
-    }
+    // if( _schema.parentSchema != null && _schema.parentSchema.type == 'HorizontalLayout'){
+    //     _container.css("display","inline-block");
+    // }
+
     if( _schema.width != undefined)
         _container.css("width",_schema.width);
 
-    if( _container.children().length > 0)
-        _container.css("margin-left","10px");
+    // if( _container.children().length > 0)
+    //     _container.css("margin-left","10px");
 
 
     if(_schema.containerCls != undefined)
-        container.addClass(_schema.containerCls);
+        _container.addClass(_schema.containerCls);
 
 
     //***  css ***//
@@ -60,9 +66,10 @@ makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , conta
 
 makeHtmlBySchema.prototype.HorizontalLayout = function( _schema , _schema_parent , container, container_parent){
     var _this = this;
+
     // var container = $("<div/>",{ style: "display: inline-block "});
     // _this.defaultSetting(_schema , container);
-    
+    // container.addClass("row");
     // return container;
 }
 
@@ -523,13 +530,15 @@ makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , co
     // var container = $("<div/>",{});
     // _this.defaultSetting(_schema, container);
         
-    var mainControl = $(document.createElement("h3"));
-    //h3.addClass("cont_tit");
-    container.append(mainControl);
-    mainControl.text(_schema.text);
-    mainControl.css("font-weight","bold");
-    mainControl.css("text-align","right");
-    mainControl.css("color","#000");
+    container.text(_schema.text);
+    container.addClass("col-sm-2");
+    // var mainControl = $(document.createElement("span"));
+    // //h3.addClass("cont_tit");
+    // container.append(mainControl);
+    // mainControl.text(_schema.text);
+    // mainControl.css("font-weight","bold");
+    // mainControl.css("text-align","right");
+    // mainControl.css("color","#000");
     
 
     // return container;
@@ -633,7 +642,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
     if(_schema.multiselectOpt != undefined)
         $.extend(multiselectOpt, _schema.multiselectOpt);
     var vMultiSelect = mainControl.multiselect(multiselectOpt).multiselectfilter();
-    mainControl.multiselect('widget').css("width","400px");
+    mainControl.multiselect('widget').css("width","420px");
     mainControl.multiselect('widget').find(".ui-multiselect-filter input").css("width","150px");
     // mainControl.multiselectOption = multiselectOpt;
     
@@ -696,7 +705,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
                     var my = $("select[name="+ child.id+"]");
                     //my.multiselect('refresh');
                     var $menu = $.data(my[0],"ech-multiselect").menu;
-                    $menu.css("width","400px");
+                    $menu.css("width","420px");
                     $menu.find(".ui-multiselect-filter input").css("width","150px");
                     
                     //$("div.ui-multiselect-menu").css("width","400px");
@@ -830,6 +839,10 @@ makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container
     mainControl.addClass("btn btn-warning btn-sm");
     mainControl.text(_schema.label);
     container.append(mainControl);
+
+    if(_this.schema.containerType == "search"){
+        mainControl.addClass("btn-block");
+    }
 			
 
     /***

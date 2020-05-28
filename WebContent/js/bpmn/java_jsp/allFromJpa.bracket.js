@@ -93,7 +93,8 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
             // width : "100%"
         } ,
         "SearchHeader": {
-            width : "100px"
+            // width : "100px"
+            containerCls : "col-sm-2"
         },
         "multiCombo" : {
             multiselectOpt : {multiple: true},
@@ -128,14 +129,15 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                 "change" : function(e){
                     fn_search();
                 }
-            }
+            },
+            containerCls : "col-sm"
         } ,
         "Button" : {
             // cls: 'btn_txt btn_type_e btn_color_a',
-            containerCss:[
-                {code: 'margin-right', value:'3px'} ,
-                {code: 'float', value:'right'} 
-            ],
+            // containerCss:[
+            //     {code: 'margin-right', value:'3px'} ,
+            //     {code: 'float', value:'right'} 
+            // ],
             label: _file._name 
         } ,
         "grid" : {
@@ -448,14 +450,15 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
 
         },
         "input" : {
-            controlCss :[
-                {code:'margin-left',value:'9px'} ,
-                {code:'width',value:'100%'},
-                {code:'height',value:'22px'}
-            ],
-            containerCss :[
-                {code:'width',value:'100px'}
-            ],
+            // controlCss :[
+            //     {code:'margin-left',value:'9px'} ,
+            //     {code:'width',value:'100%'},
+            //     {code:'height',value:'22px'}
+            // ],
+            // containerCss :[
+            //     {code:'width',value:'100px'}
+            // ],
+            containerCls : "col-sm",
             events:{
                 "keypress" : function(e){
                     if(e.which === 13){
@@ -466,7 +469,8 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
             }
         },
         "jsTreeSearch" : {
-            width: "150px"
+            // width: "150px"
+            containerCls : "col-sm"
         }
     };
 
@@ -4446,32 +4450,32 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
                 "id" : "searchConditionHorizontalLayout",
                 "name": "searchConditionHorizontalLayout",
                 "label" : "" ,
-                "controlCss" : [
-                    {code: "min-height", value: "30px"}
-                ],
+                // "controlCss" : [
+                //     {code: "min-height", value: "30px"}
+                // ],
+                
                 elements : [
                     {
                         label:'',
                         type: 'HorizontalLayout',
                         cls: '',
-                        containerCss:[],		
+                        containerCls: "no-gutters row",		
                         elements:[
                             {
-                                containerCss:[
-                                    // {code: 'height', value:'30px'}
-                                ],
                                 label:'',
-                                id: "searchVervical",
+                                id: "searchVertical",
                                 type:'Vertical',
+                                containerCls: "col-sm-10",
                                 elements:[
                                     //1line
                                     {
                                         label:'',
                                         type: 'HorizontalLayout',
-                                        "id": "searchHorizontalLayout",
-                                        "name": "searchHorizontalLayout",
-                                        containerCss:[
-                                            {code:'min-height',value:'25px'}
+                                        id: "searchHorizontalLayout",
+                                        name: "searchHorizontalLayout",
+                                        containerCls: "no-gutters row",
+                                        containerCss : [
+                                            {code: "width", value : "100%" }
                                         ],
                                         elements:[
                                             
@@ -4486,11 +4490,7 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
                             {
                                 label:'',
                                 type: 'HorizontalLayout',
-                                cls: 'btn_txt',
-                                containerCss:[
-                                    {code: 'margin-left', value:'10px'}
-                                    , {code: 'float', value:'right'}
-                                ],
+                                containerCls : "col-sm-2",
                                 elements:[
                                     {
                                         type:'ButtonBootstrap',
@@ -4499,9 +4499,9 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
                                         label:'SEARCH',
                                         //width: '50px',
                                         // cls: 'btn_txt btn_type_e btn_color_a',
-                                        containerCss:[
-                                            {code: 'margin-right', value:'3px'}
-                                        ],
+                                        // containerCss:[
+                                        //     {code: 'margin-right', value:'3px'}
+                                        // ],
                                         events:{
                                             click : function(){
                                                 fn_search();
@@ -4560,7 +4560,7 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
 
 JpaAllGeneratorBracket.prototype.fn_schema_search = function ( _file) {
     var _this = this;
-    var schemaVertical = _this.generator.findAllByElName( _file.schema.search.schema , { id: 'searchVervical' } );
+    var schemaVertical = _this.generator.findAllByElName( _file.schema.search.schema , { id: 'searchVertical' } );
     var schema = _this.generator.findAllByElName( _file.schema.search.schema , { id: 'searchHorizontalLayout' } );
     var schemaClone = _.cloneDeep(schema);
     
@@ -4671,6 +4671,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_combo = function(child_columns
             name: _.camelCase(parent._name + '_' + parentProp._name) + 'SearchHeader',
             label: '',
             text: _.capitalize(_.camelCase(child_column))
+            
         };
         var obj_combo = {
             type: "multiCombo",
@@ -4678,7 +4679,8 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_combo = function(child_columns
             name: _.camelCase(parent._name + '_' + parentProp._name) + 'SearchMultiCombo',
             label: '',
             text: _.capitalize(parentProp._name),
-            jpa_column: { "parent_column": parentProp._name, "child_column": child_column }
+            jpa_column: { "parent_column": parentProp._name, "child_column": child_column },
+            
         };
         if (parentDef["schemas"] == undefined)                     
             parentDef["schemas"] = [];
@@ -4758,6 +4760,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree1 = function(child_colum
         // text: _.map(child_columns, function (col, i) {
         //     return _.capitalize(col);
         // }).join(" ")
+       
     };
 
     // For name columns
