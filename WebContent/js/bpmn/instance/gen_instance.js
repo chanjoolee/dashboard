@@ -80,7 +80,12 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.fn_setDataSourceValue();
     // container 안에 그린다.
     // 01. search
-    this.makeSearch();
+    if(this.option != null && this.option.modal){
+        
+    }else{
+        this.makeSearch();
+    }
+    
     // 02. grid
     this.makeGrid();
 
