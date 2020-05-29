@@ -630,8 +630,10 @@
       });
 
       $(document).on('shown.bs.modal', '.modal', function (event) {
-          var grid = $(event.target).find(".ui-jqgrid-btable")
-          grid.setGridWidth($(event.target).find(".modal-body").width())
+          var grid = $(event.target).find(".ui-jqgrid-btable");
+          grid.setGridWidth($(event.target).find(".modal-body").width());
+          // action submit prevent
+          $(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
       });
 
       // modal Close

@@ -505,8 +505,14 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     opt.gridId = gridId ;
     opt.pager = gridId + "_pager";
 
+    opt.htmlMaker = _this ;
+    opt.url = function(){
+        return	"./genericlListPageJson.html?" + 
+                this.htmlMaker.instance.form.serialize() + 
+                "&sqlid=" + this.sqlId+ ".page.list" +  
+                "&paging_sqlid=" + this.sqlId+ ".page.total"
+    }
     mainControl.jqGrid(opt);
-
     
     
     // width가 100%인 경우

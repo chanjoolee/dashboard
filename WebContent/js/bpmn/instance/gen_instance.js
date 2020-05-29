@@ -28,6 +28,16 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     this.searchContainerId = this.containerId + "_searchContainer";
     this.gridCotainerId = this.containerId + "_gridContainer";
+    // make form 
+    var formTemplate = `
+        <form name="form" id="form" class="">
+        <input type="hidden" id="searchJson" name="searchJson" value='{}'/>
+        </form>
+    `;
+    this.formId = this.containerId + "_form";    
+    this.form = $(formTemplate);
+    this.form.attr("id" , this.formId);
+    this.form.attr("name" , this.formId);
     
     var _this = this;
     if(this.option != null && this.option.modal){
@@ -45,11 +55,24 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
         var headStr = '[' + _.camelCase(_this.entityId) + ']  ' +  filterStrs.join(" , ");													
         this.modalClone.find(".modal-header h6 span").text(headStr);
 
+        // inintial search
+        var v_filters = [];
+        $.each(this.option.filter ,function(field, data){
+            var obj = {
+                field : field ,
+                // value: [].concat(data)
+                value: data , 
+                isArray : _.isArray(data)
+            };
+            v_filters.push( obj );
+        });
+        this.form.find("#searchJson").val(JSON.stringify({fields: v_filters}));
+
         // modalId
         this.modalClone.attr("id", this.containerId );
         this.modalClone.attr("name", "infiniteLogModal" + this.containerId );
+        this.container = this.modalClone.find(".modal-body");        
         
-        this.container = this.modalClone.find(".modal-body");
         this.list_instance.container.append(this.modalClone);
 
         // modal
@@ -64,6 +87,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
         this.container = $("<div/>",{id:  this.containerId });
         this.list_instance.container.append(this.container);
     }
+    this.container.append(this.form);
     
     this.searchContainer = null;
     this.gridCContainer = null;
@@ -154,7 +178,7 @@ genInstance.prototype.makeSearch = function(){
     var searchContainer = $("<div/>",{id: this.searchContainerId});
     this.searchContainer = searchContainer;
     this.searchContainer.addClass("form-layout form-layout-7");
-    this.container.append(searchContainer);
+    this.form.append(searchContainer);
     var schema = this.jpaFile.schema.search.schema ;
     schema.containerType = "search";
     var makehtml = new makeHtmlBySchema( this.searchContainer , schema , this );
@@ -164,7 +188,7 @@ genInstance.prototype.makeGrid = function(){
     var _this = this;
     var gridContainer = $("<div/>",{id: this.gridCotainerId});
     this.gridCContainer = gridContainer;
-    this.container.append(gridContainer);
+    this.form.append(gridContainer);
     var schema = this.jpaFile.schema.contents.schema ;
     var makehtml = new makeHtmlBySchema( this.gridCContainer , schema , this );
 }
