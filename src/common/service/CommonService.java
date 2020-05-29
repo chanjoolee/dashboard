@@ -236,8 +236,11 @@ public class CommonService {
     				//String path = "/upload/"+req.getParameter("grpName")+"/"+realFileName;
     				String path = "/" + upload + "/" + uploadBoard  + curDateFile + "/" + realFileName;
     				logger.debug("path==>"+path);
-    				File uploadedFile = new File(filePath);
-    				file.transferTo(uploadedFile);
+    				
+    				// all file upload : not efficienct
+    				// File uploadedFile = new File(filePath);
+    				// file.transferTo(uploadedFile);
+    				writeToFile(file.getInputStream(), filePath);
     				
     				Map<String, Object> fileInfo = new HashMap<String, Object>();
     				fileInfo.put("fieldName", file.getName());
