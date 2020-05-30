@@ -1493,7 +1493,8 @@
 						"pagelistFooterOracle",
 						"pagelistHeadOracle",
 						"pagelistHeadMysql",
-						"pageTotalFooter",
+						"pageTotalFooterMysql",
+						"pageTotalFooterOracle",
 						"pageTotalHead"
 					];
 					
@@ -2072,7 +2073,9 @@
 </script>
 <script type="text/aaa" id="pagelistFooterMysql">
 </script>
-<script type="text/aaa" id="pageTotalFooter">
+<script type="text/aaa" id="pageTotalFooterOracle">
+</script>
+<script type="text/aaa" id="pageTotalFooterMysql">
 </script>
 <script type="text/aaa" id="pageTotalHead">
 	

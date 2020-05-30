@@ -1,0 +1,59 @@
+	) a
+	where 1=1 			
+	<choose>
+		<when test="filters != null and filters != '' and (filters.rules.size() > 0  or (filters.groups != null and filters.groups.size() > 0) )">
+			and (
+			<if test="filters.rules.size() > 0" >
+				<foreach collection="filters.rules" item="item" index="index"  open="(" separator="" close=")">
+					<if test="index > 0 "> ${filters.groupOp} </if>
+					<choose>
+				    	<when test="item.op =='eq' ">REGEXP_LIKE(${item.field}, '^' || #{item.data} || '$','i')</when>
+							<when test="item.data.equalsIgnoreCase('isnull')">${item.field} is null</when>
+							<when test="item.op =='eq' ">${item.field} REGEXP concat('^', #{item.data} ,'$')</when>
+							<when test="item.op =='ne' ">${item.field} <![CDATA[ != ]]> #{item.data}</when>
+							<when test="item.op =='lt' ">${item.field} <![CDATA[ < ]]> #{item.data}</when>
+							<when test="item.op =='le' ">${item.field} <![CDATA[ <= ]]> #{item.data}</when>
+							<when test="item.op =='gt' ">${item.field} <![CDATA[ > ]]> #{item.data}</when>
+							<when test="item.op =='ge' ">${item.field} <![CDATA[ >= ]]> #{item.data}</when>
+							<when test="item.op =='bw' ">${item.field} REGEXP concat('^', #{item.data} )</when>
+							<when test="item.op =='bn' "> NOT ${item.field} REGEXP concat('^', #{item.data} )</when>
+							<when test="item.op =='in' "></when>
+							<when test="item.op =='ni' "></when>
+							<when test="item.op =='ew' "> ${item.field} REGEXP concat( #{item.data} ,'$' ) </when>
+							<when test="item.op =='en' "> NOT ${item.field} REGEXP concat( #{item.data} ,'$' ) </when>
+							<when test="item.op =='cn' ">${item.field} REGEXP  #{item.data} </when>
+							<when test="item.op =='nc' ">NOT ${item.field} REGEXP  #{item.data} </when>
+				        </choose>
+				</foreach>	
+			</if>	
+			<if test="filters.groups != null and filters.groups.size() > 0">
+				<foreach collection="filters.groups" item="group" index="group_index"  open=""  close="">
+					<if test="group.rules.size() > 0">
+					${filters.groupOp}
+					<foreach collection="group.rules" item="rule" index="rule_index"  open="("   separator="" close=")">
+						<if test="rule_index > 0 "> ${group.groupOp} </if>
+						<choose>
+					    	<when test="item.data.equalsIgnoreCase('isnull')">${item.field} is null</when>
+							<when test="item.op =='eq' ">${item.field} REGEXP concat('^', #{item.data} ,'$')</when>
+							<when test="item.op =='ne' ">${item.field} <![CDATA[ != ]]> #{item.data}</when>
+							<when test="item.op =='lt' ">${item.field} <![CDATA[ < ]]> #{item.data}</when>
+							<when test="item.op =='le' ">${item.field} <![CDATA[ <= ]]> #{item.data}</when>
+							<when test="item.op =='gt' ">${item.field} <![CDATA[ > ]]> #{item.data}</when>
+							<when test="item.op =='ge' ">${item.field} <![CDATA[ >= ]]> #{item.data}</when>
+							<when test="item.op =='bw' ">${item.field} REGEXP concat('^', #{item.data} )</when>
+							<when test="item.op =='bn' "> NOT ${item.field} REGEXP concat('^', #{item.data} )</when>
+							<when test="item.op =='in' "></when>
+							<when test="item.op =='ni' "></when>
+							<when test="item.op =='ew' "> ${item.field} REGEXP concat( #{item.data} ,'$' ) </when>
+							<when test="item.op =='en' "> NOT ${item.field} REGEXP concat( #{item.data} ,'$' ) </when>
+							<when test="item.op =='cn' ">${item.field} REGEXP  #{item.data} </when>
+							<when test="item.op =='nc' ">NOT ${item.field} REGEXP  #{item.data} </when>
+					    </choose>           		 
+					</foreach>
+					</if>
+				</foreach>
+			</if> 
+				)
+		</when>
+	</choose>
+	) a

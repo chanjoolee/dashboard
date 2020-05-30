@@ -42,7 +42,7 @@ SqlGenerator.prototype.fn_generate = function(){
                 // jstree
                 src = $("#jstreeSearch").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 //  include foot
-                src = $("#pagelistFooter").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#pagelistFooter" + _.capitalize(_this.dbType)).text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 src = '</' + sql.type + '>'; _this.sources.push(src);
                 
                 
@@ -60,7 +60,7 @@ SqlGenerator.prototype.fn_generate = function(){
                     src = "\t" + where ; _this.sources.push(src);
                 });
                 //  include foot
-                src = $("#pageTotalFooter").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#pageTotalFooter" + _.capitalize(_this.dbType)).text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 src = '</' + sql.type + '>'; _this.sources.push(src);
 
                 
@@ -184,7 +184,7 @@ SqlGeneratorAll.prototype.fn_generate = function(){
                 // jstree
                 src = $("#jstreeSearch").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 //  include foot
-                src = $("#pageTotalFooter").text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
+                src = $("#pageTotalFooter" + _.capitalize(_this.dbType)).text().replace(/@{/g,"#{").replace(/!{/g,"${");   _this.sources.push(src);
                 
                 src = '</' + sql.type + '>'; _this.sources.push(src);
 
