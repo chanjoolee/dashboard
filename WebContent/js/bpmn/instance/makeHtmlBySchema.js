@@ -579,6 +579,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
         mainControl.attr("id",_schema.id);
     container.append(mainControl);
     
+    
     /* var option1 = $(document.createElement( "option" ));
     option1.val('xxx');
     option1.text('xxx');
@@ -658,6 +659,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
     if(_schema.multiselectOpt != undefined)
         $.extend(multiselectOpt, _schema.multiselectOpt);
     var vMultiSelect = mainControl.multiselect(multiselectOpt).multiselectfilter();
+    this.container.find("button.ui-multiselect.ui-widget").css("width","100%");
     mainControl.multiselect('widget').css("width","420px");
     mainControl.multiselect('widget').find(".ui-multiselect-filter input").css("width","150px");
     // mainControl.multiselectOption = multiselectOpt;
@@ -738,8 +740,8 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
         
     }
     
-    if ( _schema.containerType == "search" ){
-        maincontrol.on("change",function(){
+    if ( _this.schema.containerType == "search" ){
+        mainControl.on("change",function(){
             _this.instance.fn_search();
         });
     }
@@ -830,6 +832,7 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
         // var vLabel = $("[mainControlId="+_schema.id + "]");
         // vLabel.text(vtree.get_selected().length + " Selected");
         buttonlabel.text(vtree.get_selected().length + " Selected");
+        _this.instance.fn_search();
     });
 
     $(document).bind('mousedown.' + this._namespaceID, function(e) {
@@ -843,9 +846,42 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
     // return container;
 }
 
-/**
-Bootstrap 버튼을 사용한다.
-*/
+// 미완성.
+makeHtmlBySchema.prototype.input = function(_schema ,_schema_parent , container , container_parent){
+    var _this = this;
+
+    // var container = $("<div/>",{});
+    // _this.defaultSetting(_schema, container);
+
+    /**
+    Start Logic
+    */
+
+    var mainControl = $(document.createElement("input"));
+    mainControl.attr("type","text");
+    // mainControl.addClass("btn btn-warning btn-sm");
+    mainControl.text(_schema.label);
+    container.append(mainControl);
+
+    if(_this.schema.containerType == "search"){
+        mainControl.addClass("btn-block");
+    }
+            
+    if ( _this.schema.containerType == "search" && _schema.name == "btnSearch" ){
+        mainControl.on("click",function(){
+            _this.instance.fn_search();
+        });
+    }
+
+    /***
+    End Logic    
+    */
+
+
+    // return container;
+    
+}
+
 makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
 
@@ -866,8 +902,8 @@ makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container
         mainControl.addClass("btn-block");
     }
             
-    if ( _schema.containerType == "search" && _schema.name == "btnSearch" ){
-        maincontrol.on("click",function(){
+    if ( _this.schema.containerType == "search" && _schema.name == "btnSearch" ){
+        mainControl.on("click",function(){
             _this.instance.fn_search();
         });
     }
@@ -923,6 +959,7 @@ makeHtmlBySchema.prototype.radioButton = function(_schema ,_schema_parent ,conta
     // return container;
     
 }
+
 
 
 makeHtmlBySchema.prototype.dateInput = function(_schema ,_schema_parent , container , container_parent){
