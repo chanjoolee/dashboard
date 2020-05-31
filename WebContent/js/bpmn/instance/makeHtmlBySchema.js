@@ -11,9 +11,9 @@ makeHtmlBySchema.prototype.process_type = function(  _schema , _schema_parent , 
     _schema.parentContainer = container_parent;
 
     var container = $("<div/>",{});
-    container_parent.append(container);
-    _this.defaultSetting( _schema , container);
+    container_parent.append(container);    
     eval("_this." + _schema.type + "( _schema , _schema_parent , container , container_parent)");
+    _this.defaultSetting( _schema , container);
     
     if(_schema.elements != null){
         $.each( _schema.elements , function( i , el){
@@ -55,6 +55,16 @@ makeHtmlBySchema.prototype.defaultSetting = function( _schema , _container ){
             _container.css(v.code,v.value);
         });
     }
+
+    // // events
+    // if( _schema.mainControl != null  && _schema.events != undefined ){
+    //     _schema.mainControl.htmlMaker = _this;
+    //     $.each(_schema.events,function(ikey,event){
+    //         _schema.mainControl.on( ikey, event);
+    //     });
+    // }
+
+
 }
 
 makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , container , container_parent ){
@@ -369,7 +379,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     var containerType = container.attr("type");
         
     //==table create
-    var gridId = _this.instance.containerId + "_grid";
+    var gridId = _this.instance.gridId;
     _this.instance.gridId = gridId;
     var mainControl = $(document.createElement( "table" ));
     mainControl.attr("id", gridId );
@@ -378,7 +388,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     
     //== page create
     var pager = $(document.createElement( "div" ));
-    pager.attr("id", gridId + "_pager");
+    pager.attr("id", _this.instance.pagerId);
     container.append(pager);
     
     // refereced Items
@@ -728,6 +738,12 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
         
     }
     
+    if ( _schema.containerType == "search" ){
+        maincontrol.on("change",function(){
+            _this.instance.fn_search();
+        });
+    }
+
 
     // return container;
 }
@@ -849,7 +865,12 @@ makeHtmlBySchema.prototype.Button = function(_schema ,_schema_parent , container
     if(_this.schema.containerType == "search"){
         mainControl.addClass("btn-block");
     }
-			
+            
+    if ( _schema.containerType == "search" && _schema.name == "btnSearch" ){
+        maincontrol.on("click",function(){
+            _this.instance.fn_search();
+        });
+    }
 
     /***
     End Logic    
@@ -1000,9 +1021,9 @@ makeHtmlBySchema.prototype.tab_list = function(_schema ,_schema_parent , contain
         <ul class="nav nav-pills mb-3" id="` + _schema.id + `Ul" role="tablist"></ul>
     `;
     
-    var maincontrol = $(template);
-    maincontrol.attr("href","");
-    container.append(maincontrol);
+    var mainControl = $(template);
+    mainControl.attr("href","");
+    container.append(mainControl);
 
     // tab content
     var template1 = `

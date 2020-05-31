@@ -125,11 +125,12 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                 return rtnList;
 
             },
-            events:{
-                "change" : function(e){
-                    fn_search();
-                }
-            },
+            // events:{
+            //     "change" : function(e){
+            //         // fn_search();
+            //         e.target.htmlMaker.instance.fn_search();
+            //     }
+            // },
             containerCls : "col-sm"
         } ,
         "Button" : {
@@ -462,7 +463,8 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
             events:{
                 "keypress" : function(e){
                     if(e.which === 13){
-                        fn_search();
+                        // fn_search();
+                        e.target.htmlMaker.instance.fn_search();
                     }
                     
                 }
@@ -4504,7 +4506,8 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
                                         // ],
                                         events:{
                                             click : function(){
-                                                fn_search();
+                                                // fn_search();
+                                                this.htmlMaker.instance.fn_search();
                                             }
                                         }
                                     }
@@ -4558,6 +4561,9 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
 
 }
 
+/***
+* 검색조건 만들기
+*/
 JpaAllGeneratorBracket.prototype.fn_schema_search = function ( _file) {
     var _this = this;
     var schemaVertical = _this.generator.findAllByElName( _file.schema.search.schema , { id: 'searchVertical' } );
@@ -4680,6 +4686,12 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_combo = function(child_columns
             label: '',
             text: _.capitalize(parentProp._name),
             jpa_column: { "parent_column": parentProp._name, "child_column": child_column },
+            events:{
+                "change" : function(e){
+                    // fn_search();
+                    e.target.htmlMaker.instance.fn_search();
+                }
+            }
             
         };
         if (parentDef["schemas"] == undefined)                     
@@ -4731,7 +4743,8 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree = function(schemaNew, s
         events: {
             "changed.jstree": function (e, data) {
                 if (data.event != null) {
-                    fn_search();
+                    // fn_search();
+                    e.target.htmlMaker.instance.fn_search();
                 }
             },
             "loaded.jstree": function (e, data) {
@@ -4823,7 +4836,8 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree1 = function(child_colum
         events: {
             "changed.jstree": function (e, data) {
                 if (data.event != null) {
-                    fn_search();
+                    // fn_search();
+                    e.target.htmlMaker.instance.fn_search();
                 }
             },
             "loaded.jstree": function (e, data) {

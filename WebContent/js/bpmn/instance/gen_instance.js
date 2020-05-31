@@ -28,6 +28,8 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     this.searchContainerId = this.containerId + "_searchContainer";
     this.gridCotainerId = this.containerId + "_gridContainer";
+    this.gridId = this.containerId + "_grid";
+    this.pagerId = this.gridId + "_pager";
     // make form 
     var formTemplate = `
         <form name="form" id="form" class="">
@@ -335,6 +337,17 @@ genInstance.prototype.fn_contextmenu = function(){
         }
     );
 
+}
+
+genInstance.prototype.fn_search = function(){
+    var _this = this;
+    // $("#loader").show();
+    setTimeout( function(){
+        // jstreeInfo.search();
+        var theGrid = $("#" + _this.gridId ).jqGrid();
+        theGrid.trigger('reloadGrid',[{page:1}]);
+        // $("#loader").hide();
+    },50);
 }
 
 
