@@ -113,12 +113,7 @@ genInstanceAdd.prototype.makeSchema = function(){
 
     var _this = this;
     this.fn_getData();
-}
 
-
-genInstanceAdd.prototype.fn_getData = function(){
-    var _this = this;
-    _this.data = _this.option.filter;
     var vKeys = [];
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){
         let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
@@ -126,6 +121,17 @@ genInstanceAdd.prototype.fn_getData = function(){
             vKeys.push(prop._name.toUpperCase());
         }
     });
+    var v_type = "inline_edit";
+}
+
+
+genInstanceAdd.prototype.fn_getData = function(){
+    var _this = this;
+    if( _this.option.caller.option != null && _this.option.caller.option.filter.length > 0 ){
+        _this.data = _this.option.filter;
+    }
+    
+    
 
     
 }
