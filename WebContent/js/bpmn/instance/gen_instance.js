@@ -92,7 +92,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.container.append(this.form);
     
     this.searchContainer = null;
-    this.gridCContainer = null;
+    this.gridContainer = null;
     this.jstreeList = [];
     
     // 어떤식으로 입력을 할 것인가?  
@@ -189,10 +189,10 @@ genInstance.prototype.makeSearch = function(){
 genInstance.prototype.makeGrid = function(){
     var _this = this;
     var gridContainer = $("<div/>",{id: this.gridCotainerId});
-    this.gridCContainer = gridContainer;
+    this.gridContainer = gridContainer;
     this.form.append(gridContainer);
     var schema = this.jpaFile.schema.contents.schema ;
-    var makehtml = new makeHtmlBySchema( this.gridCContainer , schema , this );
+    var makehtml = new makeHtmlBySchema( this.gridContainer , schema , this );
 }
 
 genInstance.prototype.fn_contextmenu = function(){
