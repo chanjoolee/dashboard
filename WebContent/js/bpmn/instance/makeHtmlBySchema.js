@@ -766,7 +766,8 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
         mainControl.attr("id",_schema.id);
     mainControl.hide();
     // mainContainer.append(mainControl);
-    mainControl.appendTo(document.body);
+    mainControl.appendTo(_this.instance.form);
+    _this.instance.jstreeList.push(_schema.id);
     
     var button = $('<button type="button"><span class="ui-icon ui-icon-triangle-2-n-s"></span></button>')
     .addClass('ui-multiselect ui-widget ui-state-default ui-corner-all')

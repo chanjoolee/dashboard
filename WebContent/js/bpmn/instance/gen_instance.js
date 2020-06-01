@@ -93,7 +93,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     
     this.searchContainer = null;
     this.gridCContainer = null;
-    
+    this.jstreeList = [];
     
     // 어떤식으로 입력을 할 것인가?  
     // div에 소스를 생성하는 방식으로?
@@ -339,11 +339,74 @@ genInstance.prototype.fn_contextmenu = function(){
 
 }
 
+genInstance.prototype.fn_jstreeSearch = function(){
+    var _this = this;
+    
+    if (_this.jstreeList.length == 0)
+        return;
+    if(this.option != null && this.option.modal ){
+        return;
+    }
+    var selJsTree3 = [];
+    $.each(_this.jstreeList, function(i,vJsTreeId){
+        // 만약 Child Pop 인 경우, jstree가 없으므로 넘어간다.
+        var $jsTree = _this.form.find("#" + vJsTreeId );
+        if ($jsTree.length == 0)
+            return true;
+        
+        var vJsTree =  _this.form.find("#" + vJsTreeId ).jstree(true);
+        // var selJsTree = _.filter(vJsTree._model.data , {state : {selected: true } });
+        var selJsTree = _.filter(vJsTree._model.data , function( data ){
+            // if (data.id == "#")
+            // 	return false;
+            if (data['original'] == null || data.original["field"] == null)
+                return false;
+            if ( data.state.selected == null ) 
+                return false;
+            var vSelected = data.state.selected;
+            if ( vSelected)
+                return true;
+            $.each(vJsTree.get_node(data.id).children_d, function(i, nodeId){
+                var vNode = vJsTree.get_node(nodeId);
+                if ( vNode.state.selected) {
+                    vSelected = true;
+                    return false;
+                }
+            });
+            // if ( vJsTree.get_bottom_checked(data.id).length > 0 )
+            // 	return true;
+
+            return vSelected;
+
+        });
+        var selJsTree1 = _.map(selJsTree, function(data, i){
+            var obj = {};
+            obj[ data.original.field] = data.original.value;
+
+            return obj;
+
+        });
+        var selJsTree2 = serializeArrayJSON(selJsTree1);
+        
+        $.each(selJsTree2, function(field, data){
+            var obj = {
+                field : field ,
+                // value: [].concat(data)
+                value: data , 
+                isArray : _.isArray(data)
+            };
+            selJsTree3.push( obj );
+        });
+        
+    });
+    _this.form.find("#searchJson").val(JSON.stringify({fields: selJsTree3}));
+}
+
 genInstance.prototype.fn_search = function(){
     var _this = this;
     // $("#loader").show();
     setTimeout( function(){
-        // jstreeInfo.search();
+        _this.fn_jstreeSearch();
         var theGrid = $("#" + _this.gridId ).jqGrid();
         theGrid.trigger('reloadGrid',[{page:1}]);
         // $("#loader").hide();
