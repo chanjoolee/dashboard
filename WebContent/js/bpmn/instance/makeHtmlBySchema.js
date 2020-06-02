@@ -225,7 +225,8 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                     required : item.required != undefined ? item.required : false,
                     isDateTime : item.isDateTime != undefined ? item.isDateTime : false,
                     mode: edit_mode,
-                    label : item.label
+                    label : item.label,
+                    htmlMaker : _this
                 };
 
                 // react key 를 지정한다.
@@ -380,7 +381,6 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
         
     //==table create
     var gridId = _this.instance.gridId;
-    _this.instance.gridId = gridId;
     var mainControl = $(document.createElement( "table" ));
     mainControl.attr("id", gridId );
     //table.css("width","100%");

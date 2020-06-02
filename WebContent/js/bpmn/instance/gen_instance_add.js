@@ -22,6 +22,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
      * @argument filter
      */
     this.option = _option;
+    this.caller  = this.option.caller;
     
     this.jpaFile = this.option.caller.jpaFile;
     // this.jpaFile.dataSrc = this.jpaFile.dataSources;
@@ -91,6 +92,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.searchContainer = null;
     this.contentContainer = null;
     this.data = {};
+    this.schema = this.makeSchema();
     this.makeContent();  
 
     $("#loader").hide();
@@ -105,8 +107,7 @@ genInstanceAdd.prototype.makeContent = function(){
     var contentContainer = $("<div/>",{id: this.gridCotainerId});
     this.contentContainer = contentContainer;
     this.form.append(contentContainer);
-    var schema = this.jpaFile.schema.contents.schema ;
-    var makehtml = new makeHtmlBySchema( this.gridCContainer , schema , this );
+    var makehtml = new makeHtmlBySchema( this.container , _this.schema , this );
 }
 
 genInstanceAdd.prototype.makeSchema = function(){
@@ -122,16 +123,425 @@ genInstanceAdd.prototype.makeSchema = function(){
         }
     });
     var v_type = "inline_edit";
+
+
+    var v_items = [];
+    var theGrid = $("#" + _this.caller.gridId).jqGrid();
+    var cms = theGrid.jqGrid("getGridParam", "colModel");
+
+    // custom order by
+    var entityDoc = this.caller.jpaFile.entity_doc_obj ;
+    if (entityDoc.detail != null && entityDoc.detail.order_by != null){
+        $.each(entityDoc.detail.order_by, function(i, _order){									
+            var _cms = cms;									
+            var prop = _.find([].concat(_this.jpaFile.gridProperties), {_name : _order.column_name});
+            var rtnObj = {};
+            if (prop != null){										
+                rtnObj = {
+                    label : _.capitalize(_.upperCase(prop._name)),
+                    col : prop._name.toUpperCase() ,
+                    orderby : i ,
+                    editable : true
+                };
+                let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                if (vId != null){
+                    rtnObj.required = true;
+                }
+                
+                // list hiden columns
+                if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
+                    rtnObj.isDateTime = true;
+                }
+                var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+                if(vEdit != null){
+                    rtnObj.edit_tag = vEdit._value;
+                }
+                var cm = _.find(_cms , {id: rtnObj.col});
+                if ( cm != null && cm.editoptions != undefined && cm.editoptions.value != undefined ) {
+
+                    // rtnObj.selectOptions = cm.editoptions.value;
+                    var options = [];
+                    $.each(cm.editoptions.value, function (k, v) {
+                        var opt = {value: k, label: v};
+                        options.push(opt);
+                    });
+                    rtnObj.selectOptions = options;
+                    rtnObj.edit_tag = cm.edittype;
+                    if ( _this.caller.option.filter[rtnObj.col] != null && _this.caller.option.filter[rtnObj.col] != ""){
+                        rtnObj.edit_tag = 'input';
+                        rtnObj.editable = false;
+                    }
+                }
+
+                // if add_hidden , then edit_tage : hidden
+                if (prop._documentation != null && prop._documentation.add_hidden ){
+                    rtnObj.edit_tag = "hidden";
+                }
+                v_items.push(rtnObj);
+            }else {
+                rtnObj = _order;
+                rtnObj.orderby = i;
+                var prop1 = _.find(_this.jpaFile.gridProperties,{"_name": _order.column_name});
+                if(prop1 != null && prop1._documentation != null && prop1._documentation.add_hidden ){
+
+                }else{
+                    rtnObj.col = _order.column_name;
+                    v_items.push(rtnObj);
+                }
+            }
+            
+
+        });
+        
+    }
+
+    // Process than not exists in orderby 
+    $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){									
+        var v_item = _.find([].concat(v_items),{col : prop._name.toUpperCase()});
+        if ( v_item == null){
+            var _cms = cms;									
+            var rtnObj = {};
+                                                
+            rtnObj = {
+                label : _.capitalize(_.upperCase(prop._name)),
+                col : prop._name.toUpperCase() ,
+                orderby : 100,
+                editable : true
+            };
+            let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+            if (vId != null){
+                rtnObj.required = true;
+            }
+            // list hiden columns
+            if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
+                rtnObj.isDateTime = true;
+            }
+            var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+            if(vEdit != null){
+                rtnObj.edit_tag = vEdit._value;
+            }
+
+            // if add_hidden , then edit_tage : hidden
+            if (prop._documentation != null && prop._documentation.add_hidden ){
+                rtnObj.edit_tag = "hidden";
+            }
+
+
+            var cm = _.find(_cms , {id: rtnObj.col});
+            if ( cm != null && cm.editoptions != undefined && cm.editoptions.value != undefined ) {
+
+                // rtnObj.selectOptions = cm.editoptions.value;
+                var options = [];
+                $.each(cm.editoptions.value, function (k, v) {
+                    var opt = {value: k, label: v};
+                    options.push(opt);
+                });
+                rtnObj.selectOptions = options;
+                rtnObj.edit_tag = cm.edittype;
+                if ( _this.caller.option.filter[rtnObj.col] != null && _this.caller.option.filter[rtnObj.col] != "" ){
+                    rtnObj.edit_tag = 'input';
+                    rtnObj.editable = false;
+                }
+            }
+            
+            v_items.push(rtnObj);
+        }
+    });
+
+    // pop_select
+    var pop_props = _.filter( _this.jpaFile.gridProperties , {_documentation: { data_src_type : "pop_select" } });
+    $.each(pop_props, function(i,pop_prop){
+        var pop_item = _.find(v_items , {col : pop_prop._name.toUpperCase()});
+        if (pop_item != null)
+            pop_item.edit_tag = "pop_select";
+    });
+
+    // label merge
+    $.each(v_items , function(i, _item){
+        if (_item.col == null)
+            return true;
+        var v_property = _.find( _this.jpaFile.gridProperties , { _name : _item.col.toLowerCase() });
+        if ( v_property != null && v_property._documentation != null){
+            _.merge(_item , v_property._documentation);
+            // if (v_property._documentation.label != null){
+            //     _.merge(_item , v_property._documentation);
+            //     _item.label = v_property._documentation.label ;
+            // }
+        }
+
+    });
+
+    // schema_options
+    var schema_options = {
+        keys : vKeys ,
+        fn_change: function( input ){									
+            // cascade update
+            var __this = this;
+            var gridSchema = _this.caller.jpaFile.schema.contents.schema;
+            var jpaFile = __this.htmlMaker.instance.caller.jpaFile;
+            var gridSchema1 = __this.htmlMaker.instance.caller.jpaFile.schema.contents.schema;
+            var gridJson = findAllByElName( gridSchema1.elements , {type:"grid"});
+            
+            var item = _.find(gridJson.items, {name : this.props.options.name});
+            var dataSrc = jpaFile.dataSrc ;
+            var src = {};
+            if (item != null && item.referenceId != null && dataSrc != null){
+                src = _.find( dataSrc, {"referenceId": item.referenceId, "topRefrenceId" : item.topRefrenceId , "childColumnName": item.name.toLowerCase()  });
+            }
+            if ( src.parentColumnNames != null && src.parentColumnNames.length > 1){
+                var index = _.indexOf( _.map(src.childColumnNames,function(column){ return column.toUpperCase();  }) , item.name.toUpperCase() );
+                if (index > -1 && index < (src.parentColumnNames.length -1 )){
+                    var nextColumn = src.childColumnNames[index+1];
+                    var nextCm = _.find( cms , {name: nextColumn.toUpperCase() });												
+                    var wheres = src.childColumnNames.slice(0,index + 1);
+                    var frm = document.getElementById("form");
+                    var param = {};
+                    $.each(wheres , function(i, where ){
+                        var whereReact = _.find(__this.reactObjects , 
+                            { 
+                                props : {
+                                    options : {
+                                        name: where.toUpperCase()
+                                    } 
+                                }															
+                            }
+                        );
+                        if ( __this == whereReact )
+                            param["search_" + _.camelCase(where) ] = input;
+                        else
+                            param["search_" + _.camelCase(where) ]  =  whereReact.state.value;
+                    });												
+                    var nextSrc = _.find(dataSrc, {"referenceId": nextCm.referenceId, "topRefrenceId" : nextCm.topRefrenceId , "childColumnName": nextCm.name.toLowerCase()  });
+                    var list = nextSrc.dataDynamic(param);
+                    var nextReact = _.find( __this.reactObjects , 
+                        { 
+                            props : { 
+                                options : {
+                                    name: nextColumn.toUpperCase()
+                                }															
+                            } 
+                        }
+                    );
+                    
+                    var options = [];
+                    $.each(list, function (i, obj) {
+                        var opt = { label : obj[nextSrc.parentNameColumn.toUpperCase()], value :obj[nextSrc.parentColumnName.toUpperCase()] };
+                        options.push(opt);
+                    });
+                    // nextReact.state.selectOptions = options ;
+                    nextReact.setState({selectOptions : options });
+                    // setState()
+
+                }
+            }
+            
+        },
+        fn_submit: function(_editType){
+            var __this = this;
+            
+            var state = true;
+            var reactObjects = this;
+            var addRow = {};
+            var jpaFile = __this.htmlMaker.instance.caller.jpaFile;
+            var gridSchema = _this.caller.jpaFile.schema.contents.schema;
+            var gridSchema1 = __this.htmlMaker.instance.caller.jpaFile.schema.contents.schema;
+            var gridJson = findAllByElName( gridSchema1.elements , {type:"grid"});
+            $.each(reactObjects,function(i,react){
+                addRow[this.state.name] = this.state.value;
+            });
+            addRow['sqlid'] = gridJson.sqlId + ".insert";
+
+            var form1 = _this.form;
+
+            // fileupload
+            var parameter = "";
+            // if you want to upload options ....
+            // parameter = "uploadBoard=schema";
+            // parameter += "&useRealFileName=Y";
+            var fileInfo = {};
+            if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
+                form1.ajaxForm({
+                    url: "./fileTestJson.html?" + parameter 
+                    , type:"POST"
+                    , dataType:"json"
+                    , async: false
+                    , success:function(json) {
+                        fileInfo = json;
+                    }
+                    , error:function(e){
+                        alert(e.responseText);
+                    }
+                });
+                $('#form').submit();
+            }            
+            _.merge(addRow, form1.serializeFormJSON() );
+            
+            var edit_items = filterAllByElName( gridSchema1.elements , {edit_tag : 'file'});
+            if (edit_items.length > 0 ){
+                $.each(edit_items, function(i,edit_item){
+                    var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+                    if (item_fileinfo != null){
+                        addRow[edit_item.col] = item_fileinfo.orgFileName;
+                        addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
+                        
+                    }		
+                });
+                                                    
+            }
+
+            $.ajax({
+                url: "./genericSaveJson.html",
+                type: "POST",
+                data: addRow , 
+                async: false,			                    		
+                success:  function(data){
+                    response1 = data;
+                    if(response1.result != 'success'){
+                        state = false;
+                        var msg = "Save Success!";
+                        $("#dialog-confirm").html(response1.message);
+                        $("#dialog-confirm").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Error",
+                            //height: 200,
+                            width: 500,
+                            dialogClass: 'no-close',
+                            closeOnEscape: false,
+                            buttons: [
+                                {
+                                    text: "OK",
+                                    click: function() {
+                                        
+                                        $( this ).dialog( "close" );	
+
+                                    }
+                                }
+                            ]
+                        });
+                    } 
+                    // Success
+                    else {
+                        // To do 
+                        // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
+                        _this.caller.fn_search();
+                        var msg = "Save Success!";
+                        $("#dialog-confirm").html(msg);
+                        $("#dialog-confirm").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Error",
+                            //height: 200,
+                            width: 500,
+                            dialogClass: 'no-close',
+                            closeOnEscape: false,
+                            buttons: [
+                                {
+                                    text: "OK",
+                                    click: function() {
+                                        $( this ).dialog( "close" );
+                                        setTimeout( function(){
+                                            // parent.$("#" + window.frameElement.name.replace("frame","modal")).remove();
+                                            // parent.$("#" + window.frameElement.name.replace("frame","modal")).modal('toggle');
+                                            $("#" + _this.containerId ).modal('toggle');
+                                        },0);
+                                    }
+                                }
+                            ]
+                        });
+                        
+                        // reload to edit mode;
+                    }						                    			
+                }
+            });
+            
+
+            return state;
+            
+            
+        },
+        fn_afterSubmit: function(keyUpdatedObjects){
+            // if only edit
+            $.each(this,function(i,react){
+                if(_.find(cms,function(cm){return cm.name == react.state.name})){
+                    var vobject = {}; 
+                    var parentRowKey = theGrid.getGridParam('selrow');
+                    vobject[react.state.name] = react.state.value;
+                    theGrid.setRowData(parentRowKey,vobject);
+                }
+                
+            });
+            
+            var msg = "Save Success!";
+            $("#dialog-confirm").html(msg);
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                modal: true,
+                title: "Error",
+                //height: 200,
+                width: 300,
+                dialogClass: 'no-close',
+                closeOnEscape: false,
+                buttons: [
+                    {
+                        text: "OK",
+                        click: function() {
+                            $( this ).dialog( "close" );											                    			                  
+                        }
+                    }
+                ]
+            });
+                                        
+            
+        },
+        progressObject: $("#loader"),
+        // fn_pop_select : commonFunc.fn_pop_select
+    };
+
+
+    if (entityDoc.add_button_option != null){
+        schema_options.button_option = entityDoc.add_button_option ;
+    }
+
+    _this.schema = {
+        containerId: '',
+        type:'Vertical',
+        label: '',
+        elements: [
+            {
+                label: "",
+                type: 'Group',
+                elements: [
+                    {
+                        type: "inline_edit",
+                        edit_type : "add",
+                        cols: entityDoc.detail_cols_add =! null  ? entityDoc.detail_cols_add : 1 ,
+                        data: function(){ 
+                            return _this.data ;
+                        },
+                        options : schema_options,
+                        items: v_items 
+                        
+                    }
+                    
+                
+                ]
+            }
+            
+        
+        ]
+    };  
+
+
+
 }
 
 
 genInstanceAdd.prototype.fn_getData = function(){
     var _this = this;
     if( _this.option.caller.option != null && _this.option.caller.option.filter.length > 0 ){
-        _this.data = _this.option.filter;
+        _this.data = _this.option.caller.option.filter;
     }
-    
-    
 
-    
+
 }

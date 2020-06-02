@@ -511,6 +511,7 @@
         </div>
       </div>
     </div>
+    <div id="dialog-confirm"></div>
 
     <script src="./templates/bracket/lib/jquery/jquery.js"></script>
     <script src="./templates/bracket/lib/popper.js/popper.js"></script>
