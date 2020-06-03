@@ -16,7 +16,7 @@ gen_instance_list.prototype.add_instance = function( _entityId, _type , _option)
     if( _type == 'general'){
         newInstance = new genInstance(_entityId, _type , _this ,_option);
     }else if ( _type == 'add'){
-        newInstance = new genInstance_add(_entityId, _type , _this ,_option);
+        newInstance = new genInstanceAdd(_entityId, _type , _this ,_option);
     }
     
     _this.list.push(newInstance);

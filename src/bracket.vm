@@ -496,6 +496,8 @@
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
+    
+    <div id="dialog-confirm"></div>
     <!-- Stacked  Modal -->
     <div name="infiniteLogModal"  class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl" >
@@ -511,7 +513,39 @@
         </div>
       </div>
     </div>
-    <div id="dialog-confirm"></div>
+    
+
+    <div name="modal-edit"  class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+          <div class="modal-header" style="width: 800px;">
+            <h6 class="tx-14 mg-b-0 tx-inverse tx-bold"><span></span></h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body" >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-alert" class="modal fade">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content tx-size-sm">
+          <div class="modal-body tx-center pd-y-20 pd-x-20">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <i class="icon icon ion-ios-close-outline tx-100 tx-danger lh-1 mg-t-20 d-inline-block"></i>
+            <h4 class="tx-danger  tx-semibold mg-b-20">Error: Cannot process your entry!</h4>
+            <p class="mg-b-20 mg-x-20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.</p>
+            <button type="button" class="btn btn-danger tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20" data-dismiss="modal" aria-label="Close">
+              Continue</button>
+            </div><!-- modal-body -->
+          </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div><!-- modal -->
 
     <script src="./templates/bracket/lib/jquery/jquery.js"></script>
     <script src="./templates/bracket/lib/popper.js/popper.js"></script>
@@ -565,8 +599,12 @@
     <script  src="./js/react-0.14.3/browser.js" ></script>
 
     <!-- 스키마를 바탕으로 소스를 생성하기  -->
+    <script src="./js/bpmn/java_jsp/allFromJpa.bracket.js"></script>
     <script src="./js/bpmn/instance/gen_instance_list.js"></script>
     <script src="./js/bpmn/instance/gen_instance.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_add.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_edit.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_copy.js"></script>
     <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
     <script src="./js/bpmn/gen/$searchVO.searchJson.jpaFiles"></script>
     <!-- <script src="./js/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script> -->
@@ -632,9 +670,16 @@
 
       $(document).on('shown.bs.modal', '.modal', function (event) {
           var grid = $(event.target).find(".ui-jqgrid-btable");
-          grid.setGridWidth($(event.target).find(".modal-body").width());
-          // action submit prevent
-          $(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
+         var grid = $(event.target).find(".ui-jqgrid-btable");
+          if(grid.length > 0 ){
+            var gridParam = grid.getGridParam();
+            // height
+            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+            gridBody.height( gridBody.height() + 10  );
+            grid.setGridWidth($(event.target).find(".modal-body").width());
+            // action submit prevent
+            $(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
+          }
       });
 
       // modal Close
@@ -647,7 +692,18 @@
 				var target = $(event.target);
 				if(target.attr("isCloned") != null)
 					target.remove();
-        instances.list.pop();
+
+        var rm_instance = null;
+        if( _.includes(['modal-success'] , target.attr("id") )){
+          var last_instance = instances.list( instances.list.length -1 );
+          // rm_instance = instances.list.pop();
+          last_instance.modalClone.modal("toggle");
+        }else if ( _.includes(['modal-alert'] , target.attr("id") )){
+
+        }else{
+          rm_instance = instances.list.pop();
+        }
+        
 			});
 
 

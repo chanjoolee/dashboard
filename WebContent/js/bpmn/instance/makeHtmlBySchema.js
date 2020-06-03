@@ -74,6 +74,13 @@ makeHtmlBySchema.prototype.Vertical = function( _schema , _schema_parent , conta
     // return container;
 }
 
+makeHtmlBySchema.prototype.Group = function( _schema , _schema_parent , container , container_parent ){
+    var _this = this;
+    // var container = $("<div/>",{});
+    // _this.defaultSetting( _schema , container);
+    // return container;
+}
+
 makeHtmlBySchema.prototype.HorizontalLayout = function( _schema , _schema_parent , container, container_parent){
     var _this = this;
 
@@ -117,6 +124,7 @@ makeHtmlBySchema.prototype.inline = function(_schema ,_schema_parent , container
 
 makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
+    container.addClass("form-layout form-layout-4");
 
     // var container = $("<div/>",{});
     // _this.defaultSetting(_schema, container);
@@ -130,7 +138,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
      */
     var btnGroup = $("<div/>",{
         class: "btn_group",
-        style : "margin-bottom: 3px; width: 100% "
+        // style : "margin-bottom: 3px; width: 100% "
     });
     container.append(btnGroup);
     var edit_mode = "read";
@@ -144,7 +152,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
     // button confirm
     var btnConfirm = $("<button/>",{
         type: "button",
-        style : "width: 100px "
+        // style : "width: 100px "
     });
     btnGroup.append(btnConfirm);
     if(_schema.options != undefined && 
@@ -152,7 +160,9 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
         _schema.options.button_option.btn_class != null){
             btnConfirm.addClass(_schema.options.button_option.btn_class);	
     }else{
-            btnConfirm.addClass("btn btn-default");
+            // btnConfirm.addClass("btn btn-default");
+            btnConfirm.addClass("btn btn-outline-primary btn-block mg-b-10");
+            
     }
 
     if(_schema.options != undefined && 
@@ -186,8 +196,9 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
             fn_make_group_label(_itemGroup);					
         }
 
-        var width = (12 - _itemGroup.cols*2)  / _itemGroup.cols;
-        var col_width = "col-sm-" + width;
+        // var width = (12 - _itemGroup.cols*2)  / _itemGroup.cols;
+        // var col_width = "col-sm-" + width;
+        var col_width = "col-sm";
         var rowDiv = null;
         var j=0; // for line feed 
         
@@ -201,12 +212,15 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
             }
 
             if(i%cols == 0 ){
-                rowDiv = $("<div/>",{class: "form-group row"});
+                rowDiv = $("<div/>",{class: "form-group row "});
                 container.append(rowDiv);
             }
             // header
-            var labelH = $("<label/>",{class: "col-sm-2 col-form-label input-group-text text-right"});
+            var labelH = $("<label/>",{class: "col-sm-3 form-control-label"});
             labelH.text(item.label);
+            if(item.required){
+                labelH.append('<span class="tx-danger">*</span>');
+            }
             
 
             /**
@@ -296,7 +310,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                     };
                 }
 
-                var reacttd = window.fn_td( inputDiv, tdOption );
+                var reacttd = window.fn_td( inputDiv[0], tdOption );
                 // 날자형식인 경우 처리
                 if (tdOption.isDateTime){
                     var dateEm = inputDiv.find("input");
@@ -349,7 +363,178 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
     };
 
 
-    
+    var itemGroups = [{items:[]}];
+    /********************************************************/
+    /******************* Show Items  ************************/
+    /********************************************************/			
+    var v_show_items = _.filter( _schema.items  , function(item){
+        if (item.edit_tag != 'hidden')
+            return true;
+        else
+            return false;
+    });			
+    $.each( v_show_items , function(i,item){
+        if( item.group_label != null ){
+            var addGroup = {
+                option: {
+                    group_label : item.group_label
+                },
+                items: []
+            }
+            if (item.cols != null ){
+                addGroup.option.cols = item.cols;
+            }
+            itemGroups.push(addGroup);					
+            return true;
+        }
+        var itemGroup = itemGroups[itemGroups.length -1];
+        itemGroup.items.push(item);
+    });
+    /********************************************************/
+    /******************* Hide Items  ************************/
+    /********************************************************/
+    var v_hide_items = _.filter( _schema.items  , function(item){
+        if (item.edit_tag == 'hidden')
+            return true;
+        else
+            return false;
+    });
+    if (v_hide_items.length > 0)
+        itemGroups.push({items:[], display: 'none'});
+    $.each( v_hide_items , function(i,item){
+        if( item.group_label != null ){
+            var addGroup = {
+                option: {
+                    group_label : item.group_label
+                },
+                items: []
+            }
+            if (item.cols != null ){
+                addGroup.option.cols = item.cols;
+            }
+            itemGroups.push(addGroup);					
+            return true;
+        }
+        var itemGroup = itemGroups[itemGroups.length -1];
+        itemGroup.items.push(item);
+    });
+
+    $.each(itemGroups, function(i, group){
+        fn_make_table(group);
+    });
+
+    // 맨나중에?
+    btnGroup.appendTo(container);
+    btnConfirm.click(function(){
+        var a = "a";
+        var state = true;
+        $.each(reactObjects,function(i,item){
+            if (this.state.required && (this.state.value == "" || this.state.value == null)  ){
+                state = false;
+                var v_msg = "Please input " + this.state.label;
+                // $("#dialog-confirm").html(v_msg);
+                // $("#dialog-confirm").dialog({
+                //     resizable: false,
+                //     modal: true,
+                //     title: "Error",
+                //     //height: 200,
+                //     width: 300,
+                //     dialogClass: 'no-close',
+                //     closeOnEscape: false,
+                //     buttons: [
+                //         {
+                //             text: "OK",
+                //             click: function() {
+                //                 $( this ).dialog( "close" );											                    			                  
+                //             }
+                //         }
+                //     ]
+                // });
+                $("#modal-alert").find("p").text(v_msg);
+                $("#modal-alert").modal();
+            }
+        });
+        if(!state)
+            return;
+        // loader
+        if(_schema.options != undefined && _schema.options.progressObject != undefined)
+            _schema.options.progressObject.show();
+        setTimeout(function(){
+            
+            if( _schema.edit_type == "edit"){
+                var keyUpdatedObjects = [];
+                // key 가 아닌것을 먼저 update
+                $.each(reactObjects,function(i,item){
+                    var isKeyUpdate = false;
+                    if(this.state.value_origin != this.state.value){
+                        var vObject = this;
+                        $.each(this.state.keys, function(){
+                            if(this.field == vObject.state.name){
+                                this.value = vObject.state.value_origin;
+                                isKeyUpdate = true;
+                            }
+                                
+                        });
+                        if(!isKeyUpdate){
+                            state = item.props.options.fn_submit.call(this,"edit");
+                            this.setState({value_origin: this.state.value});
+                        }							
+                    }
+                        
+                    if(!state)
+                        return false;
+                    // this.setState({mode: "read"});
+                    if(isKeyUpdate){
+                        keyUpdatedObjects.push(item);
+                    }
+                });
+                
+                // key 는 나중에 업데이트 한다. 만약 키다 두개이상인 경우는 cover가 안됨
+                $.each(keyUpdatedObjects,function(i,item){
+                    state = item.props.options.fn_submit.call(this,"edit");
+                    this.setState({value_origin: this.state.value});
+                        
+                    if(!state)
+                        return false;
+                    // this.setState({mode: "read"});
+                    
+                });
+                if(state){
+                    // btnConfirm.hide();
+                    // btnCancel.hide();
+                    // btnEdit.show();
+                    if(_schema.options != undefined && _schema.options.fn_afterSubmit != undefined)
+                        _schema.options.fn_afterSubmit.call(reactObjects,keyUpdatedObjects);
+                }
+            }else if (_schema.edit_type == "add"){
+                state = _schema.options.fn_submit.call(reactObjects,"add");
+                
+            }else if (_schema.edit_type == "copy"){
+                state = _schema.options.fn_submit.call(reactObjects,"copy");
+            }
+
+            
+            // 키값을 업데이트 하는 경우
+            if(false){
+                if(state){
+                    btnConfirm.hide();
+                    btnCancel.hide();
+                    btnEdit.show();
+                    if(_schema.options != undefined && _schema.options.fn_afterSubmit != undefined)
+                        _schema.options.fn_afterSubmit.call(reactObjects,keyUpdatedObjects);
+                }
+            }
+            
+            if(_schema.options != undefined && _schema.options.progressObject != undefined){
+                _schema.options.progressObject.hide();
+            }
+                
+        }
+        ,50);
+        
+        
+    });
+
 
     // return container;
     
@@ -514,7 +699,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     // gridId , pagerId
     opt.gridId = gridId ;
     opt.pager = gridId + "_pager";
-
+    
     opt.htmlMaker = _this ;
     opt.url = function(){
         return	"./genericlListPageJson.html?" + 
@@ -522,6 +707,207 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                 "&sqlid=" + this.sqlId+ ".page.list" +  
                 "&paging_sqlid=" + this.sqlId+ ".page.total"
     }
+
+    opt.gridComplete = function () {
+        var grid = $(this).jqGrid();
+        var gridParam = grid.getGridParam();
+        var show_filter = true;
+        if ( gridParam.filterToolbarShow != null 
+            && gridParam.filterToolbarShow == false )
+            show_filter = false; 
+        if (show_filter){
+            grid.jqGrid('filterToolbar',
+            {
+                defaultSearch:'cn'
+                // JSON stringify all data from search, including search toolbar operators
+                ,stringResult: true
+                // instuct the grid toolbar to show the search options
+                // ,searchOperators: true
+            }
+            );
+        }
+        
+        grid.navGrid(
+            gridParam.pager ,
+            { edit: true, add: true, del: true, search: false,  refresh: true, view: true, position: "left", cloneToTop: false  
+                ,addfunc: function(){
+                    // commonFunc.fn_view_detail.call(this,'add');
+                    var filter = {};
+                    // var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                    // var row = grid.getRowData(parentRowKey);
+                    // $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                    //     let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                    //     if(vId != null){
+                    //         filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                    //     }
+                    // });
+                    var instanceOption = {
+                        modal : true,
+                        caller : gridParam.htmlMaker.instance ,
+                        filter : filter
+                    };
+                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'add' , instanceOption );
+                }
+                , editfunc : function(){
+                    // commonFunc.fn_view_detail.call(this,'add');
+                    var filter = {};
+                    var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                    var row = grid.getRowData(parentRowKey);
+                    $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if(vId != null){
+                            filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                        }
+                    });
+                    var instanceOption = {
+                        modal : true,
+                        caller : gridParam.htmlMaker.instance ,
+                        filter : filter
+                    };
+                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'edit' , instanceOption );
+                }, viewfunc : function(){
+                    var filter = {};
+                    var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                    var row = grid.getRowData(parentRowKey);
+                    $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if(vId != null){
+                            filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                        }
+                    });
+                    var instanceOption = {
+                        modal : true,
+                        caller : gridParam.htmlMaker.instance ,
+                        filter : filter
+                    };
+                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'view' , instanceOption );
+                }
+
+            }
+            // options for the Edit Dialog
+            ,{  }
+            // options for the Script Master Add Dialog
+            ,{  }
+            // options for the Script Master Del Dialog 
+            ,{  
+                reloadAfterSubmit: true,
+                afterSubmit: function(response, postdata) { 
+                    //$("#refresh_grid_script").hide();
+                    // var grid = $(this);
+                    var paramObj = {
+                        delRows : []
+                    };
+                    $.each(postdata.id.split(","),function(i,rowid){
+                        var row = grid.getRowData(rowid);
+                        paramObj.delRows.push(row);
+                    });
+                    
+                    //  
+                    paramObj.loop_id = "delRows";
+                    $.ajax({
+                        url: "./genericSaveJson.html",
+                        type: "POST",
+                        data: {
+                            searchJson: JSON.stringify(paramObj),
+                            sqlid: "rmElBaseinfoMng.rmElBaseinfoMng.delete"
+                        }  , 
+                        async: false,
+                        success:  function(data){
+                            response1 = data;
+                            if(response1.result == 'success'){
+                            
+                                msg = "Del Success!";
+                                $("#dialog-confirm").html(msg);
+                                $("#dialog-confirm").dialog({
+                                    resizable: false,
+                                    modal: true,
+                                    title: "Success",
+                                    //height: 200,
+                                    width: 200,
+                                    dialogClass: 'no-close',
+                                    closeOnEscape: false,
+                                    buttons: [
+                                        {
+                                            text: "OK",
+                                            click: function() {
+                                                $( this ).dialog( "close" );		
+                                                // fn_search_script();
+                                            }
+                                        }
+                                    ]
+                                });
+                            }
+                            
+                        }
+                    });
+                    
+                    //return [success,message,new_id] ;
+                    if(response1.result == 'success'){
+                        //$(this).trigger('reloadGrid'); 
+                        return [true, response1.result, ''];
+                    }
+                    else
+                        return [false, response1.result + ":<br/>" + response1.message , ''];
+                        
+                }
+            }
+            ,{ 
+                multipleSearch: true,
+                multipleGroup: true
+            }
+        );
+
+        if ($(gridParam.pager).find(".ui-pg-button[title=Copy]").length == 0 && true) {
+            grid.navButtonAdd(gridParam.pager, {
+                caption : "", 
+                title: "Copy",
+                buttonicon : "fa-copy",
+                onClickButton: function(){ 
+                    // var theGrid = $(this).jqGrid();
+                    var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                    if ( parentRowKey == null )   {
+                        $("#dialog-confirm").html("Please, select row");
+                        $("#dialog-confirm").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Error",
+                            //height: 200,
+                            width: 300,
+                            dialogClass: 'no-close',
+                            closeOnEscape: false,
+                            buttons: [
+                                {
+                                    text: "OK",
+                                    click: function() {
+                                        $( this ).dialog( "close" );											                    			                  
+                                    }
+                                }
+                            ]
+                        });
+                        return;
+                    }
+                    commonFunc.fn_view_detail.call(this,'copy');
+                    // alert("Deleting Row");
+                }, 
+                position:"last"
+            });
+            var td_cp = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Copy']")
+            var td_add = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Add new row']");
+            td_add.after(td_cp);
+
+        }
+        
+        // var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+        // gridBody.height( gridBody.height() + 10  );
+        if( !_this.instance.option.modal ){
+            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+            gridBody.height( gridBody.height() + 10  );
+            grid.setGridWidth(_this.instance.container.width());
+        }
+            
+        
+    }
+    opt.height = "100%";
     mainControl.jqGrid(opt);
     
     
@@ -537,6 +923,8 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
 
     // return container;
 }
+
+
 
 
 

@@ -54,8 +54,10 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
             str += " : " + v;
             filterStrs.push(str);
         });
-        var headStr = '[' + _.camelCase(_this.entityId) + ']  ' +  filterStrs.join(" , ");													
-        this.modalClone.find(".modal-header h6 span").text(headStr);
+        var headStr = '[' + _.camelCase(_this.entityId) + ']  ' +  filterStrs.join(" , ");	
+        var emptystr = "&nbsp;";
+
+        this.modalClone.find(".modal-header h6 span").text(headStr );
 
         // inintial search
         var v_filters = [];
@@ -80,9 +82,9 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
         // modal
         setTimeout( function(){
             _this.modalClone.modal();
-            _this.modalClone.draggable({
-                handle: ".modal-header"
-            }); 
+            // _this.modalClone.draggable({
+            //     handle: ".modal-header"
+            // }); 
         },0);
         
     }else{
