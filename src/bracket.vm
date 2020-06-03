@@ -496,7 +496,7 @@
       </div><!-- br-pagebody -->
     </div><!-- br-mainpanel -->
     <!--  END: MAIN PANEL  -->
-    
+
     <div id="dialog-confirm"></div>
     <!-- Stacked  Modal -->
     <div name="infiniteLogModal"  class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
@@ -695,7 +695,7 @@
 
         var rm_instance = null;
         if( _.includes(['modal-success'] , target.attr("id") )){
-          var last_instance = instances.list( instances.list.length -1 );
+          var last_instance = instances.list[ instances.list.length -1 ];
           // rm_instance = instances.list.pop();
           last_instance.modalClone.modal("toggle");
         }else if ( _.includes(['modal-alert'] , target.attr("id") )){

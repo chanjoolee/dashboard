@@ -250,7 +250,9 @@ genInstanceAdd.prototype.makeSchema = function(){
                 });
                 rtnObj.selectOptions = options;
                 rtnObj.edit_tag = cm.edittype;
-                if ( _this.caller.option.filter[rtnObj.col] != null && _this.caller.option.filter[rtnObj.col] != "" ){
+                if ( _this.caller.option.filter != null
+                    && _this.caller.option.filter[rtnObj.col] != null 
+                    && _this.caller.option.filter[rtnObj.col] != "" ){
                     rtnObj.edit_tag = 'input';
                     rtnObj.editable = false;
                 }
