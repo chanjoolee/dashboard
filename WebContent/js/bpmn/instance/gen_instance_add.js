@@ -135,7 +135,11 @@ genInstanceAdd.prototype.makeSchema = function(){
         $.each(entityDoc.detail.order_by, function(i, _order){									
             var _cms = cms;									
             var prop = _.find([].concat(_this.jpaFile.gridProperties), {_name : _order.column_name});
-            var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
+            // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
+            var docObj = prop._documentation;
+            if (docObj == null){
+                docObj = {};
+            }
             var rtnObj = {};
             if (prop != null){										
                 rtnObj = {
@@ -202,7 +206,11 @@ genInstanceAdd.prototype.makeSchema = function(){
 
     // Process than not exists in orderby 
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){		
-        var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );							
+        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
+        var docObj = prop._documentation;	
+        if (docObj == null){
+            docObj = {};
+        }					
         var v_item = _.find([].concat(v_items),{col : prop._name.toUpperCase()});
         if ( v_item == null){
             var _cms = cms;									
@@ -473,42 +481,9 @@ genInstanceAdd.prototype.makeSchema = function(){
             return state;
             
             
-        },
-        fn_afterSubmit: function(keyUpdatedObjects){
-            // if only edit
-            $.each(this,function(i,react){
-                if(_.find(cms,function(cm){return cm.name == react.state.name})){
-                    var vobject = {}; 
-                    var parentRowKey = theGrid.getGridParam('selrow');
-                    vobject[react.state.name] = react.state.value;
-                    theGrid.setRowData(parentRowKey,vobject);
-                }
-                
-            });
-            
-            var msg = "Save Success!";
-            $("#dialog-confirm").html(msg);
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                modal: true,
-                title: "Error",
-                //height: 200,
-                width: 300,
-                dialogClass: 'no-close',
-                closeOnEscape: false,
-                buttons: [
-                    {
-                        text: "OK",
-                        click: function() {
-                            $( this ).dialog( "close" );											                    			                  
-                        }
-                    }
-                ]
-            });
-                                        
-            
-        },
-        progressObject: $("#loader"),
+        }
+        
+        ,progressObject: $("#loader")
         // fn_pop_select : commonFunc.fn_pop_select
     };
 

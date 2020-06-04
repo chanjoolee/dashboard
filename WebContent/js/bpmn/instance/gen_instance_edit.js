@@ -134,7 +134,11 @@ genInstanceEdit.prototype.makeSchema = function(){
         $.each(entityDoc.detail.order_by, function(i, _order){									
             var _cms = cms;									
             var prop = _.find([].concat(_this.jpaFile.gridProperties), {_name : _order.column_name});
-            var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
+            // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
+            var docObj = prop._documentation;
+            if (docObj == null){
+                docObj = {};
+            }
             var rtnObj = {};
             if (prop != null){										
                 rtnObj = {
@@ -201,7 +205,11 @@ genInstanceEdit.prototype.makeSchema = function(){
 
     // Process than not exists in orderby 
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){		
-        var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );							
+        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );	
+        var docObj = prop._documentation;
+        if (docObj == null){
+            docObj = {};
+        }			
         var v_item = _.find([].concat(v_items),{col : prop._name.toUpperCase()});
         if ( v_item == null){
             var _cms = cms;									
@@ -269,17 +277,14 @@ genInstanceEdit.prototype.makeSchema = function(){
             pop_item.edit_tag = "pop_select";
     });
 
-    // label merge
+    // label more field merge
     $.each(v_items , function(i, _item){
         if (_item.col == null)
             return true;
         var v_property = _.find( _this.jpaFile.gridProperties , { _name : _item.col.toLowerCase() });
         if ( v_property != null && v_property._documentation != null){
             _.merge(_item , v_property._documentation);
-            // if (v_property._documentation.label != null){
-            //     _.merge(_item , v_property._documentation);
-            //     _item.label = v_property._documentation.label ;
-            // }
+            
         }
 
     });
@@ -306,7 +311,8 @@ genInstanceEdit.prototype.makeSchema = function(){
                     var nextColumn = src.childColumnNames[index+1];
                     var nextCm = _.find( cms , {name: nextColumn.toUpperCase() });												
                     var wheres = src.childColumnNames.slice(0,index + 1);
-                    var frm = document.getElementById("form");
+                    // var frm = document.getElementById("form");
+                    var frm = _this.form[0];
                     var param = {};
                     $.each(wheres , function(i, where ){
                         var whereReact = _.find(__this.reactObjects , 
@@ -349,129 +355,43 @@ genInstanceEdit.prototype.makeSchema = function(){
             
         },
         fn_submit: function(_editType){
-            
-            var state = true;
-            var reactObjects = this;
-            var addRow = {};
             var jpaFile = _this.caller.jpaFile;
             var gridSchema = jpaFile.schema.contents.schema;
             var gridJson = findAllByElName( gridSchema.elements , {type:"grid"});
-            $.each(reactObjects,function(i,react){
-                addRow[this.state.name] = this.state.value;
-            });
-            addRow['sqlid'] = gridJson.sqlId + ".insert";
 
-            var form1 = _this.form;
+            var state = true;
+            var paramObj = {
+                //origindatas: this.props.options.keys
+                origindatas: this.state.keys
+            };
 
-            // fileupload
-            var parameter = "";
-            // if you want to upload options ....
-            // parameter = "uploadBoard=schema";
-            // parameter += "&useRealFileName=Y";
-            var fileInfo = {};
-            if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
-                form1.ajaxForm({
-                    url: "./fileTestJson.html?" + parameter 
-                    , type:"POST"
-                    , dataType:"json"
-                    , async: false
-                    , success:function(json) {
-                        fileInfo = json;
-                    }
-                    , error:function(e){
-                        alert(e.responseText);
-                    }
-                });
-                $('#form').submit();
-            }            
-            _.merge(addRow, form1.serializeFormJSON() );
+            if(this.props.options.value == this.state.value)
+                return state;
             
-            var edit_items = filterAllByElName( gridSchema.elements , {edit_tag : 'file'});
-            if (edit_items.length > 0 ){
-                $.each(edit_items, function(i,edit_item){
-                    var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
-                    if (item_fileinfo != null){
-                        addRow[edit_item.col] = item_fileinfo.orgFileName;
-                        addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
-                        
-                    }		
-                });
-                                                    
-            }
-
             $.ajax({
                 url: "./genericSaveJson.html",
                 type: "POST",
-                data: addRow , 
+                data: {
+                    searchJson: JSON.stringify(paramObj),
+                    fieldName: this.state.name,
+                    fieldValue: this.state.value,
+                    fieldValueOrigin: this.state.value_origin,
+                    // userId: $("#userId").val(),
+                    // sqlid: "dashboard.ssd_sm.script_master.update"
+                    sqlid: gridJson.sqlId + ".edit"
+                }, 
                 async: false,			                    		
                 success:  function(data){
                     response1 = data;
                     if(response1.result != 'success'){
                         state = false;
-                        // var msg = "Save Success!";
-                        // $("#dialog-confirm").html(response1.message);
-                        // $("#dialog-confirm").dialog({
-                        //     resizable: false,
-                        //     modal: true,
-                        //     title: "Error",
-                        //     //height: 200,
-                        //     width: 500,
-                        //     dialogClass: 'no-close',
-                        //     closeOnEscape: false,
-                        //     buttons: [
-                        //         {
-                        //             text: "OK",
-                        //             click: function() {
-                                        
-                        //                 $( this ).dialog( "close" );	
-
-                        //             }
-                        //         }
-                        //     ]
-                        // });
                         $("#modal-alert").find("p").text(response1.message);
                         $("#modal-alert").modal();
-                    } 
-                    // Success
-                    else {
-                        // To do 
-                        // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
-                        _this.caller.fn_search();
-                        var msg = "Save Success!";
-                        // $("#dialog-confirm").html(msg);
-                        // $("#dialog-confirm").dialog({
-                        //     resizable: false,
-                        //     modal: true,
-                        //     title: "Error",
-                        //     //height: 200,
-                        //     width: 500,
-                        //     dialogClass: 'no-close',
-                        //     closeOnEscape: false,
-                        //     buttons: [
-                        //         {
-                        //             text: "OK",
-                        //             click: function() {
-                        //                 $( this ).dialog( "close" );
-                        //                 setTimeout( function(){
-                        //                     // parent.$("#" + window.frameElement.name.replace("frame","modal")).remove();
-                        //                     // parent.$("#" + window.frameElement.name.replace("frame","modal")).modal('toggle');
-                        //                     $("#" + _this.containerId ).modal('toggle');
-                        //                 },0);
-                        //             }
-                        //         }
-                        //     ]
-                        // });
-                        $("#modal-success").find("p").text(msg);
-                        $("#modal-success").modal();
-                        // reload to edit mode;
-                    }						                    			
+                    }
+                                                            
                 }
             });
-            
-
             return state;
-            
-            
         },
         fn_afterSubmit: function(keyUpdatedObjects){
             // if only edit
@@ -486,28 +406,10 @@ genInstanceEdit.prototype.makeSchema = function(){
             });
             
             var msg = "Save Success!";
-            $("#dialog-confirm").html(msg);
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                modal: true,
-                title: "Error",
-                //height: 200,
-                width: 300,
-                dialogClass: 'no-close',
-                closeOnEscape: false,
-                buttons: [
-                    {
-                        text: "OK",
-                        click: function() {
-                            $( this ).dialog( "close" );											                    			                  
-                        }
-                    }
-                ]
-            });
-                                        
-            
-        },
-        progressObject: $("#loader"),
+            $("#modal-success").find("p").text(msg);
+            $("#modal-success").modal();
+        }
+        // ,progressObject: $("#loader"),
         // fn_pop_select : commonFunc.fn_pop_select
     };
 
@@ -527,7 +429,7 @@ genInstanceEdit.prototype.makeSchema = function(){
                 elements: [
                     {
                         type: "inline_edit",
-                        edit_type : "add",
+                        edit_type : "edit",
                         cols: entityDoc.detail_cols_add =! null  ? entityDoc.detail_cols_add : 1 ,
                         data: function(){ 
                             return _this.data ;
@@ -551,15 +453,6 @@ genInstanceEdit.prototype.makeSchema = function(){
 
 genInstanceEdit.prototype.fn_getData = function(){
     var _this = this;
-    if( _this.option.caller.option != null &&
-        _this.option.caller.option.filter != null &&
-        !_.isEmpty( _this.option.caller.option.filter)){
-            
-            var selected_id = _this.grid.jqGrid('getGridParam','selrow');
-            _this.data = grid.getRowData(selected_id);
-            // _this.data = _.cloneDeep(_this.option.caller.option.filter ); 
-    }
-
-
-
+    var selected_id = _this.grid.jqGrid('getGridParam','selrow');
+    _this.data = _this.grid.getRowData(selected_id);
 }

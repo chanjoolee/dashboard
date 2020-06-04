@@ -691,6 +691,7 @@
           if(grid.length > 0 ){
             var gridParam = grid.getGridParam();
             // height
+            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
             gridBody.height( "100%" );
             grid.setGridWidth($(event.target).find(".modal-body").width());
             gridBody.height( gridBody.height() + 10  );

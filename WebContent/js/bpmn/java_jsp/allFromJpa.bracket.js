@@ -1041,6 +1041,7 @@ JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
     if ( v_entity_doc_obj.dbType == null )
         v_entity_doc_obj.dbType = _this.generator.dbType;
     v_entity_doc_obj.entityId = file_name;
+
     
     var fileObj = {
         fileType: "jsp" ,
@@ -1050,7 +1051,7 @@ JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
         foreignEntities : [] ,  // { id:'xxx' , referenceId : 'xxx' }
         childEntities : [] , // { id:'xxx' , referenceId : 'xxx' }
         schema : {},
-        gridProperties : [].concat(entity.properties) , // for coonbinient
+        gridProperties : [].concat( _this.objectToDocObject(entity.properties) ) , // for coonbinient
         sqlGenerator : {},
         sources : [] ,
         dataSources : [] ,
@@ -7514,7 +7515,7 @@ JpaAllGeneratorBracket.prototype.objectToFileScript = function(_file, object_nam
     // var object_str = JSON.stringify( objectClone, null, '\t');
 
     var object_str = JSON.stringify( objectClone, function(key, value){
-        if (key == "_documentation") {
+        if (key == "_documentation" && typeof value === "string") {
             var value_to = {};
             // var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+\.\\\/,"'\=:;\r\n\[\]{}]+)<\/code>/g);
             var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
@@ -7687,4 +7688,38 @@ JpaAllGeneratorBracket.prototype.documentToObject = function(_docstr){
     
     return v_doc_object;
 
+}
+
+/**
+ * 특정 Object 중에서 _documention을 json, javascript 형식으로 바꾼다.
+ */
+JpaAllGeneratorBracket.prototype.objectToDocObject = function( jsobject ){
+    _this = this;
+    var objectClone = _.cloneDeep(jsobject);
+    _this.generator.fuctionToString(objectClone);
+    // var object_str = JSON.stringify( objectClone, null, '\t');
+
+    var object_str = JSON.stringify( objectClone, function(key, value){
+        if (key == "_documentation") {
+            var value_to = {};
+            // var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+\.\\\/,"'\=:;\r\n\[\]{}]+)<\/code>/g);
+            var matches = value.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
+            if(matches){
+                $.each(matches,function(i,m){
+                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
+                    var content = match.groups.content;
+                    var custom_obj = eval( "(" + _.unescape(content) + ")");
+                    delete custom_obj.sql_insert;
+                    delete custom_obj.sql_select;
+                    delete custom_obj.query;
+                    _.merge(value_to,custom_obj );
+                });
+            }
+            return value_to;
+        }
+        return value;
+    }, '\t');
+    
+    return eval(object_str);
+   
 }
