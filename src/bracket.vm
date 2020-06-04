@@ -505,7 +505,7 @@
           <div class="modal-header">
             <h6 class="tx-14 mg-b-0 tx-inverse tx-bold"><span></span></h6>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body" >
@@ -521,7 +521,7 @@
           <div class="modal-header" style="width: 800px;">
             <h6 class="tx-14 mg-b-0 tx-inverse tx-bold"><span></span></h6>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body" >
@@ -546,6 +546,23 @@
           </div><!-- modal-content -->
         </div><!-- modal-dialog -->
     </div><!-- modal -->
+    <div id="modal-success" class="modal fade">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content tx-size-sm">
+          <div class="modal-body tx-center pd-y-20 pd-x-20">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <i class="icon ion-ios-checkmark-outline tx-100 tx-success lh-1 mg-t-20 d-inline-block"></i>
+            <h4 class="tx-success tx-semibold mg-b-20">Congratulations!</h4>
+            <p class="mg-b-20 mg-x-20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.</p>
+            <button type="button" class="btn btn-success tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20" data-dismiss="modal" aria-label="Close">
+              Continue</button>
+            </div><!-- modal-body -->
+          </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
 
     <script src="./templates/bracket/lib/jquery/jquery.js"></script>
     <script src="./templates/bracket/lib/popper.js/popper.js"></script>
@@ -674,9 +691,9 @@
           if(grid.length > 0 ){
             var gridParam = grid.getGridParam();
             // height
-            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-            gridBody.height( gridBody.height() + 10  );
+            gridBody.height( "100%" );
             grid.setGridWidth($(event.target).find(".modal-body").width());
+            gridBody.height( gridBody.height() + 10  );
             // action submit prevent
             $(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
           }
@@ -702,6 +719,11 @@
 
         }else{
           rm_instance = instances.list.pop();
+          if ( rm_instance instanceof genInstanceAdd ){
+            // var gridBody = $("#gbox_" + rm_instance.caller.gridId + " .ui-jqgrid-bdiv");
+            // gridBody.height( "100%"  );
+            // gridBody.height( gridBody.height() + 10  );
+          }
         }
         
 			});
@@ -743,7 +765,7 @@
 		}
 
 		.ui-jqgrid {
-			border-top: 2px solid #fc5d57;
+			/* border-top: 2px solid #fc5d57; */
 		} 
 
 		.ui-jqgrid-view  .ui-jqgrid-bdiv td.glyphicon {

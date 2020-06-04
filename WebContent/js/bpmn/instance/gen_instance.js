@@ -1,6 +1,7 @@
 function genInstance(_entityId, _type,  _list_instance , _option ){
     
     $("#loader").show();
+    localStorage.removeItem("jstree");
     this.entityId = _entityId;
     this.type = _type;
     this.list_instance = _list_instance;
@@ -412,6 +413,9 @@ genInstance.prototype.fn_search = function(){
         var theGrid = $("#" + _this.gridId ).jqGrid();
         theGrid.trigger('reloadGrid',[{page:1}]);
         // $("#loader").hide();
+        // var gridBody = $("#gbox_" + _this.gridId + " .ui-jqgrid-bdiv");
+        // gridBody.height( "100%"  );
+        // gridBody.height( gridBody.height() + 10  );
     },50);
 }
 

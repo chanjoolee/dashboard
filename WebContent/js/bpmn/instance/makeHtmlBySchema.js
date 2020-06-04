@@ -857,7 +857,25 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
             }
         );
 
-        if ($(gridParam.pager).find(".ui-pg-button[title=Copy]").length == 0 && true) {
+
+        /******
+         * Copy 메뉴를 한번만 생성하기 위함. search를 할 때마다 gridComplete 가 실행됨.
+         */
+        var hasCopy = true;
+        var pager = $(gridParam.pager);
+        var dropmenu = $("#" + pager.find(".dropdownmenu").val() );
+        if( pager.find(".ui-pg-button[title=Copy]").length == 0 ){
+            hasCopy = false;
+        }
+        if(!hasCopy){
+            if(dropmenu.length > 0){
+                if (dropmenu.find(".g-menu-item:contains(Copy)").length > 0 ){
+                    hasCopy = true;
+                }
+            }
+        }
+        
+        if ( !hasCopy ) {
             grid.navButtonAdd(gridParam.pager, {
                 caption : "", 
                 title: "Copy",
@@ -891,19 +909,28 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                 }, 
                 position:"last"
             });
-            var td_cp = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Copy']")
-            var td_add = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Add new row']");
-            td_add.after(td_cp);
+            if(dropmenu.length == 0){
+                var td_cp = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Copy']")
+                var td_add = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Add new row']");
+                td_add.after(td_cp);
+            }else{
+                var li_cp = dropmenu.find(".g-menu-item:contains(Copy)").parent();
+                var li_add = dropmenu.find(".g-menu-item:contains(Add new row)").parent();
+                li_add.after(li_cp);
+            }
+            
 
         }
         
         // var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
         // gridBody.height( gridBody.height() + 10  );
+        var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+        gridBody.height( "100%");   
         if( !_this.instance.option.modal ){
-            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-            gridBody.height( gridBody.height() + 10  );
             grid.setGridWidth(_this.instance.container.width());
-        }
+        }  
+        gridBody.height( gridBody.height() + 10  );       
+        
             
         
     }
