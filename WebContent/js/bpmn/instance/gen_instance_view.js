@@ -1,4 +1,4 @@
-function genInstanceEdit(_entityId, _type,  _list_instance , _option ){
+function genInstanceView(_entityId, _type,  _list_instance , _option ){
     
     $("#loader").show();
     this.entityId = _entityId;
@@ -101,7 +101,7 @@ function genInstanceEdit(_entityId, _type,  _list_instance , _option ){
 
 }
 
-genInstanceEdit.prototype.makeContent = function(){
+genInstanceView.prototype.makeContent = function(){
     var _this = this;
     var contentContainer = $("<div/>",{id: this.gridCotainerId});
     this.contentContainer = contentContainer;
@@ -109,7 +109,7 @@ genInstanceEdit.prototype.makeContent = function(){
     var makehtml = new makeHtmlBySchema( this.contentContainer , _this.schema , this );
 }
 
-genInstanceEdit.prototype.makeSchema = function(){
+genInstanceView.prototype.makeSchema = function(){
 
     var _this = this;
     this.fn_getData();
@@ -429,7 +429,7 @@ genInstanceEdit.prototype.makeSchema = function(){
                 elements: [
                     {
                         type: "inline_edit",
-                        edit_type : "edit",
+                        edit_type : "view",
                         cols: entityDoc.detail_cols_add =! null  ? entityDoc.detail_cols_add : 1 ,
                         data: function(){ 
                             return _this.data ;
@@ -451,7 +451,7 @@ genInstanceEdit.prototype.makeSchema = function(){
 
 }
 
-genInstanceEdit.prototype.fn_getData = function(){
+genInstanceView.prototype.fn_getData = function(){
     var _this = this;
     var selected_id = _this.grid.jqGrid('getGridParam','selrow');
     _this.data = _this.grid.getRowData(selected_id);

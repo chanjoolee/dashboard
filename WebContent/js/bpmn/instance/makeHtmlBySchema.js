@@ -124,7 +124,16 @@ makeHtmlBySchema.prototype.inline = function(_schema ,_schema_parent , container
 
 makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , container , container_parent){
     var _this = this;
-    container.addClass("form-layout form-layout-4");
+    var container_class = "form-layout form-layout-4";
+    if ( _schema.edit_type == "view"){
+        container_class = "form-layout form-layout-6";
+    }
+    container.addClass(container_class);
+
+    var new_row_class = "form-group row";
+    if ( _schema.edit_type == "view"){
+        new_row_class = "no-gutters row";
+    }
 
     // var container = $("<div/>",{});
     // _this.defaultSetting(_schema, container);
@@ -212,16 +221,22 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
             }
 
             if(i%cols == 0 ){
-                rowDiv = $("<div/>",{class: "form-group row "});
+                rowDiv = $("<div/>",{class: new_row_class });
                 container.append(rowDiv);
             }
             // header
-            var labelH = $("<label/>",{class: "col-sm-3 form-control-label"});
+            var labelH = null;
+            if ( _schema.edit_type != "view"){
+                labelH = $("<label/>",{class: "col-sm-3 form-control-label"});
+            }else{
+                // view
+                labelH = $("<div/>",{class: "col-sm-3 form-control-label"});
+            }
+
             labelH.text(item.label);
             if(item.required){
                 labelH.append('<span class="tx-danger">*</span>');
             }
-            
 
             /**
              * value Div. 리액트 사용부분
@@ -884,6 +899,11 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     // commonFunc.fn_view_detail.call(this,'add');
                     var filter = {};
                     var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                    if (parentRowKey == null ){
+                        $("#modal-alert").find("p").text("Please, select row");
+                        $("#modal-alert").modal();
+                        return;
+                    }
                     var row = grid.getRowData(parentRowKey);
                     $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
                         let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});

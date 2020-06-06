@@ -622,6 +622,7 @@
     <script src="./js/bpmn/instance/gen_instance_add.js"></script>
     <script src="./js/bpmn/instance/gen_instance_edit.js"></script>
     <script src="./js/bpmn/instance/gen_instance_copy.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_view.js"></script>
     <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
     <script src="./js/bpmn/gen/$searchVO.searchJson.jpaFiles"></script>
     <!-- <script src="./js/gen/testEntityJpaFiles.2020.04.07.03.11.38.js"></script> -->

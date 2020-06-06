@@ -49,10 +49,10 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
         // Header        
         var headStr = '[' + _.camelCase(_this.entityId) + ' ' + _.capitalize(this.type) +  ']  ' ;
         this.modalClone.find(".modal-header h6 span").text(headStr);
-        if( this.caller.option != null &&
-            this.caller.option.filter != null){
+        if( this.option != null &&
+            this.option.filter != null){
                 var filterStrs = [];        
-                $.each(this.caller.option.filter,function(k,v){
+                $.each(this.option.filter,function(k,v){
                     var str = _.camelCase(k);
                     str += " : " + v;
                     filterStrs.push(str);
