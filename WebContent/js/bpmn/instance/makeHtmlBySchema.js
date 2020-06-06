@@ -881,31 +881,22 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                 title: "Copy",
                 buttonicon : "fa-copy",
                 onClickButton: function(){ 
-                    // var theGrid = $(this).jqGrid();
+                    // commonFunc.fn_view_detail.call(this,'add');
+                    var filter = {};
                     var parentRowKey = grid.jqGrid('getGridParam','selrow');
-                    if ( parentRowKey == null )   {
-                        $("#dialog-confirm").html("Please, select row");
-                        $("#dialog-confirm").dialog({
-                            resizable: false,
-                            modal: true,
-                            title: "Error",
-                            //height: 200,
-                            width: 300,
-                            dialogClass: 'no-close',
-                            closeOnEscape: false,
-                            buttons: [
-                                {
-                                    text: "OK",
-                                    click: function() {
-                                        $( this ).dialog( "close" );											                    			                  
-                                    }
-                                }
-                            ]
-                        });
-                        return;
-                    }
-                    commonFunc.fn_view_detail.call(this,'copy');
-                    // alert("Deleting Row");
+                    var row = grid.getRowData(parentRowKey);
+                    $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
+                        if(vId != null){
+                            filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                        }
+                    });
+                    var instanceOption = {
+                        modal : true,
+                        caller : gridParam.htmlMaker.instance ,
+                        filter : filter
+                    };
+                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'copy' , instanceOption );
                 }, 
                 position:"last"
             });

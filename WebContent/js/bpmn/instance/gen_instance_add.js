@@ -417,27 +417,6 @@ genInstanceAdd.prototype.makeSchema = function(){
                     response1 = data;
                     if(response1.result != 'success'){
                         state = false;
-                        // var msg = "Save Success!";
-                        // $("#dialog-confirm").html(response1.message);
-                        // $("#dialog-confirm").dialog({
-                        //     resizable: false,
-                        //     modal: true,
-                        //     title: "Error",
-                        //     //height: 200,
-                        //     width: 500,
-                        //     dialogClass: 'no-close',
-                        //     closeOnEscape: false,
-                        //     buttons: [
-                        //         {
-                        //             text: "OK",
-                        //             click: function() {
-                                        
-                        //                 $( this ).dialog( "close" );	
-
-                        //             }
-                        //         }
-                        //     ]
-                        // });
                         $("#modal-alert").find("p").text(response1.message);
                         $("#modal-alert").modal();
                     } 
@@ -447,39 +426,14 @@ genInstanceAdd.prototype.makeSchema = function(){
                         // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
                         _this.caller.fn_search();
                         var msg = "Save Success!";
-                        // $("#dialog-confirm").html(msg);
-                        // $("#dialog-confirm").dialog({
-                        //     resizable: false,
-                        //     modal: true,
-                        //     title: "Error",
-                        //     //height: 200,
-                        //     width: 500,
-                        //     dialogClass: 'no-close',
-                        //     closeOnEscape: false,
-                        //     buttons: [
-                        //         {
-                        //             text: "OK",
-                        //             click: function() {
-                        //                 $( this ).dialog( "close" );
-                        //                 setTimeout( function(){
-                        //                     // parent.$("#" + window.frameElement.name.replace("frame","modal")).remove();
-                        //                     // parent.$("#" + window.frameElement.name.replace("frame","modal")).modal('toggle');
-                        //                     $("#" + _this.containerId ).modal('toggle');
-                        //                 },0);
-                        //             }
-                        //         }
-                        //     ]
-                        // });
                         $("#modal-success").find("p").text(msg);
                         $("#modal-success").modal();
                         // reload to edit mode;
                     }						                    			
                 }
             });
-            
 
             return state;
-            
             
         }
         

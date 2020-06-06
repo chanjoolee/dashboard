@@ -38,34 +38,34 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
     this.form = $(formTemplate);
     this.form.attr("id" , this.formId);
     this.form.attr("name" , this.formId);
+    this.grid = $("#" + this.caller.gridId).jqGrid();
     
     var _this = this;
     if(this.option != null && this.option.modal){
-        var modalCommon = $("[name=infiniteLogModal]");
+        var modalCommon = $("[name=modal-edit]");
         this.modalClone = modalCommon.clone();
         this.modalClone.attr("isCloned","true");
 
-        // Header
-        var filterStrs = [];
-        $.each(this.option.filter,function(k,v){
-            var str = _.camelCase(k);
-            str += " : " + v;
-            filterStrs.push(str);
-        });
-        var headStr = '[' + _.camelCase(_this.entityId) + ' ' + _.capitalize(this.type) +  ']  ' +  filterStrs.join(" , ");													
+        // Header        
+        var headStr = '[' + _.camelCase(_this.entityId) + ' ' + _.capitalize(this.type) +  ']  ' ;
         this.modalClone.find(".modal-header h6 span").text(headStr);
+        if( this.caller.option != null &&
+            this.caller.option.filter != null){
+                var filterStrs = [];        
+                $.each(this.caller.option.filter,function(k,v){
+                    var str = _.camelCase(k);
+                    str += " : " + v;
+                    filterStrs.push(str);
+                });
+                headStr += filterStrs.join(" , ");	
+                this.modalClone.find(".modal-header h6 span").text(headStr);
+
+        }												
+        this.modalClone.find(".modal-header h6 span").text(headStr );
+        // this.modalClone.find(".modal-header h6 span").append()
 
         // inintial search
-        var v_filters = [];
-        $.each(this.option.filter ,function(field, data){
-            var obj = {
-                field : field ,
-                // value: [].concat(data)
-                value: data , 
-                isArray : _.isArray(data)
-            };
-            v_filters.push( obj );
-        });
+        var v_filters = [];        
         this.form.find("#searchJson").val(JSON.stringify({fields: v_filters}));
 
         // modalId
@@ -78,9 +78,9 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
         // modal
         setTimeout( function(){
             _this.modalClone.modal();
-            _this.modalClone.draggable({
-                handle: ".modal-header"
-            }); 
+            // _this.modalClone.draggable({
+            //     handle: ".modal-header"
+            // }); 
         },0);
         
     }else{
@@ -92,7 +92,8 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
     this.searchContainer = null;
     this.contentContainer = null;
     this.data = {};
-    this.schema = this.makeSchema();
+    this.schema = {};
+    this.makeSchema();
     this.makeContent();  
 
     $("#loader").hide();
@@ -100,14 +101,12 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
 
 }
 
-
-
 genInstanceCopy.prototype.makeContent = function(){
     var _this = this;
     var contentContainer = $("<div/>",{id: this.gridCotainerId});
     this.contentContainer = contentContainer;
     this.form.append(contentContainer);
-    var makehtml = new makeHtmlBySchema( this.container , _this.schema , this );
+    var makehtml = new makeHtmlBySchema( this.contentContainer , _this.schema , this );
 }
 
 genInstanceCopy.prototype.makeSchema = function(){
@@ -135,6 +134,11 @@ genInstanceCopy.prototype.makeSchema = function(){
         $.each(entityDoc.detail.order_by, function(i, _order){									
             var _cms = cms;									
             var prop = _.find([].concat(_this.jpaFile.gridProperties), {_name : _order.column_name});
+            // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
+            var docObj = prop._documentation;
+            if (docObj == null){
+                docObj = {};
+            }
             var rtnObj = {};
             if (prop != null){										
                 rtnObj = {
@@ -146,6 +150,9 @@ genInstanceCopy.prototype.makeSchema = function(){
                 let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
                 if (vId != null){
                     rtnObj.required = true;
+                }
+                if (docObj.required){
+                    rtnObj.required = docObj.required;
                 }
                 
                 // list hiden columns
@@ -174,7 +181,8 @@ genInstanceCopy.prototype.makeSchema = function(){
                 }
 
                 // if add_hidden , then edit_tage : hidden
-                if (prop._documentation != null && prop._documentation.add_hidden ){
+                
+                if (docObj != null && docObj.add_hidden ){
                     rtnObj.edit_tag = "hidden";
                 }
                 v_items.push(rtnObj);
@@ -196,7 +204,12 @@ genInstanceCopy.prototype.makeSchema = function(){
     }
 
     // Process than not exists in orderby 
-    $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){									
+    $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){		
+        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );	
+        var docObj = prop._documentation;
+        if (docObj == null){
+            docObj = {};
+        }			
         var v_item = _.find([].concat(v_items),{col : prop._name.toUpperCase()});
         if ( v_item == null){
             var _cms = cms;									
@@ -208,10 +221,16 @@ genInstanceCopy.prototype.makeSchema = function(){
                 orderby : 100,
                 editable : true
             };
+
+            // required 
             let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
             if (vId != null){
                 rtnObj.required = true;
             }
+            if (docObj.required){
+                rtnObj.required = docObj.required;
+            }
+
             // list hiden columns
             if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                 rtnObj.isDateTime = true;
@@ -222,7 +241,7 @@ genInstanceCopy.prototype.makeSchema = function(){
             }
 
             // if add_hidden , then edit_tage : hidden
-            if (prop._documentation != null && prop._documentation.add_hidden ){
+            if (docObj != null && docObj.add_hidden ){
                 rtnObj.edit_tag = "hidden";
             }
 
@@ -238,7 +257,9 @@ genInstanceCopy.prototype.makeSchema = function(){
                 });
                 rtnObj.selectOptions = options;
                 rtnObj.edit_tag = cm.edittype;
-                if ( _this.caller.option.filter[rtnObj.col] != null && _this.caller.option.filter[rtnObj.col] != "" ){
+                if ( _this.caller.option.filter != null
+                    && _this.caller.option.filter[rtnObj.col] != null 
+                    && _this.caller.option.filter[rtnObj.col] != "" ){
                     rtnObj.edit_tag = 'input';
                     rtnObj.editable = false;
                 }
@@ -256,17 +277,14 @@ genInstanceCopy.prototype.makeSchema = function(){
             pop_item.edit_tag = "pop_select";
     });
 
-    // label merge
+    // label more field merge
     $.each(v_items , function(i, _item){
         if (_item.col == null)
             return true;
         var v_property = _.find( _this.jpaFile.gridProperties , { _name : _item.col.toLowerCase() });
         if ( v_property != null && v_property._documentation != null){
             _.merge(_item , v_property._documentation);
-            // if (v_property._documentation.label != null){
-            //     _.merge(_item , v_property._documentation);
-            //     _item.label = v_property._documentation.label ;
-            // }
+            
         }
 
     });
@@ -277,10 +295,9 @@ genInstanceCopy.prototype.makeSchema = function(){
         fn_change: function( input ){									
             // cascade update
             var __this = this;
-            var gridSchema = _this.caller.jpaFile.schema.contents.schema;
-            var jpaFile = __this.htmlMaker.instance.caller.jpaFile;
-            var gridSchema1 = __this.htmlMaker.instance.caller.jpaFile.schema.contents.schema;
-            var gridJson = findAllByElName( gridSchema1.elements , {type:"grid"});
+            var jpaFile =  _this.caller.jpaFile ;
+            var gridSchema = jpaFile.schema.contents.schema;
+            var gridJson = findAllByElName( gridSchema.elements , {type:"grid"});
             
             var item = _.find(gridJson.items, {name : this.props.options.name});
             var dataSrc = jpaFile.dataSrc ;
@@ -294,7 +311,8 @@ genInstanceCopy.prototype.makeSchema = function(){
                     var nextColumn = src.childColumnNames[index+1];
                     var nextCm = _.find( cms , {name: nextColumn.toUpperCase() });												
                     var wheres = src.childColumnNames.slice(0,index + 1);
-                    var frm = document.getElementById("form");
+                    // var frm = document.getElementById("form");
+                    var frm = _this.form[0];
                     var param = {};
                     $.each(wheres , function(i, where ){
                         var whereReact = _.find(__this.reactObjects , 
@@ -337,15 +355,12 @@ genInstanceCopy.prototype.makeSchema = function(){
             
         },
         fn_submit: function(_editType){
-            var __this = this;
-            
             var state = true;
             var reactObjects = this;
             var addRow = {};
-            var jpaFile = __this.htmlMaker.instance.caller.jpaFile;
-            var gridSchema = _this.caller.jpaFile.schema.contents.schema;
-            var gridSchema1 = __this.htmlMaker.instance.caller.jpaFile.schema.contents.schema;
-            var gridJson = findAllByElName( gridSchema1.elements , {type:"grid"});
+            var jpaFile = _this.caller.jpaFile;
+            var gridSchema = jpaFile.schema.contents.schema;
+            var gridJson = findAllByElName( gridSchema.elements , {type:"grid"});
             $.each(reactObjects,function(i,react){
                 addRow[this.state.name] = this.state.value;
             });
@@ -376,7 +391,7 @@ genInstanceCopy.prototype.makeSchema = function(){
             }            
             _.merge(addRow, form1.serializeFormJSON() );
             
-            var edit_items = filterAllByElName( gridSchema1.elements , {edit_tag : 'file'});
+            var edit_items = filterAllByElName( gridSchema.elements , {edit_tag : 'file'});
             if (edit_items.length > 0 ){
                 $.each(edit_items, function(i,edit_item){
                     var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
@@ -398,27 +413,8 @@ genInstanceCopy.prototype.makeSchema = function(){
                     response1 = data;
                     if(response1.result != 'success'){
                         state = false;
-                        var msg = "Save Success!";
-                        $("#dialog-confirm").html(response1.message);
-                        $("#dialog-confirm").dialog({
-                            resizable: false,
-                            modal: true,
-                            title: "Error",
-                            //height: 200,
-                            width: 500,
-                            dialogClass: 'no-close',
-                            closeOnEscape: false,
-                            buttons: [
-                                {
-                                    text: "OK",
-                                    click: function() {
-                                        
-                                        $( this ).dialog( "close" );	
-
-                                    }
-                                }
-                            ]
-                        });
+                        $("#modal-alert").find("p").text(response1.message);
+                        $("#modal-alert").modal();
                     } 
                     // Success
                     else {
@@ -426,75 +422,16 @@ genInstanceCopy.prototype.makeSchema = function(){
                         // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
                         _this.caller.fn_search();
                         var msg = "Save Success!";
-                        $("#dialog-confirm").html(msg);
-                        $("#dialog-confirm").dialog({
-                            resizable: false,
-                            modal: true,
-                            title: "Error",
-                            //height: 200,
-                            width: 500,
-                            dialogClass: 'no-close',
-                            closeOnEscape: false,
-                            buttons: [
-                                {
-                                    text: "OK",
-                                    click: function() {
-                                        $( this ).dialog( "close" );
-                                        setTimeout( function(){
-                                            // parent.$("#" + window.frameElement.name.replace("frame","modal")).remove();
-                                            // parent.$("#" + window.frameElement.name.replace("frame","modal")).modal('toggle');
-                                            $("#" + _this.containerId ).modal('toggle');
-                                        },0);
-                                    }
-                                }
-                            ]
-                        });
-                        
+                        $("#modal-success").find("p").text(msg);
+                        $("#modal-success").modal();
                         // reload to edit mode;
                     }						                    			
                 }
             });
-            
 
             return state;
-            
-            
-        },
-        fn_afterSubmit: function(keyUpdatedObjects){
-            // if only edit
-            $.each(this,function(i,react){
-                if(_.find(cms,function(cm){return cm.name == react.state.name})){
-                    var vobject = {}; 
-                    var parentRowKey = theGrid.getGridParam('selrow');
-                    vobject[react.state.name] = react.state.value;
-                    theGrid.setRowData(parentRowKey,vobject);
-                }
-                
-            });
-            
-            var msg = "Save Success!";
-            $("#dialog-confirm").html(msg);
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                modal: true,
-                title: "Error",
-                //height: 200,
-                width: 300,
-                dialogClass: 'no-close',
-                closeOnEscape: false,
-                buttons: [
-                    {
-                        text: "OK",
-                        click: function() {
-                            $( this ).dialog( "close" );											                    			                  
-                        }
-                    }
-                ]
-            });
-                                        
-            
-        },
-        progressObject: $("#loader"),
+        }
+        // ,progressObject: $("#loader"),
         // fn_pop_select : commonFunc.fn_pop_select
     };
 
@@ -514,7 +451,7 @@ genInstanceCopy.prototype.makeSchema = function(){
                 elements: [
                     {
                         type: "inline_edit",
-                        edit_type : "add",
+                        edit_type : "copy",
                         cols: entityDoc.detail_cols_add =! null  ? entityDoc.detail_cols_add : 1 ,
                         data: function(){ 
                             return _this.data ;
@@ -536,15 +473,8 @@ genInstanceCopy.prototype.makeSchema = function(){
 
 }
 
-
 genInstanceCopy.prototype.fn_getData = function(){
     var _this = this;
-    if( _this.option.caller.option != null &&
-        _this.option.caller.option.filter != null && 
-        _this.option.caller.option.filter.length > 0 ){
-        
-            _this.data = _this.option.caller.option.filter;
-    }
-
-
+    var selected_id = _this.grid.jqGrid('getGridParam','selrow');
+    _this.data = _this.grid.getRowData(selected_id);
 }
