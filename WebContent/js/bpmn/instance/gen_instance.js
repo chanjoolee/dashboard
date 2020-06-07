@@ -412,6 +412,7 @@ genInstance.prototype.fn_search = function(){
         _this.fn_jstreeSearch();
         var theGrid = $("#" + _this.gridId ).jqGrid();
         theGrid.trigger('reloadGrid',[{page:1}]);
+        // theGrid.trigger('reloadGrid');
         // $("#loader").hide();
         // var gridBody = $("#gbox_" + _this.gridId + " .ui-jqgrid-bdiv");
         // gridBody.height( "100%"  );
