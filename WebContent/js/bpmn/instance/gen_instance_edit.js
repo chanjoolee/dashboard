@@ -367,7 +367,7 @@ genInstanceEdit.prototype.makeSchema = function(){
 
             if(this.props.options.value == this.state.value)
                 return state;
-            
+
             $.ajax({
                 url: "./genericSaveJson.html",
                 type: "POST",

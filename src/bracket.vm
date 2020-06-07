@@ -715,8 +715,13 @@
         var rm_instance = null;
         if( _.includes(['modal-success'] , target.attr("id") )){
           var last_instance = instances.list[ instances.list.length -1 ];
-          // rm_instance = instances.list.pop();
-          last_instance.modalClone.modal("toggle");
+          if(last_instance instanceof genInstanceEdit){
+            // last_instance.modalClone.modal("toggle");
+          }else if ( last_instance instanceof genInstanceAdd){
+            last_instance.modalClone.modal("toggle");
+          }else if ( last_instance instanceof genInstanceCopy){
+            last_instance.modalClone.modal("toggle");
+          }
         }else if ( _.includes(['modal-alert'] , target.attr("id") )){
 
         }else{

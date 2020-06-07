@@ -387,7 +387,7 @@ genInstanceCopy.prototype.makeSchema = function(){
                         alert(e.responseText);
                     }
                 });
-                $('#form').submit();
+                form1.submit();
             }            
             _.merge(addRow, form1.serializeFormJSON() );
             

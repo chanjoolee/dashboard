@@ -809,6 +809,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                 afterSubmit: function(response, postdata) { 
                     //$("#refresh_grid_script").hide();
                     // var grid = $(this);
+                    var state = true;
                     var paramObj = {
                         delRows : []
                     };
@@ -824,45 +825,32 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                         type: "POST",
                         data: {
                             searchJson: JSON.stringify(paramObj),
-                            sqlid: "rmElBaseinfoMng.rmElBaseinfoMng.delete"
+                            sqlid: gridParam.sqlId + ".delete"
                         }  , 
                         async: false,
                         success:  function(data){
                             response1 = data;
                             if(response1.result == 'success'){
-                            
+                                // gridParam.htmlMaker.instance.fn_search();
                                 msg = "Del Success!";
-                                $("#dialog-confirm").html(msg);
-                                $("#dialog-confirm").dialog({
-                                    resizable: false,
-                                    modal: true,
-                                    title: "Success",
-                                    //height: 200,
-                                    width: 200,
-                                    dialogClass: 'no-close',
-                                    closeOnEscape: false,
-                                    buttons: [
-                                        {
-                                            text: "OK",
-                                            click: function() {
-                                                $( this ).dialog( "close" );		
-                                                // fn_search_script();
-                                            }
-                                        }
-                                    ]
-                                });
+                                $("#modal-success").find("p").text(msg);
+                                $("#modal-success").modal();
+                            }else{
+                                state = false;
+                                $("#modal-alert").find("p").text(response1.message);
+                                $("#modal-alert").modal();
                             }
                             
                         }
                     });
-                    
-                    //return [success,message,new_id] ;
-                    if(response1.result == 'success'){
-                        //$(this).trigger('reloadGrid'); 
-                        return [true, response1.result, ''];
-                    }
-                    else
-                        return [false, response1.result + ":<br/>" + response1.message , ''];
+                    return [true];
+                    // //return [success,message,new_id] ;
+                    // if(response1.result == 'success'){
+                    //     //$(this).trigger('reloadGrid'); 
+                    //     return [true, response1.result, ''];
+                    // }
+                    // else
+                    //     return [false, response1.result + ":<br/>" + response1.message , ''];
                         
                 }
             }
