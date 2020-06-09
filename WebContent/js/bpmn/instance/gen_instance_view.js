@@ -4,6 +4,7 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
     this.entityId = _entityId;
     this.type = _type;
     this.list_instance = _list_instance;
+    this.sub_instance = [];
 
     var today = new Date();
     var y = today.getFullYear();
@@ -31,7 +32,7 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
     // make form 
     var formTemplate = `
         <form name="form" id="form" class="">
-        <input type="hidden" id="searchJson" name="searchJson" value='{}'/>
+        <input type="hidden" name="searchJson" value='{}'/>
         </form>
     `;
     this.formId = this.containerId + "_form";    
@@ -66,14 +67,16 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
 
         // inintial search
         var v_filters = [];        
-        this.form.find("#searchJson").val(JSON.stringify({fields: v_filters}));
+        this.form.find("[name=searchJson]").val(JSON.stringify({fields: v_filters}));
 
         // modalId
         this.modalClone.attr("id", this.containerId );
         this.modalClone.attr("name", "infiniteLogModal" + this.containerId );
         this.container = this.modalClone.find(".modal-body");        
         
-        this.list_instance.container.append(this.modalClone);
+        // this.list_instance.container.append(this.modalClone);
+        // document.body.append(this.modalClone);
+        $("#pagebody .br-section-wrapper").append(this.modalClone);
 
         // modal
         setTimeout( function(){
@@ -103,7 +106,7 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
 
 genInstanceView.prototype.makeContent = function(){
     var _this = this;
-    var contentContainer = $("<div/>",{id: this.gridCotainerId});
+    var contentContainer = $("<div/>",{id: this.gridContainerId});
     this.contentContainer = contentContainer;
     this.form.append(contentContainer);
     var makehtml = new makeHtmlBySchema( this.contentContainer , _this.schema , this );
@@ -385,6 +388,7 @@ genInstanceView.prototype.makeSchema = function(){
                     response1 = data;
                     if(response1.result != 'success'){
                         state = false;
+                        $("#modal-alert").attr("target-id", _this.containerId);
                         $("#modal-alert").find("p").text(response1.message);
                         $("#modal-alert").modal();
                     }
@@ -406,6 +410,7 @@ genInstanceView.prototype.makeSchema = function(){
             });
             
             var msg = "Save Success!";
+            $("#modal-success").attr("target-id", _this.containerId);
             $("#modal-success").find("p").text(msg);
             $("#modal-success").modal();
         }
