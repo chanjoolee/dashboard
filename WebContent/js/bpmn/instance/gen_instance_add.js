@@ -89,6 +89,20 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         this.container = $("<div/>",{id:  this.containerId });
         this.list_instance.container.append(this.container);
     }
+
+    // show title
+    if(this.option != null && this.option.showLabel){
+        var templateTitle = `
+        <h3 class="tx-inverse fa fa-dot-circle-o" style="margin-top: 20px;">edit title</h3>
+        `;
+        var vTitle = $(templateTitle);
+        var strTitle = _.camelCase(this.jpaFile.entityId);
+        if(this.jpaFile.entity_doc_obj.label != null){
+            strTitle = this.jpaFile.entity_doc_obj.label;
+        }
+        vTitle.text(strTitle);
+        this.container.append(vTitle);
+    }
     this.container.append(this.form);
     
     this.searchContainer = null;
@@ -96,7 +110,8 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.data = {};
     this.schema = {};
     this.makeSchema();
-    this.makeContent();  
+    this.makeContent();
+    this.fn_subview();  
 
     $("#loader").hide();
 
@@ -496,4 +511,27 @@ genInstanceAdd.prototype.fn_getData = function(){
 
 
 
+}
+
+genInstanceAdd.prototype.fn_subview = function(){
+    var _this = this;
+    if( _this.jpaFile.entity_doc_obj != null && _this.jpaFile.entity_doc_obj.show_sub_pages){
+        _this.sub_container = $("<div/>",{id: _this.containerId + "_subcontainer"});
+        _this.container.append(_this.sub_container);
+        _this.sub_instance = {
+            parent_instance : _this,
+            list : new gen_instance_list(_this.sub_container , _this.list_instance.jpaFiles )
+        };
+        var childrens = _this.jpaFile.childReferences;
+        $.each(childrens , function(i,child){
+            var instanceOption = {
+                modal : false,
+                caller : _this ,
+                filter : _this.option.filter,
+                showLabel : true 
+            };
+            _this.sub_instance.list.add_instance ( child.childEntityId , 'general' , instanceOption );
+        });
+        
+    }
 }
