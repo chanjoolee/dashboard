@@ -722,6 +722,24 @@
         var target_instance = findAllByElName(instances.list   , {containerId : targetId });
         if ( target_instance == null)
           return;
+        // $("#modal_2019-5-31-11-38-56").remove();
+        var _this = $(this);
+        var target = $(event.target);        
+        if(target.attr("isCloned") != null)
+          target.remove();
+
+        var target_instance = findAllByElName(instances.list   , {containerId : target.attr("id")});
+        if ( target_instance == null)
+          return;
+        // $("#modal_2019-5-31-11-38-56").remove();
+        var _this = $(this);
+        var target = $(event.target);        
+        if(target.attr("isCloned") != null)
+          target.remove();
+
+        var target_instance = findAllByElName(instances.list   , {containerId : target.attr("id")});
+        if ( target_instance == null)
+          return;
 
         var list_instance = target_instance.list_instance;
         var rm_instance = null;
