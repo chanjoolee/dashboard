@@ -713,7 +713,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
 
     // gridId , pagerId
     opt.gridId = gridId ;
-    opt.pager = gridId + "_pager";
+    opt.pager = "#" + gridId + "_pager";
     
     opt.htmlMaker = _this ;
     opt.url = function(){
@@ -833,10 +833,12 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                             if(response1.result == 'success'){
                                 // gridParam.htmlMaker.instance.fn_search();
                                 msg = "Del Success!";
+                                $("#modal-success").attr("target-id", _this.instance.containerId);
                                 $("#modal-success").find("p").text(msg);
                                 $("#modal-success").modal();
                             }else{
                                 state = false;
+                                $("#modal-alert").attr("target-id", _this.containerId);
                                 $("#modal-alert").find("p").text(response1.message);
                                 $("#modal-alert").modal();
                             }
@@ -852,7 +854,14 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     // else
                     //     return [false, response1.result + ":<br/>" + response1.message , ''];
                         
+                },
+                afterShowForm: function($form) {
+                    var dialog = $form.closest('div.ui-jqdialog'),
+                    selRowId = gridParam.selrow ,
+                    selRowCoordinates = gridParam.htmlMaker.instance.form.find('#'+selRowId).offset();
+                    dialog.offset(selRowCoordinates);
                 }
+
             }
             ,{ 
                 multipleSearch: true,

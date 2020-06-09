@@ -5,6 +5,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.entityId = _entityId;
     this.type = _type;
     this.list_instance = _list_instance;
+    this.sub_instance = [];
 
     var today = new Date();
     var y = today.getFullYear();
@@ -28,13 +29,13 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     this.searchContainerId = this.containerId + "_searchContainer";
-    this.gridCotainerId = this.containerId + "_gridContainer";
+    this.gridContainerId = this.containerId + "_gridContainer";
     this.gridId = this.containerId + "_grid";
     this.pagerId = this.gridId + "_pager";
     // make form 
     var formTemplate = `
         <form name="form" id="form" class="">
-        <input type="hidden" id="searchJson" name="searchJson" value='{}'/>
+        <input type="hidden" name="searchJson" value='{}'/>
         </form>
     `;
     this.formId = this.containerId + "_form";    
@@ -43,7 +44,22 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.form.attr("name" , this.formId);
     
     var _this = this;
-    if(this.option != null && this.option.modal){
+    // inintial search
+    if(this.option != null && this.option.filter != null){
+        var v_filters = [];
+        $.each(this.option.filter ,function(field, data){
+            var obj = {
+                field : field ,
+                // value: [].concat(data)
+                value: data , 
+                isArray : _.isArray(data)
+            };
+            v_filters.push( obj );
+        });
+        this.form.find("[name=searchJson]").val(JSON.stringify({fields: v_filters}));
+    }
+
+    if(this.option != null && this.option.modal ){
         var modalCommon = $("[name=infiniteLogModal]");
         this.modalClone = modalCommon.clone();
         this.modalClone.attr("isCloned","true");
@@ -60,25 +76,14 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
 
         this.modalClone.find(".modal-header h6 span").text(headStr );
 
-        // inintial search
-        var v_filters = [];
-        $.each(this.option.filter ,function(field, data){
-            var obj = {
-                field : field ,
-                // value: [].concat(data)
-                value: data , 
-                isArray : _.isArray(data)
-            };
-            v_filters.push( obj );
-        });
-        this.form.find("#searchJson").val(JSON.stringify({fields: v_filters}));
-
         // modalId
         this.modalClone.attr("id", this.containerId );
         this.modalClone.attr("name", "infiniteLogModal" + this.containerId );
         this.container = this.modalClone.find(".modal-body");        
         
-        this.list_instance.container.append(this.modalClone);
+        // this.list_instance.container.append(this.modalClone);
+        $("#pagebody .br-section-wrapper").append(this.modalClone);
+        // document.body.append(this.modalClone);
 
         // modal
         setTimeout( function(){
@@ -109,8 +114,8 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.fn_setDataSourceValue();
     // container 안에 그린다.
     // 01. search
-    if(this.option != null && this.option.modal){
-        
+    if(this.option != null && this.option.filter != null ){
+        // 필터가 있다면 검색조건을 만들지 않는다.
     }else{
         this.makeSearch();
     }
@@ -191,7 +196,7 @@ genInstance.prototype.makeSearch = function(){
 
 genInstance.prototype.makeGrid = function(){
     var _this = this;
-    var gridContainer = $("<div/>",{id: this.gridCotainerId});
+    var gridContainer = $("<div/>",{id: this.gridContainerId});
     this.gridContainer = gridContainer;
     this.form.append(gridContainer);
     var schema = this.jpaFile.schema.contents.schema ;
@@ -203,7 +208,7 @@ genInstance.prototype.fn_contextmenu = function(){
 
     $.contextMenu(
         {
-            "selector": "#" + _this.gridCotainerId + " .jqgrow td.contextMenu",
+            "selector": "#" + _this.gridContainerId + " .jqgrow td.contextMenu",
             "trigger": "left",
             "build": function($trigger) {
                 var options = {
@@ -402,7 +407,7 @@ genInstance.prototype.fn_jstreeSearch = function(){
         });
         
     });
-    _this.form.find("#searchJson").val(JSON.stringify({fields: selJsTree3}));
+    _this.form.find("[name=searchJson]").val(JSON.stringify({fields: selJsTree3}));
 }
 
 genInstance.prototype.fn_search = function(){

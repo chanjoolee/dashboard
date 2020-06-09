@@ -677,18 +677,17 @@
       }
 
       // Stacked Modal
-		  $(document).on('show.bs.modal', '.modal', function (event) {
+		  // $(document).on('show.bs.modal', '.modal', function (event) {
 				
           // var zIndex = 1500 + (10 * $('.modal:visible').length);
           // $(this).css('z-index', zIndex);
           // setTimeout(function() {
           //     $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
           // }, 0);
-      });
+      // });
 
       $(document).on('shown.bs.modal', '.modal', function (event) {
-          var grid = $(event.target).find(".ui-jqgrid-btable");
-         var grid = $(event.target).find(".ui-jqgrid-btable");
+        var grid = $(event.target).find(".ui-jqgrid-btable");
           if(grid.length > 0 ){
             var gridParam = grid.getGridParam();
             // height
@@ -699,39 +698,45 @@
             // action submit prevent
             $(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
           }
+          var backdrops = $('.modal-backdrop.fade.show');
+          $.each(backdrops, function(i, backdrop){
+            if(i>0)
+              $(backdrop).css("opacity",0);
+          });
       });
 
       // modal Close
 			$(document).on('hidden.bs.modal', function (event) {
 				
 				$('.modal:visible').length && $(document.body).addClass('modal-open');
-				 
-				// $("#modal_2019-5-31-11-38-56").remove();
-				var _this = $(this);
-				var target = $(event.target);
-				if(target.attr("isCloned") != null)
-					target.remove();
+        // $("#modal_2019-5-31-11-38-56").remove();
+        var _this = $(this);
+        var target = $(event.target);        
+        if(target.attr("isCloned") != null)
+          target.remove();
 
+        var target_instance = findAllByElName(instances.list   , {containerId : target.attr("id")});
+        if ( target_instance == null)
+          return;
+
+        var list_instance = target_instance.list_instance;
         var rm_instance = null;
+
         if( _.includes(['modal-success'] , target.attr("id") )){
-          var last_instance = instances.list[ instances.list.length -1 ];
-          if(last_instance instanceof genInstanceEdit){
-            // last_instance.modalClone.modal("toggle");
-          }else if ( last_instance instanceof genInstanceAdd){
-            last_instance.modalClone.modal("toggle");
-          }else if ( last_instance instanceof genInstanceCopy){
-            last_instance.modalClone.modal("toggle");
+          // var last_instance = list_instance.list[ instances.list.length -1 ];
+          if(target_instance instanceof genInstanceEdit){
+          }else if ( target_instance instanceof genInstanceAdd){
+            target_instance.modalClone.modal("toggle");
+          }else if ( target_instance instanceof genInstanceCopy){
+            target_instance.modalClone.modal("toggle");
           }
+
         }else if ( _.includes(['modal-alert'] , target.attr("id") )){
 
         }else{
-          rm_instance = instances.list.pop();
-          if ( rm_instance instanceof genInstanceAdd ){
-            // var gridBody = $("#gbox_" + rm_instance.caller.gridId + " .ui-jqgrid-bdiv");
-            // gridBody.height( "100%"  );
-            // gridBody.height( gridBody.height() + 10  );
-          }
+          rm_instance = list_instance.list.pop();
         }
+        // console.log(instances);
         
 			});
 
