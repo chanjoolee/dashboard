@@ -447,24 +447,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
             if (this.state.required && (this.state.value == "" || this.state.value == null)  ){
                 state = false;
                 var v_msg = "Please input " + this.state.label;
-                // $("#dialog-confirm").html(v_msg);
-                // $("#dialog-confirm").dialog({
-                //     resizable: false,
-                //     modal: true,
-                //     title: "Error",
-                //     //height: 200,
-                //     width: 300,
-                //     dialogClass: 'no-close',
-                //     closeOnEscape: false,
-                //     buttons: [
-                //         {
-                //             text: "OK",
-                //             click: function() {
-                //                 $( this ).dialog( "close" );											                    			                  
-                //             }
-                //         }
-                //     ]
-                // });
+                $("#modal-alert").attr("target-id", _this.instance.containerId);
                 $("#modal-alert").find("p").text(v_msg);
                 $("#modal-alert").modal();
             }
@@ -748,14 +731,6 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                 ,addfunc: function(){
                     // commonFunc.fn_view_detail.call(this,'add');
                     var filter = {};
-                    // var parentRowKey = grid.jqGrid('getGridParam','selrow');
-                    // var row = grid.getRowData(parentRowKey);
-                    // $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                    //     let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-                    //     if(vId != null){
-                    //         filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
-                    //     }
-                    // });
                     var instanceOption = {
                         modal : true,
                         caller : gridParam.htmlMaker.instance ,
@@ -769,8 +744,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     var parentRowKey = grid.jqGrid('getGridParam','selrow');
                     var row = grid.getRowData(parentRowKey);
                     $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-                        if(vId != null){
+                        if(prop.isKey){
                             filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
                         }
                     });
@@ -785,8 +759,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     var parentRowKey = grid.jqGrid('getGridParam','selrow');
                     var row = grid.getRowData(parentRowKey);
                     $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-                        if(vId != null){
+                        if(prop.isKey){
                             filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
                         }
                     });
@@ -838,7 +811,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                                 $("#modal-success").modal();
                             }else{
                                 state = false;
-                                $("#modal-alert").attr("target-id", _this.containerId);
+                                $("#modal-alert").attr("target-id", _this.instance.containerId);
                                 $("#modal-alert").find("p").text(response1.message);
                                 $("#modal-alert").modal();
                             }
@@ -897,14 +870,14 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     var filter = {};
                     var parentRowKey = grid.jqGrid('getGridParam','selrow');
                     if (parentRowKey == null ){
+                        $("#modal-alert").attr("target-id", _this.instance.containerId);
                         $("#modal-alert").find("p").text("Please, select row");
                         $("#modal-alert").modal();
                         return;
                     }
                     var row = grid.getRowData(parentRowKey);
                     $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-                        if(vId != null){
+                        if(prop.isKey){
                             filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
                         }
                     });

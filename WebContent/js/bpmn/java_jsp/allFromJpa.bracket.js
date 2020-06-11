@@ -1047,7 +1047,7 @@ JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
         foreignEntities : [] ,  // { id:'xxx' , referenceId : 'xxx' }
         childEntities : [] , // { id:'xxx' , referenceId : 'xxx' }
         schema : {},
-        gridProperties : [].concat( _this.objectToDocObject(entity.properties) ) , // for coonbinient
+        gridProperties : [].concat( _this.entityPropsToObject(entity.properties) ) , // for coonbinient
         sqlGenerator : {},
         // sources : [] ,
         dataSources : [] ,
@@ -1193,7 +1193,7 @@ JpaAllGeneratorBracket.prototype.fn_get_top_parent = function( _parentInfo ){
     $.each(_this.Model.ownedEntities, function (i , entity) {
         if (entity.references == undefined)
             return true;
-        reference = _.find([].concat(entity.references), { _referencedEntity: _parentInfo.entity["_xmi:id"] });
+        reference = _.find([].concat(entity.references), { _referencedEntity: _parentInfo.entityId });
         if ( reference != null){
             parent_columns_detail = _.find([].concat(reference.eAnnotations.details), { "_key": "parent_columns" });
             child_columns_detail = _.find(reference.eAnnotations.details, { "_key": "child_columns" });
@@ -1201,11 +1201,11 @@ JpaAllGeneratorBracket.prototype.fn_get_top_parent = function( _parentInfo ){
             if (index > -1 ){
                 var parentColumnName = parent_columns_detail["_value"].split(",")[index];                
                 parentInfo = {
-                    "entity": entity ,
+                    "entityId": entity["_xmi:id"] ,
                     "columnName" : parentColumnName ,
                     "nameColumn" : parentColumnName ,
                     "columnNames" : parent_columns_detail["_value"].split(",") ,
-                    "reference" : reference
+                    "referenceId" : reference["_xmi:id"]
                 }
                 var parent_column_prop = _.find([].concat(entity.properties), {"_name": parentColumnName });
                 var name_column = _.find([].concat(parent_column_prop.eAnnotations.details),{"_key":"name_column"});   
@@ -1240,7 +1240,7 @@ JpaAllGeneratorBracket.prototype.fn_get_parent = function( _parentInfo ){
     $.each(_this.Model.ownedEntities, function (i , entity) {
         if (entity.references == undefined)
             return true;
-        reference = _.find([].concat(entity.references), { _referencedEntity: _parentInfo.entity["_xmi:id"] });
+        reference = _.find([].concat(entity.references), { _referencedEntity: _parentInfo.entityId });
         if ( reference != null){
             parent_columns_detail = _.find([].concat(reference.eAnnotations.details), { "_key": "parent_columns" });
             child_columns_detail = _.find(reference.eAnnotations.details, { "_key": "child_columns" });
@@ -1248,12 +1248,12 @@ JpaAllGeneratorBracket.prototype.fn_get_parent = function( _parentInfo ){
             if (index > -1 ){
                 var parentColumnName = parent_columns_detail["_value"].split(",")[index];                
                 parentInfo = {
-                    "entity": entity ,
+                    "entityId": entity["_xmi:id"] ,
                     "columnName" : parentColumnName ,
                     "nameColumn" : parentColumnName ,
                     "columnNames" : parent_columns_detail["_value"].split(",") ,
                     "childColumnNames" : child_columns_detail["_value"].split(",") ,
-                    "reference" : reference
+                    "referenceId" : reference["_xmi:id"]
                 }
                 var parent_column_prop = _.find([].concat(entity.properties), {"_name": parentColumnName });
                 var name_column = _.find([].concat(parent_column_prop.eAnnotations.details),{"_key":"name_column"});   
@@ -1644,17 +1644,18 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree1 = function(child_colum
     // For name columns
     var vKeys = _.map(parent_columns, function(col, i){
         var paramForTopParent1 = { 
-            "entity": parent , 
+            "entityId": parent["_xmi:id"] , 
             "columnName": col
         };
         var topParent = _this.fn_get_top_parent(paramForTopParent1);
+        var topParentEntity = _.find([].concat(_this.Model.ownedEntities),{"_xmi:id": topParent.entityId} );
         if (paramForTopParent1 != topParent){
             var rtnObj =  {
                 codeColumn: col,
                 nameColumn: col,
-                "topParent" : topParent
+                "topParent" : topParent.entityId
             };
-            var column_prop  = _.find([].concat( topParent.entity.properties ), {"_name": topParent.columnName });
+            var column_prop  = _.find([].concat( topParentEntity.properties ), {"_name": topParent.columnName });
             var name_column = _.find([].concat(column_prop.eAnnotations.details),{"_key":"name_column"});
             if ( name_column != null )
                 rtnObj.nameColumn = name_column["_value"];
@@ -3573,35 +3574,39 @@ JpaAllGeneratorBracket.prototype.fn_datasource_by_top = function(vEntity, jpa_pr
     var _this = this;
     var hasParents = false;
     var paramForTopParent1 = { 
-        "entity": vEntity, 
+        "entityId": vEntity["_xmi:id"], 
         "columnName": jpa_prop._name
     };
     // if ( vEntity._name == "ssd_sm_result_h" && gridCol.name=="SCRIPT_NAME")
     //     debugger;
     var topParent = _this.fn_get_top_parent(paramForTopParent1);
+    var topParentEntity = _.find([].concat(_this.Model.ownedEntities),{"_xmi:id": topParent.entityId} );
     var parent = _this.fn_get_parent(paramForTopParent1);
+    var parentEntity = null;
+    if ( parent != null)
+        parentEntity = _.find([].concat(_this.Model.ownedEntities),{"_xmi:id": parent.entityId} );
     if (paramForTopParent1 != topParent)
         hasParents = true;
     if (paramForTopParent1 != topParent){
         
-        var referenceId = parent.reference["_xmi:id"];
-        var topReferenceId = topParent.reference["_xmi:id"];
-        var sqlId = topParent.entity.sqlPreFix + _.camelCase(_file.fileName) + ".datasrc." + _.camelCase(topParent.entity._name) + "." + _.camelCase(topParent.columnName) ;
+        var referenceId = parent.referenceId;
+        var topReferenceId = topParent.referenceId;
+        var sqlId = topParentEntity.sqlPreFix + _.camelCase(_file.fileName) + ".datasrc." + _.camelCase(topParentEntity._name) + "." + _.camelCase(topParent.columnName) ;
         // var dataSrc = _.find(_file.dataSources, { "referenceId": referenceId , "topRefrencedId": topReferenceId });
         var dataSrc = _.find(_file.dataSources, { "sqlId": sqlId });
         if (dataSrc == null) {
-            var sqlIdDynamic = parent.entity.sqlPreFix + _.camelCase(_file.fileName) + ".datasrc.dynamic." + _.camelCase(parent.entity._name) + "." + _.camelCase(parent.columnName) ;
+            var sqlIdDynamic = parentEntity.sqlPreFix + _.camelCase(_file.fileName) + ".datasrc.dynamic." + _.camelCase(parentEntity._name) + "." + _.camelCase(parent.columnName) ;
             dataSrc = {
                 "referenceId": referenceId,
                 "topRefrenceId" :  topReferenceId ,
-                "parentEntity" : parent.entity._name,
+                "parentEntity" : parentEntity._name,
                 "parentColumnName": parent.columnName,
                 "childColumnName": jpa_prop._name,
                 "childColumnNames": parent.childColumnNames,  
                 "parentNameColumn": parent.nameColumn,
                 "parentColumnNames": parent.columnNames,
                 
-                "topEntity" : topParent.entity._name ,
+                "topEntity" : topParentEntity._name ,
                 "topColumnName" : topParent.columnName ,
                 "topColumnNames" : topParent.columnNames ,
                 "topNameColumn" : topParent.nameColumn ,
@@ -3684,7 +3689,7 @@ JpaAllGeneratorBracket.prototype.fn_datasource_by_top = function(vEntity, jpa_pr
                     columns.push(topParent.nameColumn.toUpperCase());
                 
                 sql.contents.push("\t" + columns.join(","));
-                src = "from " + topParent.entity._name.toUpperCase();  sql.contents.push(src);
+                src = "from " + topParentEntity._name.toUpperCase();  sql.contents.push(src);
                 src = "where 1=1"; sql.contents.push(src);
                 if(topParent.columnNames.length == 1){
                 
@@ -3713,7 +3718,7 @@ JpaAllGeneratorBracket.prototype.fn_datasource_by_top = function(vEntity, jpa_pr
                     columns.push(parent.nameColumn.toUpperCase());
                 
                 sql.contents.push("\t" + columns.join(","));
-                src = "from " + parent.entity._name.toUpperCase();  sql.contents.push(src);
+                src = "from " + parentEntity._name.toUpperCase();  sql.contents.push(src);
                 src = "where 1=1"; sql.contents.push(src);
                 if(parent.columnNames.length > 1){
                     var index = _.indexOf(dataSrc.childColumnNames,dataSrc.childColumnName);
@@ -3852,7 +3857,7 @@ JpaAllGeneratorBracket.prototype.fn_set_grid_custom_item = function(_prop, _grid
  * 파일의 특정 변수를 JSP 변수객체로 만든다.
  */
 JpaAllGeneratorBracket.prototype.objectToFileScript = function(_file, object_name, jsobject){
-    _this = this;
+    var _this = this;
     var objectClone = _.cloneDeep(jsobject);
     _this.generator.fuctionToString(objectClone);
     // var object_str = JSON.stringify( objectClone, null, '\t');
@@ -3941,7 +3946,7 @@ JpaAllGeneratorBracket.prototype.objectToFileScript = function(_file, object_nam
  * 파일의 특정 변수를 JSP 변수객체로 만든다.
  */
 JpaAllGeneratorBracket.prototype.documentToScript = function(_file, object_name, _docstr){
-    _this = this;
+    var _this = this;
     
     var v_doc_object = {};
     if ( _docstr != null){
@@ -4013,7 +4018,7 @@ JpaAllGeneratorBracket.prototype.documentToScript = function(_file, object_name,
 }
 
 JpaAllGeneratorBracket.prototype.documentToObject = function(_docstr){
-    _this = this;
+    var _this = this;
     
     var v_doc_object = {};
     if ( _docstr != null){
@@ -4033,13 +4038,16 @@ JpaAllGeneratorBracket.prototype.documentToObject = function(_docstr){
 
 }
 
+
+
 /**
- * 특정 Object 중에서 _documention을 json, javascript 형식으로 바꾼다.
+ * Entiry의 Propertis 
  */
-JpaAllGeneratorBracket.prototype.objectToDocObject = function( jsobject ){
-    _this = this;
-    var objectClone = _.cloneDeep(jsobject);
+JpaAllGeneratorBracket.prototype.entityPropsToObject = function( jsobject ){
+    var _this = this;
+    var objectClone = _.cloneDeep(jsobject);    
     _this.generator.fuctionToString(objectClone);
+    _this.entityPropsAnnotationsToKey(objectClone);
     // var object_str = JSON.stringify( objectClone, null, '\t');
 
     var object_str = JSON.stringify( objectClone, function(key, value){
@@ -4060,9 +4068,41 @@ JpaAllGeneratorBracket.prototype.objectToDocObject = function( jsobject ){
             }
             return value_to;
         }
+        
         return value;
     }, '\t');
     
-    return eval(object_str);
+    var props =  eval(object_str);
+    $.each(props, function(i,prop){
+        if (prop._documentation == null){
+            prop._documentation = {};
+        }
+    });
+    return props;
    
+}
+
+JpaAllGeneratorBracket.prototype.entityPropsAnnotationsToKey = function(jsobject){
+    var _this = this;
+    var str = "";
+    $.each(jsobject,function(k,v){
+        if( v == null || v == undefined)
+            return true;
+
+        if(k == "eAnnotations"){
+           delete jsobject[k];
+           return true;
+        }else if(k == "annotations"){
+            let vId = _.find( _.isArray(v)?v:[v] , { "_xsi:type": "gmmjpa:Id" });
+            if (vId != null) {
+                jsobject['isKey'] = true;
+            }
+            delete jsobject[k];
+        }else if(typeof(v) ==  "object"){
+            _this.entityPropsAnnotationsToKey(v);
+        }
+        
+    });
+    
+
 }

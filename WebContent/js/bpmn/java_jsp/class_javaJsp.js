@@ -537,8 +537,8 @@ Generator.prototype.findAllByElName = function(items, findJson){
 }
 
 Generator.prototype.fuctionToString = function(jsobject){
-    _this = this;
-    var str = ""
+    var _this = this;
+    var str = "";
     $.each(jsobject,function(k,v){
         if( v == null || v == undefined)
             return true;

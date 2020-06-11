@@ -134,8 +134,7 @@ genInstanceCopy.prototype.makeSchema = function(){
 
     var vKeys = [];
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){
-        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-        if (vId != null){
+        if (prop.isKey){
             vKeys.push(prop._name.toUpperCase());
         }
     });
@@ -165,8 +164,7 @@ genInstanceCopy.prototype.makeSchema = function(){
                     orderby : i ,
                     editable : true
                 };
-                let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-                if (vId != null){
+                if (prop.isKey){
                     rtnObj.required = true;
                 }
                 if (docObj.required){
@@ -177,7 +175,7 @@ genInstanceCopy.prototype.makeSchema = function(){
                 if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                     rtnObj.isDateTime = true;
                 }
-                var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+                var vEdit = prop._documentation['edit_tag'];
                 if(vEdit != null){
                     rtnObj.edit_tag = vEdit._value;
                 }
@@ -241,8 +239,7 @@ genInstanceCopy.prototype.makeSchema = function(){
             };
 
             // required 
-            let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-            if (vId != null){
+            if (prop.isKey){
                 rtnObj.required = true;
             }
             if (docObj.required){
@@ -253,7 +250,7 @@ genInstanceCopy.prototype.makeSchema = function(){
             if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                 rtnObj.isDateTime = true;
             }
-            var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+            var vEdit = prop._documentation['edit_tag'];
             if(vEdit != null){
                 rtnObj.edit_tag = vEdit._value;
             }
