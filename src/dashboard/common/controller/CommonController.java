@@ -112,7 +112,8 @@ public class CommonController {
 		StringWriter writer = new StringWriter();
 		t.merge(context, writer);
 		
-		response.getWriter().println(writer);		
+//		response.getWriter().println(writer);	
+		response.getWriter().print(writer);
         writer.close();
         
     }

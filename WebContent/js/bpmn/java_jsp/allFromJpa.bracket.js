@@ -1782,11 +1782,17 @@ JpaAllGeneratorBracket.prototype.fn_generate = function () {
 JpaAllGeneratorBracket.prototype.fn_generate_main_bracket = function () {
     var _this = this; 
 
+    // 하나의 파일로 몰지 않고 여러개의 파일로 나눈다.
+    var jpaFiles = [];
+    $.each( _.orderBy( _.filter( _this.files ,{editType: "general"} )  , ['entityId'],['asc']) , function( i, _file){
+        jpaFiles.push(_file.fileName  + ".js");
+    });
     var menu_src = "";
     var searchJson =  { 
         menus : _.orderBy( _.filter( _this.files ,{editType: "general"} )  , ['entityId'],['asc']) 
-        , jpaFiles : _this.Model._name + "JpaFiles." + _this.dateStr + '.js'
-        , jpaVarName : _this.Model._name + "JpaFiles"
+        , jpaFiles : ['jpaFiles.js'].concat( jpaFiles ) 
+        , jpaVarName : "jpaFiles"
+        , folder : _this.Model._name + "." + _this.dateStr
     };
     $.ajax({
         // url: "./template" ,
@@ -1829,8 +1835,8 @@ JpaAllGeneratorBracket.prototype.fn_generate_jsmodel = function() {
     // Model 
     var _this = this;
     var _model = _.cloneDeep( _this.Model );
-    var varName = _.camelCase(_this.Model._name +  '_jpa');
-    var fileName = varName + '.' + _this.dateStr + ".js";
+    var varName = 'jpa';
+    var fileName = varName + ".js";
     _this.generator.fuctionToString( _model);
     var modelStr = JSON.stringify( _model, null, '\t');
     var codes = modelStr.split('\n');
@@ -1954,6 +1960,83 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo = function() {
     // saveAs(blob, fileName );
 }
 
+JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_var = function() {
+    
+    // Model 
+    var _this = this;
+    var varName = 'jpaFiles';
+    var fileName = varName + ".js";
+    var sources = [];
+    var src = "\t\tvar " + varName + " = [];"; sources.push(src);
+    var blob = new Blob([sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
+    return {blob: blob, fileName: fileName};
+    // saveAs(blob, fileName );
+}
+
+JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_one = function( _file) {
+    
+    // Model 
+    var _this = this;
+    var _model = _.cloneDeep( _file );
+    var varName = 'jpaFiles';
+    var fileName = _file.fileName + ".js";
+    _this.generator.fuctionToString( _model);
+    var modelStr = JSON.stringify( _model, null, '\t');
+    var codes = modelStr.split('\n');
+    var src = "\t\t " + varName + ".push("; // sources.push(src);
+    var sources = [];
+    for(var i=0;i<codes.length;i++){
+        if ( i == 0 )
+            src += codes[i];
+        else
+            src = "\t\t" + codes[i];
+        // function 
+        if(src.match(/"function/)){
+            var src1 = src.replace(/"function/,"function");
+            var src2 = src1.replace(/(?<quotes>")(?<rest>,)?$/,'$2');
+            var src3 = src2.replace(/\\([\w"'])/g,function(match, p1, p2, p3, offset, string){
+                if(match == "\\r")
+                    return "\r";
+                if(match == "\\n")
+                    return "\n";
+                if(match == "\\t")
+                    return "\t";
+                if(match == "\\\"")
+                    return "\"";
+                if(match == "\\'")
+                    return "\'";
+            });
+            if(src.match(/^\t+/)){
+                var indent = src.match(/^\t+/)[0];
+                var src4 = "";
+                $.each(src3.split("\n"),function(i,str){
+                    var str1 = "";
+                    if( i > 0){
+                        str1 = indent + str;
+                    }else{
+                        str1 = str;
+                    }
+                    src4 += str1 + "\n";
+
+                });
+                src = src4;
+            }
+            else {
+                src = src3;
+            }
+        }
+        
+        // if ( i == (codes.length -1 ) ) 
+        //     src += ';';
+
+        sources.push(src);
+        
+    }
+    var src = "\t\t " + ");"; sources.push(src);
+    var blob = new Blob([sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
+    return {blob: blob, fileName: fileName};
+    // saveAs(blob, fileName );
+}
 
 /**
  * generate data source , schema
@@ -2493,6 +2576,9 @@ JpaAllGeneratorBracket.prototype.fn_fileSave = function(){
     var fQuery = zip.folder("query");
     // var fJsp = zip.folder("jsp");
     var fJavascript = zip.folder("javascript");
+    // FileInfo. 
+    var fileInfoVar = _this.fn_generate_fileinfo_var();
+    fJavascript.file(fileInfoVar.fileName , fileInfoVar.blob);
     $.each( _this.files ,function(i,file){
             
         // SQL XML
@@ -2501,20 +2587,23 @@ JpaAllGeneratorBracket.prototype.fn_fileSave = function(){
             var blob = new Blob([file.sqlGenerator.sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
             fQuery.file(file.sqlGenerator.fileName,blob);
         }
-        // JSP
+        // JSP. not used. only Main
         if( file.sources != null && file.sources.length > 0){
             var blob = new Blob([file.sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
             zip.file(file.fileName + "." + file.fileType,blob);
         }
-        
+
+        // FileInfo. 
+        var fileInfoOne = _this.fn_generate_fileinfo_one(file);
+        fJavascript.file(fileInfoOne.fileName , fileInfoOne.blob);
         
     });
     
     var jsinfo = _this.fn_generate_jsmodel();
     fJavascript.file(jsinfo.fileName , jsinfo.blob);
 
-    var fileInfo = _this.fn_generate_fileinfo();
-    fJavascript.file(fileInfo.fileName , fileInfo.blob);
+    // var fileInfo = _this.fn_generate_fileinfo();
+    // fJavascript.file(fileInfo.fileName , fileInfo.blob);
 
     zip.generateAsync({type:"blob"})
     .then(function(content) {
