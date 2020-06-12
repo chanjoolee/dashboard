@@ -1983,7 +1983,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_one = function( _file) {
     _this.generator.fuctionToString( _model);
     var modelStr = JSON.stringify( _model, null, '\t');
     var codes = modelStr.split('\n');
-    var src = "\t\t " + varName + ".push("; // sources.push(src);
+    var src = "\t\t" + varName + ".push("; // sources.push(src);
     var sources = [];
     for(var i=0;i<codes.length;i++){
         if ( i == 0 )
@@ -2026,13 +2026,13 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_one = function( _file) {
             }
         }
         
-        // if ( i == (codes.length -1 ) ) 
-        //     src += ';';
+        if ( i == (codes.length -1 ) ) 
+            src += ');';
 
         sources.push(src);
         
     }
-    var src = "\t\t " + ");"; sources.push(src);
+    // var src = "\t\t" + ");"; sources.push(src);
     var blob = new Blob([sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
     return {blob: blob, fileName: fileName};
     // saveAs(blob, fileName );

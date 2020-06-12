@@ -178,7 +178,7 @@ genInstanceAdd.prototype.makeSchema = function(){
                 if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                     rtnObj.isDateTime = true;
                 }
-                var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+                var vEdit = prop._documentation['edit_tag'];
                 if(vEdit != null){
                     rtnObj.edit_tag = vEdit._value;
                 }
@@ -254,7 +254,7 @@ genInstanceAdd.prototype.makeSchema = function(){
             if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                 rtnObj.isDateTime = true;
             }
-            var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+            var vEdit = prop._documentation['edit_tag'];
             if(vEdit != null){
                 rtnObj.edit_tag = vEdit._value;
             }
