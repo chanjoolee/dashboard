@@ -250,8 +250,6 @@ genInstance.prototype.fn_contextmenu = function(){
                 var vGridOpt = grid.getGridParam();
                 var cms = vGridOpt.colModel;
                 var cm = _.find(cms, {name: $trigger.attr("columnName")} );
-                // var models = eval(vGridOpt.modelVarName);
-                // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
                 
                 // parents
                 var hasParents = false;

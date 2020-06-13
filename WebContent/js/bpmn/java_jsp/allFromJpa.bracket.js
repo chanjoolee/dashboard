@@ -1978,6 +1978,13 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_one = function( _file) {
     // Model 
     var _this = this;
     var _model = _.cloneDeep( _file );
+
+    delete _model.foreignEntities;
+    delete _model.childEntities;
+    delete _model.entity_doc;
+    delete _model.sqlGenerator;
+
+
     var varName = 'jpaFiles';
     var fileName = _file.fileName + ".js";
     _this.generator.fuctionToString( _model);
