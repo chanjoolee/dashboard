@@ -706,214 +706,290 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                 "&paging_sqlid=" + this.sqlId+ ".page.total"
     }
 
-    opt.gridComplete = function () {
-        var grid = $(this).jqGrid();
-        var gridParam = grid.getGridParam();
-        var show_filter = true;
-        if ( gridParam.filterToolbarShow != null 
-            && gridParam.filterToolbarShow == false )
-            show_filter = false; 
-        if (show_filter){
-            grid.jqGrid('filterToolbar',
-            {
-                defaultSearch:'cn'
-                // JSON stringify all data from search, including search toolbar operators
-                ,stringResult: true
-                // instuct the grid toolbar to show the search options
-                // ,searchOperators: true
-            }
-            );
-        }
-        
-        grid.navGrid(
-            gridParam.pager ,
-            { edit: true, add: true, del: true, search: false,  refresh: true, view: true, position: "left", cloneToTop: false  
-                ,addfunc: function(){
-                    // commonFunc.fn_view_detail.call(this,'add');
-                    var filter = {};
-                    var instanceOption = {
-                        modal : true,
-                        caller : gridParam.htmlMaker.instance ,
-                        filter : filter
-                    };
-                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'add' , instanceOption );
+    // gridComplete
+    if(opt.gridComplete == null){
+        opt.gridComplete = function () {
+            var grid = $(this).jqGrid();
+            var gridParam = grid.getGridParam();
+            var show_filter = true;
+            if ( gridParam.filterToolbarShow != null 
+                && gridParam.filterToolbarShow == false )
+                show_filter = false; 
+            if (show_filter){
+                grid.jqGrid('filterToolbar',
+                {
+                    defaultSearch:'cn'
+                    // JSON stringify all data from search, including search toolbar operators
+                    ,stringResult: true
+                    // instuct the grid toolbar to show the search options
+                    // ,searchOperators: true
                 }
-                , editfunc : function(){
-                    // commonFunc.fn_view_detail.call(this,'add');
-                    var filter = {};
-                    var parentRowKey = grid.jqGrid('getGridParam','selrow');
-                    var row = grid.getRowData(parentRowKey);
-                    $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                        if(prop.isKey){
-                            filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
-                        }
-                    });
-                    var instanceOption = {
-                        modal : true,
-                        caller : gridParam.htmlMaker.instance ,
-                        filter : filter
-                    };
-                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'edit' , instanceOption );
-                }, viewfunc : function(){
-                    var filter = {};
-                    var parentRowKey = grid.jqGrid('getGridParam','selrow');
-                    var row = grid.getRowData(parentRowKey);
-                    $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                        if(prop.isKey){
-                            filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
-                        }
-                    });
-                    var instanceOption = {
-                        modal : true,
-                        caller : gridParam.htmlMaker.instance ,
-                        filter : filter
-                    };
-                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'view' , instanceOption );
-                }
-
+                );
             }
-            // options for the Edit Dialog
-            ,{  }
-            // options for the Script Master Add Dialog
-            ,{  }
-            // options for the Script Master Del Dialog 
-            ,{  
-                reloadAfterSubmit: true,
-                afterSubmit: function(response, postdata) { 
-                    //$("#refresh_grid_script").hide();
-                    // var grid = $(this);
-                    var state = true;
-                    var paramObj = {
-                        delRows : []
-                    };
-                    $.each(postdata.id.split(","),function(i,rowid){
-                        var row = grid.getRowData(rowid);
-                        paramObj.delRows.push(row);
-                    });
-                    
-                    //  
-                    paramObj.loop_id = "delRows";
-                    $.ajax({
-                        url: "./genericSaveJson.html",
-                        type: "POST",
-                        data: {
-                            searchJson: JSON.stringify(paramObj),
-                            sqlid: gridParam.sqlId + ".delete"
-                        }  , 
-                        async: false,
-                        success:  function(data){
-                            response1 = data;
-                            if(response1.result == 'success'){
-                                // gridParam.htmlMaker.instance.fn_search();
-                                msg = "Del Success!";
-                                $("#modal-success").attr("target-id", _this.instance.containerId);
-                                $("#modal-success").find("p").text(msg);
-                                $("#modal-success").modal();
-                            }else{
-                                state = false;
-                                $("#modal-alert").attr("target-id", _this.instance.containerId);
-                                $("#modal-alert").find("p").text(response1.message);
-                                $("#modal-alert").modal();
-                            }
-                            
-                        }
-                    });
-                    return [true];
-                    // //return [success,message,new_id] ;
-                    // if(response1.result == 'success'){
-                    //     //$(this).trigger('reloadGrid'); 
-                    //     return [true, response1.result, ''];
-                    // }
-                    // else
-                    //     return [false, response1.result + ":<br/>" + response1.message , ''];
-                        
-                },
-                afterShowForm: function($form) {
-                    var dialog = $form.closest('div.ui-jqdialog'),
-                    selRowId = gridParam.selrow ,
-                    selRowCoordinates = gridParam.htmlMaker.instance.form.find('#'+selRowId).offset();
-                    dialog.offset(selRowCoordinates);
-                }
-
-            }
-            ,{ 
-                multipleSearch: true,
-                multipleGroup: true
-            }
-        );
-
-
-        /******
-         * Copy 메뉴를 한번만 생성하기 위함. search를 할 때마다 gridComplete 가 실행됨.
-         */
-        var hasCopy = true;
-        var pager = $(gridParam.pager);
-        var dropmenu = $("#" + pager.find(".dropdownmenu").val() );
-        if( pager.find(".ui-pg-button[title=Copy]").length == 0 ){
-            hasCopy = false;
-        }
-        if(!hasCopy){
-            if(dropmenu.length > 0){
-                if (dropmenu.find(".g-menu-item:contains(Copy)").length > 0 ){
-                    hasCopy = true;
-                }
-            }
-        }
-        
-        if ( !hasCopy ) {
-            grid.navButtonAdd(gridParam.pager, {
-                caption : "", 
-                title: "Copy",
-                buttonicon : "fa-copy",
-                onClickButton: function(){ 
-                    // commonFunc.fn_view_detail.call(this,'add');
-                    var filter = {};
-                    var parentRowKey = grid.jqGrid('getGridParam','selrow');
-                    if (parentRowKey == null ){
-                        $("#modal-alert").attr("target-id", _this.instance.containerId);
-                        $("#modal-alert").find("p").text("Please, select row");
-                        $("#modal-alert").modal();
-                        return;
+            
+            grid.navGrid(
+                gridParam.pager ,
+                { edit: true, add: true, del: true, search: false,  refresh: true, view: true, position: "left", cloneToTop: false  
+                    ,addfunc: function(){
+                        // commonFunc.fn_view_detail.call(this,'add');
+                        var filter = {};
+                        var instanceOption = {
+                            modal : true,
+                            caller : gridParam.htmlMaker.instance ,
+                            filter : filter
+                        };
+                        gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'add' , instanceOption );
                     }
-                    var row = grid.getRowData(parentRowKey);
-                    $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
-                        if(prop.isKey){
-                            filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
-                        }
-                    });
-                    var instanceOption = {
-                        modal : true,
-                        caller : gridParam.htmlMaker.instance ,
-                        filter : filter
-                    };
-                    gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'copy' , instanceOption );
-                }, 
-                position:"last"
-            });
-            if(dropmenu.length == 0){
-                var td_cp = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Copy']")
-                var td_add = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Add new row']");
-                td_add.after(td_cp);
-            }else{
-                var li_cp = dropmenu.find(".g-menu-item:contains(Copy)").parent();
-                var li_add = dropmenu.find(".g-menu-item:contains(Add new row)").parent();
-                li_add.after(li_cp);
+                    , editfunc : function(){
+                        // commonFunc.fn_view_detail.call(this,'add');
+                        var filter = {};
+                        var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                        var row = grid.getRowData(parentRowKey);
+                        $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                            if(prop.isKey){
+                                filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                            }
+                        });
+                        var instanceOption = {
+                            modal : true,
+                            caller : gridParam.htmlMaker.instance ,
+                            filter : filter
+                        };
+                        gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'edit' , instanceOption );
+                    }, viewfunc : function(){
+                        var filter = {};
+                        var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                        var row = grid.getRowData(parentRowKey);
+                        $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                            if(prop.isKey){
+                                filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                            }
+                        });
+                        var instanceOption = {
+                            modal : true,
+                            caller : gridParam.htmlMaker.instance ,
+                            filter : filter
+                        };
+                        gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'view' , instanceOption );
+                    }
+
+                }
+                // options for the Edit Dialog
+                ,{  }
+                // options for the Script Master Add Dialog
+                ,{  }
+                // options for the Script Master Del Dialog 
+                ,{  
+                    reloadAfterSubmit: true,
+                    afterSubmit: function(response, postdata) { 
+                        //$("#refresh_grid_script").hide();
+                        // var grid = $(this);
+                        var state = true;
+                        var paramObj = {
+                            delRows : []
+                        };
+                        $.each(postdata.id.split(","),function(i,rowid){
+                            var row = grid.getRowData(rowid);
+                            paramObj.delRows.push(row);
+                        });
+                        
+                        //  
+                        paramObj.loop_id = "delRows";
+                        $.ajax({
+                            url: "./genericSaveJson.html",
+                            type: "POST",
+                            data: {
+                                searchJson: JSON.stringify(paramObj),
+                                sqlid: gridParam.sqlId + ".delete"
+                            }  , 
+                            async: false,
+                            success:  function(data){
+                                response1 = data;
+                                if(response1.result == 'success'){
+                                    // gridParam.htmlMaker.instance.fn_search();
+                                    msg = "Del Success!";
+                                    $("#modal-success").attr("target-id", _this.instance.containerId);
+                                    $("#modal-success").find("p").text(msg);
+                                    $("#modal-success").modal();
+                                }else{
+                                    state = false;
+                                    $("#modal-alert").attr("target-id", _this.instance.containerId);
+                                    $("#modal-alert").find("p").text(response1.message);
+                                    $("#modal-alert").modal();
+                                }
+                                
+                            }
+                        });
+                        return [true];
+                        // //return [success,message,new_id] ;
+                        // if(response1.result == 'success'){
+                        //     //$(this).trigger('reloadGrid'); 
+                        //     return [true, response1.result, ''];
+                        // }
+                        // else
+                        //     return [false, response1.result + ":<br/>" + response1.message , ''];
+                            
+                    },
+                    afterShowForm: function($form) {
+                        var dialog = $form.closest('div.ui-jqdialog'),
+                        selRowId = gridParam.selrow ,
+                        selRowCoordinates = gridParam.htmlMaker.instance.form.find('#'+selRowId).offset();
+                        dialog.offset(selRowCoordinates);
+                    }
+
+                }
+                ,{ 
+                    multipleSearch: true,
+                    multipleGroup: true
+                }
+            );
+
+
+            /******
+            * Copy 메뉴를 한번만 생성하기 위함. search를 할 때마다 gridComplete 가 실행됨.
+            */
+            var hasCopy = true;
+            var pager = $(gridParam.pager);
+            var dropmenu = $("#" + pager.find(".dropdownmenu").val() );
+            if( pager.find(".ui-pg-button[title=Copy]").length == 0 ){
+                hasCopy = false;
+            }
+            if(!hasCopy){
+                if(dropmenu.length > 0){
+                    if (dropmenu.find(".g-menu-item:contains(Copy)").length > 0 ){
+                        hasCopy = true;
+                    }
+                }
             }
             
+            if ( !hasCopy ) {
+                grid.navButtonAdd(gridParam.pager, {
+                    caption : "", 
+                    title: "Copy",
+                    buttonicon : "fa-copy",
+                    onClickButton: function(){ 
+                        // commonFunc.fn_view_detail.call(this,'add');
+                        var filter = {};
+                        var parentRowKey = grid.jqGrid('getGridParam','selrow');
+                        if (parentRowKey == null ){
+                            $("#modal-alert").attr("target-id", _this.instance.containerId);
+                            $("#modal-alert").find("p").text("Please, select row");
+                            $("#modal-alert").modal();
+                            return;
+                        }
+                        var row = grid.getRowData(parentRowKey);
+                        $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                            if(prop.isKey){
+                                filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                            }
+                        });
+                        var instanceOption = {
+                            modal : true,
+                            caller : gridParam.htmlMaker.instance ,
+                            filter : filter
+                        };
+                        gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'copy' , instanceOption );
+                    }, 
+                    position:"last"
+                });
+                if(dropmenu.length == 0){
+                    var td_cp = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Copy']")
+                    var td_add = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Add new row']");
+                    td_add.after(td_cp);
+                }else{
+                    var li_cp = dropmenu.find(".g-menu-item:contains(Copy)").parent();
+                    var li_add = dropmenu.find(".g-menu-item:contains(Add new row)").parent();
+                    li_add.after(li_cp);
+                }
+                
 
-        }
-        
-        // var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-        // gridBody.height( gridBody.height() + 10  );
-        var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-        gridBody.height( "100%");   
-        if( !_this.instance.option.modal ){
-            grid.setGridWidth(_this.instance.container.width());
-        }  
-        gridBody.height( gridBody.height() + 10  );       
-        
+            }
+            
+            // var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+            // gridBody.height( gridBody.height() + 10  );
+            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+            gridBody.height( "100%");   
+            if( !_this.instance.option.modal ){
+                grid.setGridWidth(_this.instance.container.width());
+            }  
+            gridBody.height( gridBody.height() + 10  );       
+            
+                
             
         
+        }
+    }
+    // onCellSelect
+    if(opt.onCellSelect == null){
+        opt.onCellSelect = function (rowId, iCol, content, event) {
+
+            var grid = $(this).jqGrid();
+            var gridParam = grid.getGridParam();
+            var row = grid.jqGrid('getRowData',rowId);
+            var cms = grid.jqGrid("getGridParam", "colModel");
+            var cm = cms[iCol];
+            var vGridOpt  = grid.getGridParam();
+
+            var oFrm = _this.instance.form;
+            var v_property = _.find(vGridOpt.gridProperties, { _name : cm.name.toLowerCase() });
+            
+            //customize
+            var somCondition = ( v_property != null && 
+                v_property._documentation != null &&
+                v_property._documentation.file_info != null );
+
+            if ( somCondition ){
+                var path_column = v_property._documentation.file_info.path_column ;
+                var path = '.'+ row[path_column] ;
+                if((/\.(txt|config|pdf|jpg|jpeg|gif|png|log)$/i).test(path)){
+                    var newWin1 = window.open("", "filedownload", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
+                    
+                    oFrm.action =  path;
+                    oFrm.method = "post";
+                    oFrm.target = 'filedownload'; 
+                    oFrm.submit();		
+                    newWin1.focus();
+                }else if(row[cm.name].match(/\.([\w]+)$/i) != null){
+                    //var src = "/dashboard/filedownloadJson.html";
+                    //src += "?filename=" + row.FILE_NAME;
+                    //src +="&path=" + row.FILE_PATH;
+                    //document.getElementById('file_iframe').src =  src;
+                    
+                    var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+                    if (isIE){
+                        //var fileData = ['\ufeff' + "." + row.FILE_PATH];
+                        //var blobObject = new Blob(fileData);
+                        //window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
+                        var link = document.createElement('a');
+                        // customize for same path and name ==> formalize 
+                        var value_split = row[cm.name].split("/");
+                        var return_text = value_split.pop();
+                        // link.download = row[cm.name];
+                        link.download = return_text;
+                        link.href = "." + row[path_column] ;
+                        //Firefox requires the link to be in the body
+                        document.body.appendChild(link);
+                        link.click();
+                        link.target = '_blank';
+                        document.body.removeChild(link);
+
+                    }else{
+                        var link = document.createElement('a');
+                        // customize for same path and name ==> formalize 
+                        var value_split = row[cm.name].split("/");
+                        var return_text = value_split.pop();
+                        // link.download = row[cm.name];
+                        link.download = return_text;
+                        link.href = "." + row[path_column] ;
+                        //Firefox requires the link to be in the body
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                                                            
+                }
+            }
+        }
     }
     opt.height = "100%";
     mainControl.jqGrid(opt);

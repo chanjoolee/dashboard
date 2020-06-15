@@ -176,276 +176,7 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                 multiSort: true ,
                 rowNum: 20,
                 rowList:[5,10,15,20,30],
-                emptyrecords: "No records to view",
-                gridComplete: function () {
-                    var grid = $(this).jqGrid();
-                    var gridParam = grid.getGridParam();
-                    var show_filter = true;
-                    if ( gridParam.filterToolbarShow != null 
-                        && gridParam.filterToolbarShow == false )
-                        show_filter = false; 
-                    if (show_filter){
-                        grid.jqGrid('filterToolbar',
-                        {
-                            defaultSearch:'cn'
-                            // JSON stringify all data from search, including search toolbar operators
-                            ,stringResult: true
-                            // instuct the grid toolbar to show the search options
-                            // ,searchOperators: true
-                        }
-                        );
-                    }
-                    
-                    
-                    grid.navGrid(gridParam.pager ,
-                        // the buttons to appear on the toolbar of the grid
-                        { edit: true, add: true, del: true, search: false,  refresh: true, view: true, position: "left", cloneToTop: false  
-                            ,addfunc: function(){
-                                commonFunc.fn_view_detail.call(this,'add');
-                            }
-                            , editfunc : function(){
-                                commonFunc.fn_view_detail.call(this,'edit');
-                            }, viewfunc : function(){
-                                commonFunc.fn_view_detail.call(this,'view');
-                            }
-
-                        }
-                        // options for the Edit Dialog
-                        ,{  }
-                        // options for the Script Master Add Dialog
-                        
-                        ,{	
-                            addCaption: "Add Script Master",
-                            modal:true,
-                            recreateForm: true,
-                            closeAfterAdd: true,
-                            reloadAfterSubmit: true,
-                            //template: template,
-                            errorTextFormat: function (data) {
-                                return 'Error: ' + data.responseText
-                            },
-                            onInitializeForm : function(formid){
-                                $(formid).attr('method','POST');
-                                $(formid).attr('action','');
-                                $(formid).attr('enctype','multipart/form-data');
-                                $(formid).css("font-size","14px");
-                                
-                            },
-                            afterSubmit: function(response, postdata) 
-                            { 
-                                var grid = $(this).jqGrid();
-                                var gridParam = grid.getGridParam();
-                                var formdata = this.ownerDocument.FormPost;
-                                var fd = new FormData(formdata);  	
-                                var response1 = {};
-                                
-                                $.ajax({
-                                    url: "./genericSaveJson.html?sqlid=" + gridParam.sqlId + ".insert",
-                                    type: "POST",
-                                    data: fd, 
-                                    async: false,
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
-                                    success:  function(data){
-                                        response1 = data;
-                                        if(response1.result == 'success'){
-                                            // Cumtomise...
-                                        }
-                                        
-                                    }
-                                });
-                                
-                                //return [success,message,new_id] ;
-                                if(response1.result == 'success'){
-                                    //$(this).trigger('reloadGrid'); 
-                                    return [true, response1.result, ''];
-                                }
-                                else
-                                    return [false, response1.result + ":<br/>" + response1.message , ''];
-                                    
-                            }                         
-                        }
-                        // options for the Script Master Del Dialog 
-                        ,{  
-                            reloadAfterSubmit: true,
-                            afterSubmit: function(response, postdata) { 
-                                //$("#refresh_grid_script").hide();
-                                var grid = $(this);
-                                var paramObj = {
-                                    delRows : []
-                                };
-                                $.each(postdata.id.split(","),function(i,rowid){
-                                    var row = grid.getRowData(rowid);
-                                    paramObj.delRows.push(row);
-                                });
-                                
-                                //  
-                                paramObj.loop_id = "delRows";
-                                $.ajax({
-                                    url: "./genericSaveJson.html",
-                                    type: "POST",
-                                    data: {
-                                        searchJson: JSON.stringify(paramObj),
-                                        sqlid: "$sqlId.delete"
-                                    }  , 
-                                    async: false,
-                                    success:  function(data){
-                                        response1 = data;
-                                        if(response1.result == 'success'){
-                                        
-                                            msg = "Del Success!";
-                                            $("#dialog-confirm").html(msg);
-                                            $("#dialog-confirm").dialog({
-                                                resizable: false,
-                                                modal: true,
-                                                title: "Success",
-                                                //height: 200,
-                                                width: 200,
-                                                dialogClass: 'no-close',
-                                                closeOnEscape: false,
-                                                buttons: [
-                                                    {
-                                                        text: "OK",
-                                                        click: function() {
-                                                            $( this ).dialog( "close" );		
-                                                            // fn_search_script();
-                                                        }
-                                                    }
-                                                ]
-                                            });
-                                        }
-                                        
-                                    }
-                                });
-                                
-                                //return [success,message,new_id] ;
-                                if(response1.result == 'success'){
-                                    //$(this).trigger('reloadGrid'); 
-                                    return [true, response1.result, ''];
-                                }
-                                else
-                                    return [false, response1.result + ":<br/>" + response1.message , ''];
-                                    
-                            }
-                        }
-                        ,{ 
-                            multipleSearch: true,
-                            multipleGroup: true
-                        }
-                        
-                    );
-                    if ($(gridParam.pager).find(".ui-pg-button[title=Copy]").length == 0 && true) {
-                        grid.navButtonAdd(gridParam.pager, {
-                            caption : "", 
-                            title: "Copy",
-                            buttonicon : "fa-copy",
-                            onClickButton: function(){ 
-                                var theGrid = $(this).jqGrid();
-                                var parentRowKey = theGrid.jqGrid('getGridParam','selrow');
-                                if ( parentRowKey == null )   {
-                                    $("#dialog-confirm").html("Please, select row");
-                                    $("#dialog-confirm").dialog({
-                                        resizable: false,
-                                        modal: true,
-                                        title: "Error",
-                                        //height: 200,
-                                        width: 300,
-                                        dialogClass: 'no-close',
-                                        closeOnEscape: false,
-                                        buttons: [
-                                            {
-                                                text: "OK",
-                                                click: function() {
-                                                    $( this ).dialog( "close" );											                    			                  
-                                                }
-                                            }
-                                        ]
-                                    });
-                                    return;
-                                }
-                                commonFunc.fn_view_detail.call(this,'copy');
-                                // alert("Deleting Row");
-                            }, 
-                            position:"last"
-                        });
-                        var td_cp = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Copy']")
-                        var td_add = $(gridParam.pager).find(".ui-pg-table .ui-pg-button[title='Add new row']");
-                        td_add.after(td_cp);
-
-
-                    }
-                } ,
-                onCellSelect: function (rowId, iCol, content, event) {
-
-                    var grid = $(this).jqGrid();
-                    var row = grid.jqGrid('getRowData',rowId);
-                    var cms = grid.jqGrid("getGridParam", "colModel");
-                    var cm = cms[iCol];
-                    var vGridOpt  = grid.getGridParam();
-
-                    var oFrm = document.getElementById("form1");
-                    var v_property = _.find(vGridOpt.gridProperties, { _name : cm.name.toLowerCase() });
-                    
-                    //customize
-                    var somCondition = ( v_property != null && 
-                        v_property._documentation != null &&
-                        v_property._documentation.file_info != null );
-
-                    if ( somCondition ){
-                        var path_column = v_property._documentation.file_info.path_column ;
-                        var path = '.'+ row[path_column] ;
-                        if((/\.(txt|config|pdf|jpg|jpeg|gif|png|log)$/i).test(path)){
-                            var newWin1 = window.open("", "filedownload", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
-                            
-                            oFrm.action =  path;
-                            oFrm.method = "post";
-                            oFrm.target = 'filedownload'; 
-                            oFrm.submit();		
-                            newWin1.focus();
-                        }else if(row[cm.name].match(/\.([\w]+)$/i) != null){
-                            //var src = "/dashboard/filedownloadJson.html";
-                            //src += "?filename=" + row.FILE_NAME;
-                            //src +="&path=" + row.FILE_PATH;
-                            //document.getElementById('file_iframe').src =  src;
-                            
-                            var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
-                            if (isIE){
-                                //var fileData = ['\ufeff' + "." + row.FILE_PATH];
-                                //var blobObject = new Blob(fileData);
-                                //window.navigator.msSaveOrOpenBlob(blobObject, row.FILE_NAME);
-                                var link = document.createElement('a');
-                                // customize for same path and name ==> formalize 
-                                var value_split = row[cm.name].split("/");
-                                var return_text = value_split.pop();
-                                // link.download = row[cm.name];
-                                link.download = return_text;
-                                link.href = "." + row[path_column] ;
-                                //Firefox requires the link to be in the body
-                                document.body.appendChild(link);
-                                link.click();
-                                link.target = '_blank';
-                                document.body.removeChild(link);
-
-                            }else{
-                                var link = document.createElement('a');
-                                // customize for same path and name ==> formalize 
-                                var value_split = row[cm.name].split("/");
-                                var return_text = value_split.pop();
-                                // link.download = row[cm.name];
-                                link.download = return_text;
-                                link.href = "." + row[path_column] ;
-                                //Firefox requires the link to be in the body
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            }
-                                                                    
-                        }
-                    }
-                }
-
-                
+                emptyrecords: "No records to view"
             }
             
 
@@ -1053,90 +784,7 @@ JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
         dataSources : [] ,
         childReferences : [] ,
         dictionaries : [] ,
-        jstreeInfo : { 
-            idList: [] ,
-            search: function(){
-                var _this = this;
-                if (_this.idList.length == 0)
-                    return;
-                if($("#filterPop").val() != "" ){
-                    return;
-                }
-                var selJsTree3 = [];
-                $.each(_this.idList, function(i,vJsTreeId){
-                    // 만약 Child Pop 인 경우, jstree가 없으므로 넘어간다.
-                    var $jsTree = $("#" + vJsTreeId );
-                    if ($jsTree.length == 0)
-                        return true;
-                    
-                    var vJsTree = $("#" + vJsTreeId ).jstree(true);
-                    // var selJsTree = _.filter(vJsTree._model.data , {state : {selected: true } });
-                    var selJsTree = _.filter(vJsTree._model.data , function( data ){
-                        // if (data.id == "#")
-                        // 	return false;
-                        if (data['original'] == null || data.original["field"] == null)
-                            return false;
-                        if ( data.state.selected == null ) 
-                            return false;
-                        var vSelected = data.state.selected;
-                        if ( vSelected)
-                            return true;
-                        $.each(vJsTree.get_node(data.id).children_d, function(i, nodeId){
-                            var vNode = vJsTree.get_node(nodeId);
-                            if ( vNode.state.selected) {
-                                vSelected = true;
-                                return false;
-                            }
-                        });
-                        // if ( vJsTree.get_bottom_checked(data.id).length > 0 )
-                        // 	return true;
-
-                        return vSelected;
-
-                    });
-                    var selJsTree1 = _.map(selJsTree, function(data, i){
-                        var obj = {};
-
-                        // // Customize if field is different with Original field
-                        // var _datas = data.id.split(";;;");
-                        // var _col = _datas[1];
-                        // if ( _col != null && data.original.field != 'GUBUN' ){
-                        //     var _cols = _col.split("/");
-                        //     var textIndex = _.findIndex(_datas.slice(2), function(o) { return o == data.text; });
-                        //     var keyIndex   = textIndex - 0;
-                        //     var _field = _cols[keyIndex];
-                        //     if ( _field == null) 
-                        //         debugger;
-                        //     var _field1 = decamelize(_field,'_')
-                        //     obj[ _field1.toUpperCase() ] = data.text; 
-                        // }else{
-                        //     // obj[_.camelCase(data.original.field)] = data.text;
-                        //     obj[ data.original.field] = data.text;
-                        // }
-                        obj[ data.original.field] = data.original.value;
-
-                        return obj;
-
-                    });
-                    var selJsTree2 = serializeArrayJSON(selJsTree1);
-                    
-                    $.each(selJsTree2, function(field, data){
-                        var obj = {
-                            field : field ,
-                            // value: [].concat(data)
-                            value: data , 
-                            isArray : _.isArray(data)
-                        };
-                        selJsTree3.push( obj );
-                    });
-                    
-                });
-                $("#searchJson").val(JSON.stringify({fields: selJsTree3}));
-                // var parameter = $("#form").serializeFormJSON();
-                // var removedList = _.remove(selJsTree3,{field:'GUBUN'} );
-            }
-
-        },
+       
         entity_doc : entity._documentation ,
         entity_doc_obj : v_entity_doc_obj ,
         entity_sql_prefix : entity.sqlPreFix,
@@ -1464,7 +1112,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search = function ( _file) {
         }else if ( child_columns.length > 1 ) {
             // multiCombo jstree
             // schemaNew = _this.fn_schema_search_jstree(schemaNew, schemaClone, i, schemaVertical, child_columns, parent, reference, vEntity, parent_columns, _file, parentDef);
-            _this.fn_schema_search_jstree1(child_columns,parent_columns, vEntity, parent, reference, parentDef , _file, schema);
+            _this.fn_schema_search_jstree(child_columns,parent_columns, vEntity, parent, reference, parentDef , _file, schema);
             
         }
     });
@@ -1568,66 +1216,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_combo = function(child_columns
     });
 }
 
-JpaAllGeneratorBracket.prototype.fn_schema_search_jstree = function(schemaNew, schemaClone, i, schemaVertical, child_columns, parent, reference, vEntity, parent_columns, _file, parentDef) {
-    var _this = this;
-    schemaNew = _.cloneDeep(schemaClone);
-    schemaNew.id = "searchHorizontalLayout_0" + i;
-    schemaNew.name = "searchHorizontalLayout_0" + i;
-    schemaVertical.elements.push(schemaNew);
-    var obj_txt = {
-        type: "SearchHeader",
-        id: child_columns.join("_") + '_SearchHeader',
-        name: child_columns.join("_") + '_SearchHeader',
-        label: '',
-        text: _.map(child_columns, function (col, i) {
-            return _.capitalize(col);
-        }).join(" ")
-    };
-    var obj_tree = {
-        type: 'jsTreeSearch',
-        id: child_columns.join("_") + '_jsTreeSearch',
-        name: child_columns.join("_") + '_jsTreeSearch',
-        label: _.camelCase(parent._name) + 'Tree Search',
-        text: ' ',
-        // width: '200px',
-        keys: _.map(child_columns, function (col, i) { return col.toUpperCase(); }),
-        rootText: 'Select ' + _.map(child_columns, function (col, i) { return _.camelCase(col); }).join("/"),
-        referenceId: reference._id,
-        // relationColumns: { "parent_columns": parent_columns, "child_columns": child_columns },
-        relation: {
-            parentEntityName: parent._name,
-            childEntityName: vEntity._name,
-            columns: _.map(parent_columns, function (pcol, i) {
-                return {
-                    parentColumn: pcol,
-                    childColumn: child_columns[i],
-                    index: i
-                };
-            })
-        },
-        events: {
-            "changed.jstree": function (e, data) {
-                if (data.event != null) {
-                    // fn_search();
-                    e.target.htmlMaker.instance.fn_search();
-                }
-            },
-            "loaded.jstree": function (e, data) {
-                // getGridData();
-            }
-        }
-    };
-    _file.jstreeInfo.idList.push(child_columns.join("_") + '_jsTreeSearch');
-    if (parentDef["schemas"] == undefined)
-        parentDef["schemas"] = [];
-    parentDef.schemas.push(obj_tree);
-    _this.sqlSelectJsTree(_file, parent, obj_tree);
-    schemaNew.elements.push(obj_txt);
-    schemaNew.elements.push(obj_tree);
-    return schemaNew;
-}
-
-JpaAllGeneratorBracket.prototype.fn_schema_search_jstree1 = function(child_columns, parent_columns, vEntity,  parent,reference, parentDef, _file, schema) {
+JpaAllGeneratorBracket.prototype.fn_schema_search_jstree = function(child_columns, parent_columns, vEntity,  parent,reference, parentDef, _file, schema) {
     var _this = this;
     var obj_txt = {
         type: "SearchHeader",
@@ -1711,7 +1300,6 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree1 = function(child_colum
             }
         }
     };
-    _file.jstreeInfo.idList.push(child_columns.join("_") + '_jsTreeSearch');
     if (parentDef["schemas"] == undefined)
         parentDef["schemas"] = [];
     parentDef.schemas.push(obj_tree);
@@ -2060,10 +1648,6 @@ JpaAllGeneratorBracket.prototype.fn_generate_script_schema = function( _file){
     
     // childReferences
     _this.objectToFileScript(_file, 'childReferences', _file.childReferences);
-
-    // jstree search
-    _this.objectToFileScript(_file, 'jstreeInfo', _file.jstreeInfo);
-    
 
     // gridProperties
     _this.objectToFileScript(_file, 'gridProperties', _file.gridProperties);
@@ -2534,21 +2118,6 @@ JpaAllGeneratorBracket.prototype.fn_generate_content_contextmenu = function ( _f
     var src = '\t\t\t\t' + ');'; _file.sources.push(src);
 
 
-}
-
-JpaAllGeneratorBracket.prototype.fn_generate_make_search = function( _file ){
-    var _this = this;
-    if( _file.jstreeInfo.idList.length > 0){
-        var src = "\t\t\t\t" + "jstreeInfo.search();" ; _file.sources.push(src);
-    }
-    $.each(_file.schema, function(schemaName,schema){
-        var gridSchema = _this.generator.findAllByElName(schema , { type: 'grid' } );
-        if (gridSchema != null){
-            var src = "\t\t\t\t" + "var theGrid = $(\"#" + gridSchema.id + "\").jqGrid();" ; _file.sources.push(src);
-            var src = "\t\t\t\t" + "theGrid.trigger('reloadGrid',[{page:1}]);" ; _file.sources.push(src);
-        }
-        
-    }) ;
 }
 
 JpaAllGeneratorBracket.prototype.fn_generate_container = function( _file ){
@@ -4129,7 +3698,9 @@ JpaAllGeneratorBracket.prototype.documentToObject = function(_docstr){
             });
         }
     }
-    
+    if (v_doc_object.customFunc == null){
+        v_doc_object.customFunc = {};
+    }
     return v_doc_object;
 
 }
@@ -4173,6 +3744,7 @@ JpaAllGeneratorBracket.prototype.entityPropsToObject = function( jsobject ){
         if (prop._documentation == null){
             prop._documentation = {};
         }
+        delete prop["_xmi:id"];
     });
     return props;
    
