@@ -4448,8 +4448,10 @@ function filterAllByElName(items ,findJson) {
         else{
 	
 			$.each(items,function(j,item){
-				if(j == "parentSchema")
+				if ( _.includes(['parentSchema','parentContainer','list_instance','parent_instance'],j)){
 					return true;
+				}
+					
 				if(item != null){
 					found = filterAllByElName(item ,findJson);
 					if (found.length) {

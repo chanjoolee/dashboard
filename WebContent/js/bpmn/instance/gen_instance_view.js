@@ -4,6 +4,7 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
     this.entityId = _entityId;
     this.type = _type;
     this.list_instance = _list_instance;
+    this.sub_instance = [];
 
     var today = new Date();
     var y = today.getFullYear();
@@ -31,7 +32,7 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
     // make form 
     var formTemplate = `
         <form name="form" id="form" class="">
-        <input type="hidden" id="searchJson" name="searchJson" value='{}'/>
+        <input type="hidden" name="searchJson" value='{}'/>
         </form>
     `;
     this.formId = this.containerId + "_form";    
@@ -66,14 +67,16 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
 
         // inintial search
         var v_filters = [];        
-        this.form.find("#searchJson").val(JSON.stringify({fields: v_filters}));
+        this.form.find("[name=searchJson]").val(JSON.stringify({fields: v_filters}));
 
         // modalId
         this.modalClone.attr("id", this.containerId );
         this.modalClone.attr("name", "infiniteLogModal" + this.containerId );
         this.container = this.modalClone.find(".modal-body");        
         
-        this.list_instance.container.append(this.modalClone);
+        // this.list_instance.container.append(this.modalClone);
+        // document.body.append(this.modalClone);
+        $("#pagebody .br-section-wrapper").append(this.modalClone);
 
         // modal
         setTimeout( function(){
@@ -87,6 +90,21 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
         this.container = $("<div/>",{id:  this.containerId });
         this.list_instance.container.append(this.container);
     }
+
+    // show title
+    if(this.option != null && this.option.showLabel){
+        var templateTitle = `
+        <h3 class="tx-inverse fa fa-dot-circle-o" style="margin-top: 20px;">edit title</h3>
+        `;
+        var vTitle = $(templateTitle);
+        var strTitle = _.camelCase(this.jpaFile.entityId);
+        if(this.jpaFile.entity_doc_obj.label != null){
+            strTitle = this.jpaFile.entity_doc_obj.label;
+        }
+        vTitle.text(strTitle);
+        this.container.append(vTitle);
+    }
+
     this.container.append(this.form);
     
     this.searchContainer = null;
@@ -94,7 +112,8 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
     this.data = {};
     this.schema = {};
     this.makeSchema();
-    this.makeContent();  
+    this.makeContent();
+    this.fn_subview();
 
     $("#loader").hide();
 
@@ -103,7 +122,7 @@ function genInstanceView(_entityId, _type,  _list_instance , _option ){
 
 genInstanceView.prototype.makeContent = function(){
     var _this = this;
-    var contentContainer = $("<div/>",{id: this.gridCotainerId});
+    var contentContainer = $("<div/>",{id: this.gridContainerId});
     this.contentContainer = contentContainer;
     this.form.append(contentContainer);
     var makehtml = new makeHtmlBySchema( this.contentContainer , _this.schema , this );
@@ -116,8 +135,7 @@ genInstanceView.prototype.makeSchema = function(){
 
     var vKeys = [];
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){
-        let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-        if (vId != null){
+        if (prop.isKey){
             vKeys.push(prop._name.toUpperCase());
         }
     });
@@ -147,8 +165,7 @@ genInstanceView.prototype.makeSchema = function(){
                     orderby : i ,
                     editable : true
                 };
-                let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-                if (vId != null){
+                if (prop.isKey){
                     rtnObj.required = true;
                 }
                 if (docObj.required){
@@ -159,7 +176,7 @@ genInstanceView.prototype.makeSchema = function(){
                 if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                     rtnObj.isDateTime = true;
                 }
-                var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+                var vEdit = prop._documentation['edit_tag'];
                 if(vEdit != null){
                     rtnObj.edit_tag = vEdit._value;
                 }
@@ -223,8 +240,7 @@ genInstanceView.prototype.makeSchema = function(){
             };
 
             // required 
-            let vId = _.find( _.isArray(prop.annotations)?prop.annotations:[prop.annotations] ,{"_xsi:type" : "gmmjpa:Id"});
-            if (vId != null){
+            if (prop.isKey){
                 rtnObj.required = true;
             }
             if (docObj.required){
@@ -235,7 +251,7 @@ genInstanceView.prototype.makeSchema = function(){
             if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
                 rtnObj.isDateTime = true;
             }
-            var vEdit = _.find(prop.eAnnotations.details,{"_key":"edit_tag"});
+            var vEdit = prop._documentation['edit_tag'];
             if(vEdit != null){
                 rtnObj.edit_tag = vEdit._value;
             }
@@ -385,6 +401,7 @@ genInstanceView.prototype.makeSchema = function(){
                     response1 = data;
                     if(response1.result != 'success'){
                         state = false;
+                        $("#modal-alert").attr("target-id", _this.containerId);
                         $("#modal-alert").find("p").text(response1.message);
                         $("#modal-alert").modal();
                     }
@@ -406,6 +423,7 @@ genInstanceView.prototype.makeSchema = function(){
             });
             
             var msg = "Save Success!";
+            $("#modal-success").attr("target-id", _this.containerId);
             $("#modal-success").find("p").text(msg);
             $("#modal-success").modal();
         }
@@ -455,4 +473,27 @@ genInstanceView.prototype.fn_getData = function(){
     var _this = this;
     var selected_id = _this.grid.jqGrid('getGridParam','selrow');
     _this.data = _this.grid.getRowData(selected_id);
+}
+
+genInstanceView.prototype.fn_subview = function(){
+    var _this = this;
+    if( _this.jpaFile.entity_doc_obj != null && _this.jpaFile.entity_doc_obj.show_sub_pages){
+        _this.sub_container = $("<div/>",{id: _this.containerId + "_subcontainer"});
+        _this.container.append(_this.sub_container);
+        _this.sub_instance = {
+            parent_instance : _this,
+            list : new gen_instance_list(_this.sub_container , _this.list_instance.jpaFiles )
+        };
+        var childrens = _this.jpaFile.childReferences;
+        $.each(childrens , function(i,child){
+            var instanceOption = {
+                modal : false,
+                caller : _this ,
+                filter : _this.option.filter,
+                showLabel : true 
+            };
+            _this.sub_instance.list.add_instance ( child.childEntityId , 'general' , instanceOption );
+        });
+        
+    }
 }

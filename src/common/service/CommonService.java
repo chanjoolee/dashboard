@@ -387,6 +387,12 @@ public class CommonService {
 						sub_dir += "/" + filenames[0];
 					}else if (last_path.equals("javascript")) {
 						sub_dir = "/js/bpmn/gen" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						int i = -1;
+	    				i = zipFile.getName().lastIndexOf(".");
+	    				String zipFilePre = zipFile.getName().substring(0, i);
+	    				String zipFileeExt = zipFile.getName().substring(i,zipFile.getName().length());
+	    				sub_dir += "/" + zipFilePre;
 					}else {
 						sub_dir = "/WEB-INF/views/schema" ;
 						String[] filenames = zipFile.getName().split("\\.");
@@ -413,6 +419,12 @@ public class CommonService {
 						sub_dir += "/" + filenames[0];
 					}else if (last_path.equals("javascript")) {
 						sub_dir = "/js/bpmn/gen" ;
+						String[] filenames = zipFile.getName().split("\\.");
+						int i = -1;
+	    				i = zipFile.getName().lastIndexOf(".");
+	    				String zipFilePre = zipFile.getName().substring(0, i);
+	    				String zipFileeExt = zipFile.getName().substring(i,zipFile.getName().length());
+	    				sub_dir += "/" + zipFilePre;
 					}else {
 						sub_dir = "/WEB-INF/views/schema" ;
 						String[] filenames = zipFile.getName().split("\\.");
