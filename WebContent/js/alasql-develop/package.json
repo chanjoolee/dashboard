@@ -46,7 +46,7 @@
     "jison": "^0.4.17",
     "mocha": "^3.3.0",
     "mocha.parallel": "^0.15.2",
-    "mversion": "^1.10.1",
+    "mversion": "^2.0.0",
     "npm-check": "^5.2.3",
     "open": "0.0.5",
     "strftime": "^0.10.0",
