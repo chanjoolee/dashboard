@@ -1,10 +1,9 @@
-function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
+function genInstanceEdit(_entityId, _type,  _list_instance , _option ){
     
     $("#loader").show();
     this.entityId = _entityId;
     this.type = _type;
     this.list_instance = _list_instance;
-    this.sub_instance = [];
 
     var today = new Date();
     var y = today.getFullYear();
@@ -39,6 +38,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.form = $(formTemplate);
     this.form.attr("id" , this.formId);
     this.form.attr("name" , this.formId);
+    this.grid = $("#" + this.caller.gridId).jqGrid();
     
     var _this = this;
     if(this.option != null && this.option.modal){
@@ -49,16 +49,17 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         // Header        
         var headStr = '[' + _.camelCase(_this.entityId) + ' ' + _.capitalize(this.type) +  ']  ' ;
         this.modalClone.find(".modal-header h6 span").text(headStr);
-        if( this.caller.option != null &&
-            this.caller.option.filter != null){
+        if( this.option != null &&
+            this.option.filter != null){
                 var filterStrs = [];        
-                $.each(this.caller.option.filter,function(k,v){
+                $.each(this.option.filter,function(k,v){
                     var str = _.camelCase(k);
                     str += " : " + v;
                     filterStrs.push(str);
                 });
                 headStr += filterStrs.join(" , ");	
                 this.modalClone.find(".modal-header h6 span").text(headStr);
+                
 
         }												
         this.modalClone.find(".modal-header h6 span").text(headStr );
@@ -71,7 +72,8 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         // modalId
         this.modalClone.attr("id", this.containerId );
         this.modalClone.attr("name", "infiniteLogModal" + this.containerId );
-        this.container = this.modalClone.find(".modal-body");        
+        this.container = $("<div/>",{});
+        this.modalClone.find(".modal-body").append(this.container);        
         
         // this.list_instance.container.append(this.modalClone);
         // document.body.append(this.modalClone);
@@ -103,6 +105,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         vTitle.text(strTitle);
         this.container.append(vTitle);
     }
+    
     this.container.append(this.form);
     
     this.searchContainer = null;
@@ -110,17 +113,15 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.data = {};
     this.schema = {};
     this.makeSchema();
-    this.makeContent();
-    this.fn_subview();  
+    this.makeContent();  
+    this.fn_subview();
 
     $("#loader").hide();
 
 
 }
 
-
-
-genInstanceAdd.prototype.makeContent = function(){
+genInstanceEdit.prototype.makeContent = function(){
     var _this = this;
     var contentContainer = $("<div/>",{id: this.gridContainerId});
     this.contentContainer = contentContainer;
@@ -128,16 +129,15 @@ genInstanceAdd.prototype.makeContent = function(){
     var makehtml = new makeHtmlBySchema( this.contentContainer , _this.schema , this );
 }
 
-genInstanceAdd.prototype.makeSchema = function(){
+genInstanceEdit.prototype.makeSchema = function(){
 
     var _this = this;
     this.fn_getData();
 
     var vKeys = [];
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){
-        if (prop.isKey){
+        if(prop.isKey)
             vKeys.push(prop._name.toUpperCase());
-        }
     });
     var v_type = "inline_edit";
 
@@ -165,7 +165,7 @@ genInstanceAdd.prototype.makeSchema = function(){
                     orderby : i ,
                     editable : true
                 };
-                if (prop.isKey){
+                if(prop.isKey){
                     rtnObj.required = true;
                 }
                 if (docObj.required){
@@ -222,11 +222,11 @@ genInstanceAdd.prototype.makeSchema = function(){
 
     // Process than not exists in orderby 
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){		
-        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
-        var docObj = prop._documentation;	
+        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );	
+        var docObj = prop._documentation;
         if (docObj == null){
             docObj = {};
-        }					
+        }			
         var v_item = _.find([].concat(v_items),{col : prop._name.toUpperCase()});
         if ( v_item == null){
             var _cms = cms;									
@@ -239,7 +239,6 @@ genInstanceAdd.prototype.makeSchema = function(){
                 editable : true
             };
 
-            // required 
             if (prop.isKey){
                 rtnObj.required = true;
             }
@@ -293,17 +292,14 @@ genInstanceAdd.prototype.makeSchema = function(){
             pop_item.edit_tag = "pop_select";
     });
 
-    // label merge
+    // label more field merge
     $.each(v_items , function(i, _item){
         if (_item.col == null)
             return true;
         var v_property = _.find( _this.jpaFile.gridProperties , { _name : _item.col.toLowerCase() });
         if ( v_property != null && v_property._documentation != null){
             _.merge(_item , v_property._documentation);
-            // if (v_property._documentation.label != null){
-            //     _.merge(_item , v_property._documentation);
-            //     _item.label = v_property._documentation.label ;
-            // }
+            
         }
 
     });
@@ -330,7 +326,8 @@ genInstanceAdd.prototype.makeSchema = function(){
                     var nextColumn = src.childColumnNames[index+1];
                     var nextCm = _.find( cms , {name: nextColumn.toUpperCase() });												
                     var wheres = src.childColumnNames.slice(0,index + 1);
-                    var frm = document.getElementById("form");
+                    // var frm = document.getElementById("form");
+                    var frm = _this.form[0];
                     var param = {};
                     $.each(wheres , function(i, where ){
                         var whereReact = _.find(__this.reactObjects , 
@@ -373,60 +370,31 @@ genInstanceAdd.prototype.makeSchema = function(){
             
         },
         fn_submit: function(_editType){
-            
-            var state = true;
-            var reactObjects = this;
-            var addRow = {};
             var jpaFile = _this.caller.jpaFile;
             var gridSchema = jpaFile.schema.contents.schema;
             var gridJson = findAllByElName( gridSchema.elements , {type:"grid"});
-            $.each(reactObjects,function(i,react){
-                addRow[this.state.name] = this.state.value;
-            });
-            addRow['sqlid'] = gridJson.sqlId + ".insert";
 
-            var form1 = _this.form;
+            var state = true;
+            var paramObj = {
+                //origindatas: this.props.options.keys
+                origindatas: this.state.keys
+            };
 
-            // fileupload
-            var parameter = "";
-            // if you want to upload options ....
-            // parameter = "uploadBoard=schema";
-            // parameter += "&useRealFileName=Y";
-            var fileInfo = {};
-            if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
-                form1.ajaxForm({
-                    url: "./fileTestJson.html?" + parameter 
-                    , type:"POST"
-                    , dataType:"json"
-                    , async: false
-                    , success:function(json) {
-                        fileInfo = json;
-                    }
-                    , error:function(e){
-                        alert(e.responseText);
-                    }
-                });
-                form1.submit();
-            }            
-            _.merge(addRow, form1.serializeFormJSON() );
-            
-            var edit_items = filterAllByElName( gridSchema.elements , {edit_tag : 'file'});
-            if (edit_items.length > 0 ){
-                $.each(edit_items, function(i,edit_item){
-                    var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
-                    if (item_fileinfo != null){
-                        addRow[edit_item.col] = item_fileinfo.orgFileName;
-                        addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
-                        
-                    }		
-                });
-                                                    
-            }
+            if(this.props.options.value == this.state.value)
+                return state;
 
             $.ajax({
                 url: "./genericSaveJson.html",
                 type: "POST",
-                data: addRow , 
+                data: {
+                    searchJson: JSON.stringify(paramObj),
+                    fieldName: this.state.name,
+                    fieldValue: this.state.value,
+                    fieldValueOrigin: this.state.value_origin,
+                    // userId: $("#userId").val(),
+                    // sqlid: "dashboard.ssd_sm.script_master.update"
+                    sqlid: gridJson.sqlId + ".edit"
+                }, 
                 async: false,			                    		
                 success:  function(data){
                     response1 = data;
@@ -435,26 +403,30 @@ genInstanceAdd.prototype.makeSchema = function(){
                         $("#modal-alert").attr("target-id", _this.containerId);
                         $("#modal-alert").find("p").text(response1.message);
                         $("#modal-alert").modal();
-                    } 
-                    // Success
-                    else {
-                        // To do 
-                        // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
-                        _this.caller.fn_search();
-                        var msg = "Save Success!";
-                        $("#modal-success").attr("target-id", _this.containerId);
-                        $("#modal-success").find("p").text(msg);
-                        $("#modal-success").modal();
-                        // reload to edit mode;
-                    }						                    			
+                    }
+                                                            
                 }
             });
-
             return state;
+        },
+        fn_afterSubmit: function(keyUpdatedObjects){
+            // if only edit
+            $.each(this,function(i,react){
+                if(_.find(cms,function(cm){return cm.name == react.state.name})){
+                    var vobject = {}; 
+                    var parentRowKey = theGrid.getGridParam('selrow');
+                    vobject[react.state.name] = react.state.value;
+                    theGrid.setRowData(parentRowKey,vobject);
+                }
+                
+            });
             
+            var msg = "Save Success!";
+            $("#modal-success").attr("target-id", _this.containerId);
+            $("#modal-success").find("p").text(msg);
+            $("#modal-success").modal();
         }
-        
-        ,progressObject: $("#loader")
+        // ,progressObject: $("#loader"),
         // fn_pop_select : commonFunc.fn_pop_select
     };
 
@@ -474,7 +446,7 @@ genInstanceAdd.prototype.makeSchema = function(){
                 elements: [
                     {
                         type: "inline_edit",
-                        edit_type : "add",
+                        edit_type : "edit",
                         cols: entityDoc.detail_cols_add =! null  ? entityDoc.detail_cols_add : 1 ,
                         data: function(){ 
                             return _this.data ;
@@ -496,21 +468,13 @@ genInstanceAdd.prototype.makeSchema = function(){
 
 }
 
-
-genInstanceAdd.prototype.fn_getData = function(){
+genInstanceEdit.prototype.fn_getData = function(){
     var _this = this;
-    if( _this.option.caller.option != null &&
-        _this.option.caller.option.filter != null &&
-        !_.isEmpty( _this.option.caller.option.filter)){
-        
-            _this.data = _.cloneDeep(_this.option.caller.option.filter ); 
-    }
-
-
-
+    var selected_id = _this.grid.jqGrid('getGridParam','selrow');
+    _this.data = _this.grid.getRowData(selected_id);
 }
 
-genInstanceAdd.prototype.fn_subview = function(){
+genInstanceEdit.prototype.fn_subview = function(){
     var _this = this;
     if( _this.jpaFile.entity_doc_obj != null && _this.jpaFile.entity_doc_obj.show_sub_pages){
         _this.sub_container = $("<div/>",{id: _this.containerId + "_subcontainer"});
@@ -524,7 +488,7 @@ genInstanceAdd.prototype.fn_subview = function(){
             var instanceOption = {
                 modal : false,
                 caller : _this ,
-                filter : _this.option.filter,
+                filter : _this.option.filter ,
                 showLabel : true 
             };
             _this.sub_instance.list.add_instance ( child.childEntityId , 'general' , instanceOption );

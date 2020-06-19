@@ -1,4 +1,4 @@
-function JpaAllGeneratorBracket( _generator){
+function JpaAllGeneratorLocalStorage( _generator){
     // _generator : class_javaJsp
     var _this = this;
     this.generator = _generator;
@@ -79,7 +79,7 @@ function JpaAllGeneratorBracket( _generator){
     this.init();
 }
 
-JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
+JpaAllGeneratorLocalStorage.prototype.getDefaultOption = function( _schema, _file ){
     var _this = this;
     // find parent table
     var foreign_entities = _file.foreignEntities ;
@@ -151,11 +151,11 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
             
             gridOpt : {
                 // datatype:'local',
-                datatype:'json',
-                pager: "#" + _schema.id + "Pager",
-                sqlId: _schema.sqlId ,
-                gridId: _schema.id ,
-                modelVarName : varModelName,                
+                datatype:'local',
+                // pager: "#" + _schema.id + "Pager",
+                // sqlId: _schema.sqlId ,
+                // gridId: _schema.id ,
+                modelVarName : varModelName,               
                 // url
                 editurl: './ssdCusDummySaveJson.html',
                 styleUI : 'Bootstrap',
@@ -724,13 +724,13 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
         return defaultOption[_schema.type];
 }
 
-JpaAllGeneratorBracket.prototype.init = function(){
+JpaAllGeneratorLocalStorage.prototype.init = function(){
     var _this = this;
     _this.fn_entities();    
 }
 
 
-JpaAllGeneratorBracket.prototype.fn_entities = function () {
+JpaAllGeneratorLocalStorage.prototype.fn_entities = function () {
     var _this = this;
     // SqlPreFix For Each Entity
     $.each(_this.Model.ownedEntities, function(i, entity){
@@ -756,7 +756,7 @@ JpaAllGeneratorBracket.prototype.fn_entities = function () {
     // Make Main Page
 }
 
-JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
+JpaAllGeneratorLocalStorage.prototype.fn_entities_general = function (entity) {
     var _this = this;    
     var file_name = _.camelCase( entity._name );
     var v_entity_doc_obj = _this.documentToObject(entity._documentation);
@@ -766,6 +766,7 @@ JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
 
     
     var fileObj = {
+        modelName : _this.Model._name ,
         fileType: "jsp" ,
         editType: "general",
         fileName: file_name ,
@@ -801,7 +802,7 @@ JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
     _this.fn_defaultOption(fileObj.schema, fileObj);
 }
 
-JpaAllGeneratorBracket.prototype.fn_foreign = function ( _file ) {
+JpaAllGeneratorLocalStorage.prototype.fn_foreign = function ( _file ) {
     // if ( _file.fileName == "ssdSmScriptsetMap")
     //     debugger;
     var _this = this;
@@ -823,7 +824,7 @@ JpaAllGeneratorBracket.prototype.fn_foreign = function ( _file ) {
     });
 }
 
-JpaAllGeneratorBracket.prototype.fn_get_top_parent = function( _parentInfo ){
+JpaAllGeneratorLocalStorage.prototype.fn_get_top_parent = function( _parentInfo ){
     var _this = this;
     // find parent
     var reference = {};
@@ -871,7 +872,7 @@ JpaAllGeneratorBracket.prototype.fn_get_top_parent = function( _parentInfo ){
     
 }
 
-JpaAllGeneratorBracket.prototype.fn_get_parent = function( _parentInfo ){
+JpaAllGeneratorLocalStorage.prototype.fn_get_parent = function( _parentInfo ){
     var _this = this;
     // find parent
     var reference = {};
@@ -914,7 +915,7 @@ JpaAllGeneratorBracket.prototype.fn_get_parent = function( _parentInfo ){
     
 }
 
-JpaAllGeneratorBracket.prototype.fn_children = function ( _file ) {
+JpaAllGeneratorLocalStorage.prototype.fn_children = function ( _file ) {
     var _this = this;
     var vEntity = _.find(_this.Model.ownedEntities, {"_xmi:id": _file.entityId});
     if (vEntity.references == undefined)
@@ -949,7 +950,7 @@ JpaAllGeneratorBracket.prototype.fn_children = function ( _file ) {
 
 }
 
-JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
+JpaAllGeneratorLocalStorage.prototype.fn_schema = function ( _file) {
     var _this = this;
     var schema = {
         "search" : {
@@ -1072,7 +1073,7 @@ JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
 /***
 * 검색조건 만들기
 */
-JpaAllGeneratorBracket.prototype.fn_schema_search = function ( _file) {
+JpaAllGeneratorLocalStorage.prototype.fn_schema_search = function ( _file) {
     var _this = this;
     var schemaVertical = _this.generator.findAllByElName( _file.schema.search.schema , { id: 'searchVertical' } );
     var schema = _this.generator.findAllByElName( _file.schema.search.schema , { id: 'searchHorizontalLayout' } );
@@ -1173,7 +1174,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search = function ( _file) {
 
 
 }
-JpaAllGeneratorBracket.prototype.fn_schema_search_combo = function(child_columns, vEntity, parent_columns, parent, parentDef, _file, schema) {
+JpaAllGeneratorLocalStorage.prototype.fn_schema_search_combo = function(child_columns, vEntity, parent_columns, parent, parentDef, _file, schema) {
     var _this = this;
     $.each(child_columns, function (i, child_column) {
         var childProp = _.find([].concat(vEntity.properties), { "_name": child_column });
@@ -1211,7 +1212,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_combo = function(child_columns
     });
 }
 
-JpaAllGeneratorBracket.prototype.fn_schema_search_jstree = function(child_columns, parent_columns, vEntity,  parent,reference, parentDef, _file, schema) {
+JpaAllGeneratorLocalStorage.prototype.fn_schema_search_jstree = function(child_columns, parent_columns, vEntity,  parent,reference, parentDef, _file, schema) {
     var _this = this;
     var obj_txt = {
         type: "SearchHeader",
@@ -1303,7 +1304,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree = function(child_column
     schema.elements.push(obj_tree);    
 }
 
-JpaAllGeneratorBracket.prototype.fn_schema_content = function ( _file) {
+JpaAllGeneratorLocalStorage.prototype.fn_schema_content = function ( _file) {
     var _this = this;
     var schema = _this.generator.findAllByElName( _file.schema.contents.schema , { id: 'contentVertical' } );
     var entity = _.find(_this.Model.ownedEntities, {"_xmi:id": _file.entityId});
@@ -1330,7 +1331,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_content = function ( _file) {
 
 }
 
-JpaAllGeneratorBracket.prototype.fn_defaultOption = function(jsobject, _file){
+JpaAllGeneratorLocalStorage.prototype.fn_defaultOption = function(jsobject, _file){
     _this = this;
     var str = ""
     $.each(jsobject,function(k,v){
@@ -1352,17 +1353,17 @@ JpaAllGeneratorBracket.prototype.fn_defaultOption = function(jsobject, _file){
 /**
  * generate js file include entire entity , data_sources
  */
-JpaAllGeneratorBracket.prototype.fn_gen_js = function () {
+ JpaAllGeneratorLocalStorage.prototype.fn_gen_js = function () {
     var _this = this;
     
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate = function () {
+JpaAllGeneratorLocalStorage.prototype.fn_generate = function () {
     var _this = this;
     _this.fn_generate_main_bracket();    
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_main_bracket = function () {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_main_bracket = function () {
     var _this = this; 
 
     // 하나의 파일로 몰지 않고 여러개의 파일로 나눈다.
@@ -1413,7 +1414,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_main_bracket = function () {
 
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_jsmodel = function() {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_jsmodel = function() {
     
     // Model 
     var _this = this;
@@ -1478,7 +1479,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_jsmodel = function() {
     //saveAs(blob, fileName );
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_fileinfo = function() {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_fileinfo = function() {
     
     // Model 
     var _this = this;
@@ -1543,7 +1544,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo = function() {
     // saveAs(blob, fileName );
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_var = function() {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_fileinfo_var = function() {
     
     // Model 
     var _this = this;
@@ -1556,7 +1557,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_var = function() {
     // saveAs(blob, fileName );
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_one = function( _file) {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_fileinfo_one = function( _file) {
     
     // Model 
     var _this = this;
@@ -1632,7 +1633,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_fileinfo_one = function( _file) {
  * generate data source , schema
  * @param {*} _file 
  */
-JpaAllGeneratorBracket.prototype.fn_generate_script_schema = function( _file){
+ JpaAllGeneratorLocalStorage.prototype.fn_generate_script_schema = function( _file){
     var _this = this;
 
     // dictionary
@@ -1665,13 +1666,13 @@ JpaAllGeneratorBracket.prototype.fn_generate_script_schema = function( _file){
     _this.objectToFileScript(_file, 'commonFunc', _file.commonFunc);
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_pop_search_init = function( _file){
+JpaAllGeneratorLocalStorage.prototype.fn_generate_pop_search_init = function( _file){
     var _this = this;   
     var src = "\t\t\t\tsetTimeout(function(){fn_search();},1000);"; _file.sources.push(src); 
     var src = '\t\t\t\t' + 'popParemeters.fn_set();'; _file.sources.push(src);
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_make_html = function( _file ) {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_make_html = function( _file ) {
     var _this = this;
     // dictionary
     var src =  "\t\t\t\t$.each(dictionaries,function(i, src){";  _file.sources.push(src);
@@ -1715,7 +1716,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_make_html = function( _file ) {
     
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_make_html_add = function( _file ) {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_make_html_add = function( _file ) {
     var _this = this;
     // dictionary   
     var src =  "\t\t\t\t// dictionary"; _file.sources.push(src);
@@ -1753,7 +1754,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_make_html_add = function( _file ) {
     var src = "\t\t\t\t}"; _file.sources.push(src);
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_content_contextmenu = function ( _file) {
+JpaAllGeneratorLocalStorage.prototype.fn_generate_content_contextmenu = function ( _file) {
     var _this = this;
     var context = {
         selector: '.jqgrow td.contextMenu', 
@@ -2115,7 +2116,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_content_contextmenu = function ( _f
 
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_container = function( _file ){
+JpaAllGeneratorLocalStorage.prototype.fn_generate_container = function( _file ){
     var _this = this;
     $.each(_file.schema, function(schemaName,schema){
         var vClass = "content_container";
@@ -2128,7 +2129,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_container = function( _file ){
 
 }
 
-JpaAllGeneratorBracket.prototype.fn_generate_container_add = function( _file ){
+JpaAllGeneratorLocalStorage.prototype.fn_generate_container_add = function( _file ){
     var _this = this;
     var searchContainerId = "v_schema_searchContainer";
     var contentContainerId = "v_schema_contentContainer";
@@ -2140,7 +2141,7 @@ JpaAllGeneratorBracket.prototype.fn_generate_container_add = function( _file ){
 
 }
 
-JpaAllGeneratorBracket.prototype.fn_fileSave = function(){
+JpaAllGeneratorLocalStorage.prototype.fn_fileSave = function(){
     var _this = this;
     var sqls = [];
     var zip = new JSZip();
@@ -2313,12 +2314,12 @@ JpaAllGeneratorBracket.prototype.fn_fileSave = function(){
 
 }
 
-JpaAllGeneratorBracket.prototype.xmlMake = function ( _fileObj) {
+JpaAllGeneratorLocalStorage.prototype.xmlMake = function ( _fileObj) {
     var _this = this;
     _fileObj.sqlGenerator = new SqlGeneratorAll( _fileObj );
 }
 
-JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,  obj_schema) {
+JpaAllGeneratorLocalStorage.prototype.sqlSelect = function( _file , schema_jpa_enity,  obj_schema) {
     var _this = this;
     var sqlId = schema_jpa_enity.sqlPreFix + _.camelCase( _file.fileName ) + "." + _.camelCase(schema_jpa_enity._name);
     if (obj_schema.type == "multiCombo")
@@ -2478,7 +2479,7 @@ JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,
     obj_schema.entityId = schema_jpa_enity["_xmi:id"];
 }
 
-JpaAllGeneratorBracket.prototype.sqlSelectJsTree = function( _file , jpaEntity,  obj_schema) {
+JpaAllGeneratorLocalStorage.prototype.sqlSelectJsTree = function( _file , jpaEntity,  obj_schema) {
     var _this = this;
     var sqlId = jpaEntity.sqlPreFix + _.camelCase( _file.fileName ) + "." + _.camelCase(jpaEntity._name);
     sqlId += ".jstreesearch";    
@@ -2546,7 +2547,7 @@ JpaAllGeneratorBracket.prototype.sqlSelectJsTree = function( _file , jpaEntity, 
     obj_schema.entityId = jpaEntity["_xmi:id"];
 }
 
-JpaAllGeneratorBracket.prototype.whereAndDetail = function( _file , schema_jpa_enity,  obj_schema) {
+JpaAllGeneratorLocalStorage.prototype.whereAndDetail = function( _file , schema_jpa_enity,  obj_schema) {
     var _this = this;
     var sql = _.find( _file.sqlGenerator.sqls , {id : obj_schema.sqlId } );
     $.each(_file.foreignEntities, function (i, parentDef) {
@@ -2571,7 +2572,7 @@ JpaAllGeneratorBracket.prototype.whereAndDetail = function( _file , schema_jpa_e
 
 }
 
-JpaAllGeneratorBracket.prototype.sqlInsert = function( _file , schema_jpa_enity,  obj_schema) {
+JpaAllGeneratorLocalStorage.prototype.sqlInsert = function( _file , schema_jpa_enity,  obj_schema) {
     var _this = this;
     let sqlId = schema_jpa_enity.sqlPreFix + _.camelCase( _file.fileName ) + "." + _.camelCase(schema_jpa_enity._name) + ".insert";
     var sql = _.find( _file.sqlGenerator.sqls , {id : sqlId } );
@@ -2661,7 +2662,7 @@ JpaAllGeneratorBracket.prototype.sqlInsert = function( _file , schema_jpa_enity,
     }
 }
 
-JpaAllGeneratorBracket.prototype.sqlEdit = function( _file , schema_jpa_enity,  obj_schema) {
+JpaAllGeneratorLocalStorage.prototype.sqlEdit = function( _file , schema_jpa_enity,  obj_schema) {
     var _this = this;
     let sqlId = schema_jpa_enity.sqlPreFix + _.camelCase( _file.fileName ) + "." + _.camelCase(schema_jpa_enity._name) + ".edit";
     var sql = _.find( _file.sqlGenerator.sqls , {id : sqlId } );
@@ -2742,7 +2743,7 @@ JpaAllGeneratorBracket.prototype.sqlEdit = function( _file , schema_jpa_enity,  
 
 }
 
-JpaAllGeneratorBracket.prototype.sqlDelete = function( _file , schema_jpa_enity,  obj_schema) {
+JpaAllGeneratorLocalStorage.prototype.sqlDelete = function( _file , schema_jpa_enity,  obj_schema) {
     var _this = this;
     let sqlId = schema_jpa_enity.sqlPreFix + _.camelCase( _file.fileName ) + "." + _.camelCase(schema_jpa_enity._name) + ".delete";
     var sql = _.find( _file.sqlGenerator.sqls , {id : sqlId } );
@@ -2783,7 +2784,7 @@ JpaAllGeneratorBracket.prototype.sqlDelete = function( _file , schema_jpa_enity,
     }
 }
 
-JpaAllGeneratorBracket.prototype.fn_datasource = function(foreign_entities, vEntity, jpa_prop, _file, gridCol) {
+JpaAllGeneratorLocalStorage.prototype.fn_datasource = function(foreign_entities, vEntity, jpa_prop, _file, gridCol) {
     var _this = this;
     var hasParents = false;
     if (foreign_entities != null) {
@@ -2887,7 +2888,7 @@ JpaAllGeneratorBracket.prototype.fn_datasource = function(foreign_entities, vEnt
     return hasParents;
 }
 
-JpaAllGeneratorBracket.prototype.manageTable = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.manageTable = function( _entity ){
     
     // select table exists
     // create table
@@ -2921,7 +2922,7 @@ JpaAllGeneratorBracket.prototype.manageTable = function( _entity ){
     _this.createPrimaryKey(_entity);
     
 }
-JpaAllGeneratorBracket.prototype.existsTable = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.existsTable = function( _entity ){
     var _this = this;
     var rtn = false;
     $.ajax({
@@ -2939,7 +2940,7 @@ JpaAllGeneratorBracket.prototype.existsTable = function( _entity ){
     });
     return rtn;
 }
-JpaAllGeneratorBracket.prototype.existsPrimaryKey = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.existsPrimaryKey = function( _entity ){
     var _this = this;
     var rtn = false;
     $.ajax({
@@ -2957,7 +2958,7 @@ JpaAllGeneratorBracket.prototype.existsPrimaryKey = function( _entity ){
     });
     return rtn;
 }
-JpaAllGeneratorBracket.prototype.createTable = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.createTable = function( _entity ){
     var _this = this;
     var rtn = false;
     var type = function(_prop){
@@ -3034,7 +3035,7 @@ JpaAllGeneratorBracket.prototype.createTable = function( _entity ){
     });
     
 }
-JpaAllGeneratorBracket.prototype.addColumns = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.addColumns = function( _entity ){
     var _this = this;
     var rtn = false;
     var type = function(_prop){
@@ -3130,7 +3131,7 @@ JpaAllGeneratorBracket.prototype.addColumns = function( _entity ){
    
     
 }
-JpaAllGeneratorBracket.prototype.deletePrimaryKey = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.deletePrimaryKey = function( _entity ){
     var _this = this;
     var rtn = false;
     
@@ -3169,7 +3170,7 @@ JpaAllGeneratorBracket.prototype.deletePrimaryKey = function( _entity ){
         } 
     });
 }
-JpaAllGeneratorBracket.prototype.createPrimaryKey = function( _entity ){
+JpaAllGeneratorLocalStorage.prototype.createPrimaryKey = function( _entity ){
     var _this = this;
     var rtn = false;
     
@@ -3230,7 +3231,7 @@ JpaAllGeneratorBracket.prototype.createPrimaryKey = function( _entity ){
     });
 }
 
-JpaAllGeneratorBracket.prototype.fn_datasource_by_top = function(vEntity, jpa_prop, _file, gridCol) {
+JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_top = function(vEntity, jpa_prop, _file, gridCol) {
     var _this = this;
     var hasParents = false;
     var paramForTopParent1 = { 
@@ -3408,7 +3409,7 @@ JpaAllGeneratorBracket.prototype.fn_datasource_by_top = function(vEntity, jpa_pr
 /**
  * if field has dictionary override datasrc
  */
-JpaAllGeneratorBracket.prototype.fn_datasource_by_dictionary = function(vEntity, jpa_prop, _file, gridCol) {
+JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_dictionary = function(vEntity, jpa_prop, _file, gridCol) {
     var _this = this;
     // defined Entity
     var dictionaryDefEntity = _.find( this.Model.ownedEntities , {eAnnotations: { details: [{ _key: "isDictionaryDefine"}] } , sqlPreFix : vEntity.sqlPreFix } );
@@ -3488,7 +3489,7 @@ JpaAllGeneratorBracket.prototype.fn_datasource_by_dictionary = function(vEntity,
  * json 형식으로 정의함.
  * @param {*} task 
  */
-JpaAllGeneratorBracket.prototype.fn_set_grid_custom_item = function(_prop, _gridItem ){
+JpaAllGeneratorLocalStorage.prototype.fn_set_grid_custom_item = function(_prop, _gridItem ){
     var _this = this;
     if(_prop._documentation == undefined)
         return;
@@ -3516,7 +3517,7 @@ JpaAllGeneratorBracket.prototype.fn_set_grid_custom_item = function(_prop, _grid
 /**
  * 파일의 특정 변수를 JSP 변수객체로 만든다.
  */
-JpaAllGeneratorBracket.prototype.objectToFileScript = function(_file, object_name, jsobject){
+JpaAllGeneratorLocalStorage.prototype.objectToFileScript = function(_file, object_name, jsobject){
     var _this = this;
     var objectClone = _.cloneDeep(jsobject);
     _this.generator.fuctionToString(objectClone);
@@ -3605,7 +3606,7 @@ JpaAllGeneratorBracket.prototype.objectToFileScript = function(_file, object_nam
 /**
  * 파일의 특정 변수를 JSP 변수객체로 만든다.
  */
-JpaAllGeneratorBracket.prototype.documentToScript = function(_file, object_name, _docstr){
+JpaAllGeneratorLocalStorage.prototype.documentToScript = function(_file, object_name, _docstr){
     var _this = this;
     
     var v_doc_object = {};
@@ -3677,7 +3678,7 @@ JpaAllGeneratorBracket.prototype.documentToScript = function(_file, object_name,
 
 }
 
-JpaAllGeneratorBracket.prototype.documentToObject = function(_docstr){
+JpaAllGeneratorLocalStorage.prototype.documentToObject = function(_docstr){
     var _this = this;
     
     var v_doc_object = {};
@@ -3705,7 +3706,7 @@ JpaAllGeneratorBracket.prototype.documentToObject = function(_docstr){
 /**
  * Entiry의 Propertis 
  */
-JpaAllGeneratorBracket.prototype.entityPropsToObject = function( jsobject ){
+JpaAllGeneratorLocalStorage.prototype.entityPropsToObject = function( jsobject ){
     var _this = this;
     var objectClone = _.cloneDeep(jsobject);    
     _this.generator.fuctionToString(objectClone);
@@ -3745,7 +3746,7 @@ JpaAllGeneratorBracket.prototype.entityPropsToObject = function( jsobject ){
    
 }
 
-JpaAllGeneratorBracket.prototype.entityPropsAnnotationsToKey = function(jsobject){
+JpaAllGeneratorLocalStorage.prototype.entityPropsAnnotationsToKey = function(jsobject){
     var _this = this;
     var str = "";
     $.each(jsobject,function(k,v){

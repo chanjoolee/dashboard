@@ -1,4 +1,4 @@
-function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
+function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
     
     $("#loader").show();
     this.entityId = _entityId;
@@ -39,6 +39,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.form = $(formTemplate);
     this.form.attr("id" , this.formId);
     this.form.attr("name" , this.formId);
+    this.grid = $("#" + this.caller.gridId).jqGrid();
     
     var _this = this;
     if(this.option != null && this.option.modal){
@@ -49,10 +50,10 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         // Header        
         var headStr = '[' + _.camelCase(_this.entityId) + ' ' + _.capitalize(this.type) +  ']  ' ;
         this.modalClone.find(".modal-header h6 span").text(headStr);
-        if( this.caller.option != null &&
-            this.caller.option.filter != null){
+        if( this.option != null &&
+            this.option.filter != null){
                 var filterStrs = [];        
-                $.each(this.caller.option.filter,function(k,v){
+                $.each(this.option.filter,function(k,v){
                     var str = _.camelCase(k);
                     str += " : " + v;
                     filterStrs.push(str);
@@ -89,7 +90,6 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         this.container = $("<div/>",{id:  this.containerId });
         this.list_instance.container.append(this.container);
     }
-
     // show title
     if(this.option != null && this.option.showLabel){
         var templateTitle = `
@@ -103,6 +103,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
         vTitle.text(strTitle);
         this.container.append(vTitle);
     }
+
     this.container.append(this.form);
     
     this.searchContainer = null;
@@ -111,16 +112,14 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.schema = {};
     this.makeSchema();
     this.makeContent();
-    this.fn_subview();  
+    this.fn_subview();
 
     $("#loader").hide();
 
 
 }
 
-
-
-genInstanceAdd.prototype.makeContent = function(){
+genInstanceCopy.prototype.makeContent = function(){
     var _this = this;
     var contentContainer = $("<div/>",{id: this.gridContainerId});
     this.contentContainer = contentContainer;
@@ -128,7 +127,7 @@ genInstanceAdd.prototype.makeContent = function(){
     var makehtml = new makeHtmlBySchema( this.contentContainer , _this.schema , this );
 }
 
-genInstanceAdd.prototype.makeSchema = function(){
+genInstanceCopy.prototype.makeSchema = function(){
 
     var _this = this;
     this.fn_getData();
@@ -222,11 +221,11 @@ genInstanceAdd.prototype.makeSchema = function(){
 
     // Process than not exists in orderby 
     $.each([].concat( _this.jpaFile.gridProperties ), function(i, prop){		
-        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );
-        var docObj = prop._documentation;	
+        // var docObj = JpaAllGeneratorBracket.prototype.documentToObject( prop._documentation );	
+        var docObj = prop._documentation;
         if (docObj == null){
             docObj = {};
-        }					
+        }			
         var v_item = _.find([].concat(v_items),{col : prop._name.toUpperCase()});
         if ( v_item == null){
             var _cms = cms;									
@@ -293,17 +292,14 @@ genInstanceAdd.prototype.makeSchema = function(){
             pop_item.edit_tag = "pop_select";
     });
 
-    // label merge
+    // label more field merge
     $.each(v_items , function(i, _item){
         if (_item.col == null)
             return true;
         var v_property = _.find( _this.jpaFile.gridProperties , { _name : _item.col.toLowerCase() });
         if ( v_property != null && v_property._documentation != null){
             _.merge(_item , v_property._documentation);
-            // if (v_property._documentation.label != null){
-            //     _.merge(_item , v_property._documentation);
-            //     _item.label = v_property._documentation.label ;
-            // }
+            
         }
 
     });
@@ -330,7 +326,8 @@ genInstanceAdd.prototype.makeSchema = function(){
                     var nextColumn = src.childColumnNames[index+1];
                     var nextCm = _.find( cms , {name: nextColumn.toUpperCase() });												
                     var wheres = src.childColumnNames.slice(0,index + 1);
-                    var frm = document.getElementById("form");
+                    // var frm = document.getElementById("form");
+                    var frm = _this.form[0];
                     var param = {};
                     $.each(wheres , function(i, where ){
                         var whereReact = _.find(__this.reactObjects , 
@@ -373,7 +370,6 @@ genInstanceAdd.prototype.makeSchema = function(){
             
         },
         fn_submit: function(_editType){
-            
             var state = true;
             var reactObjects = this;
             var addRow = {};
@@ -451,10 +447,8 @@ genInstanceAdd.prototype.makeSchema = function(){
             });
 
             return state;
-            
         }
-        
-        ,progressObject: $("#loader")
+        // ,progressObject: $("#loader"),
         // fn_pop_select : commonFunc.fn_pop_select
     };
 
@@ -474,7 +468,7 @@ genInstanceAdd.prototype.makeSchema = function(){
                 elements: [
                     {
                         type: "inline_edit",
-                        edit_type : "add",
+                        edit_type : "copy",
                         cols: entityDoc.detail_cols_add =! null  ? entityDoc.detail_cols_add : 1 ,
                         data: function(){ 
                             return _this.data ;
@@ -496,21 +490,13 @@ genInstanceAdd.prototype.makeSchema = function(){
 
 }
 
-
-genInstanceAdd.prototype.fn_getData = function(){
+genInstanceCopy.prototype.fn_getData = function(){
     var _this = this;
-    if( _this.option.caller.option != null &&
-        _this.option.caller.option.filter != null &&
-        !_.isEmpty( _this.option.caller.option.filter)){
-        
-            _this.data = _.cloneDeep(_this.option.caller.option.filter ); 
-    }
-
-
-
+    var selected_id = _this.grid.jqGrid('getGridParam','selrow');
+    _this.data = _this.grid.getRowData(selected_id);
 }
 
-genInstanceAdd.prototype.fn_subview = function(){
+genInstanceCopy.prototype.fn_subview = function(){
     var _this = this;
     if( _this.jpaFile.entity_doc_obj != null && _this.jpaFile.entity_doc_obj.show_sub_pages){
         _this.sub_container = $("<div/>",{id: _this.containerId + "_subcontainer"});

@@ -699,15 +699,15 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
     opt.pager = "#" + gridId + "_pager";
     
     opt.htmlMaker = _this ;
+    // if(opt.url == null){
+    //     opt.url = function(){
+    //        var tx =  this.htmlMaker.instance.db.transaction(this.htmlMaker.instance.entityId, "readwrite");
+    //        return tx.objectStore(this.htmlMaker.instance.entityId);
+    //     }
+    // }
 
-    if(opt.url == null){
-        opt.url = function(){
-            return	"./genericlListPageJson.html?" + 
-                this.htmlMaker.instance.form.serialize() + 
-                "&sqlid=" + this.sqlId+ ".page.list" +  
-                "&paging_sqlid=" + this.sqlId+ ".page.total" ;
-        }
-    }
+
+    // 
 
     // gridComplete
     if(opt.gridComplete == null){

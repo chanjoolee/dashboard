@@ -26,6 +26,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.caller  = this.option.caller;
     
     this.jpaFile = this.option.caller.jpaFile;
+    this.db = null;
     // this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     
@@ -109,6 +110,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.contentContainer = null;
     this.data = {};
     this.schema = {};
+    this.openDb();
     this.makeSchema();
     this.makeContent();
     this.fn_subview();  
@@ -383,7 +385,6 @@ genInstanceAdd.prototype.makeSchema = function(){
             $.each(reactObjects,function(i,react){
                 addRow[this.state.name] = this.state.value;
             });
-            addRow['sqlid'] = gridJson.sqlId + ".insert";
 
             var form1 = _this.form;
 
@@ -423,35 +424,42 @@ genInstanceAdd.prototype.makeSchema = function(){
                                                     
             }
 
-            $.ajax({
-                url: "./genericSaveJson.html",
-                type: "POST",
-                data: addRow , 
-                async: false,			                    		
-                success:  function(data){
-                    response1 = data;
-                    if(response1.result != 'success'){
-                        state = false;
-                        $("#modal-alert").attr("target-id", _this.containerId);
-                        $("#modal-alert").find("p").text(response1.message);
-                        $("#modal-alert").modal();
-                    } 
-                    // Success
-                    else {
-                        // To do 
-                        // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
-                        _this.caller.fn_search();
-                        var msg = "Save Success!";
-                        $("#modal-success").attr("target-id", _this.containerId);
-                        $("#modal-success").find("p").text(msg);
-                        $("#modal-success").modal();
-                        // reload to edit mode;
-                    }						                    			
-                }
-            });
+            var transaction = _this.db.transaction( [_this.entityId ], "readwrite");
+            transaction.oncomplete = function(event) {
+                // var msg = "Save Success!";
+                // $("#modal-success").attr("target-id", _this.containerId);
+                // $("#modal-success").find("p").text(msg);
+                // $("#modal-success").modal();
+            };
 
-            return state;
-            
+            transaction.onerror = function(event) {
+                state = false;
+                // $("#modal-alert").attr("target-id", _this.containerId);
+                // $("#modal-alert").find("p").text("Duplicate items not allowed");
+                // $("#modal-alert").modal();
+            };
+            var objectStore = transaction.objectStore(_this.entityId);
+            var objectStoreRequest = objectStore.add(addRow);
+
+            objectStoreRequest.onsuccess = function(event) {
+                // report the success of our request
+                // note.innerHTML += '<li>Request successful.</li>';
+                _this.caller.fn_search();
+                var msg = "Save Success!";
+                $("#modal-success").attr("target-id", _this.containerId);
+                $("#modal-success").find("p").text(msg);
+                $("#modal-success").modal();
+                return state;
+            };
+
+            objectStoreRequest.onerror = function(event) {
+                state = false;
+                $("#modal-alert").attr("target-id", _this.containerId);
+                $("#modal-alert").find("p").text("Duplicate items not allowed");
+                $("#modal-alert").modal();
+                return state;
+            };
+
         }
         
         ,progressObject: $("#loader")
@@ -531,4 +539,37 @@ genInstanceAdd.prototype.fn_subview = function(){
         });
         
     }
+}
+
+genInstanceAdd.prototype.openDb = function(){
+    var _this = this;
+    var keyCols = _.filter(_this.jpaFile.gridProperties , { isKey : true } );
+    var keys = $.map(keyCols,function(col,i){
+        return col._name.toUpperCase();
+    });
+    var req = indexedDB.open(_this.jpaFile.modelName , 1);
+    req.onsuccess = function (evt) {
+        // Better use "this" than "req" to get the result to avoid problems with
+        // garbage collection.
+        // db = req.result;
+        _this.db = this.result;
+        console.log("openDb DONE");
+        
+    };
+    req.onerror = function (evt) {
+        console.error("openDb:", evt.target.errorCode);
+    };
+    req.onupgradeneeded = function (evt) {
+        console.log("openDb.onupgradeneeded");
+        _this.db = this.result;
+        var storeIndex = _.indexOf(_this.db.objectStoreNames , _this.entity_doc_obj);
+        if( storeIndex < 0 ){
+            var store = _this.db.createObjectStore(
+                _this.entityId , { keyPath: keys }
+            );  
+        }
+        
+        // store.createIndex('title', 'title', { unique: false });
+    };
+
 }
