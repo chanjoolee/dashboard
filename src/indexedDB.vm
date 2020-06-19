@@ -588,8 +588,8 @@
 
     <!-- multiselect -->
     <script src="./js/jquery-multiselect/jquery.multiselect.js"></script>
-		<script src="./js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
-		<link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.css" />
+	<script src="./js/jquery-multiselect/src/jquery.multiselect.filter.js"></script>
+	<link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.css" />
     <link rel="stylesheet" type="text/css" href="./js/jquery-multiselect/jquery.multiselect.filter.css" />
 
     <!-- JS Tree -->
@@ -598,7 +598,7 @@
     
     <!-- contextMenu -->
     <link rel="stylesheet" media="screen" href="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.css" type="text/css" />
-		<script src="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.js"></script>
+	<script src="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.js"></script>
     <script src="./js/jQuery-contextMenu-master/dist/jquery.ui.position.js"></script>
     
     <!-- alasql -->
@@ -611,19 +611,19 @@
 
     <!-- react  -->
     <script  src="./js/react-0.14.3/build/react.js"></script>
-		<script  src="./js/react-0.14.3/build/react-dom.js"></script>
-		<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
+	<script  src="./js/react-0.14.3/build/react-dom.js"></script>
+	<script  src="./js/react-0.14.3/build/react-with-addons.js"></script>
     <script  src="./js/react-0.14.3/browser.js" ></script>
 
     <!-- 스키마를 바탕으로 소스를 생성하기  -->
     <script src="./js/bpmn/java_jsp/allFromJpa.bracket.js"></script>
-    <script src="./js/bpmn/instance/gen_instance_list.js"></script>
-    <script src="./js/bpmn/instance/gen_instance.js"></script>
-    <script src="./js/bpmn/instance/gen_instance_add.js"></script>
-    <script src="./js/bpmn/instance/gen_instance_edit.js"></script>
-    <script src="./js/bpmn/instance/gen_instance_copy.js"></script>
-    <script src="./js/bpmn/instance/gen_instance_view.js"></script>
-    <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
+    <script src="./js/bpmn/instance/localstorage/gen_instance_list.js"></script>
+    <script src="./js/bpmn/instance/localstorage/gen_instance.js"></script>
+    <script src="./js/bpmn/instance/localstorage/gen_instance_add.js"></script>
+    <script src="./js/bpmn/instance/localstorage/gen_instance_edit.js"></script>
+    <script src="./js/bpmn/instance/localstorage/gen_instance_copy.js"></script>
+    <script src="./js/bpmn/instance/localstorage/gen_instance_view.js"></script>
+    <script src="./js/bpmn/instance/localstorage/makeHtmlBySchema.js"></script>
     #foreach( $jsfile in $searchVO.searchJson.jpaFiles )
     <script src="./js/bpmn/gen/$searchVO.searchJson.folder/$jsfile"></script>
     #end
@@ -667,6 +667,8 @@
             //   selectOtherMonths: true
             // });
 
+            fn_indexedDB();
+
         });
 
         function fn_makeInstance(_entityId){
@@ -677,6 +679,46 @@
             };
             instances.add_instance(_entityId ,'general', instanceOption );
         }
+
+        var db = null;
+		function fn_indexedDB(){
+
+			var req = indexedDB.open( "$searchVO.searchJson.modelName" , 2);
+			req.onsuccess = function (evt) {
+				// Better use "this" than "req" to get the result to avoid problems with
+				// garbage collection.
+				// db = req.result;
+				db = this.result;
+				console.log("openDb DONE");
+			};
+			req.onerror = function (evt) {
+				console.error("openDb:", evt.target.errorCode);
+			};
+			req.onupgradeneeded = function (evt) {
+				console.log("openDb.onupgradeneeded");
+				db = this.result;
+				$.each(jpaFiles , function(i, _file){
+					var keyCols = _.filter( _file.gridProperties , { isKey : true } );
+					var keys = $.map(keyCols,function(col,i){
+						return col._name.toUpperCase();
+					});
+
+					var storeIndex = _.indexOf( db.objectStoreNames , _file.entityId);
+					if( storeIndex < 0 ){
+						var store = db.createObjectStore(
+							_file.entityId , { keyPath: keys }
+						);  
+					}				
+
+				});
+				
+				
+				// store.createIndex('title', 'title', { unique: false });
+			};
+
+			
+		}
+
 
         // Stacked Modal
             // $(document).on('show.bs.modal', '.modal', function (event) {

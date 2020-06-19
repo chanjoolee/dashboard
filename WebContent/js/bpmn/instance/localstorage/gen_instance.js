@@ -27,7 +27,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     this.option = _option;
     
     this.jpaFile = _.find( this.list_instance.jpaFiles , { entityId : this.entityId, editType: this.type });
-    this.db = null;
+    this.db = db;
     this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     this.searchContainerId = this.containerId + "_searchContainer";
@@ -137,8 +137,8 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     }
     
     // 02. grid
-    this.openDb();
-    // this.makeGrid();
+    // this.openDb();
+    this.makeGrid();
 
     this.fn_contextmenu();
 
@@ -464,38 +464,6 @@ genInstance.prototype.fn_search = function(){
 }
 
 
-genInstance.prototype.openDb = function(){
-    var _this = this;
-    var keyCols = _.filter(_this.jpaFile.gridProperties , { isKey : true } );
-    var keys = $.map(keyCols,function(col,i){
-        return col._name.toUpperCase();
-    });
-    var req = indexedDB.open(_this.jpaFile.modelName , 1);
-    req.onsuccess = function (evt) {
-        // Better use "this" than "req" to get the result to avoid problems with
-        // garbage collection.
-        // db = req.result;
-        _this.db = this.result;
-        console.log("openDb DONE");
-        
-        _this.makeGrid();
-    };
-    req.onerror = function (evt) {
-        console.error("openDb:", evt.target.errorCode);
-    };
-    req.onupgradeneeded = function (evt) {
-        console.log("openDb.onupgradeneeded");
-        _this.db = this.result;
-        var storeIndex = _.indexOf(_this.db.objectStoreNames , _this.entity_doc_obj);
-        if( storeIndex < 0 ){
-            var store = _this.db.createObjectStore(
-                _this.entityId , { keyPath: keys }
-            );  
-        }
-        
-        // store.createIndex('title', 'title', { unique: false });
-    };
 
-}
 
 

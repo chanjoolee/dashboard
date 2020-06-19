@@ -138,6 +138,7 @@
 		<script type="text/javascript" src="./js/bpmn/java_jsp/class_sql.js"></script>
 		<script type="text/javascript" src="./js/bpmn/java_jsp/allFromJpa.toolbox.js"></script>
 		<script type="text/javascript" src="./js/bpmn/java_jsp/allFromJpa.bracket.js"></script>
+		<script type="text/javascript" src="./js/bpmn/java_jsp/allFromJpa.bracket.localstorage.js"></script>
 
 		<!-- jszip -->
 		<script type="text/javascript" src="./js/Stuk-jszip-3109282/dist/jszip.js"></script>

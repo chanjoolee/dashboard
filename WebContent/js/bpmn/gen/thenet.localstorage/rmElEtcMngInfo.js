@@ -177,12 +177,7 @@
 									"sqlId": "rmElEtcMngInfo.rmElEtcMngInfo",
 									"gridId": "rmElEtcMngInfoGrid",
 									"modelVarName": "thenetJpa",
-									"url": function(){ 
-									                    return	"./genericlListPageJson.html?" + 
-									                        $("#form").serialize() + 
-									                        "&sqlid=rmElEtcMngInfo.rmElEtcMngInfo.page.list" +  
-									                        "&paging_sqlid=rmElEtcMngInfo.rmElEtcMngInfo.page.total" 
-									                },
+									
 
 									"editurl": "./ssdCusDummySaveJson.html",
 									"styleUI": "Bootstrap",

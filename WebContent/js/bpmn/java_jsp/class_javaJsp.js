@@ -60,9 +60,9 @@ Generator.prototype.init = function(){
         generator.fn_fileSave();
 
     }
-    else if( _this.schema_bpmn.Model != undefined && _this.cssType != null && _this.cssType == "LocalStorage" ){
+    else if( _this.schema_bpmn.Model != undefined && _this.cssType != null && _this.cssType == "IndexedDB" ){
         _this.fn_convert_id();
-        var generator = new JpaAllGeneratorBracket( _this ) ;
+        var generator = new JpaAllGeneratorLocalStorage( _this ) ;
         generator.fn_generate();
         generator.fn_fileSave();
 

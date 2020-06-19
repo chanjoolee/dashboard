@@ -1377,6 +1377,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_generate_main_bracket = function () {
         , jpaFiles : ['jpaFiles.js'].concat( jpaFiles ) 
         , jpaVarName : "jpaFiles"
         , folder : _this.Model._name + "." + _this.dateStr
+        , modelName : _this.Model._name
     };
     $.ajax({
         // url: "./template" ,
@@ -1386,7 +1387,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_generate_main_bracket = function () {
         data : {    
             searchJson : JSON.stringify(searchJson),
             // searchJson : searchJson ,
-            viewName : "bracket.vm" ,
+            viewName : "indexedDB.vm" ,
             menuFolder : 'schema/'+ _this.Model._name + "." + _this.dateStr + '/'
         },
         success: function (content){

@@ -1280,163 +1280,200 @@
 
     <script>
 
-      $.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.responsive = true;
 
-      $.jgrid.defaults.styleUI = 'Bootstrap4';
+		$.jgrid.defaults.styleUI = 'Bootstrap4';
 
-      $.jgrid.defaults.iconSet = "fontAwesome";
-
-
-
-      var instances = {};
+		$.jgrid.defaults.iconSet = "fontAwesome";
 
 
 
-      $(function(){
-
-        'use strict'
+		var instances = {};
 
 
 
-        // FOR DEMO ONLY
+		$(function(){
 
-        // menu collapsed by default during first page load or refresh with screen
-
-        // having a size between 992px and 1299px. This is intended on this page only
-
-        // for better viewing of widgets demo.
-
-        $(window).resize(function(){
-
-          minimizeMenu();
-
-        });
+		'use strict'
 
 
 
-        minimizeMenu();
+		// FOR DEMO ONLY
+
+		// menu collapsed by default during first page load or refresh with screen
+
+		// having a size between 992px and 1299px. This is intended on this page only
+
+		// for better viewing of widgets demo.
+
+		$(window).resize(function(){
+
+			minimizeMenu();
+
+		});
 
 
 
-        function minimizeMenu() {
-
-          if(window.matchMedia('(min-width: 992px)').matches && window.matchMedia('(max-width: 1299px)').matches) {
-
-            // show only the icons and hide left menu label by default
-
-            $('.menu-item-label,.menu-item-arrow').addClass('op-lg-0-force d-lg-none');
-
-            $('body').addClass('collapsed-menu');
-
-            $('.show-sub + .br-menu-sub').slideUp();
-
-          } else if(window.matchMedia('(min-width: 1300px)').matches && !$('body').hasClass('collapsed-menu')) {
-
-            $('.menu-item-label,.menu-item-arrow').removeClass('op-lg-0-force d-lg-none');
-
-            $('body').removeClass('collapsed-menu');
-
-            $('.show-sub + .br-menu-sub').slideDown();
-
-          }
-
-        }
+		minimizeMenu();
 
 
 
-        // $('.fc-datepicker').datepicker({
+		function minimizeMenu() {
 
-        //   dateFormat: "yy-mm-dd",
+			if(window.matchMedia('(min-width: 992px)').matches && window.matchMedia('(max-width: 1299px)').matches) {
 
-        //   showOtherMonths: true,
+			// show only the icons and hide left menu label by default
 
-        //   selectOtherMonths: true
+			$('.menu-item-label,.menu-item-arrow').addClass('op-lg-0-force d-lg-none');
 
-        // });
+			$('body').addClass('collapsed-menu');
 
+			$('.show-sub + .br-menu-sub').slideUp();
 
+			} else if(window.matchMedia('(min-width: 1300px)').matches && !$('body').hasClass('collapsed-menu')) {
 
-      });
+			$('.menu-item-label,.menu-item-arrow').removeClass('op-lg-0-force d-lg-none');
 
+			$('body').removeClass('collapsed-menu');
 
+			$('.show-sub + .br-menu-sub').slideDown();
 
-      function fn_makeInstance(_entityId){
+			}
 
-        delete instances;
-
-        instances = new gen_instance_list($("#pagebody .br-section-wrapper") , jpaFiles );
-
-        var instanceOption = {
-
-            isPopSelect : false
-
-        };
-
-        instances.add_instance(_entityId ,'general', instanceOption );
-
-      }
+		}
 
 
 
-      // Stacked Modal
+		// $('.fc-datepicker').datepicker({
 
-		  // $(document).on('show.bs.modal', '.modal', function (event) {
+		//   dateFormat: "yy-mm-dd",
+
+		//   showOtherMonths: true,
+
+		//   selectOtherMonths: true
+
+		// });
+		fn_indexedDB();
+
+
+		});
+
+
+
+		function fn_makeInstance(_entityId){
+
+		delete instances;
+
+		instances = new gen_instance_list($("#pagebody .br-section-wrapper") , jpaFiles );
+
+		var instanceOption = {
+
+			isPopSelect : false
+
+		};
+
+		instances.add_instance(_entityId ,'general', instanceOption );
+
+		}
+
+		var db = null;
+		function fn_indexedDB(){
+
+			var req = indexedDB.open( "thenet" , 2);
+			req.onsuccess = function (evt) {
+				// Better use "this" than "req" to get the result to avoid problems with
+				// garbage collection.
+				// db = req.result;
+				db = this.result;
+				console.log("openDb DONE");
+			};
+			req.onerror = function (evt) {
+				console.error("openDb:", evt.target.errorCode);
+			};
+			req.onupgradeneeded = function (evt) {
+				console.log("openDb.onupgradeneeded");
+				db = this.result;
+				$.each(jpaFiles , function(i, _file){
+					var keyCols = _.filter( _file.gridProperties , { isKey : true } );
+					var keys = $.map(keyCols,function(col,i){
+						return col._name.toUpperCase();
+					});
+
+					var storeIndex = _.indexOf( db.objectStoreNames , _file.entityId);
+					if( storeIndex < 0 ){
+						var store = db.createObjectStore(
+							_file.entityId , { keyPath: keys }
+						);  
+					}				
+
+				});
+				
+				
+				// store.createIndex('title', 'title', { unique: false });
+			};
+
+			
+		}
+
+		// Stacked Modal
+
+			// $(document).on('show.bs.modal', '.modal', function (event) {
 
 				
 
-          // var zIndex = 1500 + (10 * $('.modal:visible').length);
+			// var zIndex = 1500 + (10 * $('.modal:visible').length);
 
-          // $(this).css('z-index', zIndex);
+			// $(this).css('z-index', zIndex);
 
-          // setTimeout(function() {
+			// setTimeout(function() {
 
-          //     $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+			//     $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
 
-          // }, 0);
+			// }, 0);
 
-      // });
-
-
-
-      $(document).on('shown.bs.modal', '.modal', function (event) {
-
-        var grid = $(event.target).find(".ui-jqgrid-btable");
-
-          if(grid.length > 0 ){
-
-            var gridParam = grid.getGridParam();
-
-            // height
-
-            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-
-            gridBody.height( "100%" );
-
-            grid.setGridWidth($(event.target).find(".modal-body").width());
-
-            gridBody.height( gridBody.height() + 10  );
-
-            // action submit prevent
-
-            $(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
-
-          }
-
-          var backdrops = $('.modal-backdrop.fade.show');
-
-          $.each(backdrops, function(i, backdrop){
-
-            if(i>0)
-
-              $(backdrop).css("opacity",0);
-
-          });
-
-      });
+		// });
 
 
 
-      // modal Close
+		$(document).on('shown.bs.modal', '.modal', function (event) {
+
+		var grid = $(event.target).find(".ui-jqgrid-btable");
+
+			if(grid.length > 0 ){
+
+			var gridParam = grid.getGridParam();
+
+			// height
+
+			var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+
+			gridBody.height( "100%" );
+
+			grid.setGridWidth($(event.target).find(".modal-body").width());
+
+			gridBody.height( gridBody.height() + 10  );
+
+			// action submit prevent
+
+			$(grid.getGridParam("pager")).find("td button.dropdownmenu").attr("type","button");
+
+			}
+
+			var backdrops = $('.modal-backdrop.fade.show');
+
+			$.each(backdrops, function(i, backdrop){
+
+			if(i>0)
+
+				$(backdrop).css("opacity",0);
+
+			});
+
+		});
+
+
+
+		// modal Close
 
 			$(document).on('hidden.bs.modal', function (event) {
 
@@ -1444,78 +1481,78 @@
 
 				$('.modal:visible').length && $(document.body).addClass('modal-open');
 
-        // $("#modal_2019-5-31-11-38-56").remove();
+		// $("#modal_2019-5-31-11-38-56").remove();
 
-        var _this = $(this);
+		var _this = $(this);
 
-        var target = $(event.target);        
+		var target = $(event.target);        
 
-        if(target.attr("isCloned") != null)
+		if(target.attr("isCloned") != null)
 
-          target.remove();
-
-
-
-        // success , alert ë±ì instance ê° ìì¼ë¯ë¡ ë³ëë¡ ì§ì í´ ì¤ë¤.
-
-        var targetId = target.attr("id");
-
-        if(target.attr("target-id") != null)
-
-          targetId = target.attr("target-id");
-
-        var target_instance = findAllByElName(instances.list   , {containerId : targetId });
-
-        if ( target_instance == null)
-
-          return;
+			target.remove();
 
 
 
-        var list_instance = target_instance.list_instance;
+		// success , alert ë±ì instance ê° ìì¼ë¯ë¡ ë³ëë¡ ì§ì í´ ì¤ë¤.
 
-        var rm_instance = null;
+		var targetId = target.attr("id");
 
+		if(target.attr("target-id") != null)
 
+			targetId = target.attr("target-id");
 
-        if( _.includes(['modal-success'] , target.attr("id") )){
+		var target_instance = findAllByElName(instances.list   , {containerId : targetId });
 
-          // var last_instance = list_instance.list[ instances.list.length -1 ];
+		if ( target_instance == null)
 
-          if(target_instance instanceof genInstanceEdit){
-
-          
-
-          }else if ( target_instance instanceof genInstanceAdd){
-
-            target_instance.modalClone.modal("toggle");
-
-          }else if ( target_instance instanceof genInstanceCopy){
-
-            target_instance.modalClone.modal("toggle");
-
-          }
+			return;
 
 
 
-        }else if ( _.includes(['modal-alert'] , target.attr("id") )){
+		var list_instance = target_instance.list_instance;
+
+		var rm_instance = null;
 
 
 
-        }else{
+		if( _.includes(['modal-success'] , target.attr("id") )){
 
-          rm_instance = list_instance.list.pop();
+			// var last_instance = list_instance.list[ instances.list.length -1 ];
 
-        }
+			if(target_instance instanceof genInstanceEdit){
 
-        // console.log(instances);
+			
 
-        
+			}else if ( target_instance instanceof genInstanceAdd){
+
+			target_instance.modalClone.modal("toggle");
+
+			}else if ( target_instance instanceof genInstanceCopy){
+
+			target_instance.modalClone.modal("toggle");
+
+			}
+
+
+
+		}else if ( _.includes(['modal-alert'] , target.attr("id") )){
+
+
+
+		}else{
+
+			rm_instance = list_instance.list.pop();
+
+		}
+
+		// console.log(instances);
+
+		
 
 			});
 
 
-
+		
 
 
     </script>
