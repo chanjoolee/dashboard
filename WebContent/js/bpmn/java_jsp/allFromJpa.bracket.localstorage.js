@@ -3273,35 +3273,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_top = function(vEntity, j
                 "topColumnNames" : topParent.columnNames ,
                 "topNameColumn" : topParent.nameColumn ,
                 "sqlId": sqlId,                
-                "data": function ( _gridProperties ) {
-                    var _this = this;
-                    var vGridProperties = null;
-                    if( _gridProperties == null)
-                        vGridProperties = gridProperties;
-                    else 
-                        vGridProperties = _gridProperties;
-                    
-                    var prop = _.find( vGridProperties , { _name : _this.childColumnName } );
-                    var dataSrcType = "select";
-                    if ( prop != null && prop._documentation != null && prop._documentation.data_src_type != null)
-                        dataSrcType = prop._documentation.data_src_type;
-                    if (dataSrcType != "select")
-                        return;
-                    $.ajax({
-                        type: "POST",
-                        url: "./genericlListJson.html?" +
-                            "&sqlid=" + _this.sqlId,
-                        data: {},
-                        async: false,
-                        success: function (response) {
-                            var dataList = response.dataList;
-                            $.each(dataList, function (i, data) {
-                                if( data != null)
-                                    _this.value[data[ _this.topColumnName.toUpperCase()]] = data[_this.topNameColumn.toUpperCase()];
-                            });
-                        }
-                    });
-                },
+                // "data"
                 "value": {} ,
                 "sqlIdDynamic": sqlIdDynamic, 
                 "dataDynamic": function ( param ) {
@@ -3436,23 +3408,23 @@ JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_dictionary = function(vEn
             codeColumn : dictionaryDefPropCode._value , 
             nameColumn : dictionaryDefPropName._value ,
             
-            "data": function () {
-                var _this = this;
-                $.ajax({
-                    type: "POST",
-                    url: "./genericlListJson.html?" +
-                        "&sqlid=" + _this.sqlId,
-                    data: {},
-                    async: false,
-                    success: function (response) {
-                        var dataList = response.dataList;
-                        $.each(dataList, function (i, data) {
-                            if( data != null)
-                                _this.value.push(data);
-                        });
-                    }
-                });
-            },
+            // "data": function () {
+            //     var _this = this;
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "./genericlListJson.html?" +
+            //             "&sqlid=" + _this.sqlId ,
+            //         data: {},
+            //         async: false,
+            //         success: function (response) {
+            //             var dataList = response.dataList;
+            //             $.each(dataList, function (i, data) {
+            //                 if( data != null)
+            //                     _this.value.push(data);
+            //             });
+            //         }
+            //     });
+            // },
             "value": []
         };
         _file.dictionaries.push(dictionary);

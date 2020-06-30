@@ -26,6 +26,7 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
     this.caller  = this.option.caller;
     
     this.jpaFile = this.option.caller.jpaFile;
+    this.db = db;
     // this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     
@@ -419,37 +420,43 @@ genInstanceCopy.prototype.makeSchema = function(){
                                                     
             }
 
-            $.ajax({
-                url: "./genericSaveJson.html",
-                type: "POST",
-                data: addRow , 
-                async: false,			                    		
-                success:  function(data){
-                    response1 = data;
-                    if(response1.result != 'success'){
-                        state = false;
-                        $("#modal-alert").attr("target-id", _this.containerId);
-                        $("#modal-alert").find("p").text(response1.message);
-                        $("#modal-alert").modal();
-                    } 
-                    // Success
-                    else {
-                        // To do 
-                        // Message ==> Click  ==> Parent Grid Refresh , Self Refresh Edit
-                        _this.caller.fn_search();
-                        var msg = "Save Success!";
-                        $("#modal-success").attr("target-id", _this.containerId);
-                        $("#modal-success").find("p").text(msg);
-                        $("#modal-success").modal();
-                        // reload to edit mode;
-                    }						                    			
-                }
-            });
+            var transaction = _this.db.transaction( [_this.entityId ], "readwrite");
+            transaction.oncomplete = function(event) {
+                // var msg = "Save Success!";
+                // $("#modal-success").attr("target-id", _this.containerId);
+                // $("#modal-success").find("p").text(msg);
+                // $("#modal-success").modal();
+            };
 
-            return state;
+            transaction.onerror = function(event) {
+                state = false;
+                // $("#modal-alert").attr("target-id", _this.containerId);
+                // $("#modal-alert").find("p").text("Duplicate items not allowed");
+                // $("#modal-alert").modal();
+            };
+            var objectStore = transaction.objectStore(_this.entityId);
+            var objectStoreRequest = objectStore.add(addRow);
+
+            objectStoreRequest.onsuccess = function(event) {
+                // report the success of our request
+                // note.innerHTML += '<li>Request successful.</li>';
+                _this.caller.fn_search();
+                var msg = "Save Success!";
+                $("#modal-success").attr("target-id", _this.containerId);
+                $("#modal-success").find("p").text(msg);
+                $("#modal-success").modal();
+                return state;
+            };
+
+            objectStoreRequest.onerror = function(event) {
+                state = false;
+                $("#modal-alert").attr("target-id", _this.containerId);
+                $("#modal-alert").find("p").text("Duplicate items not allowed");
+                $("#modal-alert").modal();
+                return state;
+            };
+
         }
-        // ,progressObject: $("#loader"),
-        // fn_pop_select : commonFunc.fn_pop_select
     };
 
 

@@ -585,8 +585,10 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
         }
         if(dicCodes.length > 0){
             item.edittype = "select";
-            if(item.formatter == null)
-                item.formatter = "select"
+            if(item.formatter == null){
+                item.formatter = "select";
+            }
+                
             var editopt = item.editoptions;
             if(editopt == undefined){							
                 editopt = {};
@@ -793,36 +795,48 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                         };
                         $.each(postdata.id.split(","),function(i,rowid){
                             var row = grid.getRowData(rowid);
-                            paramObj.delRows.push(row);
-                        });
-                        
-                        //  
-                        paramObj.loop_id = "delRows";
-                        $.ajax({
-                            url: "./genericSaveJson.html",
-                            type: "POST",
-                            data: {
-                                searchJson: JSON.stringify(paramObj),
-                                sqlid: gridParam.sqlId + ".delete"
-                            }  , 
-                            async: false,
-                            success:  function(data){
-                                response1 = data;
-                                if(response1.result == 'success'){
-                                    // gridParam.htmlMaker.instance.fn_search();
-                                    msg = "Del Success!";
-                                    $("#modal-success").attr("target-id", _this.instance.containerId);
-                                    $("#modal-success").find("p").text(msg);
-                                    $("#modal-success").modal();
-                                }else{
-                                    state = false;
-                                    $("#modal-alert").attr("target-id", _this.instance.containerId);
-                                    $("#modal-alert").find("p").text(response1.message);
-                                    $("#modal-alert").modal();
+                            var delQuery = [];
+                            $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
+                                if(prop.isKey){
+                                    delQuery.push(row[prop._name.toUpperCase()]);
                                 }
-                                
-                            }
+                            });
+
+                            var transaction = gridParam.htmlMaker.instance.db.transaction( [ _this.instance.entityId ], "readwrite");
+                            transaction.oncomplete = function(event) {
+                                // var msg = "Save Success!";
+                                // $("#modal-success").attr("target-id", _this.containerId);
+                                // $("#modal-success").find("p").text(msg);
+                                // $("#modal-success").modal();
+                            };
+                            transaction.onerror = function(event) {
+                                state = false;
+                                // $("#modal-alert").attr("target-id", _this.containerId);
+                                // $("#modal-alert").find("p").text("Duplicate items not allowed");
+                                // $("#modal-alert").modal();
+                            };
+                            var objectStore = transaction.objectStore( _this.instance.entityId );
+                            var objectStoreRequest = objectStore.delete(delQuery);
+                            objectStoreRequest.onsuccess = function(event) {
+                                // _this.caller.fn_search();
+                                // var msg = "Delete Success!";
+                                // $("#modal-success").attr("target-id", _this.instance.containerId);
+                                // $("#modal-success").find("p").text(msg);
+                                // $("#modal-success").modal();
+                                return [state];
+                            };
+                
+                            objectStoreRequest.onerror = function(event) {
+                                state = false;
+                                $("#modal-alert").attr("target-id", _this.instance.containerId);
+                                $("#modal-alert").find("p").text("Delete Fail!");
+                                $("#modal-alert").modal();
+                                return [state];
+                            };
+
                         });
+
+
                         return [true];
                         // //return [success,message,new_id] ;
                         // if(response1.result == 'success'){

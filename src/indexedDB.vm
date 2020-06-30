@@ -704,11 +704,28 @@
 					});
 
 					var storeIndex = _.indexOf( db.objectStoreNames , _file.entityId);
+					var store = null;
 					if( storeIndex < 0 ){
-						var store = db.createObjectStore(
+						store = db.createObjectStore(
 							_file.entityId , { keyPath: keys }
-						);  
-					}				
+                        ); 
+                        
+                        
+                    }else{
+                        // var transaction = db.transaction( _file.entityId , "readonly");
+                        store = evt.target.transaction.objectStore(_file.entityId);
+                    }
+                    // create foreginKey
+                    $.each( _file.dataSources , function(ii, _src ){
+                        var indexPath = $.map(_src.childColumnNames,function(col,jj){
+                            return col.toUpperCase();
+                        });
+                        var idx = _.indexOf( store.indexNames , _src.referenceId );
+                        if( idx < 0 ){
+                            store.createIndex( _src.referenceId , indexPath , { unique: false } );
+                        }
+                        
+                    });				
 
 				});
 				

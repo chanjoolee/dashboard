@@ -26,7 +26,7 @@ function genInstanceAdd(_entityId, _type,  _list_instance , _option ){
     this.caller  = this.option.caller;
     
     this.jpaFile = this.option.caller.jpaFile;
-    this.db = null;
+    this.db = db;
     // this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     
@@ -273,6 +273,7 @@ genInstanceAdd.prototype.makeSchema = function(){
                     var opt = {value: k, label: v};
                     options.push(opt);
                 });
+
                 rtnObj.selectOptions = options;
                 rtnObj.edit_tag = cm.edittype;
                 if ( _this.caller.option.filter != null
@@ -282,6 +283,9 @@ genInstanceAdd.prototype.makeSchema = function(){
                     rtnObj.editable = false;
                 }
             }
+
+            // var src = _.find(_this.instance.jpaFile.dataSrc, {"referenceId": item.referenceId, "topRefrenceId" : item.topRefrenceId , "childColumnName": item.name.toLowerCase()  });
+
             
             v_items.push(rtnObj);
         }

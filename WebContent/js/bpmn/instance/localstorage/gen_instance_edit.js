@@ -25,6 +25,7 @@ function genInstanceEdit(_entityId, _type,  _list_instance , _option ){
     this.caller  = this.option.caller;
     
     this.jpaFile = this.option.caller.jpaFile;
+    this.db = db;
     // this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     

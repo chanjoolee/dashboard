@@ -28,6 +28,8 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     
     this.jpaFile = _.find( this.list_instance.jpaFiles , { entityId : this.entityId, editType: this.type });
     this.db = db;
+    
+
     this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     this.searchContainerId = this.containerId + "_searchContainer";
@@ -125,28 +127,32 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     // ==> 일단은 이것으로 한다.
     // 이것을 완성 한 다음 div 에 소스를 generating 하는 방식으로 한다.
 
-    
-
+        
+    // 데이타소스가 모두 완료가 되었는지. 
+    this.dbDataSourceCompleted = 0 ; 
     this.fn_setDataSourceValue();
-    // container 안에 그린다.
-    // 01. search
-    if(this.option != null && this.option.filter != null ){
-        // 필터가 있다면 검색조건을 만들지 않는다.
-    }else{
-        this.makeSearch();
-    }
+    setTimeout( function(){
+        // container 안에 그린다.
+        // 01. search
+        if(_this.option != null && _this.option.filter != null ){
+            // 필터가 있다면 검색조건을 만들지 않는다.
+        }else{
+            _this.makeSearch();
+        }
+        
+        // 02. grid
+        // this.openDb();
+        _this.makeGrid();
+
+        _this.fn_contextmenu();
+
+        $("#loader").hide();
+
+        if(_this.option != null && _this.option.modal){
+
+        }
+    }, 150 );
     
-    // 02. grid
-    // this.openDb();
-    this.makeGrid();
-
-    this.fn_contextmenu();
-
-    $("#loader").hide();
-
-    if(this.option != null && this.option.modal){
-
-    }
 
 }
 
@@ -154,7 +160,14 @@ genInstance.prototype.fn_setDataSourceValue = function(){
     var _this = this;
     // dictionary
     $.each(_this.jpaFile.dictionaries,function(i, src){
-        src.data();
+        // src.data();
+        // if(src.data != null && typeof src.data == "function"){
+        //     src.data();
+        // }else{
+        //     _this.fn_setDataDictionary(src);
+        // }
+        _this.fn_setDataDictionary(src);
+        
     });
 
     // data scource
@@ -171,11 +184,57 @@ genInstance.prototype.fn_setDataSourceValue = function(){
 
 }
 
+genInstance.prototype.fn_setDataDictionary = function( _datasrc ){
+    var _this = this;
+    _datasrc.value = [];
+    var transactionUse = _this.db.transaction( _datasrc.dictionaryUseTable , "readonly");
+    var objectStoreUse = transactionUse.objectStore( _datasrc.dictionaryUseTable );
+
+    // keyRange not use
+    // var keyRangeUse = IDBKeyRange.only( _this.entityId);
+    var requestUse = objectStoreUse.openCursor();
+    var datalistUse = [];
+    var datalist = [];
+    requestUse.onsuccess = function(event) {
+        var cursor = event.target.result;
+        if(cursor) {
+            // cursor.value contains the current record being iterated through
+            // this is where you'd do something with the result
+            var re = new RegExp("\^" + _this.entityId + "\$", 'i');
+            if(re.exec(cursor.value['TABLE_NAME']) != null){
+                datalistUse.push(cursor.value);
+            }
+            cursor.continue();
+        } else {
+            $.each( datalistUse , function( i, use){
+                // start common code
+                var transactionCode = _this.db.transaction( _datasrc.dictionaryDefTable , "readonly");
+                var objectStoreCode = transactionCode.objectStore( _datasrc.dictionaryDefTable );
+                var requestCode = objectStoreCode.openCursor();
+                requestCode.onsuccess = function(event1){
+                    var cursor1 = event1.target.result;
+                    if(cursor1){
+                        if( cursor1.value[_datasrc.categoryColumn.toUpperCase()] == use[_datasrc.categoryColumn.toUpperCase() ]){
+                            var data = _.cloneDeep(use);
+                            _.merge(data, cursor1.value);
+                            _datasrc.value.push(data);
+                        }                        
+                        cursor1.continue();
+                    }else{
+                        
+                    }
+                }
+            });
+        }
+    };
+}
+
 /**
 부모를 참조하는 데이타 셋팅
 */
 genInstance.prototype.fn_setDataSourceValueParent = function( _datasrc ){
     var _this = this;
+    _datasrc.value = {};
     var prop = _.find( _this.jpaFile.gridProperties , { _name : _datasrc.childColumnName } );
     var dataSrcType = "select";
     if ( prop != null && prop._documentation != null && prop._documentation.data_src_type != null)
@@ -184,20 +243,35 @@ genInstance.prototype.fn_setDataSourceValueParent = function( _datasrc ){
         var dataSrcType = "select";
     if (dataSrcType != "select")
         return;
-    $.ajax({
-        type: "POST",
-        url: "./genericlListJson.html?" +
-            "&sqlid=" + _datasrc.sqlId,
-        data: {},
-        async: false,
-        success: function (response) {
-            var dataList = response.dataList;
-            $.each(dataList, function (i, data) {
-                if( data != null)
-                _datasrc.value[data[ _datasrc.topColumnName.toUpperCase()]] = data[_datasrc.topNameColumn.toUpperCase()];
-            });
-        }
-    });
+    if( _datasrc.data != null && typeof _datasrc.data == "function"){
+        _datasrc.data( _this.jpaFile.gridProperties );
+    }else{
+        // _datasrc.value[data[ _datasrc.topColumnName.toUpperCase()]] = data[_datasrc.topNameColumn.toUpperCase()];
+        var transaction = _this.db.transaction( _datasrc.parentEntity , "readonly");
+        var objectStore = transaction.objectStore( _datasrc.parentEntity);        
+
+        var request = objectStore.openCursor();
+        var datalist = [];
+        var dataUniq = [];
+        
+        request.onsuccess = function(event) {
+            var cursor = event.target.result;
+            if(cursor) {
+                // cursor.value contains the current record being iterated through
+                // this is where you'd do something with the result
+                datalist.push(cursor.value);
+                cursor.continue();
+            } else {
+                dataUniq = _.uniqBy(datalist, _datasrc.childColumnName.toUpperCase() );
+                $.each(dataUniq , function( i , data){
+                    _datasrc.value[data[ _datasrc.topColumnName.toUpperCase()]] = data[_datasrc.topNameColumn.toUpperCase()];
+                });
+
+            }
+        };
+
+    }
+    
 }
 
 genInstance.prototype.makeSearch = function(){
@@ -281,7 +355,9 @@ genInstance.prototype.fn_contextmenu = function(){
                             var instanceOption = {
                                 modal : true,
                                 caller : _this ,
-                                filter : filter
+                                filter : filter ,
+                                referenceType : "parent",
+                                reference : src
                             };
                             _this.list_instance.add_instance ( itemName , 'general' , instanceOption );
                             
@@ -329,7 +405,9 @@ genInstance.prototype.fn_contextmenu = function(){
                             var instanceOption = {
                                 modal : true,
                                 caller : _this ,
-                                filter : filter
+                                filter : filter ,
+                                referenceType : "child",
+                                reference : child
                             };
                             _this.list_instance.add_instance ( itemName , 'general' , instanceOption );
                             
@@ -347,10 +425,10 @@ genInstance.prototype.fn_contextmenu = function(){
             if ( !hasParents && !hasChildrens )
                 return false;
 
-            if ( _.keys(options.items).length == 1 ){
-                options.items[_.keys(options.items)[0]].callback();
-                return false;
-            }
+            // if ( _.keys(options.items).length == 1 ){
+            //     options.items[_.keys(options.items)[0]].callback();
+            //     return false;
+            // }
 
             return options;
             // return false; 
@@ -443,22 +521,69 @@ genInstance.prototype.fn_search = function(){
         var theGrid = $("#" + _this.gridId ).jqGrid();
         var transaction = _this.db.transaction( _this.entityId , "readonly");
         var objectStore = transaction.objectStore( _this.entityId);
-        var request = objectStore.openCursor();
-        var datalist = [];
-        request.onsuccess = function(event) {
-            var cursor = event.target.result;
-            if(cursor) {
-              // cursor.value contains the current record being iterated through
-              // this is where you'd do something with the result
-              datalist.push(cursor.value);
-              cursor.continue();
-            } else {
-                theGrid.setGridParam({data : datalist});
-                theGrid.trigger('reloadGrid');
-            }
-        };
-        // theGrid.setGridParam({data : datalist});
-        // theGrid.trigger('reloadGrid');
+        // preFrame call child 
+        // and you have to find datasorce
+        if(_this.option != null && _this.option.filter != null && _this.option.referenceType=="child"){
+            var datasrc = _.find( _this.jpaFile.dataSrc, {"referenceId": _this.option.reference.referenceId });         
+            var vIndex = objectStore.index(datasrc.referenceId);
+            var keys = [];
+            var vquery = [];
+            $.each(datasrc.parentColumnNames , function(i, col){
+                keys.push(datasrc.childColumnNames[i].toUpperCase());
+            });
+            $.each(keys, function(i, key){
+                vquery.push(_this.option.filter[key]);
+            });
+            
+            var request = vIndex.getAll(vquery);
+            request.onsuccess = function(event) {
+                var cursor = event.target.result;
+                if(cursor) {
+                    theGrid.setGridParam({data : cursor});
+                    theGrid.trigger('reloadGrid');
+                }
+            };
+        }else if(_this.option != null && _this.option.filter != null && _this.option.referenceType=="parent"){
+        // preFrame call parent 
+        // and you have to find self key
+            var keys = [];
+            var vquery = [];
+            $.each(_this.option.reference.parentColumnNames , function(i, col){
+                keys.push(col.toUpperCase());
+            });
+            $.each(keys, function(i, key){
+                vquery.push(_this.option.filter[key]);
+            });
+
+            var request = objectStore.get( vquery );
+            var datalist = [];
+            request.onsuccess = function(event) {
+                var cursor = event.target.result;
+                if(cursor) {
+                    datalist.push(cursor);
+                    theGrid.setGridParam({data : datalist});
+                    theGrid.trigger('reloadGrid');
+                }
+            };
+        }else{
+
+            var request = objectStore.openCursor();
+            var datalist = [];
+            request.onsuccess = function(event) {
+                var cursor = event.target.result;
+                if(cursor) {
+                    // cursor.value contains the current record being iterated through
+                    // this is where you'd do something with the result
+                    datalist.push(cursor.value);
+                    cursor.continue();
+                } else {
+                    theGrid.setGridParam({data : datalist});
+                    theGrid.trigger('reloadGrid');
+                }
+            };
+        }
+        
+        
         
     },50);
 }
