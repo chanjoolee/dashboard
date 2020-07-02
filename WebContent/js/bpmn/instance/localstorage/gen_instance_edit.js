@@ -321,6 +321,7 @@ genInstanceEdit.prototype.makeSchema = function(){
             if (item != null && item.referenceId != null && dataSrc != null){
                 src = _.find( dataSrc, {"referenceId": item.referenceId, "topRefrenceId" : item.topRefrenceId , "childColumnName": item.name.toLowerCase()  });
             }
+            // dynamic combo query
             if ( src.parentColumnNames != null && src.parentColumnNames.length > 1){
                 var index = _.indexOf( _.map(src.childColumnNames,function(column){ return column.toUpperCase();  }) , item.name.toUpperCase() );
                 if (index > -1 && index < (src.parentColumnNames.length -1 )){
@@ -371,43 +372,84 @@ genInstanceEdit.prototype.makeSchema = function(){
             
         },
         fn_submit: function(_editType){
+            var state = true;
+            var reactObjects = this;
             var jpaFile = _this.caller.jpaFile;
             var gridSchema = jpaFile.schema.contents.schema;
             var gridJson = findAllByElName( gridSchema.elements , {type:"grid"});
-
-            var state = true;
-            var paramObj = {
-                //origindatas: this.props.options.keys
-                origindatas: this.state.keys
+            
+                
+            var updateObj = {};
+            var changeCount = 0;
+            $.each(reactObjects,function(i,react){
+                updateObj[this.state.name] = this.state.value;
+                if( this.props.options.value != this.state.value )
+                    changeCount += 1;
+            });
+            if(changeCount == 0 ){
+                var msg = "There is no changes!";
+                $("#modal-alert").attr("target-id", _this.containerId);
+                $("#modal-alert").find("p").text(msg);
+                $("#modal-alert").modal();
+                return state;
+            }
+            var transaction = _this.db.transaction( [_this.entityId ], "readwrite");
+            transaction.oncomplete = function(event) {
+                // var msg = "Save Success!";
+                // $("#modal-success").attr("target-id", _this.containerId);
+                // $("#modal-success").find("p").text(msg);
+                // $("#modal-success").modal();
+            };
+            transaction.onerror = function(event) {
+                state = false;
+                // $("#modal-alert").attr("target-id", _this.containerId);
+                // $("#modal-alert").find("p").text("Duplicate items not allowed");
+                // $("#modal-alert").modal();
+            };
+            var objectStore = transaction.objectStore(_this.entityId);
+            var objectStoreRequest = objectStore.put(updateObj);
+            objectStoreRequest.onsuccess = function(event) {
+                // report the success of our request
+                // note.innerHTML += '<li>Request successful.</li>';
+                _this.caller.fn_search();
+                var msg = "Save Success!";
+                $("#modal-success").attr("target-id", _this.containerId);
+                $("#modal-success").find("p").text(msg);
+                $("#modal-success").modal();
+                return state;
             };
 
-            if(this.props.options.value == this.state.value)
+            objectStoreRequest.onerror = function(event) {
+                state = false;
+                $("#modal-alert").attr("target-id", _this.containerId);
+                $("#modal-alert").find("p").text("Save Fail!");
+                $("#modal-alert").modal();
                 return state;
-
-            $.ajax({
-                url: "./genericSaveJson.html",
-                type: "POST",
-                data: {
-                    searchJson: JSON.stringify(paramObj),
-                    fieldName: this.state.name,
-                    fieldValue: this.state.value,
-                    fieldValueOrigin: this.state.value_origin,
-                    // userId: $("#userId").val(),
-                    // sqlid: "dashboard.ssd_sm.script_master.update"
-                    sqlid: gridJson.sqlId + ".edit"
-                }, 
-                async: false,			                    		
-                success:  function(data){
-                    response1 = data;
-                    if(response1.result != 'success'){
-                        state = false;
-                        $("#modal-alert").attr("target-id", _this.containerId);
-                        $("#modal-alert").find("p").text(response1.message);
-                        $("#modal-alert").modal();
-                    }
+            };
+            // $.ajax({
+            //     url: "./genericSaveJson.html",
+            //     type: "POST",
+            //     data: {
+            //         searchJson: JSON.stringify(paramObj),
+            //         fieldName: this.state.name,
+            //         fieldValue: this.state.value,
+            //         fieldValueOrigin: this.state.value_origin,
+            //         // userId: $("#userId").val(),
+            //         // sqlid: "dashboard.ssd_sm.script_master.update"
+            //         sqlid: gridJson.sqlId + ".edit"
+            //     }, 
+            //     async: false,			                    		
+            //     success:  function(data){
+            //         response1 = data;
+            //         if(response1.result != 'success'){
+            //             state = false;
+            //             $("#modal-alert").attr("target-id", _this.containerId);
+            //             $("#modal-alert").find("p").text(response1.message);
+            //             $("#modal-alert").modal();
+            //         }
                                                             
-                }
-            });
+            //     }
+            // });
             return state;
         },
         fn_afterSubmit: function(keyUpdatedObjects){

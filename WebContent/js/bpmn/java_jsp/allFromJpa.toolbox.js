@@ -3258,6 +3258,32 @@ JpaAllGeneratorToolBox.prototype.fn_entities_edit = function (entity) {
                             
                             if(this.props.options.value == this.state.value)
                                 return state;
+                            
+                            var edit_item = findAllByElName(v_schema.elements , {edit_tag : 'file'});
+                            if (edit_item != null && edit_item.col == this.state.name){
+                                
+                                var parameter = "uploadBoard=schema";
+                                parameter += "&useRealFileName=Y";
+
+                                $('#form').ajaxForm({
+                                    url: "${pageContext.request.contextPath}/fileTestJson.html?" + parameter 
+                                    , type:"POST"
+                                    , dataType:"json"
+                                    , async: false
+                                    , success:function(json) {
+                                        fileInfo = json;
+                                    }
+                                    , error:function(e){
+                                        alert(e);
+                                    }
+                                });
+                                $('#form').submit();
+                                var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+                                if (item_fileinfo != null){
+                                    edit_value = item_fileinfo.filePath;
+                                }		
+                            }
+                            
                             $.ajax({
                                 url: "./genericSaveJson.html",
                                 type: "POST",

@@ -454,12 +454,13 @@ genInstance.prototype.fn_jstreeSearch = function(){
         return;
     }
     var selJsTree3 = [];
-    $.each(_this.jstreeList, function(i,vJsTreeId){
+    $.each(_this.jstreeList, function(i, jsSchema ){
         // 만약 Child Pop 인 경우, jstree가 없으므로 넘어간다.
+        var vJsTreeId = jsSchema.id;
         var $jsTree = _this.form.find("#" + vJsTreeId );
         if ($jsTree.length == 0)
             return true;
-        
+                
         var vJsTree =  _this.form.find("#" + vJsTreeId ).jstree(true);
         // var selJsTree = _.filter(vJsTree._model.data , {state : {selected: true } });
         var selJsTree = _.filter(vJsTree._model.data , function( data ){
@@ -469,43 +470,41 @@ genInstance.prototype.fn_jstreeSearch = function(){
                 return false;
             if ( data.state.selected == null ) 
                 return false;
+            if( data.children_d.length > 0 )
+                return false;
             var vSelected = data.state.selected;
             if ( vSelected)
                 return true;
-            $.each(vJsTree.get_node(data.id).children_d, function(i, nodeId){
-                var vNode = vJsTree.get_node(nodeId);
-                if ( vNode.state.selected) {
-                    vSelected = true;
-                    return false;
-                }
-            });
-            // if ( vJsTree.get_bottom_checked(data.id).length > 0 )
-            // 	return true;
-
+            
             return vSelected;
 
         });
         var selJsTree1 = _.map(selJsTree, function(data, i){
             var obj = {};
-            obj[ data.original.field] = data.original.value;
-
+            $.each(jsSchema.keys , function(i, key){
+                obj[key.codeColumn.toUpperCase()] = data.id.split(";;;")[i];
+            });
             return obj;
 
         });
-        var selJsTree2 = serializeArrayJSON(selJsTree1);
-        
-        $.each(selJsTree2, function(field, data){
-            var obj = {
-                field : field ,
-                // value: [].concat(data)
-                value: data , 
-                isArray : _.isArray(data)
-            };
-            selJsTree3.push( obj );
+        selJsTree3.push({
+            id : vJsTreeId,
+            value : selJsTree1
         });
+        // var selJsTree2 = serializeArrayJSON(selJsTree1);
+        
+        // $.each(selJsTree2, function(field, data){
+        //     var obj = {
+        //         field : field ,
+        //         // value: [].concat(data)
+        //         value: data , 
+        //         isArray : _.isArray(data)
+        //     };
+        //     selJsTree3.push( obj );
+        // });
         
     });
-    _this.form.find("[name=searchJson]").val(JSON.stringify({fields: selJsTree3}));
+    _this.form.find("[name=searchJson]").val(JSON.stringify({jstreeSearch : selJsTree3}));
 }
 
 genInstance.prototype.fn_search = function(){
@@ -566,17 +565,57 @@ genInstance.prototype.fn_search = function(){
                 }
             };
         }else{
-
+            // 모달이 아닌경우. not modal
             var request = objectStore.openCursor();
             var datalist = [];
             request.onsuccess = function(event) {
                 var cursor = event.target.result;
                 if(cursor) {
-                    // cursor.value contains the current record being iterated through
-                    // this is where you'd do something with the result
-                    datalist.push(cursor.value);
+                    var isPass = true;
+                    var searchJson = JSON.parse(_this.form.find("[name=searchJson]").val());
+                    // filter jstree
+                    if(searchJson.jstreeSearch != null) {
+                        $.each(searchJson.jstreeSearch, function(i, jstree){
+                            
+                            if (jstree.value.length > 0){
+                                var where = {};
+                                $.each(jstree.value[0], function(k,v){
+                                    where[k] = cursor.value[k];
+                                });
+                                var vFind = _.find(jstree.value, where );
+                                if(vFind == null){
+                                    isPass = false;
+                                    return false;
+                                }
+                            }
+                            
+                        });                        
+                    }
+                    // filter multicombo
+                    if( isPass){
+                        var combosList = filterAllByElName( _this.jpaFile.schema.search.schema.elements , {type: "multiCombo"} );
+                        $.each(combosList , function(i, combos){
+                            var formarray = $(instances.list[0].form).serializeArray();
+                            var formarrayCombo = _.filter(formarray, {name : combos.name});
+                            if( formarrayCombo.length > 0 
+                                && !_.includes( _.map(formarrayCombo, 'value') , cursor.value[combos.jpa_column.child_column.toUpperCase()] ) 
+                            ){
+                                isPass = false;
+                                return false;
+                            }
+                                
+                        });
+                        
+                    }
+                    
+                    // finally display
+                    if(isPass){
+                        datalist.push(cursor.value);
+                    }
+                    
                     cursor.continue();
                 } else {
+                    theGrid.jqGrid("clearGridData");
                     theGrid.setGridParam({data : datalist});
                     theGrid.trigger('reloadGrid');
                 }

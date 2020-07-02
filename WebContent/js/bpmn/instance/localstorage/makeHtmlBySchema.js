@@ -258,6 +258,14 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                     htmlMaker : _this
                 };
 
+                // if key not editabe
+                if( _this.instance instanceof genInstanceEdit ){
+                    var keyProp = _.find(_this.instance.jpaFile.gridProperties , { _name : item.col.toLowerCase(), isKey: true} );
+                    if(keyProp != null){
+                        tdOption.editable = false;
+                    }
+                }
+
                 // react key 를 지정한다.
                 if(_schema.options != undefined && _schema.options.keys != undefined){
                     var keys = [];
@@ -460,50 +468,51 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
         setTimeout(function(){
             
             if( _schema.edit_type == "edit"){
-                var keyUpdatedObjects = [];
-                // key 가 아닌것을 먼저 update
-                $.each(reactObjects,function(i,item){
-                    var isKeyUpdate = false;
-                    if(this.state.value_origin != this.state.value){
-                        var vObject = this;
-                        $.each(this.state.keys, function(){
-                            if(this.field == vObject.state.name){
-                                this.value = vObject.state.value_origin;
-                                isKeyUpdate = true;
-                            }
+                state = _schema.options.fn_submit.call(reactObjects,"edit");
+                // var keyUpdatedObjects = [];
+                // // key 가 아닌것을 먼저 update
+                // $.each(reactObjects,function(i,item){
+                //     var isKeyUpdate = false;
+                //     if(this.state.value_origin != this.state.value){
+                //         var vObject = this;
+                //         $.each(this.state.keys, function(){
+                //             if(this.field == vObject.state.name){
+                //                 this.value = vObject.state.value_origin;
+                //                 isKeyUpdate = true;
+                //             }
                                 
-                        });
-                        if(!isKeyUpdate){
-                            state = item.props.options.fn_submit.call(this,"edit");
-                            this.setState({value_origin: this.state.value});
-                        }							
-                    }
+                //         });
+                //         if(!isKeyUpdate){
+                //             state = item.props.options.fn_submit.call(this,"edit");
+                //             this.setState({value_origin: this.state.value});
+                //         }							
+                //     }
                         
-                    if(!state)
-                        return false;
-                    // this.setState({mode: "read"});
-                    if(isKeyUpdate){
-                        keyUpdatedObjects.push(item);
-                    }
-                });
+                //     if(!state)
+                //         return false;
+                //     // this.setState({mode: "read"});
+                //     if(isKeyUpdate){
+                //         keyUpdatedObjects.push(item);
+                //     }
+                // });
                 
-                // key 는 나중에 업데이트 한다. 만약 키다 두개이상인 경우는 cover가 안됨
-                $.each(keyUpdatedObjects,function(i,item){
-                    state = item.props.options.fn_submit.call(this,"edit");
-                    this.setState({value_origin: this.state.value});
+                // // key 는 나중에 업데이트 한다. 만약 키다 두개이상인 경우는 cover가 안됨
+                // $.each(keyUpdatedObjects,function(i,item){
+                //     state = item.props.options.fn_submit.call(this,"edit");
+                //     this.setState({value_origin: this.state.value});
                         
-                    if(!state)
-                        return false;
-                    // this.setState({mode: "read"});
+                //     if(!state)
+                //         return false;
+                //     // this.setState({mode: "read"});
                     
-                });
-                if(state){
-                    // btnConfirm.hide();
-                    // btnCancel.hide();
-                    // btnEdit.show();
-                    if(_schema.options != undefined && _schema.options.fn_afterSubmit != undefined)
-                        _schema.options.fn_afterSubmit.call(reactObjects,keyUpdatedObjects);
-                }
+                // });
+                // if(state){
+                //     // btnConfirm.hide();
+                //     // btnCancel.hide();
+                //     // btnEdit.show();
+                //     if(_schema.options != undefined && _schema.options.fn_afterSubmit != undefined)
+                //         _schema.options.fn_afterSubmit.call(reactObjects,keyUpdatedObjects);
+                // }
             }else if (_schema.edit_type == "add"){
                 state = _schema.options.fn_submit.call(reactObjects,"add");
                 
@@ -1051,192 +1060,224 @@ makeHtmlBySchema.prototype.SearchHeader = function(_schema , _schema_parent , co
 
 makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , container, container_parent){
     var _this = this;
+    var vData = [];
+    if ( _schema.data != null && typeof _schema.data == "function"){
+        vData = _schema.data();
+        _this.multiCombo_dom(_schema, container, vData);
+    }else{
+        var transaction = _this.instance.db.transaction( [_schema.entityId], "readonly");
+        transaction.oncomplete = function(event) {
+            // var msg = "Save Success!";
+            // $("#modal-success").attr("target-id", _this.containerId);
+            // $("#modal-success").find("p").text(msg);
+            // $("#modal-success").modal();
+        };
+        transaction.onerror = function(event) {
+            state = false;
+            // $("#modal-alert").attr("target-id", _this.containerId);
+            // $("#modal-alert").find("p").text("Duplicate items not allowed");
+            // $("#modal-alert").modal();
+        };
+        var objectStore = transaction.objectStore(_schema.entityId);
+        var request = objectStore.openCursor();
+        var datalist = [];
+        request.onsuccess = function(event) {
+            var cursor = event.target.result;
+            if(cursor) {
+                datalist.push(cursor.value);
+                cursor.continue();
+            }else{
+                var column = _schema.options.cd.toUpperCase();
+                if ( _schema.options.cd != _schema.options.name){
+                    column += ", _schema.options.name ";
+                }
+                vData = alasql("select distinct " + column +" , 'selected' as selected from ?",[datalist]);
+                _this.multiCombo_dom(_schema, container, vData);
+            }
+        };
 
-    // var container = $("<div/>",{});
-    // _this.defaultSetting(_schema, container);
+    }
     
-    var vData = _schema.data();
+    
+
+
+    // return container;
+}
+
+makeHtmlBySchema.prototype.multiCombo_dom = function(_schema, container, vData){
+    var _this = this;
     var sb = [];
-    //sb.push("<option value='' multiple='multiple' ></option>");
-    var mainControl = $(document.createElement( "select" ));
-    mainControl.css("width",_schema.width);
-    if(_schema.multiselectOpt != undefined && _schema.multiselectOpt.multiple != undefined && _schema.multiselectOpt.multiple == true )
-        mainControl.attr("multiple","multiple");
-    if(_schema.name != undefined)
-        mainControl.attr("name",_schema.name);
-    if(_schema.id != undefined)
-        mainControl.attr("id",_schema.id);
+    var mainControl = $(document.createElement("select"));
+    mainControl.css("width", _schema.width);
+    if (_schema.multiselectOpt != undefined && _schema.multiselectOpt.multiple != undefined && _schema.multiselectOpt.multiple == true)
+        mainControl.attr("multiple", "multiple");
+    if (_schema.name != undefined)
+        mainControl.attr("name", _schema.name);
+    if (_schema.id != undefined)
+        mainControl.attr("id", _schema.id);
     container.append(mainControl);
-    
-    
+
+
     /* var option1 = $(document.createElement( "option" ));
     option1.val('xxx');
     option1.text('xxx');
     option1.css("display","none");
     mainControl.append(option1); */
-    
-    if(_schema.options.group != undefined){
+    if (_schema.options.group != undefined) {
         var groupKeys = [_schema.options.group.cd, _schema.options.group.name];
         var series = getDrillDownDataSeries2(
-                '',
-                vData ,
-                groupKeys ,
-                [], //filter
-                [], //convert
-                '', //xAxis
-                '',
-                {cd: _schema.options.group.cd, name: _schema.options.group.name},
-                {isGroupby: false}
+            '',
+            vData,
+            groupKeys,
+            [],
+            [],
+            '',
+            '',
+            { cd: _schema.options.group.cd, name: _schema.options.group.name },
+            { isGroupby: false }
         );
-        var selected ="selected";
+        var selected = "selected";
         var sb = [];
-        sortObjects(series.series,['name']);
-        $.each(series.series,function(index,s){
-            var optGrp = $(document.createElement( "optgroup" ));
-            optGrp.attr("label",s.name);
-            optGrp.attr("cd",s.cd);
+        sortObjects(series.series, ['name']);
+        $.each(series.series, function (index, s) {
+            var optGrp = $(document.createElement("optgroup"));
+            optGrp.attr("label", s.name);
+            optGrp.attr("cd", s.cd);
             mainControl.append(optGrp);
-            $.each(s.data,function(index1,d){
-                var option = $(document.createElement( "option" ));
+            $.each(s.data, function (index1, d) {
+                var option = $(document.createElement("option"));
                 option.val(this[_schema.options.cd]);
                 option.text(this[_schema.options.name]);
                 //모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
-                $.each(this,function(k,v){
-                    option.attr(k.toLowerCase(),v);
+                $.each(this, function (k, v) {
+                    option.attr(k.toLowerCase(), v);
                 });
                 optGrp.append(option);
             });
         });
-        
+
     }
     else {
-        $.each(vData,function(){
-            var option = $(document.createElement( "option" ));
+        $.each(vData, function () {
+            var option = $(document.createElement("option"));
             option.val(this[_schema.options.cd]);
             option.text(this[_schema.options.name]);
             var _this = this;
             //모든 쿼리필드를 attr 등록 하여 jquery에서 사용할 수 있도록 한다.
-            
-            $.each(this,function(k,v){
-                try{
-                    option.attr(k.toLowerCase(),v);
-                }catch(e){
+            $.each(this, function (k, v) {
+                try {
+                    option.attr(k.toLowerCase(), v);
+                }
+                catch (e) {
                     console.log(_this);
-                }						
+                }
             });
             //sb.push("<option value='"+ this[_schema.options.cd] +"' "+''+">" + this[_schema.options.name] +"</option>");
             mainControl.append(option);
         });
     }
-    
-    
-    
+
+
+
     //$(vSelect).append(sb.join(""));
     //$(vSelect).append(sb.join(""));
     var multiselectOpt = {
         //selectedList: 1,
         // multiple: true,
-        height:300,
+        height: 300,
         minWidth: 100,
         //selectedText: _schema.text + ' # selected',
-        selectedText: function(numChecked, numTotal, checkedItems){
-             return numChecked + ' of ' + numTotal + ' checked';
+        selectedText: function (numChecked, numTotal, checkedItems) {
+            return numChecked + ' of ' + numTotal + ' checked';
         },
         noneSelectedText: 'Select ' + _schema.text
-        
     };
-    if(_schema.multiselectOpt != undefined)
+    if (_schema.multiselectOpt != undefined)
         $.extend(multiselectOpt, _schema.multiselectOpt);
     var vMultiSelect = mainControl.multiselect(multiselectOpt).multiselectfilter();
-    this.container.find("button.ui-multiselect.ui-widget").css("width","100%");
-    mainControl.multiselect('widget').css("width","420px");
-    mainControl.multiselect('widget').find(".ui-multiselect-filter input").css("width","150px");
+    this.container.find("button.ui-multiselect.ui-widget").css("width", "100%");
+    mainControl.multiselect('widget').css("width", "420px");
+    mainControl.multiselect('widget').find(".ui-multiselect-filter input").css("width", "150px");
     // mainControl.multiselectOption = multiselectOpt;
-    
     //filter by parent
-    if(_schema.options.childrens != undefined){
-        $.each(_schema.options.childrens, function(i,child){
-            var childSchema = findAll(child.id, eval(child.topElement) )[0];
-            if(childSchema != undefined){						
-                mainControl.on( 'change', function(){
-                    
-                    $("select[name="+_schema.name+"] option").each(function(i,sel){
-                        if($(this).is(':selected')){
-                            $("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "disabled", false );
+    if (_schema.options.childrens != undefined) {
+        $.each(_schema.options.childrens, function (i, child) {
+            var childSchema = findAll(child.id, eval(child.topElement))[0];
+            if (childSchema != undefined) {
+                mainControl.on('change', function () {
+
+                    $("select[name=" + _schema.name + "] option").each(function (i, sel) {
+                        if ($(this).is(':selected')) {
+                            $("select[name=" + child.id + "] option[" + _schema.options.cd + "='" + $(this).val() + "']").prop("disabled", false);
                             //$("input[name=multiselect_pjtCodeList],[value="+$(this).val()+"]").prop( "disabled", true );
-                            $("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "selected", true );
-                        }else{
-                            $("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "disabled", true );
+                            $("select[name=" + child.id + "] option[" + _schema.options.cd + "='" + $(this).val() + "']").prop("selected", true);
+                        }
+                        else {
+                            $("select[name=" + child.id + "] option[" + _schema.options.cd + "='" + $(this).val() + "']").prop("disabled", true);
                             //$("input[name=multiselect_pjtCodeList],[value="+$(this).val()+"]").prop( "disabled", false );
-                            $("select[name="+ child.id+"] option["+_schema.options.cd+"='"+$(this).val()+"']").prop( "selected", false );
+                            $("select[name=" + child.id + "] option[" + _schema.options.cd + "='" + $(this).val() + "']").prop("selected", false);
                         }
                     });
-                    
-                    $("select[name="+ child.id+"] option").each(function(i,project){			
-                        $("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").prop( "disabled", $(this).prop("disabled") );
-                        if($(this).prop("disabled")){
-                            $("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").parent().addClass( "ui-state-disabled" );
-                            $("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").attr("checked",false);
-                            
-                        }else{
-                            $("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").parent().removeClass( "ui-state-disabled" );
-                            $("input[name=multiselect_"+ child.id+"][value='"+$(this).val()+"']").attr("checked",true);
+
+                    $("select[name=" + child.id + "] option").each(function (i, project) {
+                        $("input[name=multiselect_" + child.id + "][value='" + $(this).val() + "']").prop("disabled", $(this).prop("disabled"));
+                        if ($(this).prop("disabled")) {
+                            $("input[name=multiselect_" + child.id + "][value='" + $(this).val() + "']").parent().addClass("ui-state-disabled");
+                            $("input[name=multiselect_" + child.id + "][value='" + $(this).val() + "']").attr("checked", false);
+
                         }
-                        
+                        else {
+                            $("input[name=multiselect_" + child.id + "][value='" + $(this).val() + "']").parent().removeClass("ui-state-disabled");
+                            $("input[name=multiselect_" + child.id + "][value='" + $(this).val() + "']").attr("checked", true);
+                        }
+
                     });
-                    
-                    
+
+
                     //$("input[name=multiselect_"+ child.id+"]").each(function(){
                     //	$("select[name="+ child.id+"] option[value='"+$(this).val()+"']").prop( "selected", $(this).is(":checked") );
                     //});
-                    
                     var childMultiselectOpt = {
                         //selectedList: 1,
-                        height:300,
+                        height: 300,
                         minWidth: 100,
                         //selectedText: _schema.text + ' # selected',
-                        selectedText: function(numChecked, numTotal, checkedItems){
-                             return numChecked + ' of ' + numTotal + ' checked';
+                        selectedText: function (numChecked, numTotal, checkedItems) {
+                            return numChecked + ' of ' + numTotal + ' checked';
                         },
                         noneSelectedText: 'Select ' + childSchema.text
-                        
                     };
-                    if(childSchema.multiselectOpt != undefined)
+                    if (childSchema.multiselectOpt != undefined)
                         $.extend(childMultiselectOpt, childSchema.multiselectOpt);
-                    
-                    
-                    $("select[name="+ child.id+"]").multiselect(childMultiselectOpt).multiselectfilter();
+
+
+                    $("select[name=" + child.id + "]").multiselect(childMultiselectOpt).multiselectfilter();
                     //$("select[name="+ child.id+"]").multiselect(childSchema.multiselectOpt).multiselectfilter();
-                    
                     // 해당하는 Object 만 refresh 한다.
-                    var my = $("select[name="+ child.id+"]");
+                    var my = $("select[name=" + child.id + "]");
                     //my.multiselect('refresh');
-                    var $menu = $.data(my[0],"ech-multiselect").menu;
-                    $menu.css("width","420px");
-                    $menu.find(".ui-multiselect-filter input").css("width","150px");
-                    
+                    var $menu = $.data(my[0], "ech-multiselect").menu;
+                    $menu.css("width", "420px");
+                    $menu.find(".ui-multiselect-filter input").css("width", "150px");
+
                     //$("div.ui-multiselect-menu").css("width","400px");
                     //$(".ui-multiselect-filter input").css("width","150px");
-                    
-                    var obj_child = $("#"+childSchema.id);
+                    var obj_child = $("#" + childSchema.id);
                     obj_child.trigger("change");
                 });
-                
-                
+
+
             }
-            
-        } );
-        
+
+        });
+
     }
-    
-    if ( _this.schema.containerType == "search" ){
-        mainControl.on("change",function(){
+
+    if (_this.schema.containerType == "search") {
+        mainControl.on("change", function () {
             _this.instance.fn_search();
         });
     }
-
-
-    // return container;
 }
 
 makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , container , container_parent){
@@ -1244,51 +1285,97 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
 
     // var container = $("<div/>",{});
     // _this.defaultSetting(_schema, container);
+    var vData = [];
+    if( _schema.data != null && typeof _schema.data ==  "function"){
+        vData = _schema.data();
+        _this.jsTreeSearch_afterData(_schema, container, vData);
+    }else{
+        var transaction = _this.instance.db.transaction( [ _schema.relation.parentEntityName], "readonly");
+        transaction.oncomplete = function(event) {
+            // var msg = "Save Success!";
+            // $("#modal-success").attr("target-id", _this.containerId);
+            // $("#modal-success").find("p").text(msg);
+            // $("#modal-success").modal();
+        };
+        transaction.onerror = function(event) {
+            state = false;
+            // $("#modal-alert").attr("target-id", _this.containerId);
+            // $("#modal-alert").find("p").text("Duplicate items not allowed");
+            // $("#modal-alert").modal();
+        };
+        var objectStore = transaction.objectStore(_schema.relation.parentEntityName);
+        var request = objectStore.openCursor();
+        var datalist = [];
+        request.onsuccess = function(event) {
+            var cursor = event.target.result;
+            if(cursor) {
+                datalist.push(cursor.value);
+                cursor.continue();
+            }else{
+                vData = _.map(datalist, function(data,i){
+                    var rtnObj = {};
+                    $.each(_schema.keys, function(ii, key){
+                        rtnObj[key.codeColumn.toUpperCase()] = data[key.codeColumn.toUpperCase()];
+                        rtnObj[key.nameColumn.toUpperCase()] = data[key.nameColumn.toUpperCase()];
+                    });
+                    return rtnObj;
+                });
+                _this.jsTreeSearch_afterData(_schema, container, vData);
+            }
+        };
+    }
+    
 
-    var vData = _schema.data();
-    var mainControl = $(document.createElement( "div" ));
+    // return container;
+}
+
+
+makeHtmlBySchema.prototype.jsTreeSearch_afterData = function(_schema, container, vData) {
+    var _this = this;
+    var mainControl = $(document.createElement("div"));
 
     mainControl.addClass("ui-multiselect-menu ui-widget-content ui-corner-all");
-    if(_schema.name != undefined)
-        mainControl.attr("name",_schema.name);
-    if(_schema.id != undefined)
-        mainControl.attr("id",_schema.id);
+    if (_schema.name != undefined)
+        mainControl.attr("name", _schema.name);
+    if (_schema.id != undefined)
+        mainControl.attr("id", _schema.id);
     mainControl.hide();
     // mainContainer.append(mainControl);
     mainControl.appendTo(_this.instance.form);
-    _this.instance.jstreeList.push(_schema.id);
-    
+    _this.instance.jstreeList.push(_schema);
+
     var button = $('<button type="button"><span class="ui-icon ui-icon-triangle-2-n-s"></span></button>')
-    .addClass('ui-multiselect ui-widget ui-state-default ui-corner-all')
-    .addClass("")
-    .attr({ 'title':"", 'aria-haspopup':true }) 
-    .css({width: "100%"})
-    .appendTo(container);
+        .addClass('ui-multiselect ui-widget ui-state-default ui-corner-all')
+        .addClass("")
+        .attr({ 'title': "", 'aria-haspopup': true })
+        .css({ width: "100%" })
+        .appendTo(container);
 
     var buttonlabel = $('<span />')
-    .html("Js Tree Search")
-    .appendTo(button);
-    button.on( "click", function() {
+        .html("Js Tree Search")
+        .appendTo(button);
+    button.on("click", function () {
         // mainControl.toggle( 'blind', { to: { width: 200, height: 300 } }, 500 );
         var display = mainControl.css("display");
         var pos = $(this).offset();
         mainControl.css({
             top: pos.top + $(this).outerHeight(),
-            left : pos.left
+            left: pos.left
         });
-        if (display == "none"){
+        if (display == "none") {
             mainControl.show();
-        }else
+        }
+        else
             mainControl.hide();
-        
+
 
     });
 
-    buttonlabel.attr("mainControlId",_schema.id );
+    buttonlabel.attr("mainControlId", _schema.id);
     var searchTree = new List2Tree(vData, _schema.keys);
-    _.merge(searchTree.tree ,
+    _.merge(searchTree.tree,
         {
-            checkbox : {
+            checkbox: {
                 // three_state : false,
                 // cascade: 'undetermined',
                 // visible: true,
@@ -1298,42 +1385,41 @@ makeHtmlBySchema.prototype.jsTreeSearch = function(_schema ,_schema_parent , con
             'plugins': ["checkbox", "state"],
             // 'plugins': ["checkbox", "wholerow"],
             "core": {
-                themes:{
-                    'icons':false
+                themes: {
+                    'icons': false
                 }
             }
         }
     );
 
-    if(_schema.rootText != null){
+    if (_schema.rootText != null) {
         searchTree.tree.core.data[0].text = _schema.rootText;
-    }else{
-        searchTree.tree.core.data[0].text = _.map( _schema.keys,function(key , i){
+    }
+    else {
+        searchTree.tree.core.data[0].text = _.map(_schema.keys, function (key, i) {
             return _.camelCase(key);
         }).join("/");
     }
 
-    mainControl.css("width","400px");
-    mainControl.css("max-height","600px");
-    mainControl.css("overflow","scroll");
+    mainControl.css("width", "400px");
+    mainControl.css("max-height", "600px");
+    mainControl.css("overflow", "scroll");
     mainControl.jstree(_.cloneDeep(searchTree.tree));
     var vtree = mainControl.jstree(true);
-    mainControl.on("changed.jstree", function(){
+    mainControl.on("changed.jstree", function () {
         // var vLabel = $("[mainControlId="+_schema.id + "]");
         // vLabel.text(vtree.get_selected().length + " Selected");
         buttonlabel.text(vtree.get_selected().length + " Selected");
         _this.instance.fn_search();
     });
 
-    $(document).bind('mousedown.' + this._namespaceID, function(e) {
+    $(document).bind('mousedown.' + this._namespaceID, function (e) {
         var display = mainControl.css("display");
 
-        if(display != "none" && e.target != mainControl[0] && !$.contains(mainControl[0], e.target) && !$.contains(button[0], e.target) && e.target !== button[0]) {
+        if (display != "none" && e.target != mainControl[0] && !$.contains(mainControl[0], e.target) && !$.contains(button[0], e.target) && e.target !== button[0]) {
             mainControl.hide();
         }
     });
-
-    // return container;
 }
 
 // 미완성.
@@ -1635,3 +1721,6 @@ makeHtmlBySchema.prototype.tab_item = function(_schema ,_schema_parent , contain
    
     
 }
+
+
+

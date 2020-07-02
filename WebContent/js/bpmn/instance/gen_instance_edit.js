@@ -383,6 +383,45 @@ genInstanceEdit.prototype.makeSchema = function(){
             if(this.props.options.value == this.state.value)
                 return state;
 
+            if (this.edit_tag == "file"){
+                var form1 = _this.form;
+                // fileupload
+                var parameter = "";
+                // if you want to upload options ....
+                // parameter = "uploadBoard=schema";
+                // parameter += "&useRealFileName=Y";
+                var fileInfo = {};
+                if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
+                    form1.ajaxForm({
+                        url: "./fileTestJson.html?" + parameter 
+                        , type:"POST"
+                        , dataType:"json"
+                        , async: false
+                        , success:function(json) {
+                            fileInfo = json;
+                        }
+                        , error:function(e){
+                            alert(e.responseText);
+                        }
+                    });
+                    form1.submit();
+                }            
+                _.merge(addRow, form1.serializeFormJSON() );
+                
+                var edit_items = filterAllByElName( gridSchema.elements , {edit_tag : 'file'});
+                if (edit_items.length > 0 ){
+                    $.each(edit_items, function(i,edit_item){
+                        var item_fileinfo = _.find( fileInfo.searchVO.fileInfoList , {fieldName : edit_item.col });
+                        if (item_fileinfo != null){
+                            addRow[edit_item.col] = item_fileinfo.orgFileName;
+                            addRow[edit_item.file_info.path_column] = item_fileinfo.filePath;
+                            
+                        }		
+                    });
+                                                        
+                }		
+            }
+            
             $.ajax({
                 url: "./genericSaveJson.html",
                 type: "POST",
