@@ -123,7 +123,7 @@ JpaAllGeneratorLocalStorage.prototype.getDefaultOption = function( _schema, _fil
             //     });
             //     return rtnList;
             // },
-            
+
             // events:{
             //     "change" : function(e){
             //         // fn_search();
@@ -539,8 +539,8 @@ JpaAllGeneratorLocalStorage.prototype.fn_entities = function () {
 
     $.each(_this.Model.ownedEntities, function(i, entity){
         _this.fn_entities_general(entity);
-        if(_this.generator.dbType == 'mysql')
-            _this.manageTable(entity);
+        // if(_this.generator.dbType == 'mysql')
+        //     _this.manageTable(entity);
     });
 
     // Make Main Page
@@ -1936,7 +1936,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_fileSave = function(){
     var _this = this;
     var sqls = [];
     var zip = new JSZip();
-    var fQuery = zip.folder("query");
+    // var fQuery = zip.folder("query");
     // var fJsp = zip.folder("jsp");
     var fJavascript = zip.folder("javascript");
     // FileInfo. 
@@ -1945,11 +1945,11 @@ JpaAllGeneratorLocalStorage.prototype.fn_fileSave = function(){
     $.each( _this.files ,function(i,file){
             
         // SQL XML
-        if(file.sqlGenerator != undefined){
-            file.sqlGenerator.fn_generate();
-            var blob = new Blob([file.sqlGenerator.sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
-            fQuery.file(file.sqlGenerator.fileName,blob);
-        }
+        // if(file.sqlGenerator != undefined){
+        //     file.sqlGenerator.fn_generate();
+        //     var blob = new Blob([file.sqlGenerator.sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
+        //     fQuery.file(file.sqlGenerator.fileName,blob);
+        // }
         // JSP. not used. only Main
         if( file.sources != null && file.sources.length > 0){
             var blob = new Blob([file.sources.join("\r\n")], {type: "text/plain;charset=utf-8"});
