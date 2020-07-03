@@ -309,7 +309,17 @@ genInstanceEdit.prototype.makeSchema = function(){
     var schema_options = {
         keys : vKeys ,
         fn_change: function( input ){									
-            // cascade update
+           // cascade update
+            var react_change_byData = function(list, nextSrc, nextReact) {
+                var options = [];
+                $.each(list, function (i, obj) {
+                    var opt = { label: obj[nextSrc.parentNameColumn.toUpperCase()], value: obj[nextSrc.parentColumnName.toUpperCase()] };
+                    options.push(opt);
+                });
+                // nextReact.state.selectOptions = options ;
+                nextReact.setState({ selectOptions: options });
+            };
+
             var __this = this;
             var jpaFile =  _this.caller.jpaFile ;
             var gridSchema = jpaFile.schema.contents.schema;
@@ -321,16 +331,14 @@ genInstanceEdit.prototype.makeSchema = function(){
             if (item != null && item.referenceId != null && dataSrc != null){
                 src = _.find( dataSrc, {"referenceId": item.referenceId, "topRefrenceId" : item.topRefrenceId , "childColumnName": item.name.toLowerCase()  });
             }
-            // dynamic combo query
             if ( src.parentColumnNames != null && src.parentColumnNames.length > 1){
                 var index = _.indexOf( _.map(src.childColumnNames,function(column){ return column.toUpperCase();  }) , item.name.toUpperCase() );
                 if (index > -1 && index < (src.parentColumnNames.length -1 )){
                     var nextColumn = src.childColumnNames[index+1];
                     var nextCm = _.find( cms , {name: nextColumn.toUpperCase() });												
                     var wheres = src.childColumnNames.slice(0,index + 1);
-                    // var frm = document.getElementById("form");
-                    var frm = _this.form[0];
-                    var param = {};
+                    var frm = _this.form[0] ;
+                    var param = [];
                     $.each(wheres , function(i, where ){
                         var whereReact = _.find(__this.reactObjects , 
                             { 
@@ -341,13 +349,17 @@ genInstanceEdit.prototype.makeSchema = function(){
                                 }															
                             }
                         );
-                        if ( __this == whereReact )
-                            param["search_" + _.camelCase(where) ] = input;
-                        else
-                            param["search_" + _.camelCase(where) ]  =  whereReact.state.value;
+                        if ( __this == whereReact ){
+                            param.push({[where.toUpperCase()] : input} ) ;
+                            // param.push(where.toUpperCase() = " = '" + input +  "'" ); 
+                        }                            
+                        else{
+                            param.push( {[where.toUpperCase()] : whereReact.state.value } ) ;
+                            // param.push(where.toUpperCase() = " = '" + whereReact.state.value +  "'" ); 
+                        }
+                            
                     });												
                     var nextSrc = _.find(dataSrc, {"referenceId": nextCm.referenceId, "topRefrenceId" : nextCm.topRefrenceId , "childColumnName": nextCm.name.toLowerCase()  });
-                    var list = nextSrc.dataDynamic(param);
                     var nextReact = _.find( __this.reactObjects , 
                         { 
                             props : { 
@@ -357,15 +369,43 @@ genInstanceEdit.prototype.makeSchema = function(){
                             } 
                         }
                     );
-                    
-                    var options = [];
-                    $.each(list, function (i, obj) {
-                        var opt = { label : obj[nextSrc.parentNameColumn.toUpperCase()], value :obj[nextSrc.parentColumnName.toUpperCase()] };
-                        options.push(opt);
-                    });
-                    // nextReact.state.selectOptions = options ;
-                    nextReact.setState({selectOptions : options });
-                    // setState()
+                    var list = [];
+                    if (nextSrc.dataDynamic != null ){
+                        list = nextSrc.dataDynamic(param);
+                        react_change_byData(list, nextSrc, nextReact);
+                    }else{
+                        
+                        var transaction = _this.db.transaction( [ nextSrc.parentEntity ], "readonly");
+                        transaction.oncomplete = function(event) {
+                        };
+                        transaction.onerror = function(event) {
+                            state = false;
+                        };
+                        var objectStore = transaction.objectStore( nextSrc.parentEntity );
+                        var request = objectStore.openCursor();
+                        var datalist = [];
+                        request.onsuccess = function(event) {
+                            var cursor = event.target.result;
+                            if(cursor) {
+                                datalist.push(cursor.value);
+                                cursor.continue();
+                            }else{
+                                var column = nextSrc.parentColumnName.toUpperCase();
+                                if ( nextSrc.parentNameColumn != nextSrc.parentColumnName){
+                                    column += "," +  nextSrc.parentNameColumn ;
+                                }
+                                var sqlWhere = _.map(param, function(p,i){
+                                    var rtnObj = $.map(p, function(v,k){
+                                        return k +  " = " + "'" + v + "'";
+                                    });
+                                    return rtnObj;
+                                });
+
+                                list = alasql("select distinct " + column +" , 'selected' as selected from ? where " +  sqlWhere.join(" and ")  ,[datalist]);
+                                react_change_byData(list, nextSrc, nextReact);
+                            }
+                        };
+                    }
 
                 }
             }

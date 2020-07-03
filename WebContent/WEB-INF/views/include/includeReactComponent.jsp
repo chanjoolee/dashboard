@@ -171,7 +171,7 @@
 						<div>
 							<select  className="form-control" style={this.props.options.edit_style} onChange={this.changeHandler.bind(this)} value={this.state.value }>
 								<option value="">SELECT</option>
-								{this.props.options.selectOptions.map(opt => {
+								{this.state.selectOptions.map(opt => {
 									return (
 										<option key={opt.value} value={opt.value}>{opt.label}</option>
 									);
@@ -183,7 +183,7 @@
 				}else if(this.state.edit_tag == "radio") {
 					return (
 						<div className="radio">
-							{this.props.options.selectOptions.map(opt => {
+							{this.state.selectOptions.map(opt => {
 								var v_checked = false;
 								if ( opt.value === this.state.value)
 									v_checked = true;

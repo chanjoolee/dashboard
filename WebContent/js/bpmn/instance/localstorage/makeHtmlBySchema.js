@@ -1089,7 +1089,7 @@ makeHtmlBySchema.prototype.multiCombo = function(_schema ,_schema_parent , conta
             }else{
                 var column = _schema.options.cd.toUpperCase();
                 if ( _schema.options.cd != _schema.options.name){
-                    column += ", _schema.options.name ";
+                    column += "," +  _schema.options.name ;
                 }
                 vData = alasql("select distinct " + column +" , 'selected' as selected from ?",[datalist]);
                 _this.multiCombo_dom(_schema, container, vData);

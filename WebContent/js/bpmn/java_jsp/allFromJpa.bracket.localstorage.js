@@ -3053,34 +3053,34 @@ JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_top = function(vEntity, j
                 "topRefrenceId" :  topReferenceId ,
                 "parentEntity" : parentEntity._name,
                 "parentColumnName": parent.columnName,
-                "childColumnName": jpa_prop._name,
-                "childColumnNames": parent.childColumnNames,  
                 "parentNameColumn": parent.nameColumn,
                 "parentColumnNames": parent.columnNames,
+                "childColumnName": jpa_prop._name,
+                "childColumnNames": parent.childColumnNames,  
                 
                 "topEntity" : topParentEntity._name ,
                 "topColumnName" : topParent.columnName ,
                 "topColumnNames" : topParent.columnNames ,
                 "topNameColumn" : topParent.nameColumn ,
-                "sqlId": sqlId,                
+                // "sqlId": sqlId,                
                 // "data"
                 "value": {} ,
-                "sqlIdDynamic": sqlIdDynamic, 
-                "dataDynamic": function ( param ) {
-                    var _this = this;
-                    var rtnList = [];
-                    $.ajax({
-                        type: "POST",
-                        url: "./genericlListJson.html?" +
-                            "&sqlid=" + _this.sqlIdDynamic,
-                        data: param,
-                        async: false,
-                        success: function (response) {
-                            rtnList = response.dataList;
-                        }
-                    });
-                    return rtnList;
-                }
+                // "sqlIdDynamic": sqlIdDynamic, 
+                // "dataDynamic": function ( param ) {
+                //     var _this = this;
+                //     var rtnList = [];
+                //     $.ajax({
+                //         type: "POST",
+                //         url: "./genericlListJson.html?" +
+                //             "&sqlid=" + _this.sqlIdDynamic,
+                //         data: param,
+                //         async: false,
+                //         success: function (response) {
+                //             rtnList = response.dataList;
+                //         }
+                //     });
+                //     return rtnList;
+                // }
             };
             var editSetting = {
                 // "edittype": 'select' ,
