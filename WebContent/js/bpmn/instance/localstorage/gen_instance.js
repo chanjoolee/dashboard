@@ -28,7 +28,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     
     this.jpaFile = _.find( this.list_instance.jpaFiles , { entityId : this.entityId, editType: this.type });
     this.db = db;
-    
+    this.fn_makeSchema();
 
     this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
@@ -280,9 +280,490 @@ genInstance.prototype.makeSearch = function(){
     this.searchContainer = searchContainer;
     this.searchContainer.addClass("form-layout form-layout-7");
     this.form.append(searchContainer);
+
+    // make schema if schema not exists
     var schema = this.jpaFile.schema.search.schema ;
     schema.containerType = "search";
     var makehtml = new makeHtmlBySchema( this.searchContainer , schema , this );
+}
+
+
+genInstance.prototype.fn_makeSchema = function(){
+    var _this = this;
+    var _file = this.jpaFile ;
+    var v_schema = this.jpaFile.schema;
+    if ( v_schema == null){
+        v_schema = {
+            "search" : {
+                name: "v_schema_search",
+                containerId : "v_schema_search" + "Container",
+                schema: {
+                    "type": "Vertical",
+                    "id" : "searchConditionHorizontalLayout",
+                    "name": "searchConditionHorizontalLayout",
+                    "label" : "" ,
+                    // "controlCss" : [
+                    //     {code: "min-height", value: "30px"}
+                    // ],
+                    
+                    elements : [
+                        {
+                            label:'',
+                            type: 'HorizontalLayout',
+                            cls: '',
+                            containerCls: "no-gutters row",		
+                            elements:[
+                                {
+                                    label:'',
+                                    id: "searchVertical",
+                                    type:'Vertical',
+                                    containerCls: "col-sm-10",
+                                    elements:[
+                                        //1line
+                                        {
+                                            label:'',
+                                            type: 'HorizontalLayout',
+                                            id: "searchHorizontalLayout",
+                                            name: "searchHorizontalLayout",
+                                            containerCls: "no-gutters row",
+                                            containerCss : [
+                                                {code: "width", value : "100%" }
+                                            ],
+                                            elements:[
+                                                
+                                            ]
+                                        }
+                                        //2line
+                                    ]
+                                },                            
+                                //검색버튼
+                                {
+                                    label:'',
+                                    type: 'HorizontalLayout',
+                                    containerCls : "col-sm-2",
+                                    elements:[
+                                        {
+                                            type:'ButtonBootstrap',
+                                            id: 'btnSearch',
+                                            name: 'btnSearch',
+                                            label:'SEARCH',
+                                            //width: '50px',
+                                            // cls: 'btn_txt btn_type_e btn_color_a',
+                                            // containerCss:[
+                                            //     {code: 'margin-right', value:'3px'}
+                                            // ],
+                                            events:{
+                                                click : function(){
+                                                    // fn_search();
+                                                    this.htmlMaker.instance.fn_search();
+                                                }
+                                            }
+                                        }
+                                        // ,{
+                                        //     type:'Button',
+                                        //     id: 'btnDownload',
+                                        //     name: 'btndownload',
+                                        //     label:'DOWNLOAD',
+                                        //     //width: '50px',
+                                        //     cls: 'btn_txt btn_type_e btn_color_a',
+                                        //     containerCss:[
+                                        //         {code: 'margin-right', value:'3px'},
+                                        //         {code: "display" , value: 'none'}
+                                        //     ],
+                                        //     events:{
+                                        //         click : function(){
+                                        //             // fn_FileDownload();
+                                        //         }
+                                        //     }
+                                        // }
+                                    
+                                    ]
+                                }
+                            
+                            ]
+                        }                   
+                    ]
+                }
+    
+            }, 
+            "contents": {
+                name: "v_schema_content",
+                containerId : "v_schema_content" + "Container",
+                schema: {
+                    "type": "Vertical",
+                    "id": "contentVertical",
+                    "name": "contentVertical",
+                    "label": "",
+                    elements : [
+    
+                    ]
+    
+    
+                }
+            }
+        };
+        this.jpaFile.schema = v_schema;
+        _this.fn_makeSchemaSearch();
+        _this.fn_makeSchemaGrid();
+    }
+}
+genInstance.prototype.fn_makeSchemaSearch = function(){
+    var _this = this;
+    var _file = this.jpaFile ;
+    var schemaVertical = findAllByElName( _file.schema.search.schema , { id: 'searchVertical' } );
+    var schema = findAllByElName( _file.schema.search.schema , { id: 'searchHorizontalLayout' } );
+    var schemaClone = _.cloneDeep(schema);
+
+    // MultiCombo <== Parents
+    var searchCols = [];
+    var schemaNew = {};
+    var processedReferenceId = "";
+    $.each( this.jpaFile.dataSources, function (i, _datasrc) {
+        var child_columns = _datasrc.childColumnNames;
+        var parent_columns = _datasrc.parentColumnNames;
+        if ( child_columns.length == 1){
+            var parentFile = _.find(_this.list_instance.list, {entityId : _datasrc.parentEntity, editType : "general"} );
+            // multi combo            
+            $.each(child_columns, function (i, child_column) {
+                var parent_column = parent_columns[i];
+                var parentProp = _.find([].concat(parentFile.gridProperties), { "_name": parent_column });
+                var obj_txt = {
+                    type: "SearchHeader",
+                    id: _.camelCase(_datasrc.parentEntity + '_' + parentProp._name) + 'SearchHeader',
+                    name: _.camelCase(parent.parentEntity + '_' + parentProp._name) + 'SearchHeader',
+                    label: '',
+                    text: _.capitalize(_.camelCase(child_column)),
+                    containerCls : "col-sm-2"
+                };
+
+                var obj_combo = {
+                    type: "multiCombo",
+                    id: _.camelCase(_datasrc.parentEntity + '_' + parentProp._name) + 'SearchMultiCombo',
+                    name: _.camelCase(_datasrc.parentEntity + '_' + parentProp._name) + 'SearchMultiCombo',
+                    label: '',
+                    text: _.capitalize(parentProp._name),
+                    jpa_column: { "parent_column": parentProp._name, "child_column": child_column },
+                    events:{
+                        "change" : function(e){
+                            // fn_search();
+                            e.target.htmlMaker.instance.fn_search();
+                        }
+                    },
+                    multiselectOpt : {multiple: true},
+                    width: "150px",
+                    options : {
+                        cd : parentColumnName.toUpperCase(),
+                        name: parentNameColumn.toUpperCase()
+                    },
+                    containerCls : "col-sm"
+                };
+
+                
+
+                schema.elements.push(obj_txt);
+                schema.elements.push(obj_combo);
+            });            
+
+        }else if ( child_columns.length > 1  ){
+            // jstree
+            if ( processedReferenceId == _datasrc.referenceId){
+                // continue
+                return true;
+            }
+            // jstree 가 적용될 datasrc list
+            var ref_datasrcs = _.filter(_this.jpaFile.dataSources , {referenceId : _datasrc.referenceId });
+            var obj_txt = {
+                type: "SearchHeader",
+                id: child_columns.join("_") + '_SearchHeader',
+                name: child_columns.join("_") + '_SearchHeader',
+                label: '',
+                text : _.capitalize(child_columns[0]) + " ...",
+                containerCls : "col-sm-2"
+            };
+
+            // For name columns
+            var vKeys = _.map(ref_datasrcs, function( _src , i){
+                var rtnObj =  {
+                    codeColumn: _src.parentColumnName ,
+                    nameColumn: _src.parentNameColumn
+                };
+                if ( _src.topEntity != _src.parentEntity ){
+                    rtnObj.topParent = _src.topEntity;
+                };
+                return rtnObj;
+                    
+            });
+            var obj_tree = {
+                type: 'jsTreeSearch',
+                id: child_columns.join("_") + '_jsTreeSearch',
+                name: child_columns.join("_") + '_jsTreeSearch',
+                label: _.camelCase(_datasrc.parentEntity) + 'Tree Search',
+                text: ' ',
+                // width: '200px',
+                // keys: _.map(parent_columns, function (col, i) { return col.toUpperCase(); }),
+                keys: vKeys ,
+                rootText: 'Select ' + _.map(child_columns, function (col, i) { return _.camelCase(col); }).join("/"),
+                referenceId: _datasrc.referenceId,
+                // relationColumns: { "parent_columns": parent_columns, "child_columns": child_columns },
+                relation: {
+                    parentEntityName: _datasrc.parentEntity,
+                    childEntityName: _file.entityId,
+                    columns: _.map(parent_columns, function (pcol, i) {
+                        return {
+                            parentColumn: pcol,
+                            childColumn: child_columns[i],
+                            index: i
+                        };
+                    })
+                },
+                popValues : [] ,
+                events: {
+                    "changed.jstree": function (e, data) {
+                        if (data.event != null) {
+                            // fn_search();
+                            e.target.htmlMaker.instance.fn_search();
+                        }
+                    },
+                    "loaded.jstree": function (e, data) {
+                        // getGridData();
+                    }
+                },
+                entityId : _file.entityId ,
+                containerCls: "col-sm"
+            };
+            schema.elements.push(obj_txt);
+            schema.elements.push(obj_tree);  
+
+            processedReferenceId = _datasrc.referenceId;
+        }
+        
+    });
+
+}
+
+genInstance.prototype.fn_makeSchemaGrid = function(){
+    var _this = this;
+    var _file = this.jpaFile ;
+    var schema = findAllByElName( _file.schema.contents.schema , { id: 'contentVertical' } );
+    var schema_obj = {
+        type: "grid",
+        id: _.camelCase( _this.jpaFile.entityId) + 'Grid' ,
+        name: _.camelCase(_this.jpaFile.entityId) + 'Grid' ,
+        label: "" , //_.capitalize(entity._name) ,
+        text : _.capitalize(_this.jpaFilefileName),
+        sqlId : _.camelCase( _this.jpaFile.entityId) + "." + _.camelCase( _this.jpaFile.entityId),
+        entityId : _this.jpaFile.entityId,
+        containerCss:[
+            {code: 'width', value:'100%'},
+            {code: 'margin-top', value:'10px'},
+            {code: 'background-color', value:'#FFF'},
+        ],
+        gridOpt : {
+            datatype:'local',
+            editurl: './ssdCusDummySaveJson.html',
+            styleUI : 'Bootstrap',
+            viewrecords: true,
+            width: '100%',
+            autowidth: true,
+            // shrinkToFit: true,
+            height : 650 ,
+            // sortable: true,
+            // multiSort:true,
+            multiselect: false,
+            multiboxonly: true,
+            multiSort: true ,
+            rowNum: 20,
+            rowList:[5,10,15,20,30],
+            emptyrecords: "No records to view"
+        }
+
+    };
+    schema_obj.items = _.map([].concat(_this.jpaFile.gridProperties), function(prop){
+        var v_prop_doc = prop._documentation;
+        var gridItem = {
+            label : _.capitalize(_.upperCase(prop._name)),
+            name : prop._name.toUpperCase() ,
+            id : prop._name.toUpperCase() ,
+            align: 'center',
+            entityName :_this.entityId ,
+            editable: true ,
+            edithidden : true ,
+            gridId : _this.gridId
+        };
+
+        if( prop.isKey){
+            gridItem.editrules = {edithidden:true};       
+            gridItem.required = true;
+        }
+        // parent 
+        var datasrc = _.find( _this.jpaFile.dataSources , {childColumnName : prop._name});
+        if(datasrc != null){
+            gridItem.referenceId = datasrc.referenceId;
+            if(datasrc.topRefrenceId != null){
+                gridItem.topRefrenceId = datasrc.topRefrenceId;
+            }
+            gridItem.unformat = function( cellval ,  opts , cell){
+                var grid = $(this).jqGrid();
+                var originVal = $(cell).attr("cellValue");
+                //opts.colModel.editoptions.value[]
+                return originVal;
+            }
+        }
+        // children
+        var v_childrens = _.filter( _this.list_instance.jpaFiles , { dataSources : [{ parentEntity : _this.entityId, parentColumnName : prop._name}] }) ; 
+        if( datasrc != null && v_childrens.length > 0){
+            gridItem.cellattr = function( rowId, cellValue, rawObject, cm, rdata ){
+                var grid = $(this).jqGrid();
+                var vGridOpt = grid.getGridParam();
+                // var models = eval(vGridOpt.modelVarName);
+                // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
+                var result = " class='contextMenu contextMenu-all'";
+                result += " style='vertical-align: middle;";
+                // result += "color: black;font-weight: bolder;cursor:pointer;'";
+                result += "cursor:pointer;'";
+                result += " gridId='" + vGridOpt.gridId + "'";
+                result += " entityId='" + vGridOpt.entityId + "'";
+                result += " columnName='" + cm.name + "'";
+                result += " cellValue='" + rawObject[cm.name] + "'";
+                
+                return result;
+            };
+        }else if(datasrc != null){
+            gridItem.cellattr = function( rowId, cellValue, rawObject, cm, rdata ){
+                var grid = $(this).jqGrid();
+                var vGridOpt = grid.getGridParam();
+                // var models = eval(vGridOpt.modelVarName);
+                // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
+                var result = " class='contextMenu contextMenu-parent'";
+                result += " style='vertical-align: middle;";
+                // red
+                // result += "color: #d34b4b;font-weight: bolder;cursor:pointer;'";
+                result += "cursor:pointer;'";
+                result += " gridId='" + vGridOpt.gridId + "'";
+                result += " entityId='" + vGridOpt.entityId + "'";
+                result += " columnName='" + cm.name + "'";
+                result += " cellValue='" + rawObject[cm.name] + "'";
+                
+                return result;
+            };
+        }else if(v_childrens.length > 0){
+            gridItem.cellattr = function( rowId, cellValue, rawObject, cm, rdata ){
+                var grid = $(this).jqGrid();
+                var vGridOpt = grid.getGridParam();
+                // var models = eval(vGridOpt.modelVarName);
+                // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
+                var result = " class='contextMenu contextMenu-child'";
+                result += " style='vertical-align: middle;";
+                // blue
+                // result += "color: #009eff;font-weight: bolder;cursor:pointer;'";
+                result += "cursor:pointer;'";
+                result += " gridId='" + vGridOpt.gridId + "'";
+                result += " entityId='" + vGridOpt.entityId + "'";
+                result += " columnName='" + cm.name + "'";
+                result += " cellValue='" + rawObject[cm.name] + "'";
+                
+                return result;
+            };
+        }else{
+            gridItem.cellattr = function( rowId, cellValue, rawObject, cm, rdata ){
+                var grid = $(this).jqGrid();
+                var vGridOpt = grid.getGridParam();                    
+                var result = "";
+                
+                if ( cm.file_info != null){
+                    result = " class='glyphicon glyphicon-download-alt'";
+                    result += " style='vertical-align: middle;";
+                    result += "cursor:pointer;'";
+                }
+                result += " gridId='" + vGridOpt.gridId + "'";
+                result += " entityId='" + vGridOpt.entityId + "'";
+                result += " columnName='" + cm.name + "'";
+                result += " cellValue='" + rawObject[cm.name] + "'";
+                
+                return result;
+            };
+        }
+
+        // datetime
+        if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
+            gridItem.editoptions = {
+                size: 12,
+                maxlengh: 12,
+                dataInit: function (element) {
+                    //$(element).datepicker({ dateFormat: 'yy-mm-dd', timepicker: true });
+                    $(element).datetimepicker({ 
+                        //formatDate: 'Y-m-d'
+                        //, formatTime:'H:i'
+                        format : 'Y-m-d H:i:s'
+                        //format : 'H:i:s'
+                        //, datepicker: false
+                        , timepicker: true 
+                        , step: 15
+                        //, useSeconds: true //default true
+                    });
+                }
+            }
+        }
+
+        // file_info ==> formatter
+        if (v_prop_doc.file_info != null){
+            gridItem.formatter = function(cellValue, options, rowObject){                    
+                // var return_text = "Download";
+                var return_text = cellValue;
+                if (cellValue != null){
+                    var value_split = cellValue.split("/");
+                    return_text = value_split.pop();
+                }                    
+                // som condition
+                
+                return return_text;
+            };
+            gridItem.unformat = function( cellval ,  opts , cell){
+                var grid = $(this).jqGrid();
+                var originVal = $(cell).attr("cellValue");
+                //opts.colModel.editoptions.value[]
+                return originVal;
+            }
+
+        }
+
+        // custom 
+        _.merge(gridItem, v_prop_doc );
+
+        return gridItem;
+    });
+
+    // custom columns from references
+    // custom columns from Entities
+    if ( _this.jpaFile.entity_doc_obj.custom_columns != null){
+        $.each([].concat(_this.jpaFile.entity_doc_obj.custom_columns), function(i ,custom_column){
+            let gridItem = {
+                label : _.capitalize(_.upperCase(custom_column.column_name)),
+                name : custom_column.column_name.toUpperCase() ,
+                id : custom_column.column_name.toUpperCase() ,
+                align: 'center',
+                entityName : _this.entityId ,
+                editable: true ,
+                gridId : _this.gridId
+            };
+
+            if(custom_column.properties != null){
+                _.merge(gridItem, custom_column.properties);
+            }
+
+            var _index = _.findIndex(schema_obj.items, function(o) { return o.name == custom_column.column_after.toUpperCase(); });
+            if (_index == (schema_obj.items.length -1) )
+                schema_obj.items.push(gridItem);
+            else
+                schema_obj.items.splice(_index,0,gridItem);
+        });
+    }
+
+    // grid option from Entities
+    if ( _this.jpaFile.entity_doc_obj.grid_option != null){
+        _.merge(schema_obj.gridOpt, custom_obj._this.jpaFile.entity_doc_obj.grid_option );
+    }
+    schema.elements.push(schema_obj);
 }
 
 genInstance.prototype.makeGrid = function(){

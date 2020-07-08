@@ -146,8 +146,7 @@ JpaAllGeneratorLocalStorage.prototype.getDefaultOption = function( _schema, _fil
                 {code: 'margin-top', value:'10px'},
                 {code: 'background-color', value:'#FFF'},
             ],	
-            label: _file._name ,
-            
+            label: _file._name ,            
             gridOpt : {
                 // datatype:'local',
                 datatype:'local',
