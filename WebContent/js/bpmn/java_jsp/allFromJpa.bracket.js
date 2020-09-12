@@ -58,7 +58,7 @@ function JpaAllGeneratorBracket( _generator){
      * Jpa Model
      */
     this.Model = _this.generator.schema_bpmn.Model;
-    this.sqlPreFix = "";
+    this.sqlPreFix = this.generator.rowData.SORUCE_ID + ".";
     /**
      * Model에서 SqlPreFix를 정하는 경우 Copy & Paste를 했을 경우 Mapper 의 중복에러가 발생한다.
      * 그래서 입력하는 

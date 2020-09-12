@@ -1,4 +1,4 @@
-function Generator(_schema_bpmn, _cssType, _dbType, _deploy){
+function Generator(_schema_bpmn, _cssType, _dbType, _deploy, _rowdata){
     this.files = {};
     this.cssType = _cssType;
     if(_dbType != null)
@@ -6,6 +6,7 @@ function Generator(_schema_bpmn, _cssType, _dbType, _deploy){
     else
         this.dbType = "oracle";
     this.deploy = _deploy ;
+    this.rowData = _rowdata;
     /**
      * two times call prepend
      * url

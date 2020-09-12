@@ -58,9 +58,9 @@ function JpaAllGeneratorToolBox( _generator){
      * Jpa Model
      */
     this.Model = _this.generator.schema_bpmn.Model;
-    this.sqlPreFix = "";
-    if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"}) != null)
-        this.sqlPreFix = _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"})._value + ".";
+    this.sqlPreFix = this.generator.rowData.SORUCE_ID + ".";
+    // if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"}) != null)
+    //     this.sqlPreFix = _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"})._value + ".";
     this.sqlAddDate = true;
     if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlAddDate", "_value": "false"}) != null)
         this.sqlAddDate = false;
