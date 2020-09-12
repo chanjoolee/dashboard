@@ -287,7 +287,11 @@ genInstance.prototype.makeSearch = function(){
     var makehtml = new makeHtmlBySchema( this.searchContainer , schema , this );
 }
 
-
+/**
+ * 만약 schema가 없다면 schema를 만든다.
+ * 소스 generate를 한다면 schema가 있을 것이다.
+ * js fiddle 같은데에 예제를 올리는 경우.
+ */
 genInstance.prototype.fn_makeSchema = function(){
     var _this = this;
     var _file = this.jpaFile ;

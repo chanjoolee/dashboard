@@ -59,8 +59,13 @@ function JpaAllGeneratorBracket( _generator){
      */
     this.Model = _this.generator.schema_bpmn.Model;
     this.sqlPreFix = "";
-    if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"}) != null)
-        this.sqlPreFix = _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"})._value + ".";
+    /**
+     * Model에서 SqlPreFix를 정하는 경우 Copy & Paste를 했을 경우 Mapper 의 중복에러가 발생한다.
+     * 그래서 입력하는 
+     */
+    // if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"}) != null)
+    //     this.sqlPreFix = _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlPreFix"})._value + ".";
+
     this.sqlAddDate = true;
     if( _.find([].concat(this.Model.eAnnotations.details),{"_key": "sqlAddDate", "_value": "false"}) != null)
         this.sqlAddDate = false;
@@ -750,12 +755,17 @@ JpaAllGeneratorBracket.prototype.fn_entities = function () {
     $.each(_this.Model.ownedEntities, function(i, entity){
         _this.fn_entities_general(entity);
         if(_this.generator.dbType == 'mysql')
+            // 데이타베이스를 생성한다.
             _this.manageTable(entity);
     });
 
     // Make Main Page
 }
 
+/**
+ * entity 를 그대로 쓰는 것이 아니고 entity에 대응하는는 fileObj 를 생성한다. 그리고 이후에는 fileObj를 이용한다. 
+ * @param {*} entity 
+ */
 JpaAllGeneratorBracket.prototype.fn_entities_general = function (entity) {
     var _this = this;    
     var file_name = _.camelCase( entity._name );
@@ -949,6 +959,10 @@ JpaAllGeneratorBracket.prototype.fn_children = function ( _file ) {
 
 }
 
+/**
+ * 화면을 생성하는 엔진의 input 값이 schema를 생성한다.
+ * @param {*} _file 
+ */
 JpaAllGeneratorBracket.prototype.fn_schema = function ( _file) {
     var _this = this;
     var schema = {
@@ -2887,6 +2901,10 @@ JpaAllGeneratorBracket.prototype.fn_datasource = function(foreign_entities, vEnt
     return hasParents;
 }
 
+/**
+ * 테이블생성
+ * @param {*} _entity 
+ */
 JpaAllGeneratorBracket.prototype.manageTable = function( _entity ){
     
     // select table exists
