@@ -29,13 +29,15 @@
 				<div class="content image" style="display:none; position:relative;"><img src="" alt="" style="display:block; position:absolute; left:50%; top:50%; padding:0; max-height:90%; max-width:90%;" /></div>
 				<div class="content default" style="text-align:center;"></div>
 			</div>
+			<div id="test"></div>
 		</div>
+
 
 		<script src="//static.jstree.com/latest/assets/dist/libs/jquery.js"></script>
 		<script src="//static.jstree.com/latest/assets/dist/jstree.min.js"></script>
-		<!-- <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script> -->
-		<script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/ckeditor.js"></script>
-		<!-- <script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/autosave.js"></script> -->
+		<script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
+		<!-- <script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/ckeditor.formatted.js"></script> -->
+		<script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/autosave.js"></script>
 
 		<script src="./js/jointjs/lodash.4.17.10.js"></script>
 
@@ -82,6 +84,9 @@
 			// trigger the read from the reader...
 			reader.readAsDataURL(blob); 
 
+		}
+		function MyPlugin( editor ) {
+			
 		}
 		$(function () {
 			$(window).resize(function () {
@@ -234,6 +239,7 @@
 				})
 				.on('copy_node.jstree', function (e, data) {
 					// { 'id' : data.original.id, 'parent' : data.parent, 'position' : data.position }
+					// 여기에 새로운 node를 추가하는 ajax를 만든다. 아래의 id 에 대입한다.
 					var bind = {
 						id : data.node.id ,
 						parent : data.node.parent, 
@@ -273,10 +279,18 @@
 								cur_editor.destroy();
 							ClassicEditor
 							.create( document.querySelector( '#data .default' ) ,{
+								// extraPlugins: [ Autosave ],
+								// plugins: [ Autosave ],
 								ckfinder: {
 									uploadUrl  : "./ckfinderUploadJson.html"
-								} 
-								
+								}
+								// , autosave: {
+								// 	save( editor ) {
+								// 		// return saveData( editor.getData() );
+								// 		return saveEditor( data.node.id , editor );
+								// 	}
+								// }
+									
 							})
 							.then( editor => {
 								// editors.push({
@@ -298,12 +312,32 @@
 									},
 									
 								});
-								
 
-								editor.model.document.on( 'change:data', () => {
-									// console.log( 'The data has changed!' );
-									return saveEditor( data.node.id , editor );
-								} );
+								// append save button
+								$.ajax({
+									url: "./images/button_save.txt",
+									async: false,
+									success: function (content){
+										var editor_item_container = $("#data .ck.ck-toolbar__items");
+										var button_save = $(content);
+										editor_item_container.append(button_save);
+										button_save.on( "click", function() {
+											saveEditor( data.node.id , editor );
+										});
+										// button_save.click(function() {
+										// 	saveEditor( data.node.id , editor );
+										// });
+									} ,
+									error : function (){
+										
+									},
+								});
+								
+								// // 저장버튼에서 처리하는 것으로 처리할예정임.  2020.12.26
+								// editor.model.document.on( 'change:data', () => {
+								// 	// console.log( 'The data has changed!' );
+								// 	return saveEditor( data.node.id , editor );
+								// } );
 							} )
 							.catch( error => {
 								// console.error( error );
@@ -321,6 +355,10 @@
 
 
 		});
+		</script>
+		<script type="module">
+			// import ttt from "./js/jqGrid_JS_5.1.0/js/jquery-1.11.0.min.js";
+			// ttt('#test').text('Hi from jQuery!');
 		</script>
 	</body>
 </html>
