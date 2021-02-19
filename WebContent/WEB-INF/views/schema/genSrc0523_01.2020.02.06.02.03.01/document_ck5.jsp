@@ -35,9 +35,9 @@
 
 		<script src="//static.jstree.com/latest/assets/dist/libs/jquery.js"></script>
 		<script src="//static.jstree.com/latest/assets/dist/jstree.min.js"></script>
-		<script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
-		<!-- <script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/ckeditor.formatted.js"></script> -->
-		<script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/autosave.js"></script>
+		<!-- <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script> -->
+		<script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/ckeditor.js"></script>
+		<!-- <script src="./js/ckeditor5-build-classic-16.0.0/ckeditor5-build-classic/autosave.js"></script> -->
 
 		<script src="./js/jointjs/lodash.4.17.10.js"></script>
 
@@ -315,7 +315,7 @@
 
 								// append save button
 								$.ajax({
-									url: "./images/button_save.txt",
+									url: "./images/button_save_1.txt",
 									async: false,
 									success: function (content){
 										var editor_item_container = $("#data .ck.ck-toolbar__items");
