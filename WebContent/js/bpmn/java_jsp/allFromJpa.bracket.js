@@ -2979,11 +2979,22 @@ JpaAllGeneratorBracket.prototype.createTable = function( _entity ){
     var _this = this;
     var rtn = false;
     var type = function(_prop){
-        var rtn_type = "VARCHAR(100)";
+        var rtn_type = "VARCHAR";
         if (_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" )
             rtn_type = "DATE";
         else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EInt")
             rtn_type = "INT";
+        
+        // if type is 'varchar', read length
+        if( rtn_type == 'VARCHAR'){
+            var annotationColumn = _.find([].concat(_prop.annotations),{"_xsi:type":"gmmjpa:Column"});
+            if( annotationColumn != null && annotationColumn._length != null && annotationColumn._length != "0"){
+                rtn_type += "(" + annotationColumn._length + ")";
+            }else{
+                rtn_type += "(100)";
+            }
+        }
+        
         return rtn_type;
     };
     var columns =  _.map([].concat(_entity.properties),function(prop,i){
@@ -3061,6 +3072,17 @@ JpaAllGeneratorBracket.prototype.addColumns = function( _entity ){
             rtn_type = "DATE";
         else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EInt")
             rtn_type = "INT";
+
+        // if type is 'varchar', read length
+        if( rtn_type == 'VARCHAR'){
+            var annotationColumn = _.find([].concat(_prop.annotations),{"_xsi:type":"gmmjpa:Column"});
+            if( annotationColumn != null && annotationColumn._length != null && annotationColumn._length != "0"){
+                rtn_type += "(" + annotationColumn._length + ")";
+            }else{
+                rtn_type += "(100)";
+            }
+        }
+        
         return rtn_type;
     };
     var columns =  _.map([].concat(_entity.properties),function(prop,i){
