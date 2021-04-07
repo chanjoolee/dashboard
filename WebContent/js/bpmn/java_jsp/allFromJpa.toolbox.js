@@ -678,10 +678,10 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
                         return true;
                     // if(task._name == "regex pattern")
                     //     debugger;
-                    var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+*\.\\\/,"'\=:;\r\n\[\]{}\-]+)<\/code>/g);
+                    var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                     if(matches){
                         $.each(matches,function(i,m){
-                            var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+*\.\\\/,"'\=:;\r\n\[\]{}\-]+)<\/code>/);
+                            var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                             var content = match.groups.content;
                             // var custom_obj = JSON.parse(content);            
                             eval("var custom_obj = " + _.unescape(content));
@@ -716,10 +716,10 @@ JpaAllGeneratorToolBox.prototype.getDefaultOption = function( _schema, _file ){
             // custom columns from Entities
             if ( vEntity._documentation != null) {            
                     
-                var matches = vEntity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+                var matches = vEntity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                 if(matches){
                     $.each(matches,function(i,m){
-                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                         var content = match.groups.content;
     
                         // var custom_obj = JSON.parse(content);            
@@ -6346,11 +6346,11 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
                 var isSqlSelectCustomed = false; 
                 var matches = null;                
                 if(prop._documentation != null)
-                    matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+                    matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                 
                 if(matches){
                     $.each(matches,function(i,m){
-                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                         var content = match.groups.content;
                         // var custom_obj = JSON.parse(content);            
                         // eval("var custom_obj = " + _.unescape(content));
@@ -6381,10 +6381,10 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
                     return true;
                 // if(task._name == "regex pattern")
                 //     debugger;
-                var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+                var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                 if(matches){
                     $.each(matches,function(i,m){
-                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                         var content = match.groups.content;
                         // var custom_obj = JSON.parse(content);            
                         eval("var custom_obj = " + _.unescape(content));
@@ -6401,10 +6401,10 @@ JpaAllGeneratorToolBox.prototype.sqlSelect = function( _file , schema_jpa_enity,
         // custom columns from Entities
         if ( schema_jpa_enity._documentation != null) {            
                 
-            var matches = schema_jpa_enity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+            var matches = schema_jpa_enity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
             if(matches){
                 $.each(matches,function(i,m){
-                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                     var content = match.groups.content;
                     // var custom_obj = JSON.parse(content);            
                     eval("var custom_obj = " + _.unescape(content));
@@ -6611,10 +6611,10 @@ JpaAllGeneratorToolBox.prototype.sqlInsert = function( _file , schema_jpa_enity,
 
         var custom_sql_insert = "";
         if (prop._documentation != null){
-            var matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+            var matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
             if(matches){
                 $.each(matches,function(i,m){
-                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                     var content = match.groups.content;
                     // var custom_obj = JSON.parse(content);            
                     eval("var custom_obj = " + _.unescape(content));

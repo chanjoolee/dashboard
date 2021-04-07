@@ -415,10 +415,10 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         return true;
                     // if(task._name == "regex pattern")
                     //     debugger;
-                    var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+*\.\\\/,"'\=:;\r\n\[\]{}\-]+)<\/code>/g);
+                    var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                     if(matches){
                         $.each(matches,function(i,m){
-                            var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!\^\?\+*\.\\\/,"'\=:;\r\n\[\]{}\-]+)<\/code>/);
+                            var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                             var content = match.groups.content;
                             // var custom_obj = JSON.parse(content);            
                             eval("var custom_obj = " + _.unescape(content));
@@ -453,10 +453,10 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
             // custom columns from Entities
             if ( vEntity._documentation != null) {            
                     
-                var matches = vEntity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+                var matches = vEntity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                 if(matches){
                     $.each(matches,function(i,m){
-                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                         var content = match.groups.content;
     
                         // var custom_obj = JSON.parse(content);            
@@ -2364,22 +2364,22 @@ JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,
                 var isSqlSelectCustomed = false; 
                 var matches = null;                
                 if(prop._documentation != null)
-                    matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+                    matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                 
                 if(matches){
                     $.each(matches,function(i,m){
-                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                         var content = match.groups.content;
                         // var custom_obj = JSON.parse(content);            
                         // eval("var custom_obj = " + _.unescape(content));
                         var custom_obj = eval( "(" + _.unescape(content) + ")");
                         // sub column 
                         if ( custom_obj.sql_select != null ){
-                            rtn = "(" + custom_obj.sql_select.toUpperCase() + ") as " + prop._name.toUpperCase() ;  
+                            rtn = "(" + custom_obj.sql_select + ") as " + prop._name.toUpperCase() ;  
                             isSqlSelectCustomed = true;             
                         }else if ( custom_obj.query != null ){
                             // 혹시몰라서
-                            rtn = "(" + custom_obj.query.toUpperCase() + ") as " + prop._name.toUpperCase() ;      
+                            rtn = "(" + custom_obj.query + ") as " + prop._name.toUpperCase() ;      
                             isSqlSelectCustomed = true;     
                         }
                         
@@ -2399,10 +2399,10 @@ JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,
                     return true;
                 // if(task._name == "regex pattern")
                 //     debugger;
-                var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+                var matches = ref._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
                 if(matches){
                     $.each(matches,function(i,m){
-                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                        var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                         var content = match.groups.content;
                         // var custom_obj = JSON.parse(content);            
                         eval("var custom_obj = " + _.unescape(content));
@@ -2419,10 +2419,10 @@ JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,
         // custom columns from Entities
         if ( schema_jpa_enity._documentation != null) {            
                 
-            var matches = schema_jpa_enity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+            var matches = schema_jpa_enity._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
             if(matches){
                 $.each(matches,function(i,m){
-                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                     var content = match.groups.content;
                     // var custom_obj = JSON.parse(content);            
                     eval("var custom_obj = " + _.unescape(content));
@@ -2629,10 +2629,10 @@ JpaAllGeneratorBracket.prototype.sqlInsert = function( _file , schema_jpa_enity,
 
         var custom_sql_insert = "";
         if (prop._documentation != null){
-            var matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/g);
+            var matches = prop._documentation.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/g);
             if(matches){
                 $.each(matches,function(i,m){
-                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|]+)<\/code>/);
+                    var match = m.match(/<code class="language-json">(?<content>[\w\s\(\)#$&!%\^\?\+*\.\\\/,"'\=:;\t\r\n\[\]{}\-\+|ㄱ-ㅎㅏ-ㅣ가-힣]+)<\/code>/);
                     var content = match.groups.content;
                     // var custom_obj = JSON.parse(content);            
                     eval("var custom_obj = " + _.unescape(content));
@@ -2984,6 +2984,12 @@ JpaAllGeneratorBracket.prototype.createTable = function( _entity ){
             rtn_type = "DATE";
         else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EInt")
             rtn_type = "INT";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject")
+            rtn_type = "INT";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject")
+            rtn_type = "DOUBLE";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EFloatObject")
+            rtn_type = "FLOAT";
         
         // if type is 'varchar', read length
         if( rtn_type == 'VARCHAR'){
@@ -3067,11 +3073,17 @@ JpaAllGeneratorBracket.prototype.addColumns = function( _entity ){
     var _this = this;
     var rtn = false;
     var type = function(_prop){
-        var rtn_type = "VARCHAR(100)";
+        var rtn_type = "VARCHAR";
         if (_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" )
             rtn_type = "DATE";
         else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EInt")
             rtn_type = "INT";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject")
+            rtn_type = "INT";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject")
+            rtn_type = "DOUBLE";
+        else if(_prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EFloatObject")
+            rtn_type = "FLOAT";
 
         // if type is 'varchar', read length
         if( rtn_type == 'VARCHAR'){
@@ -3082,7 +3094,7 @@ JpaAllGeneratorBracket.prototype.addColumns = function( _entity ){
                 rtn_type += "(100)";
             }
         }
-        
+
         return rtn_type;
     };
     var columns =  _.map([].concat(_entity.properties),function(prop,i){
