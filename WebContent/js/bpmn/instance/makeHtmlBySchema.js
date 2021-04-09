@@ -341,13 +341,15 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                         , onSelectTime: function( _data, _target) {
                             // _target.trigger('change');
                             // var react = item;
-                            item.setState({value:_target.val()})
+                            // item.setState({value:_target.val()});
+                            reacttd.setState({value:_target.val()});
                         },
                         onSelectDate :  function( _data, _target) {
                             // _target.trigger('change');
                             // var react = item;
-                            item.setState({value:_target.val()})
-                        },
+                            // item.setState({value:_target.val()});
+                            reacttd.setState({value:_target.val()})
+                        }
                     });
                 }
 
