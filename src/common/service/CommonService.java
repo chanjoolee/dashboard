@@ -354,7 +354,7 @@ public class CommonService {
 	}
 
 	public void decompressGensrcByUrl(Map searchVO , HttpServletRequest req) throws Throwable {
-		
+		requestToVo(req,searchVO);
 		String zipFileUrl = searchVO.get("SOURCE").toString();
 	    String zipFileRealPath = req.getSession().getServletContext().getRealPath(zipFileUrl);
 	    
@@ -382,9 +382,11 @@ public class CommonService {
 					last_path = pathes[pathes.length - 1];
 					String sub_dir = "";
 					if(last_path.equals("query")) {
+						// 데이터원본으로 폴더를 만든다.
 						sub_dir = "/sql/mybatis/mapper" ;
 						String[] filenames = zipFile.getName().split("\\.");
-						sub_dir += "/" + filenames[0];
+						sub_dir += "/" + ((net.sf.json.JSONObject)searchVO.get("searchJson")).get("SORUCE_ID").toString();
+						
 					}else if (last_path.equals("javascript")) {
 						sub_dir = "/js/bpmn/gen" ;
 						String[] filenames = zipFile.getName().split("\\.");
@@ -405,8 +407,19 @@ public class CommonService {
 					}					
 					
 					File file = new File(context_path + sub_dir);
-					if ( !file.exists() )
+					if(last_path.equals("query")) {
+						// 쿼리는 항상 새롭게 만든다. 만약 기존의 것이 필요하다면 데이터원본을 새롭게 만든다.
+						if ( file.exists() ) {
+							file.delete();
+						}
 						file.mkdirs();
+					}else {
+						if ( !file.exists() ) {
+							file.mkdirs();
+						}
+						
+					}
+					
 				} else {
 					if (pathes.length > 1)
 						last_path = pathes[pathes.length - 2];
@@ -416,7 +429,8 @@ public class CommonService {
 					if(last_path.equals("query")) {
 						sub_dir = "/sql/mybatis/mapper" ;
 						String[] filenames = zipFile.getName().split("\\.");
-						sub_dir += "/" + filenames[0];
+						// sub_dir += "/" + filenames[0];
+						sub_dir += "/" + ((net.sf.json.JSONObject)searchVO.get("searchJson")).get("SORUCE_ID").toString();
 					}else if (last_path.equals("javascript")) {
 						sub_dir = "/js/bpmn/gen" ;
 						String[] filenames = zipFile.getName().split("\\.");

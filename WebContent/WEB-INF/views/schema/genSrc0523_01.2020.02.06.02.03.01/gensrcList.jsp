@@ -1421,7 +1421,10 @@
 					$.ajax({
 						url: "./gensrcDeployJson.html" ,
 						type: "POST",
-						data: {SOURCE: rowData.SOURCE }, 
+						data: {
+							SOURCE: rowData.SOURCE ,
+							searchJson : JSON.stringify(rowData)
+						}, 
 						async: false,
 						success:  function(response){
 							$("#loader").hide();
