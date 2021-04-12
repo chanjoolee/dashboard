@@ -596,6 +596,10 @@
 		<script type="text/javascript" src="./js/jstree/3.3.8/dist/jstree.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./js/jstree/3.3.8/dist/themes/default/style.min.css" />
     
+    <!------- datetimepicker -------->
+		<script src="./js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+		<link rel="stylesheet" href="./js/datetimepicker-master/jquery.datetimepicker.css">
+
     <!-- contextMenu -->
     <link rel="stylesheet" media="screen" href="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.css" type="text/css" />
 		<script src="./js/jQuery-contextMenu-master/dist/jquery.contextMenu.min.js"></script>
