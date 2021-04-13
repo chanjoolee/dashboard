@@ -1251,7 +1251,7 @@ JpaAllGeneratorBracket.prototype.fn_schema_search_jstree = function(child_column
             var rtnObj =  {
                 codeColumn: col,
                 nameColumn: col,
-                "topParent" : topParent.entityId
+                "topParent" : topParent
             };
             var column_prop  = _.find([].concat( topParentEntity.properties ), {"_name": topParent.columnName });
             var name_column = _.find([].concat(column_prop.eAnnotations.details),{"_key":"name_column"});
@@ -2384,9 +2384,13 @@ JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,
                         }
                         
                     });
-                }            
+                }
                 if ( !isSqlSelectCustomed && prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" )
-                    rtn = "to_char(" + prop._name.toUpperCase() + ",'YYYY-MM-DD HH24:MI:SS') as " + prop._name.toUpperCase();
+                    // 오라클 Mysql을 구분하여 분개한다.
+                    if(_this.generator.dbType == 'mysql')
+                        rtn = "DATE_FORMAT(" + prop._name.toUpperCase() + ",'%Y-%m-%d %H:%i:%s') as " + prop._name.toUpperCase();
+                    else
+                        rtn = "to_char(" + prop._name.toUpperCase() + ",'YYYY-MM-DD HH24:MI:SS') as " + prop._name.toUpperCase();
                 
                 return rtn;
             }
@@ -2469,7 +2473,15 @@ JpaAllGeneratorBracket.prototype.sqlSelect = function( _file , schema_jpa_enity,
                 // All columns   
                 src = "<if test=\"search_" + _.camelCase(prop._name) + " != null and search_" + _.camelCase(prop._name) + " !='' \">"; sql.wheres.push(src);
                 if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
-                    src = "\tand " + prop._name + " = to_date(#{search_" + _.camelCase(prop._name) + "} , 'YYYY-MM-DD HH24:MI:SS' )"; sql.wheres.push(src);
+                    // 오라클 MySql 을 구분하여 분개한다.
+                    if(_this.generator.dbType == 'mysql'){
+                        src = "\tand " + prop._name + " = STR_TO_DATE(#{search_" + _.camelCase(prop._name) + "} , '%Y-%m-%d %H:%i:%s' )"; sql.wheres.push(src);
+                    }                        
+                    else{
+                        src = "\tand " + prop._name + " = to_date(#{search_" + _.camelCase(prop._name) + "} , 'YYYY-MM-DD HH24:MI:SS' )"; sql.wheres.push(src);
+                    }
+
+                    
                 }
                 else {
                     src = "\tand " + prop._name + " = #{search_" + _.camelCase(prop._name) + "}"; sql.wheres.push(src);
@@ -2519,10 +2531,10 @@ JpaAllGeneratorBracket.prototype.sqlSelectJsTree = function( _file , jpaEntity, 
 
         var columns = "\t" + _.map([].concat(obj_schema.keys), function(key,i){
                 var rtn =  key.codeColumn.toUpperCase();
-                if( key.topParent != undefined &&  key.topParent._name != jpaEntity._name){
+                if( key.topParent != undefined &&  key.topParent.entityId != jpaEntity._name){
                     if ( key.codeColumn != key.nameColumn ){
                         rtn += ",(";
-                        rtn += "select max(t." + key.topParent.nameColumn.toUpperCase() + ") from " + key.topParent.entity._name.toUpperCase() + " t";
+                        rtn += "select max(t." + key.topParent.nameColumn.toUpperCase() + ") from " + key.topParent.entityId.toUpperCase() + " t";
                         rtn += " where t." + key.topParent.columnName + " = " + "a." + key.codeColumn;
                         rtn += " ) AS " + key.nameColumn.toUpperCase();
                     }
@@ -2648,7 +2660,13 @@ JpaAllGeneratorBracket.prototype.sqlInsert = function( _file , schema_jpa_enity,
         if ( custom_sql_insert != ""){
             src = "\t\t" + custom_sql_insert ; sql.contents.push(src);
         }else if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
-            src = "\t\tto_date( #{" + prop._name.toUpperCase() + "} ,'YYYY-MM-DD HH24:MI:SS')"; sql.contents.push(src);
+            // 오라클 Mysql을 구분하여 분개한다.
+            if(_this.generator.dbType == 'mysql'){
+                src = "\t\STR_TO_DATE( #{" + prop._name.toUpperCase() + "} ,'%Y-%m-%d %H:%i:%s')"; sql.contents.push(src);
+            }else{
+                src = "\t\tto_date( #{" + prop._name.toUpperCase() + "} ,'YYYY-MM-DD HH24:MI:SS')"; sql.contents.push(src);
+            }
+            
         }
         else{
             src = "\t\t#{" + prop._name.toUpperCase() + "}"; sql.contents.push(src);
@@ -2713,7 +2731,13 @@ JpaAllGeneratorBracket.prototype.sqlEdit = function( _file , schema_jpa_enity,  
         src = "\t" + "<choose>"; sql.contents.push(src);
         $.each([].concat(vDtCols), function (i, prop) {
             src = "\t\t" + "<when test=\"fieldName eq '" + prop['_name'].toUpperCase() + "' \">"; sql.contents.push(src);
-            src = "\t\t" + "${fieldName} = to_date(#{fieldValue} ,'YYYY-MM-DD HH24:MI:SS')"; sql.contents.push(src);
+            // 오라클 Mysql을 구분하여 분개한다.
+            if(_this.generator.dbType == 'mysql'){
+                src = "\t\t" + "${fieldName} = STR_TO_DATE(#{fieldValue} ,'%Y-%m-%d %H:%i:%s')"; sql.contents.push(src);
+            }else{
+                src = "\t\t" + "${fieldName} = to_date(#{fieldValue} ,'YYYY-MM-DD HH24:MI:SS')"; sql.contents.push(src);
+            }
+            
             src = "\t\t" + "</when>";sql.contents.push(src);
         });
         src = "\t\t" + "<otherwise>"; sql.contents.push(src);
@@ -2734,8 +2758,14 @@ JpaAllGeneratorBracket.prototype.sqlEdit = function( _file , schema_jpa_enity,  
     src = "\t\t\t" + "<foreach collection=\"searchJson.origindatas\" item=\"item\" index=\"index\"  >"; sql.contents.push(src);
     if (vDtWheres.length > 0 ){
         src = "\t\t\t\t" + "<choose>"; sql.contents.push(src);
+        // 오라클 Mysql을 구분하여 분개한다.
         $.each([].concat(vDtWheres), function (i, prop) {
-            src = "\t\t\t\t" + "<when test=\"item.field == '" + prop['_name'].toUpperCase() + "' \">" + " and ${item.field} = to_date( #{item.value} , 'YYYY-MM-DD HH24:MI:SS' ) " + "</when>"; sql.contents.push(src);
+            if(_this.generator.dbType == 'mysql'){
+                src = "\t\t\t\t" + "<when test=\"item.field == '" + prop['_name'].toUpperCase() + "' \">" + " and ${item.field} = STR_TO_DATE( #{item.value} , '%Y-%m-%d %H:%i:%s' ) " + "</when>"; sql.contents.push(src);
+            }else{
+                src = "\t\t\t\t" + "<when test=\"item.field == '" + prop['_name'].toUpperCase() + "' \">" + " and ${item.field} = to_date( #{item.value} , 'YYYY-MM-DD HH24:MI:SS' ) " + "</when>"; sql.contents.push(src);
+            }
+        
         });
         src = "\t\t\t\t" + "<otherwise>" + "and ${item.field} = #{item.value}" + "</otherwise>"; sql.contents.push(src);
         src = "\t\t\t\t" + "</choose>"; sql.contents.push(src);
@@ -2784,7 +2814,13 @@ JpaAllGeneratorBracket.prototype.sqlDelete = function( _file , schema_jpa_enity,
         let vId = _.find( [].concat(prop.annotations) , { "_xsi:type": "gmmjpa:Id" });
         if (vId != null) {
             if ( prop.type._href == "http://www.eclipse.org/emf/2002/Ecore#//EDate" ){
-                src = "\t\tand " + prop._name + " = to_date( #{detail." +   prop._name.toUpperCase() + "} , 'YYYY-MM-DD HH24:MI:SS' ) " ; sql.contents.push(src);
+                // 오라클 Mysql을 구분하여 분개한다.
+                if(_this.generator.dbType == 'mysql'){
+                    src = "\t\tand " + prop._name + " = STR_TO_DATE( #{detail." +   prop._name.toUpperCase() + "} , '%Y-%m-%d %H:%i:%s' ) " ; sql.contents.push(src);
+                }
+                else{
+                    src = "\t\tand " + prop._name + " = to_date( #{detail." +   prop._name.toUpperCase() + "} , 'YYYY-MM-DD HH24:MI:SS' ) " ; sql.contents.push(src);
+                }
             }else{
                 src = "\t\tand " + prop._name + " = #{detail." +   prop._name.toUpperCase() + "}" ; sql.contents.push(src);
             }
