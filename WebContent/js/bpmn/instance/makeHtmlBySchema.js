@@ -128,7 +128,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
     if ( _schema.edit_type == "view"){
         container_class = "form-layout form-layout-6";
     }
-    container.addClass(container_class);
+    // container.addClass(container_class);
 
     var new_row_class = "form-group row";
     if ( _schema.edit_type == "view"){
@@ -204,6 +204,11 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                 minCols = _itemGroup.option.cols;
             fn_make_group_label(_itemGroup);					
         }
+        var containerGroup = $("<div/>",{});
+        container.append(containerGroup);
+        containerGroup.addClass(container_class);
+        if(_itemGroup.display != null )
+            containerGroup.css('display',_itemGroup.display);
 
         // var width = (12 - _itemGroup.cols*2)  / _itemGroup.cols;
         // var col_width = "col-sm-" + width;
@@ -222,7 +227,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
 
             if(i%cols == 0 ){
                 rowDiv = $("<div/>",{class: new_row_class });
-                container.append(rowDiv);
+                containerGroup.append(rowDiv);
             }
             // header
             var labelH = null;
@@ -257,6 +262,8 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                     label : item.label,
                     htmlMaker : _this
                 };
+                if(item.edit_tag != null && item.edit_tag =='hidden')
+                    tdOption.required = false;
 
                 // react key 를 지정한다.
                 if(_schema.options != undefined && _schema.options.keys != undefined){
@@ -289,7 +296,7 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                     item.edit_tag = "file";
                 }
 
-                if( item.edit_tag != undefined )	{
+                if( item.edit_tag != undefined ){
                     tdOption.edit_tag = item.edit_tag;
                     if(item.edit_style != undefined ){
                         tdOption.edit_style = item.edit_style;
