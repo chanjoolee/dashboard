@@ -59,6 +59,13 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
         this.form.find("[name=searchJson]").val(JSON.stringify({fields: v_filters}));
     }
 
+    // 제목을 Label 로 표시한다.
+    var vPageLabel = _this.entityId;
+    var vJpa = _.find(instances.jpaFiles,{entityId : _this.entityId});
+    if (vJpa.entity_doc_obj != null && vJpa.entity_doc_obj.label != null){
+        vPageLabel = vJpa.entity_doc_obj.label;
+    }
+
     if(this.option != null && this.option.modal ){
         var modalCommon = $("[name=infiniteLogModal]");
         this.modalClone = modalCommon.clone();
@@ -66,12 +73,14 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
 
         // Header
         var filterStrs = [];
-        $.each(this.option.filter,function(k,v){
-            var str = _.camelCase(k);
+        $.each(this.option.filterLabel,function(k,v){
+            // k : 컬럼
+            var str = _.camelCase(k);            
             str += " : " + v;
             filterStrs.push(str);
         });
-        var headStr = '[' + _.camelCase(_this.entityId) + ']  ' +  filterStrs.join(" , ");	
+        
+        var headStr = '[' + _.camelCase(vPageLabel) + ']  ' +  filterStrs.join(" , ");	
         var emptystr = "&nbsp;";
 
         this.modalClone.find(".modal-header h6 span").text(headStr );
@@ -96,6 +105,12 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     }else{
         this.container = $("<div/>",{id:  this.containerId });
         this.list_instance.container.append(this.container);
+        // this.container.append($("<h5/>",{class: "page-title"}).text(vPageLabel));
+        this.container.append(`
+        <div class="page-title-box">            
+            <h4 class="page-title">` + vPageLabel  + `</h4>
+        </div>
+        `);
     }
     // show title
     if(this.option != null && this.option.showLabel){
@@ -262,7 +277,7 @@ genInstance.prototype.fn_contextmenu = function(){
                 if (parentJpa.entity_doc_obj != null && parentJpa.entity_doc_obj.label != null){
                     itemName = parentJpa.entity_doc_obj.label;
                 }
-                // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
+                // entityId를 넣어야 하므로 camelCase 를 쓰지 않는다.
                 options.items[itemName] = {
                     name: itemName ,
                     callback : function(key, options){
@@ -272,17 +287,31 @@ genInstance.prototype.fn_contextmenu = function(){
                         if(true){
                             // Form Submit
                             var filter = {};
+                            // 표시를 Label 로 한다.
+                            var filterLabel = {};
                             $.each(src.childColumnNames , function(i,column){
                                 var parentColumn = src.parentColumnNames[i];
-                                if(rowData[column.toUpperCase()] != null)
+                                var parentColumnLabel = parentColumn;
+                                
+                                var parentColumnObj = _.find(parentJpa.gridProperties,{_name: parentColumn});
+                                // 이것을 대안으로 써도 된다.
+                                // findAllByElName(parentJpa.schema.contents.schema.elements, {name:parentColumn.toUpperCase()})
+                                if(parentColumnObj._documentation != null &&  parentColumnObj._documentation.label != null)
+                                    parentColumnLabel = parentColumnObj._documentation.label;
+
+                                if(rowData[column.toUpperCase()] != null){
                                     filter[parentColumn.toUpperCase()] = rowData[column.toUpperCase()];
+                                    filterLabel[parentColumnLabel] = rowData[column.toUpperCase()];
+                                }
+                                    
                                 // $(this).attr("cellValue");
                             });
 
                             var instanceOption = {
                                 modal : true,
                                 caller : _this ,
-                                filter : filter
+                                filter : filter ,
+                                filterLabel : filterLabel
                             };
                             _this.list_instance.add_instance ( src.parentEntity , 'general' , instanceOption );
                             
@@ -326,17 +355,30 @@ genInstance.prototype.fn_contextmenu = function(){
                         if(true){
                             // Form Submit
                             var filter = {};
+                            // 표시를 Label 로 한다.
+                            var filterLabel = {};
                             $.each(child_columns , function(i,column){
                                 var parentColumn = parent_columns[i];
-                                if(rowData[column.toUpperCase()] != null)
+                                var childColumnLabel = column.toUpperCase();
+                                var childColumnObj = _.find(vJpa.gridProperties,{_name:column});
+                                // 이것을 대안으로 써도 된다.
+                                // findAllByElName(vJpa.schema.contents.schema.elements, {name:parentColumn.toUpperCase()})
+                                if(childColumnObj._documentation != null && childColumnObj._documentation.label != null)
+                                    childColumnLabel = childColumnObj._documentation.label;
+                                
+                                if(rowData[column.toUpperCase()] != null){
                                     filter[column.toUpperCase()] = rowData[parentColumn.toUpperCase()];
+                                    filterLabel[childColumnLabel] = rowData[parentColumn.toUpperCase()];
+                                }
+                                    
                                 // $(this).attr("cellValue");
                             });
                             
                             var instanceOption = {
                                 modal : true,
                                 caller : _this ,
-                                filter : filter
+                                filter : filter ,
+                                filterLabel : filterLabel
                             };
                             _this.list_instance.add_instance ( child.childEntityName , 'general' , instanceOption );
                             
