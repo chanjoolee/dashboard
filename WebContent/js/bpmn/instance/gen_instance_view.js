@@ -197,11 +197,10 @@ genInstanceView.prototype.makeSchema = function(){
                     }
                 }
 
-                // if add_hidden , then edit_tage : hidden
-                
-                if (docObj != null && docObj.add_hidden ){
-                    rtnObj.edit_tag = "hidden";
-                }
+                // if add_hidden , then edit_tage : hidden                
+                // if (docObj != null && docObj.view_hidden ){
+                //     rtnObj.edit_tag = "hidden";
+                // }
                 v_items.push(rtnObj);
             }else {
                 rtnObj = _order;
@@ -257,7 +256,7 @@ genInstanceView.prototype.makeSchema = function(){
             }
 
             // if add_hidden , then edit_tage : hidden
-            if (docObj != null && docObj.add_hidden ){
+            if (docObj != null && docObj.view_hidden ){
                 rtnObj.edit_tag = "hidden";
             }
 
