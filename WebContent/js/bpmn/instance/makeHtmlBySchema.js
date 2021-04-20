@@ -919,12 +919,14 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
             
             // var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
             // gridBody.height( gridBody.height() + 10  );
-            var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-            gridBody.height( "100%");   
+
+            // 높이를 고정하므로 주석처리한다.
+            // var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
+            // gridBody.height( "100%");   
             if( !_this.instance.option.modal ){
                 grid.setGridWidth(_this.instance.container.width());
             }  
-            gridBody.height( gridBody.height() + 10  );       
+            // gridBody.height( gridBody.height() + 10  );       
             
                 
             
