@@ -698,7 +698,10 @@
                 var gridParam = grid.getGridParam();
                 // height
                 var gridBody = $("#gbox_" + gridParam.id + " .ui-jqgrid-bdiv");
-                gridBody.height( "100%" );
+                // 그리드에 맞게 하려면 100%
+                // gridBody.height( "100%" );
+                // 모달창의 크기를 고정적으로 한다.
+                gridBody.height( $("body").height() - 150);
                 grid.setGridWidth($(event.target).find(".modal-body").width());
                 gridBody.height( gridBody.height() + 10  );
                 // action submit prevent
@@ -847,6 +850,20 @@
         .modal-xl {
             max-width: 1140px;
         }
+    }
+    .page-title-box .page-title {
+        font-size: 18px;
+        margin: 0;
+        line-height: 75px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: inherit
+    }
+
+    .page-title-box .page-title-right {
+        float: right;
+        margin-top: 20px
     }
   </style>
 </html>
