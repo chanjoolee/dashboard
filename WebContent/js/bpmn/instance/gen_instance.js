@@ -255,10 +255,16 @@ genInstance.prototype.fn_contextmenu = function(){
             if ( cm.referenceId != null){
                 
                 var src = _.find( _this.jpaFile.dataSrc, {"referenceId": cm.referenceId , "topRefrenceId" : cm.topRefrenceId  });
-                // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
+                
+                // Label이 있으면 Label 로 표현한다.
                 var itemName = src.parentEntity;
+                var parentJpa = _.find(instances.jpaFiles,{entityId : src.parentEntity});
+                if (parentJpa.entity_doc_obj != null && parentJpa.entity_doc_obj.label != null){
+                    itemName = parentJpa.entity_doc_obj.label;
+                }
+                // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
                 options.items[itemName] = {
-                    name: "Parents: " + itemName ,
+                    name: itemName ,
                     callback : function(key, options){
                         var m = "clicked: " + key + ", data: " + $(this).text();
 
@@ -278,7 +284,7 @@ genInstance.prototype.fn_contextmenu = function(){
                                 caller : _this ,
                                 filter : filter
                             };
-                            _this.list_instance.add_instance ( itemName , 'general' , instanceOption );
+                            _this.list_instance.add_instance ( src.parentEntity , 'general' , instanceOption );
                             
                         }
                         return; 
@@ -290,7 +296,8 @@ genInstance.prototype.fn_contextmenu = function(){
                 // }
 
             }
-
+            // Seperator
+            options.items["Seperator"] = "-------------";
             // children
             var hasChildrens = false;
             var childrens = _this.jpaFile.childReferences;
@@ -304,8 +311,13 @@ genInstance.prototype.fn_contextmenu = function(){
 
                 // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
                 var itemName = child.childEntityName;
+                // Label이 있으면 Label 로 표현한다.
+                var vJpa = _.find(instances.jpaFiles,{entityId : child.childEntityName});
+                if (vJpa.entity_doc_obj != null && vJpa.entity_doc_obj.label != null){
+                    itemName = vJpa.entity_doc_obj.label;
+                }
                 options.items[itemName] = {
-                    name: "Child: " + itemName ,
+                    name: itemName ,
                     callback : function(key, options){
                         // var m = "clicked: " + key + ", data: " + $(this).text();
                         // console.log(m);
@@ -326,7 +338,7 @@ genInstance.prototype.fn_contextmenu = function(){
                                 caller : _this ,
                                 filter : filter
                             };
-                            _this.list_instance.add_instance ( itemName , 'general' , instanceOption );
+                            _this.list_instance.add_instance ( child.childEntityName , 'general' , instanceOption );
                             
                         }
                         return ;
@@ -342,10 +354,11 @@ genInstance.prototype.fn_contextmenu = function(){
             if ( !hasParents && !hasChildrens )
                 return false;
 
-            if ( _.keys(options.items).length == 1 ){
-                options.items[_.keys(options.items)[0]].callback();
-                return false;
-            }
+            // 참조가 하나만 있는 경우. 바로 보여주기. 일단주석
+            // if ( _.keys(options.items).length == 1 ){
+            //     options.items[_.keys(options.items)[0]].callback();
+            //     return false;
+            // }
 
             return options;
             // return false; 
