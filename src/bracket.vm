@@ -714,7 +714,7 @@
             });
 
             // 마자막것 만 테두리를 파란색 두껍게 한다.
-            var modalContents = $(".modal.fade.bd-example-modal-xl.show .modal-content");
+            var modalContents = $(".modal.fade.show .modal-content");
             modalContents.removeClass("modal-front");
             $(modalContents[modalContents.length-1]).addClass("modal-front");
         });
@@ -758,7 +758,7 @@
             // console.log(instances);
 
             // 마자막것 만 테두리를 파란색 두껍게 한다.
-            var modalContents = $(".modal.fade.bd-example-modal-xl.show .modal-content");
+            var modalContents = $(".modal.fade.show .modal-content");
             modalContents.removeClass("modal-front");
             $(modalContents[modalContents.length-1]).addClass("modal-front");
             
