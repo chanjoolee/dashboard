@@ -47,13 +47,20 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
         this.modalClone = modalCommon.clone();
         this.modalClone.attr("isCloned","true");
 
-        // Header        
-        var headStr = '[' + _.camelCase(_this.entityId) + ' ' + _.capitalize(this.type) +  ']  ' ;
+        // Header
+        // 제목을 Label 로 표시한다.
+        var vPageLabel = this.entityId;
+        var vJpa = _.find(instances.jpaFiles,{entityId : this.entityId});
+        if (vJpa.entity_doc_obj != null && vJpa.entity_doc_obj.label != null){
+            vPageLabel = vJpa.entity_doc_obj.label;
+        }
+
+        var headStr = '[' + _.camelCase(vPageLabel) + ' ' + _.capitalize(this.type) +  ']  ' ;
         this.modalClone.find(".modal-header h6 span").text(headStr);
         if( this.option != null &&
             this.option.filter != null){
                 var filterStrs = [];        
-                $.each(this.option.filter,function(k,v){
+                $.each(this.option.filterLabel,function(k,v){
                     var str = _.camelCase(k);
                     str += " : " + v;
                     filterStrs.push(str);

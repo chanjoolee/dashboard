@@ -755,32 +755,49 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     , editfunc : function(){
                         // commonFunc.fn_view_detail.call(this,'add');
                         var filter = {};
+                        // 표시를 Label 로 한다.
+                        var filterLabel = {};
                         var parentRowKey = grid.jqGrid('getGridParam','selrow');
                         var row = grid.getRowData(parentRowKey);
                         $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
                             if(prop.isKey){
-                                filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                                var column = prop._name.toUpperCase();
+                                var columnLabel = column;
+                                if(prop._documentation != null && prop._documentation.label != null )
+                                    columnLabel = prop._documentation.label;
+                                filter[column] = row[column];
+                                filterLabel[columnLabel] = row[column];
+
                             }
                         });
                         var instanceOption = {
                             modal : true,
                             caller : gridParam.htmlMaker.instance ,
-                            filter : filter
+                            filter : filter ,
+                            filterLabel : filterLabel
                         };
                         gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'edit' , instanceOption );
                     }, viewfunc : function(){
                         var filter = {};
+                        // 표시를 Label 로 한다.
+                        var filterLabel = {};
                         var parentRowKey = grid.jqGrid('getGridParam','selrow');
                         var row = grid.getRowData(parentRowKey);
                         $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
                             if(prop.isKey){
-                                filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                                var column = prop._name.toUpperCase();
+                                var columnLabel = column;
+                                if(prop._documentation != null && prop._documentation.label != null )
+                                    columnLabel = prop._documentation.label;
+                                filter[column] = row[column];
+                                filterLabel[columnLabel] = row[column];
                             }
                         });
                         var instanceOption = {
                             modal : true,
                             caller : gridParam.htmlMaker.instance ,
-                            filter : filter
+                            filter : filter ,
+                            filterLabel : filterLabel
                         };
                         gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'view' , instanceOption );
                     }
@@ -882,6 +899,8 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     onClickButton: function(){ 
                         // commonFunc.fn_view_detail.call(this,'add');
                         var filter = {};
+                        // 표시를 Label 로 한다.
+                        var filterLabel = {};
                         var parentRowKey = grid.jqGrid('getGridParam','selrow');
                         if (parentRowKey == null ){
                             $("#modal-alert").attr("target-id", _this.instance.containerId);
@@ -892,13 +911,19 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                         var row = grid.getRowData(parentRowKey);
                         $.each(gridParam.htmlMaker.instance.jpaFile.gridProperties , function(i,prop){
                             if(prop.isKey){
-                                filter[prop._name.toUpperCase()] = row[prop._name.toUpperCase()];
+                                var column = prop._name.toUpperCase();
+                                var columnLabel = column;
+                                if(prop._documentation != null && prop._documentation.label != null )
+                                    columnLabel = prop._documentation.label;
+                                filter[column] = row[column];
+                                filterLabel[columnLabel] = row[column];
                             }
                         });
                         var instanceOption = {
                             modal : true,
                             caller : gridParam.htmlMaker.instance ,
-                            filter : filter
+                            filter : filter ,
+                            filterLabel : filterLabel
                         };
                         gridParam.htmlMaker.instance.list_instance.add_instance( gridParam.entityId , 'copy' , instanceOption );
                     }, 
