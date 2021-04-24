@@ -932,6 +932,9 @@ JpaAllGeneratorBracket.prototype.fn_children = function ( _file ) {
     var references = [].concat(vEntity.references);
     // entity.references.eAnnotations.details
     $.each(references, function(i, reference){
+        // 삭제된 참조인경우.
+        if (reference._referencedEntity == null)
+            return true;
         var parent_columns = [];
         var parent_columns_detail = _.find([].concat(reference.eAnnotations.details), { "_key": "parent_columns" });
         if (parent_columns_detail != null) {
