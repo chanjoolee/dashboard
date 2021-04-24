@@ -237,9 +237,9 @@ genInstance.prototype.fn_contextmenu = function(){
         _this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu.call(_this);
         return;
     }
-    // 
+    // 셀단위에서 행당위로 바꾼다.
     var default_option = {
-        "selector": "#" + _this.gridContainerId + " .jqgrow td.contextMenu",
+        "selector": "#" + _this.gridContainerId + " .jqgrow td.jqgrid-rownum",
         "trigger": "left",
         "build": function($trigger) {
             var options = {
@@ -249,40 +249,24 @@ genInstance.prototype.fn_contextmenu = function(){
                     options.items[key].callback.call(this,key,options);
                 },
                 items: {}
-
             };
 
-            // if ($trigger.hasClass('something')) {
-            // 	options.items.foo = {name: "foo"};
-            // } else {
-            //     options.items.bar = {name: "bar"};
-            // }
-            var columnName = $trigger.attr("columnName");
-            if (columnName == null)
-                return false;
-
-            var gridId = $trigger.attr("gridId");
+            var gridId = _this.gridId;
             var grid = _this.container.find("#"+gridId).jqGrid();
             var rowId = $trigger.parent().attr("id");
             var rowData = grid.getRowData(rowId);
             var vGridOpt = grid.getGridParam();
             var cms = vGridOpt.colModel;
             var cm = _.find(cms, {name: $trigger.attr("columnName")} );
-            
-            // parents
-            var hasParents = false;
-            var parents = [];
-            if ( cm.referenceId != null){
-                
-                var src = _.find( _this.jpaFile.dataSrc, {"referenceId": cm.referenceId , "topRefrenceId" : cm.topRefrenceId  });
-                
+
+            // Start Parent
+            $.each(_this.jpaFile.dataSrc, function(i,src){
                 // Label이 있으면 Label 로 표현한다.
                 var itemName = src.parentEntity;
                 var parentJpa = _.find(instances.jpaFiles,{entityId : src.parentEntity});
                 if (parentJpa.entity_doc_obj != null && parentJpa.entity_doc_obj.label != null){
                     itemName = parentJpa.entity_doc_obj.label;
                 }
-                // entityId를 넣어야 하므로 camelCase 를 쓰지 않는다.
                 options.items[itemName] = {
                     name: itemName ,
                     callback : function(key, options){
@@ -308,7 +292,6 @@ genInstance.prototype.fn_contextmenu = function(){
                                     filter[parentColumn.toUpperCase()] = rowData[column.toUpperCase()];
                                     filterLabel[parentColumnLabel] = rowData[column.toUpperCase()];
                                 }
-                                    
                                 // $(this).attr("cellValue");
                             });
 
@@ -326,10 +309,9 @@ genInstance.prototype.fn_contextmenu = function(){
                         
                     }
                 };
-                hasParents = true;
-                // }
+            });
+            // End Parent
 
-            }
             // Seperator
             options.items["Seperator"] = "-------------";
             // children
@@ -339,10 +321,7 @@ genInstance.prototype.fn_contextmenu = function(){
             $.each(childrens , function(i,child){
                 var child_columns = child.child_columns;
                 var parent_columns = child.parent_columns;
-                var child_columns_index = _.indexOf(child.parent_columns, cm.name.toLowerCase());
-                if (child_columns_index == -1)
-                    return false;
-
+               
                 // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
                 var itemName = child.childEntityName;
                 // Label이 있으면 Label 로 표현한다.
@@ -393,13 +372,9 @@ genInstance.prototype.fn_contextmenu = function(){
                         
                     }
                 };
-                hasChildrens = true;
-                
-                
+               
             });
             
-            if ( !hasParents && !hasChildrens )
-                return false;
 
             // 참조가 하나만 있는 경우. 바로 보여주기. 일단주석
             // if ( _.keys(options.items).length == 1 ){
@@ -410,7 +385,6 @@ genInstance.prototype.fn_contextmenu = function(){
             return options;
             // return false; 
         }
-
     };
     var option = {};
     if( _this.jpaFile.entity_doc_obj.customFunc.contextOption != null ){

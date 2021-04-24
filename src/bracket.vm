@@ -771,8 +771,14 @@
    <style>
     .ui-dialog { z-index: 1000 !important ;}
     .contextMenu{
+			/* color: #337ab7;			 */
+			/* font-weight: bold; */
+		}
+
+    .ui-jqgrid-bdiv td.jqgrid-rownum{
 			color: #337ab7;			
 			font-weight: bold;
+      cursor: pointer;
 		}
 
     /* *********** Bootstrap Custom Start************/
