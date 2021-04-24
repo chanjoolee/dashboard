@@ -217,6 +217,10 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
         var j=0; // for line feed 
         
         $.each(_itemGroup.items,function(i,item){
+            var isContext = false;
+            if(item.col == "context")
+                isContext = true;
+
             if (item.line_feed != null && item.line_feed){
                 j = j + Math.abs( j - minCols );
                 return true;
@@ -243,10 +247,22 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
                 labelH.append('<span class="tx-danger">*</span>');
             }
 
+            if(isContext){
+                labelH.addClass("contextMenu");
+            }
+            if( item.edit_tag != undefined )	{
+                if(item.edit_tag == "pop_select"){
+                } else if(item.edit_tag == "manual_attach"){
+                } else {
+                    rowDiv.append(labelH);
+                }
+            }else {
+                rowDiv.append(labelH);
+            }
             /**
              * value Div. 리액트 사용부분
              */
-            // row div
+            // row div            
             if(true){
                 var inputDiv = $("<div/>",{class: col_width});
                 // 리액트 옵션
@@ -362,15 +378,8 @@ makeHtmlBySchema.prototype.inline_edit = function(_schema ,_schema_parent , cont
 
                 reacttd.reactObjects = reactObjects;
                 reactObjects.push(reacttd);		
-                if( item.edit_tag != undefined )	{
-                    if(item.edit_tag == "pop_select"){
-                    } else if(item.edit_tag == "manual_attach"){
-                    } else {
-                        rowDiv.append(labelH);
-                    }
-                }else {
-                    rowDiv.append(labelH);
-                }
+                
+                
                 
                 rowDiv.append(inputDiv);
             }

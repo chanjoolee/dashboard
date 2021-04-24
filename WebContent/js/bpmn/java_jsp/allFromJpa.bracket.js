@@ -294,7 +294,8 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         var vGridOpt = grid.getGridParam();
                         // var models = eval(vGridOpt.modelVarName);
                         // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
-                        var result = " class='contextMenu contextMenu-all'";
+                        var result = "";
+                        // var result = " class='contextMenu contextMenu-all'";
                         result += " style='vertical-align: middle;";
                         // result += "color: black;font-weight: bolder;cursor:pointer;'";
                         // result += "cursor:pointer;'";
@@ -311,7 +312,8 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         var vGridOpt = grid.getGridParam();
                         // var models = eval(vGridOpt.modelVarName);
                         // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
-                        var result = " class='contextMenu contextMenu-parent'";
+                        var result = "";
+                        // var result = " class='contextMenu contextMenu-parent'";
                         result += " style='vertical-align: middle;";
                         // red
                         // result += "color: #d34b4b;font-weight: bolder;cursor:pointer;'";
@@ -329,7 +331,8 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         var vGridOpt = grid.getGridParam();
                         // var models = eval(vGridOpt.modelVarName);
                         // var vEntity = _.find([].concat(models.ownedEntities),{"_xmi:id": vGridOpt.entityId} );
-                        var result = " class='contextMenu contextMenu-child'";
+                        // var result = " class='contextMenu contextMenu-child'";
+                        var result = "";
                         result += " style='vertical-align: middle;";
                         // blue
                         // result += "color: #009eff;font-weight: bolder;cursor:pointer;'";

@@ -155,6 +155,15 @@ genInstanceView.prototype.makeSchema = function(){
     var theGrid = $("#" + _this.caller.gridId).jqGrid();
     var cms = theGrid.jqGrid("getGridParam", "colModel");
 
+    // context menu 용. mobile에서도 작용하려면.
+    v_items.push({
+        label : "Context Menu",
+        col : "context",
+        orderby : 0 ,
+        editable : false
+    });
+    v_items.push({line_feed:true});
+
     // custom order by
     var entityDoc = this.caller.jpaFile.entity_doc_obj ;
     if (entityDoc.detail != null && entityDoc.detail.order_by != null){
@@ -485,8 +494,8 @@ genInstanceView.prototype.fn_contextmenu = function(){
     }
     
     var default_option = {
-        "selector": "#" + _this.contentContainerId ,
-        // "trigger": "left",
+        "selector": "#" + _this.contentContainerId + " .contextMenu",
+        "trigger": "left",
         "build": function($trigger) {
             var options = {
                 callback: function(key, options) {
