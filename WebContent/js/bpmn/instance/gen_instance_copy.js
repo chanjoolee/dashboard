@@ -35,7 +35,8 @@ function genInstanceCopy(_entityId, _type,  _list_instance , _option ){
         <input type="hidden" name="searchJson" value='{}'/>
         </form>
     `;
-    this.formId = this.containerId + "_form";    
+    this.formId = this.containerId + "_form";
+    this.contentContainerId = this.containerId + "_content";
     this.form = $(formTemplate);
     this.form.attr("id" , this.formId);
     this.form.attr("name" , this.formId);

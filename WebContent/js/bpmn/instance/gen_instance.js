@@ -233,6 +233,9 @@ genInstance.prototype.makeGrid = function(){
 
 genInstance.prototype.fn_contextmenu = function(){
     var _this = this;
+    if(_this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu != null){
+        _this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu.call(_this);
+    }
     var default_option = {
         "selector": "#" + _this.gridContainerId + " .jqgrow td.contextMenu",
         "trigger": "left",
