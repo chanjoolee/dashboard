@@ -259,6 +259,7 @@ genInstance.prototype.fn_contextmenu = function(){
             var cms = vGridOpt.colModel;
             var cm = _.find(cms, {name: $trigger.attr("columnName")} );
 
+            
             // Start Parent
             $.each(_this.jpaFile.dataSrc, function(i,src){
                 // Label이 있으면 Label 로 표현한다.
@@ -313,7 +314,7 @@ genInstance.prototype.fn_contextmenu = function(){
             // End Parent
 
             // Seperator
-            options.items["Seperator"] = "-------------";
+            options.items["Seperator1"] = "-------------";
             // children
             var hasChildrens = false;
             var childrens = _this.jpaFile.childReferences;
@@ -374,6 +375,59 @@ genInstance.prototype.fn_contextmenu = function(){
                 };
                
             });
+
+            options.items["Seperator"] = "-------------";
+            // Add
+            options.items["Insert"] = {
+                name: "Insert" ,
+                callback : function(key, options){
+                    var vGrid = grid;
+                    var vDiv = $("#add_" + _this.gridId);
+                    vDiv.trigger('click');
+
+                }
+            };
+            // Copy
+            options.items["Copy"] = {
+                name: "Copy" ,
+                callback : function(key, options){
+                    var vGrid = grid;
+                    var vDiv = $("#add_" + _this.gridId)[0].nextSibling;
+                    vDiv = $(vDiv);
+                    if(vDiv.length == 0 ){
+                        var next = $("#add_" + _this.gridId).parent()[0].nextSibling;
+                        vDiv = $(next).find("a");
+                    }
+                    vDiv.trigger('click');
+                }
+            };
+            // Edit
+            options.items["Edit"] = {
+                name: "Edit" ,
+                callback : function(key, options){
+                    var vGrid = grid;
+                    var vDiv = $("#edit_" + _this.gridId);
+                    vDiv.trigger('click');
+                }
+            };
+            // View
+            options.items["View"] = {
+                name: "View" ,
+                callback : function(key, options){
+                    var vGrid = grid;
+                    var vDiv = $("#view_" + _this.gridId);
+                    vDiv.trigger('click');
+                }
+            };
+            // Delete
+            options.items["Delete"] = {
+                name: "Delete" ,
+                callback : function(key, options){
+                    var vGrid = grid;
+                    var vDiv = $("#del_" + _this.gridId);
+                    vDiv.trigger('click');
+                }
+            };
             
 
             // 참조가 하나만 있는 경우. 바로 보여주기. 일단주석
