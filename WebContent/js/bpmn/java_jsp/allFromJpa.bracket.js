@@ -297,7 +297,7 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         var result = " class='contextMenu contextMenu-all'";
                         result += " style='vertical-align: middle;";
                         // result += "color: black;font-weight: bolder;cursor:pointer;'";
-                        result += "cursor:pointer;'";
+                        // result += "cursor:pointer;'";
                         result += " gridId='" + vGridOpt.gridId + "'";
                         result += " entityId='" + vGridOpt.entityId + "'";
                         result += " columnName='" + cm.name + "'";
@@ -315,7 +315,7 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         result += " style='vertical-align: middle;";
                         // red
                         // result += "color: #d34b4b;font-weight: bolder;cursor:pointer;'";
-                        result += "cursor:pointer;'";
+                        // result += "cursor:pointer;'";
                         result += " gridId='" + vGridOpt.gridId + "'";
                         result += " entityId='" + vGridOpt.entityId + "'";
                         result += " columnName='" + cm.name + "'";
@@ -333,7 +333,7 @@ JpaAllGeneratorBracket.prototype.getDefaultOption = function( _schema, _file ){
                         result += " style='vertical-align: middle;";
                         // blue
                         // result += "color: #009eff;font-weight: bolder;cursor:pointer;'";
-                        result += "cursor:pointer;'";
+                        // result += "cursor:pointer;'";
                         result += " gridId='" + vGridOpt.gridId + "'";
                         result += " entityId='" + vGridOpt.entityId + "'";
                         result += " columnName='" + cm.name + "'";
