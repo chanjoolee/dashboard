@@ -481,7 +481,9 @@ genInstanceView.prototype.fn_contextmenu = function(){
     var _this = this;
     if(_this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu_detail != null){
         _this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu_detail.call(_this);
+        return;
     }
+    
     var default_option = {
         "selector": "#" + _this.contentContainerId ,
         // "trigger": "left",

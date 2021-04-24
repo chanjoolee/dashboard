@@ -235,6 +235,197 @@ genInstance.prototype.fn_contextmenu = function(){
     var _this = this;
     if(_this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu != null){
         _this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu.call(_this);
+        return;
+    }
+    // 
+    var default_option = {
+        "selector": "#" + _this.gridContainerId + " .jqgrow td.contextMenu",
+        "trigger": "left",
+        "build": function($trigger) {
+            var options = {
+                callback: function(key, options) {
+                    // var m = "clicked: " + key;
+                    // window.console && console.log(m) || alert(m);
+                    options.items[key].callback.call(this,key,options);
+                },
+                items: {}
+
+            };
+
+            // if ($trigger.hasClass('something')) {
+            // 	options.items.foo = {name: "foo"};
+            // } else {
+            //     options.items.bar = {name: "bar"};
+            // }
+            var columnName = $trigger.attr("columnName");
+            if (columnName == null)
+                return false;
+
+            var gridId = $trigger.attr("gridId");
+            var grid = _this.container.find("#"+gridId).jqGrid();
+            var rowId = $trigger.parent().attr("id");
+            var rowData = grid.getRowData(rowId);
+            var vGridOpt = grid.getGridParam();
+            var cms = vGridOpt.colModel;
+            var cm = _.find(cms, {name: $trigger.attr("columnName")} );
+            
+            // parents
+            var hasParents = false;
+            var parents = [];
+            if ( cm.referenceId != null){
+                
+                var src = _.find( _this.jpaFile.dataSrc, {"referenceId": cm.referenceId , "topRefrenceId" : cm.topRefrenceId  });
+                
+                // Label이 있으면 Label 로 표현한다.
+                var itemName = src.parentEntity;
+                var parentJpa = _.find(instances.jpaFiles,{entityId : src.parentEntity});
+                if (parentJpa.entity_doc_obj != null && parentJpa.entity_doc_obj.label != null){
+                    itemName = parentJpa.entity_doc_obj.label;
+                }
+                // entityId를 넣어야 하므로 camelCase 를 쓰지 않는다.
+                options.items[itemName] = {
+                    name: itemName ,
+                    callback : function(key, options){
+                        var m = "clicked: " + key + ", data: " + $(this).text();
+
+                        // Modal Pop
+                        if(true){
+                            // Form Submit
+                            var filter = {};
+                            // 표시를 Label 로 한다.
+                            var filterLabel = {};
+                            $.each(src.childColumnNames , function(i,column){
+                                var parentColumn = src.parentColumnNames[i];
+                                var parentColumnLabel = parentColumn;
+                                
+                                var parentColumnObj = _.find(parentJpa.gridProperties,{_name: parentColumn});
+                                // 이것을 대안으로 써도 된다.
+                                // findAllByElName(parentJpa.schema.contents.schema.elements, {name:parentColumn.toUpperCase()})
+                                if(parentColumnObj._documentation != null &&  parentColumnObj._documentation.label != null)
+                                    parentColumnLabel = parentColumnObj._documentation.label;
+
+                                if(rowData[column.toUpperCase()] != null){
+                                    filter[parentColumn.toUpperCase()] = rowData[column.toUpperCase()];
+                                    filterLabel[parentColumnLabel] = rowData[column.toUpperCase()];
+                                }
+                                    
+                                // $(this).attr("cellValue");
+                            });
+
+                            var instanceOption = {
+                                modal : true,
+                                caller : _this ,
+                                filter : filter ,
+                                filterLabel : filterLabel
+                            };
+                            _this.list_instance.add_instance ( src.parentEntity , 'general' , instanceOption );
+                            
+                        }
+                        return; 
+
+                        
+                    }
+                };
+                hasParents = true;
+                // }
+
+            }
+            // Seperator
+            options.items["Seperator"] = "-------------";
+            // children
+            var hasChildrens = false;
+            var childrens = _this.jpaFile.childReferences;
+
+            $.each(childrens , function(i,child){
+                var child_columns = child.child_columns;
+                var parent_columns = child.parent_columns;
+                var child_columns_index = _.indexOf(child.parent_columns, cm.name.toLowerCase());
+                if (child_columns_index == -1)
+                    return false;
+
+                // entytyId를 넣어야 하므로 camelCase 를 쓰지 않는다.
+                var itemName = child.childEntityName;
+                // Label이 있으면 Label 로 표현한다.
+                var vJpa = _.find(instances.jpaFiles,{entityId : child.childEntityName});
+                if (vJpa.entity_doc_obj != null && vJpa.entity_doc_obj.label != null){
+                    itemName = vJpa.entity_doc_obj.label;
+                }
+                options.items[itemName] = {
+                    name: itemName ,
+                    callback : function(key, options){
+                        // var m = "clicked: " + key + ", data: " + $(this).text();
+                        // console.log(m);
+
+                        // Modal Pop
+                        if(true){
+                            // Form Submit
+                            var filter = {};
+                            // 표시를 Label 로 한다.
+                            var filterLabel = {};
+                            $.each(child_columns , function(i,column){
+                                var parentColumn = parent_columns[i];
+                                var childColumnLabel = column.toUpperCase();
+                                var childColumnObj = _.find(vJpa.gridProperties,{_name:column});
+                                // 이것을 대안으로 써도 된다.
+                                // findAllByElName(vJpa.schema.contents.schema.elements, {name:parentColumn.toUpperCase()})
+                                if(childColumnObj._documentation != null && childColumnObj._documentation.label != null)
+                                    childColumnLabel = childColumnObj._documentation.label;
+                                
+                                if(rowData[column.toUpperCase()] != null){
+                                    filter[column.toUpperCase()] = rowData[parentColumn.toUpperCase()];
+                                    filterLabel[childColumnLabel] = rowData[parentColumn.toUpperCase()];
+                                }
+                                    
+                                // $(this).attr("cellValue");
+                            });
+                            
+                            var instanceOption = {
+                                modal : true,
+                                caller : _this ,
+                                filter : filter ,
+                                filterLabel : filterLabel
+                            };
+                            _this.list_instance.add_instance ( child.childEntityName , 'general' , instanceOption );
+                            
+                        }
+                        return ;
+
+                        
+                    }
+                };
+                hasChildrens = true;
+                
+                
+            });
+            
+            if ( !hasParents && !hasChildrens )
+                return false;
+
+            // 참조가 하나만 있는 경우. 바로 보여주기. 일단주석
+            // if ( _.keys(options.items).length == 1 ){
+            //     options.items[_.keys(options.items)[0]].callback();
+            //     return false;
+            // }
+
+            return options;
+            // return false; 
+        }
+
+    };
+    var option = {};
+    if( _this.jpaFile.entity_doc_obj.customFunc.contextOption != null ){
+        option = _this.jpaFile.entity_doc_obj.customFunc.contextOption;
+    }else{
+        option = default_option;
+    }
+    _this.container.contextMenu(option);
+
+}
+
+genInstance.prototype.fn_contextmenu_back = function(){
+    var _this = this;
+    if(_this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu != null){
+        _this.jpaFile.entity_doc_obj.customFunc.fn_contextmenu.call(_this);
     }
     var default_option = {
         "selector": "#" + _this.gridContainerId + " .jqgrow td.contextMenu",
