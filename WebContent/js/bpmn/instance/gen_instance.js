@@ -25,7 +25,7 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
      */
     this.option = _option;
     
-    this.jpaFile = _.find( this.list_instance.jpaFiles , { entityId : this.entityId, editType: this.type });
+    this.jpaFile = _.find( this.list_instance.jpaFiles , { entityId : this.entityId, editType: 'general' });
     this.jpaFile.dataSrc = this.jpaFile.dataSources;
     this.containerId = "div_" + this.entityId + "_"+ this.type + "_" + this.idPrefix; 
     this.searchContainerId = this.containerId + "_searchContainer";
@@ -102,7 +102,11 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
             // }); 
         },0);
         
-    }else{
+    }else if(this.type=='sub'){
+        // 
+
+    }else if(this.option != null && this.option.showLabel == null){
+        // 본화면
         this.container = $("<div/>",{id:  this.containerId });
         this.list_instance.container.append(this.container);
         // this.container.append($("<h5/>",{class: "page-title"}).text(vPageLabel));
@@ -114,6 +118,10 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     }
     // show title
     if(this.option != null && this.option.showLabel){
+        if(this.container == null){
+            this.container = $("<div/>",{id:  this.containerId });
+            this.list_instance.container.append(this.container);
+        }
         var templateTitle = `
         <h3 class="tx-inverse fa fa-dot-circle-o" style="margin-top: 20px;">edit title</h3>
         `;
@@ -144,6 +152,8 @@ function genInstance(_entityId, _type,  _list_instance , _option ){
     // 01. search
     if(this.option != null && this.option.filter != null ){
         // 필터가 있다면 검색조건을 만들지 않는다.
+    }else if(this.type=='sub'){
+        
     }else{
         this.makeSearch();
     }
@@ -647,6 +657,8 @@ genInstance.prototype.fn_jstreeSearch = function(){
     if(this.option != null && this.option.modal ){
         return;
     }
+    if(this.type == "sub")
+        return;
     var selJsTree3 = [];
     $.each(_this.jstreeList, function(i,vJsTreeId){
         // 만약 Child Pop 인 경우, jstree가 없으므로 넘어간다.

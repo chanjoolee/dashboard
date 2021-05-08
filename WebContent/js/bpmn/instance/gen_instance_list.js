@@ -23,6 +23,8 @@ gen_instance_list.prototype.add_instance = function( _entityId, _type , _option)
         newInstance = new genInstanceCopy(_entityId, _type , _this ,_option);
     }else if ( _type == 'view'){
         newInstance = new genInstanceView(_entityId, _type , _this ,_option);
+    }else if (_type == 'master_sub'){
+        newInstance = new genInstanceMasterSub(_entityId, _type , _this ,_option)
     }
     
     _this.list.push(newInstance);

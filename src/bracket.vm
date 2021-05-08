@@ -627,6 +627,7 @@
     <script src="./js/bpmn/instance/gen_instance_edit.js"></script>
     <script src="./js/bpmn/instance/gen_instance_copy.js"></script>
     <script src="./js/bpmn/instance/gen_instance_view.js"></script>
+    <script src="./js/bpmn/instance/gen_instance_master_sub.js"></script>
     <script src="./js/bpmn/instance/makeHtmlBySchema.js"></script>
     #foreach( $jsfile in $searchVO.searchJson.jpaFiles )
     <script src="./js/bpmn/gen/$searchVO.searchJson.folder/$jsfile"></script>
@@ -680,6 +681,34 @@
                 isPopSelect : false
             };
             instances.add_instance(_entityId ,'general', instanceOption );
+        }
+
+        function fn_makeInstance_master_and_sub(_entityId){
+            delete instances;
+
+            var menuSchema1 = 
+              {
+                type : "master_and_sub",
+                menu_id : 'inventory_item_master',
+                menu_name : "품목마스터",
+                entity_id: 'inventory_item_master',
+                elements : [
+                  {
+                    entity_id : 'inventory_order'
+                  },
+                  {
+                    type : 'general',
+                    has_parent: true,
+                    entity_id : 'inventory_book'
+                  }
+                ]
+              }
+            ;
+
+            
+
+            instances = new gen_instance_list($("#pagebody .br-section-wrapper") , jpaFiles );
+            instances.add_instance(_entityId ,'master_sub', menuSchema1 );
         }
 
         // Stacked Modal
