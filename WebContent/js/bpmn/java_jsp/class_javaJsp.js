@@ -223,7 +223,8 @@ Generator.prototype.fn_source = function(){
     var _this = this;
     if(_this.schema_bpmn.Definitions != undefined ){
         _.forEach(this.files,function(v,k){
-            if( _.isArray(v.process.eAnnotations.details) ){   
+            if( _.isArray(v.process.eAnnotations.details) ){
+                // 일부 특수한 파일을 다른식으로 생성하고자 하는 경우에 쓰인다. phthon 이 유용할 듯.
                 if ( _.find(v.process.eAnnotations.details,{"_key":"file_type"})._value == "python"){
                     var generator = new PythonGenerator(k, _this);
                     _this.files[k].generator = generator;

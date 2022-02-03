@@ -165,7 +165,6 @@ public class CommonController {
     
     @RequestMapping(value = "/genericlListPageJson",method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView genericlListPageJson(HttpServletRequest request,HttpServletResponse response, @RequestParam Map<Object,Object> searchVO ,Locale locale, Model model) {
-    	
     	ModelAndView mav = new ModelAndView(); 
     	//searchVO.put("pjtCodeList",request.getParameterValues("pjtCodeList"));
     	commonService.requestToVo(request, searchVO);

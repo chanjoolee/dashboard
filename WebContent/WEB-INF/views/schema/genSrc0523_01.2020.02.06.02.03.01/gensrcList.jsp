@@ -1407,6 +1407,10 @@
 							schema_bpmn =  x2js.xml_str2json(genmyModelxmi);
 							// fn_create_source();
 							generator = new Generator(schema_bpmn,rowData.GEN_TYPE, rowData.DB_TYPE, false , rowData);
+							// 2022.01.11 : 아래의 generator.fn_source(); 는 Bracket의 경우 적용되지 않는다. Bracket 과 localstorage는 new 에서 끝난다.
+							// GEN_TYPE 
+							// 		Bracket : class_javaJsp
+							// 		ToolBox
 							save_file = generator.fn_source();
 							// generator.fn_fileSave();
 						}
