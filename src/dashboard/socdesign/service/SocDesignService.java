@@ -30,7 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
+import java.util.Base64;
 import common.dao.CommonDao;
 import common.dao.PmsDao;
 import dashboard.controller.ProjectListByJsonController;
@@ -88,8 +89,9 @@ public class SocDesignService {
 	public void getConfluenceAttachMent(@SuppressWarnings("rawtypes") List list,JSONObject space) throws Exception {
 		
 		String strUser="conf.dashboard:conf.dashboard";
-		BASE64Encoder base64Encoder = new BASE64Encoder();
-		String base64User = base64Encoder.encode(strUser.getBytes());
+		//BASE64Encoder base64Encoder = new BASE64Encoder();
+		//String base64User = base64Encoder.encode(strUser.getBytes());
+		String base64User = Base64.getEncoder().encodeToString(strUser.getBytes());
 		
 		JSONArray pageResults = space.getJSONArray("results");
 		for(Object page :pageResults){
@@ -139,8 +141,9 @@ public class SocDesignService {
 		
 //		String strUser="chanjoo2.lee:chanjoo2.lee";
 		String strUser="conf.dashboard:conf.dashboard";
-		BASE64Encoder base64Encoder = new BASE64Encoder();
-		String base64User = base64Encoder.encode(strUser.getBytes());
+		//BASE64Encoder base64Encoder = new BASE64Encoder();
+		//String base64User = base64Encoder.encode(strUser.getBytes());
+		String base64User = Base64.getEncoder().encodeToString(strUser.getBytes());
 		
 		String spaceKey = parameter.get("INTERFACE_ID").toString();
 		String title = "DV+(Dashboard)";
@@ -252,8 +255,9 @@ public class SocDesignService {
             
             java.net.HttpURLConnection con = (HttpURLConnection) myurl.openConnection();
             String strUser="conf.dashboard:conf.dashboard";
-    		BASE64Encoder base64Encoder = new BASE64Encoder();
-    		String base64User = base64Encoder.encode(strUser.getBytes());
+    		//BASE64Encoder base64Encoder = new BASE64Encoder();
+    		//String base64User = base64Encoder.encode(strUser.getBytes());
+            String base64User = Base64.getEncoder().encodeToString(strUser.getBytes());
             con.setRequestProperty("Authorization", "Basic "+base64User); 
 		    con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
             InputStream ins = con.getInputStream();
@@ -329,8 +333,9 @@ public class SocDesignService {
 		URL myurl = new URL(httpsURL);
 		java.net.HttpURLConnection con = (HttpURLConnection) myurl.openConnection();
         String strUser="conf.dashboard:conf.dashboard";
-		BASE64Encoder base64Encoder = new BASE64Encoder();
-		String base64User = base64Encoder.encode(strUser.getBytes());
+		//BASE64Encoder base64Encoder = new BASE64Encoder();
+		//String base64User = base64Encoder.encode(strUser.getBytes());
+        String base64User = Base64.getEncoder().encodeToString(strUser.getBytes());
         con.setRequestProperty("Authorization", "Basic "+base64User); 
 	    con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
         InputStream ins = con.getInputStream();
