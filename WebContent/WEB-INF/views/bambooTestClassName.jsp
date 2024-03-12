@@ -55,7 +55,7 @@
 	
 	function getDataByJson(){
 		$.ajax({
-			url : "/dashboard/bambooTestClassNameJson.html",
+			url : "/dashboard/bambooTestClassNameJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -174,7 +174,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.project.value = project;
 			oFrm.className.value = className;
-			oFrm.action =  '/dashboard/bambooTestClassNameTime.html';
+			oFrm.action =  '/dashboard/bambooTestClassNameTime.do';
 			oFrm.method = "post";
 			oFrm.target = '_blank'; 
 		    oFrm.submit();
@@ -189,7 +189,7 @@
 			window.open("", "categorylistPop", "resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			oFrm.category.value = category;
-			oFrm.action =  '/dashboard/regressionTestCategoryList.html';
+			oFrm.action =  '/dashboard/regressionTestCategoryList.do';
 			oFrm.method = "post";
 			oFrm.target = 'categorylistPop'; 
 		    oFrm.submit();

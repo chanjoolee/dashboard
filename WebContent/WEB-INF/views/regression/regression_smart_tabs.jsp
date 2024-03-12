@@ -496,7 +496,7 @@
 						   	            		
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.regression.category.by.folderNames", searchJson: JSON.stringify(paramObj) }, 
 													async: false,
 													success:  function(response){
@@ -555,7 +555,7 @@
 							   	            		
 													var rtnList = [];
 													$.ajax({
-														url: "/dashboard/genericlListJson.html",
+														url: "/dashboard/genericlListJson.do",
 														data: {sqlid: "dashboard.regression.smart.slot_name.by.folderNames.and.category.and.test_name", searchJson: JSON.stringify(paramObj) }, 
 														async: false,
 														success:  function(response){
@@ -627,7 +627,7 @@
 						   	            		
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.regression.smart.slot_name.by.folderNames.and.category.and.test_name", searchJson: JSON.stringify(paramObj) }, 
 													async: false,
 													success:  function(response){
@@ -825,7 +825,7 @@
 		});
     	
 //		$.ajax({
-//			url: "/dashboard/genericlListJson.html",
+//			url: "/dashboard/genericlListJson.do",
 //			data: {sqlid: "dashboard.regression.smart.slot_name.by.folderNames.and.category.and.test_name", searchJson: JSON.stringify(paramObj) }, 
 //			async: false,
 //			success:  function(response){

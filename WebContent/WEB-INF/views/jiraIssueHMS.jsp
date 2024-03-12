@@ -184,7 +184,7 @@
 												
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/projectListSubByJson.html",
+										    		url: "/dashboard/projectListSubByJson.do",
 										    		data: {PJT_CODE: '${param.pjtId}',division:'jira'	}, 
 										    		async: false,
 										    		success:  function(response){
@@ -205,7 +205,7 @@
 												$.ajax({
 													type: "POST",
 													async:false,
-													url : "/dashboard/checkSearchConditionJson.html",
+													url : "/dashboard/checkSearchConditionJson.do",
 													data: $("#form").serialize() ,
 													success : function(responseData){
 														vSearchConditions  = responseData.searchCondition;															
@@ -245,7 +245,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/jiraIssueComponentJson.html",
+										    		url: "/dashboard/jiraIssueComponentJson.do",
 										    		data: {pjtCode: $("#pjtId").val()}, 
 										    		async: false,
 										    		success:  function(response){
@@ -305,7 +305,7 @@
 											data: function(){
 												var rtnList = [];	
 												$.ajax({
-										    		url: "/dashboard/jiraIssueTypeJson.html",
+										    		url: "/dashboard/jiraIssueTypeJson.do",
 										    		data: {}, 
 										    		async: false,
 										    		success:  function(response){
@@ -1407,8 +1407,8 @@
 	
 	function pmsProjectList(){
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			url : "/dashboard/pmsProjectListJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			url : "/dashboard/pmsProjectListJson.do",
 			data: {division:'jira'},
 			async : false,
 			success : function(pResponseData){
@@ -1510,7 +1510,7 @@
 			// end 검색조건유지
 			
 			$.ajax({
-				url : "/dashboard/jiraIssueHmsListJson.html",
+				url : "/dashboard/jiraIssueHmsListJson.do",
 				data: $("#form").serialize()+ "&site=xxx&function=xxx&pjtCode=xxx",
 				async: false,
 				success : function(responseData){
@@ -1581,7 +1581,7 @@
 		$("#loader").show();
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/jiraIssueComponentJson.html",
+    		url: "/dashboard/jiraIssueComponentJson.do",
     		data: {pjtCode: $("#pjtCode").val()[0]	}, 
     		async: false,
     		success:  function(response){
@@ -1619,7 +1619,7 @@
 		$("#loader").show();
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/jiraIssueComponentJson.html",
+    		url: "/dashboard/jiraIssueComponentJson.do",
     		data: {project: $("#project").val()[0]	}, 
     		async: false,
     		success:  function(response){
@@ -2008,7 +2008,7 @@
 	
 	
 	function popHmsDetail(project,category,component,field){
-		var url = '/dashboard/jiraIssueHMSDetail.html';
+		var url = '/dashboard/jiraIssueHMSDetail.do';
 		var newWin1 = window.open("", "HMSDetail", "width=1200,height=750, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 		
 		//var formData = new FormData($("#form")[0]);

@@ -301,7 +301,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.master.all",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.master.all",
 			data:{ 
 						page:1, rows:999999, 
 						filters: JSON.stringify({
@@ -335,7 +335,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.others",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.others",
 			data:{ 
 						page:1, rows:999999, 
 						testSetIdx : nvl(pTestSetIdx,''),

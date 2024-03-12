@@ -608,7 +608,7 @@
 														{STAGE:"CUS", selected: "selected"}
 													];
 													// $.ajax({
-													// 	url: "/dashboard/genericlListJson.html",
+													// 	url: "/dashboard/genericlListJson.do",
 													// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
 													// 	async: false,
 													// 	success:  function(response){
@@ -741,7 +741,7 @@
 						
 						$.ajax({
 							type: "POST",
-							url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.summary.all",
+							url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.summary.all",
 							//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 							data: $("#form").serialize(), 
 							async: false,
@@ -914,7 +914,7 @@
 					gridOpt:{
 						datatype:'local',
 						pager: "#grid_summaryPager",
-						editurl: '/dashboard/ssdCusDummySaveJson.html',
+						editurl: '/dashboard/ssdCusDummySaveJson.do',
 						viewrecords: true,	
 						emptyrecords: "No records to view",		    		
 						width: '100%',
@@ -985,7 +985,7 @@
 									var fd = new FormData(formdata);  	
 									var response1 = {};
 									$.ajax({
-										url: "/dashboard/genericSaveJson.html",
+										url: "/dashboard/genericSaveJson.do",
 										type: "POST",
 										data: fd, 
 										async: false,
@@ -1112,8 +1112,8 @@
 									var newwin = window.open("", "SummaryFirmware_SSD", "width=1200,height=820,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 									var oFrm = document.getElementById("form");
 									//oFrm.menuAuthId.value = "MNU20150422131320740";
-									//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-									oFrm.action =  '/dashboard/generic.html?viewName='+ v_path +'/Summary';
+									//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+									oFrm.action =  '/dashboard/generic.do?viewName='+ v_path +'/Summary';
 									oFrm.method = "post";
 									oFrm.target = 'SummaryFirmware_SSD'; 
 									oFrm.submit();
@@ -1126,7 +1126,7 @@
 							if(ispop){
 								var newWin1 = window.open("", "Detail_ssd_sm", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 								
-								oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/Detail';
+								oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/Detail';
 								oFrm.method = "post";
 								oFrm.target = "Detail_ssd_sm"; 
 								oFrm.submit();		
@@ -1260,7 +1260,7 @@
 				
 			// 	search option
 			// 	$.ajax({
-			// 	url: "/dashboard/genericlListJson.html",
+			// 	url: "/dashboard/genericlListJson.do",
 			// 	data: param + "&sqlid=dashboard.regresson.distinct.field&field=FOLDER_NAME", 
 			// 	async: false,
 			// 	success:  function(response){
@@ -1272,7 +1272,7 @@
 			// });
 				
 			// 	$.ajax({
-			// 	url: "/dashboard/genericlListJson.html",
+			// 	url: "/dashboard/genericlListJson.do",
 			// 	data: param + "&sqlid=dashboard.regresson.distinct.field&field=FIRMWARE", 
 			// 	async: false,
 			// 	success:  function(response){
@@ -1284,7 +1284,7 @@
 			// });
 				
 			// 	$.ajax({
-			// 	url: "/dashboard/genericlListJson.html",
+			// 	url: "/dashboard/genericlListJson.do",
 			// 	data: param + "&sqlid=dashboard.regresson.distinct.field&field=TESTNAME", 
 			// 	async: false,
 			// 	success:  function(response){
@@ -1296,7 +1296,7 @@
 			// });
 				
 			// 	$.ajax({
-			// 	url: "/dashboard/genericlListJson.html",
+			// 	url: "/dashboard/genericlListJson.do",
 			// 	data: param + "&sqlid=dashboard.regresson.distinct.field&field=SLOTNAME", 
 			// 	async: false,
 			// 	success:  function(response){
@@ -1331,8 +1331,8 @@
 			var newwin = window.open("coronaEmmcScriptManagement", "coronaEmmcScriptManagement", "width=1300,height=900,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/manage_tabs';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/manage_tabs';
 			oFrm.method = "post";
 			oFrm.target = 'coronaEmmcScriptManagement'; 
 			oFrm.submit();
@@ -1342,7 +1342,7 @@
 		function fn_set_testCase(){
 			
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: {sqlid: "dashboard.corona.emmc.scriptsets.search.by.fimware", sample: $("#sample").val(), firmware: $("#firmware").val() }, 
 				async: false,
 				success:  function(response){
@@ -1362,8 +1362,8 @@
 			var newwin = window.open("", "ScriptSetCopy_SSD", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName='+ v_path +'/manage_copy_template_scriptset';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName='+ v_path +'/manage_copy_template_scriptset';
 			oFrm.method = "post";
 			oFrm.target = 'ScriptSetCopy_SSD'; 
 			oFrm.submit();
@@ -1375,8 +1375,8 @@
 			var newwin = window.open("", "ScriptSetMgmt_SSD", "width=1200,height=820,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName='+ v_path +'/manage_scriptset_script_edit_paging';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName='+ v_path +'/manage_scriptset_script_edit_paging';
 			oFrm.method = "post";
 			oFrm.target = 'ScriptSetMgmt_SSD'; 
 			oFrm.submit();

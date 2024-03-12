@@ -23,7 +23,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/summaryDashboardJson.html",
+			url : "/dashboard/summaryDashboardJson.do",
 			data: {PJT_CODE: '' },
 			success : function(pResponseData){
 				responseData = pResponseData;

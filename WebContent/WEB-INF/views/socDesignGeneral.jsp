@@ -91,7 +91,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/socDesignGeneralJson.html",
+			url : "/dashboard/socDesignGeneralJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;

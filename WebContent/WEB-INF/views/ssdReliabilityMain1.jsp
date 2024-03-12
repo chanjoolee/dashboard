@@ -330,7 +330,7 @@
 												var pmsModels = [];
 												
 												$.ajax({
-										    		url: "/dashboard/pmsModelListJson.html",
+										    		url: "/dashboard/pmsModelListJson.do",
 										    		data: {}, 
 										    		async: false,
 										    		success:  function(response){
@@ -340,7 +340,7 @@
 										    	});
 												
 												$.ajax({
-										    		url: "/dashboard/reliabilityModelListJson.html",
+										    		url: "/dashboard/reliabilityModelListJson.do",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -419,7 +419,7 @@
 												var rtnList = [];	
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/reliabilityTestTypeListJson.html?searchProduct=xxx",
+										    		url: "/dashboard/reliabilityTestTypeListJson.do?searchProduct=xxx",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -466,7 +466,7 @@
 												var rtnList = [];	
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/reliabilityFWVersionListJson.html?searchProduct=xxx&searchTestType=xxx",
+										    		url: "/dashboard/reliabilityFWVersionListJson.do?searchProduct=xxx&searchTestType=xxx",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -512,7 +512,7 @@
 												var rtnList = [];	
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/reliabilityCapacityListJson.html?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
+										    		url: "/dashboard/reliabilityCapacityListJson.do?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -614,7 +614,7 @@
 			    		
 			    		$.ajax({
 			    			type: "POST",
-			    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.summary",
+			    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.summary",
 			    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 			    			data: $("#form").serialize(), 
 			    			async: false,
@@ -813,7 +813,7 @@
 		                        	
 		                        	var response1 = {};
 		                        	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: row, 
 			                    		async: false,			                    		
@@ -865,7 +865,7 @@
 			    	gridOpt:{
 			    		datatype:'local',
 			    		//pager: "#grid_summaryPager",
-			    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+			    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 			    		viewrecords: true,			    		
 			    		width: '100%',
 			    		height: '100%',
@@ -946,7 +946,7 @@
 			                    	var fd = new FormData(formdata);  	
 			                    	var response1 = {};
 			                    	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: fd, 
 			                    		async: false,
@@ -1034,7 +1034,7 @@
 							if(ispop){
 								var newWin1 = window.open("", "coronaDetail", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 								
-								oFrm.action =  '/dashboard/generic.html?viewName=coronaDetail';
+								oFrm.action =  '/dashboard/generic.do?viewName=coronaDetail';
 								oFrm.method = "post";
 								oFrm.target = "coronaDetail"; 
 							    oFrm.submit();		
@@ -1609,7 +1609,7 @@
 		var pmsModels = [];
 		
 		$.ajax({
-    		url: "/dashboard/pmsModelListJson.html",
+    		url: "/dashboard/pmsModelListJson.do",
     		data: {}, 
     		async: false,
     		success:  function(response){
@@ -1619,7 +1619,7 @@
     	});
 		
 		$.ajax({
-    		url: "/dashboard/reliabilityModelListJson.html",
+    		url: "/dashboard/reliabilityModelListJson.do",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){
@@ -1672,7 +1672,7 @@
 	function changeProductTestType(){
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/reliabilityTestTypeListJson.html?searchProduct=xxx",
+    		url: "/dashboard/reliabilityTestTypeListJson.do?searchProduct=xxx",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){
@@ -1709,7 +1709,7 @@
 	function changeProductFw(){
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/reliabilityFWVersionListJson.html?searchProduct=xxx&searchTestType=xxx",
+    		url: "/dashboard/reliabilityFWVersionListJson.do?searchProduct=xxx&searchTestType=xxx",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){
@@ -1746,7 +1746,7 @@
 	function changeProductCapacity(){
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/reliabilityCapacityListJson.html?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
+    		url: "/dashboard/reliabilityCapacityListJson.do?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){

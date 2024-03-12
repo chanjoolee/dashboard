@@ -434,8 +434,8 @@
 				dataList = [];						
 				$.ajax({
 					type: "POST",
-					// url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_test.summary.all.1",
-					url: "/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.ssd_test.detail.paging&paging_sqlid=dashboard.ssd_test.detail.paging.page" ,
+					// url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_test.summary.all.1",
+					url: "/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.ssd_test.detail.paging&paging_sqlid=dashboard.ssd_test.detail.paging.page" ,
 					//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 					data: $("#form").serialize(), 
 					async: false,
@@ -480,8 +480,8 @@
 				};
 				$.ajax({
 					type: "POST",
-					// url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_test.summary.all.1",
-					url: "/dashboard/genericSaveJson.html" ,
+					// url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_test.summary.all.1",
+					url: "/dashboard/genericSaveJson.do" ,
 					//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 					data: {
 						searchJson: JSON.stringify(paramObj),
@@ -529,8 +529,8 @@
 			var newwin = window.open("scriptManagement", "scriptManagement", "width=1300,height=900,screenY=20, top=20, screenX=100,left=100,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/test_master_mgmt';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/test_master_mgmt';
 			oFrm.method = "post";
 			oFrm.target = 'scriptManagement'; 
 			oFrm.submit();

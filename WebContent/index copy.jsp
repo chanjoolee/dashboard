@@ -72,33 +72,33 @@
 	}
 	
 	function gotoPhaseCauseList(){
-	    window.open('/dashboard/jiraIssuePhaseCauseList.html?sender=confluence','_blank',
+	    window.open('/dashboard/jiraIssuePhaseCauseList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=768');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
 	}
 	
 	function gotoCauseMatrixList(){
-	    window.open('/dashboard/jiraIssueCauseMatrixList.html?sender=confluence','_blank',
+	    window.open('/dashboard/jiraIssueCauseMatrixList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1000,height=320');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
 	}
 	
 	function gotoCauseStatusList(){
-	    window.open('/dashboard/jiraIssueCauseStatusList.html?sender=confluence','_blank',
+	    window.open('/dashboard/jiraIssueCauseStatusList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1024,height=608');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
@@ -221,40 +221,40 @@
                         <li class="dropdown-submenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Schema</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=schema/entity_create_from_table');">Create Enity</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=schema/workflow_create_from_enities');">Create WorkFlow by Enity</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=schema/generate_from_bpmn2');">Generate source by BPMN2</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=schema/entity_create_from_table');">Create Enity</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=schema/workflow_create_from_enities');">Create WorkFlow by Enity</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=schema/generate_from_bpmn2');">Generate source by BPMN2</a></li>
                                 
                             </ul>
 						</li>						
 						<li class="dropdown-submenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Diagram</a>
                             <ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/erd/erd');">Erd</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/bpmn/bpmn');">BPMN</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/erd/erd');">Erd</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/bpmn/bpmn');">BPMN</a></li>
 								<li class="dropdown-submenu">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Joint/Rappid</a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/jointjs/demos/rappid/apps/QAD/qad');">Qad</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/jointjs/myqad/2018.010/qad');">MyQad.1</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/jointjs/demos/rappid/apps/QAD/qad');">Qad</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/jointjs/myqad/2018.010/qad');">MyQad.1</a></li>
 										
 									</ul>
 								</li>
 								<li class="dropdown-submenu">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">prototype</a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jointjs.html');">jointJs</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/backboneEx.html');">backbone 연습</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_blog.html');">01. diagram layout Blog sample</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_1_blogMy.html');">01-1. diagram layout my</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_webpage.html');">02. diagram layout Webpage sample</a>	</li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_1_webpageMy.html');">02-1. diagram layout Webpage my</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_2_dragAndDrop.html');">02-2. diagram drag and drop sample</a></li>	
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_3_joint.html');">02-3. diagram joint</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_4_joint.html');">02-4. diagram joint: template</a>	</li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewname=diagram/diagram02_5_joint');">02-5. diagram joint: template</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram02_6_joint');">02-6. diagram joint: template</a></li>
-										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram_erd');">diagram: erd</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jointjs.do');">jointJs</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/backboneEx.do');">backbone 연습</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_blog.do');">01. diagram layout Blog sample</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_1_blogMy.do');">01-1. diagram layout my</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_webpage.do');">02. diagram layout Webpage sample</a>	</li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_1_webpageMy.do');">02-1. diagram layout Webpage my</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_2_dragAndDrop.do');">02-2. diagram drag and drop sample</a></li>	
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_3_joint.do');">02-3. diagram joint</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_4_joint.do');">02-4. diagram joint: template</a>	</li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewname=diagram/diagram02_5_joint');">02-5. diagram joint: template</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/diagram02_6_joint');">02-6. diagram joint: template</a></li>
+										<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/diagram_erd');">diagram: erd</a></li>
 										
 									</ul>
 								</li>
@@ -265,13 +265,13 @@
 						<li class="dropdown-submenu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">WebSearch</a>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=websearch/webSearch');">Web Search</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=websearch/webSearch2');">Web Search2</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=websearch/webSearch');">Web Search</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=websearch/webSearch2');">Web Search2</a></li>
 								
 							</ul>
 						</li>
 
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/summaryDashboard.html');">Summary Dashboard</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/summaryDashboard.do');">Summary Dashboard</a></li>
 						<li><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">fileUpload</a></li>
 					
 					</ul>
@@ -282,38 +282,38 @@
 						<li class="dropdown-submenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">SCript Management</a>
                             <ul class="dropdown-menu">
-                            	<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/test_master_mgmt');">SSD Mgmt</a></li>
-                            	<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/performance/Summary');">SSD Summary</a></li>
+                            	<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=ssd_sm/test_master_mgmt');">SSD Mgmt</a></li>
+                            	<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=ssd_sm/performance/Summary');">SSD Summary</a></li>
                             	<li class="dropdown-submenu">
                             		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Prototype</a>
                             		 <ul class="dropdown-menu">
                             		 	<li class="dropdown-submenu">
-                            		 		<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/SummaryAll');">SSD Summary</a></li>
+                            		 		<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=ssd_sm/SummaryAll');">SSD Summary</a></li>
                             		 	</li>
                             		 </ul>
                             	</li>
 								
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=coronaSummary');">Corona UFS Summary</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_emmc/coronaSummary');">Corona EMMC Summary</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=coronaSummary');">Corona UFS Summary</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=corona_emmc/coronaSummary');">Corona EMMC Summary</a></li>
                                 
                             </ul>
 						</li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=regression/regressionTabView');">Regression Tab View1</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=regression/regressionTabView');">Regression Tab View1</a></li>
 						<li class="dropdown-submenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">SSD</a>
                             <ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMain.html');">고객실장</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMainChart.html');">고객실장차트</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdReliabilityMain.html');">ssdReliabilityMain</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMain.do');">고객실장</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMainChart.do');">고객실장차트</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdReliabilityMain.do');">ssdReliabilityMain</a></li>
                             </ul>
 						</li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.html?viewName=performanceTabView');">Performance</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.do?viewName=performanceTabView');">Performance</a></li>
 						<li class="dropdown-submenu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">FW Quality</a>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqDivision.html');">FW Quality Division</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqMetric.html');">FW Quality Metric</a></li>
-								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqCodingRulePop.html?project=Columbus_FCPU&measureDt1=20160117&measureDt2=20170110');">FW Quality Coding Rule</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqDivision.do');">FW Quality Division</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqMetric.do');">FW Quality Metric</a></li>
+								<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqCodingRulePop.do?project=Columbus_FCPU&measureDt1=20160117&measureDt2=20170110');">FW Quality Coding Rule</a></li>
 								
 							</ul>
 						</li>
@@ -323,9 +323,9 @@
 				<li>
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Generate<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate Source</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate Source</a></li>
 						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','https://www.jstree.com/demo_sitebrowser/index.php');">Jstree Demo DataBase (JsTree Site)</a></li>
-						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Manual Ck5(MySite)</a></li>
+						<li><a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Manual Ck5(MySite)</a></li>
 
 					</ul>
 					

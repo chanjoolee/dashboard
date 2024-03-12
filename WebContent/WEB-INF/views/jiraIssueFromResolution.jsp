@@ -98,7 +98,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/jiraIssueFromResolutionJson.html",
+			url : "/dashboard/jiraIssueFromResolutionJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				//dataList = responseData.dataList;
@@ -646,7 +646,7 @@
 	function gotoDetail(phase,issueFrom){
 		var newWin1 = window.open("", "jiraIssueCauseStatusList", "width=1000,height=380,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
-		oFrm.action =  '/dashboard/jiraIssueCauseStatusList.html?phase='+phase+'&issueFrom='+issueFrom;
+		oFrm.action =  '/dashboard/jiraIssueCauseStatusList.do?phase='+phase+'&issueFrom='+issueFrom;
 		oFrm.method = "post";
 		oFrm.target = 'jiraIssueCauseStatusList'; 
 	    oFrm.submit();

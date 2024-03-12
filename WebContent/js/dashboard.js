@@ -131,7 +131,7 @@ function Request(){
 
 function projectListByAjaxCsv(){
 	$.ajax({
-		url : "/dashboard/codesonarProjectDetailProjectListJson.html",
+		url : "/dashboard/codesonarProjectDetailProjectListJson.do",
 		data: {},
 		success : function(responseData){
 			//01. 전역변수설정
@@ -211,7 +211,7 @@ function getCodesonarPriorityCsvLink(pjtCode,priority){
 function htmlExpandPriority(pjtCode,priority,dt){
 	var linkUrl = "";
 	$.ajax({
-		url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+		url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode },
 		//data: $("#form").serialize(),
@@ -303,7 +303,7 @@ function htmlExpandPriority(pjtCode,priority,dt){
 function htmlExpandClass(pjtCode,className){
 	var linkUrl = "";
 	$.ajax({
-		url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+		url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode },
 		//data: $("#form").serialize(),
@@ -380,7 +380,7 @@ function getCodesonarFileCsvLink(pjtCode,filename){
 function htmlExpandFile(pjtCode,file,obj){
 	var linkUrl = "";		
 	$.ajax({
-		url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+		url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode },
 		//data: $("#form").serialize(),
@@ -448,7 +448,7 @@ function getCodesonarFunctionCsvLink(pjtCode,filename){
 function htmlExpandFunction(pjtCode,file,func){
 	var linkUrl = "";
 	$.ajax({
-		url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+		url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode },
 		//data: $("#form").serialize(),
@@ -524,7 +524,7 @@ function htmlExpandIssueTrend(pjtCode,priority,obj){
 	});
 	
 	$.ajax({
-		url : "/dashboard/jiraPkeyLinkJson.html",
+		url : "/dashboard/jiraPkeyLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode, subProjects: subProjects },
 		//data: $("#form").serialize(),
@@ -582,7 +582,7 @@ function htmlExpandIssueTrend(pjtCode,priority,obj){
 	
 	// 2015-10-28.  show resolution by root cause
 	if(goJiraAnalysisByDateIssueType){
-		var link = '/dashboard/goJiraCauseByDate.html';
+		var link = '/dashboard/goJiraCauseByDate.do';
 		var date = obj.rawData.DEFECTS_DATE; // ex) "2015/10/20"
 		linkUrl +="<span style=\"cursor: pointer;\" onclick=\"goJiraAnalysisByDateIssueType('"+pjtCode+"','"+date+"');\">";
 		linkUrl +="resolution analysis("+date+")";
@@ -615,7 +615,7 @@ function getJiraPriorityCsvLink(pjtCode,priority){
 function htmlExpandIssueType(pjtCode,priority,issuetype){
 	var linkUrl = "";
 	$.ajax({
-		url : "/dashboard/jiraPkeyLinkJson.html",
+		url : "/dashboard/jiraPkeyLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode },
 		//data: $("#form").serialize(),
@@ -683,7 +683,7 @@ function htmlExpandIssueType(pjtCode,priority,issuetype){
 function htmlExpandIssuePriority(pjtCode,priority){
 	var linkUrl = "";
 	$.ajax({
-		url : "/dashboard/jiraPkeyLinkJson.html",
+		url : "/dashboard/jiraPkeyLinkJson.do",
 		async: false,
 		data: {PJT_CODE: pjtCode },
 		//data: $("#form").serialize(),
@@ -2352,7 +2352,7 @@ function fn_makeHtml(container, _schema){
 				var form_id = _schema.form_id;
 				
 				var vform =  document.getElementById(form_id);
-				vform.action = '/dashboard/generic.html?viewName='+viewName;
+				vform.action = '/dashboard/generic.do?viewName='+viewName;
 				vform.method = "post";
 				vform.target = _schema.id + '_'+ item.name +'Frame';
 				//vform.target = v_content[0];
@@ -3230,7 +3230,7 @@ function fn_makeHtml(container, _schema){
 					//var vform = $(document.createElement( "form" ));
 					
 					var vform =  document.getElementById(form_id);
-					vform.action = '/dashboard/generic.html?viewName='+viewName;
+					vform.action = '/dashboard/generic.do?viewName='+viewName;
 					vform.method = "post";
 					vform.target = _schema.id + 'Frame';
 					//vform.target = v_content[0];
@@ -3530,7 +3530,7 @@ function fn_makeHtml_hot(container, _schema){
 			var form_id = _schema.form_id;
 			
 			var vform =  document.getElementById(form_id);
-			vform.action = '/dashboard/generic.html?viewName='+viewName;
+			vform.action = '/dashboard/generic.do?viewName='+viewName;
 			vform.method = "post";
 			vform.target = _schema.id + '_'+ item.name +'Frame';
 			//vform.target = v_content[0];
@@ -4408,7 +4408,7 @@ function fn_makeHtml_hot(container, _schema){
 				//var vform = $(document.createElement( "form" ));
 				
 				var vform =  document.getElementById(form_id);
-				vform.action = '/dashboard/generic.html?viewName='+viewName;
+				vform.action = '/dashboard/generic.do?viewName='+viewName;
 				vform.method = "post";
 				vform.target = _schema.id + 'Frame';
 				//vform.target = v_content[0];

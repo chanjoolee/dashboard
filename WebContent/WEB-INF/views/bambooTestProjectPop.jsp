@@ -73,7 +73,7 @@
 	
 	function getDataByJson(){
 		
-		dashboardShow("bambooTestClassName","/dashboard/bambooTestClassName.html");
+		dashboardShow("bambooTestClassName","/dashboard/bambooTestClassName.do");
 	}
 	
 	function dashboardShow(target,action){
@@ -95,7 +95,7 @@
 	    frm.project.value = project;
 	    frm.className.value = className;
 	    //frm.revision.value = revision;
-	    frm.action = "/dashboard/bambooTestClassNameTime.html";
+	    frm.action = "/dashboard/bambooTestClassNameTime.do";
 	    frm.target = "bambooTestClassNameTime";
 	    frm.submit();
 		
@@ -105,7 +105,7 @@
 		var newwin = window.open("", "testList", "resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form1");
 		oFrm.category.value = category;
-		oFrm.action =  '/dashboard/bambooTestClassNameTimeList.html';
+		oFrm.action =  '/dashboard/bambooTestClassNameTimeList.do';
 		oFrm.method = "post";
 		oFrm.target = 'testList'; 
 	    oFrm.submit();
@@ -125,7 +125,7 @@
 		} */
 		
 		$.ajax({
-			url : "/dashboard/dashboardProjectListJson.html",
+			url : "/dashboard/dashboardProjectListJson.do",
 			data: {division:'jira'},
 			success : function(responseData){
 				var projectList = responseData.projectList;

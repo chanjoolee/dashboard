@@ -71,7 +71,7 @@
 			return;
 		
 		$.ajax({
-			url : "/dashboard/pmsResourceProjectJson.html",
+			url : "/dashboard/pmsResourceProjectJson.do",
 			//data: {PJT_CODE: $("#sProject").val() },
 			data: $("#form").serialize(),
 			success : function(responseData){

@@ -1592,7 +1592,7 @@
 			HIS.POINT as POINT,
 			<![CDATA[ 
 			'http://codesonar' || stc.CODESONAR_SVR|| '.skhynix.com:7340/analysis/' || stc.CSV_NUM  || '.html' as link_static,
-			'http://solutionpms.skhynix.com/dashboard/fwqFunctionParameterPop.html?measureDt=' || fp.MEASURE_DT ||  '&project='  || fp.PROJECT_ORIGIN  || '&sender=func_param' as link_function_parameter,
+			'http://solutionpms.skhynix.com/dashboard/fwqFunctionParameterPop.do?measureDt=' || fp.MEASURE_DT ||  '&project='  || fp.PROJECT_ORIGIN  || '&sender=func_param' as link_function_parameter,
 			'http://codesonar' || fs.CODESONAR_SVR || '.skhynix.com:7340/metric_search.html?filter=2&metrics=LCode%3A100%2CvG%3A100&scope=aid%3A' || fs.CSV_NUM AS link_function_loc,
 			'http://bamboo.skhynix.com:6060/CPD_Result/'  || dup.CSV_NAME as link_duplicate,
 			'http://bamboo.skhynix.com:6060/CI_Result/' || cod.CSV_NAME as link_coding_rule,

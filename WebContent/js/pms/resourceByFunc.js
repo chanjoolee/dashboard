@@ -756,7 +756,7 @@ function drawchartByAllFunc(){
 		var funcIds = dataFilter(dataList,[{col: 'UP_PJT_FUNC_NAME', val: func }]);
 		var funcId = funcIds[0].UP_PJT_FUNC_ID;
 		$.ajax({
-			url: "/dashboard/pmsResourceSubfuncJson.html",
+			url: "/dashboard/pmsResourceSubfuncJson.do",
 			data: {func: funcId, estStartDate: $("#estStartDate").val(), estEndDate: $("#estEndDate").val() }, 
 			async: false,
 			success:  function(response){

@@ -56,7 +56,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/jiraIssueRootCauseTatJson.html",
+			url : "/dashboard/jiraIssueRootCauseTatJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;

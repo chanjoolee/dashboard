@@ -64,7 +64,7 @@
 	function fn_save(){
 		
 		var frm = document.form1;
-		//frm.action = "/dashboard/fileTestJson.html";
+		//frm.action = "/dashboard/fileTestJson.do";
 		//frm.action = "/dashboard/rest/ssdinsertform";
 		//frm.action = "/dashboard/rest/ssdinsert/form";
 		frm.action = "/dashboard/rest/ssdinsert/upload";
@@ -73,8 +73,8 @@
 	    
 // 	    frm.submit();   
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			//url : "/dashboard/fileTestJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			//url : "/dashboard/fileTestJson.do",
 			url : "/dashboard/rest/ssdinsert/upload",
 			data: $('#form1').serialize(),
 			type:"POST",

@@ -27,8 +27,8 @@ function JpaAllGeneratorLocalStorage( _generator){
         //     var _this = this;
         //     $.ajax({
         //         type: "POST",
-        //         // url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_test.summary.all.1",
-        //         url: "/dashboard/genericlListJson.html?" + 
+        //         // url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_test.summary.all.1",
+        //         url: "/dashboard/genericlListJson.do?" + 
         //             "&sqlid=" + _this.sqlId ,						
         //         data: {}, 
         //         async: false,
@@ -106,7 +106,7 @@ JpaAllGeneratorLocalStorage.prototype.getDefaultOption = function( _schema, _fil
             // data: function(){
             //     var rtnList = [];
             //     $.ajax({
-            //         url: "./genericlListJson.html",
+            //         url: "./genericlListJson.do",
             //         data: {"sqlid": "$sqlId"}, 
             //         async: false,
             //         success:  function(response){
@@ -155,7 +155,7 @@ JpaAllGeneratorLocalStorage.prototype.getDefaultOption = function( _schema, _fil
                 // gridId: _schema.id ,
                 modelVarName : varModelName,               
                 // url
-                editurl: './ssdCusDummySaveJson.html',
+                editurl: "./ssdCusDummySaveJson.do",
                 styleUI : 'Bootstrap',
                 viewrecords: true,
                 width: '100%',
@@ -1657,7 +1657,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_generate_content_contextmenu = function
                                 // $(this).attr("cellValue");
                             });
                             $("#filterPop").val(JSON.stringify(filter));
-                            oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
+                            oFrm.action =  "./generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
                             oFrm.method = "post";
                             oFrm.target = frameId;
                             frameDom.show();
@@ -1703,7 +1703,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_generate_content_contextmenu = function
 
                         
                         $("#filterPop").val(JSON.stringify(filter));
-                        oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";
+                        oFrm.action =  "./generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";
                         oFrm.method = "post";
                         oFrm.target = windowName; 
                         oFrm.submit();		
@@ -1784,7 +1784,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_generate_content_contextmenu = function
                                 // $(this).attr("cellValue");
                             });
                             $("#filterPop").val(JSON.stringify(filter));
-                            oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
+                            oFrm.action =  "./generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
                             oFrm.method = "post";
                             oFrm.target = frameId;
                             frameDom.show();
@@ -1828,7 +1828,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_generate_content_contextmenu = function
 
 
                         $("#filterPop").val(JSON.stringify(filter));
-                        oFrm.action =  "./generic.html?viewName=" + viewPath.join("/") + "/" + itemName;
+                        oFrm.action =  "./generic.do?viewName=" + viewPath.join("/") + "/" + itemName;
                         oFrm.method = "post";
                         oFrm.target = windowName; 
                         oFrm.submit();		
@@ -1991,7 +1991,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_fileSave = function(){
             $.ajax({
                 type: 'POST',
                 async : false,
-                url: './fileTestJson.html',
+                url: "./fileTestJson.do",
                 data: fd
                 , processData: false
                 , contentType: false
@@ -2029,7 +2029,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_fileSave = function(){
                 ]
             }
             $.ajax({
-                url: "./genericSaveJson.html",
+                url: "./genericSaveJson.do",
                 type: "POST",
                 data: {
                     searchJson: JSON.stringify(paramObj),
@@ -2325,7 +2325,7 @@ JpaAllGeneratorLocalStorage.prototype.sqlSelectJsTree = function( _file , jpaEnt
     //     var _this = this;
     //     var rtnList = [];
     //     $.ajax({
-    //         url: "./genericlListJson.html",
+    //         url: "./genericlListJson.do",
     //         data: {"sqlid": _this.sqlId }, 
     //         async: false,
     //         success:  function(response){
@@ -2617,8 +2617,8 @@ JpaAllGeneratorLocalStorage.prototype.fn_datasource = function(foreign_entities,
 
                             $.ajax({
                                 type: "POST",
-                                // url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_test.summary.all.1",
-                                url: "./genericlListJson.html?" +
+                                // url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_test.summary.all.1",
+                                url: "./genericlListJson.do?" +
                                     "&sqlid=" + _this.sqlId,
                                 data: {},
                                 async: false,
@@ -2716,7 +2716,7 @@ JpaAllGeneratorLocalStorage.prototype.existsTable = function( _entity ){
     var _this = this;
     var rtn = false;
     $.ajax({
-        url: "./genericlListJson.html",
+        url: "./genericlListJson.do",
         type: "POST",
         data: {
             table_name : _entity._name.toUpperCase(),
@@ -2734,7 +2734,7 @@ JpaAllGeneratorLocalStorage.prototype.existsPrimaryKey = function( _entity ){
     var _this = this;
     var rtn = false;
     $.ajax({
-        url: "./genericlListJson.html",
+        url: "./genericlListJson.do",
         type: "POST",
         data: {
             table_name : _entity._name.toUpperCase(),
@@ -2788,7 +2788,7 @@ JpaAllGeneratorLocalStorage.prototype.createTable = function( _entity ){
         "columns" : columns
     };
     $.ajax({
-        url: "./genericSaveJson.html",
+        url: "./genericSaveJson.do",
         type: "POST",
         data: {
             table_name : _entity._name.toUpperCase() ,
@@ -2869,7 +2869,7 @@ JpaAllGeneratorLocalStorage.prototype.addColumns = function( _entity ){
     );
     $.each(columns, function(i,column){
         $.ajax({
-            url: "./genericlListJson.html",
+            url: "./genericlListJson.do",
             type: "POST",
             data: {
                 table_name : _entity._name.toUpperCase(),
@@ -2880,7 +2880,7 @@ JpaAllGeneratorLocalStorage.prototype.addColumns = function( _entity ){
             success:  function(data){
                 if(data.dataList[0].CNT == 0){
                     $.ajax({
-                        url: "./genericSaveJson.html",
+                        url: "./genericSaveJson.do",
                         type: "POST",
                         data: column , 
                         async: false,			                    		
@@ -2927,7 +2927,7 @@ JpaAllGeneratorLocalStorage.prototype.deletePrimaryKey = function( _entity ){
     
     
     $.ajax({
-        url: "./genericSaveJson.html",
+        url: "./genericSaveJson.do",
         type: "POST",
         data: {
             table_name : _entity._name.toUpperCase() ,
@@ -2985,7 +2985,7 @@ JpaAllGeneratorLocalStorage.prototype.createPrimaryKey = function( _entity ){
         "columns" : columns
     };
     $.ajax({
-        url: "./genericSaveJson.html",
+        url: "./genericSaveJson.do",
         type: "POST",
         data: {
             table_name : _entity._name.toUpperCase() ,
@@ -3070,7 +3070,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_top = function(vEntity, j
                 //     var rtnList = [];
                 //     $.ajax({
                 //         type: "POST",
-                //         url: "./genericlListJson.html?" +
+                //         url: "./genericlListJson.do?" +
                 //             "&sqlid=" + _this.sqlIdDynamic,
                 //         data: param,
                 //         async: false,
@@ -3201,7 +3201,7 @@ JpaAllGeneratorLocalStorage.prototype.fn_datasource_by_dictionary = function(vEn
             //     var _this = this;
             //     $.ajax({
             //         type: "POST",
-            //         url: "./genericlListJson.html?" +
+            //         url: "./genericlListJson.do?" +
             //             "&sqlid=" + _this.sqlId ,
             //         data: {},
             //         async: false,

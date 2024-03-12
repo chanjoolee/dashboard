@@ -29,7 +29,7 @@
 				                var _this = this;
 				                $.ajax({
 				                    type: "POST",
-				                    url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+				                    url: "${pageContext.request.contextPath}/genericlListJson.do?" +
 				                        "&sqlid=" + _this.sqlId,
 				                    data: {},
 				                    async: false,
@@ -352,13 +352,13 @@
 						"gridId": "gensrcCmmCdGrid",
 						"modelVarName": "genSrc052301Jpa",
 						"url": function(){ 
-						                    return	"${pageContext.request.contextPath}/genericlListPageJson.html?" + 
+						                    return	"${pageContext.request.contextPath}/genericlListPageJson.do?" + 
 						                        $("#form").serialize() + 
 						                        "&sqlid=gensrcCmmCd.gensrcCmmCd.page.list" +  
 						                        "&paging_sqlid=gensrcCmmCd.gensrcCmmCd.page.total" 
 						                },
 
-						"editurl": "${pageContext.request.contextPath}/ssdCusDummySaveJson.html",
+						"editurl": "${pageContext.request.contextPath}/ssdCusDummySaveJson.do",
 						"styleUI": "Bootstrap",
 						"viewrecords": true,
 						"width": "100%",
@@ -439,7 +439,7 @@
 						                                var response1 = {};
 						                                
 						                                $.ajax({
-						                                    url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=" + gridParam.sqlId + ".insert",
+						                                    url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=" + gridParam.sqlId + ".insert",
 						                                    type: "POST",
 						                                    data: fd, 
 						                                    async: false,
@@ -482,7 +482,7 @@
 						                                //  
 						                                paramObj.loop_id = "delRows";
 						                                $.ajax({
-						                                    url: "${pageContext.request.contextPath}/genericSaveJson.html",
+						                                    url: "${pageContext.request.contextPath}/genericSaveJson.do",
 						                                    type: "POST",
 						                                    data: {
 						                                        searchJson: JSON.stringify(paramObj),
@@ -604,7 +604,7 @@
 						                            oFrm.submit();		
 						                            newWin1.focus();
 						                        }else if(row[cm.name].match(/\.([\w]+)$/i) != null){
-						                            //var src = "/dashboard/filedownloadJson.html";
+						                            //var src = "/dashboard/filedownloadJson.do";
 						                            //src += "?filename=" + row.FILE_NAME;
 						                            //src +="&path=" + row.FILE_PATH;
 						                            //document.getElementById('file_iframe').src =  src;
@@ -678,7 +678,7 @@
 						                        var detailList = [];
 						                        $.ajax({
 						                            type: "POST",
-						                            url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=gensrcCmmCd.gensrcCmmCd.one" ,
+						                            url: "${pageContext.request.contextPath}/genericlListJson.do?sqlid=gensrcCmmCd.gensrcCmmCd.one" ,
 						                            data: searchRow ,
 						                            //data: $("#form").serialize(), 
 						                            async: false,
@@ -743,7 +743,7 @@
 						                                                    if(this.props.options.value == this.state.value)
 						                                                        return state;
 						                                                    $.ajax({
-						                                                        url: "${pageContext.request.contextPath}/genericSaveJson.html",
+						                                                        url: "${pageContext.request.contextPath}/genericSaveJson.do",
 						                                                        type: "POST",
 						                                                        data: {
 						                                                            searchJson: JSON.stringify(paramObj),
@@ -1220,8 +1220,8 @@
 			                var viewName = $("#viewName").val();
 			                var viewPath = viewName.split("/");
 			                var itemName = viewPath.pop();
-			                oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "." + _type + "&backgroundColor=FFF&isPop=Y";;
-			                // oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=common/commonDetail";
+			                oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "." + _type + "&backgroundColor=FFF&isPop=Y";;
+			                // oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=common/commonDetail";
 			                $("#detailSqlId").val("gensrcCmmCd.gensrcCmmCd.one");
 			                $("#detailSqlUpdateId").val("gensrcCmmCd.gensrcCmmCd.edit");
 			                $("#detailType").val(_type);
@@ -1476,7 +1476,7 @@
 						                                // $(this).attr("cellValue");
 						                            });
 						                            $("#filterPop").val(JSON.stringify(filter));
-						                            oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
+						                            oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
 						                            oFrm.method = "post";
 						                            oFrm.target = frameId;
 						                            frameDom.show();
@@ -1522,7 +1522,7 @@
 						
 						                        
 						                        $("#filterPop").val(JSON.stringify(filter));
-						                        oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";
+						                        oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";
 						                        oFrm.method = "post";
 						                        oFrm.target = windowName; 
 						                        oFrm.submit();		
@@ -1603,7 +1603,7 @@
 						                                // $(this).attr("cellValue");
 						                            });
 						                            $("#filterPop").val(JSON.stringify(filter));
-						                            oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
+						                            oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isPop=Y";;
 						                            oFrm.method = "post";
 						                            oFrm.target = frameId;
 						                            frameDom.show();
@@ -1647,7 +1647,7 @@
 						
 						
 						                        $("#filterPop").val(JSON.stringify(filter));
-						                        oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName;
+						                        oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName;
 						                        oFrm.method = "post";
 						                        oFrm.target = windowName; 
 						                        oFrm.submit();		

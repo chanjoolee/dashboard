@@ -104,13 +104,13 @@
 									"gridId": "rmTabColsGrid",
 									"modelVarName": "thenetJpa",
 									"url": function(){ 
-									                    return	"./genericlListPageJson.html?" + 
+									                    return	"./genericlListPageJson.do?" + 
 									                        $("#form").serialize() + 
 									                        "&sqlid=rmTabCols.rmTabCols.page.list" +  
 									                        "&paging_sqlid=rmTabCols.rmTabCols.page.total" 
 									                },
 
-									"editurl": "./ssdCusDummySaveJson.html",
+									"editurl": "./ssdCusDummySaveJson.do",
 									"styleUI": "Bootstrap",
 									"viewrecords": true,
 									"width": "100%",
@@ -163,7 +163,7 @@
 									                        var detailList = [];
 									                        $.ajax({
 									                            type: "POST",
-									                            url: "./genericlListJson.html?sqlid=rmTabCols.rmTabCols.one" ,
+									                            url: "./genericlListJson.do?sqlid=rmTabCols.rmTabCols.one" ,
 									                            data: searchRow ,
 									                            //data: $("#form").serialize(), 
 									                            async: false,
@@ -228,7 +228,7 @@
 									                                                    if(this.props.options.value == this.state.value)
 									                                                        return state;
 									                                                    $.ajax({
-									                                                        url: "./genericSaveJson.html",
+									                                                        url: "./genericSaveJson.do",
 									                                                        type: "POST",
 									                                                        data: {
 									                                                            searchJson: JSON.stringify(paramObj),
@@ -474,7 +474,7 @@
 					                var _this = this;
 					                $.ajax({
 					                    type: "POST",
-					                    url: "./genericlListJson.html?" +
+					                    url: "./genericlListJson.do?" +
 					                        "&sqlid=" + _this.sqlId,
 					                    data: {},
 					                    async: false,

@@ -54,7 +54,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/bambooTestProjectJson.html",
+			url : "/dashboard/bambooTestProjectJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -152,7 +152,7 @@
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
 		oFrm.project.value = project;
-		oFrm.action =  '/dashboard/bambooTestProjectPop.html';
+		oFrm.action =  '/dashboard/bambooTestProjectPop.do';
 		oFrm.method = "post";
 		oFrm.target = 'bambooTestProjectPop'; 
 	    oFrm.submit();
@@ -178,7 +178,7 @@
 		else{
 			var oFrm = document.getElementById("form");
 			oFrm.project.value = project;
-			oFrm.action =  '/dashboard/bambooTestClassName.html';
+			oFrm.action =  '/dashboard/bambooTestClassName.do';
 			oFrm.method = "post";
 			oFrm.target = '_blank'; 
 		    oFrm.submit();

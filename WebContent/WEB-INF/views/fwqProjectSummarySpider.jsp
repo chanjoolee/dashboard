@@ -199,7 +199,7 @@
 		oFrm.project.value = this.PROJECT;
 		oFrm.category.value = category;
 		oFrm.categoryLabel.value = label;
-		oFrm.action =  '/dashboard/fwqProjectCategoryTrend.html';
+		oFrm.action =  '/dashboard/fwqProjectCategoryTrend.do';
 		oFrm.method = "post";
 		oFrm.target = 'FWQualityProjectCategoryTrend'; 
 	    oFrm.submit();		    

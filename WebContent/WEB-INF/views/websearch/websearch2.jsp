@@ -578,7 +578,7 @@
 		
 		$.ajax({
 			type: "POST",
-			url: "/dashboard/webSearchJson.html",
+			url: "/dashboard/webSearchJson.do",
 			data: {searchJson: JSON.stringify(paramObj)}, 
 			async: false,
 			success:  function(response){

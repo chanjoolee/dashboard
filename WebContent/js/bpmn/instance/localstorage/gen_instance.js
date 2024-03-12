@@ -564,7 +564,7 @@ genInstance.prototype.fn_makeSchemaGrid = function(){
         ],
         gridOpt : {
             datatype:'local',
-            editurl: './ssdCusDummySaveJson.html',
+            editurl: "./ssdCusDummySaveJson.do",
             styleUI : 'Bootstrap',
             viewrecords: true,
             width: '100%',

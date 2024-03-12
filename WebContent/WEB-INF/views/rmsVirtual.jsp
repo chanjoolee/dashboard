@@ -59,7 +59,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/rmsVirtualJson.html",
+			url : "/dashboard/rmsVirtualJson.do",
 			data: $("#form").serialize(),
 			//data: $("#form").serialize(),
 			success : function(responseData){

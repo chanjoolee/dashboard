@@ -514,7 +514,7 @@
 		});
     	
 		$.ajax({
-			url: "/dashboard/genericlListJson.html",
+			url: "/dashboard/genericlListJson.do",
 			data: {sqlid: "dashboard.regression.smart.attribute.by.folderNames.and.category.and.test_name.and.slotname", searchJson: JSON.stringify(paramObj) }, 
 			async: false,
 			success:  function(response){

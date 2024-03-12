@@ -415,7 +415,7 @@
 				dataList = [];						
 				$.ajax({
 					type: "POST",
-					url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_test.summary.all.1",
+					url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_test.summary.all.1",
 					//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 					data: $("#form").serialize(), 
 					async: false,
@@ -440,8 +440,8 @@
 			var newwin = window.open("scriptManagement", "scriptManagement", "width=1300,height=1000,screenY=20, top=20, screenX=100,left=100,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/test_master_mgmt';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/test_master_mgmt';
 			oFrm.method = "post";
 			oFrm.target = 'scriptManagement'; 
 			oFrm.submit();
@@ -455,7 +455,7 @@
 		function fn_pop_detail(){
 			var newWin1 = window.open("", "Detail_ssd_test", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 			var oFrm = document.getElementById("form");				
-			oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/performance/Detail';
+			oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/performance/Detail';
 			oFrm.method = "post";
 			oFrm.target = "Detail_ssd_test"; 
 			oFrm.submit();		

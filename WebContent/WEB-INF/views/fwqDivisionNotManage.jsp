@@ -224,8 +224,8 @@
 	
 	function pmsProjectList(){
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			url : "/dashboard/pmsProjectListJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			url : "/dashboard/pmsProjectListJson.do",
 			data: {division:'jira'},
 			async : false,
 			success : function(pResponseData){
@@ -384,7 +384,7 @@
 	function pmsAllSchedule(){
 		//jQuery.support.cors = true;
 		$.ajax({
-			url : "/dashboard/pmsScheduleAllJson.html",
+			url : "/dashboard/pmsScheduleAllJson.do",
 			async : false,
 			data: {phaseBase: $("#phaseBase").val()},
 			success : function(pResponseData){
@@ -398,7 +398,7 @@
 	function getDataByJson(){
 		//jQuery.support.cors = true;
 		$.ajax({
-			url : "/dashboard/fwqDivisionJson.html",
+			url : "/dashboard/fwqDivisionJson.do",
 			data: $("#form").serialize(),
 			//type: "POST",
 			//crossDomain: true,
@@ -1379,7 +1379,7 @@
 			oFrm.pjt_name.value = this.PJT_NAME_PMS;
 		}
 		
-		oFrm.action =  '/dashboard/fwqProjectSummary.html';
+		oFrm.action =  '/dashboard/fwqProjectSummary.do';
 		oFrm.method = "post";
 		oFrm.target = 'FWQualitySummary'; 
 	    oFrm.submit();		
@@ -1400,7 +1400,7 @@
 		oFrm.pjt_name.value = this.PJT_NAME;
 		oFrm.category.value = category;
 		oFrm.categoryLabel.value = label;
-		oFrm.action =  '/dashboard/fwqProjectCategoryTrend.html';
+		oFrm.action =  '/dashboard/fwqProjectCategoryTrend.do';
 		oFrm.method = "post";
 		oFrm.target = 'FWQualityProjectCategoryTrend'; 
 	    oFrm.submit();		 
@@ -1414,7 +1414,7 @@
 		var oFrm = document.getElementById("form");
 		//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 		//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
-		oFrm.action =  '/dashboard/fwqMetric.html';
+		oFrm.action =  '/dashboard/fwqMetric.do';
 		oFrm.method = "post";
 		oFrm.target = 'FWQuality'; 
 	    oFrm.submit();		    
@@ -1428,7 +1428,7 @@
 		var oFrm = document.getElementById("form");
 		//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 		//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
-		oFrm.action =  '/dashboard/pmsSchedule.html';
+		oFrm.action =  '/dashboard/pmsSchedule.do';
 		oFrm.method = "post";
 		oFrm.target = 'PmsSchedule'; 
 	    oFrm.submit();	

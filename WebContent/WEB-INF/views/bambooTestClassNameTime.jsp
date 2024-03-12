@@ -58,7 +58,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/bambooTestClassNameTimeJson.html",
+			url : "/dashboard/bambooTestClassNameTimeJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -265,7 +265,7 @@
 		var oFrm = document.getElementById("form");
 		oFrm.startTime.value = startTime;
 		oFrm.informId.value = informId;
-		oFrm.action =  '/dashboard/bambooTestClassNameTimeList.html';
+		oFrm.action =  '/dashboard/bambooTestClassNameTimeList.do';
 		oFrm.method = "post";
 		oFrm.target = 'bambooTestClassNameTimeList'+informId; 
 	    oFrm.submit();

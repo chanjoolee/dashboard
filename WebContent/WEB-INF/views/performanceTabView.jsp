@@ -141,7 +141,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['CATEGORY']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -251,7 +251,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['CATEGORY','VENDOR']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -342,7 +342,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['VENDOR','PRODUCT_NAME']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -385,7 +385,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['VENDOR','FIRMWARE']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -436,7 +436,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['CATEGORY','NAND_TECH']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -531,7 +531,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['NAND_TECH','CELL_TYPE']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -573,7 +573,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/performanceDistinctFieldJson.html",
+										    		url: "/dashboard/performanceDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['NAND_TECH','CAPACITY']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -1399,7 +1399,7 @@
 		if($("#report").val() != "Y"){
 			
 			$.ajax({
-				url : "/dashboard/performanceFolderListJson.html",
+				url : "/dashboard/performanceFolderListJson.do",
 				data: $("#form").serialize(),
 				success : function(responseData){
 					//dataList = responseData.dataList;
@@ -1421,7 +1421,7 @@
 	
 	function getGridData(){
 		$.ajax({
-			url : "/dashboard/performanceFolderListJson.html",
+			url : "/dashboard/performanceFolderListJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				folderList = responseData.folderList;
@@ -1465,7 +1465,7 @@
 	                        	theGrid.jqGrid('setRowData',rowid,{EDIT_MODE:'U'});
 	                        	var row = theGrid.jqGrid('getRowData',rowid);
 	                        	$.ajax({
-	                    			url : "/dashboard/performanceSaveJson.html",
+	                    			url : "/dashboard/performanceSaveJson.do",
 	                    			//contentType: "application/x-www-form-urlencoded; charset=UTF-8",  
 	                    			data: row,
 	                    			//EI-1057 comment 추가
@@ -1753,7 +1753,7 @@
 				parameter.sqlid = sqlMap[pDataSrc]; 
 				
 			$.ajax({
-				url : "/dashboard/performanceDataListJson.html",
+				url : "/dashboard/performanceDataListJson.do",
 				//data: {FOLDER_NAME: jmespath.search(filters,"[?col=='FOLDER_NAME'].val") },
 				data: parameter ,
 				//data: jmespath.search(filters,"[?col=='FOLDER_NAME'].{FOLDER_NAME: val}") ,
@@ -1926,12 +1926,12 @@
 		        	//       return false;
 		        	//       //theGrid.setSelection(rowid, false);
 	        	    // }
-					//,editurl:"/dashboard/performanceJson.html"
+					//,editurl:"/dashboard/performanceJson.do"
 					editurl:'clientArray'
 					//, cellEdit: true
 					//, forceFit : true
 					,cellsubmit: 'clientArray'
-					//,cellsubmit: '/dashboard/performanceJson.html'
+					//,cellsubmit: '/dashboard/performanceJson.do'
 					// ,afterEditCell: function (id,name,val,iRow,iCol){
 					
 					// }
@@ -2164,7 +2164,7 @@
 				//report 이면 서버를 갖다오지 않는다.
 				if($("#report").val() != "Y"){
 					$.ajax({
-						url : "/dashboard/performanceTabListJson.html",
+						url : "/dashboard/performanceTabListJson.do",
 						//data: {FOLDER_NAME: jmespath.search(filters,"[?col=='FOLDER_NAME'].val") },
 						data: parameter ,
 						//data: jmespath.search(filters,"[?col=='FOLDER_NAME'].{FOLDER_NAME: val}") ,
@@ -3127,7 +3127,7 @@
 						//, cellEdit: true
 						, forceFit : false
 						//, cellsubmit: 'clientArray'
-						//,cellsubmit: '/dashboard/performanceJson.html'
+						//,cellsubmit: '/dashboard/performanceJson.do'
 						// , afterEditCell: function (id,name,val,iRow,iCol){
 						
 						// }
@@ -3852,7 +3852,7 @@
 		//parameter.attribute = att;		
 		if(atts1.length > 0){
 			$.ajax({
-				url : "/dashboard/performanceDataListJson.html",
+				url : "/dashboard/performanceDataListJson.do",
 				data: $("#form").serialize() + paramstr,
 				async: false ,
 				success : function(responseData){
@@ -4000,7 +4000,7 @@
 		//parameter.attribute = att;		
 		if(atts1.length > 0){
 			$.ajax({
-				url : "/dashboard/performanceDataListJson.html",
+				url : "/dashboard/performanceDataListJson.do",
 				data: $("#form").serialize() + paramstr,
 				async: false ,
 				success : function(responseData){
@@ -4141,7 +4141,7 @@
 		var oFrm = document.getElementById("formReport");
 		oFrm.searchJson.value = JSON.stringify(parameter);
 		
-		oFrm.action =  '/dashboard/performanceReportJson.html';
+		oFrm.action =  '/dashboard/performanceReportJson.do';
 		oFrm.method = "post";
 		oFrm.target = 'MS_WordReport';
 	    oFrm.submit();		    

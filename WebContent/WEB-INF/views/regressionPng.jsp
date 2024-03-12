@@ -20,7 +20,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -57,7 +57,7 @@
 		
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/regressionPngJson.html",
+			url : "/dashboard/regressionPngJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){

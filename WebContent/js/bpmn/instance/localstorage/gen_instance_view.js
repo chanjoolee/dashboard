@@ -386,7 +386,7 @@ genInstanceView.prototype.makeSchema = function(){
                 return state;
             
             $.ajax({
-                url: "./genericSaveJson.html",
+                url: "./genericSaveJson.do",
                 type: "POST",
                 data: {
                     searchJson: JSON.stringify(paramObj),

@@ -33,7 +33,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			//data: {},
 			data: $("#form").serialize(),			
 			success : function(responseData){

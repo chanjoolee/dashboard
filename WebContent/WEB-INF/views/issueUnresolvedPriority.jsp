@@ -40,7 +40,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {division:'jira'},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -78,7 +78,7 @@
 		parameter.PJT_CODE = $("#sProject").val();
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/issueUnresolvedJson.html",
+			url : "/dashboard/issueUnresolvedJson.do",
 			data: $("#form").serialize() ,
 			//modelAttribute:"searchVO",
 			success : function(responseData){

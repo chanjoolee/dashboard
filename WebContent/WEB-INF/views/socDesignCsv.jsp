@@ -32,7 +32,7 @@
 	
 	function getCsvUrlList(){
 		$.ajax({
-			url : pmsUrl + "/dashboard/pmsSocDesignCsvUrlListJson.html",
+			url : pmsUrl + "/dashboard/pmsSocDesignCsvUrlListJson.do",
 			data: {},
 			//datatype:'json',
 			success : function(pResponseData){
@@ -55,7 +55,7 @@
 		//var param = '{"voList":'+JSON.stringify(pUrlList)+'}';
 		$.ajax({
 			//type: "post",
-			url : pmsUrl + "/dashboard/pmsSocDesignCsvDataJson.html",
+			url : pmsUrl + "/dashboard/pmsSocDesignCsvDataJson.do",
 			//data: {voList : pUrlList} ,
 			//data: {urlList : JSON.stringify(pUrlList)},
 			
@@ -75,7 +75,7 @@
 	
 	function saveCsv(){
 		$.ajax({
-			url : pmsUrl + "/dashboard/pmsSocDesignCsvSaveJson.html",
+			url : pmsUrl + "/dashboard/pmsSocDesignCsvSaveJson.do",
 			data: {},
 			success : function(responseData){
 				//$.echo(responseData.result);

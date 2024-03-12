@@ -74,7 +74,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			//data: {},
 			data: $("#form").serialize(),
 			success : function(responseData){
@@ -99,7 +99,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/projectOneStackByPCntJson.html",
+			url : "/dashboard/projectOneStackByPCntJson.do",
 			data: {PJT_CODE: $("#sProject").val() },
 			//data: $("#form").serialize(),
 			success : function(responseData){
@@ -124,7 +124,7 @@
 	function getCodesonarPriorityCsvLink(pjtCode){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),

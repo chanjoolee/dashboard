@@ -58,7 +58,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/fvtPassByDtJson.html",
+			url : "/dashboard/fvtPassByDtJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				
@@ -271,7 +271,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/pmsScheduleProject.html';
+			oFrm.action =  '/dashboard/pmsScheduleProject.do';
 			oFrm.method = "post";
 			oFrm.target = 'pmsScheduleProject'; 
 		    oFrm.submit();
@@ -282,7 +282,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/pmsScheduleProject.html';
+			oFrm.action =  '/dashboard/pmsScheduleProject.do';
 			oFrm.method = "post";
 			oFrm.target = 'pmsScheduleProject'; 
 		    oFrm.submit();

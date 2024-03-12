@@ -595,7 +595,7 @@
 											var rtn = {};
 											$.ajax({
 								    			type: "POST",
-								    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.scriptsets.search",
+								    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.emmc.manage.scriptsets.search",
 								    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 								    			data: $("#form").serialize(), 
 								    			async: false,
@@ -650,7 +650,7 @@
 				                        	
 				                        	var response1 = {};
 				                        	$.ajax({
-					                    		url: "/dashboard/genericSaveJson.html",
+					                    		url: "/dashboard/genericSaveJson.do",
 					                    		type: "POST",
 					                    		data: row, 
 					                    		async: false,			                    		
@@ -716,7 +716,7 @@
 //					    		var rtnList = [];
 //					    		$.ajax({
 //					    			type: "POST",
-//					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.scriptsets.search",
+//					    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.emmc.manage.scriptsets.search",
 //					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 //					    			data: $("#form").serialize(), 
 //					    			async: false,
@@ -734,7 +734,7 @@
 					    		datatype:'json',
 					    		pager: "#grid_scriptPager",
 					    		url:function(){ 
-					    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.project.useYn&paging_sqlid=dashboard.corona.emmc.project.useYn.page";
+					    			return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.project.useYn&paging_sqlid=dashboard.corona.emmc.project.useYn.page";
 					    		},
 // 					    		 jsonReader: {
 // 								      root: function(data){
@@ -742,7 +742,7 @@
 // 								      }
 // 								     ,repeatitems:false
 // 								},
-								editurl: '/dashboard/ssdCusDummySaveJson.html',
+								editurl: '/dashboard/ssdCusDummySaveJson.do',
 					    		viewrecords: true,	
 					    		emptyrecords: "No records to view",		    		
 					    		width: '100%',
@@ -860,7 +860,7 @@
 //			};
 //			$.ajax({
 //				type: "POST",
-//				url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
+//				url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.emmc.manage.script.search",
 //				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.emmc.manage.script.firmware.mapping"}, 
 //				data: $("#form").serialize(), 
 //				//data: paramObj,
@@ -899,8 +899,8 @@
 		var newwin = window.open("", "ScriptSetCopy_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_copy_template_scriptset';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=corona_emmc/corona_manage_copy_template_scriptset';
 		oFrm.method = "post";
 		oFrm.target = 'ScriptSetCopy_UFS'; 
 	    oFrm.submit();
@@ -912,8 +912,8 @@
 		var newwin = window.open("", "ScriptSetMgmt_UFS", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_scriptset_script_edit_paging';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=corona_emmc/corona_manage_scriptset_script_edit_paging';
 		oFrm.method = "post";
 		oFrm.target = 'ScriptSetMgmt_UFS'; 
 	    oFrm.submit();

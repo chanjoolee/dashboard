@@ -620,7 +620,7 @@
 													{STAGE:"CUS", selected: "selected"}
 												];
 												// $.ajax({
-												// 	url: "/dashboard/genericlListJson.html",
+												// 	url: "/dashboard/genericlListJson.do",
 												// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
 												// 	async: false,
 												// 	success:  function(response){
@@ -748,7 +748,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
 													async: false,
 													success:  function(response){
@@ -810,7 +810,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.ssd_sm.script.sub_category.distinct", sample: $("#category").val() }, 
 													async: false,
 													success:  function(response){
@@ -1003,7 +1003,7 @@
 
 												// $.ajax({
 												// 	type: "POST",
-												// 	url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.manage.scriptsets.search",
+												// 	url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.manage.scriptsets.search",
 												// 	//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 												// 	data: $("#form").serialize(), 
 												// 	async: false,
@@ -1062,7 +1062,7 @@
 													appendTo : "body",
 													source: function(query, proxy) {
 														$.ajax({
-															url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=CATEGORY',
+															url: '/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=CATEGORY',
 															//dataType: "jsonp",
 															data: {term: query},
 															//dataType: "json",
@@ -1096,7 +1096,7 @@
 													appendTo : "body",
 													source: function(query, proxy) {
 														$.ajax({
-															url: '/dashboard/genericlListJson.html?'+
+															url: '/dashboard/genericlListJson.do?'+
 																'sqlid=dashboard.ssd_sm.autocomplete.script'+
 																'&callback=?'+
 																'&field=SUB_CATEGORY'
@@ -1131,7 +1131,7 @@
 													appendTo : "body",
 													source: function(query, proxy) {
 														$.ajax({
-															url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=ITEM',
+															url: '/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=ITEM',
 															//dataType: "jsonp",
 															data: {term: query},
 															//dataType: "json",
@@ -1160,7 +1160,7 @@
 													appendTo : "body",
 													source: function(query, proxy) {
 														$.ajax({
-															url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=SUB_ITEM',
+															url: '/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.autocomplete.script&callback=?&field=SUB_ITEM',
 															//dataType: "jsonp",
 															data: {term: query},
 															//dataType: "json",
@@ -1193,12 +1193,12 @@
 									// loadonce: false,
 									pager: "#grid_scriptPager",
 									url: function(){
-										return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + 
+										return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + 
 										"&sqlid=dashboard.ssd_sm.manage.script.search.paging" + 
 										"&paging_sqlid=dashboard.ssd_sm.manage.script.search.paging.page";
 									},
-									editurl: '/dashboard/ssdCusDummySaveJson.html',
-									//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
+									editurl: '/dashboard/ssdCusDummySaveJson.do',
+									//editurl: '/dashboard/genericSaveJson.do?sqlid=dashboard.corona.script_master.insert',
 									styleUI : 'Bootstrap',
 									viewrecords: true,			    		
 									width: '100%',
@@ -1235,7 +1235,7 @@
 										var detailList = [];
 										$.ajax({
 											type: "POST",
-											url: "/dashboard/genericlListJson.html",
+											url: "/dashboard/genericlListJson.do",
 											data: {
 												script_name: row.SCRIPT_NAME
 												, sqlid: 'dashboard.ssd_sm.manage.script.search.one'
@@ -1300,7 +1300,7 @@
 																		if(this.props.options.value == this.state.value)
 																			return state;
 																		$.ajax({
-																			url: "/dashboard/genericSaveJson.html",
+																			url: "/dashboard/genericSaveJson.do",
 																			type: "POST",
 																			data: {
 																				searchJson: JSON.stringify(paramObj),
@@ -1437,7 +1437,7 @@
 													var fd = new FormData(formdata);  	
 													var response1 = {};
 													$.ajax({
-														url: "/dashboard/genericSaveJson.html?sqlid=dashboard.ssd_sm.script_master.insert",
+														url: "/dashboard/genericSaveJson.do?sqlid=dashboard.ssd_sm.script_master.insert",
 														type: "POST",
 														data: fd, 
 														async: false,
@@ -1550,7 +1550,7 @@
 													//  
 													paramObj.loop_id = "delRows";
 													$.ajax({
-														url: "/dashboard/genericSaveJson.html",
+														url: "/dashboard/genericSaveJson.do",
 														type: "POST",
 														data: {
 															searchJson: JSON.stringify(paramObj),
@@ -1674,7 +1674,7 @@
 				};
 				$.ajax({
 					type: "POST",
-					url: "/dashboard/genericlListJson.html",
+					url: "/dashboard/genericlListJson.do",
 					//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
 					//data: $("#form").serialize(), 
 					data: paramObj,
@@ -1730,7 +1730,7 @@
 			setTimeout( function(){
 				$.ajax({
 					type : 'post',
-					url : '/dashboard/fvtExcelUploadJson.html',
+					url : '/dashboard/fvtExcelUploadJson.do',
 					async : false,
 					data : formData,
 					processData : false,
@@ -1757,14 +1757,14 @@
 		}
 		
 		function fn_FileDownloadAjax() {
-			$("#excelForm").attr("action", "/dashboard/fvtExcelDownJson.html");
+			$("#excelForm").attr("action", "/dashboard/fvtExcelDownJson.do");
 			$("#excelForm").attr("target", "popHiddenFrame");
 			$("#excelForm").submit();
 		}
 	
 		function fn_load_scriptGroups() {
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: {sqlid: "dashboard.ssd_sm.script.group.list"}, 
 				async: false,
 				success:  function(response){

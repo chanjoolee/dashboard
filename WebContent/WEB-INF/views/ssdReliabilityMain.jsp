@@ -330,7 +330,7 @@
 												var pmsModels = [];
 												
 												$.ajax({
-										    		url: "/dashboard/pmsModelListJson.html",
+										    		url: "/dashboard/pmsModelListJson.do",
 										    		data: {}, 
 										    		async: false,
 										    		success:  function(response){
@@ -340,7 +340,7 @@
 										    	});
 												
 												$.ajax({
-										    		url: "/dashboard/reliabilityModelListJson.html",
+										    		url: "/dashboard/reliabilityModelListJson.do",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -419,7 +419,7 @@
 												var rtnList = [];	
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/reliabilityTestTypeListJson.html?searchProduct=xxx",
+										    		url: "/dashboard/reliabilityTestTypeListJson.do?searchProduct=xxx",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -466,7 +466,7 @@
 												var rtnList = [];	
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/reliabilityFWVersionListJson.html?searchProduct=xxx&searchTestType=xxx",
+										    		url: "/dashboard/reliabilityFWVersionListJson.do?searchProduct=xxx&searchTestType=xxx",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -512,7 +512,7 @@
 												var rtnList = [];	
 												var vPjtCode = "";
 												$.ajax({
-										    		url: "/dashboard/reliabilityCapacityListJson.html?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
+										    		url: "/dashboard/reliabilityCapacityListJson.do?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
 										    		data: $('form').serialize(), 
 										    		async: false,
 										    		success:  function(response){
@@ -1113,7 +1113,7 @@
 		$("#loader").show();
 		setTimeout(function(){
 			$.ajax({
-				url : "/dashboard/ssdReliabilityMainJson.html?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx&searchCapacity=xxx",
+				url : "/dashboard/ssdReliabilityMainJson.do?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx&searchCapacity=xxx",
 				data: $("#form").serialize(),
 				success : function(responseData){
 					dataList = responseData.dataList;
@@ -1214,7 +1214,7 @@
 		 					oFrm.fwVersion.value = "";
 		 					
 		 					var query = "";
-		 					//var url = "/dashboard/ssdReliabilityChartPop.html";
+		 					//var url = "/dashboard/ssdReliabilityChartPop.do";
 		 					// productName
 		 					if(cm.name == 'PRODUCT_NAME'){
 		 						ispop = true;
@@ -1246,7 +1246,7 @@
 		 						//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 		 						//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME_PMS;
 		 						oFrm.productCategory.value = row.PRODUCT_CATEGORY;
-		 						oFrm.action =  '/dashboard/ssdReliabilityChartPop.html';
+		 						oFrm.action =  '/dashboard/ssdReliabilityChartPop.do';
 		 						oFrm.method = "post";
 		 						oFrm.target = 'ssdReliabilityChartPop'; 
 		 					    oFrm.submit();		
@@ -1445,7 +1445,7 @@
 		var pmsModels = [];
 		
 		$.ajax({
-    		url: "/dashboard/pmsModelListJson.html",
+    		url: "/dashboard/pmsModelListJson.do",
     		data: {}, 
     		async: false,
     		success:  function(response){
@@ -1455,7 +1455,7 @@
     	});
 		
 		$.ajax({
-    		url: "/dashboard/reliabilityModelListJson.html",
+    		url: "/dashboard/reliabilityModelListJson.do",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){
@@ -1508,7 +1508,7 @@
 	function changeProductTestType(){
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/reliabilityTestTypeListJson.html?searchProduct=xxx",
+    		url: "/dashboard/reliabilityTestTypeListJson.do?searchProduct=xxx",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){
@@ -1545,7 +1545,7 @@
 	function changeProductFw(){
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/reliabilityFWVersionListJson.html?searchProduct=xxx&searchTestType=xxx",
+    		url: "/dashboard/reliabilityFWVersionListJson.do?searchProduct=xxx&searchTestType=xxx",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){
@@ -1582,7 +1582,7 @@
 	function changeProductCapacity(){
 		var components = [];
 		$.ajax({
-    		url: "/dashboard/reliabilityCapacityListJson.html?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
+    		url: "/dashboard/reliabilityCapacityListJson.do?searchProduct=xxx&searchTestType=xxx&searchFWversion=xxx",
     		data: $('form').serialize(), 
     		async: false,
     		success:  function(response){

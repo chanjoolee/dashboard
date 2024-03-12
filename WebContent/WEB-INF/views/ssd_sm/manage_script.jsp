@@ -591,7 +591,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.script.category.distinct"}, 
 													async: false,
 													success:  function(response){
@@ -655,7 +655,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.script.test_item.distinct", sample: $("#category").val() }, 
 													async: false,
 													success:  function(response){
@@ -809,7 +809,7 @@
 					    		var rtnList = [];
 					    		$.ajax({
 					    			type: "POST",
-					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.script.search",
+					    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.manage.script.search",
 					    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 					    			data: $("#form").serialize(), 
 					    			async: false,
@@ -827,8 +827,8 @@
 					    		datatype:'local',
 					    		//loadonce: true,
 					    		pager: "#grid_scriptPager",
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
-					    		//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
+					    		//editurl: '/dashboard/genericSaveJson.do?sqlid=dashboard.corona.script_master.insert',
 					    		styleUI : 'Bootstrap',
 					    		viewrecords: true,			    		
 					    		width: '100%',
@@ -876,7 +876,7 @@
 					    			var detailList = [];
 									$.ajax({
 						    			type: "POST",
-						    			url: "/dashboard/genericlListJson.html",
+						    			url: "/dashboard/genericlListJson.do",
 						    			data: {
 						    				script_name: row.SCRIPT_NAME
 						    				, sqlid: 'dashboard.corona.manage.script.search.one'}, 
@@ -913,7 +913,7 @@
 																	};
 																	
 																	$.ajax({
-											                    		url: "/dashboard/genericSaveJson.html",
+											                    		url: "/dashboard/genericSaveJson.do",
 											                    		type: "POST",
 											                    		data: {
 											                    			searchJson: JSON.stringify(paramObj),
@@ -1073,7 +1073,7 @@
 						                    	var fd = new FormData(formdata);  	
 						                    	var response1 = {};
 						                    	$.ajax({
-						                    		url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert",
+						                    		url: "/dashboard/genericSaveJson.do?sqlid=dashboard.corona.script_master.insert",
 						                    		type: "POST",
 						                    		data: fd, 
 						                    		async: false,
@@ -1139,7 +1139,7 @@
 										    	
 									    		
 						                    	$.ajax({
-						                    		url: "/dashboard/genericSaveJson.html",
+						                    		url: "/dashboard/genericSaveJson.do",
 						                    		type: "POST",
 						                    		data: {
 						                    			searchJson: JSON.stringify(paramObj),
@@ -1154,7 +1154,7 @@
 //													    	var griddata = [];
 //													    	$.ajax({
 //												    			type: "POST",
-//												    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.script.search",
+//												    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.manage.script.search",
 //												    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 //												    			data: $("#form").serialize(), 
 //												    			async: false,
@@ -1252,7 +1252,7 @@
 							data: function(){
 								var rtnList = [];
 								$.ajax({
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: {sqlid: "dashboard.corona.search.sample"}, 
 									async: false,
 									success:  function(response){
@@ -1283,7 +1283,7 @@
 									var datas = [];
 									$.ajax({
 										type: "POST",
-										url: "/dashboard/genericlListJson.html",
+										url: "/dashboard/genericlListJson.do",
 										data: {sqlid: "dashboard.corona.search.firmware",sample: $("#to_sample").val() }, 
 										async: false,
 										success:  function(response){
@@ -1329,7 +1329,7 @@
 							data: function(){
 								var rtnList = [];
 								$.ajax({
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: {sqlid: "dashboard.corona.search.firmware", sample: $("#to_sample").val() }, 
 									async: false,
 									success:  function(response){
@@ -1450,7 +1450,7 @@
 			    	gridOpt:{
 			    		datatype:'local',
 			    		pager: "#grid_firmwarePager",
-			    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+			    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 			    		styleUI : 'Bootstrap',
 			    		viewrecords: true,			    		
 			    		width: '100%',
@@ -1496,7 +1496,7 @@
 			                var detailList = [];
 							$.ajax({
 				    			type: "POST",
-				    			url: "/dashboard/genericlListJson.html",
+				    			url: "/dashboard/genericlListJson.do",
 				    			data: {
 				    				sample: row.SAMPLE
 				    				, firmware: row.FIRMWARE
@@ -1535,7 +1535,7 @@
 															};
 															
 															$.ajax({
-									                    		url: "/dashboard/genericSaveJson.html",
+									                    		url: "/dashboard/genericSaveJson.do",
 									                    		type: "POST",
 									                    		data: {
 									                    			searchJson: JSON.stringify(paramObj),
@@ -1697,7 +1697,7 @@
 			                    	var fd = new FormData(formdata);  	
 			                    	var response1 = {};
 			                    	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.firmware_script_map.insert",
+			                    		url: "/dashboard/genericSaveJson.do?sqlid=dashboard.corona.firmware_script_map.insert",
 			                    		type: "POST",
 			                    		data: fd, 
 			                    		async: false,
@@ -1763,7 +1763,7 @@
 							    	
 						    		
 			                    	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: {
 			                    			searchJson: JSON.stringify(paramObj),
@@ -1778,7 +1778,7 @@
 //													    	var griddata = [];
 //													    	$.ajax({
 //												    			type: "POST",
-//												    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.script.search",
+//												    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.manage.script.search",
 //												    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 //												    			data: $("#form").serialize(), 
 //												    			async: false,
@@ -2647,7 +2647,7 @@
 			};
 			$.ajax({
 				type: "POST",
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
 				//data: $("#form").serialize(), 
 				data: paramObj,
@@ -2680,7 +2680,7 @@
 			};
 			$.ajax({
 				type: "POST",
-				url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.manage.script.search",
+				url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.manage.script.search",
 				//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.firmware.mapping"}, 
 				data: $("#form").serialize(), 
 				//data: paramObj,
@@ -2718,7 +2718,7 @@
     	});
 		
 		$.ajax({
-			url: "/dashboard/genericSaveJson.html",
+			url: "/dashboard/genericSaveJson.do",
 			type: "POST",
 			data: {
 				searchJson: JSON.stringify(paramObj),

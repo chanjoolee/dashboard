@@ -57,7 +57,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/regressionTestProjectJson.html",
+			url : "/dashboard/regressionTestProjectJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -269,7 +269,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/regressionTestRevision.html';
+			oFrm.action =  '/dashboard/regressionTestRevision.do';
 			oFrm.method = "post";
 			oFrm.target = '_blank'; 
 		    oFrm.submit();

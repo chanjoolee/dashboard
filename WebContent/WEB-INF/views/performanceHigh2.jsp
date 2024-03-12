@@ -1639,7 +1639,7 @@
 	
 	function getDataByJson(){
 		$.ajax({
-			url : "/dashboard/performanceFolderListJson.html",
+			url : "/dashboard/performanceFolderListJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				//dataList = responseData.dataList;
@@ -1665,7 +1665,7 @@
 			                        	theGrid.jqGrid('setRowData',rowid,{EDIT_MODE:'U'});
 			                        	var row = theGrid.jqGrid('getRowData',rowid);
 			                        	$.ajax({
-			                    			url : "/dashboard/performanceSaveJson.html",
+			                    			url : "/dashboard/performanceSaveJson.do",
 			                    			data: row,
 			                    			//type: "POST",
 			                    			//crossDomain: true,
@@ -1730,7 +1730,7 @@
 	function getDataListByAjax(){
 		
 		$.ajax({
-			url : "/dashboard/performanceDataListJson.html",
+			url : "/dashboard/performanceDataListJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -1866,12 +1866,12 @@
 // 		        	      return false;
 // 		        	      //theGrid.setSelection(rowid, false);
 // 	        	    }
-					//,editurl:"/dashboard/performanceJson.html"
+					//,editurl:"/dashboard/performanceJson.do"
 					editurl:'clientArray'
 					//, cellEdit: true
 					//, forceFit : true
 					,cellsubmit: 'clientArray'
-					//,cellsubmit: '/dashboard/performanceJson.html'
+					//,cellsubmit: '/dashboard/performanceJson.do'
 // 					,afterEditCell: function (id,name,val,iRow,iCol){
 					
 // 					}
@@ -1979,7 +1979,7 @@
 			setTimeout(function(){
 				if(ajaxFilter.length > 0){
 					$.ajax({
-						url : "/dashboard/performanceDataListJson.html",
+						url : "/dashboard/performanceDataListJson.do",
 						//data: {FOLDER_NAME: jmespath.search(filters,"[?col=='FOLDER_NAME'].val") },
 						data: {FOLDER_NAME: jmespath.search(ajaxFilter,"[?col=='FOLDER_NAME'].val") },
 						//data: jmespath.search(filters,"[?col=='FOLDER_NAME'].{FOLDER_NAME: val}") ,
@@ -2525,7 +2525,7 @@
 					//, cellEdit: true
 					, forceFit : true
 					//, cellsubmit: 'clientArray'
-					//,cellsubmit: '/dashboard/performanceJson.html'
+					//,cellsubmit: '/dashboard/performanceJson.do'
 					// , afterEditCell: function (id,name,val,iRow,iCol){
 					
 					// }

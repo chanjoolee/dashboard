@@ -56,7 +56,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/regressionTestCategoryJson.html",
+			url : "/dashboard/regressionTestCategoryJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -160,7 +160,7 @@
 			var newWin1 = window.open("", "categorylistPop", "resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			oFrm.category.value = category;
-			oFrm.action =  '/dashboard/regressionTestCategoryList.html';
+			oFrm.action =  '/dashboard/regressionTestCategoryList.do';
 			oFrm.method = "post";
 			oFrm.target = 'categorylistPop'; 
 		    oFrm.submit();

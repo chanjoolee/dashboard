@@ -43,7 +43,7 @@
 	
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/codesonarProjectDetailProjectListJson.html",
+			url : "/dashboard/codesonarProjectDetailProjectListJson.do",
 			data: {},
 			success : function(responseData){
 				//01. 전역변수설정
@@ -96,7 +96,7 @@
 		$.ajax({
 			//type: "POST",
 			async: true,
-			url : "/dashboard/pmsProgressJson.html",
+			url : "/dashboard/pmsProgressJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){
@@ -139,7 +139,7 @@
 	function htmlExpandPriority(pjtCode,priority){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),

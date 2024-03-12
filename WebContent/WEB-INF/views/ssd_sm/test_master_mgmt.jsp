@@ -138,10 +138,10 @@
                                     <a href="#" class="tab_link">Test Mgmt. System - Master Mgmt.</a>
                                 </li>
                                 <li class="tab_item">
-                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.html?viewName=ssd_sm/test_set_mgmt');">Test Mgmt. System - Test Set Mgmt.</a>
+                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.do?viewName=ssd_sm/test_set_mgmt');">Test Mgmt. System - Test Set Mgmt.</a>
                                 </li>
                                 <li class="tab_item">
-                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.html?viewName=ssd_sm/test_map_project_mgmt');">Map Test Project - Test Set.</a>
+                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.do?viewName=ssd_sm/test_map_project_mgmt');">Map Test Project - Test Set.</a>
                                 </li>
                             </ul>
                         </div>
@@ -385,7 +385,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.commonComboSearch",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.commonComboSearch",
 			data: { 
 						filters: JSON.stringify({commCdType:paramObj}) 
 					},	
@@ -621,7 +621,7 @@
 			console.log(change);
 		  	console.log(JSON.stringify(paramObj));
 	       	$.ajax({
-	       			url: "/dashboard/genericAutoSaveJson.html?sqlid=dashboard.ssd_sm.commonGridSave",
+	       			url: "/dashboard/genericAutoSaveJson.do?sqlid=dashboard.ssd_sm.commonGridSave",
 	        		dataType: "json",
 	        		type: "POST",
 			        data: {
@@ -668,7 +668,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.master.all",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.master.all",
 			data:{ 
 						listType:viewOption, 
 						page:pPage, rows:rows, 
@@ -760,7 +760,7 @@
 			getMasterList(page);
 			/* $.ajax({		//loads data to Handsontable
 				type: "POST",
-				url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.master.all",
+				url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.master.all",
 				data:{
 							listType:viewOption, page:1,rows:rows,
 							filters: JSON.stringify({
@@ -815,7 +815,7 @@
 			var newwin = window.open("", "SSD_TEST_MASTER_ADMIN", "width=560px,height=570px,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form1");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/test_admin_mgmt';
+			oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/test_admin_mgmt';
 			oFrm.method = "post";
 			oFrm.target = 'SSD_TEST_MASTER_ADMIN'; 
 			oFrm.submit();
@@ -848,7 +848,7 @@
 		
 			$.ajax({		//loads data to Handsontable
 				type: "POST",
-				url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.master.all",
+				url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.master.all",
 				data:{ 
 					listType:viewOption, 
 					page:1, rows:999999, 
@@ -1380,7 +1380,7 @@
 					}
 					
 					$.ajax({
-		       			url: "/dashboard/genericAllSaveJson.html?sqlid=dashboard.ssd_sm.masterGridSave",
+		       			url: "/dashboard/genericAllSaveJson.do?sqlid=dashboard.ssd_sm.masterGridSave",
 		        		dataType: "json",
 		        		type: "POST",
 		        		async : true,

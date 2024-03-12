@@ -30,7 +30,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/dashboardProjectListJson.html",
+			url : "/dashboard/dashboardProjectListJson.do",
 			data: {division:'jira'},
 			success : function(responseData){
 				var projectList = responseData.projectList;

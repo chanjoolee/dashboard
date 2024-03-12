@@ -22,7 +22,7 @@
     
 	<script type="text/javascript">
 	/* $(function () {		
-		window.open('http://166.125.112.110:7070/dashboard/dashboard.html','winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=0,width=1024,height=800');
+		window.open('http://166.125.112.110:7070/dashboard/dashboard.do','winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=0,width=1024,height=800');
 	}); */
 	
 	$(function () {
@@ -101,33 +101,33 @@
 	}
 	
 	function gotoPhaseCauseList(){
-	    window.open('/dashboard/jiraIssuePhaseCauseList.html?sender=confluence','_blank',
+	    window.open('/dashboard/jiraIssuePhaseCauseList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=768');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
 	}
 	
 	function gotoCauseMatrixList(){
-	    window.open('/dashboard/jiraIssueCauseMatrixList.html?sender=confluence','_blank',
+	    window.open('/dashboard/jiraIssueCauseMatrixList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1000,height=320');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
 	}
 	
 	function gotoCauseStatusList(){
-	    window.open('/dashboard/jiraIssueCauseStatusList.html?sender=confluence','_blank',
+	    window.open('/dashboard/jiraIssueCauseStatusList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1024,height=608');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
@@ -197,8 +197,8 @@
 		          Schema
 		        </a>	
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=schema/entity_create_from_table');">Create Enity</a>
-		          <a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=schema/workflow_create_from_enities');">Create WorkFlow by Enity</a>
+		          <a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=schema/entity_create_from_table');">Create Enity</a>
+		          <a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=schema/workflow_create_from_enities');">Create WorkFlow by Enity</a>
 		        </div> 
 		        
 		        
@@ -212,8 +212,8 @@
 		          SSD Script Management
 		        </a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/manage_tabs');">Manage Script</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=ssd_sm/SummaryAll');">Summary ALL</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=ssd_sm/manage_tabs');">Manage Script</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=ssd_sm/SummaryAll');">Summary ALL</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -221,10 +221,10 @@
 		          Corona
 		        </a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_portal');">Corona All</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_emmc/coronaSummary');">Corona EMMC Summary</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=coronaSummary');">Corona UFS Summary</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=corona_manage_script');">Corona Manage Script</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=corona_portal');">Corona All</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=corona_emmc/coronaSummary');">Corona EMMC Summary</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=coronaSummary');">Corona UFS Summary</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=corona_manage_script');">Corona Manage Script</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown ">
@@ -233,8 +233,8 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=regression/regressionTabView');">Regression Tab View1</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/regressionTabView.html');">Regression Tab View</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=regression/regressionTabView');">Regression Tab View1</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/regressionTabView.do');">Regression Tab View</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -242,9 +242,9 @@
 		          SSD
 		        </a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMain.html');">고객실장</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMainChart.html');">고객실장차트</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdReliabilityMain.html');">ssdReliabilityMain</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMain.do');">고객실장</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdCusMainChart.do');">고객실장차트</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/ssdReliabilityMain.do');">ssdReliabilityMain</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -252,11 +252,11 @@
 		          Preformance
 		        </a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.html?viewName=performanceHigh1');">High charts1</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.html?viewName=performanceHigh2');">High charts2</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.html?viewName=performanceTabView');">Tab_View(CSSD)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.html?viewName=performanceTabView&category=ESSD');">Tab_View(ESSD)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performance.html');">Pivot table</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.do?viewName=performanceHigh1');">High charts1</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.do?viewName=performanceHigh2');">High charts2</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.do?viewName=performanceTabView');">Tab_View(CSSD)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performanceHigh.do?viewName=performanceTabView&category=ESSD');">Tab_View(ESSD)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/performance.do');">Pivot table</a>
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/js/WebPivotTable/public/index.htm');">Web Pivot table</a>
 				</div>
 			</li>
@@ -265,14 +265,14 @@
 		          FW Quality
 		        </a> 
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqDivision.html');">FW Quality Division</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqMetric.html');">FW Quality Metric</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqCodingRulePop.html?project=Columbus_FCPU&measureDt1=20160117&measureDt2=20170110');">FW Quality Coding Rule</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqDivision.do');">FW Quality Division</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqMetric.do');">FW Quality Metric</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fwqCodingRulePop.do?project=Columbus_FCPU&measureDt1=20160117&measureDt2=20170110');">FW Quality Coding Rule</a>
 					
 				</div>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#" onclick="dashboardShow('_blank','/dashboard/dashboard.html');" >Dashboard</a>
+				<a class="nav-link" href="#" onclick="dashboardShow('_blank','/dashboard/dashboard.do');" >Dashboard</a>
 			</li>
 			<li class="nav-item" >
 				<a class="nav-link" href="#" onclick="windowOpen();">dashboard popup</a>
@@ -304,7 +304,7 @@
 		          Issue
 		        </a> 
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/issueTrends.html');">Issue Trends</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/issueTrends.do');">Issue Trends</a>
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','issueUnresolvedPriority.html');">Issue UnresolvedPriority</a>
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','issueUnresolvedType.html');">Issue UnresolvedType</a>
 					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','issueUnresolved.html');">Issue Unresolved</a>
@@ -312,10 +312,10 @@
 			</li>
 			
 			<li class="nav-item" >
-				<a class="nav-link" href="#" onclick="dashboardShow('_blank','/dashboard/projectOneComplex.html?pjt_code=MercuryPlus');">ProjectOneComplex</a>
+				<a class="nav-link" href="#" onclick="dashboardShow('_blank','/dashboard/projectOneComplex.do?pjt_code=MercuryPlus');">ProjectOneComplex</a>
 			</li>
 			<li class="nav-item" >
-				<a class="nav-link" href="#" onclick="dashboardShow('_blank','/dashboard/regressionPng.html');">regression</a>
+				<a class="nav-link" href="#" onclick="dashboardShow('_blank','/dashboard/regressionPng.do');">regression</a>
 			</li>
 			
 			
@@ -326,8 +326,8 @@
 		        </a> 
 				 
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsTatByModel.html');">Pms TAT(by model)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsTatByProject.html');">Pms TAT(by project)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsTatByModel.do');">Pms TAT(by model)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsTatByProject.do');">Pms TAT(by project)</a>
 				</div>
 			</li>
 			
@@ -337,11 +337,11 @@
 		        </a> 
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResourceFcst.html');">Pms Resource Forecast</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResource.html?category=project');">Pms Resource project </a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResource.html?category=function');">Pms Resource function </a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResource.html?category=site');">Pms Resource site </a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResourceProject.html?category=function&pjt_code=PJT_00021046&pjt_name=Armstrong');">Pms Resource project Armstrong function</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResourceFcst.do');">Pms Resource Forecast</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResource.do?category=project');">Pms Resource project </a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResource.do?category=function');">Pms Resource function </a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResource.do?category=site');">Pms Resource site </a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsResourceProject.do?category=function&pjt_code=PJT_00021046&pjt_name=Armstrong');">Pms Resource project Armstrong function</a>
 										
 				</div>
 			</li>
@@ -351,7 +351,7 @@
 		        </a> 
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/deliverableGeneral.html');">General</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/deliverableGeneral.do');">General</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -360,7 +360,7 @@
 		        </a> 
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/regressionTestProject.html');">Project</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/regressionTestProject.do');">Project</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -368,7 +368,7 @@
 		          Schedule
 		        </a> 
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsSchedule.html');">Schedule</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/pmsSchedule.do');">Schedule</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -376,9 +376,9 @@
 		          codeComplexity
 		        </a> 
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeComplexity.html');">codeComplexity</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeComplexStatus.html');">codeComplexStatus</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeComplexHistory.html');">codeComplexHistory</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeComplexity.do');">codeComplexity</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeComplexStatus.do');">codeComplexStatus</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeComplexHistory.do');">codeComplexHistory</a>
 				</div>
 			</li>
 		</ul>
@@ -393,7 +393,7 @@
 		          Summary Dashboard
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/summaryDashboard.html');">Summary Dashboard</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/summaryDashboard.do');">Summary Dashboard</a>
 				</div> 
 			</li>
 			
@@ -402,7 +402,7 @@
 		          Code Revew
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeReview.html');">Code Revew</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/codeReview.do');">Code Revew</a>
 				</div> 
 			</li>
 			<li class="nav-item dropdown">
@@ -411,12 +411,12 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchSocDesignJson.html');">new barch</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/socDesignCsv.html');">socDesignCsv</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchSocDesignJson.do');">new barch</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/socDesignCsv.do');">socDesignCsv</a>
 					
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/socDesignChart.html?project=Columbus');">socDesignChart</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/socDesignChart.do?project=Columbus');">socDesignChart</a>
 					
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/socDesinTestCaseChart.html');">socDesinTestCaseChart</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/socDesinTestCaseChart.do');">socDesinTestCaseChart</a>
 					
 				</div>
 			</li>
@@ -426,18 +426,18 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchPjtnameMappingJson.html');">PjtnameMapping(pms의 pjtName과 dashboard pjtName parsing)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchPjtnameMappingJson.do');">PjtnameMapping(pms의 pjtName과 dashboard pjtName parsing)</a>
 					
 					
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchMappingSchedulePmsWithDashboard.html');">MappingSchedule(pms의 schedule 데이타를 dashboard schedule로 update)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchJiraProjectMappingJson.html');">JiraProjectMapping(pms의 project와  dashboard jira project mapping)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchCodesonarProjectMappingJson.html');">CodesonarProjectMapping(pms의 project와  dashboard codesonar project mapping)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFileFvt.html');">Fvt batch</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fvtPassByDt.html');">Fvt Chart(Progress)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fvtPhaseCount.html');">Fvt Chart(phase count)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFwqJson.html');">FW Quality Index</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFwqLinkCheckJson.html');">FW Quality Link check</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchSsdCustomMigrationJson.html');">SSD Custom Test Migration</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchMappingSchedulePmsWithDashboard.do');">MappingSchedule(pms의 schedule 데이타를 dashboard schedule로 update)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchJiraProjectMappingJson.do');">JiraProjectMapping(pms의 project와  dashboard jira project mapping)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchCodesonarProjectMappingJson.do');">CodesonarProjectMapping(pms의 project와  dashboard codesonar project mapping)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFileFvt.do');">Fvt batch</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fvtPassByDt.do');">Fvt Chart(Progress)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fvtPhaseCount.do');">Fvt Chart(phase count)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFwqJson.do');">FW Quality Index</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchFwqLinkCheckJson.do');">FW Quality Link check</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchSsdCustomMigrationJson.do');">SSD Custom Test Migration</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -446,17 +446,17 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraIssueFromResolution.html');">jiraIssueFromResolution(불량별 해결현황)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraIssueFromResolution.do');">jiraIssueFromResolution(불량별 해결현황)</a>
 					
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraDiscoveredResolution.html');">DiscoveredResolution(테스트종류별해결현황)</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraPresumedCause.html');">PresumedCause(추정원인대비확정원인)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraDiscoveredResolution.do');">DiscoveredResolution(테스트종류별해결현황)</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraPresumedCause.do');">PresumedCause(추정원인대비확정원인)</a>
 					<a class="dropdown-item" href="#" onclick="gotoCauseStatusList();">JIRA Issue List</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveJiraIssueRootCauseTat.html');">Root Cause별 TAT</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveJiraIssuePhaseTat.html');">Phase별 TAT</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveJiraIssueProjectDefect.html');">Project별 불량현황</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraIssueHMS.html?pjtId=PJT_00049942');">Jiraissue HMS Gemini</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/perforceHMS.html?pjtId=PJT_00049942');">Perforce HMS Gemini</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/perforceHMS.html?pjtId=PJT_00049499');">Perforce HMS Sapphire</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveJiraIssueRootCauseTat.do');">Root Cause별 TAT</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveJiraIssuePhaseTat.do');">Phase별 TAT</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveJiraIssueProjectDefect.do');">Project별 불량현황</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraIssueHMS.do?pjtId=PJT_00049942');">Jiraissue HMS Gemini</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/perforceHMS.do?pjtId=PJT_00049942');">Perforce HMS Gemini</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/perforceHMS.do?pjtId=PJT_00049499');">Perforce HMS Sapphire</a>
 					
 				</div>
 			</li>
@@ -467,7 +467,7 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/bambooTestProject.html');">bambooTestProjectt</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/bambooTestProject.do');">bambooTestProjectt</a>
 				</div>
 			</li>
 			
@@ -476,7 +476,7 @@
 		          PMS Controller
 		        </a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/relevant.html');">PMS Controller Map</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/relevant.do');">PMS Controller Map</a>
 				</div>
 				
 			</li>
@@ -486,11 +486,11 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchRMSJson.html');">RMS Batch</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rmsVirtual.html?pjt_code=PJT_00021073');">RMS : Jade(Quasar 64Gb MLC )</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rms.html?pjt_code=Columbus');">RMS : Columbus</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rms.html?pjt_code=SampleProject1');">RMS : Jade(SampleProject #1 )</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rms.html?pjt_code=SampleProject2');">RMS : Jade(SampleProject #2 )</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/batchRMSJson.do');">RMS Batch</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rmsVirtual.do?pjt_code=PJT_00021073');">RMS : Jade(Quasar 64Gb MLC )</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rms.do?pjt_code=Columbus');">RMS : Columbus</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rms.do?pjt_code=SampleProject1');">RMS : Jade(SampleProject #1 )</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/rms.do?pjt_code=SampleProject2');">RMS : Jade(SampleProject #2 )</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -499,7 +499,7 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jsonforms.html');">jsonforms</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jsonforms.do');">jsonforms</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -508,7 +508,7 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fileTest.html');">fileTest</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/fileTest.do');">fileTest</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -517,11 +517,11 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/googleSearch.html');">googleSearch</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveIarLicenseUse.html');">IAR License</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/systemUsageSummary.html?systemId=SolutionPMS');">systemUsageSummary</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/systemUsage.html?systemId=SolutionPMS&useMonth=201610');">systemUsage</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraConfUsage.html');">jira confluence Usage</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/googleSearch.do');">googleSearch</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/retrieveIarLicenseUse.do');">IAR License</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/systemUsageSummary.do?systemId=SolutionPMS');">systemUsageSummary</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/systemUsage.do?systemId=SolutionPMS&useMonth=201610');">systemUsage</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jiraConfUsage.do');">jira confluence Usage</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -530,18 +530,18 @@
 				  
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jointjs.html');">jointJs</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/backboneEx.html');">backbone 연습</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_blog.html');">01. diagram layout Blog sample</a>		
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_1_blogMy.html');">01-1. diagram layout my</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_webpage.html');">02. diagram layout Webpage sample</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_1_webpageMy.html');">02-1. diagram layout Webpage my</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_2_dragAndDrop.html');">02-2. diagram drag and drop sample</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_3_joint.html');">02-3. diagram joint</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_4_joint.html');">02-4. diagram joint: template</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewname=diagram/diagram02_5_joint');">02-5. diagram joint: template</a>	
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram02_6_joint');">02-6. diagram joint: template</a>		
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/diagram_erd');">diagram: erd</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/jointjs.do');">jointJs</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/backboneEx.do');">backbone 연습</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_blog.do');">01. diagram layout Blog sample</a>		
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram01_1_blogMy.do');">01-1. diagram layout my</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_webpage.do');">02. diagram layout Webpage sample</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_1_webpageMy.do');">02-1. diagram layout Webpage my</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_2_dragAndDrop.do');">02-2. diagram drag and drop sample</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_3_joint.do');">02-3. diagram joint</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/diagram02_4_joint.do');">02-4. diagram joint: template</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewname=diagram/diagram02_5_joint');">02-5. diagram joint: template</a>	
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/diagram02_6_joint');">02-6. diagram joint: template</a>		
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/diagram_erd');">diagram: erd</a>	
 				</div>
 				
 					
@@ -552,8 +552,8 @@
 		          Joint/Rappid
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/jointjs/demos/rappid/apps/QAD/qad');">Qad</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=diagram/jointjs/myqad/2018.010/qad');">MyQad.1</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/jointjs/demos/rappid/apps/QAD/qad');">Qad</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=diagram/jointjs/myqad/2018.010/qad');">MyQad.1</a>
 				</div>
 			</li>
 			<li class="nav-item dropdown">
@@ -562,8 +562,8 @@
 		        </a>
 				
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=websearch/webSearch');">Web Search</a>
-					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.html?viewName=websearch/webSearch2');">Web Search2</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=websearch/webSearch');">Web Search</a>
+					<a class="dropdown-item" href="#" onclick="dashboardShow('_blank','/dashboard/generic.do?viewName=websearch/webSearch2');">Web Search2</a>
 				</div>
 			</li>
 		</ul>

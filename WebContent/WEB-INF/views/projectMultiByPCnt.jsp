@@ -66,8 +66,8 @@
 	
 	function pmsProjectList(){
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			url : "/dashboard/pmsProjectListJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			url : "/dashboard/pmsProjectListJson.do",
 			data: {division:'jira'},
 			async : false,
 			success : function(pResponseData){
@@ -242,7 +242,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/projectMultiByPCntJson.html",
+			url : "/dashboard/projectMultiByPCntJson.do",
 			//data: {PJT_CODE: $("#sProject").val() },
 			data: $("#form").serialize(),
 			success : function(pResponseData){
@@ -552,7 +552,7 @@
 	/* function htmlExpand(pjtCode,priority,dt){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),

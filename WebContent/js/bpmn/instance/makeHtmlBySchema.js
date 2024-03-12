@@ -720,7 +720,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
 
     if(opt.url == null){
         opt.url = function(){
-            return	"./genericlListPageJson.html?" + 
+            return	"./genericlListPageJson.do?" + 
                 this.htmlMaker.instance.form.serialize() + 
                 "&sqlid=" + this.sqlId+ ".page.list" +  
                 "&paging_sqlid=" + this.sqlId+ ".page.total" ;
@@ -834,7 +834,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                         //  
                         paramObj.loop_id = "delRows";
                         $.ajax({
-                            url: "./genericSaveJson.html",
+                            url: "./genericSaveJson.do",
                             type: "POST",
                             data: {
                                 searchJson: JSON.stringify(paramObj),
@@ -998,7 +998,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     oFrm.submit();		
                     newWin1.focus();
                 }else if(row[cm.name].match(/\.([\w]+)$/i) != null){
-                    //var src = "/dashboard/filedownloadJson.html";
+                    //var src = "/dashboard/filedownloadJson.do";
                     //src += "?filename=" + row.FILE_NAME;
                     //src +="&path=" + row.FILE_PATH;
                     //document.getElementById('file_iframe').src =  src;

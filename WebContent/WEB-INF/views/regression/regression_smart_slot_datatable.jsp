@@ -145,7 +145,7 @@
    	            		
 			    		$.ajax({
 			    			type: "POST",
-			    			url: "/dashboard/genericlListJson.html",
+			    			url: "/dashboard/genericlListJson.do",
 			    			data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 			    			async: false,
 			    			success:  function(response){

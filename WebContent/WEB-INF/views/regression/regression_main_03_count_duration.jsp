@@ -465,8 +465,8 @@
    	            		var series = {series:[]};
    	            		$.ajax({
    	            			type: "POST",
-   	                		url: "/dashboard/genericlListJson.html",
-   	                		//url: "/dashboard/regressionTabViewMainJson.html",
+   	                		url: "/dashboard/genericlListJson.do",
+   	                		//url: "/dashboard/regressionTabViewMainJson.do",
    	                		data: {sqlid:"dashboard.regresson.mainlist.category.tasktime.list", searchJson: JSON.stringify(paramObj)}, 
    	                		async: false,
    	                		success:  function(response){

@@ -57,7 +57,7 @@
 		$.ajax({
 			//type: "POST",
 			async: true,
-			url : "/dashboard/getSummaryForChartJson.html",
+			url : "/dashboard/getSummaryForChartJson.do",
 			data: $("#form1").serialize(),
 			//modelAttribute:"searchVO",
 			success : function(responseData){
@@ -179,7 +179,7 @@
 		var newWin1 = window.open("", "socDesignChartPop", "width=1000,height=700,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form1");
 		oFrm.ip.value = ip;
-		oFrm.action =  '/dashboard/socDesignChartPop.html';
+		oFrm.action =  '/dashboard/socDesignChartPop.do';
 		oFrm.method = "post";
 		oFrm.target = 'socDesignChartPop'; 
 	    oFrm.submit();

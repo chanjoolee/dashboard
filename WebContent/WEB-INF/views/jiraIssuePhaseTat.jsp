@@ -66,7 +66,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {division:'jira'},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -92,7 +92,7 @@
 	function getDataByJson() {
 		/*
 		$.ajax({
-			url : "/dashboard/jiraIssuePhaseTatJson.html",
+			url : "/dashboard/jiraIssuePhaseTatJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				drawchart(responseData);
@@ -106,7 +106,7 @@
 		parameter.PJT_CODE = $("#sProject").val();
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/jiraIssuePhaseTatJson.html",
+			url : "/dashboard/jiraIssuePhaseTatJson.do",
 			data: $("#form").serialize() ,
 			//modelAttribute:"searchVO",
 			success : function(responseData){

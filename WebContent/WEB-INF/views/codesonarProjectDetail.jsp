@@ -42,7 +42,7 @@
 	
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/codesonarProjectDetailProjectListJson.html",
+			url : "/dashboard/codesonarProjectDetailProjectListJson.do",
 			data: {},
 			success : function(responseData){
 				//01. 전역변수설정
@@ -98,7 +98,7 @@
 	
 	function projectListByAjaxBack1(){
 		$.ajax({
-			url : "/dashboard/codesonarProjectDetailProjectListJson.html",
+			url : "/dashboard/codesonarProjectDetailProjectListJson.do",
 			data: {},
 			success : function(responseData){
 				var projectList1 = $.csv2Dictionary(responseData.projectList1);
@@ -145,7 +145,7 @@
 	
 	function projectListByAjaxBack(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -183,7 +183,7 @@
 		
 		$.ajax({
 			//type: "POST",
-			url : "/dashboard/codesonarProjectDetailJson.html",
+			url : "/dashboard/codesonarProjectDetailJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){
@@ -233,7 +233,7 @@
 		var parameter = {PJT_CODE:pjt_code,PRIORITY:priority};		
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/issueUnresolvedPieJson.html",
+			url : "/dashboard/issueUnresolvedPieJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){
@@ -253,7 +253,7 @@
 	function htmlExpandPriority(pjtCode,priority){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),
@@ -302,7 +302,7 @@
 	function htmlExpandFile(pjtCode,file,obj){
 		var linkUrl = "";		
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),
@@ -352,7 +352,7 @@
 	function htmlExpandFunction(pjtCode,file,func){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),

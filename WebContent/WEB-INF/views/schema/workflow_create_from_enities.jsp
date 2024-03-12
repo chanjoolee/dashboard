@@ -575,7 +575,7 @@
 			// var oFrm = document.getElementById("formReport");
 			// oFrm.searchJson.value = JSON.stringify(schema);
 			
-			// oFrm.action =  '/dashboard/performanceReportJson.html';
+			// oFrm.action =  '/dashboard/performanceReportJson.do';
 			// oFrm.method = "post";
 			// oFrm.target = 'MS_WordReport';
 		    // oFrm.submit();		    

@@ -773,7 +773,7 @@
 		
 		$.ajax({
 			// type: "POST",
-			//url: "/dashboard/webSearchJson.html",
+			//url: "/dashboard/webSearchJson.do",
 			url: url,
 			dataType: 'jsonp', 
 			// data: {searchJson: JSON.stringify(paramObj)}, 

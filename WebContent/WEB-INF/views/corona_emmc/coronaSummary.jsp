@@ -601,7 +601,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.emmc.search.sample"}, 
 													async: false,
 													success:  function(response){
@@ -633,7 +633,7 @@
 													var list1 = [];
 													$.ajax({
 														type: "POST",
-														url: "/dashboard/genericlListJson.html",
+														url: "/dashboard/genericlListJson.do",
 														data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.map.search",project: $("#sample").val() }, 
 														async: false,
 														success:  function(response){
@@ -645,7 +645,7 @@
 													if($("#firmware_gubun").val()== "pms"){
 														var list2 = [];
 														$.ajax({
-															url: "/dashboard/genericlListJson.html",
+															url: "/dashboard/genericlListJson.do",
 															data: {sqlid: "dashboard.corona.emmc.summay.firmware.pms", project: $("#sample").val() }, 
 															async: false,
 															success:  function(response){
@@ -716,7 +716,7 @@
 												var rtnList = [];
 												var list1 = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.emmc.manage.scriptsets.map.search", project: $("#sample").val() }, 
 													async: false,
 													success:  function(response){
@@ -726,7 +726,7 @@
 												if($("#firmware_gubun").val()== "pms"){
 													var list2 = [];
 													$.ajax({
-														url: "/dashboard/genericlListJson.html",
+														url: "/dashboard/genericlListJson.do",
 														data: {sqlid: "dashboard.corona.emmc.summay.firmware.pms", project: $("#sample").val() }, 
 														async: false,
 														success:  function(response){
@@ -934,7 +934,7 @@
 		    		
 		    		$.ajax({
 		    			type: "POST",
-		    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.summary",
+		    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.emmc.summary",
 		    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 		    			data: $("#form").serialize(), 
 		    			async: false,
@@ -1179,7 +1179,7 @@
 	                        	
 	                        	var response1 = {};
 	                        	$.ajax({
-		                    		url: "/dashboard/genericSaveJson.html",
+		                    		url: "/dashboard/genericSaveJson.do",
 		                    		type: "POST",
 		                    		data: row, 
 		                    		async: false,			                    		
@@ -1233,7 +1233,7 @@
 		    	gridOpt:{
 		    		datatype:'local',
 		    		pager: "#grid_summaryPager",
-		    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+		    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 		    		viewrecords: true,	
 		    		emptyrecords: "No records to view",		    		
 		    		width: '100%',
@@ -1315,7 +1315,7 @@
 		                    	var fd = new FormData(formdata);  	
 		                    	var response1 = {};
 		                    	$.ajax({
-		                    		url: "/dashboard/genericSaveJson.html",
+		                    		url: "/dashboard/genericSaveJson.do",
 		                    		type: "POST",
 		                    		data: fd, 
 		                    		async: false,
@@ -1432,7 +1432,7 @@
 						if(ispop){
 							var newWin1 = window.open("", "coronaDetail_emmc", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 							
-							oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/coronaDetail';
+							oFrm.action =  '/dashboard/generic.do?viewName=corona_emmc/coronaDetail';
 							oFrm.method = "post";
 							oFrm.target = "coronaDetail_emmc"; 
 						    oFrm.submit();		
@@ -1566,7 +1566,7 @@
 		
 		//search option
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FOLDER_NAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -1578,7 +1578,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FIRMWARE", 
 //    		async: false,
 //    		success:  function(response){
@@ -1590,7 +1590,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=TESTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -1602,7 +1602,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=SLOTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -1637,8 +1637,8 @@
 		var newwin = window.open("coronaEmmcScriptManagement", "coronaEmmcScriptManagement", "width=1200,height=860,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_tabs';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=corona_emmc/corona_manage_tabs';
 		oFrm.method = "post";
 		oFrm.target = 'coronaEmmcScriptManagement'; 
 	    oFrm.submit();
@@ -1648,7 +1648,7 @@
 	function fn_set_testCase(){
 		
 		$.ajax({
-			url: "/dashboard/genericlListJson.html",
+			url: "/dashboard/genericlListJson.do",
 			data: {sqlid: "dashboard.corona.emmc.scriptsets.search.by.fimware", sample: $("#sample").val(), firmware: $("#firmware").val() }, 
 			async: false,
 			success:  function(response){

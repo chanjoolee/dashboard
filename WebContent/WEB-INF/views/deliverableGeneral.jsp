@@ -56,7 +56,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/deliverableGeneralJson.html",
+			url : "/dashboard/deliverableGeneralJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -162,7 +162,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/deliverableProjectFunction.html';
+			oFrm.action =  '/dashboard/deliverableProjectFunction.do';
 			oFrm.method = "post";
 			oFrm.target = '_frm'; 
 		    oFrm.submit();		
@@ -171,7 +171,7 @@
 		    var newWin2 = window.open("about:blank", "_frm1", "screenY=20, top=20, screenY=300,left=300, scrollbars=yes,resizable=yes"); 
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/deliverableProjectPhase.html';
+			oFrm.action =  '/dashboard/deliverableProjectPhase.do';
 			oFrm.method = "post";
 			oFrm.target = '_frm1'; 
 		    oFrm.submit();

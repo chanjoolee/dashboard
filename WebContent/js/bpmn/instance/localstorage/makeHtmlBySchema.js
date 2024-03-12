@@ -976,7 +976,7 @@ makeHtmlBySchema.prototype.grid = function(_schema ,_schema_parent , container ,
                     oFrm.submit();		
                     newWin1.focus();
                 }else if(row[cm.name].match(/\.([\w]+)$/i) != null){
-                    //var src = "/dashboard/filedownloadJson.html";
+                    //var src = "/dashboard/filedownloadJson.do";
                     //src += "?filename=" + row.FILE_NAME;
                     //src +="&path=" + row.FILE_PATH;
                     //document.getElementById('file_iframe').src =  src;

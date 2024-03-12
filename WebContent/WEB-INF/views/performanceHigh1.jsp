@@ -1509,7 +1509,7 @@
 	
 	function getDataByJson(){
 		$.ajax({
-			url : "/dashboard/performanceJson.html",
+			url : "/dashboard/performanceJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -1534,7 +1534,7 @@
 			                        	theGrid.jqGrid('setRowData',rowid,{EDIT_MODE:'U'});
 			                        	var row = theGrid.jqGrid('getRowData',rowid);
 			                        	$.ajax({
-			                    			url : "/dashboard/performanceSaveJson.html",
+			                    			url : "/dashboard/performanceSaveJson.do",
 			                    			data: row,
 			                    			//type: "POST",
 			                    			//crossDomain: true,
@@ -1716,12 +1716,12 @@
 // 		        	      return false;
 // 		        	      //theGrid.setSelection(rowid, false);
 // 	        	    }
-					//,editurl:"/dashboard/performanceJson.html"
+					//,editurl:"/dashboard/performanceJson.do"
 					editurl:'clientArray'
 					//, cellEdit: true
 					//, forceFit : true
 					,cellsubmit: 'clientArray'
-					//,cellsubmit: '/dashboard/performanceJson.html'
+					//,cellsubmit: '/dashboard/performanceJson.do'
 // 					,afterEditCell: function (id,name,val,iRow,iCol){
 					
 // 					}
@@ -2268,7 +2268,7 @@
 				//, cellEdit: true
 				//, forceFit : true
 				//, cellsubmit: 'clientArray'
-				//,cellsubmit: '/dashboard/performanceJson.html'
+				//,cellsubmit: '/dashboard/performanceJson.do'
 				// , afterEditCell: function (id,name,val,iRow,iCol){
 				
 				// }

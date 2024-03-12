@@ -70,7 +70,7 @@
 				fd.append('useRealFileName', 'Y');
 				$.ajax({
 					type: 'POST',
-					url: './fileTestJson.html',
+					url: "./fileTestJson.do",
 					data: fd
 					, processData: false
 					, contentType: false
@@ -99,7 +99,7 @@
 					'core' : {
 						'data' : {
 							'url' : function(node) {
-								return './jstreeJson.html?sqlid=jstree.doc';
+								return './jstreeJson.do?sqlid=jstree.doc';
 							},
 							'data' : function (node) {
 								var v_node_id = node.id;
@@ -136,7 +136,7 @@
 						text : data.text
 					};
 					$.ajax({
-						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.delete",
+						url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=jstree.delete",
 						type: "POST",
 						data: bind , 
 						// async: false,			                    		
@@ -163,7 +163,7 @@
 						text : data.node.text
 					};
 					$.ajax({
-						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.create",
+						url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=jstree.create",
 						type: "POST",
 						data: bind , 
 						// async: false,			                    		
@@ -189,7 +189,7 @@
 						text : data.text
 					};
 					$.ajax({
-						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.update.title",
+						url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=jstree.update.title",
 						type: "POST",
 						data: bind , 
 						// async: false,			                    		
@@ -215,7 +215,7 @@
 					$.each(parent.children , function(i,child){
 						var bind = { 'id' : child, 'parent' : data.parent, 'position' : i };
 						$.ajax({
-							url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.move",
+							url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=jstree.move",
 							type: "POST",
 							data: bind , 
 							async: false ,			                    		
@@ -248,7 +248,7 @@
 					};
 
 					$.ajax({
-						url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=jstree.copy",
+						url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=jstree.copy",
 						type: "POST",
 						data: bind , 
 						// async: false,			                    		
@@ -282,7 +282,7 @@
 								// extraPlugins: [ Autosave ],
 								// plugins: [ Autosave ],
 								ckfinder: {
-									uploadUrl  : "./ckfinderUploadJson.html"
+									uploadUrl  : "./ckfinderUploadJson.do"
 								}
 								// , autosave: {
 								// 	save( editor ) {

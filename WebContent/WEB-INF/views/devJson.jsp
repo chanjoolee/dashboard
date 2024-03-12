@@ -21,7 +21,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/fwqProjectCategoryTendJson.html",
+			url : "/dashboard/fwqProjectCategoryTendJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				fwqDataList = responseData.fwqDataList;

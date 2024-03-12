@@ -145,7 +145,7 @@
    	            		var rtn = {series:[]};
    	            		$.ajax({
    	            			type: "POST",
-   	                		url: "/dashboard/regressionTabViewMainJson.html",
+   	                		url: "/dashboard/regressionTabViewMainJson.do",
    	                		data: {searchJson: JSON.stringify(paramObj)}, 
    	                		async: false,
    	                		success:  function(response){
@@ -330,7 +330,7 @@
 //	            		var rtn = {series:[]};
 //	            		$.ajax({
 //	            			type: "POST",
-//	                		url: "/dashboard/genericlListJson.html",
+//	                		url: "/dashboard/genericlListJson.do",
 //	                		data: {searchJson: JSON.stringify(paramObj), ignoreTime: "Y", sqlid: "dashboard.regresson.mainlist.all" }, 
 //	                		async: false,
 //	                		success:  function(response){

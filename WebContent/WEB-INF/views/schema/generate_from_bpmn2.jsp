@@ -867,6 +867,6 @@
    		</choose>
 		<choose><when test="sidx != null and sidx != '' "> order by !{sidx} <if test="sord != null and sord != '' "> !{sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
 </script>
-<iframe name="mainFrame" id="mainFrame" src="/dashboard/generic.html?viewName=schema/manage_tabs&sender=${param.sender}" style="min-width:1000px; width:100%;border: 0;height: 1000px; display:block ;"></iframe>
+<iframe name="mainFrame" id="mainFrame" src="/dashboard/generic.do?viewName=schema/manage_tabs&sender=${param.sender}" style="min-width:1000px; width:100%;border: 0;height: 1000px; display:block ;"></iframe>
 
 </html>

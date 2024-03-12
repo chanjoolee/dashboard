@@ -321,7 +321,7 @@
 		$.ajax({
 			//type: "POST",
 			async: true,
-			url : "/dashboard/relevantJson.html",
+			url : "/dashboard/relevantJson.do",
 			data: $("#form1").serialize(),
 			success : function(responseData){
 				relevantList = responseData.relevantList;

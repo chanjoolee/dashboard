@@ -218,7 +218,7 @@
 	function getSearchList(){
 		
 		$.ajax({
-			url : "/dashboard/ssdReliabilityMainJson.html",
+			url : "/dashboard/ssdReliabilityMainJson.do",
 			data: $("#form1").serialize(),
 			async: false,
 			success : function(responseData){
@@ -231,7 +231,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/ssdReliabilityChartPopJson.html",
+			url : "/dashboard/ssdReliabilityChartPopJson.do",
 			data: $("#form1").serialize(),
 			async: false,
 			success : function(responseData){

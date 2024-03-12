@@ -601,7 +601,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.search.sample"}, 
 													async: false,
 													success:  function(response){
@@ -633,7 +633,7 @@
 													var list1 = [];
 													$.ajax({
 														type: "POST",
-														url: "/dashboard/genericlListJson.html",
+														url: "/dashboard/genericlListJson.do",
 														data: {sqlid: "dashboard.corona.manage.scriptsets.map.search",project: $("#sample").val() }, 
 														async: false,
 														success:  function(response){
@@ -645,7 +645,7 @@
 													if($("#firmware_gubun").val()== "pms"){
 														var list2 = [];
 														$.ajax({
-															url: "/dashboard/genericlListJson.html",
+															url: "/dashboard/genericlListJson.do",
 															data: {sqlid: "dashboard.corona.summay.firmware.pms", project: $("#sample").val() }, 
 															async: false,
 															success:  function(response){
@@ -716,7 +716,7 @@
 												var rtnList = [];
 												var list1 = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.manage.scriptsets.map.search", project: $("#sample").val() }, 
 													async: false,
 													success:  function(response){
@@ -727,7 +727,7 @@
 												if($("#firmware_gubun").val()== "pms"){
 													var list2 = [];
 													$.ajax({
-														url: "/dashboard/genericlListJson.html",
+														url: "/dashboard/genericlListJson.do",
 														data: {sqlid: "dashboard.corona.summay.firmware.pms", project: $("#sample").val() }, 
 														async: false,
 														success:  function(response){
@@ -936,7 +936,7 @@
 			    		
 			    		$.ajax({
 			    			type: "POST",
-			    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.summary",
+			    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.summary",
 			    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 			    			data: $("#form").serialize(), 
 			    			async: false,
@@ -1184,7 +1184,7 @@
 		                        	
 		                        	var response1 = {};
 		                        	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: row, 
 			                    		async: false,			                    		
@@ -1238,7 +1238,7 @@
 			    		datatype:'local',
 			    		pager: "#grid_summaryPager",
 //			    		url : function(){
-//			    			return "/dashboard/genericlListJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.summary"
+//			    			return "/dashboard/genericlListJson.do?" + $("#form").serialize() + "&sqlid=dashboard.corona.summary"
 //			    		},
 //			    		jsonReader: {
 //					    	root: function(data){
@@ -1261,7 +1261,7 @@
 //					    	}
 //					    	//,repeatitems:false
 //						},
-			    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+			    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 			    		viewrecords: true,	
 			    		emptyrecords: "No records to view",		    		
 			    		width: '100%',
@@ -1343,7 +1343,7 @@
 			                    	var fd = new FormData(formdata);  	
 			                    	var response1 = {};
 			                    	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: fd, 
 			                    		async: false,
@@ -1462,7 +1462,7 @@
 							if(ispop){
 								var newWin1 = window.open("", "coronaDetail_ufs", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 								
-								oFrm.action =  '/dashboard/generic.html?viewName=coronaDetail';
+								oFrm.action =  '/dashboard/generic.do?viewName=coronaDetail';
 								oFrm.method = "post";
 								oFrm.target = "coronaDetail_ufs"; 
 							    oFrm.submit();		
@@ -2117,7 +2117,7 @@
 		
 		//search option
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FOLDER_NAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -2129,7 +2129,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FIRMWARE", 
 //    		async: false,
 //    		success:  function(response){
@@ -2141,7 +2141,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=TESTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -2153,7 +2153,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=SLOTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -2188,8 +2188,8 @@
 		var newwin = window.open("coronaScriptManagement", "coronaScriptManagement", "width=1200,height=860,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_tabs';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_tabs';
 		oFrm.method = "post";
 		oFrm.target = 'coronaScriptManagement'; 
 	    oFrm.submit();
@@ -2199,7 +2199,7 @@
 	function fn_set_testCase(){
 		
 		$.ajax({
-			url: "/dashboard/genericlListJson.html",
+			url: "/dashboard/genericlListJson.do",
 			data: {sqlid: "dashboard.corona.scriptsets.search.by.fimware", sample: $("#sample").val(), firmware: $("#firmware").val() }, 
 			async: false,
 			success:  function(response){

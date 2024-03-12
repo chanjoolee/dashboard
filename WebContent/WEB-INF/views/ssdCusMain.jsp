@@ -123,7 +123,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/ssdCusDistinctFieldJson.html",
+										    		url: "/dashboard/ssdCusDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['DEVICE_TYPE']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -211,7 +211,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/ssdCusDistinctFieldJson.html",
+										    		url: "/dashboard/ssdCusDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['DEVICE_TYPE','MODEL_NAME']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -250,7 +250,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/ssdCusDistinctFieldJson.html",
+										    		url: "/dashboard/ssdCusDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['DEVICE_TYPE','FIRMWARE_VERSION']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -297,7 +297,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/ssdCusDistinctFieldJson.html",
+										    		url: "/dashboard/ssdCusDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['SYSTEM_MANUFACTURER']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -388,7 +388,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/ssdCusDistinctFieldJson.html",
+										    		url: "/dashboard/ssdCusDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['SYSTEM_MANUFACTURER','SYSTEM_MODEL']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -426,7 +426,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/ssdCusDistinctFieldJson.html",
+										    		url: "/dashboard/ssdCusDistinctFieldJson.do",
 										    		data: {filters: JSON.stringify({fields:['SYSTEM_MANUFACTURER','SYSTEM_CHIPSET']})}, 
 										    		async: false,
 										    		success:  function(response){
@@ -694,7 +694,7 @@
 													var oFrm = document.getElementById("form");
 													//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 													//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
-													oFrm.action =  '/dashboard/ssdCusMainChart.html';
+													oFrm.action =  '/dashboard/ssdCusMainChart.do';
 													oFrm.method = "post";
 													oFrm.target = 'SSD_CUSTOMER_CHART'; 
 												    oFrm.submit();	
@@ -1157,7 +1157,7 @@
 	
 	function getDataByJson(){
 		$.ajax({
-			url : "/dashboard/ssdCusMainJson.html",
+			url : "/dashboard/ssdCusMainJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -1169,7 +1169,7 @@
 	
 	function getGridData(){
 		var theGrid = $("#jqgridTable");
-		theGrid.jqGrid('setGridParam',{url:'/dashboard/ssdCusMainJson.html?'+ $("#form").serialize()}).trigger( 'reloadGrid',[{page:1}]);
+		theGrid.jqGrid('setGridParam',{url:'/dashboard/ssdCusMainJson.do?'+ $("#form").serialize()}).trigger( 'reloadGrid',[{page:1}]);
 		//adjustGrid();
 	}
 	
@@ -1206,7 +1206,7 @@
 				//data: dataList,
 				
 				//==server side paging ==//
-				url: '/dashboard/ssdCusMainJson.html?'+ $("#form").serialize(),
+				url: '/dashboard/ssdCusMainJson.do?'+ $("#form").serialize(),
                 //mtype: "GET",
                 datatype: 'json',
                 userdata: "dataList",
@@ -1270,7 +1270,7 @@
 					if(ispop){
 						var newWin1 = window.open("", "ssdCusPop", "width=1300,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 						
-						oFrm.action =  '/dashboard/ssdCusPop.html';
+						oFrm.action =  '/dashboard/ssdCusPop.do';
 						oFrm.method = "post";
 						oFrm.target = 'ssdCusPop'; 
 					    oFrm.submit();		

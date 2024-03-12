@@ -625,7 +625,7 @@
 												var rtn = {};
 												$.ajax({
 													type: "POST",
-													url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.manage.scriptsets.search",
+													url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.manage.scriptsets.search",
 													//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 													data: $("#form").serialize(), 
 													async: false,
@@ -676,7 +676,7 @@
 													
 													var response1 = {};
 													$.ajax({
-														url: "/dashboard/genericSaveJson.html",
+														url: "/dashboard/genericSaveJson.do",
 														type: "POST",
 														data: row, 
 														async: false,			                    		
@@ -728,7 +728,7 @@
 												
 												var response1 = {};
 												$.ajax({
-													url: "/dashboard/genericSaveJson.html",
+													url: "/dashboard/genericSaveJson.do",
 													type: "POST",
 													data: row, 
 													async: false,			                    		
@@ -786,14 +786,14 @@
 								gridOpt:{
 									datatype:'json',
 									pager: "#grid_scriptPager",
-									url: '/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.manage.scriptsets.search',
+									url: '/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.manage.scriptsets.search',
 									jsonReader: {
 										root: function(data){
 											return data.dataList;
 										}
 										,repeatitems:false
 									},
-									editurl: '/dashboard/ssdCusDummySaveJson.html',
+									editurl: '/dashboard/ssdCusDummySaveJson.do',
 									viewrecords: true,	
 									emptyrecords: "No records to view",		    		
 									width: '100%',
@@ -851,7 +851,7 @@
 													var fd = new FormData(formdata);  	
 													var response1 = {};
 													$.ajax({
-														url: "/dashboard/genericSaveJson.html?sqlid=dashboard.ssd_sm.scriptset.insert",
+														url: "/dashboard/genericSaveJson.do?sqlid=dashboard.ssd_sm.scriptset.insert",
 														type: "POST",
 														data: fd, 
 														async: false,
@@ -964,8 +964,8 @@
 			var newwin = window.open("", "ScriptSetCopy_SSD", "width=1200,height=770,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName='+ v_path +'/manage_copy_template_scriptset';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName='+ v_path +'/manage_copy_template_scriptset';
 			oFrm.method = "post";
 			oFrm.target = 'ScriptSetCopy_SSD'; 
 			oFrm.submit();
@@ -977,8 +977,8 @@
 			var newwin = window.open("", "ScriptSetMgmt_SSD", "width=1200,height=820,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form");
 			//oFrm.menuAuthId.value = "MNU20150422131320740";
-			//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-			oFrm.action =  '/dashboard/generic.html?viewName='+ v_path +'/manage_scriptset_script_edit_paging';
+			//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+			oFrm.action =  '/dashboard/generic.do?viewName='+ v_path +'/manage_scriptset_script_edit_paging';
 			oFrm.method = "post";
 			oFrm.target = 'ScriptSetMgmt_SSD'; 
 			oFrm.submit();

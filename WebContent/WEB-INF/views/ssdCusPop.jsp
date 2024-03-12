@@ -581,8 +581,8 @@
 					    		datatype:'json',
 					    		pager: "#testResultsPager",
 					    		viewrecords: true,
-					    		url: '/dashboard/ssdCustomResultJson.html?testId=${param.testId}',
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		url: '/dashboard/ssdCustomResultJson.do?testId=${param.testId}',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 					    		//closeAfterEdit: true,
 					    		width: '100%',
 					    		//height: 600,
@@ -609,7 +609,7 @@
 										    oFrm.submit();		
 										    newWin1.focus();	
 										}else if(row.TEST_LOG.match(/\.([\w]+)$/i) != null){
-											//var src = "/dashboard/filedownloadJson.html";
+											//var src = "/dashboard/filedownloadJson.do";
 											//src += "?filename=" + row.TEST_LOG;
 											//src +="&path=" + row.FILE_PATH;
 											
@@ -942,8 +942,8 @@
 					    		datatype:'json',
 					    		pager: "#commentsPager",
 					    		viewrecords: true,
-					    		url: '/dashboard/ssdCustomCommentJson.html?testId=${param.testId}',
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		url: '/dashboard/ssdCustomCommentJson.do?testId=${param.testId}',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 					    		//closeAfterEdit: true,
 					    		width: '100%',
 					    		//height: 600,
@@ -1238,7 +1238,7 @@
 										    oFrm.submit();		
 										    newWin1.focus();	
 										}else if(row.FILE_NAME.match(/\.([\w]+)$/i) != null){
-											//var src = "/dashboard/filedownloadJson.html";
+											//var src = "/dashboard/filedownloadJson.do";
 											//src += "?filename=" + row.FILE_NAME;
 											//src +="&path=" + row.FILE_PATH;
 											//document.getElementById('file_iframe').src =  src;
@@ -1368,8 +1368,8 @@
 					    		//height: 200,
 					    		datatype:'json',
 					    		pager: "#attachmentsScreenPager",
-					    		url: '/dashboard/ssdCustomFilesJson.html?testId=${param.testId}&FIELD_NAME=screen_capture',
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		url: '/dashboard/ssdCustomFilesJson.do?testId=${param.testId}&FIELD_NAME=screen_capture',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 					    		//editurl: '/dashboard/rest/ssdinsert/custom',
 					    		viewrecords: true,
 					    		onCellSelect: function (rowId, iCol, content, event) {
@@ -1394,7 +1394,7 @@
 										    oFrm.submit();		
 										    newWin1.focus();	
 										}else if(row.FILE_NAME.match(/\.([\w]+)$/i) != null){
-											//var src = "/dashboard/filedownloadJson.html";
+											//var src = "/dashboard/filedownloadJson.do";
 											//src += "?filename=" + row.FILE_NAME;
 											//src +="&path=" + row.FILE_PATH;
 											//document.getElementById('file_iframe').src =  src;
@@ -1500,7 +1500,7 @@
 						                	closeAfterAdd: true,
 						                	recreateForm: true,
 						                	reloadAfterSubmit: true,
-						                	//url: '/dashboard/ssdCustomFilesJson.html' ,
+						                	//url: '/dashboard/ssdCustomFilesJson.do' ,
 						                	//addedrow:'last',
 											//template: template,
 						                    errorTextFormat: function (data) {
@@ -1699,8 +1699,8 @@
 					    	gridOpt:{
 					    		datatype:'json',
 					    		pager: "#attachmentsFarPager",
-					    		url: '/dashboard/ssdCustomFilesJson.html?testId=${param.testId}&FIELD_NAME=far',
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		url: '/dashboard/ssdCustomFilesJson.do?testId=${param.testId}&FIELD_NAME=far',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 					    		//editurl: '/dashboard/rest/ssdinsert/custom',
 					    		viewrecords: true,
 					    		onCellSelect: function (rowId, iCol, content, event) {
@@ -1725,7 +1725,7 @@
 										    oFrm.submit();		
 										    newWin1.focus();	
 										}else if(row.FILE_NAME.match(/\.([\w]+)$/i) != null){
-											//var src = "/dashboard/filedownloadJson.html";
+											//var src = "/dashboard/filedownloadJson.do";
 											//src += "?filename=" + row.FILE_NAME;
 											//src +="&path=" + row.FILE_PATH;
 											//document.getElementById('file_iframe').src =  src;
@@ -1831,7 +1831,7 @@
 						                	closeAfterAdd: true,
 						                	recreateForm: true,
 						                	reloadAfterSubmit: true,
-						                	//url: '/dashboard/ssdCustomFilesJson.html' ,
+						                	//url: '/dashboard/ssdCustomFilesJson.do' ,
 						                	//addedrow:'last',
 											//template: template,
 						                    errorTextFormat: function (data) {
@@ -2131,7 +2131,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/ssdCusPopJson.html",
+			url : "/dashboard/ssdCusPopJson.do",
 			data: $("#form1").serialize(),
 			async: false,
 			success : function(responseData){

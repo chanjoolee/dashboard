@@ -269,7 +269,7 @@
 					    		var rtnList = [];
 					    		$.ajax({
 					    			type: "POST",
-					    			url: "/dashboard/genericlListJson.html?sqlid=fwq.project.function_loc.file_distribution",
+					    			url: "/dashboard/genericlListJson.do?sqlid=fwq.project.function_loc.file_distribution",
 					    			data: $("#form").serialize(), 
 					    			async: false,
 					    			success:  function(response){

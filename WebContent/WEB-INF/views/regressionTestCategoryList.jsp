@@ -98,7 +98,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/regressionTestCategoryListJson.html",
+			url : "/dashboard/regressionTestCategoryListJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;

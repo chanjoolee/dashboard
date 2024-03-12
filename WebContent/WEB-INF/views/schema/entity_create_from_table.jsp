@@ -569,7 +569,7 @@
 			// var oFrm = document.getElementById("formReport");
 			// oFrm.searchJson.value = JSON.stringify(schema);
 			
-			// oFrm.action =  '/dashboard/performanceReportJson.html';
+			// oFrm.action =  '/dashboard/performanceReportJson.do';
 			// oFrm.method = "post";
 			// oFrm.target = 'MS_WordReport';
 		    // oFrm.submit();		    
@@ -578,7 +578,7 @@
 		
 		function fn_tables(){
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: {sqlid: "codegen.tables",owner: $("#owner").val()}, 
 				async: false,
 				success:  function(response){
@@ -588,7 +588,7 @@
 		}
 		function fn_columns(){
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: {sqlid: "codegen.columns",owner: $("#owner").val()}, 
 				async: false,
 				success:  function(response){
@@ -598,7 +598,7 @@
 		}
 		function fn_constraints(){
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: {sqlid: "codegen.constraint.primary_key",owner: $("#owner").val()}, 
 				async: false,
 				success:  function(response){

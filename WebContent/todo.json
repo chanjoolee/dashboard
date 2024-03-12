@@ -408,7 +408,7 @@
    						
    					}
    					, {
-   						name: "/dashboard/generic.html?viewName=coronaSummay",
+   						name: "/dashboard/generic.do?viewName=coronaSummay",
    						controller: "CommonController"
    					}
    					, {
@@ -609,7 +609,7 @@
    											"sample",
    											"category"
    										],
-   										targetUrl: "/dashboard/generic.html?vewname=coronaDetail",
+   										targetUrl: "/dashboard/generic.do?vewname=coronaDetail",
    										status: "Before Start"
    									},
    									
@@ -742,7 +742,7 @@
    					{
    						status: "Before Start",
    						name: "06. make detail jsp "
-   						referrence: "/dashboard/ssdCusPop.html", 
+   						referrence: "/dashboard/ssdCusPop.do", 
    						include_scripts : [
    							{
    								category: "jquery",
@@ -850,9 +850,9 @@
    			, {
    				"name": "script_manager"
    				"testUrl": [
-   					"http://chanjoo.skhynix.com:8080/nspim/dash/performanceHigh.do?dashboardUrl=generic.html?viewName=corona_manage_script"
-   					,"http://solutionpms.skhynix.com/nspim/dash/performanceHigh.do?dashboardUrl=generic.html?viewName=corona_manage_script"
-   					,"http://solutionpms.skhynix.com/nspim/dash/performanceHigh.do?dashboardUrl=generic.html?viewName=coronaSummary"
+   					"http://chanjoo.skhynix.com:8080/nspim/dash/performanceHigh.do?dashboardUrl=generic.do?viewName=corona_manage_script"
+   					,"http://solutionpms.skhynix.com/nspim/dash/performanceHigh.do?dashboardUrl=generic.do?viewName=corona_manage_script"
+   					,"http://solutionpms.skhynix.com/nspim/dash/performanceHigh.do?dashboardUrl=generic.do?viewName=coronaSummary"
    				],
    				"list": [
    					{
@@ -1477,7 +1477,7 @@
    					"dashboard_call_DS-5/Metaware": {
    						"getDataByJson" : function() {
    							// draw chart in dashboard
-							dashboardShow("licenseUsage","/dashboard/licenseUsage.html");		
+							dashboardShow("licenseUsage","/dashboard/licenseUsage.do");		
 		
 							// dawtable in pms
 							$.ajax({
@@ -1493,8 +1493,8 @@
 						},
 						
 						// draw chart in dashboard
-						"/dashboard/licenseUsage.html": {
-							"url": "/dashboard/licenseUsage.html",
+						"/dashboard/licenseUsage.do": {
+							"url": "/dashboard/licenseUsage.do",
 	   						"controller": "/dashboard/src/dashboard/license/controller/LicenseUsageController.java",
 	   						"jsp_dashboard": {
 	   							"jsp": "/dashboard/WebContent/WEB-INF/views/licenseUsage.jsp",
@@ -1503,7 +1503,7 @@
 										if( $("#sProject").val() == "")
 											return;
 										$.ajax({
-											url : "/dashboard/licenseUsageJson.html",
+											url : "/dashboard/licenseUsageJson.do",
 											data: $("#form").serialize() ,
 											success : function(responseData){
 												dataList = responseData.dataList;
@@ -1575,9 +1575,9 @@
    					"dashboard_call_IAR": {
    						"searchIarLicense" : function() {	
 							var url = "/nspim/dash/retrieveIarLicenseUse.do";
-							dashboardShow("chartArea","/dashboard/iarLicenseUse.html");
+							dashboardShow("chartArea","/dashboard/iarLicenseUse.do");
 						},
-   						"url": "/dashboard/iarLicenseUse.html",
+   						"url": "/dashboard/iarLicenseUse.do",
    						"controller": "/dashboard/src/dashboard/license/controller/LicenseController.java",
    						"jsp_dashboard": {
    							"jsp": "/dashboard/WebContent/WEB-INF/views/iarLicenseUse.jsp",
@@ -1585,7 +1585,7 @@
 								"getDataByJson": function() {
 									$.ajax({
 										type: "POST",
-										url : "/dashboard/iarLicenseUseJson.html",
+										url : "/dashboard/iarLicenseUseJson.do",
 										data: {fromDt:"${searchVO.fromDt}", toDt:"${searchVO.toDt}"},
 										success : function(responseData){
 											drawchart(responseData);
@@ -1667,7 +1667,7 @@
    						"funcCall" : {
    							"getDataByJson": {
    								from : function(){
-   									dashboardShow("licenseUsage","/dashboard/licenseUsage.html");		
+   									dashboardShow("licenseUsage","/dashboard/licenseUsage.do");		
 		
 									$.ajax({
 										url : "/nspim/dash/retrieveLicenseUsageTbl.do",
@@ -1682,7 +1682,7 @@
    								},
    								to : function(divid,target){
    									var $Div = $("#"+divid);
-   									dashboardShow(divid,target,"/dashboard/licenseUsage.html");		
+   									dashboardShow(divid,target,"/dashboard/licenseUsage.do");		
 		
 									$.ajax({
 										url : "/nspim/dash/retrieveLicenseUsageTbl.do",
@@ -1785,7 +1785,7 @@
    	
    	"Reliability" : {
    		"resource": {
-   			url: "/dashboard/ssdReliabilityMain.html",
+   			url: "/dashboard/ssdReliabilityMain.do",
    			controller : "dashboard.ssd.controller.SSDController.ssdReliabilityMain",
    			sql: "ssdReliability.xml, ssd.xml",
    			tables : {
@@ -2454,7 +2454,7 @@
    					},
    					{
    						name: "pop when chartClick",
-   						pop_url: "/dashboard/generic.html?viewName=ssdReliabilityChartPop1",
+   						pop_url: "/dashboard/generic.do?viewName=ssdReliabilityChartPop1",
    						parameters: [
    							{
    								name: "productName"   							
@@ -2571,7 +2571,7 @@
    		"webSearch" : {
    			java: {
    				Controller: {
-   					url: "/dashboard/webSearch.html",
+   					url: "/dashboard/webSearch.do",
    					package: "bigdata.websearch.controller",
    					name: "bigdata.websearch.controller.WebSearchController",
    					functions: [
@@ -2608,7 +2608,7 @@
 	   				},
 	   				functions: {
 	   					searchSite: {
-	   						url: "/dashboard/webSearch.html",
+	   						url: "/dashboard/webSearch.do",
 	   						parameter : [
 	   							{
 	   								sites: [

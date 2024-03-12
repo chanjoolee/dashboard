@@ -36,7 +36,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {division:'jira'},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -74,7 +74,7 @@
 		parameter.PJT_CODE = $("#sProject").val();
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/issueUnresolvedJson.html",
+			url : "/dashboard/issueUnresolvedJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){
@@ -89,7 +89,7 @@
 		var parameter = {PJT_CODE:pjt_code,PRIORITY:priority};		
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/issueUnresolvedPieJson.html",
+			url : "/dashboard/issueUnresolvedPieJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){
@@ -110,7 +110,7 @@
 	function htmlExpandPriority(pjtCode,priority){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/jiraPkeyLinkJson.html",
+			url : "/dashboard/jiraPkeyLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),
@@ -155,7 +155,7 @@
 	function htmlExpandIssueType(pjtCode,priority,issuetype){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/jiraPkeyLinkJson.html",
+			url : "/dashboard/jiraPkeyLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),

@@ -137,7 +137,7 @@
 	           		var series = {series:[]};
 					$.ajax({
 						type : "POST",
-						url : "/dashboard/genericlListJson.html",
+						url : "/dashboard/genericlListJson.do",
 						data : {
 							sqlid : "dashboard.trendSyn.latest",
 							searchJson : JSON.stringify(paramObj)

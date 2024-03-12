@@ -40,7 +40,7 @@
     		
 	        
     		$.ajax({
-    			url : "/dashboard/performanceJson.html",
+    			url : "/dashboard/performanceJson.do",
     			data: $("#form").serialize(),
     			//type: "POST",
     			//crossDomain: true,

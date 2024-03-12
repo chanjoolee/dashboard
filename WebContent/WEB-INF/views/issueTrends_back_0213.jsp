@@ -20,7 +20,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -35,7 +35,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/defectsTrendsJson.html",
+			url : "/dashboard/defectsTrendsJson.do",
 			data: {PJT_CODE: $("#sProject").val() },
 			success : function(responseData){
 				responseDataG = responseData;

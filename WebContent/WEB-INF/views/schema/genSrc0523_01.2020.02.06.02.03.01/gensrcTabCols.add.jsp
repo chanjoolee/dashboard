@@ -30,7 +30,7 @@
 				                var _this = this;
 				                $.ajax({
 				                    type: "POST",
-				                    url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+				                    url: "${pageContext.request.contextPath}/genericlListJson.do?" +
 				                        "&sqlid=" + _this.sqlId,
 				                    data: {},
 				                    async: false,
@@ -167,7 +167,7 @@
 			                if( _.includes(['edit','view', 'copy'],$("#detailType").val()) ){
 			                    $.ajax({
 			                        type: "POST",
-			                        url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=gensrcTabCols.gensrcTabCols.one",
+			                        url: "${pageContext.request.contextPath}/genericlListJson.do?sqlid=gensrcTabCols.gensrcTabCols.one",
 			                        // data: searchRow ,
 			                        data: $("#form").serialize(), 
 			                        async: false,
@@ -410,7 +410,7 @@
 			                            if(this.props.options.value == this.state.value)
 			                                return state;
 			                            $.ajax({
-			                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+			                                url: "${pageContext.request.contextPath}/genericSaveJson.do",
 			                                type: "POST",
 			                                data: {
 			                                    searchJson: JSON.stringify(paramObj),
@@ -467,7 +467,7 @@
 			                            _.merge(addRow, form1.serializeFormJSON() );
 			                            
 			                            $.ajax({
-			                                url: "${pageContext.request.contextPath}/genericSaveJson.html",
+			                                url: "${pageContext.request.contextPath}/genericSaveJson.do",
 			                                type: "POST",
 			                                data: addRow , 
 			                                async: false,			                    		
@@ -654,7 +654,7 @@
 								var viewPath = viewName.split("/");
 								var itemName = viewPath.pop();
 								var parentViewName = _.camelCase( v_datasrc.parentEntity);
-								oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
+								oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + parentViewName + "&backgroundColor=FFF&isPop=Y&is_pop_select=Y";
 								oFrm.method = "post";
 								oFrm.target = frameId;
 			                    
@@ -769,7 +769,7 @@
 								var viewPath = viewName.split("/");
 								var itemName = _.camelCase(child.childEntityName);
 								viewPath.pop();
-								oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
+								oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName + "&backgroundColor=FFF&isSubFrame=Y";;
 								oFrm.method = "post";
 								oFrm.target = frameId;
 								frameDom.show();

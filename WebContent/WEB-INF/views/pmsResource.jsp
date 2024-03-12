@@ -135,7 +135,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			//data: {},
 			data: $("#form").serialize(),
 			success : function(responseData){
@@ -160,7 +160,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/pmsResourceJson.html",
+			url : "/dashboard/pmsResourceJson.do",
 			//data: {PJT_CODE: $("#sProject").val() },
 			data: $("#form").serialize(),
 			success : function(responseData){
@@ -198,7 +198,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/pmsResourceProjectAllJson.html",
+			url : "/dashboard/pmsResourceProjectAllJson.do",
 			//data: {PJT_CODE: $("#sProject").val() },
 			data: $("#form").serialize(),
 			success : function(responseData){
@@ -223,7 +223,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/pmsResourceSiteAllJson.html",
+			url : "/dashboard/pmsResourceSiteAllJson.do",
 			//data: {PJT_CODE: $("#sProject").val() },
 			data: $("#form").serialize(),
 			success : function(responseData){
@@ -294,7 +294,7 @@
 	function getCodesonarPriorityCsvLink(pjtCode){
 		var linkUrl = "";
 		$.ajax({
-			url : "/dashboard/codesonarPriorityCsvLinkJson.html",
+			url : "/dashboard/codesonarPriorityCsvLinkJson.do",
 			async: false,
 			data: {PJT_CODE: pjtCode },
 			//data: $("#form").serialize(),
@@ -926,7 +926,7 @@
 		var funcIds = dataFilter(dataList,[{col: 'UP_PJT_FUNC_NAME', val: func}]);
 		var funcId = funcIds[0].UP_PJT_FUNC_ID;
 		$.ajax({
-			url: "/dashboard/pmsResourceSubfuncJson.html",
+			url: "/dashboard/pmsResourceSubfuncJson.do",
 			data: {pjt_code: pjtId, site: site , func: funcId, estStartDate: $("#estStartDate").val(), estEndDate: $("#estEndDate").val()}, 
 			async: false,
 			success:  function(response){
@@ -1524,7 +1524,7 @@ function drawchartByProjectFuncSubfunc(pjtId,func){
 	var funcIds = dataFilter(dataList,[{col: 'UP_PJT_FUNC_NAME', val: func}]);
 	var funcId = funcIds[0].UP_PJT_FUNC_ID;
 	$.ajax({
-		url: "/dashboard/pmsResourceSubfuncJson.html",
+		url: "/dashboard/pmsResourceSubfuncJson.do",
 		data: {pjt_code: pjtId, func: funcId, estStartDate: $("#estStartDate").val(), estEndDate: $("#estEndDate").val()}, 
 		async: false,
 		success:  function(response){

@@ -605,7 +605,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.emmc.script.category.distinct"}, 
 													async: false,
 													success:  function(response){
@@ -669,7 +669,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: "dashboard.corona.emmc.script.test_item.distinct", sample: $("#category").val() }, 
 													async: false,
 													success:  function(response){
@@ -821,7 +821,7 @@
 					    		var rtnList = [];
 					    		$.ajax({
 					    			type: "POST",
-					    			url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
+					    			url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.emmc.manage.script.search",
 					    			data: $("#form").serialize(), 
 					    			async: false,
 					    			success:  function(response){
@@ -838,8 +838,8 @@
 					    		datatype:'local',
 					    		//loadonce: true,
 					    		pager: "#grid_scriptPager",
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
-					    		//editurl: '/dashboard/genericSaveJson.html?sqlid=dashboard.corona.script_master.insert',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
+					    		//editurl: '/dashboard/genericSaveJson.do?sqlid=dashboard.corona.script_master.insert',
 					    		styleUI : 'Bootstrap',
 					    		viewrecords: true,			    		
 					    		width: '100%',
@@ -887,7 +887,7 @@
 					    			var detailList = [];
 									$.ajax({
 						    			type: "POST",
-						    			url: "/dashboard/genericlListJson.html",
+						    			url: "/dashboard/genericlListJson.do",
 						    			data: {
 						    				script_name: row.SCRIPT_NAME
 						    				, sqlid: 'dashboard.corona.emmc.manage.script.search.one'}, 
@@ -924,7 +924,7 @@
 																	};
 																	
 																	$.ajax({
-											                    		url: "/dashboard/genericSaveJson.html",
+											                    		url: "/dashboard/genericSaveJson.do",
 											                    		type: "POST",
 											                    		data: {
 											                    			searchJson: JSON.stringify(paramObj),
@@ -1133,7 +1133,7 @@
 							data: function(){
 								var rtnList = [];
 								$.ajax({
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: {sqlid: "dashboard.corona.emmc.search.sample"}, 
 									async: false,
 									success:  function(response){
@@ -1164,7 +1164,7 @@
 									var datas = [];
 									$.ajax({
 										type: "POST",
-										url: "/dashboard/genericlListJson.html",
+										url: "/dashboard/genericlListJson.do",
 										data: {sqlid: "dashboard.corona.emmc.search.firmware",sample: $("#to_sample").val() }, 
 										async: false,
 										success:  function(response){
@@ -1210,7 +1210,7 @@
 							data: function(){
 								var rtnList = [];
 								$.ajax({
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: {sqlid: "dashboard.corona.emmc.search.firmware", sample: $("#to_sample").val() }, 
 									async: false,
 									success:  function(response){
@@ -1299,7 +1299,7 @@
 			    	gridOpt:{
 			    		datatype:'local',
 			    		pager: "#grid_firmwarePager",
-			    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+			    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 			    		styleUI : 'Bootstrap',
 			    		viewrecords: true,			    		
 			    		width: '100%',
@@ -1347,7 +1347,7 @@
 			                var detailList = [];
 							$.ajax({
 				    			type: "POST",
-				    			url: "/dashboard/genericlListJson.html",
+				    			url: "/dashboard/genericlListJson.do",
 				    			data: {
 				    				sample: row.SAMPLE
 				    				, firmware: row.FIRMWARE
@@ -1387,7 +1387,7 @@
 															};
 															
 															$.ajax({
-									                    		url: "/dashboard/genericSaveJson.html",
+									                    		url: "/dashboard/genericSaveJson.do",
 									                    		type: "POST",
 									                    		data: {
 									                    			searchJson: JSON.stringify(paramObj),
@@ -1573,7 +1573,7 @@
 			};
 			$.ajax({
 				type: "POST",
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: paramObj,
 				async: false,
 				success:  function(response){
@@ -1604,7 +1604,7 @@
 			};
 			$.ajax({
 				type: "POST",
-				url: "/dashboard/genericlListJson.html?sqlid=dashboard.corona.emmc.manage.script.search",
+				url: "/dashboard/genericlListJson.do?sqlid=dashboard.corona.emmc.manage.script.search",
 				data: $("#form").serialize(), 
 				//data: paramObj,
 				async: false,
@@ -1647,7 +1647,7 @@
 		// 01. hystory no 
 		var v_hystoryno = "";
 		$.ajax({
-			url: "/dashboard/genericlListJson.html",
+			url: "/dashboard/genericlListJson.do",
 			type: "POST",
 			data: {
 				sqlid: "dashboard.corona.emmc.historyno"
@@ -1661,7 +1661,7 @@
 		// 02. hystory no insert
 		var update_ok = false;
 		$.ajax({
-			url: "/dashboard/genericSaveJson.html",
+			url: "/dashboard/genericSaveJson.do",
 			type: "POST",
 			data: {
 				searchJson: JSON.stringify(paramObj),
@@ -1703,7 +1703,7 @@
 		paramObj.loop_id = "selectedlist";
 		// 03. last process data
 		$.ajax({
-			url: "/dashboard/genericSaveJson.html",
+			url: "/dashboard/genericSaveJson.do",
 			type: "POST",
 			data: {
 				searchJson: JSON.stringify(paramObj),
@@ -1747,7 +1747,7 @@
 		
 		// 04. stauts update
 		$.ajax({
-			url: "/dashboard/genericSaveJson.html",
+			url: "/dashboard/genericSaveJson.do",
 			type: "POST",
 			data: {
 				firmware : $("#to_firmware").val(),

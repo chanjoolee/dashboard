@@ -54,7 +54,7 @@
 	function getDataByJson() {	
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/systemUsageSummaryJson.html",
+			url : "/dashboard/systemUsageSummaryJson.do",
 			data: {systemId:'${searchVO.systemId}'},
 			success : function(responseData){
 				drawchart(responseData);

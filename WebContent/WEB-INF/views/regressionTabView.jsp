@@ -547,7 +547,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: 'dashboard.regresson.firmware.list'}, 
 													async: false,
 													success:  function(response){
@@ -621,7 +621,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: 'dashboard.regresson.firmware.revision.list'}, 
 													async: false,
 													success:  function(response){
@@ -826,7 +826,7 @@
 	            		var rtn = {series:[]};
 	            		$.ajax({
 	            			type: "POST",
-	            			url: "/dashboard/regressionTabViewSmartJson.html",
+	            			url: "/dashboard/regressionTabViewSmartJson.do",
 	                		data: {searchJson: JSON.stringify(paramObj)}, 
 	                		async: false,
 	                		success:  function(response){
@@ -1268,7 +1268,7 @@
 			    		param += '&sqlid=dashboard.regresson.smartlist.raw';
 			    		$.ajax({
 			    			type: "POST",
-			    			url: "/dashboard/genericlListJson.html",
+			    			url: "/dashboard/genericlListJson.do",
 			    			data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 			    			async: false,
 			    			success:  function(response){
@@ -1381,7 +1381,7 @@
 	            		
 	            		var rtn = {};
 	            		$.ajax({
-	                		url: "/dashboard/regressionTabViewHostJson.html",
+	                		url: "/dashboard/regressionTabViewHostJson.do",
 	                		data: param, 
 	                		async: false,
 	                		success:  function(response){
@@ -1670,7 +1670,7 @@
 			            		
 			            		var rtn = {};
 			            		$.ajax({
-			                		url: "/dashboard/regressionTabViewHostJson.html",
+			                		url: "/dashboard/regressionTabViewHostJson.do",
 			                		data: param, 
 			                		async: false,
 			                		success:  function(response){
@@ -1701,7 +1701,7 @@
 			            		var param_x =  param + '&sqlid=dashboard.regresson.hostlist.x';
 			            		var xCategory = {x:[],x1:[]};
 			            		$.ajax({
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: param_x, 
 									async: false,
 									success:  function(response){
@@ -1714,7 +1714,7 @@
 			            		var param_y =  param + '&sqlid=dashboard.regresson.hostlist.y';
 			            		var yCategory = {y:[],y1:[]};
 			            		$.ajax({
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: param_y, 
 									async: false,
 									success:  function(response){
@@ -3206,7 +3206,7 @@
 		    		param += '&sqlid=dashboard.regresson.hostlist.raw';
 		    		$.ajax({
 		    			type: "POST",
-		    			url: "/dashboard/genericlListJson.html",
+		    			url: "/dashboard/genericlListJson.do",
 		    			data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.hostlist.raw' }, 
 		    			async: false,
 		    			success:  function(response){
@@ -4193,7 +4193,7 @@
 	            		
 	            		var rtn = {};
 	            		$.ajax({
-	                		url: "/dashboard/regressionTabViewPecountJson.html",
+	                		url: "/dashboard/regressionTabViewPecountJson.do",
 	                		data: param, 
 	                		async: false,
 	                		success:  function(response){
@@ -4492,7 +4492,7 @@
 	            		var rtn = {};
 	            		$.ajax({
 	                		type: "POST",
-                        url: "/dashboard/regressionTabViewPecountJson.html",
+                        url: "/dashboard/regressionTabViewPecountJson.do",
 	                		data: {searchJson: JSON.stringify(paramObj)}, 
 	                		async: false,
 	                		success:  function(response){
@@ -4717,7 +4717,7 @@
                   
 			    		$.ajax({
 			    			type: "POST",
-                     url: "/dashboard/genericlListJson.html",
+                     url: "/dashboard/genericlListJson.do",
 			    			data: {searchJson: JSON.stringify(paramObj),sqlid:'dashboard.regresson.pecountlist.raw' }, 
 			    			async: false,
 			    			success:  function(response){
@@ -4852,7 +4852,7 @@
 	            		var rtn = {series:[]};
 	            		$.ajax({
 	                		type: "POST",
-                        url: "/dashboard/regressionTabViewErrologJson.html",
+                        url: "/dashboard/regressionTabViewErrologJson.do",
 	                		data: {searchJson: JSON.stringify(paramObj)}, 
 	                		async: false,
 	                		success:  function(response){
@@ -5125,7 +5125,7 @@
                      
 			    		$.ajax({
 			    			type: "POST",
-                     url: "/dashboard/genericlListJson.html",
+                     url: "/dashboard/genericlListJson.do",
 			    			data:  {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.errologlist.raw' }, 
 			    			async: false,
 			    			success:  function(response){
@@ -5249,7 +5249,7 @@
    	            		var rtn = {series:[]};
    	            		$.ajax({
    	            			type: "POST",
-   	                		url: "/dashboard/regressionTabViewMainJson.html",
+   	                		url: "/dashboard/regressionTabViewMainJson.do",
    	                		data: {searchJson: JSON.stringify(paramObj)}, 
    	                		async: false,
    	                		success:  function(response){
@@ -5420,7 +5420,7 @@
 	            		var rtn = {series:[]};
 	            		$.ajax({
 	            			type: "POST",
-	                		url: "/dashboard/genericlListJson.html",
+	                		url: "/dashboard/genericlListJson.do",
 	                		data: {searchJson: JSON.stringify(paramObj), ignoreTime: "Y", sqlid: "dashboard.regresson.mainlist.all" }, 
 	                		async: false,
 	                		success:  function(response){
@@ -5560,7 +5560,7 @@
 	            		
 	            		var rtn = {series:[]};
 	            		$.ajax({
-	                		url: "/dashboard/genericlListJson.html",
+	                		url: "/dashboard/genericlListJson.do",
 	                		data: param, 
 	                		async: false,
 	                		success:  function(response){
@@ -6209,7 +6209,7 @@
 		});
 		//search option
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FOLDER_NAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -6221,7 +6221,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FIRMWARE", 
 //    		async: false,
 //    		success:  function(response){
@@ -6233,7 +6233,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=TESTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -6245,7 +6245,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=SLOTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -6341,7 +6341,7 @@
 	function getGridData(){
 		var theGrid = $("#searchGridTable");
 		$.ajax({
-			url : "/dashboard/regressionTabViewFolderListJson.html",
+			url : "/dashboard/regressionTabViewFolderListJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				folderList = responseData.folderList;				
@@ -7231,7 +7231,7 @@
 		var rtn = {series:[]};
 		$.ajax({
 			type: "POST",
-			url: "/dashboard/regressionTabViewHostJson.html",
+			url: "/dashboard/regressionTabViewHostJson.do",
     		data: {searchJson: JSON.stringify(paramObj)}, 
     		async: false,
     		success:  function(response){
@@ -7263,7 +7263,7 @@
 		var xCategory = {x:[],x1:[]};
 		$.ajax({
 			type: "POST",
-			url: "/dashboard/genericlListJson.html",
+			url: "/dashboard/genericlListJson.do",
 			data: {searchJson: JSON.stringify(paramObj) , sqlid: 'dashboard.regresson.hostlist.x' }, 
 			async: false,
 			success:  function(response){
@@ -7277,7 +7277,7 @@
 		var yCategory = {y:[],y1:[]};
 		$.ajax({
 			type: "POST",
-			url: "/dashboard/genericlListJson.html",
+			url: "/dashboard/genericlListJson.do",
 			data: {searchJson: JSON.stringify(paramObj) , sqlid: 'dashboard.regresson.hostlist.y' }, 
 			async: false,
 			success:  function(response){

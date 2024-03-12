@@ -140,7 +140,7 @@
 		var oFrm = document.getElementById("form1");
 		//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 		//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
-		oFrm.action =  '/dashboard/fwqProjectSummarySpider.html';
+		oFrm.action =  '/dashboard/fwqProjectSummarySpider.do';
 		oFrm.method = "post";
 		oFrm.target = 'spiderChartIframe'; 
 	    oFrm.submit();		    
@@ -149,7 +149,7 @@
 		var oFrm = document.getElementById("form1");
 		//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 		//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
-		oFrm.action =  '/dashboard/fwqProjectSummaryAdvanced.html';
+		oFrm.action =  '/dashboard/fwqProjectSummaryAdvanced.do';
 		oFrm.method = "post";
 		oFrm.target = 'advancedChartIframe'; 
 	    oFrm.submit();		    
@@ -159,7 +159,7 @@
 		var oFrm = document.getElementById("form1");
 		//oFrm.pjt_code.value = this.options.dataraw.PJT_CODE;
 		//oFrm.pjt_name.value = this.options.dataraw.PJT_NAME;
-		oFrm.action =  '/dashboard/fwqProjectSummaryAdvanced.html';
+		oFrm.action =  '/dashboard/fwqProjectSummaryAdvanced.do';
 		oFrm.method = "post";
 		oFrm.target = 'advancedChartIframe'; 
 	    oFrm.submit();		    
@@ -168,7 +168,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/fwqProjectSummaryJson.html",
+			url : "/dashboard/fwqProjectSummaryJson.do",
 			data: $("#form1").serialize(),
 			success : function(responseData){
 				dataList = responseData.fwqDataList;
@@ -185,7 +185,7 @@
 	
 	function subProjectList(){
 		$.ajax({
-			url : "/dashboard/fwqSubProjectListJson.html",
+			url : "/dashboard/fwqSubProjectListJson.do",
 			data: $("#form1").serialize(),
 			success : function(responseData){
 				var projectList = responseData.dataList;
@@ -214,7 +214,7 @@
 	
 	function subProjectPoint(){
 		$.ajax({
-			url : "/dashboard/fwqSubProjectDataJson.html",
+			url : "/dashboard/fwqSubProjectDataJson.do",
 			data: $("#form1").serialize(),
 			success : function(responseData){
 				subProjectList = responseData.dataList;

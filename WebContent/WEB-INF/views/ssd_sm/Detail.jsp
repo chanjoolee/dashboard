@@ -343,7 +343,7 @@
 													{STAGE:"CUS" <c:forEach items="${paramValues.stage}" var="s" varStatus="status"> <c:if test="${s == 'CUS' }"> , selected: "selected" </c:if>  </c:forEach>}
 												];
 												// $.ajax({
-												// 	url: "/dashboard/genericlListJson.html",
+												// 	url: "/dashboard/genericlListJson.do",
 												// 	data: {sqlid: "dashboard.ssd_sm.script.category.distinct"}, 
 												// 	async: false,
 												// 	success:  function(response){
@@ -497,7 +497,7 @@
 										
 										var response1 = {};
 										$.ajax({
-											url: "/dashboard/genericSaveJson.html",
+											url: "/dashboard/genericSaveJson.do",
 											type: "POST",
 											data: row, 
 											async: false,			                    		
@@ -695,8 +695,8 @@
 							datatype:'json',
 							pager: "#grid_detailPager",
 							url:function(){ 
-								// return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
-								return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.ssd_sm.detail.paging&paging_sqlid=dashboard.ssd_sm.detail.paging.page";
+								// return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.corona.emmc.detail.last&paging_sqlid=dashboard.corona.emmc.detail.last.page";
+								return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.ssd_sm.detail.paging&paging_sqlid=dashboard.ssd_sm.detail.paging.page";
 							},
 							viewrecords: true,			    		
 							width: '100%',
@@ -729,7 +729,7 @@
 								var detailList = [];
 								$.ajax({
 									type: "POST",
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: {
 										firmware:  row.FIRMWARE,
 										script_name: row.SCRIPT_NAME
@@ -795,7 +795,7 @@
 																if(this.props.options.value == this.state.value)
 																	return state;
 																$.ajax({
-																	url: "/dashboard/genericSaveJson.html",
+																	url: "/dashboard/genericSaveJson.do",
 																	type: "POST",
 																	data: {
 																		searchJson: JSON.stringify(paramObj),
@@ -916,7 +916,7 @@
 									var colname = 'SCRIPT_NAME_META';
 									var newWin1 = window.open("", "coronaDetailScript_emmc:" + row[colname], "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
 									var oFrm = document.getElementById("form1");
-									oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/coronaDetailScript';
+									oFrm.action =  '/dashboard/generic.do?viewName=corona_emmc/coronaDetailScript';
 									oFrm.method = "post";
 									oFrm.target = "coronaDetailScript_emmc:" + row[colname]; 
 									$("#script_name").val(row.SCRIPT_NAME_META);
@@ -970,7 +970,7 @@
 	
 		function fn_load_scriptGroups() {
 			$.ajax({
-				url: "/dashboard/genericlListJson.html",
+				url: "/dashboard/genericlListJson.do",
 				data: {sqlid: "dashboard.ssd_sm.script.group.list"}, 
 				async: false,
 				success:  function(response){

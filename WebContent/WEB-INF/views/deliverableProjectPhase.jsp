@@ -55,7 +55,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/deliverableGeneralJson.html",
+			url : "/dashboard/deliverableGeneralJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;

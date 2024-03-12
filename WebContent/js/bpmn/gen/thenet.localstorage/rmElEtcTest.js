@@ -109,7 +109,7 @@
 														        var _this = this;
 														        var rtnList = [];
 														        $.ajax({
-														            url: "./genericlListJson.html",
+														            url: "./genericlListJson.do",
 														            data: {"sqlid": _this.sqlId }, 
 														            async: false,
 														            success:  function(response){
@@ -189,13 +189,13 @@
 									"gridId": "rmElEtcTestGrid",
 									"modelVarName": "thenetJpa",
 									"url": function(){ 
-									                    return	"./genericlListPageJson.html?" + 
+									                    return	"./genericlListPageJson.do?" + 
 									                        $("#form").serialize() + 
 									                        "&sqlid=rmElEtcTest.rmElEtcTest.page.list" +  
 									                        "&paging_sqlid=rmElEtcTest.rmElEtcTest.page.total" 
 									                },
 
-									"editurl": "./ssdCusDummySaveJson.html",
+									"editurl": "./ssdCusDummySaveJson.do",
 									"styleUI": "Bootstrap",
 									"viewrecords": true,
 									"width": "100%",
@@ -248,7 +248,7 @@
 									                        var detailList = [];
 									                        $.ajax({
 									                            type: "POST",
-									                            url: "./genericlListJson.html?sqlid=rmElEtcTest.rmElEtcTest.one" ,
+									                            url: "./genericlListJson.do?sqlid=rmElEtcTest.rmElEtcTest.one" ,
 									                            data: searchRow ,
 									                            //data: $("#form").serialize(), 
 									                            async: false,
@@ -313,7 +313,7 @@
 									                                                    if(this.props.options.value == this.state.value)
 									                                                        return state;
 									                                                    $.ajax({
-									                                                        url: "./genericSaveJson.html",
+									                                                        url: "./genericSaveJson.do",
 									                                                        type: "POST",
 									                                                        data: {
 									                                                            searchJson: JSON.stringify(paramObj),
@@ -675,7 +675,7 @@
 					                        return;
 					                    $.ajax({
 					                        type: "POST",
-					                        url: "./genericlListJson.html?" +
+					                        url: "./genericlListJson.do?" +
 					                            "&sqlid=" + _this.sqlId,
 					                        data: {},
 					                        async: false,
@@ -696,7 +696,7 @@
 					                    var rtnList = [];
 					                    $.ajax({
 					                        type: "POST",
-					                        url: "./genericlListJson.html?" +
+					                        url: "./genericlListJson.do?" +
 					                            "&sqlid=" + _this.sqlIdDynamic,
 					                        data: param,
 					                        async: false,
@@ -749,7 +749,7 @@
 					                        return;
 					                    $.ajax({
 					                        type: "POST",
-					                        url: "./genericlListJson.html?" +
+					                        url: "./genericlListJson.do?" +
 					                            "&sqlid=" + _this.sqlId,
 					                        data: {},
 					                        async: false,
@@ -770,7 +770,7 @@
 					                    var rtnList = [];
 					                    $.ajax({
 					                        type: "POST",
-					                        url: "./genericlListJson.html?" +
+					                        url: "./genericlListJson.do?" +
 					                            "&sqlid=" + _this.sqlIdDynamic,
 					                        data: param,
 					                        async: false,
@@ -824,7 +824,7 @@
 					                        return;
 					                    $.ajax({
 					                        type: "POST",
-					                        url: "./genericlListJson.html?" +
+					                        url: "./genericlListJson.do?" +
 					                            "&sqlid=" + _this.sqlId,
 					                        data: {},
 					                        async: false,
@@ -845,7 +845,7 @@
 					                    var rtnList = [];
 					                    $.ajax({
 					                        type: "POST",
-					                        url: "./genericlListJson.html?" +
+					                        url: "./genericlListJson.do?" +
 					                            "&sqlid=" + _this.sqlIdDynamic,
 					                        data: param,
 					                        async: false,
@@ -872,7 +872,7 @@
 					                var _this = this;
 					                $.ajax({
 					                    type: "POST",
-					                    url: "./genericlListJson.html?" +
+					                    url: "./genericlListJson.do?" +
 					                        "&sqlid=" + _this.sqlId,
 					                    data: {},
 					                    async: false,

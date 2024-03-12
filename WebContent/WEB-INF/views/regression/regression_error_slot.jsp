@@ -148,7 +148,7 @@
    	            		var rtn = {series:[]};
    	            		$.ajax({
    	            			type: "POST",
-   	                		url: "/dashboard/genericlListJson.html",
+   	                		url: "/dashboard/genericlListJson.do",
 							//data: {sqlid: "dashboard.regresson.errologlist.by.slotName", searchJson: JSON.stringify(paramObj) }, 
 							data: {sqlid: "dashboard.regresson.errologlist.by.slotName1", searchJson: JSON.stringify(paramObj) }, 
    	                		async: false,
@@ -293,7 +293,7 @@
    	            		
 			    		$.ajax({
 			    			type: "POST",
-			    			url: "/dashboard/genericlListJson.html",
+			    			url: "/dashboard/genericlListJson.do",
 			    			data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.errologlist.raw.new1' }, 
 			    			async: false,
 			    			success:  function(response){

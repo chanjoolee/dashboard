@@ -33,7 +33,7 @@
 	
 	function getUrlList(){
 		$.ajax({
-			url : pmsUrl + "/dashboard/batchFileFvtUrlListJson.html",
+			url : pmsUrl + "/dashboard/batchFileFvtUrlListJson.do",
 			data: {},
 			//datatype:'json',
 			success : function(pResponseData){
@@ -56,7 +56,7 @@
 		//var param = '{"voList":'+JSON.stringify(pUrlList)+'}';
 		$.ajax({
 			//type: "post",
-			url : pmsUrl + "/dashboard/batchFileFvtUpdateJson.html",
+			url : pmsUrl + "/dashboard/batchFileFvtUpdateJson.do",
 			//data: {voList : pUrlList} ,
 			//data: {urlList : JSON.stringify(pUrlList)},
 			

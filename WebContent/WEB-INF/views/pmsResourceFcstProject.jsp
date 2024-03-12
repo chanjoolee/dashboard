@@ -410,7 +410,7 @@
 	function getDataByJson(){
 		//setCalendarRsc();
 		$.ajax({
-			url : "/dashboard/pmsResourceFcstProjectJson.html",
+			url : "/dashboard/pmsResourceFcstProjectJson.do",
 			data: $("#form1").serialize(),
 			async: false,
 			success : function(vResponseData){

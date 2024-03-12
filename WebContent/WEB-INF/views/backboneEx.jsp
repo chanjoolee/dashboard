@@ -61,7 +61,7 @@
         });    
         var Coronas = Backbone.Collection.extend({
             model : Corona,
-            url:'/dashboard/genericlListPageJson.html?sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page&rows=20&page=2&sample=Armstrong3D_S36_128Gb_128GB&firmware=U3AE351C7B14',
+            url:'/dashboard/genericlListPageJson.do?sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page&rows=20&page=2&sample=Armstrong3D_S36_128Gb_128GB&firmware=U3AE351C7B14',
             parse: function(data){
                 return data.rows;
             }

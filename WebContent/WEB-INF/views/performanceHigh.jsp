@@ -1150,7 +1150,7 @@
 	
 	function getDataByJson(){
 		$.ajax({
-			url : "/dashboard/performanceJson.html",
+			url : "/dashboard/performanceJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				dataList = responseData.dataList;

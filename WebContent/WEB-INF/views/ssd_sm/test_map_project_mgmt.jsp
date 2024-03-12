@@ -41,10 +41,10 @@
 						<div class="tab_list_wrap">
                             <ul class="tab_list">
                                 <li class="tab_item"> 
-                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.html?viewName=ssd_sm/test_master_mgmt');">Test Mgmt. System - Master Mgmt.</a>
+                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.do?viewName=ssd_sm/test_master_mgmt');">Test Mgmt. System - Master Mgmt.</a>
                                 </li>
                                 <li class="tab_item">
-                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.html?viewName=ssd_sm/test_set_mgmt');">Test Mgmt. System - Test Set Mgmt.</a>
+                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.do?viewName=ssd_sm/test_set_mgmt');">Test Mgmt. System - Test Set Mgmt.</a>
                                 </li>
                                 <li class="tab_item selected">
                                     <a href="#" class="tab_link">Map Test Project - Test Set.</a>
@@ -185,7 +185,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.commonComboSearch",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.commonComboSearch",
 			data: { 
 						filters: JSON.stringify({commCdType:paramObj}) 
 					},	
@@ -205,7 +205,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.all",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.all",
 			data: { 
 						page:1, rows:999999
 					},	
@@ -380,7 +380,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.mapProject.all",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.mapProject.all",
 			data:{ 
 						page:pPage, rows:rows, 
 					},
@@ -676,7 +676,7 @@
 					}
 					
 					$.ajax({
-		       			url: "/dashboard/genericAllSaveJson.html?sqlid=dashboard.ssd_sm.mapProjectGridSave",
+		       			url: "/dashboard/genericAllSaveJson.do?sqlid=dashboard.ssd_sm.mapProjectGridSave",
 		        		dataType: "json",
 		        		type: "POST",
 		        		async : true,

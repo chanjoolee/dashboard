@@ -711,7 +711,7 @@
 		    	gridOpt:{
 		    		datatype:'local',
 		    		pager: "#grid_summaryPager",
-		    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+		    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 		    		viewrecords: true,	
 		    		emptyrecords: "No records to view",		    		
 		    		width: '100%',
@@ -889,7 +889,7 @@
 		
 		$.ajax({
 			type: "POST",
-    		url: "/dashboard/genericlListJson.html",
+    		url: "/dashboard/genericlListJson.do",
     		data: {searchJson: JSON.stringify(paramObj),  sqlid: 'dashboard.regresson.mainlist.category.tasktime.list'}, 
     		async: false,
     		success:  function(response){
@@ -1073,7 +1073,7 @@
 		
 		//search option
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FOLDER_NAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -1085,7 +1085,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=FIRMWARE", 
 //    		async: false,
 //    		success:  function(response){
@@ -1097,7 +1097,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=TESTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -1109,7 +1109,7 @@
 //    	});
 		
 //		$.ajax({
-//    		url: "/dashboard/genericlListJson.html",
+//    		url: "/dashboard/genericlListJson.do",
 //    		data: param + "&sqlid=dashboard.regresson.distinct.field&field=SLOTNAME", 
 //    		async: false,
 //    		success:  function(response){
@@ -1158,8 +1158,8 @@
 		var newwin = window.open("coronaEmmcScriptManagement", "coronaEmmcScriptManagement", "width=1200,height=860,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=corona_emmc/corona_manage_tabs';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=corona_emmc/corona_manage_tabs';
 		oFrm.method = "post";
 		oFrm.target = 'coronaEmmcScriptManagement'; 
 	    oFrm.submit();

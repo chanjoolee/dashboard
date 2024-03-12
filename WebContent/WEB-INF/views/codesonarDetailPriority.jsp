@@ -49,7 +49,7 @@
 		$.ajax({
 			//type: "POST",
 			async: true,
-			url : "/dashboard/codesonarProjectDetailJson.html",
+			url : "/dashboard/codesonarProjectDetailJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){

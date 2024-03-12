@@ -144,7 +144,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.commonCodeSearch",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.commonCodeSearch",
 			data: { 
 						filters: JSON.stringify({commCdType:paramObj})
 					},	
@@ -325,7 +325,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.commonCodeList",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.commonCodeList",
 			data:{ 
 						filters: JSON.stringify({
 													searchCode:$('#searchCode').val() == null ? []:new Array($('#searchCode').val()),
@@ -512,7 +512,7 @@
 			  	}
 
 			  	$.ajax({
-		       			url: "/dashboard/genericAutoSaveJson.html?sqlid=dashboard.ssd_sm.commonCodeSave",
+		       			url: "/dashboard/genericAutoSaveJson.do?sqlid=dashboard.ssd_sm.commonCodeSave",
 		        		dataType: "json",
 		        		type: "POST",
 				        data: {
@@ -569,7 +569,7 @@
 					}
 					
 					$.ajax({
-		       			url: "/dashboard/genericAllSaveJson.html?sqlid=dashboard.ssd_sm.commCdGridSave",
+		       			url: "/dashboard/genericAllSaveJson.do?sqlid=dashboard.ssd_sm.commCdGridSave",
 		        		dataType: "json",
 		        		type: "POST",
 		        		async : true,

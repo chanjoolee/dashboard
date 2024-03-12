@@ -63,7 +63,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/jiraIssueProjectDefectJson.html",
+			url : "/dashboard/jiraIssueProjectDefectJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData) {
 				dataList = responseData.dataList;

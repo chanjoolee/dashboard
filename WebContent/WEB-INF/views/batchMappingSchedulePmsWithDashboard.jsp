@@ -29,7 +29,7 @@
 		//var param = '{"voList":'+JSON.stringify(pUrlList)+'}';
 		$.ajax({
 			//type: "post",
-			url : "/dashboard/batchMappingSchedulePmsWithDashboardJson.html",
+			url : "/dashboard/batchMappingSchedulePmsWithDashboardJson.do",
 			//data: {voList : pUrlList} ,
 			//data: {urlList : JSON.stringify(pUrlList)},
 			datatype:'json',

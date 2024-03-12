@@ -74,7 +74,7 @@
 	
 	function subProjectList(){
 		$.ajax({
-			url : "/dashboard/fwqSubProjectListJson.html",
+			url : "/dashboard/fwqSubProjectListJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				var projectList = responseData.dataList;
@@ -110,7 +110,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/fwqProjectCategoryTendJson.html",
+			url : "/dashboard/fwqProjectCategoryTendJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				fwqDataList = responseData.fwqDataList;
@@ -329,7 +329,7 @@
 //										
 //		            		    	});
 		            		    	
-		            		    	var url =  '/dashboard/generic.html?viewName=fwqFunctionLocDetailPop&measure_dt='+ e.point.options.MEASURE_DT ;
+		            		    	var url =  '/dashboard/generic.do?viewName=fwqFunctionLocDetailPop&measure_dt='+ e.point.options.MEASURE_DT ;
 		            		    	url += '&project='+ e.point.options.PROJECT  ;
 		            		    	url += '&svr_num=' + e.point.options.CODESONAR_SVR;
 		            		    	url += '&csv_num=' + e.point.options.CSV_NUM;
@@ -467,7 +467,7 @@
 		            		    	
 		            		    	break;
 		            		    case 'FUNC_PARAMETER':
-		            		    	var url =  '/dashboard/fwqFunctionParameterPop.html?measureDt='+ e.point.options.REAL_MEASURE_DT + '&project='+ e.point.options.PROJECT_ORIGIN  ;
+		            		    	var url =  '/dashboard/fwqFunctionParameterPop.do?measureDt='+ e.point.options.REAL_MEASURE_DT + '&project='+ e.point.options.PROJECT_ORIGIN  ;
 		            		    	var newWin1 = window.open("", "fwqFunctionParameterPop", "width=1200,height=900, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
 		            		    	var oFrm = document.getElementById("form");
 		            		    	oFrm.action =  url;
@@ -516,15 +516,15 @@
 	}
 	
 	function openCodingRuleRawPop(){
-		//var url =  '/dashboard/fwqFunctionParameterPop.html?measureDt='+ e.point.options.REAL_MEASURE_DT + '&project='+ e.point.options.PROJECT_ORIGIN  ;
+		//var url =  '/dashboard/fwqFunctionParameterPop.do?measureDt='+ e.point.options.REAL_MEASURE_DT + '&project='+ e.point.options.PROJECT_ORIGIN  ;
 		
 		var date1 = minValue(fwqDataList,"MEASURE_DT");
 		var date2 = maxValue(fwqDataList,"MEASURE_DT");
 		$("#measureDt1").val(date1);
 		$("#measureDt2").val(date2);
 		var project = $("[name=project]:checked").val();
-		//var url = '/dashboard/fwqCodingRulePop.html?project=' + project;
-		var url = '/dashboard/fwqCodingRulePop.html';
+		//var url = '/dashboard/fwqCodingRulePop.do?project=' + project;
+		var url = '/dashboard/fwqCodingRulePop.do';
     	var newWin1 = window.open("", "fwqCodingRulePop", "width=1200,height=940, screenY=20, top=20, screenX=100,left=100, scrollbars=yes,resizable=yes");
     	var oFrm = document.getElementById("form");
     	oFrm.action =  url;
@@ -538,7 +538,7 @@
 	
 	function urlExists(url, callback){
 		$.ajax({
-			url : "/dashboard/urlExistsJson.html",
+			url : "/dashboard/urlExistsJson.do",
 			data: {url:url},
 			success : function(response){
 				callback(response.result)

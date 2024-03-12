@@ -81,29 +81,29 @@
 	}
 	
 	function gotoPhaseCauseList(){
-	    window.open('./jiraIssuePhaseCauseList.html?sender=confluence','_blank',
+	    window.open('./jiraIssuePhaseCauseList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=768');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
 	}
 	
 	function gotoCauseMatrixList(){
-	    window.open('./jiraIssueCauseMatrixList.html?sender=confluence','_blank',
+	    window.open('./jiraIssueCauseMatrixList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1000,height=320');
 		//var oFrm = document.getElementById("form1");
 		
-		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.html";
+		//oFrm.action =  "/dashboard/jiraIssuePhaseCauseList.do";
 		//oFrm.method = "post";
 		//oFrm.target = "_blank"; 
 	    //oFrm.submit();
 	}
 	
 	function gotoCauseStatusList(){
-	    window.open('./jiraIssueCauseStatusList.html?sender=confluence','_blank',
+	    window.open('./jiraIssueCauseStatusList.do?sender=confluence','_blank',
 		'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1024,height=608');
 		//var oFrm = document.getElementById("form1");
 		
@@ -183,10 +183,10 @@
                 <li><a href="https://github.com/chanjoolee/dashboard" target="_blank">GitHub Project</a></li>
             </ul>
             <ul id="navbar-first" class="nav navbar-nav">
-				<li class="active"><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','./generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_home');">Home</a></li>
-				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','./generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Document</a></li>
+				<li class="active"><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','./generic.do?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_home');">Home</a></li>
+				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','./generic.do?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_ck5');">Document</a></li>
 				<!-- <li class=""><a href="#">Demo</a></li> -->
-				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','./generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate-Source</a></li>
+				<li><a class="dropdown-item" href="#" onclick="dashboardShow('frame_content','./generic.do?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/main');">Generate-Source</a></li>
 				<!-- locale -->
 				<li class="btn-group">
 					<button id="language_head" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 50px;"></button>
@@ -200,7 +200,8 @@
         </div><!--/.nav-collapse -->
     </div>
 </div>
-<div style="margin-top: 52px;"><iframe id="frame_content" src="./generic.html?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_home" name="frame_content" style="width: 100%; height: 1000px;"></iframe></div>
+<div style="margin-top: 52px;"><iframe id="frame_content" src="./generic.do?sender=xxx&viewName=schema/genSrc0523_01.2020.02.06.02.03.01/document_home" name="frame_content" style="width: 100%; height: 1000px;"></iframe></div>
+
 
 </form>				
 </body>

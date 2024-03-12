@@ -652,7 +652,7 @@
 	</script>
 </head>
 <body style="min-width:920px">
-<form name="form" id="form" class="" action="./generic.html?viewName=gensrc/genSrcCustom/gensrcList" method="post" target="gensrcListIframeFrame">
+<form name="form" id="form" class="" action="./generic.do?viewName=gensrc/genSrcCustom/gensrcList" method="post" target="gensrcListIframeFrame">
 	<input type="hidden" id="sender" name="sender" value="xxx">
 	<div id="schemaTabContainer" class="" style="margin-top: 3px;margin-left: 20px;margin-right: 20px;"><div id="tabListTabListContainer" class="tit_btn m_top_10"><ul id="tabListTabListUl" class="tab_2depth"><li id="gensrcListIframeTab" target="gensrcListIframeContent" class="on"><a id="gensrcListIframe_a" origin_id="gensrcListIframe" viewname="gensrc/genSrcCustom/gensrcList" form_id="form" roaded="y">Generate list</a></li><li id="cmmCdIframeTab" target="cmmCdIframeContent" class="off"><a id="cmmCdIframe_a" origin_id="cmmCdIframe" viewname="gensrc/genSrcCustom/gensrcCmmCd" form_id="form">Common Code</a></li><li id="gensrcCmmUseIframeTab" target="gensrcCmmUseIframeContent" class="off"><a id="gensrcCmmUseIframe_a" origin_id="gensrcCmmUseIframe" viewname="gensrc/genSrcCustom/gensrcCmmUse" form_id="form">Cmm Use</a></li><li id="gensrcTabColsIframeTab" target="gensrcTabColsIframeContent" class="off"><a id="gensrcTabColsIframe_a" origin_id="gensrcTabColsIframe" viewname="gensrc/genSrcCustom/gensrcTabCols" form_id="form">Tables</a></li></ul></div><div type="tab_list"></div></div>
 </form>

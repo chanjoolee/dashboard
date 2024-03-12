@@ -457,8 +457,8 @@
 					    		datatype:'json',
 					    		pager: "#testResultsPager",
 					    		viewrecords: true,
-					    		url: '/dashboard/ssdCustomResultJson.html?testId=${param.testId}',
-					    		editurl: '/dashboard/ssdCusDummySaveJson.html',
+					    		url: '/dashboard/ssdCustomResultJson.do?testId=${param.testId}',
+					    		editurl: '/dashboard/ssdCusDummySaveJson.do',
 					    		//closeAfterEdit: true,
 					    		width: '100%',
 					    		//height: 600,
@@ -485,7 +485,7 @@
 										    oFrm.submit();		
 										    newWin1.focus();	
 										}else if(row.TEST_LOG.match(/\.([\w]+)$/i) != null){
-											//var src = "/dashboard/filedownloadJson.html";
+											//var src = "/dashboard/filedownloadJson.do";
 											//src += "?filename=" + row.TEST_LOG;
 											//src +="&path=" + row.FILE_PATH;
 											
@@ -914,7 +914,7 @@
 		var rtn = {};
 		
 		$.ajax({
-			url : "/dashboard/fwqMetricJson.html",
+			url : "/dashboard/fwqMetricJson.do",
 			data: $("#form").serialize() ,
 			async: false,
 			success : function(pResponseData){
@@ -1019,7 +1019,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/ssdCusPopJson.html",
+			url : "/dashboard/ssdCusPopJson.do",
 			data: $("#form1").serialize(),
 			async: false,
 			success : function(responseData){

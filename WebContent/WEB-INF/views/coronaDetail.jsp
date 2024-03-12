@@ -335,7 +335,7 @@
 		                        	
 		                        	var response1 = {};
 		                        	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: row, 
 			                    		async: false,			                    		
@@ -510,10 +510,10 @@
 			    		datatype:'json',
 			    		pager: "#grid_detailPager",
 			    		url: function(){
-			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
+			    			return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
 			    		},
-			    		//url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
-			    		editurl: "/dashboard/ssdCusDummySaveJson.html",
+			    		//url: "/dashboard/genericlListPageJson.do?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
+			    		editurl: "/dashboard/ssdCusDummySaveJson.do",
 			    		viewrecords: true,			    		
 			    		width: '100%',
 			    		height: '100%',
@@ -535,7 +535,7 @@
 					    	var row = theGrid.jqGrid('getRowData',parentRowKey);
 					    	var cms = theGrid.jqGrid("getGridParam", "colModel");
 					    	
-			    			var childGridURL = "/dashboard/genericlListJson.html?sqlid=dashboard.corona.detail"; 
+			    			var childGridURL = "/dashboard/genericlListJson.do?sqlid=dashboard.corona.detail"; 
 			    			childGridURL  += "&test_board=" + row.TEST_BOARD;
 			    			childGridURL  += "&sample=" + row.SAMPLE;
 			    			childGridURL  += "&firmware=" + row.FIRMWARE;
@@ -563,7 +563,7 @@
 														var datas = [];
 														$.ajax({
 											    			type: "POST",
-											    			url: "/dashboard/genericlListJson.html",
+											    			url: "/dashboard/genericlListJson.do",
 											    			data: {
 											    				sample: row.SAMPLE,
 											    				firmware: row.FIRMWARE,
@@ -593,7 +593,7 @@
 															//	return state;
 															//return;
 															$.ajax({
-									                    		url: "/dashboard/genericSaveJson.html",
+									                    		url: "/dashboard/genericSaveJson.do",
 									                    		type: "POST",
 									                    		data: {
 									                    			searchJson: JSON.stringify(paramObj),
@@ -718,7 +718,7 @@
 					                        	
 					                        	var response1 = {};
 					                        	$.ajax({
-						                    		url: "/dashboard/genericSaveJson.html",
+						                    		url: "/dashboard/genericSaveJson.do",
 						                    		type: "POST",
 						                    		data: row, 
 						                    		async: false,			                    		
@@ -916,7 +916,7 @@
 								var colname = 'SCRIPT_NAME_META';
 								var newWin1 = window.open("", "coronaDetailScript_ufs:" + row[colname], "width=1300,height=900, screenY=" + event.screenY + ", top=" + event.screenY + ", screenX=" + event.screenX + ",left=" + event.screenX + ", scrollbars=yes,resizable=yes");
 								var oFrm = document.getElementById("form1");
-								oFrm.action =  '/dashboard/generic.html?viewName=corona_ufs/coronaDetailScript';
+								oFrm.action =  '/dashboard/generic.do?viewName=corona_ufs/coronaDetailScript';
 								oFrm.method = "post";
 								oFrm.target = "coronaDetailScript_ufs:" + row[colname]; 
 								$("#script_name").val(row.SCRIPT_NAME_META);

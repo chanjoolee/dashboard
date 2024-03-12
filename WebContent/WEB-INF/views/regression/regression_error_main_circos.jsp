@@ -157,7 +157,7 @@
    		
 		$.ajax({
    			type: "POST",
-       		url: "/dashboard/genericlListJson.html",
+       		url: "/dashboard/genericlListJson.do",
 			data: {sqlid: "dashboard.regresson.errologlist.for.main.circos", searchJson: JSON.stringify(paramObj) }, 
        		async: false,
        		success:  function(response){

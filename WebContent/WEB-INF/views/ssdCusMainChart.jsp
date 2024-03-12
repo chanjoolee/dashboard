@@ -476,7 +476,7 @@
 		var dataList = [];
 		var rtn = {};
 		$.ajax({
-    		url: "/dashboard/ssdCusMainAllJson.html",
+    		url: "/dashboard/ssdCusMainAllJson.do",
     		data: param, 
     		async: false,
     		success:  function(response){
@@ -658,7 +658,7 @@
 		var dataList = [];
 		var rtn = {};
 		$.ajax({
-    		url: "/dashboard/ssdCusMainAllJson.html",
+    		url: "/dashboard/ssdCusMainAllJson.do",
     		data: param, 
     		async: false,
     		success:  function(response){
@@ -809,7 +809,7 @@
 		var dataList = [];
 		var rtn = {};
 		$.ajax({
-    		url: "/dashboard/ssdCusMainAllJson.html",
+    		url: "/dashboard/ssdCusMainAllJson.do",
     		data: param, 
     		async: false,
     		success:  function(response){
@@ -985,7 +985,7 @@
 		var dataList = [];
 		var rtn = {};
 		$.ajax({
-    		url: "/dashboard/ssdCusMainAllJson.html",
+    		url: "/dashboard/ssdCusMainAllJson.do",
     		data: param, 
     		async: false,
     		success:  function(response){

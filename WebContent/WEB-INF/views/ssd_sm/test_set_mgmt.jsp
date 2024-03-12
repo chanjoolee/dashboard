@@ -73,13 +73,13 @@
 						<div class="tab_list_wrap">
                             <ul class="tab_list">
                                 <li class="tab_item"> 
-                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.html?viewName=ssd_sm/test_master_mgmt');">Test Mgmt. System - Master Mgmt.</a>
+                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.do?viewName=ssd_sm/test_master_mgmt');">Test Mgmt. System - Master Mgmt.</a>
                                 </li>
                                 <li class="tab_item selected">
                                     <a href="#" class="tab_link">Test Mgmt. System - Test Set Mgmt.</a>
                                 </li>
                                 <li class="tab_item">
-                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.html?viewName=ssd_sm/test_map_project_mgmt');">Map Test Project - Test Set.</a>
+                                    <a href="#" class="tab_link" onclick="dashboardShow('_self','/dashboard/generic.do?viewName=ssd_sm/test_map_project_mgmt');">Map Test Project - Test Set.</a>
                                 </li>
                             </ul>
                         </div>
@@ -246,7 +246,7 @@
 		*/
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.commonComboSearch",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.commonComboSearch",
 			data: { 
 						filters: JSON.stringify({commCdType:paramObj}),
 						testSetSearch:searchObj,
@@ -494,8 +494,8 @@
 					oFrm.testType.value = hot1.getDataAtCell(selRow, 3);
 					oFrm.testSet.value = hot1.getDataAtCell(selRow, 4);
 					//oFrm.menuAuthId.value = "MNU20150422131320740";
-					//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-					oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/test_set_pop1';
+					//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+					oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/test_set_pop1';
 					oFrm.method = "post";
 					oFrm.target = 'SSD_TEST_SET_POP1'; 
 					oFrm.submit();
@@ -529,7 +529,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.all",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.all",
 			data:{ 
 						page:pPage, rows:rows, 
 						filters: JSON.stringify({
@@ -1049,7 +1049,7 @@
 					}
 					
 					$.ajax({
-		       			url: "/dashboard/genericAllSaveJson.html?sqlid=dashboard.ssd_sm.testSetGridSave",
+		       			url: "/dashboard/genericAllSaveJson.do?sqlid=dashboard.ssd_sm.testSetGridSave",
 		        		dataType: "json",
 		        		type: "POST",
 		        		async : true,
@@ -1165,7 +1165,7 @@
 	var closeStatUpdate = function(status, pTestSetIdx){
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericSaveJson.html?sqlid=dashboard.ssd_sm.testSet.statusUpdate",
+			url: "/dashboard/genericSaveJson.do?sqlid=dashboard.ssd_sm.testSet.statusUpdate",
 			data:{ 
 						status : status, 
 						testSetIdx : nvl(pTestSetIdx,''),

@@ -58,7 +58,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/fvtPhaseCountJson.html",
+			url : "/dashboard/fvtPhaseCountJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				

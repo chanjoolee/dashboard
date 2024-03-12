@@ -39,7 +39,7 @@
 	 */
 	function projectListByAjax() {
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data : {
 				division : 'jira'
 			},
@@ -74,7 +74,7 @@
 		};
 		$.ajax({
 			type : "POST",
-			url : "/dashboard/issueUnresolvedPieJson.html",
+			url : "/dashboard/issueUnresolvedPieJson.do",
 			data : $("#form").serialize() ,
 			//modelAttribute:"searchVO",
 			success : function(responseData) {

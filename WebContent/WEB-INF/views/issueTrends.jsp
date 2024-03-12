@@ -39,7 +39,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {division:'jira'},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -116,7 +116,7 @@
 		
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/issueTrendsJson.html",
+			url : "/dashboard/issueTrendsJson.do",
 			data: parameter,
 			modelAttribute:"searchVO",
 			success : function(responseData){
@@ -576,7 +576,7 @@
 		$.ajax({
 			type: "POST",
 			async:false,
-			url : "/dashboard/projectListSubByJson.html",
+			url : "/dashboard/projectListSubByJson.do",
 			data: parameter,
 			modelAttribute:"searchVO",
 			success : function(responseData){
@@ -592,7 +592,7 @@
 		$.ajax({
 			type: "POST",
 			async:false,
-			url : "/dashboard/checkSearchConditionJson.html",
+			url : "/dashboard/checkSearchConditionJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				searchConditionG = $.extend({}, responseData.searchCondition);; 
@@ -640,7 +640,7 @@
 		$.ajax({
 			type: "POST",
 			async:false,
-			url : "/dashboard/issueTrendAllSearchConditionJson.html",
+			url : "/dashboard/issueTrendAllSearchConditionJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				priorityG = responseData.priority;
@@ -673,7 +673,7 @@
 	function goJiraAnalysisByDateIssueType(pjtCode,date){
 		var newWin1 = window.open("", "jiraAnalysisByDateIssueType", "left=300, top = 200, width=1000,height=380,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 		var oFrm = document.getElementById("form");
-		oFrm.action =  '/dashboard/jiraAnalysisByDateIssueType.html?pjtCode='+pjtCode+'&resolutionDate='+date;
+		oFrm.action =  '/dashboard/jiraAnalysisByDateIssueType.do?pjtCode='+pjtCode+'&resolutionDate='+date;
 		oFrm.method = "post";
 		oFrm.target = 'jiraAnalysisByDateIssueType'; 
 	    oFrm.submit();

@@ -865,7 +865,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/jiraIssueHmsDetailListJson.html",
+			url : "/dashboard/jiraIssueHmsDetailListJson.do",
 			data: $("#form1").serialize(),
 			async: false,
 			success : function(responseData){

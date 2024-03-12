@@ -303,7 +303,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: 'dashboard.regresson.pjt_list'}, 
 													async: false,
 													success:  function(response){
@@ -351,7 +351,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: 'dashboard.regresson.firmware.list'}, 
 													async: false,
 													success:  function(response){
@@ -429,7 +429,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-													url: "/dashboard/genericlListJson.html",
+													url: "/dashboard/genericlListJson.do",
 													data: {sqlid: 'dashboard.regresson.firmware.revision.list'}, 
 													async: false,
 													success:  function(response){
@@ -750,7 +750,7 @@
 	function getGridData(){
 		var theGrid = $("#searchGridTable");
 		$.ajax({
-			url : "/dashboard/regressionTabViewFolderListJson.html",
+			url : "/dashboard/regressionTabViewFolderListJson.do",
 			data: $("#form").serialize(),
 			success : function(responseData){
 				folderList = responseData.folderList;				

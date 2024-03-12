@@ -145,7 +145,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/pmsCodeListJson.html",
+										    		url: "/dashboard/pmsCodeListJson.do",
 										    		data: {codeName: 'National_Cd'}, 
 										    		async: false,
 										    		success:  function(response){
@@ -184,7 +184,7 @@
 											data: function(){
 												var rtnList = [];
 												$.ajax({
-										    		url: "/dashboard/pmsCodeListJson.html",
+										    		url: "/dashboard/pmsCodeListJson.do",
 										    		data: {codeName: 'Function'}, 
 										    		async: false,
 										    		success:  function(response){
@@ -898,8 +898,8 @@
 	
 	function pmsProjectList(){
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			url : "/dashboard/pmsProjectListJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			url : "/dashboard/pmsProjectListJson.do",
 			data: {division:'jira',allYn:'Y'},
 			async : false,
 			success : function(pResponseData){
@@ -1075,7 +1075,7 @@
 	function getDataByJson(){
 		//setCalendarRsc();
 		$.ajax({
-			url : "/dashboard/pmsResourceFcstJson.html",
+			url : "/dashboard/pmsResourceFcstJson.do",
 			data: $("#form").serialize()+ "&site=xxx&function=xxx&pjtCode=xxx",
 			async: false,
 			success : function(vResponseData){
@@ -1280,7 +1280,7 @@
 			    			oFrm.pjt_code.value = pjtObject.PJT_ID;
 		    				oFrm.pjt_name.value = pjtObject.PJT_NAME;
 		    				
-		    				var url = '/dashboard/pmsResourceFcstProject.html';
+		    				var url = '/dashboard/pmsResourceFcstProject.do';
 			    			oFrm.action =  url;
 			    			oFrm.method = "post";
 			    			oFrm.target = 'ResourceFcstProject'; 

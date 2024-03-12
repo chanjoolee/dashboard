@@ -578,7 +578,7 @@
 								data: function(){
 									var rtnList = [];
 									$.ajax({
-										url: "/dashboard/genericlListJson.html",
+										url: "/dashboard/genericlListJson.do",
 										data: {sqlid: "dashboard.corona.manage.scriptsets.search"}, 
 										async: false,
 										success:  function(response){
@@ -670,10 +670,10 @@
 						gridOpt:{
 							datatype:'json',
 							url: function(){
-								return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.manage.script.scriptset.mapping.paging&paging_sqlid=dashboard.corona.manage.script.scriptset.mapping.paging.page";	
+								return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.corona.manage.script.scriptset.mapping.paging&paging_sqlid=dashboard.corona.manage.script.scriptset.mapping.paging.page";	
 							},
 							pager: "#grid_firmwarePager",
-							editurl: '/dashboard/ssdCusDummySaveJson.html',
+							editurl: '/dashboard/ssdCusDummySaveJson.do',
 							styleUI : 'Bootstrap',
 							viewrecords: true,			    		
 							width: '100%',
@@ -708,7 +708,7 @@
 								var detailList = [];
 								$.ajax({
 									type: "POST",
-									url: "/dashboard/genericlListJson.html",
+									url: "/dashboard/genericlListJson.do",
 									data: {
 										scriptset: row.SCRIPTSET
 										, script_name: row.SCRIPT_NAME
@@ -747,7 +747,7 @@
 																};
 																
 																$.ajax({
-																	url: "/dashboard/genericSaveJson.html",
+																	url: "/dashboard/genericSaveJson.do",
 																	type: "POST",
 																	data: {
 																		searchJson: JSON.stringify(paramObj),
@@ -890,7 +890,7 @@
 											var fd = new FormData(formdata);  	
 											var response1 = {};
 											$.ajax({
-												url: "/dashboard/genericSaveJson.html?sqlid=dashboard.corona.firmware_script_map.insert",
+												url: "/dashboard/genericSaveJson.do?sqlid=dashboard.corona.firmware_script_map.insert",
 												type: "POST",
 												data: fd, 
 												async: false,
@@ -954,7 +954,7 @@
 											//
 											paramObj.loop_id = "delRows";
 											$.ajax({
-												url: "/dashboard/genericSaveJson.html",
+												url: "/dashboard/genericSaveJson.do",
 												type: "POST",
 												data: {
 													searchJson: JSON.stringify(paramObj),
@@ -1029,7 +1029,7 @@
 				};
 				$.ajax({
 					type: "POST",
-					url: "/dashboard/genericlListJson.html",
+					url: "/dashboard/genericlListJson.do",
 					//data: {searchJson: JSON.stringify(paramObj), sqlid: "dashboard.corona.manage.script.scriptset.mapping"}, 
 					//data: $("#form").serialize(), 
 					data: paramObj,

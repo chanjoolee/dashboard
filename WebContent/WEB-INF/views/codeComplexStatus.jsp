@@ -22,7 +22,7 @@
 	*/
 	function projectListByAjax(){
 		$.ajax({
-			url : "/dashboard/projectListByJson.html",
+			url : "/dashboard/projectListByJson.do",
 			data: {},
 			success : function(responseData){
 				var projectList = responseData.projectList;
@@ -64,7 +64,7 @@
 		
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/codeComplexStatusJson.html",
+			url : "/dashboard/codeComplexStatusJson.do",
 			data: parameter,
 			//modelAttribute:"searchVO",
 			success : function(responseData){

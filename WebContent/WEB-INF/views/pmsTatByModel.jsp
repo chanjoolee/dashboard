@@ -59,7 +59,7 @@
 		$.ajax({
 			//type: "POST",
 			async: true,
-			url : "/dashboard/pmsTatByModelJson.html",
+			url : "/dashboard/pmsTatByModelJson.do",
 			data: $("#form1").serialize(),
 			//modelAttribute:"searchVO",
 			success : function(responseData){

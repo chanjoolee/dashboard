@@ -71,8 +71,8 @@
 	
 	function pmsProjectList(){
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			url : "/dashboard/pmsProjectListJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			url : "/dashboard/pmsProjectListJson.do",
 			data: {division:'jira'},
 			async : false,
 			success : function(pResponseData){
@@ -234,8 +234,8 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/pmsScheduleJson.html",
-			//url : "http://10.92.142.215:8080/dashboard/pmsScheduleJson.html",
+			url : "/dashboard/pmsScheduleJson.do",
+			//url : "http://10.92.142.215:8080/dashboard/pmsScheduleJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				var vEndtime = new Date();
@@ -277,8 +277,8 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/pmsScheduleAllJson.html",
-			//url : "http://10.92.142.215:8080/dashboard/pmsScheduleJson.html",
+			url : "/dashboard/pmsScheduleAllJson.do",
+			//url : "http://10.92.142.215:8080/dashboard/pmsScheduleJson.do",
 			data: {} ,
 			success : function(responseData){
 				var vEndtime = new Date();
@@ -719,7 +719,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/pmsScheduleProject.html';
+			oFrm.action =  '/dashboard/pmsScheduleProject.do';
 			oFrm.method = "post";
 			oFrm.target = 'pmsScheduleProject'; 
 		    oFrm.submit();
@@ -730,7 +730,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/pmsScheduleProject.html';
+			oFrm.action =  '/dashboard/pmsScheduleProject.do';
 			oFrm.method = "post";
 			oFrm.target = 'pmsScheduleProject'; 
 		    oFrm.submit();

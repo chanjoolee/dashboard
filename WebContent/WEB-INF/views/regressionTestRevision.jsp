@@ -56,7 +56,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/regressionTestRevisionJson.html",
+			url : "/dashboard/regressionTestRevisionJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -227,7 +227,7 @@
 		else{
 			var oFrm = document.getElementById("form");
 			oFrm.revision.value = revision;
-			oFrm.action =  '/dashboard/regressionTestCategory.html';
+			oFrm.action =  '/dashboard/regressionTestCategory.do';
 			oFrm.method = "post";
 			oFrm.target = '_blank'; 
 		    oFrm.submit();

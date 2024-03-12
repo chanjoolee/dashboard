@@ -53,7 +53,7 @@
 	function getDataByJson() {	
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/systemUsageJson.html",
+			url : "/dashboard/systemUsageJson.do",
 			data: {systemId:'${searchVO.systemId}', useMonth:'${searchVO.useMonth}'},
 			success : function(responseData){
 				drawchart(responseData);

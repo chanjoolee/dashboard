@@ -56,7 +56,7 @@
 	
 	function getDataByJson(){
 		$.ajax({
-			url : "/dashboard/licenseUsagePopJson.html",
+			url : "/dashboard/licenseUsagePopJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;

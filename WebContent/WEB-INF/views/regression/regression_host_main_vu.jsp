@@ -149,7 +149,7 @@
    	            		var rtn = {series:[]};
    	            		$.ajax({
    	            			type: "POST",
-   	                		url: "/dashboard/genericlListJson.html",
+   	                		url: "/dashboard/genericlListJson.do",
 							data: {sqlid: "dashboard.regresson.hostlist.new1", searchJson: JSON.stringify(paramObj) }, 
    	                		async: false,
    	                		success:  function(response){

@@ -60,7 +60,7 @@
 				                var _this = this;
 				                $.ajax({
 				                    type: "POST",
-				                    url: "${pageContext.request.contextPath}/genericlListJson.html?" +
+				                    url: "${pageContext.request.contextPath}/genericlListJson.do?" +
 				                        "&sqlid=" + _this.sqlId,
 				                    data: {},
 				                    async: false,
@@ -396,13 +396,13 @@
 						"gridId": "gensrcListGrid",
 						"modelVarName": "genSrc052301Jpa",
 						"url": function(){ 
-						                    return	"${pageContext.request.contextPath}/genericlListPageJson.html?" + 
+						                    return	"${pageContext.request.contextPath}/genericlListPageJson.do?" + 
 						                        $("#form").serialize() + 
 						                        "&sqlid=gensrcList.gensrcList.page.list" +  
 						                        "&paging_sqlid=gensrcList.gensrcList.page.total" 
 						                },
 
-						"editurl": "${pageContext.request.contextPath}/ssdCusDummySaveJson.html",
+						"editurl": "${pageContext.request.contextPath}/ssdCusDummySaveJson.do",
 						"styleUI": "Bootstrap",
 						"viewrecords": true,
 						"width": "100%",
@@ -461,7 +461,7 @@
 						                                var response1 = {};
 						                                
 						                                $.ajax({
-						                                    url: "${pageContext.request.contextPath}/genericSaveJson.html?sqlid=" + gridParam.sqlId + ".insert",
+						                                    url: "${pageContext.request.contextPath}/genericSaveJson.do?sqlid=" + gridParam.sqlId + ".insert",
 						                                    type: "POST",
 						                                    data: fd, 
 						                                    async: false,
@@ -504,7 +504,7 @@
 						                                //  
 						                                paramObj.loop_id = "delRows";
 						                                $.ajax({
-						                                    url: "${pageContext.request.contextPath}/genericSaveJson.html",
+						                                    url: "${pageContext.request.contextPath}/genericSaveJson.do",
 						                                    type: "POST",
 						                                    data: {
 						                                        searchJson: JSON.stringify(paramObj),
@@ -591,7 +591,7 @@
 						                    var detailList = [];
 						                    $.ajax({
 						                        type: "POST",
-						                        url: "${pageContext.request.contextPath}/genericlListJson.html?sqlid=gensrcList.gensrcList.one" ,
+						                        url: "${pageContext.request.contextPath}/genericlListJson.do?sqlid=gensrcList.gensrcList.one" ,
 						                        data: searchRow ,
 						                        //data: $("#form").serialize(), 
 						                        async: false,
@@ -656,7 +656,7 @@
 						                                                if(this.props.options.value == this.state.value)
 						                                                    return state;
 						                                                $.ajax({
-						                                                    url: "${pageContext.request.contextPath}/genericSaveJson.html",
+						                                                    url: "${pageContext.request.contextPath}/genericSaveJson.do",
 						                                                    type: "POST",
 						                                                    data: {
 						                                                        searchJson: JSON.stringify(paramObj),
@@ -1087,7 +1087,7 @@
 						
 						                        
 						                        $("#filterPop").val(JSON.stringify(filter));
-						                        oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName;
+						                        oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName;
 						                        oFrm.method = "post";
 						                        oFrm.target = windowName; 
 						                        oFrm.submit();		
@@ -1146,7 +1146,7 @@
 						
 						
 						                            $("#filterPop").val(JSON.stringify(filter));
-						                            oFrm.action =  "${pageContext.request.contextPath}/generic.html?viewName=" + viewPath.join("/") + "/" + itemName;
+						                            oFrm.action =  "${pageContext.request.contextPath}/generic.do?viewName=" + viewPath.join("/") + "/" + itemName;
 						                            oFrm.method = "post";
 						                            oFrm.target = windowName; 
 						                            oFrm.submit();		
@@ -1439,6 +1439,6 @@
    		</choose>
 		<choose><when test="sidx != null and sidx != '' "> order by !{sidx} <if test="sord != null and sord != '' "> !{sord} </if> </when><otherwise>order by 1,2</otherwise></choose>
 </script>
-<iframe name="mainFrame" id="mainFrame" src="/dashboard/generic.html?viewName=schema/manage_tabs&sender=${param.sender}" style="min-width:1000px; width:100%;border: 0;height: 1000px; display:block ;"></iframe>
+<iframe name="mainFrame" id="mainFrame" src="/dashboard/generic.do?viewName=schema/manage_tabs&sender=${param.sender}" style="min-width:1000px; width:100%;border: 0;height: 1000px; display:block ;"></iframe>
 
 </html>					

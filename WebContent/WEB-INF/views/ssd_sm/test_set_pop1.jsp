@@ -221,7 +221,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.commonComboSearch",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.commonComboSearch",
 			data: { 
 						filters: JSON.stringify({commCdType:paramObj}) 
 					},	
@@ -485,7 +485,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.dtl",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.dtl",
 			data:{ 
 						page:pPage, 
 						rows:rows, 
@@ -598,7 +598,7 @@
 			//창 닫기 전 Test Set 의 status 를 변경한다.
 			$.ajax({		//loads data to Handsontable
 				type: "POST",
-				url: "/dashboard/genericSaveJson.html?sqlid=dashboard.ssd_sm.testSet.statusUpdate",
+				url: "/dashboard/genericSaveJson.do?sqlid=dashboard.ssd_sm.testSet.statusUpdate",
 				data:{ 
 							status : 'Released', 
 							testSetIdx : nvl(pTestSetIdx,''),
@@ -619,7 +619,7 @@
 			setTestSetStatUpdate('Editing');		//테스트 셋의 상태를 업데이트 한다.
 			newwin = window.open("", "SSD_TEST_SET_COPY", "width=1024px,height=768px,resizable=yes, scrollbars=yes, status=yes,menubar=yes");
 			var oFrm = document.getElementById("form1");
-			oFrm.action =  '/dashboard/generic.html?viewName=ssd_sm/test_set_pop2';
+			oFrm.action =  '/dashboard/generic.do?viewName=ssd_sm/test_set_pop2';
 			oFrm.method = "post";
 			oFrm.target = 'SSD_TEST_SET_COPY'; 
 			oFrm.submit();
@@ -629,7 +629,7 @@
 				var selCode = hot.getDataAtCell(selIndex, 'ITEM_CODE');
 				$.ajax({		//loads data to Handsontable
 					type: "POST",
-					url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.revDtl",
+					url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.revDtl",
 					data:{ 
 								rev : selRev, 
 								testSetIdx : nvl(pTestSetIdx,''),
@@ -1503,7 +1503,7 @@
 					}
 					
 					$.ajax({
-		       			url: "/dashboard/genericAllSaveJson.html?sqlid=dashboard.ssd_sm.testSetDtlGridSave",
+		       			url: "/dashboard/genericAllSaveJson.do?sqlid=dashboard.ssd_sm.testSetDtlGridSave",
 		        		dataType: "json",
 		        		type: "POST",
 		        		async : true,
@@ -1646,7 +1646,7 @@
 	var getMasterCopyList = function(copyList){
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.master.all",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.master.all",
 			data:{ 
 						page:1, 
 						rows:999999, 
@@ -1686,7 +1686,7 @@
 	var getTestSetCopyList = function(copyList){
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.dtl",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.dtl",
 			data:{ 
 						page:1, 
 						rows:999999, 
@@ -1726,7 +1726,7 @@
 	var setTestSetStatUpdate = function(status){
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericSaveJson.html?sqlid=dashboard.ssd_sm.testSet.statusUpdate",
+			url: "/dashboard/genericSaveJson.do?sqlid=dashboard.ssd_sm.testSet.statusUpdate",
 			data:{ 
 						status : status, 
 						testSetIdx : nvl(pTestSetIdx,''),
@@ -1759,7 +1759,7 @@
 		
 		$.ajax({		//loads data to Handsontable
 			type: "POST",
-			url: "/dashboard/genericlListJson.html?sqlid=dashboard.ssd_sm.testSet.revList",
+			url: "/dashboard/genericlListJson.do?sqlid=dashboard.ssd_sm.testSet.revList",
 			data:{ 
 						status : status, 
 						testSetIdx : nvl(pTestSetIdx,''),

@@ -55,7 +55,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/licenseUsageJson.html?siteNm=xxx",
+			url : "/dashboard/licenseUsageJson.do?siteNm=xxx",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -201,7 +201,7 @@
 		
 		oFrm.useMonth.value = useMonth;
 		
-		oFrm.action =  '/dashboard/licenseUsagePop.html';
+		oFrm.action =  '/dashboard/licenseUsagePop.do';
 		oFrm.method = "post";
 		oFrm.target = 'licenseUsagePop'; 
 	    oFrm.submit();

@@ -207,7 +207,7 @@ genInstance.prototype.fn_setDataSourceValueParent = function( _datasrc ){
         return;
     $.ajax({
         type: "POST",
-        url: "./genericlListJson.html?" +
+        url: "./genericlListJson.do?" +
             "&sqlid=" + _datasrc.sqlId,
         data: {},
         async: false,

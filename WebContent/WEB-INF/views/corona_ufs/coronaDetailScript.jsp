@@ -341,7 +341,7 @@
 		                        	
 		                        	var response1 = {};
 		                        	$.ajax({
-			                    		url: "/dashboard/genericSaveJson.html",
+			                    		url: "/dashboard/genericSaveJson.do",
 			                    		type: "POST",
 			                    		data: row, 
 			                    		async: false,			                    		
@@ -512,10 +512,10 @@
 			    		datatype:'json',
 			    		pager: "#grid_detailPager",
 			    		url: function(){
-			    			return	"/dashboard/genericlListPageJson.html?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
+			    			return	"/dashboard/genericlListPageJson.do?" + $("#form").serialize() + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page";
 			    		},
-			    		//url: "/dashboard/genericlListPageJson.html?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
-			    		editurl: "/dashboard/ssdCusDummySaveJson.html",
+			    		//url: "/dashboard/genericlListPageJson.do?" + "testId=${param.testId}&sample=${param.sample}&firmware=${param.firmware}&category=${param.category}" + "&sqlid=dashboard.corona.detail.last&paging_sqlid=dashboard.corona.detail.last.page",
+			    		editurl: "/dashboard/ssdCusDummySaveJson.do",
 			    		viewrecords: true,			    		
 			    		width: '100%',
 			    		height: '100%',
@@ -537,7 +537,7 @@
 					    	var row = theGrid.jqGrid('getRowData',parentRowKey);
 					    	var cms = theGrid.jqGrid("getGridParam", "colModel");
 					    	
-			    			var childGridURL = "/dashboard/genericlListJson.html?sqlid=dashboard.corona.detail"; 
+			    			var childGridURL = "/dashboard/genericlListJson.do?sqlid=dashboard.corona.detail"; 
 			    			childGridURL  += "&test_board=" + row.TEST_BOARD;
 			    			childGridURL  += "&sample=" + row.SAMPLE;
 			    			childGridURL  += "&firmware=" + row.FIRMWARE;
@@ -565,7 +565,7 @@
 														var datas = [];
 														$.ajax({
 											    			type: "POST",
-											    			url: "/dashboard/genericlListJson.html",
+											    			url: "/dashboard/genericlListJson.do",
 											    			data: {
 											    				sample: row.SAMPLE,
 											    				firmware: row.FIRMWARE,
@@ -595,7 +595,7 @@
 															//	return state;
 															//return;
 															$.ajax({
-									                    		url: "/dashboard/genericSaveJson.html",
+									                    		url: "/dashboard/genericSaveJson.do",
 									                    		type: "POST",
 									                    		data: {
 									                    			searchJson: JSON.stringify(paramObj),
@@ -724,7 +724,7 @@
 					                        	
 					                        	var response1 = {};
 					                        	$.ajax({
-						                    		url: "/dashboard/genericSaveJson.html",
+						                    		url: "/dashboard/genericSaveJson.do",
 						                    		type: "POST",
 						                    		data: row, 
 						                    		async: false,			                    		

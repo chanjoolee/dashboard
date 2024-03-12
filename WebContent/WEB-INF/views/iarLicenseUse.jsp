@@ -96,7 +96,7 @@
 			    		
 			    		$.ajax({
 			    			type: "POST",
-			    			url: "/dashboard/genericlListJson.html?sqlid=license.selectIarLicenseUseList.grid",
+			    			url: "/dashboard/genericlListJson.do?sqlid=license.selectIarLicenseUseList.grid",
 			    			//data: {searchJson: JSON.stringify(paramObj), sqlid: 'dashboard.regresson.smartlist.raw'}, 
 			    			data: {fromDt:'${searchVO.fromDt}', toDt:'${searchVO.toDt}'}, 
 			    			async: false,
@@ -693,7 +693,7 @@
 	function getDataByJson() {	
 		$.ajax({
 			type: "POST",
-			url : "/dashboard/iarLicenseUseJson.html",
+			url : "/dashboard/iarLicenseUseJson.do",
 			data: {fromDt:'${searchVO.fromDt}', toDt:'${searchVO.toDt}'},
 			success : function(responseData){
 				drawchart(responseData);

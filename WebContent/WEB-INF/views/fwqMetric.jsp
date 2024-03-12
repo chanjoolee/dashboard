@@ -114,8 +114,8 @@
 	
 	function pmsProjectList(){
 		$.ajax({
-			//url : "/dashboard/dashboardProjectListJson.html",
-			url : "/dashboard/pmsProjectListJson.html",
+			//url : "/dashboard/dashboardProjectListJson.do",
+			url : "/dashboard/pmsProjectListJson.do",
 			data: {division:'jira'},
 			async : false,
 			success : function(responseData){
@@ -182,7 +182,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/fwqMetricJson.html",
+			url : "/dashboard/fwqMetricJson.do",
 			data: $("#form").serialize() ,
 			success : function(pResponseData){
 				fwqDataList = pResponseData.fwqDataList;
@@ -409,7 +409,7 @@ function popFWQProjectSummary(){
 	var oFrm = document.getElementById("form");
 	oFrm.pjt_code.value = this.PJT_CODE;
 	oFrm.pjt_name.value = this.PJT_NAME_PMS;
-	oFrm.action =  '/dashboard/fwqProjectSummary.html';
+	oFrm.action =  '/dashboard/fwqProjectSummary.do';
 	oFrm.method = "post";
 	oFrm.target = 'FWQualitySummary'; 
     oFrm.submit();		
@@ -430,7 +430,7 @@ function popFWQProjectCategoryTrend(category,label){
 	oFrm.pjt_name.value = this.PJT_NAME;
 	oFrm.category.value = category;
 	oFrm.categoryLabel.value = label;
-	oFrm.action =  '/dashboard/fwqProjectCategoryTrend.html';
+	oFrm.action =  '/dashboard/fwqProjectCategoryTrend.do';
 	oFrm.method = "post";
 	oFrm.target = 'FWQualityProjectCategoryTrend'; 
     oFrm.submit();		 

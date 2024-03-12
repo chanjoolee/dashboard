@@ -80,7 +80,7 @@
 		if( $("#sProject").val() == "")
 			return;
 		$.ajax({
-			url : "/dashboard/bambooTestClassNameTimeListJson.html",
+			url : "/dashboard/bambooTestClassNameTimeListJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;

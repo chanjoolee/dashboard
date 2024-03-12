@@ -54,7 +54,7 @@
 	function getDataByJson(){
 		
 		$.ajax({
-			url : "/dashboard/socDesignChartPopJson.html",
+			url : "/dashboard/socDesignChartPopJson.do",
 			data: $("#form").serialize() ,
 			success : function(responseData){
 				dataList = responseData.dataList;
@@ -167,7 +167,7 @@
 			var oFrm = document.getElementById("form");
 			oFrm.pjt_code.value = pjt_code;
 			oFrm.pjt_name.value = pjt_name;
-			oFrm.action =  '/dashboard/regressionTestRevision.html';
+			oFrm.action =  '/dashboard/regressionTestRevision.do';
 			oFrm.method = "post";
 			oFrm.target = '_blank'; 
 		    oFrm.submit();

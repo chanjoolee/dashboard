@@ -40,12 +40,12 @@
 <form name="form" id="form">
 <div id="resultTop" class="dashboard-div"></div>
 <script>
-	$( "#resultTop" ).load( "/dashboard/projectOneStackByPCntDate.html",{pjt_code:'MercuryPlus'});
+	$( "#resultTop" ).load( "/dashboard/projectOneStackByPCntDate.do",{pjt_code:'MercuryPlus'});
 	
 </script>
 <div id="resultDown" class="dashboard-div"></div>
 <script>
-	/* $( "#resultDown" ).load( "/dashboard/codesonarProjectDetail.html",{pjt_code:'MercuryPlus'},function(response, status, xhr){
+	/* $( "#resultDown" ).load( "/dashboard/codesonarProjectDetail.do",{pjt_code:'MercuryPlus'},function(response, status, xhr){
 		//alert($("#sProject").val());
 		//alert(status);
 	}); */

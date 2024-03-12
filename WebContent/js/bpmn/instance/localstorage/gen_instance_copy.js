@@ -434,7 +434,7 @@ genInstanceCopy.prototype.makeSchema = function(){
             var fileInfo = {};
             if(_.find(reactObjects,{state : {edit_tag:'file'}}) != null){
                 form1.ajaxForm({
-                    url: "./fileTestJson.html?" + parameter 
+                    url: "./fileTestJson.do?" + parameter 
                     , type:"POST"
                     , dataType:"json"
                     , async: false

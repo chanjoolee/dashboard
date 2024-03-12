@@ -278,7 +278,7 @@
 						var rtn = {series:[]};
    	            		$.ajax({
    	            			type: "POST",
-   	                		url: "/dashboard/genericlListJson.html",
+   	                		url: "/dashboard/genericlListJson.do",
 							data: {sqlid: "dashboard.trendSyn.main", searchJson: JSON.stringify(paramObj) }, 
    	                		async: false,
    	                		success:  function(response){
@@ -527,8 +527,8 @@
 	function submit_logic(){
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=soctrend/logic';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=soctrend/logic';
 		oFrm.method = "post";
 		oFrm.target = 'div_logic'; 
 	    oFrm.submit();
@@ -537,8 +537,8 @@
 	function submit_macro(){
 		var oFrm = document.getElementById("form");
 		//oFrm.menuAuthId.value = "MNU20150422131320740";
-		//oFrm.action =  '/dashboard/generic.html?viewName=corona_manage_script';
-		oFrm.action =  '/dashboard/generic.html?viewName=soctrend/macro';
+		//oFrm.action =  '/dashboard/generic.do?viewName=corona_manage_script';
+		oFrm.action =  '/dashboard/generic.do?viewName=soctrend/macro';
 		oFrm.method = "post";
 		oFrm.target = 'div_macro'; 
 	    oFrm.submit();
