@@ -34,3 +34,4 @@ WebContent/js/pivottable/examples/mps.csv
 WebContent/js/Stuk-jszip-3109282/test/ref/complex_files/AntarcticaTemps.xlsx
 WebContent/js/WebPivotTable/doc/license_agreement.doc
 WebContent/MISRA Rule_0329.pptx
+*.xlsx
