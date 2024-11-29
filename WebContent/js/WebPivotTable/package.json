@@ -23,7 +23,7 @@
     "phantomjs": "~1.9.2",
     "phantom": "~0.7.2",
     "temp": "~0.8.1",
-    "request": "2.21.x"
+    "request": "2.88.x"
   },
   "engines": {
     "node": ">=0.10.28",
