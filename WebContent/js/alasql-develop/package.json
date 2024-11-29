@@ -48,7 +48,7 @@
     "mocha.parallel": "^0.15.2",
     "mversion": "^1.10.1",
     "npm-check": "^5.2.3",
-    "open": "0.0.5",
+    "open": "7.0.0",
     "strftime": "^0.10.0",
     "uglify-js": "^3.0.1"
   },
